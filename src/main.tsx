@@ -1,10 +1,11 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
+import "@src/index.css";
+import App from "@src/App.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  //Strict mode disabled for preventing double calls for useEffect
+  // <StrictMode>
+  //   <App />
+  // </StrictMode>
+  <App />
 );
