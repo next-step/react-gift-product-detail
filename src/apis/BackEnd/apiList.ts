@@ -133,11 +133,6 @@ export async function fetchThemeProducts(
       BE.API.THEME.PRODUCTS(themeId) + `?cursor=${cursor}&limit=${limit}`
     );
 
-    function delay(ms: number) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-    await delay(1000);
-
     return response.data;
   } catch (error) {
     handleError(error);
