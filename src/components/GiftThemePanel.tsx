@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
 import { fetchThemes } from "@src/apis/BackEnd/apiList";
 import ThemeButton from "@src/components/shared/ThemeButton";
-import useFetchState from "@src/hooks/useFetchState";
-import PendingSpinner from "./shared/PendingSpinner";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 type Theme = {
   themeId: number;
@@ -11,30 +10,27 @@ type Theme = {
 };
 
 function GiftThemePanel() {
-  const themes = useFetchState<Theme[]>(fetchThemes);
+  const themes = useSuspenseQuery({
+    queryKey: ["themes"],
+    queryFn: fetchThemes
+  });
 
   return (
-    <>
-      {themes.status === "pending" && <PendingSpinner />}
-
-      {themes.status === "done" && themes.data && (
-        <GiftThemePanelWrapper>
-          <TitleP>선물 테마</TitleP>
-          <ThemePlaceholder>
-            {themes.data.map((theme) => {
-              return (
-                <ThemeButton
-                  key={theme.themeId}
-                  id={theme.themeId}
-                  image={theme.image}
-                  caption={theme.name}
-                />
-              );
-            })}
-          </ThemePlaceholder>
-        </GiftThemePanelWrapper>
-      )}
-    </>
+    <GiftThemePanelWrapper>
+      <TitleP>선물 테마</TitleP>
+      <ThemePlaceholder>
+        {themes.data?.map((theme: Theme) => {
+          return (
+            <ThemeButton
+              key={theme.themeId}
+              id={theme.themeId}
+              image={theme.image}
+              caption={theme.name}
+            />
+          );
+        })}
+      </ThemePlaceholder>
+    </GiftThemePanelWrapper>
   );
 }
 
