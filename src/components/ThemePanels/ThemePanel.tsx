@@ -38,7 +38,7 @@ function ThemePanel() {
       cursorRef.current = cursor;
       setProductList((prev) => [...prev, ...list]);
     }
-  }, [productData.status]);
+  }, [productData.status, productData.result?.data]);
 
   const getNext = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -50,7 +50,7 @@ function ThemePanel() {
         productData.post(themeId, cursorRef.current, PRODUCTS_PER_PAGE);
       }
     },
-    [themeId, productData.status]
+    [themeId, productData]
   );
 
   useEffect(() => {

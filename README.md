@@ -4,6 +4,7 @@
 
 - [x] README 수정
 - [x] 불필요한 api delay 로직 삭제
+- [x] useEffect dependency array 값 수정 (필요 종속 변수 추가, 불필요한 변수 제거)
 
 ## 실행 가이드
 
