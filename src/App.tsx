@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GlobalResetStyle } from "./styles/reset";
+import { Global, ThemeProvider } from "@emotion/react";
+import { theme } from "./styles/theme/theme";
+import { AuthProvider } from "./contexts/AuthContext";
+import RequireAuth from "./components/auth/RequireAuth";
+import GiftMain from "./pages/GiftMain";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import MyPage from "./pages/MyPage";
+import OrderPage from "./pages/OrderPage";
+import ThemeProduct from "./pages/ThemeProduct";
+import { PATH } from "@/constants/path";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <ThemeProvider theme={theme}>
+      <Global styles={GlobalResetStyle} />
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path={PATH.HOME} element={<GiftMain />} />
+            <Route path={PATH.LOGIN} element={<Login />} />
+            <Route
+              path={PATH.MY_PAGE}
+              element={
+                <RequireAuth>
+                  <MyPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path={PATH.ORDER()}
+              element={
+                <RequireAuth>
+                  <OrderPage />
+                </RequireAuth>
+              }
+            />
+            <Route path={PATH.THEME()} element={<ThemeProduct />} />
+            <Route path={PATH.NOT_FOUND} element={<NotFound />} />
+            <Route path={PATH.ALL} element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+};
 
-export default App
+export default App;
