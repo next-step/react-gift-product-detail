@@ -56,6 +56,7 @@ export async function fetchRealTimeRankings(
       BE.API.PRODUCT.RANKING + `?targetType=${targetType}&rankType=${rankType}`
     );
     const body = response.data;
+    // throw Error(); // For testing ErrorBoundary
     return body.data;
   } catch (error) {
     handleError(error);
