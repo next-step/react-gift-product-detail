@@ -1,0 +1,153 @@
+import { rankingItemMock } from "@/assets/rankingItemMock";
+import styled from "@emotion/styled";
+import Divider from "@/components/common/Divider";
+import { useState } from "react";
+import Button from "@/components/common/Button";
+import useFetch from "@/hooks/useFetch";
+import Loading from "@/components/common/Loading";
+import type { RankingProductType } from "@/types/RankingProductType";
+import { ROUTE_PATH } from "@/components/routes/routePath";
+import { generatePath, Link } from "react-router-dom";
+import API_ENDPOINTS from "@/constants/apiEndpoints";
+
+interface RankingListProps {
+  targetType: string;
+  rankType: string;
+}
+
+const RANKING_LIST_ITEM_VIEW_COUNT = 6;
+
+const RankingList = ({ targetType, rankType }: RankingListProps) => {
+  const [viewCount, setViewCount] = useState(RANKING_LIST_ITEM_VIEW_COUNT);
+  const isCollapsed = viewCount === RANKING_LIST_ITEM_VIEW_COUNT;
+  const toggleView = () => {
+    const nextViewCount = isCollapsed ? rankingItemMock.length : RANKING_LIST_ITEM_VIEW_COUNT;
+    setViewCount(nextViewCount);
+  };
+
+  const rankingListData = useFetch<RankingProductType[]>(API_ENDPOINTS.PRODUCTS_RANKING, {
+    params: { targetType, rankType },
+    dependency: [targetType, rankType],
+  });
+
+  if (rankingListData.isLoading) {
+    return <Loading height="625px" />;
+  }
+  if (rankingListData.error || rankingListData.data?.length === 0) {
+    return (
+      <Empty>
+        <Msg>상품이 없습니다.</Msg>
+      </Empty>
+    );
+  }
+  return (
+    <Container>
+      <Content>
+        {rankingListData.data?.slice(0, viewCount).map((item, index) => (
+          <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
+            <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
+            <ItemContent>
+              <ItemContentImg src={item.imageURL} />
+              <ItemContentBrand>{item.brandInfo.name}</ItemContentBrand>
+              <ItemContentTitle>{item.name}</ItemContentTitle>
+              <ItemContentPrice>
+                {item.price.sellingPrice}
+                <span>원</span>
+              </ItemContentPrice>
+            </ItemContent>
+          </Item>
+        ))}
+      </Content>
+      <Divider />
+      <ItemContent>
+        <Button variant="secondary" onClick={toggleView}>
+          {isCollapsed ? "더보기" : "접기"}
+        </Button>
+      </ItemContent>
+      <Divider />
+    </Container>
+  );
+};
+
+const Empty = styled.div`
+  width: 100%;
+  display: flex;
+  height: 240px;
+  justify-content: center;
+  align-items: center;
+`;
+const Msg = styled.p`
+  width: 100%;
+  font: ${({ theme }) => theme.typography.label1Regular};
+  text-align: center;
+`;
+const Container = styled.div`
+  width: 100%;
+`;
+const Content = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: ${({ theme }) => theme.spacing.spacing6} ${({ theme }) => theme.spacing.spacing2};
+`;
+const Item = styled(Link)`
+  width: 100%;
+  position: relative;
+  text-decoration: none;
+`;
+type RankingAndTheme = {
+  ranking: number;
+};
+const ItemRank = styled.span<RankingAndTheme>`
+  position: absolute;
+  z-index: 2;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0.25rem;
+  left: 0.25rem;
+  ${({ ranking, theme }) => {
+    return `
+      font: ${theme.typography.label1Bold};
+      color: ${theme.color.gray00};
+      background-color: ${ranking <= 3 ? theme.color.red500 : theme.color.gray700};
+    `;
+  }}
+`;
+const ItemContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+const ItemContentImg = styled.img`
+  width: 100%;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: ${({ theme }) => theme.spacing.spacing3};
+`;
+const ItemContentBrand = styled.p`
+  font: ${({ theme }) => theme.typography.subtitle2Regular};
+  color: ${({ theme }) => theme.color.textColor.sub};
+  margin-right: auto;
+`;
+const ItemContentTitle = styled.h6`
+  font: ${({ theme }) => theme.typography.subtitle2Bold};
+  color: ${({ theme }) => theme.color.textColor.default};
+  margin-right: auto;
+  margin-bottom: ${({ theme }) => theme.spacing.spacing1};
+`;
+const ItemContentPrice = styled.p`
+  font: ${({ theme }) => theme.typography.title2Bold};
+  color: ${({ theme }) => theme.color.textColor.default};
+  margin-right: auto;
+  word-break: break-word;
+`;
+
+export default RankingList;
