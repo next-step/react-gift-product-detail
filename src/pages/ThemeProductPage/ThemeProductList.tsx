@@ -21,8 +21,14 @@ const ThemeProductList = () => {
   const navigate = useNavigate();
 
   const numericThemeId = Number(themeId);
+
+  useEffect(() => {
+    if (!numericThemeId) {
+      navigate('/');
+    }
+  }, [numericThemeId, navigate]);
+
   if (!numericThemeId) {
-    navigate('/');
     return null;
   }
 
@@ -33,8 +39,18 @@ const ThemeProductList = () => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
+  const loadingRef = useRef(loading);
+  const hasMoreRef = useRef(hasMore);
+  const cursorRef = useRef(cursor);
+
+  useEffect(() => {
+    loadingRef.current = loading;
+    hasMoreRef.current = hasMore;
+    cursorRef.current = cursor;
+  }, [loading, hasMore, cursor]);
+
   const loadProducts = useCallback(async () => {
-    if (loading || !hasMore) return;
+    if (loadingRef.current || !hasMoreRef.current) return;
 
     setLoading(true);
     try {
@@ -65,7 +81,8 @@ const ThemeProductList = () => {
   }, []);
 
   useEffect(() => {
-    if (!observerRef.current) return;
+    const observerTarget = observerRef.current;
+    if (!observerTarget) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -79,7 +96,7 @@ const ThemeProductList = () => {
       }
     );
 
-    observer.observe(observerRef.current);
+    observer.observe(observerTarget);
 
     return () => observer.disconnect();
   }, [loadProducts, hasMore, loading]);
