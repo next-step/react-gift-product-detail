@@ -1,1 +1,1 @@
-# react-gift-product-detail
+## 0단계 코드 준비
