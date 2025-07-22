@@ -144,3 +144,44 @@ export async function fetchThemeProducts(
     handleError(error);
   }
 }
+
+export const PRODUCT_GENERAL_INFO_CODE = { NO_PRODUCT: 404 };
+export async function fetchProductGeneralInfo(id: string) {
+  try {
+    const response = await instance.get(BE.API.PRODUCT.INFO.GENERAL(id));
+    const body = response.data;
+    return body.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function fetchProductDetailInfo(id: string) {
+  try {
+    const response = await instance.get(BE.API.PRODUCT.INFO.DETAIL(id));
+    const body = response.data;
+    return body.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function fetchProductWish(id: string) {
+  try {
+    const response = await instance.get(BE.API.PRODUCT.WISH(id));
+    const body = response.data;
+    return body.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function fetchProductHighLightReview(id: string) {
+  try {
+    const response = await instance.get(BE.API.PRODUCT.HIGHLIGHT_REVIEW(id));
+    const body = response.data;
+    return body.data;
+  } catch (error) {
+    handleError(error);
+  }
+}

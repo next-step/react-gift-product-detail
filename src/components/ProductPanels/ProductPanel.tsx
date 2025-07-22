@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchProductSummary } from "@src/apis/BackEnd/apiList";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 import UserContext from "@src/contexts/UserContext";
 import { PATH } from "@src/router/Router";
+import FooterPanel from "./FooterPanel";
 
 export type ProductData = {
   imageURL: string;
@@ -17,10 +16,6 @@ function ProductPanel() {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const productId = useParams().id ?? "";
-  const productData = useSuspenseQuery<ProductData>({
-    queryKey: ["product", productId],
-    queryFn: () => fetchProductSummary(productId)
-  });
 
   const redirectLogin = (path: string, id: string | undefined) => {
     navigate(PATH.LOGIN + `?redirect=${encodeURIComponent(path)}/${id}`);
@@ -32,7 +27,12 @@ function ProductPanel() {
     }
   }, [userContext?.authToken.value, productId]);
 
-  return <>Product Panel</>;
+  return (
+    <>
+      Product Panel <br />
+      <FooterPanel />
+    </>
+  );
 }
 
 export default ProductPanel;
