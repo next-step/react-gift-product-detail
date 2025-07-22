@@ -3,15 +3,8 @@ import Router from "@src/router/Router";
 import UserContextProvider from "./contexts/UserContextProdiver";
 import AliveCheckPanel from "./apis/AliveCheckPanel"; // for testing
 import ToastContextProvider from "./contexts/ToastContextProdiver";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false
-    }
-  }
-});
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "./apis/BackEnd/query/client";
 
 function App() {
   return (
