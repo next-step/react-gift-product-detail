@@ -6,11 +6,13 @@ type UseInViewOptions = {
   rootMargin?: string;
 };
 
-export const useInView = (options: UseInViewOptions = {}) => {
+export const useInView = <TElement extends HTMLElement = HTMLDivElement>(
+  options: UseInViewOptions = {},
+) => {
   const { callback, threshold = 0.1, rootMargin = "50px" } = options;
 
   const [inView, setInView] = useState(false);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<TElement>(null);
 
   const handleIntersection = useCallback(
     ([entry]: IntersectionObserverEntry[]) => {
