@@ -117,7 +117,7 @@ export const THEME_INFO_CODE = { NOT_FOUND: 404 };
 export async function fetchThemeInfo(themeId: string) {
   try {
     const response = await instance.get(BE.API.THEME.INFO(themeId));
-    return response.data;
+    return response.data.data;
   } catch (error) {
     handleError(error);
   }
