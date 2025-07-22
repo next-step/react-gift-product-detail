@@ -1,35 +1,93 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/** @jsxImportSource @emotion/react */
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import NavBar from './pages/Home/components/NavBar';
+import FriendSelector from './pages/Home/components/FriendSelector';
+import CategorySection from './pages/Home/components/CategorySection';
+import Banner from './pages/Home/components/Banner';
+import RankingSection from './pages/Home/components/RankingSection/RankingSection';
+import LoginPage from './pages/Login/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
+import MyPage from './pages/MyPage';
+import {
+  UserManagementProvider,
+  UserManagement,
+} from './pages/Login/contexts/UserManagement';
+import React from 'react';
+import OrderPage from './pages/Order/OrderPage';
+import ScrollToTop from './pages/Home/ScrollToTop';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ThemeProductPage from './pages/ThemeProductPage';
+import theme from './styles/theme';
+import { css } from '@emotion/react';
+
+const Home = () => (
+  <main>
+    <FriendSelector />
+    <CategorySection />
+    <Banner />
+    <RankingSection />
+  </main>
+);
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = UserManagement();
+  return user ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+const RedirectIfLoggedIn = ({ children }: { children: React.ReactNode }) => {
+  const { user } = UserManagement();
+  return user ? <Navigate to="/my" replace /> : <>{children}</>;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <UserManagementProvider>
+        <ScrollToTop />
+        <NavBar />
+        <div
+          css={css`
+            padding-top: ${theme.spacing[12]};
+            max-width: 720px;
+            margin: 0 auto;
+            min-height: calc(100vh - ${theme.spacing[12]});
+          `}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/login"
+              element={
+                <RedirectIfLoggedIn>
+                  <LoginPage />
+                </RedirectIfLoggedIn>
+              }
+            />
+            <Route
+              path="/my"
+              element={
+                <ProtectedRoute>
+                  <MyPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/order/:productId" element={<OrderPage />} />
+            <Route path="/themes/:themeId" element={<ThemeProductPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3000}
+          hideProgressBar={true}
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
+      </UserManagementProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
