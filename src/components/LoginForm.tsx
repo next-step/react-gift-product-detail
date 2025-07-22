@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
-import { LOGIN_CODE, postLogin } from "@src/apis/BackEnd/apiList";
+import {
+  LOGIN_CODE,
+  postLogin,
+  type APIError
+} from "@src/apis/BackEnd/apiList";
 import UserContext from "@src/contexts/UserContext";
-import usePostState from "@src/hooks/usePostState";
 import theme from "@src/styles/kakaoTheme";
+import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -37,38 +41,33 @@ function LoginForm() {
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
-  const { status, result, error, post } = usePostState(postLogin);
-
-  const nagivateToRedirectionTarget = () => {
-    navigate(redirectPath ? decodeURIComponent(redirectPath) : "/");
-  };
-
-  const handleLogin = async (data: LoginFormData) => {
-    post(data.email, data.password);
-  };
-
-  useEffect(() => {
-    if (status === "pending") return;
-
-    if (status === "error") {
-      if (error?.status === LOGIN_CODE.WRONG_FORMAT) {
+  const { mutate } = useMutation({
+    mutationFn: (data: LoginFormData) => postLogin(data.email, data.password),
+    onSuccess: (result) => {
+      const authData = result;
+      userContext?.authToken.setValue(authData!.data.authToken);
+      userContext?.email.setValue(authData!.data.email);
+      userContext?.user.setValue(authData!.data.name);
+      nagivateToRedirectionTarget();
+    },
+    onError: (error: APIError) => {
+      if (error.status === LOGIN_CODE.WRONG_FORMAT) {
         toast(error.message, {
           type: "error",
           hideProgressBar: true,
           position: "bottom-center"
         });
       }
-      return;
     }
+  });
 
-    if (status === "done") {
-      const authData = result;
-      userContext?.authToken.setValue(authData!.data.authToken);
-      userContext?.email.setValue(authData!.data.email);
-      userContext?.user.setValue(authData!.data.name);
-      nagivateToRedirectionTarget();
-    }
-  }, [status]);
+  const nagivateToRedirectionTarget = () => {
+    navigate(redirectPath ? decodeURIComponent(redirectPath) : "/");
+  };
+
+  const handleLogin = async (data: LoginFormData) => {
+    mutate(data);
+  };
 
   useEffect(() => {
     if (userContext?.authToken.value) {
