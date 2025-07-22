@@ -1,35 +1,109 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Outlet,
+} from 'react-router-dom';
+import { MobileLayout } from '@/components/layout';
+import { NavigationBar } from '@/components/navigation';
+import { PrivateRoute } from '@/components/common';
+import {
+  HomePage,
+  LoginPage,
+  MyPage,
+  OrderPage,
+  NotFoundPage,
+  ThemeProductListPage,
+} from '@/pages';
+import {
+  ROUTE_HOME,
+  ROUTE_LOGIN,
+  ROUTE_MY,
+  ROUTE_ORDER,
+  ROUTE_NOT_FOUND,
+  ROUTE_THEME_PRODUCTS,
+} from '@/constants';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// OrderLayout 컴포넌트 추가
+function OrderLayout() {
+  const navigate = useNavigate();
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <NavigationBar
+        title="선물하기"
+        showBackButton={true}
+        showProfileButton={false}
+        onBackClick={() => navigate(ROUTE_HOME)}
+      />
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const getNavigationConfig = () => {
+    return {
+      title: '선물하기',
+      showBackButton: true,
+      showProfileButton: true,
+    };
+  };
+
+  const navConfig = getNavigationConfig();
+
+  const handleBackClick = () => {
+    navigate(ROUTE_HOME); // 항상 홈으로 이동
+  };
+
+  const handleProfileClick = () => {
+    navigate(ROUTE_MY);
+  };
+
+  return (
+    <MobileLayout>
+      {!location.pathname.startsWith(ROUTE_ORDER) && (
+        <NavigationBar
+          title={navConfig.title}
+          showBackButton={navConfig.showBackButton}
+          showProfileButton={navConfig.showProfileButton}
+          onBackClick={handleBackClick}
+          onProfileClick={handleProfileClick}
+        />
+      )}
+
+      <Routes>
+        <Route path={ROUTE_HOME} element={<HomePage />} />
+        <Route path={ROUTE_LOGIN} element={<LoginPage />} />
+        <Route
+          path={ROUTE_MY}
+          element={
+            <PrivateRoute>
+              <MyPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path={ROUTE_ORDER} element={<OrderLayout />}>
+          <Route
+            path=":productId"
+            element={
+              <PrivateRoute>
+                <OrderPage />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+        <Route path={ROUTE_THEME_PRODUCTS} element={<ThemeProductListPage />} />
+        <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
+      </Routes>
+      <ToastContainer />
+    </MobileLayout>
+  );
+}
+
+export default App;
