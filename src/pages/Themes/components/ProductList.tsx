@@ -13,6 +13,8 @@ const ProductList = () => {
   const { items, isLoading, hasMoreList, loader } = usePaginationFetch<RankingProductType>(
     generatePath(API_ENDPOINTS.THEME_PRODUCTS, { themeId: themeId ?? null }),
     PRODUCT_LIST_LIMIT,
+    0.5,
+    "상품 목록을 불러오는데 실패했습니다.",
   );
 
   return (

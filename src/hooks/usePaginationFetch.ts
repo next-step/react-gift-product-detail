@@ -9,7 +9,12 @@ interface PaginationData<T> {
   hasMoreList: boolean;
 }
 
-const usePaginationFetch = <T>(url: string, limit: number = 10, threshold: number = 0.5) => {
+const usePaginationFetch = <T>(
+  url: string,
+  limit: number = 10,
+  threshold: number = 0.5,
+  errorMessage: string = "데이터를 불러오는데 실패했습니다.",
+) => {
   const [items, setItems] = useState<T[]>([]);
   const [cursor, setCursor] = useState(0);
   const [hasMoreList, setHasMoreList] = useState(true);
@@ -39,7 +44,7 @@ const usePaginationFetch = <T>(url: string, limit: number = 10, threshold: numbe
         setHasMoreList(response.data.hasMoreList);
       }
     } catch (error) {
-      console.error("상품 목록을 불러오는데 실패했습니다:", error);
+      console.error(errorMessage, error);
       setHasMoreList(false);
     }
   }, [cursor, hasMoreList, isLoading, fetchData, limit]);
