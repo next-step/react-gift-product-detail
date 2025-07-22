@@ -8,7 +8,7 @@ import PendingSpinner from "../shared/PendingSpinner";
 function RealTimeRankPanel() {
   return (
     <ErrorBoundary
-      fallbackRender={({ error }) => {
+      fallbackRender={() => {
         return <NoProduct>목록을 불러올 수 없습니다.</NoProduct>;
       }}
     >

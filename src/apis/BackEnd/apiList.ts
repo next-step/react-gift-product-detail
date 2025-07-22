@@ -4,6 +4,11 @@ import instance from "./axios/instance";
 
 const ALIVEMESSAGE = "pong~!@#$%^&*()";
 
+export type APIError = {
+  status: number;
+  message: string;
+};
+
 function handleError(error: unknown) {
   if (axios.isAxiosError(error)) {
     throw {

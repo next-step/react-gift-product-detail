@@ -1,14 +1,10 @@
+import type { APIError } from "@src/apis/BackEnd/apiList";
 import { useState, useCallback } from "react";
-
-type Error = {
-  status: number;
-  message: string;
-};
 
 type DataState<T> = {
   status: "ready" | "pending" | "done" | "error";
   result: T | null;
-  error?: Error;
+  error?: APIError;
 };
 
 export default function usePostState<T, A extends unknown[]>(
@@ -30,7 +26,7 @@ export default function usePostState<T, A extends unknown[]>(
         setDataState({
           status: "error",
           result: null,
-          error: e as Error
+          error: e as APIError
         });
       }
     },
