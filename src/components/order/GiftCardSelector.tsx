@@ -1,7 +1,7 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
 import { ordercard } from "@/data/ordercard";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import ErrorMessage from "./ErrorMessage";
 
 type Props = {
@@ -13,13 +13,19 @@ type Props = {
 export default function GiftCardSelector({ value, onChange, error }: Props) {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
 
-  useEffect(() => {
-    onChange({
+  const latestOnChange = useRef(onChange);
+
+  latestOnChange.current = onChange;
+
+  const handleCardClick = (index: number) => {
+    setSelectedCardIndex(index);
+
+    latestOnChange.current({
       target: {
-        value: ordercard[selectedCardIndex].defaultTextMessage,
+        value: ordercard[index].defaultTextMessage,
       },
     } as React.ChangeEvent<HTMLTextAreaElement>);
-  }, [selectedCardIndex, onChange]);
+  };
 
   return (
     <GiftCardWrapper>
@@ -31,7 +37,7 @@ export default function GiftCardSelector({ value, onChange, error }: Props) {
                 key={card.id}
                 src={card.thumbUrl}
                 isSelected={selectedCardIndex === index}
-                onClick={() => setSelectedCardIndex(index)}
+                onClick={() => handleCardClick(index)}
               />
             ))}
             <GiftcardEndBox />

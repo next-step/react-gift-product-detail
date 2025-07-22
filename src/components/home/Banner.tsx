@@ -1,3 +1,4 @@
+// 카카오테크 캠퍼스 3기 여러분 ...
 import styled from "@emotion/styled";
 
 export default function Banner() {

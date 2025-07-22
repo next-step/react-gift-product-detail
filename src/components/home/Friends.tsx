@@ -1,3 +1,4 @@
+// 선물할 친구를 선택해 주세요
 import { getUserFromSession } from "@/utils/getUserFromStorage";
 import styled from "@emotion/styled";
 import { FiPlus } from "react-icons/fi";
