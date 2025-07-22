@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import GlobalStyle from '@/styles/GlobalStyle';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from '@/pages/HomePage';
+import LoginPage from '@/pages/LoginPage';
+import ThemePage from '@/pages/ThemePage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import MyPage from '@/pages/Mypage';
+import OrderPage from '@/pages/OrderPage';
+import PrivateRoute from '@/routes/PrivateRoute';
+import { ROUTES } from '@/constants/routes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Routes>
+          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.THEME_PATH} element={<ThemePage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path={ROUTES.MY} element={<MyPage />} />
+            <Route path={ROUTES.ORDER_PATH} element={<OrderPage />} />
+          </Route>
+
+          <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer position="bottom-center" autoClose={2000} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
