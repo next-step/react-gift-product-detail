@@ -1,13 +1,10 @@
-import { useCallback, useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  PRODUCT_SUMMARY_CODE,
-  fetchProductSummary
-} from "@src/apis/BackEnd/apiList";
-import useFetchState from "@src/hooks/useFetchState";
+import { Suspense, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { PRODUCT_SUMMARY_CODE, type APIError } from "@src/apis/BackEnd/apiList";
 import PendingSpinner from "@src/components/shared/PendingSpinner";
-import OrderForm from "@src/components/OrderPanels/OrderForm";
 import ToastContext from "@src/contexts/ToastContext";
+import OrderPanel from "@src/components/OrderPanels/OrderPanel";
+import { ErrorBoundary } from "react-error-boundary";
 
 export type ProductData = {
   imageURL: string;
@@ -20,31 +17,24 @@ export type ProductData = {
 function OrderPage() {
   const toastContext = useContext(ToastContext);
   const navigate = useNavigate();
-  const productId = useParams().id ?? "";
-  const update = useCallback(async () => {
-    const response = await fetchProductSummary(productId);
-    return response;
-  }, [productId]);
-
-  const productData = useFetchState<ProductData>(update);
-
-  useEffect(() => {
-    if (
-      productData.status === "error" &&
-      productData.error?.status === PRODUCT_SUMMARY_CODE.NO_PRODUCT
-    ) {
-      toastContext?.message.setValue(productData.error.message);
-      navigate(`/`);
-    }
-  }, [productData.status]);
 
   return (
-    <>
-      {productData.status === "pending" && <PendingSpinner />}
-      {productData.status === "done" && (
-        <OrderForm productData={productData.data!} />
+    <ErrorBoundary
+      fallbackRender={() => (
+        <>주문하기 페이지를 로딩하는 도중에 오류가 발생하였습니다.</>
       )}
-    </>
+      onError={(error: unknown) => {
+        const customError = error as APIError;
+        if (customError.status === PRODUCT_SUMMARY_CODE.NO_PRODUCT) {
+          toastContext?.message.setValue(customError.message);
+          navigate(`/`);
+        }
+      }}
+    >
+      <Suspense fallback={<PendingSpinner />}>
+        <OrderPanel />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

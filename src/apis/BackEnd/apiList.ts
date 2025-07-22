@@ -4,6 +4,11 @@ import instance from "./axios/instance";
 
 const ALIVEMESSAGE = "pong~!@#$%^&*()";
 
+export type APIError = {
+  status: number;
+  message: string;
+};
+
 function handleError(error: unknown) {
   if (axios.isAxiosError(error)) {
     throw {
@@ -56,6 +61,7 @@ export async function fetchRealTimeRankings(
       BE.API.PRODUCT.RANKING + `?targetType=${targetType}&rankType=${rankType}`
     );
     const body = response.data;
+    // throw Error(); // For testing ErrorBoundary
     return body.data;
   } catch (error) {
     handleError(error);
@@ -116,7 +122,7 @@ export const THEME_INFO_CODE = { NOT_FOUND: 404 };
 export async function fetchThemeInfo(themeId: string) {
   try {
     const response = await instance.get(BE.API.THEME.INFO(themeId));
-    return response.data;
+    return response.data.data;
   } catch (error) {
     handleError(error);
   }

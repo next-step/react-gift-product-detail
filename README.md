@@ -6,6 +6,11 @@
 - [x] 불필요한 api delay 로직 삭제
 - [x] useEffect dependency array 값 수정 (필요 종속 변수 추가, 불필요한 변수 제거)
 
+## 1단계
+
+- [x] tanstack query 모듈 추가 및 전역 상태 Provider 추가
+- [x] 모든 GET, POST react query로 리펙토링
+
 ## 실행 가이드
 
 1. 프론트엔드 프로젝트 루트에 .env 파일을 구성해주세요

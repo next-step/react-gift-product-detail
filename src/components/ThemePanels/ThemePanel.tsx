@@ -3,8 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Card from "./Card";
 import styled from "@emotion/styled";
-import usePostState from "@src/hooks/usePostState";
 import PendingSpinner from "../shared/PendingSpinner";
+import { useMutation } from "@tanstack/react-query";
 
 export type ThemeProductData = {
   brandInfo: {
@@ -29,28 +29,36 @@ function ThemePanel() {
   const cursorRef = useRef<number>(0);
   const scrollEndRef = useRef<HTMLDivElement>(null);
   const PRODUCTS_PER_PAGE = 12;
-  const productData = usePostState(fetchThemeProducts);
 
-  useEffect(() => {
-    if (productData.status === "done") {
-      const { cursor, hasMoreList, list } = productData.result.data;
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: ({
+      themeId,
+      cursor,
+      limit
+    }: {
+      themeId: string;
+      cursor: number;
+      limit: number;
+    }) => fetchThemeProducts(themeId, cursor, limit),
+    onSuccess: (result) => {
+      const { cursor, hasMoreList, list } = result.data;
       hasMoreRef.current = hasMoreList;
       cursorRef.current = cursor;
       setProductList((prev) => [...prev, ...list]);
     }
-  }, [productData.status, productData.result?.data]);
+  });
 
   const getNext = useCallback(
     (entries: IntersectionObserverEntry[]) => {
-      if (
-        entries[0].isIntersecting &&
-        hasMoreRef.current &&
-        productData.status !== "pending"
-      ) {
-        productData.post(themeId, cursorRef.current, PRODUCTS_PER_PAGE);
+      if (entries[0].isIntersecting && hasMoreRef.current && !isPending) {
+        mutate({
+          themeId,
+          cursor: cursorRef.current,
+          limit: PRODUCTS_PER_PAGE
+        });
       }
     },
-    [themeId, productData]
+    [themeId, isPending, mutate]
   );
 
   useEffect(() => {
@@ -65,7 +73,7 @@ function ThemePanel() {
 
   return (
     <>
-      {productData.status === "done" && productList.length === 0 && (
+      {isSuccess && productList.length === 0 && (
         <NoProduct>상품이 없습니다.</NoProduct>
       )}
       <CardPlaceHolder>
@@ -73,7 +81,7 @@ function ThemePanel() {
           <Card key={product.id} product={product} />
         ))}
       </CardPlaceHolder>
-      {productData.status === "pending" && <PendingSpinner />}
+      {isPending && <PendingSpinner />}
       <ScrollEnd ref={scrollEndRef}></ScrollEnd>
     </>
   );
