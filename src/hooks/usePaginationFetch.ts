@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-
-import { useRef } from "react";
-import useFetch from "./useFetch";
+import useFetch from "@/hooks/useFetch";
+import useInView from "@/hooks/useInView";
 
 interface PaginationData<T> {
   list: T[];
@@ -18,7 +17,7 @@ const usePaginationFetch = <T>(
   const [items, setItems] = useState<T[]>([]);
   const [cursor, setCursor] = useState(0);
   const [hasMoreList, setHasMoreList] = useState(true);
-  const loader = useRef<HTMLDivElement>(null);
+  const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
   const { fetchData, isLoading } = useFetch<PaginationData<T>>(url, {
     autoFetch: false,
@@ -47,29 +46,13 @@ const usePaginationFetch = <T>(
       console.error(errorMessage, error);
       setHasMoreList(false);
     }
-  }, [cursor, hasMoreList, isLoading, fetchData, limit]);
+  }, [cursor, hasMoreList, isLoading, fetchData, limit, errorMessage]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entries]) => {
-        if (entries.isIntersecting && hasMoreList && !isLoading) {
-          loadMoreItems();
-        }
-      },
-      { threshold },
-    );
-
-    const el = loader.current;
-    if (el && hasMoreList) {
-      observer.observe(el);
+    if (isInView && hasMoreList && !isLoading) {
+      loadMoreItems();
     }
-
-    return () => {
-      if (el) {
-        observer.unobserve(el);
-      }
-    };
-  }, [hasMoreList, loadMoreItems, isLoading, threshold, loader]);
+  }, [hasMoreList, loadMoreItems, isInView, isLoading]);
 
   return { items, isLoading, hasMoreList, loader };
 };
