@@ -13,7 +13,7 @@ export const ProductListSection = ({ themeId }: Props) => {
   const { products, loading, error, hasMore, fetchNext } =
     useThemeProducts(themeId);
 
-  const observerRef = useInfiniteScroll({
+  const observerRef = useInfiniteScroll<HTMLDivElement>({
     onIntersect: fetchNext,
     enabled: hasMore && !loading,
   });

@@ -7,12 +7,12 @@ type UseInfiniteScrollProps = {
   threshold?: number;
 };
 
-export const useInfiniteScroll = ({
+export const useInfiniteScroll = <T extends HTMLElement = HTMLDivElement>({
   onIntersect,
   enabled,
   threshold = SCROLL_THRESHOLD,
 }: UseInfiniteScrollProps) => {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<T | null>(null);
 
   useEffect(() => {
     if (!enabled || !ref.current) return;
