@@ -13,11 +13,12 @@ import { useForm, Controller, FormProvider, useWatch } from "react-hook-form";
 import {
   ORDER_CODE,
   postOrder,
+  type APIError,
   type OrderBody
 } from "@src/apis/BackEnd/apiList";
 import { ToastContainer, toast } from "react-toastify";
 import type { ProductData } from "@src/pages/OrderPage";
-import usePostState from "@src/hooks/usePostState";
+import { useMutation } from "@tanstack/react-query";
 
 export type Receiver = {
   id: string;
@@ -51,43 +52,15 @@ function OrderForm({ productData }: { productData: ProductData }) {
     }
   });
 
-  const { status, result, error, post } = usePostState(postOrder);
-
-  const orderHandler = async () => {
-    const orderInfo: OrderBody = {
-      productId: productData.id,
-      message: formHooks.getValues("message"),
-      messageCardId: formHooks.getValues("cardId").toString(),
-      ordererName: formHooks.getValues("sender"),
-      receivers: formHooks.getValues("receivers").map((receiver: Receiver) => ({
-        name: receiver.name,
-        phoneNumber: receiver.phoneNumber,
-        quantity: parseInt(receiver.quantity)
-      }))
-    };
-    post(orderInfo, userContext?.authToken.value ?? "");
-  };
-
-  useEffect(() => {
-    if (status === "pending") return;
-
-    if (status === "error") {
-      switch (error?.status) {
-        case ORDER_CODE.NOT_VALID:
-          toast(error.message, {
-            type: "error",
-            hideProgressBar: true,
-            position: "bottom-center"
-          });
-          break;
-        case ORDER_CODE.LOGIN_REQUIRED:
-          redirectLogin(PATH.ORDER, params.id);
-          break;
-      }
-      return;
-    }
-
-    if (status === "done") {
+  const { mutate } = useMutation({
+    mutationFn: ({
+      orderInfo,
+      authToken
+    }: {
+      orderInfo: OrderBody;
+      authToken: string;
+    }) => postOrder(orderInfo, authToken),
+    onSuccess: (result) => {
       if (result.data.success) {
         alert(
           `주문이 완료되었습니다.\n상품명: ${
@@ -103,8 +76,37 @@ function OrderForm({ productData }: { productData: ProductData }) {
       } else {
         alert("주문에 실패하였습니다.");
       }
+    },
+    onError: (error: APIError) => {
+      switch (error?.status) {
+        case ORDER_CODE.NOT_VALID:
+          toast(error.message, {
+            type: "error",
+            hideProgressBar: true,
+            position: "bottom-center"
+          });
+          break;
+        case ORDER_CODE.LOGIN_REQUIRED:
+          redirectLogin(PATH.ORDER, params.id);
+          break;
+      }
     }
-  }, [status]);
+  });
+
+  const orderHandler = async () => {
+    const orderInfo: OrderBody = {
+      productId: productData.id,
+      message: formHooks.getValues("message"),
+      messageCardId: formHooks.getValues("cardId").toString(),
+      ordererName: formHooks.getValues("sender"),
+      receivers: formHooks.getValues("receivers").map((receiver: Receiver) => ({
+        name: receiver.name,
+        phoneNumber: receiver.phoneNumber,
+        quantity: parseInt(receiver.quantity)
+      }))
+    };
+    mutate({ orderInfo, authToken: userContext?.authToken.value ?? "" });
+  };
 
   const receivers = useWatch({
     control: formHooks.control,
@@ -115,7 +117,7 @@ function OrderForm({ productData }: { productData: ProductData }) {
     if (!userContext?.authToken.value) {
       redirectLogin(PATH.ORDER, params.id);
     }
-  }, [userContext?.authToken.value]);
+  }, [userContext?.authToken.value, params.id]);
 
   return (
     <FormProvider {...formHooks}>
