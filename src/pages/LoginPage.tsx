@@ -42,13 +42,7 @@ export default function LoginPage() {
 
     try {
       const user = await auth({ email, password });
-
-      const userInfo = {
-        email: user.email,
-        name: user.name,
-        authToken: user.authToken,
-      };
-      sessionStorage.setItem(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
+      sessionStorage.setItem(STORAGE_KEY.USER_INFO, JSON.stringify(user));
 
       navigate(from, { replace: true });
     } catch (error: unknown) {
