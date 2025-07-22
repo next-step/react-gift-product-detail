@@ -3,6 +3,7 @@ import { type ThemeInfo, fetchThemeInfo } from "@/api/theme";
 import { ERROR_MESSAGES } from "@/constants/messages";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { isAxiosError } from "axios";
 import { AxiosError } from "axios";
 
 export const useThemeInfo = (themeId: number | undefined) => {
@@ -19,11 +20,12 @@ export const useThemeInfo = (themeId: number | undefined) => {
         const data = await fetchThemeInfo(themeId);
         setThemeInfo(data);
       } catch (err) {
-        const error = err as AxiosError;
-
-        if (error.response?.status === 404) {
-          navigate(ROUTES.HOME);
+        if (isAxiosError(err)) {
+          if (err.response?.status === 404) {
+            navigate(ROUTES.HOME);
+          }
         }
+
         setError(ERROR_MESSAGES.THEME.FAIL_TO_LOAD);
       } finally {
         setLoading(false);
