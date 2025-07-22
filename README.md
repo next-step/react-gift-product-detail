@@ -1,1 +1,1 @@
-# react-gift-product-detail
+#상품 상세 - API 연동 심화, 테스트
