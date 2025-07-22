@@ -28,7 +28,7 @@ const ThemeProductsPage = () => {
         if (entries[0].isIntersecting && hasMore) {
           loadMore();
         }
-      });
+      }, { rootMargin: '0px 0px 300px 0px' });
 
       if (node) observer.current.observe(node);
     },
