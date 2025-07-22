@@ -1,8 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import UserContext from "@src/contexts/UserContext";
+import { useParams } from "react-router-dom";
 import { PATH } from "@src/router/Router";
 import FooterPanel from "./FooterPanel";
+import { useLoginRedirection } from "@src/hooks/useLoginRedirection";
 
 export type ProductData = {
   imageURL: string;
@@ -13,19 +12,9 @@ export type ProductData = {
 };
 
 function ProductPanel() {
-  const navigate = useNavigate();
-  const userContext = useContext(UserContext);
   const productId = useParams().id ?? "";
 
-  const redirectLogin = (path: string, id: string | undefined) => {
-    navigate(PATH.LOGIN + `?redirect=${encodeURIComponent(path)}/${id}`);
-  };
-
-  useEffect(() => {
-    if (!userContext?.authToken.value) {
-      redirectLogin(PATH.PRODUCT, productId);
-    }
-  }, [userContext?.authToken.value, productId]);
+  useLoginRedirection(`${PATH.PRODUCT}/${productId}`);
 
   return (
     <>
