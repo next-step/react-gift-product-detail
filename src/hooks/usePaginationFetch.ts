@@ -13,10 +13,9 @@ const usePaginationFetch = <T>(url: string, limit: number = 10, threshold: numbe
   const [items, setItems] = useState<T[]>([]);
   const [cursor, setCursor] = useState(0);
   const [hasMoreList, setHasMoreList] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const loader = useRef<HTMLDivElement>(null);
 
-  const { fetchData } = useFetch<PaginationData<T>>(url, {
+  const { fetchData, isLoading } = useFetch<PaginationData<T>>(url, {
     autoFetch: false,
   });
 
@@ -24,7 +23,6 @@ const usePaginationFetch = <T>(url: string, limit: number = 10, threshold: numbe
     if (isLoading || !hasMoreList) return null;
 
     try {
-      setIsLoading(true);
       const response = await fetchData(undefined, undefined, {
         cursor,
         limit,
@@ -43,8 +41,6 @@ const usePaginationFetch = <T>(url: string, limit: number = 10, threshold: numbe
     } catch (error) {
       console.error("상품 목록을 불러오는데 실패했습니다:", error);
       setHasMoreList(false);
-    } finally {
-      setIsLoading(false);
     }
   }, [cursor, hasMoreList, isLoading, fetchData, limit]);
 
