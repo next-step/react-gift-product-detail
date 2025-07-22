@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import useApiRequest from "./useApiRequest";
 import { useInView } from "./useInView";
+import usePreservedCallback from "./usePreservedCallback";
 
 type UseInfiniteQueryProps<TRes, TItem, TParams> = {
   fetcher: (params: TParams) => Promise<TRes>;
@@ -20,6 +21,9 @@ function useInfiniteQuery<TRes, TItem, TParams>({
   const [items, setItems] = useState<TItem[]>([]);
   const [cursor, setCursor] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const preservedGetList = usePreservedCallback(getList);
+  const preservedGetCursor = usePreservedCallback(getCursor);
+  const preservedGetHasMore = usePreservedCallback(getHasMore);
 
   const requestFn = useCallback(
     () => fetcher({ ...initialParams, cursor, limit: 20 }),
@@ -35,14 +39,21 @@ function useInfiniteQuery<TRes, TItem, TParams>({
       data &&
       !isLoading &&
       !isError &&
-      (!getHasMore(data) || cursor !== getCursor(data))
+      (!preservedGetHasMore(data) || cursor !== preservedGetCursor(data))
     ) {
-      setItems(prev => [...prev, ...getList(data)]);
-      setCursor(getCursor(data));
-      setHasMore(getHasMore(data));
+      setItems(prev => [...prev, ...preservedGetList(data)]);
+      setCursor(preservedGetCursor(data));
+      setHasMore(preservedGetHasMore(data));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isLoading, isError]);
+  }, [
+    data,
+    isLoading,
+    isError,
+    preservedGetList,
+    preservedGetCursor,
+    preservedGetHasMore,
+    cursor,
+  ]);
 
   const { ref: loader } = useInView({
     callback: () => {
