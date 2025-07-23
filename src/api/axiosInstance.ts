@@ -1,4 +1,5 @@
 import { SESSION_USER_INFO_KEY } from "@/constants/storageKeys";
+import { createStorage } from "@/utils/createStorage";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -12,9 +13,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   config => {
-    const sessionUserInfo = sessionStorage.getItem(SESSION_USER_INFO_KEY);
+    const userInfoStorage = createStorage(SESSION_USER_INFO_KEY);
+    const sessionUserInfo = userInfoStorage.get();
     if (sessionUserInfo) {
-      const { authToken } = JSON.parse(sessionUserInfo);
+      const { authToken } = sessionUserInfo;
       config.headers.Authorization = authToken;
     }
     return config;
