@@ -1,23 +1,13 @@
 import styled from "@emotion/styled";
 import UserContext from "@src/contexts/UserContext";
+import { useLoginRedirection } from "@src/hooks/useLoginRedirection";
 import { PATH } from "@src/router/Router";
 import theme from "@src/styles/kakaoTheme";
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 
 function MyPage() {
-  const navigate = useNavigate();
   const userContext = useContext(UserContext);
-
-  const redirectLogin = (path: string) => {
-    navigate(PATH.LOGIN + `?redirect=${encodeURIComponent(path)}`);
-  };
-
-  useEffect(() => {
-    if (!userContext?.authToken.value) {
-      redirectLogin(PATH.MY);
-    }
-  }, [userContext?.authToken.value]);
+  useLoginRedirection(PATH.MY);
 
   const handleLogout = () => {
     userContext?.authToken.setValue(null);

@@ -13,7 +13,7 @@ function Card({ no, prod }: CardProps) {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    navigate(`${PATH.ORDER}/${prod.id}`);
+    navigate(`${PATH.PRODUCT}/${prod.id}`);
   };
 
   return (

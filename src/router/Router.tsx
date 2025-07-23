@@ -4,6 +4,7 @@ import LoginPage from "@src/pages/LoginPage";
 import Mainpage from "@src/pages/MainPage";
 import MyPage from "@src/pages/MyPage";
 import OrderPage from "@src/pages/OrderPage";
+import ProductPage from "@src/pages/ProductPage";
 import ThemePage from "@src/pages/ThemePage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -13,6 +14,7 @@ export const PATH = {
   MY: "/my",
   ORDER: "/order",
   THEME: "/themes",
+  PRODUCT: "/product",
   EXCEPT: "*"
 } as const;
 
@@ -26,6 +28,7 @@ function Router() {
         <Route path={PATH.MY} element={<MyPage />} />
         <Route path={PATH.ORDER + "/:id"} element={<OrderPage />} />
         <Route path={PATH.THEME + "/:id"} element={<ThemePage />} />
+        <Route path={PATH.PRODUCT + "/:id"} element={<ProductPage />} />
         <Route path={PATH.EXCEPT} element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>

@@ -19,6 +19,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import type { ProductData } from "@src/pages/OrderPage";
 import { useMutation } from "@tanstack/react-query";
+import { useLoginRedirection } from "@src/hooks/useLoginRedirection";
 
 export type Receiver = {
   id: string;
@@ -42,6 +43,8 @@ function OrderForm({ productData }: { productData: ProductData }) {
   const redirectLogin = (path: string, id: string | undefined) => {
     navigate(PATH.LOGIN + `?redirect=${encodeURIComponent(path)}/${id}`);
   };
+
+  useLoginRedirection(`${PATH.ORDER}/${params.id}`);
 
   const formHooks = useForm({
     defaultValues: {
@@ -112,12 +115,6 @@ function OrderForm({ productData }: { productData: ProductData }) {
     control: formHooks.control,
     name: "receivers"
   });
-
-  useEffect(() => {
-    if (!userContext?.authToken.value) {
-      redirectLogin(PATH.ORDER, params.id);
-    }
-  }, [userContext?.authToken.value, params.id]);
 
   return (
     <FormProvider {...formHooks}>

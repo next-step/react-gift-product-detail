@@ -2,7 +2,7 @@ import { Suspense, useContext } from "react";
 import PendingSpinner from "@src/components/shared/PendingSpinner";
 import styled from "@emotion/styled";
 import ThemeContents from "@src/components/ThemePanels/ThemeContents";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@src/components/shared/ErrorBoundary";
 import { useNavigate } from "react-router-dom";
 import ToastContext from "@src/contexts/ToastContext";
 import { THEME_INFO_CODE, type APIError } from "@src/apis/BackEnd/apiList";

@@ -8,7 +8,7 @@ function Card({ product }: { product: ThemeProductData }) {
   const navigate = useNavigate();
 
   const clickHandler = () => {
-    navigate(`${PATH.ORDER}/${product.id}`);
+    navigate(`${PATH.PRODUCT}/${product.id}`);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import RealTimeRankContents from "./RealTimeRankContents";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@src/components/shared/ErrorBoundary";
 import styled from "@emotion/styled";
 import theme from "@src/styles/kakaoTheme";
 import PendingSpinner from "../shared/PendingSpinner";
