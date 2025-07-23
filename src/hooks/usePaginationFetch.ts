@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { useInfiniteQuery, type QueryFunctionContext } from "@tanstack/react-query";
 import useFetch from "@/hooks/useFetch";
 import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import { isErrorData } from "@/types/FetchErrorData";
+import { isErrorData, type ErrorData } from "@/types/FetchErrorData";
 
 interface PaginationData<T> {
   list: T[];
@@ -16,43 +17,57 @@ const usePaginationFetch = <T>(
   threshold: number = 0.5,
   errorMessage: string = "데이터를 불러오는데 실패했습니다.",
 ) => {
-  const [items, setItems] = useState<T[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMoreList, setHasMoreList] = useState(true);
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
-  const { fetchData, isLoading } = useFetch<PaginationData<T>>(url, {
+  const { fetchData } = useFetch<PaginationData<T>>(url, {
     autoFetch: false,
   });
 
-  const loadMoreItems = useCallback(async () => {
-    if (isLoading || !hasMoreList) return null;
+  const fetchPageData = useCallback(
+    async (context: QueryFunctionContext): Promise<PaginationData<T>> => {
+      const pageParam = (context.pageParam as number) ?? 0;
 
-    try {
       const responseData = await fetchData(undefined, undefined, {
-        cursor,
+        cursor: pageParam,
         limit,
       });
-      if (responseData) {
-        setItems((prev) => [...prev, ...(responseData?.list ?? [])]);
-        setCursor(responseData.cursor);
-        setHasMoreList(responseData.hasMoreList);
-      }
-    } catch (error) {
-      if (isErrorData(error)) {
-        showFetchErrorToast(error.statusCode, errorMessage);
-      }
-      setHasMoreList(false);
-    }
-  }, [cursor, hasMoreList, isLoading, fetchData, limit, errorMessage]);
+      return responseData;
+    },
+    [limit, fetchData],
+  );
+
+  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
+    PaginationData<T>,
+    ErrorData
+  >({
+    queryKey: ["themeProducts", url],
+    queryFn: fetchPageData,
+    getNextPageParam: (lastPage: PaginationData<T>) => {
+      return lastPage.hasMoreList ? lastPage.cursor : undefined;
+    },
+    initialPageParam: 0,
+  });
 
   useEffect(() => {
-    if (isInView && hasMoreList && !isLoading) {
-      loadMoreItems();
+    if (error && isErrorData(error)) {
+      showFetchErrorToast(error.statusCode, errorMessage);
     }
-  }, [hasMoreList, loadMoreItems, isInView, isLoading]);
+  }, [error, errorMessage]);
 
-  return { items, isLoading, hasMoreList, loader };
+  useEffect(() => {
+    if (isInView && hasNextPage && !isFetchingNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [isInView, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage]);
+
+  const items = data?.pages.flatMap((page) => page.list) ?? [];
+
+  return {
+    items,
+    isLoading: isLoading || isFetchingNextPage,
+    hasMoreList: hasNextPage ?? false,
+    loader,
+  };
 };
 
 export default usePaginationFetch;

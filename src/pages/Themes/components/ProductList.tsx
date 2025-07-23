@@ -33,8 +33,8 @@ const ProductList = () => {
       </Content>
       <Loader ref={loader}>
         {isLoading && <Loading height="50px" />}
-        {!hasMoreList && items.length === 0 && <Empty>상품이 없습니다.</Empty>}
-        {!hasMoreList && items.length > 0 && <EndMessage>모든 상품을 불러왔습니다.</EndMessage>}
+        {!isLoading && !hasMoreList && items.length === 0 && <Empty>상품이 없습니다.</Empty>}
+        {!isLoading && !hasMoreList && items.length > 0 && <EndMessage>모든 상품을 불러왔습니다.</EndMessage>}
       </Loader>
     </Container>
   );
