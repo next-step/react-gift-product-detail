@@ -6,7 +6,7 @@ export const useProductSummary = (productId: number | undefined) => {
   const {
     data: product,
     isLoading: loading,
-    error,
+    isError,
   } = useQuery<ProductSummary, Error>({
     queryKey: ["productSummary", productId],
     queryFn: () => {
@@ -21,6 +21,6 @@ export const useProductSummary = (productId: number | undefined) => {
   return {
     product,
     loading,
-    error: error ? ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD : null,
+    error: isError ? ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD : null,
   };
 };

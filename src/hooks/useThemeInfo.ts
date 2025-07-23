@@ -6,7 +6,7 @@ export const useThemeInfo = (themeId: number | undefined) => {
   const {
     data: themeInfo,
     isLoading: loading,
-    error,
+    isError,
   } = useQuery<ThemeInfo, string>({
     queryKey: ["themeInfo", themeId],
     queryFn: () => {
@@ -21,6 +21,6 @@ export const useThemeInfo = (themeId: number | undefined) => {
   return {
     themeInfo,
     loading,
-    error: error ? ERROR_MESSAGES.THEME.FAIL_TO_LOAD : null,
+    error: isError ? ERROR_MESSAGES.THEME.FAIL_TO_LOAD : null,
   };
 };
