@@ -7,3 +7,4 @@ export { useFetch } from './useFetch';
 export { useThemes } from './useThemes';
 export { useRankingProducts } from './useRankingProducts';
 export { useProduct } from './useProduct';
+export { useInfiniteScroll } from './useInfiniteScroll';
