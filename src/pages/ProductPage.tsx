@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { PRODUCT_SUMMARY_CODE, type APIError } from "@src/apis/BackEnd/apiList";
 import PendingSpinner from "@src/components/shared/PendingSpinner";
 import ToastContext from "@src/contexts/ToastContext";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@src/components/shared/ErrorBoundary";
 import ProductPanel from "@src/components/ProductPanels/ProductPanel";
 
 function ProductPage() {
