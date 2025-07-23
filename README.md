@@ -29,11 +29,10 @@ http://localhost:3000(x)
 git submodule update --init --recursive
 ```
 
-3. 프로젝트 실행에 필요한 패키지를 설치해주세요.
+3. 프로젝트 실행에 필요한 패키지를 설치해주세요. **백엔드 mock 서버에 필요한 패키지는 postinstall 스크립트로 자동 설치됩니다.**
 
 ```
 npm install
-cd react-gift-mock-server && npm install
 ```
 
 4. concurrently 라이브러리를 사용해 BE, FE 서버를 동시에 실행 하려면 다음 명령어를 사용하세요
