@@ -10,7 +10,7 @@
         - 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
             [v] theme.ts
             [v] raking.ts
-            [ ] product.ts
+            [v] product.ts
             [ ] product_summary.ys
             [v] orders.ts
             [v] info.ts

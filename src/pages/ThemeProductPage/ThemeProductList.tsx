@@ -1,18 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ProductCard from '../Home/components/Shared/RankingCard';
 import { css } from '@emotion/react';
+import ProductCard from '../Home/components/Shared/RankingCard';
 import theme from '../../styles/theme';
-import { fetchThemeProducts } from '../../apis/product';
-
-type ProductItem = {
-  id: number;
-  imageUrl: string;
-  name: string;
-  price: number;
-  brand: string;
-};
+import { useThemeProducts } from '../../apis/product';
 
 const LIMIT = 10;
 
@@ -28,66 +20,19 @@ const ThemeProductList = () => {
     }
   }, [numericThemeId, navigate]);
 
-  if (!numericThemeId) {
-    return null;
-  }
-
-  const [products, setProducts] = useState<ProductItem[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
+    useThemeProducts(numericThemeId, LIMIT);
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const loadingRef = useRef(loading);
-  const hasMoreRef = useRef(hasMore);
-  const cursorRef = useRef(cursor);
-
-  useEffect(() => {
-    loadingRef.current = loading;
-    hasMoreRef.current = hasMore;
-    cursorRef.current = cursor;
-  }, [loading, hasMore, cursor]);
-
-  const loadProducts = useCallback(async () => {
-    if (loadingRef.current || !hasMoreRef.current) return;
-
-    setLoading(true);
-    try {
-      const {
-        products: newProducts,
-        nextCursor,
-        hasMoreList,
-      } = await fetchThemeProducts(numericThemeId, cursor, LIMIT);
-
-      setProducts((prev) => [
-        ...prev,
-        ...newProducts.filter(
-          (newItem) => !prev.some((existing) => existing.id === newItem.id)
-        ),
-      ]);
-      setCursor(nextCursor);
-      setHasMore(hasMoreList);
-    } catch (e) {
-      console.error('상품 로딩 실패:', e);
-      navigate('/');
-    } finally {
-      setLoading(false);
-    }
-  }, [numericThemeId, cursor, hasMore, loading, navigate]);
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
   useEffect(() => {
     const observerTarget = observerRef.current;
-    if (!observerTarget) return;
+    if (!observerTarget || !hasNextPage || isLoading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          loadProducts();
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
         }
       },
       {
@@ -99,16 +44,24 @@ const ThemeProductList = () => {
     observer.observe(observerTarget);
 
     return () => observer.disconnect();
-  }, [loadProducts, hasMore, loading]);
+  }, [fetchNextPage, hasNextPage, isLoading]);
 
-  if (!products.length && !loading) {
+  if (isError) {
+    console.error('상품 로딩 실패:', error);
+    navigate('/');
+    return null;
+  }
+
+  const allProducts = data?.pages.flatMap((page) => page.products) ?? [];
+
+  if (!isLoading && allProducts.length === 0) {
     return <div css={emptyStyle}>상품이 없습니다.</div>;
   }
 
   return (
     <>
       <div css={gridStyle}>
-        {products.map((item) => (
+        {allProducts.map((item) => (
           <div
             key={item.id}
             onClick={() => navigate(`/order/${item.id}`)}
@@ -123,6 +76,7 @@ const ThemeProductList = () => {
           </div>
         ))}
       </div>
+
       <div
         ref={observerRef}
         css={css`
@@ -130,7 +84,7 @@ const ThemeProductList = () => {
           margin-top: ${theme.spacing[10]};
         `}
       />
-      {loading && <div css={loadingStyle}>로딩 중...</div>}
+      {isLoading && <div css={loadingStyle}>로딩 중...</div>}
     </>
   );
 };
