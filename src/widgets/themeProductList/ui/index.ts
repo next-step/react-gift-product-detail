@@ -1,0 +1,1 @@
+export { default as ThemeProductSection } from './ThemeProductSection'; 
