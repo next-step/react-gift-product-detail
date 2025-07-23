@@ -25,7 +25,7 @@ export default function useIntersectionObserver({
       },
       {
         root: null,
-      }
+      },
     );
 
     observer.observe(element);
