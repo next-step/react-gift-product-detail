@@ -23,9 +23,9 @@ const OrderPage = () => {
   const { id } = useParams();
   const productId = Number(id);
   const { userInfo } = useAuth();
+
   if (!userInfo?.authToken) {
-    navigate("/login");
-    return null;
+    return <Navigate to="/login" replace />;
   }
 
   const { data: productData } = useSuspenseApiQuery<ProductSummary>({
