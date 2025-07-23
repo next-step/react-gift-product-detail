@@ -3,7 +3,6 @@ export { useLoginForm } from './useLoginForm';
 export { useAuth } from '@/contexts';
 export { useLocalStorageState } from './useLocalStorageState';
 export { useBodyScrollLock } from './useBodyScrollLock';
-export { useFetch } from './useFetch';
 export { useThemes } from './useThemes';
 export { useRankingProducts } from './useRankingProducts';
 export { useProduct } from './useProduct';
