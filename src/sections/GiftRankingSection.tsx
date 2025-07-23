@@ -3,7 +3,10 @@ import styled from "@emotion/styled";
 import ProductCard from "@/components/ProductCard";
 import { useSearchParams } from "react-router";
 import { useGiftRankingQuery } from "@/hooks/useGiftRankingQuery";
-import AsyncBoundary from "@/components/AsyncBoundary";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import Spinner from "@/components/Spinner";
 
 const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
@@ -96,6 +99,42 @@ const Message = styled.p`
   ${({ theme }) => theme.typography.body.body2Regular};
 `;
 
+function GiftRankingContent({
+  selectedFilter,
+  selectedTab,
+  showAll,
+  toggleShowAll,
+}: {
+  selectedFilter: string;
+  selectedTab: string;
+  showAll: boolean;
+  toggleShowAll: () => void;
+}) {
+  const { data } = useGiftRankingQuery(selectedFilter, selectedTab);
+  const DEFAULT_VISIBLE_COUNT = 6;
+
+  if (data.length === 0) {
+    return <Message>상품이 없습니다.</Message>;
+  }
+
+  const productToShow = showAll ? data : data.slice(0, DEFAULT_VISIBLE_COUNT);
+
+  return (
+    <>
+      <Grid>
+        {productToShow.map((item, index) => (
+          <ProductCard key={item.id} item={item} rank={index + 1} />
+        ))}
+      </Grid>
+      {data.length > DEFAULT_VISIBLE_COUNT && (
+        <LoadMore onClick={toggleShowAll}>
+          {showAll ? "접기" : "더보기"}
+        </LoadMore>
+      )}
+    </>
+  );
+}
+
 export default function GiftRankingSection() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -105,8 +144,6 @@ export default function GiftRankingSection() {
   const [selectedFilter, setSelectedFilter] = useState(initialFilter);
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [showAll, setShowAll] = useState(false);
-
-  const { data, isLoading, isError } = useGiftRankingQuery(selectedFilter, selectedTab);
 
   const filters = [
     { label: "전체", icon: "ALL", value: "ALL" },
@@ -138,9 +175,6 @@ export default function GiftRankingSection() {
     updateParams(selectedFilter, value);
   };
 
-  const DEFAULT_VISIBLE_COUNT = 6;
-  const visibleProducts = data ?? [];
-  const productToShow = showAll ? visibleProducts : visibleProducts.slice(0, DEFAULT_VISIBLE_COUNT);
   return (
     <Wrapper>
       <Title>실시간 급상승 선물랭킹</Title>
@@ -170,28 +204,15 @@ export default function GiftRankingSection() {
         ))}
       </TabWrapper>
 
-      <AsyncBoundary loading={isLoading} error={isError} errorFallback={<Message>상품을 불러오는 데 실패했어요.</Message>}>
-        {data?.length === 0 ? (
-          <Message>상품이 없습니다.</Message>
-        ) : (
-          <>
-            <Grid>
-              {productToShow.map((item, index) => (
-                <ProductCard
-                  key={item.id}
-                  item={item}
-                  rank={index + 1}
-                />
-              ))}
-            </Grid>
-            {data && data.length > DEFAULT_VISIBLE_COUNT && (
-              <LoadMore onClick={() => setShowAll(!showAll)}>
-                {showAll ? "접기" : "더보기"}
-              </LoadMore>
-            )}
-          </>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset} fallbackRender={() => <Message>상품을 불러오는데 실패했어요.</Message>}>
+            <Suspense fallback={<Spinner />}>
+              <GiftRankingContent selectedFilter={selectedFilter} selectedTab={selectedTab} showAll={showAll} toggleShowAll={() => setShowAll((prev) => !prev)} />
+            </Suspense>
+          </ErrorBoundary>
         )}
-      </AsyncBoundary>
+      </QueryErrorResetBoundary>
     </Wrapper>
   );
 }
