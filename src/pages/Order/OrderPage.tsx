@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { isErrorData } from "@/types/FetchErrorData";
 import { showFetchErrorToast, showFetchSuccessToast } from "@/utils/showFetchToast";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
+import { useMutation } from "@tanstack/react-query";
 
 interface OrderData {
   success: boolean;
@@ -40,8 +41,26 @@ const OrderPageContent = () => {
   const closeModal = () => setIsModalOpen(false);
 
   const { fetchData } = useFetch<OrderData, OrderBodyData>(API_ENDPOINTS.ORDER, {
+    headers: new AxiosHeaders({ Authorization: getCookieValue(AUTH_COOKIE_KEY_TOKEN) ?? "" }),
     method: "POST",
     autoFetch: false,
+  });
+  const { mutate } = useMutation({
+    mutationFn: (body: OrderBodyData) => fetchData(undefined, body),
+    onSuccess: (data) => {
+      if (data.success) {
+        showFetchSuccessToast("주문에 성공했습니다.", goHome);
+      }
+    },
+    onError: (error) => {
+      if (isErrorData(error)) {
+        if (error.statusCode === 401) {
+          showFetchErrorToast(error.statusCode, "유효하지 않은 계정입니다.", goLogin);
+        } else if (error) {
+          showFetchErrorToast(error.statusCode, error.message);
+        }
+      }
+    },
   });
 
   const navigate = useNavigate();
@@ -53,7 +72,6 @@ const OrderPageContent = () => {
   }, [logout, navigate]);
 
   const onSubmit = async (data: any) => {
-    const headers = new AxiosHeaders({ Authorization: getCookieValue(AUTH_COOKIE_KEY_TOKEN) ?? "" });
     const body: OrderBodyData = {
       productId: data.productId,
       message: data.message,
@@ -61,20 +79,7 @@ const OrderPageContent = () => {
       ordererName: data.sender,
       receivers: data.recipients,
     };
-    try {
-      const responseData = await fetchData(headers, body);
-      if (responseData?.success) {
-        showFetchSuccessToast("주문에 성공했습니다.", goHome);
-      }
-    } catch (error) {
-      if (isErrorData(error)) {
-        if (error?.statusCode === 401) {
-          showFetchErrorToast(error.statusCode, "유효하지 않은 계정입니다.", goLogin);
-        } else if (error) {
-          showFetchErrorToast(error.statusCode, error.message);
-        }
-      }
-    }
+    mutate(body);
   };
   return (
     <Container>

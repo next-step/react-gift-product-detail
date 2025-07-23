@@ -4,9 +4,11 @@ import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
+import { isErrorData, type ErrorData } from "@/types/FetchErrorData";
 import type { ProductType } from "@/types/RankingProductType";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { generatePath, useNavigate, useParams } from "react-router-dom";
@@ -15,24 +17,33 @@ const Product = () => {
   const { setValue } = useFormContext<OrderFormType>();
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { data, error, isLoading } = useFetch<ProductType>(
+  const { fetchData } = useFetch<ProductType>(
     generatePath(API_ENDPOINTS.PRODUCT_SUMMARY, { productId: productId ?? null }),
   );
+  const { data, isPending, isError, error } = useQuery<ProductType, ErrorData>({
+    queryKey: ["orderProduct", productId],
+    queryFn: () => fetchData(),
+    enabled: !!productId,
+  });
   const product = useMemo(() => data, [data]);
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
+
   useEffect(() => {
     if (product) {
       setValue("productId", product.id);
-    } else if (error) {
+    } else if (isErrorData(error)) {
       showFetchErrorToast(error.statusCode, error.message, goHome);
     }
-  }, [error, isLoading, setValue, goHome, product]);
-  if (isLoading) {
+  }, [error, setValue, goHome, product]);
+
+  if (isPending) {
     return <Loading height="170px" />;
   }
-  if (error) {
+
+  if (isError) {
     return null;
   }
+
   return (
     <Content>
       <Divider spacing="1rem" />
