@@ -4,23 +4,18 @@ import ProductCard from '@/components/giftHome/GiftThemes/ProductCard';
 import Text from '@/common/Text';
 import LoadingSpinner from '@/common/LoadingSpinner';
 import useGiftRanking from '@/hooks/useGiftRanking';
-import { type TargetType, type RankType } from '@/hooks/useFetch';
 
-const targetTypes: TargetType[] = ['ALL', 'FEMALE', 'MALE', 'TEEN'];
-const rankTypes: RankType[] = [
-  'MANY_WISH',
-  'MANY_RECEIVE',
-  'MANY_WISH_RECEIVE',
-];
+const targetTypes = ['ALL', 'FEMALE', 'MALE', 'TEEN'];
+const rankTypes = ['MANY_WISH', 'MANY_RECEIVE', 'MANY_WISH_RECEIVE'];
 
-const targetTypeLabels: Record<TargetType, string> = {
+const targetTypeLabels: Record<string, string> = {
   ALL: '전체',
   FEMALE: '여성이',
   MALE: '남성이',
   TEEN: '청소년이',
 };
 
-const rankTypeLabels: Record<RankType, string> = {
+const rankTypeLabels: Record<string, string> = {
   MANY_WISH: '받고 싶어한',
   MANY_RECEIVE: '많이 선물한',
   MANY_WISH_RECEIVE: '위시로 받은',
@@ -29,24 +24,20 @@ const rankTypeLabels: Record<RankType, string> = {
 const GiftRanking = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const selectedTarget = (searchParams.get('target') as TargetType) || 'ALL';
-  const selectedRank = (searchParams.get('rank') as RankType) || 'MANY_WISH';
+  const selectedTarget = searchParams.get('target') || 'ALL';
+  const selectedRank = searchParams.get('rank') || 'MANY_WISH';
 
-  const { products, loading, error, refetch } = useGiftRanking({
+  const { products, isLoading, isError, error } = useGiftRanking({
     target: selectedTarget,
     rank: selectedRank,
   });
 
-  const updateTargetFilter = (target: TargetType) => {
+  const updateTargetFilter = (target: string) => {
     setSearchParams({ target, rank: selectedRank });
   };
 
-  const updateRankFilter = (rank: RankType) => {
+  const updateRankFilter = (rank: string) => {
     setSearchParams({ target: selectedTarget, rank });
-  };
-
-  const handleRetry = () => {
-    refetch();
   };
 
   return (
@@ -81,12 +72,12 @@ const GiftRanking = () => {
         ))}
       </RankContainer>
 
-      {loading ? (
+      {isLoading ? (
         <LoadingSpinner />
-      ) : error ? (
+      ) : isError ? (
         <CenteredBox>
           <Text size="label1" weight="regular">
-            {error}
+            {error?.message || '에러가 발생했습니다.'}
           </Text>
         </CenteredBox>
       ) : products.length === 0 ? (
