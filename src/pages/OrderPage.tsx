@@ -15,6 +15,8 @@ import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
 import { postOrder } from '@/api';
 import type { ProductSummary } from '../hooks/useProduct';
 import { useMutation } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 interface OrderFormData {
   selectedCardId: number;
@@ -264,7 +266,7 @@ function handleOrderError(
   }
 }
 
-const OrderPage = () => {
+const OrderPageContent = () => {
   const { user } = useAuth();
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
@@ -486,5 +488,30 @@ const OrderPage = () => {
     </Container>
   );
 };
+
+const OrderPage = () => (
+  <ErrorBoundary>
+    <Suspense
+      fallback={
+        <Container>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '50vh',
+              fontSize: 18,
+              color: '#666',
+            }}
+          >
+            상품 정보를 불러오는 중...
+          </div>
+        </Container>
+      }
+    >
+      <OrderPageContent />
+    </Suspense>
+  </ErrorBoundary>
+);
 
 export default OrderPage;
