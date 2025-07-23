@@ -1,9 +1,4 @@
-import useApi from '@/apis/useApi';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { isAxiosError } from 'axios';
-import { PATH } from '@/constants/paths';
+import { useQueryApi } from '@/apis/useQueryApi';
 import { API_URLS } from './constants';
 
 interface ThemeInfo {
@@ -15,17 +10,11 @@ interface ThemeInfo {
 }
 
 export const useGetThemeInfo = (themeId: number) => {
-  const { data, isLoading, error } = useApi<{ data: ThemeInfo }>(
-    'get', API_URLS.THEME_INFO(themeId),
+  const { data } = useQueryApi<{ data: ThemeInfo }>(
+    ['theme', 'info', String(themeId)],
+    API_URLS.THEME_INFO(themeId),
+    { enabled: !!themeId, suspense: true }
   );
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAxiosError(error) && error.response?.status === 404) {
-      navigate(PATH.HOME);
-    }
-  }, [error, navigate]);
-
-  return { themeInfo: data?.data, isLoading, error };
+  return { themeInfo: data?.data };
 };
