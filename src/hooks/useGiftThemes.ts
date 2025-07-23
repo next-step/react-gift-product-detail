@@ -1,17 +1,18 @@
+import { useQuery } from '@tanstack/react-query';
 import { fetchThemes, type Category } from '@/api/themes';
-import { useFetch } from '@/hooks/useFetch';
 
 const useGiftThemes = () => {
   const {
     data: categories,
-    loading,
+    isLoading,
+    isError,
     error,
-  } = useFetch<Category[]>(fetchThemes, [], {
-    initialData: [],
-    errorMessage: '테마 불러오기에 실패했습니다.',
+  } = useQuery<Category[], Error>({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
   });
 
-  return { categories: categories || [], loading, error };
+  return { categories: categories || [], isLoading, isError, error };
 };
 
 export default useGiftThemes;
