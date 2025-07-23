@@ -6,6 +6,7 @@ export const ERROR_MESSAGES = {
     PW_TOO_SHORT: (min: number) =>
       `비밀번호는 최소 ${min}자 이상이어야 합니다.`,
     SUCCESS: "로그인에 성공했습니다.",
+    FAIL: "로그인에 실패했습니다.",
   },
 
   SYSTEM: {

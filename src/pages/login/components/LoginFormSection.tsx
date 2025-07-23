@@ -14,15 +14,12 @@ export default function LoginFormSection() {
     handlePasswordChange,
   } = useLoginForm();
 
-  const { handleLogin } = useLogin();
+  const { handleLogin, isPending } = useLogin();
 
   const handleSubmit = () => {
-    if (!isButtonEnabled) return;
+    if (!isButtonEnabled || isPending) return;
 
-    handleLogin({
-      email,
-      password,
-    });
+    handleLogin({ email, password });
   };
 
   return (
@@ -43,8 +40,11 @@ export default function LoginFormSection() {
         error={passwordError}
       />
 
-      <LoginButton onClick={handleSubmit} disabled={!isButtonEnabled}>
-        로그인
+      <LoginButton
+        onClick={handleSubmit}
+        disabled={!isButtonEnabled || isPending}
+      >
+        {isPending ? "로그인 중..." : "로그인"}
       </LoginButton>
     </Form>
   );
