@@ -1,11 +1,13 @@
-import { useFetch } from './useFetch';
-import apiClient from '../api';
-import type { ThemeResponse } from '../api/types';
+import { useQuery } from '@tanstack/react-query';
+import { getThemes } from '@/api/themes';
+import type { ThemeResponse } from '@/api/types';
 
 /**
- * 테마 목록을 조회하는 커스텀 훅
+ * 테마 목록을 조회하는 커스텀 훅 (React Query 적용)
  */
 export const useThemes = () => {
-  const baseUrl = `${apiClient.defaults.baseURL}/api/themes`;
-  return useFetch<ThemeResponse>(baseUrl);
+  return useQuery<ThemeResponse, Error>({
+    queryKey: ['themes'],
+    queryFn: getThemes,
+  });
 };

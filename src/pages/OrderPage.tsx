@@ -269,7 +269,7 @@ const OrderPage = () => {
   const navigate = useNavigate();
 
   // API에서 상품 정보 가져오기
-  const { product, isLoading, error } = useProduct(productId ?? '');
+  const { data: product, isLoading, error } = useProduct(productId ?? '');
 
   useEffect(() => {
     if (error) {
