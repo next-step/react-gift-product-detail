@@ -1,67 +1,36 @@
-import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { getThemeProduct } from "@/services/theme";
-import styled from "@emotion/styled";
-import axios from "axios";
-import { showErrorToast } from "@/styles/toast";
-import type { ProductInfo } from "@/types/product";
 import { useFetchTheme } from "../hooks/useFetchTheme";
+import { useThemeProduct } from "@/hooks/useThemeProduct";
+import styled from "@emotion/styled";
 import ThemeHeader from "@/components/theme/ThemeHeader";
 import ProductGrid from "@/components/theme/ProductGrid";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function ThemePage() {
   const { themeId } = useParams();
-  const { data: theme, isLoading: themeLoading } = useFetchTheme(themeId);
-  const [products, setProducts] = useState<ProductInfo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true); // 더 불러 올 게 있는지
-
-  const cursorRef = useRef(0);
-  
-  // 상품 불러오기
-  const fetchProducts = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      if (!themeId) return;
-      const cursor = cursorRef.current;
-      const productData = await getThemeProduct(themeId, cursor);
-      const newProducts = productData.data.list;
-
-      setProducts((prev) => [...prev, ...newProducts]);
-      cursorRef.current += newProducts.length;
-      setHasMore(newProducts.length > 0);
-    } catch (error) {
-      if (axios.isAxiosError(error))
-        showErrorToast("상품을 불러오는 데 실패했어요.");
-    } finally {
-      setLoading(false);
-    }
-  }, [themeId, hasMore]);
-
-  // 첫 페이지 상품만 초기 fetch
-  useEffect(() => {
-    if (!themeId || themeLoading) return;
-    setProducts([]);
-    setHasMore(true);
-    cursorRef.current = 0;
-    fetchProducts();
-  }, [themeId, themeLoading]);
+  const { data:theme } = useFetchTheme(themeId);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useThemeProduct(themeId!);
 
   const { loaderRef } = useInfiniteScroll({
-    hasMore,
-    loading,
-    fetchMore: fetchProducts,
+    hasMore: !!hasNextPage,
+    loading: isFetchingNextPage,
+    fetchMore: () => { fetchNextPage(); },
   });
 
-  if (!theme) return null;
+  const products = data?.pages.flatMap((page) => page.list ?? []) ?? [];
+
+  if (!theme || !data) return null;
 
   return (
     <Wrapper>
       <ThemeHeader theme={theme} />
-      <ProductGrid products={products} loader={loaderRef} loading={loading} />
-      {loading && <Spinner />}
+      <ProductGrid products={products} loader={loaderRef} loading={isFetchingNextPage} />
+      {isFetchingNextPage && <Spinner />}
     </Wrapper>
   );
 }
@@ -86,3 +55,4 @@ const Spinner = styled.div`
     }
   }
 `;
+

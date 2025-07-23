@@ -19,3 +19,8 @@ export type ProductInfo = {
     name: string;
   };
 };
+
+export type ProductPage = {
+  list: ProductInfo[];
+  nextCursor: number | null;
+};

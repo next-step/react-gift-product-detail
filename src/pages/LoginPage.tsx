@@ -3,12 +3,12 @@ import styled from "@emotion/styled";
 import Spacing from "@/components/Spacing";
 import { useLoginForm } from "@/hooks/useLoginForm";
 import { css, type Theme } from "@emotion/react";
-import { auth } from "@/services/auth";
 import { STORAGE_KEY } from "@/constants/storage";
 import { showErrorToast } from "@/styles/toast";
 import { REGEX } from "@/constants/regex";
 import { ERROR_MESSAGE } from "@/constants/messages";
 import axios from "axios";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -27,6 +27,8 @@ export default function LoginPage() {
     isFormValid,
   } = useLoginForm();
 
+  const loginMutation = useLoginMutation();
+
   const goToLogin = async () => {
     if (!isFormValid) return;
 
@@ -40,16 +42,20 @@ export default function LoginPage() {
       return;
     }
 
-    try {
-      const user = await auth({ email, password });
-      sessionStorage.setItem(STORAGE_KEY.USER_INFO, JSON.stringify(user));
-
-      navigate(from, { replace: true });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        showErrorToast("올바른 이메일 형식이 아닙니다.");
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          sessionStorage.setItem(STORAGE_KEY.USER_INFO, JSON.stringify(data));
+          navigate(from, { replace: true });
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            showErrorToast("올바른 이메일 형식이 아닙니다.");
+          }
+        },
       }
-    }
+    );
   };
 
   return (

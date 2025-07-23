@@ -1,21 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { get } from "@/services/request";
 
-type Params = {
-  url: string;
-  queryParams?: Record<string, string>;
-  enabled?: boolean;
-  suspense?: boolean;
-}
-
-export function useFetch<T>({
-  url,
-  queryParams,
-  enabled = true,
-}: Params) {
-  return useQuery<T>({
+export function useFetch<T>(url: string, queryParams?: Record<string, string>) {
+  return useQuery({
     queryKey: [url, queryParams],
-    queryFn: () => get<T>(url,{queryParams}),
-    enabled,
-  })
+    queryFn: () => get<{ data: T }>(url, { queryParams }).then(res => res.data),
+  });
 }
