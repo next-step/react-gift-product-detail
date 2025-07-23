@@ -2,8 +2,10 @@ import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import useFetch from "@/hooks/useFetch";
+import type { ErrorData } from "@/types/FetchErrorData";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { generatePath, useNavigate, useParams } from "react-router-dom";
 
@@ -19,9 +21,11 @@ const HeroSection = () => {
   const navigate = useNavigate();
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
   const { themeId } = useParams();
-  const { data, isLoading, error } = useFetch<HeroSectionData>(
-    generatePath(API_ENDPOINTS.THEME_INFO, { themeId: themeId ?? null }),
-  );
+  const { fetchData } = useFetch<HeroSectionData>(generatePath(API_ENDPOINTS.THEME_INFO, { themeId: themeId ?? null }));
+  const { data, isPending, error } = useQuery<HeroSectionData, ErrorData>({
+    queryKey: ["theme", themeId],
+    queryFn: () => fetchData(),
+  });
 
   useEffect(() => {
     if (error) {
@@ -33,7 +37,7 @@ const HeroSection = () => {
     }
   }, [error, goHome]);
 
-  if (isLoading) {
+  if (isPending) {
     return <Loading height="127.2px" />;
   }
 
