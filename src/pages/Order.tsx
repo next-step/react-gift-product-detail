@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { useTheme } from '@emotion/react'
 import { useFetch } from '@/shared/hooks'
 import { decodeUserInfo, getCookie } from '@/shared/utils'
+import { useMutation } from '@tanstack/react-query'
 
 // * 주문하기 페이지 (주문하기 폼 Provider 포함)
 export const Order = () => {
@@ -57,10 +58,22 @@ export const OrderContent = () => {
   const watchedData = watch()
   const { selectedCard } = watchedData
 
-  // * 폼 제출 핸들러
-  const onSubmit = handleSubmit(async (data) => {
-    if (!productInfo) return
+  // * React Query의 useMutation으로 주문하기 요청 관리
+  const mutation = useMutation({
+    // 주문하기 API 함수 (axios 기반)
+    mutationFn: createOrder,
+    // 주문하기 성공 시: 토스트 메시지 및 홈으로 리다이렉트
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success('주문이 완료되었습니다!')
+        navigate(ROUTE_PATH.HOME)
+      }
+    },
+  })
 
+  // * 폼 제출 핸들러
+  const onSubmit = handleSubmit((data) => {
+    if (!productInfo) return
     if (data.receivers.length === 0) {
       toast.warning('받는 사람이 최소 1명 필요합니다.')
       return
@@ -79,14 +92,7 @@ export const OrderContent = () => {
       })),
     }
 
-    // * 주문하기 API 요청
-    const result = await createOrder(orderRequest)
-
-    // * 성공시 홈으로 이동
-    if (result.success) {
-      toast.success('주문이 완료되었습니다!')
-      navigate(ROUTE_PATH.HOME)
-    }
+    mutation.mutate(orderRequest)
   })
 
   // * 주문 총액 계산
@@ -157,7 +163,7 @@ export const OrderContent = () => {
 
       {/* 주문하기 버튼 */}
       <OrderButtonSection>
-        <OrderButton variant="kakao" size="large" onClick={onSubmit}>
+        <OrderButton variant="kakao" size="large" onClick={onSubmit} disabled={mutation.isPending}>
           {totalPrice.toLocaleString()}원 주문하기
         </OrderButton>
       </OrderButtonSection>
