@@ -1,1 +1,48 @@
-# react-gift-product-detail
+# react-gift-product-list
+
+## 구현할 기능 목록
+
+### 테마 상품 목록 페이지
+
+- 선물하기 홈 > 선물 테마 섹션의 아이템을 클릭하면 테마 상품 목록 페이지로 연결
+- /api/themes/:themeId/info API를 사용하여 선물 테마 섹션의 히어로 영역을 구현
+- 만약 테마 정보를 가져오는 API가 404 에러가 발생하면 선물하기 홈 페이지로 연결
+- /api/themes/:themeId/products API를 사용하여 상품 리스트를 구현
+- 무한 스크롤 기능을 구현
+- 상품 리스트가 없으면 빈 페이지를 보여주기
+
+## 구현한 기능
+
+#### 히어로 영역을 구현
+
+- useFetch 사용하여 API 요청
+- 히어로 UI 구현 주문하기 페이지로 연결
+
+#### API를 사용하여 상품 리스트를 구현
+
+- API 요청 로직 구현
+- Grid 구현
+- 상세ProductCard는 미구현
+- 페이지네이션 미구현
+
+#### 상세 ProductCard는 구현
+
+- ProductCard 컴포넌트 작성
+- 상품 클릭시 주문하기 페이지로 연결
+- 불필요한 console.log 삭제
+
+#### 무한 스크롤 구현
+
+- fetchThemeProducts 메서드 작성
+- ProductList.tsx에서 사용하던 API 호출방식을 fetchThemeProducts로 변경
+  - fetchNextPage 메서드 구현
+  - useEffect 사용하여 최초 호출
+  - StrictMode에 의한 중복 호출 방지 로직 추가
+- useInfiniteScroll 훅 작성
+- useInfiniteScroll을 ProductList.tsx에서 연동하여 무한 스크롤 구현
+
+#### EmptyMessage 컴포넌트화
+
+- 기존에 styled-component로 사용하던 EmptyMessage를 컴포넌트로 리팩토링
+
+## 리뷰 반영
