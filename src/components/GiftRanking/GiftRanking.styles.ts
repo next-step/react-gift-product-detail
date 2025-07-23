@@ -125,5 +125,5 @@ export const None = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 400px;
+  height: 600px;
 `;

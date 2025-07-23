@@ -9,6 +9,8 @@ import GiftRankingGrid from '@/components/GiftRanking/GiftRankingGrid';
 import useGetRanking from './useGetRanking';
 import { CATEGORY_OPTIONS, SORT_OPTIONS } from './constants';
 import type { CategoryValue, SortValue } from './constants';
+import ApiErrorBoundary from '@/components/common/ErrorBoundary';
+import SuspenseWrapper from '@/components/common/SuspenseWrapper';
 
 const GiftRankingSection = () => {
   const getInitialCategory = (): CategoryValue => {
@@ -30,11 +32,6 @@ const GiftRankingSection = () => {
     useState<CategoryValue>(getInitialCategory);
   const [selectedSort, setSelectedSort] = useState<SortValue>(getInitialSort);
 
-  const { products, isLoading, error } = useGetRanking(
-    selectedCategory,
-    selectedSort
-  );
-
   return (
     <Section>
       <Heading>실시간 급상승 선물랭킹</Heading>
@@ -50,13 +47,31 @@ const GiftRankingSection = () => {
           localStorage.setItem('selectedSort', tab);
         }}
       />
-      {isLoading && <None></None>}
-      {error && <div>Error: {error.message}</div>}
-      {!isLoading && !error && products.length === 0 && (
-        <None>'상품이 없습니다.'</None>
-      )}
-      {!isLoading && !error && <GiftRankingGrid products={products} />}
+      <ApiErrorBoundary>
+        <SuspenseWrapper fallback={<None>로딩중...</None>}>
+          <GiftRankingContent
+            selectedCategory={selectedCategory}
+            selectedSort={selectedSort}
+          />
+        </SuspenseWrapper>
+      </ApiErrorBoundary>
     </Section>
+  );
+};
+
+const GiftRankingContent = ({
+  selectedCategory,
+  selectedSort,
+}: {
+  selectedCategory: CategoryValue;
+  selectedSort: SortValue;
+}) => {
+  const { products } = useGetRanking(selectedCategory, selectedSort);
+  return (
+    <>
+      {products.length === 0 && <None>'상품이 없습니다.'</None>}
+      <GiftRankingGrid products={products} />
+    </>
   );
 };
 
