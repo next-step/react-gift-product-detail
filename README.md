@@ -13,6 +13,5 @@
             [ ] product.ts
             [ ] product_summary.ys
             [ ] orders.ts
-            [ ] info.ts
-            [ ] index.ts
+            [v] info.ts
             [v] auth.ts
