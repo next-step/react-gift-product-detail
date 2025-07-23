@@ -4,15 +4,26 @@ import ThemeProductList from './ThemeProductList';
 import { useGetThemeInfo } from './useGetThemeInfo';
 import { useCallback, useRef } from 'react';
 import { useGetThemeProducts } from './useGetThemeProducts';
+import SuspenseWrapper from '@/components/common/SuspenseWrapper';
+import ApiErrorBoundary from '@/components/common/ErrorBoundary';
 
 const ThemeProductsPage = () => {
+  return (
+    <ApiErrorBoundary>
+      <SuspenseWrapper>
+        <ThemeProductsPageContent />
+      </SuspenseWrapper>
+    </ApiErrorBoundary>
+  );
+};
+
+const ThemeProductsPageContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const id = Number(themeId);
   const { themeInfo } = useGetThemeInfo(id);
   const {
     list: products,
     isLoading,
-    error: productsError,
     hasMore,
     loadMore,
   } = useGetThemeProducts(id, 10);

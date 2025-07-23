@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import useApi from '@/apis/useApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import apiClient from '@/apis/httpClient';
 import { API_URLS } from './constants';
+import type { QueryFunctionContext } from '@tanstack/react-query';
 
 export interface Product {
   id: number;
@@ -19,50 +20,37 @@ export interface Product {
 }
 
 interface ThemeProductsResponse {
-  data: {
-    list: Product[];
-    cursor: number;
-    hasMoreList: boolean;
-  };
-}
-interface InfiniteProducts {
   list: Product[];
-  isLoading: boolean;
-  error: Error | null;
-  hasMore: boolean;
-  loadMore: () => void;
+  cursor: number;
+  hasMoreList: boolean;
 }
 
-export const useGetThemeProducts = (
-  themeId: number,
-  limit = 10,
-): InfiniteProducts => {
-  const [cursor, setCursor] = useState(0);
-  const [list, setList] = useState<Product[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-
-  const { isLoading, error, execute } = useApi<
-    ThemeProductsResponse,
-    { params: { cursor: number; limit: number } }
-  >('get', API_URLS.THEME_PRODUCTS(themeId));
-
-  const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return;
-    const res = await execute({ params: { cursor, limit } });
-    setList(prev => {
-      const merged = [...prev, ...res.data.list];
-      const map = new Map<number, Product>();
-      merged.forEach(item => map.set(item.id, item));
-      return Array.from(map.values());
+export const useGetThemeProducts = (themeId: number, limit = 10) => {
+  const fetchThemeProducts = async ({ pageParam }: QueryFunctionContext) => {
+    const cursor = typeof pageParam === 'number' ? pageParam : 0;
+    const res = await apiClient.get(API_URLS.THEME_PRODUCTS(themeId), {
+      params: { cursor, limit },
     });
-    setCursor(res.data.cursor);
-    setHasMore(res.data.hasMoreList);
-  }, [cursor, limit, hasMore, isLoading, execute]);
+    return res.data.data as ThemeProductsResponse;
+  };
 
+  const { data, fetchNextPage, hasNextPage, isFetching, error } =
+    useInfiniteQuery<ThemeProductsResponse, Error>({
+      queryKey: ['theme', 'products', themeId],
+      queryFn: fetchThemeProducts,
+      getNextPageParam: (lastPage: ThemeProductsResponse) =>
+        lastPage.hasMoreList ? lastPage.cursor : undefined,
+      initialPageParam: 0,
+      enabled: !!themeId,
+    });
 
-  useEffect(() => {
-    loadMore();
-  }, []);
+  const list = data ? data.pages.flatMap((page) => page.list) : [];
 
-  return { list, isLoading, error, hasMore, loadMore };
+  return {
+    list,
+    isLoading: isFetching,
+    error,
+    hasMore: hasNextPage,
+    loadMore: fetchNextPage,
+  };
 };
