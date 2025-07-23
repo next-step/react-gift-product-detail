@@ -7,31 +7,36 @@ import { useAuth } from '@/context/AuthContext';
 import NavigationBar from '@/common/NavigationBar';
 import ProductCard from '@/common/ProductCard';
 import Text from '@/common/Text';
-
 import styled from '@emotion/styled';
 
 const Theme = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const { themeInfo, loading: infoLoading } = useThemeInfo(themeId ?? '');
+  const {
+    themeInfo,
+    isLoading: infoLoading,
+    isError: infoError,
+  } = useThemeInfo(themeId ?? '');
   const {
     products,
-    loading: productsLoading,
-    error,
-    hasMore,
     loadMore,
+    hasMore,
+    isLoading: productsLoading,
+    isError: productsError,
+    error,
   } = useThemeProducts(Number(themeId));
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   const lastProductRef = useIntersectionObserver({
     onIntersect: loadMore,
-    enabled: !productsLoading && hasMore,
+    enabled: hasMore && !productsLoading,
     rootMargin: '100px',
   });
 
   if (infoLoading) return <div>로딩 중...</div>;
-  if (!themeInfo) return null;
-  if (error) return <div>{error}</div>;
+  if (infoError || !themeInfo)
+    return <div>테마 정보를 불러올 수 없습니다.</div>;
+  if (productsError) return <div>{error?.message}</div>;
 
   return (
     <Layout>
@@ -53,7 +58,7 @@ const Theme = () => {
           </Text>
         </ThemeHeroContent>
 
-        {products.length === 0 ? (
+        {products.length === 0 && !productsLoading ? (
           <EmptyMessage>상품이 없습니다.</EmptyMessage>
         ) : (
           <ProductList>
