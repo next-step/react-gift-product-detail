@@ -19,12 +19,12 @@ import ReceiverTable from "@/components/order/ReceiverTable";
 import OrderSummary from "@/components/order/OrderSummary";
 import OrderButton from "@/components/order/OrderButton";
 
-import { postCreateOrder } from "@/api/orderapi";
 import { useAuth } from "@/contexts/AuthContext";
 import { PATH } from "@/constants/path";
 import { messageCards } from "@/mock/messageCards";
 
 import { useProductSummary } from "@/hooks/queries/useProductSummary";
+import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -33,7 +33,6 @@ const OrderPage = () => {
 
   const productId = Number(id);
   const { data: product } = useProductSummary(productId);
-
   const [isReceiverModalOpen, setReceiverModalOpen] = useState(false);
 
   const methods = useForm<OrderFormValues>({
@@ -49,7 +48,7 @@ const OrderPage = () => {
 
   useEffect(() => {
     const defaultCard = messageCards.find(
-      c => c.id === Number(methods.getValues("selectedCardId"))
+      c => c.id === Number(methods.getValues("selectedCardId")),
     );
     if (defaultCard) {
       methods.setValue("message", defaultCard.defaultTextMessage);
@@ -61,7 +60,7 @@ const OrderPage = () => {
 
   const totalQuantity = receivers.reduce(
     (sum, r) => sum + (r.quantity ?? 0),
-    0
+    0,
   );
   const totalAmount = (product?.price.sellingPrice ?? 0) * totalQuantity;
 
@@ -69,7 +68,35 @@ const OrderPage = () => {
     setValue("receivers", data);
   };
 
-  const onValid = async (data: OrderFormValues) => {
+  const { mutate: createOrder } = useCreateOrder({
+    productId: product?.id ?? 0,
+    token: token ?? "",
+    onSuccess: (_response, variables) => {
+      methods.reset();
+
+      const totalQuantity = variables.receivers.reduce(
+        (sum, r) => sum + r.quantity,
+        0,
+      );
+
+      const confirmed = window.confirm(
+        `🎉 주문이 완료되었습니다.\n\n` +
+          `상품명: ${product?.name}\n` +
+          `구매 수량: ${totalQuantity}\n` +
+          `받는 사람: ${variables.receivers[0]?.name}\n` +
+          `메시지: ${variables.message}\n\n`,
+      );
+
+      if (confirmed) {
+        navigate(PATH.HOME, { replace: true });
+      }
+    },
+    onError: msg => {
+      toast.error(msg);
+    },
+  });
+
+  const onValid = (data: OrderFormValues) => {
     if (!product) return;
 
     if (!token) {
@@ -78,16 +105,7 @@ const OrderPage = () => {
       return;
     }
 
-    try {
-      await postCreateOrder(data, product.id, token);
-      toast.success("주문이 성공적으로 완료되었습니다!");
-      navigate(PATH.HOME, { replace: true });
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.data?.message ||
-        "주문 요청 중 오류가 발생했습니다.";
-      toast.error(msg);
-    }
+    createOrder(data);
   };
 
   if (!isInitialized || !isLoggedIn) return null;
