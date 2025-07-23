@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { useParams, useNavigate } from "react-router-dom";
-import { useApiRequest } from "@/hooks/useApiRequest";
+import { useSuspenseApiQuery } from "@/hooks/useSuspenseApiQuery";
+import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import type { Product } from "@/types/api_types";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
@@ -16,7 +17,6 @@ type ThemeProductResponse = {
 export default function ThemeProductsList() {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
-
   const handleApiError = useApiErrorHandler({
     fallbackMessage: "상품 정보를 불러오는데 실패했어요.",
   });
@@ -27,18 +27,28 @@ export default function ThemeProductsList() {
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const query = useApiRequest<ThemeProductResponse>({
-    url: `/api/themes/${themeId}/products${cursor ? `?cursor=${cursor}` : ""}`,
-    method: "get",
-    queryOptions: {
+  const { data: initialData } = useSuspenseApiQuery<ThemeProductResponse>({
+    url: `/api/themes/${themeId}/products`,
+    queryKey: ["theme-products", themeId, "initial"],
+  });
+
+  const { data, isLoading, isError, error, refetch } =
+    useApiQuery<ThemeProductResponse>({
+      url: `/api/themes/${themeId}/products${cursor ? `?cursor=${cursor}` : ""}`,
       queryKey: ["theme-products", themeId, cursor],
       enabled: false,
-    },
-  }) as import("@tanstack/react-query").UseQueryResult<
-    ThemeProductResponse,
-    Error
-  >;
-  const { data, isLoading, isError, error, refetch } = query;
+    });
+
+  useEffect(() => {
+    if (initialData) {
+      setProducts(initialData.list);
+      setCursor(initialData.cursor ?? null);
+      setHasMore(
+        initialData.hasMoreList !== false && !!initialData.list.length
+      );
+      setInitLoading(false);
+    }
+  }, [initialData]);
 
   useEffect(() => {
     if (isError && error) {
@@ -50,44 +60,28 @@ export default function ThemeProductsList() {
     }
   }, [isError, error, handleApiError]);
 
-  const loadingNext = isLoading;
-
-  const initializeProducts = () => {
-    setInitLoading(true);
-    setProducts([]);
-    setCursor(undefined);
-    setHasMore(true);
-    refetch();
-  };
-
-  const updateProductList = (data: ThemeProductResponse) => {
-    setProducts((prev) => {
-      const existingIds = new Set(prev.map((item) => item.id));
-      const filtered = data.list.filter((item) => !existingIds.has(item.id));
-      return [...prev, ...filtered];
-    });
-    setCursor(data.cursor ?? null);
-    setHasMore(data.hasMoreList !== false && !!data.list.length);
-    setInitLoading(false);
-  };
-
   useEffect(() => {
-    initializeProducts();
-  }, [themeId]);
-
-  useEffect(() => {
-    if (!data) return;
-    updateProductList(data);
+    if (data && cursor) {
+      setProducts((prev) => {
+        const existingIds = new Set(prev.map((item) => item.id));
+        const filtered = data.list.filter((item) => !existingIds.has(item.id));
+        return [...prev, ...filtered];
+      });
+      setCursor(data.cursor ?? null);
+      setHasMore(data.hasMoreList !== false && !!data.list.length);
+    }
   }, [data]);
 
   const handleObserver = useCallback(() => {
-    refetch();
-  }, [refetch]);
+    if (hasMore && !isLoading && !initLoading && products.length > 0) {
+      refetch();
+    }
+  }, [hasMore, isLoading, initLoading, products.length, refetch]);
 
   useInfiniteScroll({
     targetRef: observerRef,
     onIntersect: handleObserver,
-    enabled: hasMore && !loadingNext && !initLoading && products.length > 0,
+    enabled: hasMore && !isLoading && !initLoading && products.length > 0,
     threshold: 0.4,
   });
 
@@ -112,7 +106,7 @@ export default function ThemeProductsList() {
         ))}
       </List>
       <ObserverTarget ref={observerRef} />
-      {loadingNext && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
     </>
   );
 }

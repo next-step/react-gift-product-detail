@@ -2,13 +2,17 @@
 import styled from "@emotion/styled";
 import FilterButtons from "@/pages/homepage/RisingSection/FilterButtons";
 import RisingList from "@/pages/homepage/RisingSection/RisingList";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function RisingSection() {
   return (
     <Container>
       <Title>실시간 급상승 선물 랭킹</Title>
       <FilterButtons />
-      <RisingList />
+      <Suspense fallback={<LoadingSpinner />}>
+        <RisingList />
+      </Suspense>
     </Container>
   );
 }

@@ -2,21 +2,18 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import CategoryItem from "@/pages/homepage/CategorySection/CategoryItem";
-import { useApiRequest } from "@/hooks/useApiRequest";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import { useSuspenseApiQuery } from "@/hooks/useSuspenseApiQuery";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 import type { Theme } from "@/types/api_types";
 
 export default function CategorySection() {
-  const query = useApiRequest<Theme[]>({
-    url: API_ENDPOINTS.THEMES,
-    method: "get",
-  }) as import("@tanstack/react-query").UseQueryResult<Theme[], Error>;
   const navigate = useNavigate();
+  const { data } = useSuspenseApiQuery<Theme[]>({
+    url: API_ENDPOINTS.THEMES,
+    queryKey: ["themes-list"],
+  });
 
-  if (query.isLoading) return <LoadingSpinner />;
-  if (query.isError) throw query.error;
-  if (!query.data || query.data.length === 0) return null;
+  if (!data || data.length === 0) return null;
 
   const handleClick = (themeId: number) => {
     navigate(`/themes/${themeId}`);
@@ -26,7 +23,7 @@ export default function CategorySection() {
     <>
       <SectionTitle>선물 테마</SectionTitle>
       <Container>
-        {query.data?.map((theme: Theme) => (
+        {data.map((theme: Theme) => (
           <div
             key={theme.themeId}
             onClick={() => handleClick(theme.themeId)}

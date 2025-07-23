@@ -16,6 +16,8 @@ import PrivateRoute from "@/routes/PrivateRoute";
 import ThemeProductsPage from "@/pages/themeproductspage/ThemeProductsPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 function App() {
   return (
@@ -30,13 +32,22 @@ function App() {
             element={
               <>
                 <AddFriend />
-                <CategorySection />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <CategorySection />
+                </Suspense>
                 <Fighting />
                 <RisingSection />
               </>
             }
           />
-          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
           <Route
             path="/my"
             element={
@@ -49,11 +60,20 @@ function App() {
             path="/order/:id"
             element={
               <PrivateRoute>
-                <OrderPage />
+                <Suspense fallback={<LoadingSpinner />}>
+                  <OrderPage />
+                </Suspense>
               </PrivateRoute>
             }
           />
-          <Route path="/themes/:themeId" element={<ThemeProductsPage />} />
+          <Route
+            path="/themes/:themeId"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <ThemeProductsPage />
+              </Suspense>
+            }
+          />
           <Route path="/notfound" element={<NotFoundPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

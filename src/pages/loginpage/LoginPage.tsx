@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/utils/validator";
 import type { LoginFormValues } from "@/utils/validator";
-import { useApiRequest } from "@/hooks/useApiRequest";
+import { useApiMutation } from "@/hooks/useApiMutation";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 import { HTTP_STATUS } from "@/utils/HTTP_STATUS";
 
@@ -41,23 +41,14 @@ const LoginPage = () => {
     },
   });
 
-  const loginMutation = useApiRequest<{
+  const loginMutation = useApiMutation<{
     email: string;
     name: string;
     authToken: string;
   }>({
     url: API_ENDPOINTS.LOGIN,
     method: "post",
-  }) as import("@tanstack/react-query").UseMutationResult<
-    {
-      email: string;
-      name: string;
-      authToken: string;
-    },
-    Error,
-    LoginFormValues,
-    unknown
-  >;
+  });
 
   const onSubmit = async (data: LoginFormValues) => {
     try {

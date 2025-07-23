@@ -1,14 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useApiRequest } from "@/hooks/useApiRequest";
+import { useSuspenseApiQuery } from "@/hooks/useSuspenseApiQuery";
 import styled from "@emotion/styled";
 import ThemeProductsList from "@/pages/themeproductspage/ThemeProductsList";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 import type { ThemeInfo } from "@/types/api_types";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
-import { HTTP_STATUS } from "@/utils/HTTP_STATUS";
 
 export default function ThemeProductsPage() {
   const { themeId } = useParams();
@@ -23,33 +20,10 @@ export default function ThemeProductsPage() {
 
   if (!parsedThemeId) return null;
 
-  const query = useApiRequest<ThemeInfo>({
+  const { data: themeInfo } = useSuspenseApiQuery<ThemeInfo>({
     url: API_ENDPOINTS.THEME_INFO(parsedThemeId),
-  }) as import("@tanstack/react-query").UseQueryResult<ThemeInfo, Error>;
-  const { data: themeInfo, isLoading, isError, error: themeError } = query;
-
-  const handleError = useApiErrorHandler({
-    fallbackMessage: "테마 정보를 불러올 수 없습니다.",
-    customHandler: (statusCode) => {
-      if (statusCode === HTTP_STATUS.NOT_FOUND) {
-        navigate("/");
-        return true;
-      }
-      return false;
-    },
+    queryKey: [API_ENDPOINTS.THEME_INFO(parsedThemeId), parsedThemeId],
   });
-
-  useEffect(() => {
-    if (isError && themeError) {
-      if ((themeError as any)?.response?.status === HTTP_STATUS.NOT_FOUND) {
-        handleError(themeError);
-      } else {
-        throw themeError;
-      }
-    }
-  }, [isError, themeError, handleError]);
-
-  if (isLoading) return <LoadingSpinner />;
 
   if (!themeInfo) {
     return <p>정보를 불러올 수 없습니다.</p>;
