@@ -13,14 +13,18 @@ import { useProductSummary } from '@/hooks/useProductSummary';
 
 const ProductOrder = () => {
   const { productId } = useParams();
-  const { product, isLoading } = useProductSummary(Number(productId));
+  const { product, isLoading: isProductLoading } = useProductSummary(
+    Number(productId)
+  );
 
-  const { methods, handleSubmit, order } = useOrderForm(Number(productId));
+  const { methods, handleSubmit, order, isLoading: isOrderLoading } = useOrderForm(
+    Number(productId)
+  );
 
   const [message, setMessage] = useState('생일 축하해!');
   const [messageCardId, setMessageCardId] = useState('default-card');
 
-  if (isLoading) return <div>상품 정보를 불러오는 중입니다...</div>;
+  if (isProductLoading) return <div>상품 정보를 불러오는 중입니다...</div>;
   if (!product) return <div>상품 정보를 찾을 수 없습니다.</div>;
 
   return (
@@ -50,6 +54,7 @@ const ProductOrder = () => {
               <OrderBtn
                 price={product.price}
                 onClick={handleSubmit(() => order({ message, messageCardId }))}
+                disabled={isOrderLoading}
               />
             </StickyWrapper>
           </Layout>

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { postOrder } from '@/api/order';
+import { useMutation } from '@tanstack/react-query';
 
 export interface OrderFormInputs {
   senderName: string;
@@ -16,7 +17,7 @@ export interface OrderFormInputs {
 export const useOrderForm = (productId: number) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { imageURL, name, price, brandInfo } = location.state || {};
 
   const methods = useForm<OrderFormInputs>({
@@ -26,7 +27,25 @@ export const useOrderForm = (productId: number) => {
     },
   });
 
-  const order = async ({
+  const mutation = useMutation({
+    mutationFn: (orderData: any) => postOrder(orderData, token || ''),
+    onSuccess: () => {
+      toast.success('주문이 완료되었습니다!');
+      navigate('/');
+    },
+    onError: (error: any) => {
+      if (error.response?.status === 401) {
+        toast.error('로그인이 필요합니다.');
+        navigate('/login');
+      } else {
+        toast.error(
+          error.response?.data?.message || '주문 중 오류가 발생했습니다.'
+        );
+      }
+    },
+  });
+
+  const order = ({
     message,
     messageCardId,
   }: {
@@ -51,27 +70,13 @@ export const useOrderForm = (productId: number) => {
       quantity: r.quantity,
     }));
 
-    try {
-      await postOrder({
-        productId,
-        ordererName: values.senderName,
-        message,
-        messageCardId,
-        receivers,
-      });
-
-      toast.success('주문이 완료되었습니다!');
-      navigate('/');
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
-        navigate('/login');
-      } else {
-        toast.error(
-          error.response?.data?.message || '주문 중 오류가 발생했습니다.'
-        );
-      }
-    }
+    mutation.mutate({
+      productId,
+      ordererName: values.senderName,
+      message,
+      messageCardId,
+      receivers,
+    });
   };
 
   return {
@@ -82,5 +87,6 @@ export const useOrderForm = (productId: number) => {
     methods,
     handleSubmit: methods.handleSubmit,
     order,
+    isLoading: mutation.isPending,
   };
 };

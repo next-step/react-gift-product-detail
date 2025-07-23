@@ -15,7 +15,7 @@ interface OrderRequest {
 }
 
 export const postOrder = async (orderData: OrderRequest, authToken: string) => {
-  const response = await apiClient.post('/order', orderData, {
+  const response = await apiClient.post('/api/order', orderData, {
     headers: {
       Authorization: authToken,
     },
