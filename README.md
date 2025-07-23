@@ -22,11 +22,14 @@
 
 ### 목표
 
-- [ ] React Query를 사용하여 API 사용 방식과 사용자 경험을 고도화 하기
-- [ ] Suspense와 ErrorBoundary를 사용하여 선언적 구조의 API를 구현하기
+- React Query를 사용하여 API 사용 방식과 사용자 경험을 고도화 하기
+- Suspense와 ErrorBoundary를 사용하여 선언적 구조의 API를 구현하기
 
 ### 과제 진행 요구사항
 
-- [ ] 기존에 작성했던 API를 React Query를 이용해서 리팩터링 (GET, POST 모두)
+- [x] 기존에 작성했던 API를 React Query를 이용해서 리팩터링 (GET, POST 모두)
+
+- [ ] Suspense와 ErrorBoundary를 사용하여 선언적 구조의 API를 구현하기
+
 - [ ] 본인만의 기준으로 일관된 코드 작성하기
 - [ ] 기능 단위로 나누어 커밋 하기
