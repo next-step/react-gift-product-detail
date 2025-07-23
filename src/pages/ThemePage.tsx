@@ -12,13 +12,13 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function ThemePage() {
   const { themeId } = useParams();
-  const { theme, loading: themeLoading } = useFetchTheme(themeId);
+  const { data: theme, isLoading: themeLoading } = useFetchTheme(themeId);
   const [products, setProducts] = useState<ProductInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true); // 더 불러 올 게 있는지
 
   const cursorRef = useRef(0);
-
+  
   // 상품 불러오기
   const fetchProducts = useCallback(async () => {
     if (loading || !hasMore) return;

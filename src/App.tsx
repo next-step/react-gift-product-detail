@@ -11,6 +11,7 @@ import NotFoundPage from "@/pages/NotfoundPage";
 import OrderPage from "@/pages/OrderPage";
 import ThemePage from "@/pages/ThemePage";
 import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const LayoutWrapper = () => (
   <MainLayout>
@@ -32,13 +33,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
+    <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
       <Global styles={resetStyle} />
       <RouterProvider router={router} />
       <ToastContainer />
     </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
