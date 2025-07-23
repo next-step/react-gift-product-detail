@@ -9,6 +9,7 @@ import type { RankingProductType } from "@/types/RankingProductType";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { generatePath, Link } from "react-router-dom";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
+import { useQuery } from "@tanstack/react-query";
 
 interface RankingListProps {
   targetType: string;
@@ -25,15 +26,20 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     setViewCount(nextViewCount);
   };
 
-  const rankingListData = useFetch<RankingProductType[]>(API_ENDPOINTS.PRODUCTS_RANKING, {
+  const { fetchData } = useFetch<RankingProductType[]>(API_ENDPOINTS.PRODUCTS_RANKING, {
     params: { targetType, rankType },
     dependency: [targetType, rankType],
+    autoFetch: false,
+  });
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["rankingList", targetType, rankType],
+    queryFn: () => fetchData(),
   });
 
-  if (rankingListData.isLoading) {
+  if (isPending) {
     return <Loading height="625px" />;
   }
-  if (rankingListData.error || rankingListData.data?.length === 0) {
+  if (isError || data?.length === 0) {
     return (
       <Empty>
         <Msg>상품이 없습니다.</Msg>
@@ -43,7 +49,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   return (
     <Container>
       <Content>
-        {rankingListData.data?.slice(0, viewCount).map((item, index) => (
+        {data?.slice(0, viewCount).map((item, index) => (
           <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
             <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
             <ItemContent>
