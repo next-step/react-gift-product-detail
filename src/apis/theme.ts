@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 import { BASE_API_URL } from './index';
 
 export type Category = {
@@ -8,23 +9,24 @@ export type Category = {
 };
 
 export const fetchThemes = async (): Promise<Category[]> => {
-  try {
-    const response = await axios.get(`${BASE_API_URL}/api/themes`);
+  const response = await axios.get(`${BASE_API_URL}/api/themes`);
+  const responseData = response.data;
 
-    const responseData = response.data;
-
-    if (Array.isArray(responseData)) {
-      return responseData;
-    }
-
-    if (responseData && Array.isArray(responseData.data)) {
-      return responseData.data;
-    }
-
-    console.error('Unexpected API response structure:', responseData);
-    return [];
-  } catch (error) {
-    console.error('API 호출 실패:', error);
-    return [];
+  if (Array.isArray(responseData)) {
+    return responseData;
   }
+
+  if (responseData && Array.isArray(responseData.data)) {
+    return responseData.data;
+  }
+
+  throw new Error('Unexpected API response structure');
+};
+
+export const useThemes = () => {
+  return useQuery<Category[], Error>({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
+    staleTime: 1000 * 60 * 5,
+  });
 };
