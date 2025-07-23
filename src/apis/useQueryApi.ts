@@ -7,6 +7,7 @@ import { handleApiError } from './queryClient';
 export interface QueryApiOptions<TData>
   extends Omit<UseQueryOptions<TData, AxiosError>, 'queryKey' | 'queryFn'> {
   onError?: (error: AxiosError) => void;
+  suspense?: boolean;
 }
 
 export const useQueryApi = <TData>(
