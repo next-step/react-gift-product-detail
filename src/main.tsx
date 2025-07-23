@@ -10,16 +10,7 @@ import theme from './styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from './ErrorBoundary';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      // @ts-ignore
-      suspense: true,
-      useErrorBoundary: true,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
