@@ -1,7 +1,7 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
 import { ordercard } from "@/data/ordercard";
-import { useState, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ErrorMessage from "./ErrorMessage";
 
 type Props = {
@@ -12,20 +12,23 @@ type Props = {
 
 export default function GiftCardSelector({ value, onChange, error }: Props) {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  // 초기 페이지의 디폴트 메세지 설정
+  useEffect(() => {
+    handleCardClick(0);
+  }, []);
 
-  const latestOnChange = useRef(onChange);
+  const handleCardClick = useCallback(
+    (index: number) => {
+      setSelectedCardIndex(index);
 
-  latestOnChange.current = onChange;
-
-  const handleCardClick = (index: number) => {
-    setSelectedCardIndex(index);
-
-    latestOnChange.current({
-      target: {
-        value: ordercard[index].defaultTextMessage,
-      },
-    } as React.ChangeEvent<HTMLTextAreaElement>);
-  };
+      onChange({
+        target: {
+          value: ordercard[index].defaultTextMessage,
+        },
+      } as React.ChangeEvent<HTMLTextAreaElement>);
+    },
+    [onChange, setSelectedCardIndex]
+  );
 
   return (
     <GiftCardWrapper>
