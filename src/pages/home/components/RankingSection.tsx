@@ -13,7 +13,7 @@ import {
 import { LOCAL_STORAGE_KEYS } from "@/constants/localStorage";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Spinner } from "@/components/common/Spinner";
-import { ErrorFallback } from "@/components/common/ErrorFallBack";
+import { ErrorFallback } from "@/components/common/ErrorFallback";
 
 export const RankingSection = () => {
   const [gender, setGender] = useLocalStorageState<GenderType>(
