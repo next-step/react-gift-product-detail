@@ -111,13 +111,10 @@ const OrderPage = () => {
       <Main>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit(onValid)}>
-            <CardSection
-              selectedCard={selectedCard}
-              setSelectedCard={setSelectedCard}
-            />
+            <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
             <SenderSection />
             <ReceiverSection />
-            <GiftInformationSection selectedGift={gift} />
+            <GiftInformationSection {...gift} />
             <Button type="submit">
               {gift.price *
                 watchedReceiver.reduce(

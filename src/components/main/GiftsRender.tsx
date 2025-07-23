@@ -7,19 +7,17 @@ import useApiRequest from "@/hooks/useApiRequest";
 import type { TargetType, RankType } from "@/types/gift";
 
 type GiftsRenderProps = {
-  selectedTypes: {
-    targetType: TargetType;
-    rankType: RankType;
-  };
+  targetType: TargetType;
+  rankType: RankType;
 };
 
-const GiftsRender = ({ selectedTypes }: GiftsRenderProps) => {
+const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
   const requestFn = useCallback(() => {
     return fetchProductsRanking({
-      targetType: selectedTypes.targetType,
-      rankType: selectedTypes.rankType,
+      targetType,
+      rankType,
     });
-  }, [selectedTypes]);
+  }, [targetType, rankType]);
   const { data: gifts, isLoading, isError } = useApiRequest({ requestFn });
 
   if (isLoading) {
@@ -36,7 +34,7 @@ const GiftsRender = ({ selectedTypes }: GiftsRenderProps) => {
   if (!gifts || gifts.length === 0) {
     return <BoxMessage message="상품이 없습니다." height="266px" />;
   }
-  return <GiftsList gifts={gifts} />;
+  return <GiftsList items={gifts} />;
 };
 
 export default GiftsRender;

@@ -1,24 +1,25 @@
 import styled from "@emotion/styled";
 import type { GiftSummary } from "@/types/gift";
 
-type GiftInformationSectionProps = {
-  selectedGift: GiftSummary;
-};
+type GiftInformationSectionProps = Omit<GiftSummary, "id">;
 
 const GiftInformationSection = ({
-  selectedGift,
+  name,
+  imageURL,
+  price,
+  brandName,
 }: GiftInformationSectionProps) => {
   return (
     <Section>
       <SectionTitle>선물 정보</SectionTitle>
       <GiftDiv>
-        <Img src={selectedGift.imageURL} alt={selectedGift.name} />
+        <Img src={imageURL} alt={name} />
         <div>
-          <GiftName>{selectedGift.name}</GiftName>
-          <GiftBrand>{selectedGift.brandName}</GiftBrand>
+          <GiftName>{name}</GiftName>
+          <GiftBrand>{brandName}</GiftBrand>
           <GiftPrice>
             <Span>상품가 </Span>
-            {selectedGift.price}원
+            {price}원
           </GiftPrice>
         </div>
       </GiftDiv>

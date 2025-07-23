@@ -50,7 +50,7 @@ const GiftsRanking = () => {
           </GiftRankType>
         ))}
       </GiftRankTypeFlex>
-      <GiftsRender selectedTypes={selectedTypes} />
+      <GiftsRender {...selectedTypes} />
     </Background>
   );
 };
