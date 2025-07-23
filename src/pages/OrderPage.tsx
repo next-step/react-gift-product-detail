@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
 import { postOrder } from '@/api';
 import type { ProductSummary } from '../hooks/useProduct';
+import { useMutation } from '@tanstack/react-query';
 
 interface OrderFormData {
   selectedCardId: number;
@@ -271,6 +272,29 @@ const OrderPage = () => {
   // API에서 상품 정보 가져오기
   const { data: product, isLoading, error } = useProduct(productId ?? '');
 
+  // 주문 생성 useMutation
+  const orderMutation = useMutation({
+    mutationFn: (variables: { orderData: any; authToken: string }) =>
+      postOrder(variables.orderData, variables.authToken),
+    onSuccess: (_data, variables) => {
+      // 성공 시 안내 메시지 및 이동
+      if (!product) return;
+      const totalQuantity = getTotalQuantity(variables.orderData.receivers);
+      const totalPrice = getTotalPrice(product.price, totalQuantity);
+      const msg = makeOrderCompleteMessage(
+        product,
+        { ...variables.orderData, recipients: variables.orderData.receivers },
+        totalQuantity,
+        totalPrice
+      );
+      alert(msg);
+      navigate('/');
+    },
+    onError: (error) => {
+      handleOrderError(error, navigate, toast, ROUTE_LOGIN);
+    },
+  });
+
   useEffect(() => {
     if (error) {
       // axios 에러 객체에서 메시지 추출
@@ -341,27 +365,11 @@ const OrderPage = () => {
     setIsModalOpen(false);
   };
 
-  // 주문 제출 핸들러
+  // 주문 제출 핸들러 (useMutation 활용)
   const handleOrderSubmit = handleSubmit(async (data) => {
     if (!product || !user) return;
-
-    try {
-      const orderData = makeOrderData(product, data, selectedCardId);
-      console.log('orderData to send:', orderData);
-      await postOrder(orderData, user.authToken);
-      const totalQuantity = getTotalQuantity(data.recipients);
-      const totalPrice = getTotalPrice(product.price, totalQuantity);
-      const msg = makeOrderCompleteMessage(
-        product,
-        data,
-        totalQuantity,
-        totalPrice
-      );
-      alert(msg);
-      navigate('/');
-    } catch (error) {
-      handleOrderError(error, navigate, toast, ROUTE_LOGIN);
-    }
+    const orderData = makeOrderData(product, data, selectedCardId);
+    await orderMutation.mutateAsync({ orderData, authToken: user.authToken });
   });
 
   // 로딩 중
