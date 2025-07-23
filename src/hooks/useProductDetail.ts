@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductById } from "@/api/product";
 import { ERROR_MESSAGES } from "@/constants/messages";
+import type { Product } from "@/types/product";
 
 export const useProductDetail = (productId: number | undefined) => {
   const {
     data: product,
     isLoading: loading,
     error,
-  } = useQuery({
+  } = useQuery<Product, Error>({
     queryKey: ["productDetail", productId],
     queryFn: () => {
       if (!productId) {
