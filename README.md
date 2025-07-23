@@ -11,6 +11,14 @@
 - [x] tanstack query 모듈 추가 및 전역 상태 Provider 추가
 - [x] 모든 GET, POST react query로 리펙토링
 
+## 2단계
+
+- [x] Product 페이지 및 세부 사항 디스플레이 UI + 로직 구현
+
+## 3단계
+
+- [ ] TBD
+
 ## 실행 가이드
 
 1. 프론트엔드 프로젝트 루트에 .env 파일을 구성해주세요
