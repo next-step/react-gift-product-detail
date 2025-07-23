@@ -19,7 +19,7 @@ const PresentCategory = () => {
     return <></>;
   }
 
-  const handleThemeClick = (themeId: number) => {
+  const navigateToTheme = (themeId: number) => {
     navigate(`${ROUTE_PATH.THEMES.replace(":id", themeId.toString())}`);
   };
 
@@ -32,7 +32,7 @@ const PresentCategory = () => {
             <button
               type="button"
               key={theme.themeId}
-              onClick={() => handleThemeClick(theme.themeId)}
+              onClick={() => navigateToTheme(theme.themeId)}
             >
               <PresentTheme theme={theme} />
             </button>

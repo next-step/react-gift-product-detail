@@ -6,7 +6,7 @@ import { ROUTE_PATH } from "@/routes/paths";
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
-  const handleGoHome = () => {
+  const navigateToHome = () => {
     navigate(ROUTE_PATH.HOME);
   };
 
@@ -17,7 +17,7 @@ const NotFoundPage = () => {
         <Wrong size={"150px"} />
         <Title>잘못된 접근입니다.</Title>
         <Context>찾으시는 페이지가 존재하지 않습니다.</Context>
-        <Button onClick={handleGoHome}>홈으로</Button>
+        <Button onClick={navigateToHome}>홈으로</Button>
       </Main>
     </>
   );

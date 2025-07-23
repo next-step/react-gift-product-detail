@@ -13,7 +13,7 @@ const GiftsList = ({ gifts }: GiftsListProps) => {
   const navigate = useNavigate();
   const [showMore, setShowMore] = useState(false);
 
-  const handleGiftClick = (giftId: number) => {
+  const navigateToOrder = (giftId: number) => {
     navigate(`${ROUTE_PATH.ORDER.replace(":id", giftId.toString())}`);
   };
 
@@ -33,7 +33,7 @@ const GiftsList = ({ gifts }: GiftsListProps) => {
             rank={index + 1}
             as="button"
             type="button"
-            onClick={() => handleGiftClick(gift.id)}
+            onClick={() => navigateToOrder(gift.id)}
           />
         ))}
       </GiftsGrid>

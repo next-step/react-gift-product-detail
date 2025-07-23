@@ -17,7 +17,7 @@ const GiftsRanking = () => {
     rankType: isValidRankType(rankTypeParam) ? rankTypeParam : rankType[0].id,
   });
 
-  const handleFilterChange = (key: string, selectedType: string) => {
+  const changeFilter = (key: string, selectedType: string) => {
     const newSelectedTypes = { ...selectedTypes, [key]: selectedType };
     setSelectedTypes(newSelectedTypes);
 
@@ -35,7 +35,7 @@ const GiftsRanking = () => {
             icon={type.icon}
             name={type.name}
             selected={selectedTypes.targetType === type.id}
-            onClick={() => handleFilterChange("targetType", type.id)}
+            onClick={() => changeFilter("targetType", type.id)}
           />
         ))}
       </GiftTargetTypeFlex>
@@ -44,7 +44,7 @@ const GiftsRanking = () => {
           <GiftRankType
             key={index}
             selected={selectedTypes.rankType === type.id}
-            onClick={() => handleFilterChange("rankType", type.id)}
+            onClick={() => changeFilter("rankType", type.id)}
           >
             {type.name}
           </GiftRankType>
