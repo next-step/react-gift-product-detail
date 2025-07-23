@@ -12,7 +12,7 @@ const API_ENDPOINTS = {
   PRODUCT_HIGHLIGHT_REVIEW: "/api/products/:productId/highlight-review",
   PRODUCT_SUMMARY: "/api/products/:productId/summary",
 
-  ORDER: "/api/orders",
+  ORDER: "/api/order",
 } as const;
 
 export default API_ENDPOINTS;

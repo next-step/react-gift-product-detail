@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import useInView from "@/hooks/useInView";
+import { showFetchErrorToast } from "@/utils/showFetchToast";
+import { isErrorData } from "@/types/FetchErrorData";
 
 interface PaginationData<T> {
   list: T[];
@@ -27,23 +29,19 @@ const usePaginationFetch = <T>(
     if (isLoading || !hasMoreList) return null;
 
     try {
-      const response = await fetchData(undefined, undefined, {
+      const responseData = await fetchData(undefined, undefined, {
         cursor,
         limit,
       });
-
-      if (response.error) {
-        setHasMoreList(false);
-        return null;
-      }
-
-      if (response.data) {
-        setItems((prev) => [...prev, ...(response.data?.list ?? [])]);
-        setCursor(response.data.cursor);
-        setHasMoreList(response.data.hasMoreList);
+      if (responseData) {
+        setItems((prev) => [...prev, ...(responseData?.list ?? [])]);
+        setCursor(responseData.cursor);
+        setHasMoreList(responseData.hasMoreList);
       }
     } catch (error) {
-      console.error(errorMessage, error);
+      if (isErrorData(error)) {
+        showFetchErrorToast(error.statusCode, errorMessage);
+      }
       setHasMoreList(false);
     }
   }, [cursor, hasMoreList, isLoading, fetchData, limit, errorMessage]);

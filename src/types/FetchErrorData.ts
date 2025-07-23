@@ -3,3 +3,9 @@ export interface ErrorData {
   statusCode: number;
   message: string;
 }
+
+export const isErrorData = (error: unknown): error is ErrorData => {
+  return (
+    typeof error === "object" && error !== null && "status" in error && "statusCode" in error && "message" in error
+  );
+};

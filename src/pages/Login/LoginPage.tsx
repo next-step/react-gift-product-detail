@@ -7,6 +7,7 @@ import useLoginInput from "@/hooks/useLoginInput";
 import { useAuth, type Auth } from "@/contexts/authContext";
 import useFetch from "@/hooks/useFetch";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
+import { isErrorData } from "@/types/FetchErrorData";
 
 interface LoginBodyData {
   email: string;
@@ -23,11 +24,15 @@ const LoginPage = () => {
   });
   const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const responseData = await loginFetch.fetchData();
-    if (responseData.data) {
-      login(responseData.data);
-    } else if (responseData.error) {
-      showFetchErrorToast(responseData.error.statusCode, responseData.error.message);
+    try {
+      const responseData = await loginFetch.fetchData();
+      if (responseData) {
+        login(responseData);
+      }
+    } catch (error) {
+      if (isErrorData(error)) {
+        showFetchErrorToast(error.statusCode, error.message);
+      }
     }
   };
   const isValidIdAndPassword = user.id.length !== 0 && user.password.length >= 8 && !errorMsg.id && !errorMsg.password;

@@ -3,14 +3,14 @@ import Container from "@/components/common/Container";
 import Divider from "@/components/common/Divider";
 import Order, { type RecipientType } from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import useFetch from "@/hooks/useFetch";
 import { getCookieValue } from "@/utils/cookie";
 import { AUTH_COOKIE_KEY_TOKEN, useAuth } from "@/contexts/authContext";
 import { AxiosHeaders } from "axios";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { useNavigate } from "react-router-dom";
-import type { ErrorData } from "@/types/FetchErrorData";
+import { isErrorData } from "@/types/FetchErrorData";
 import { showFetchErrorToast, showFetchSuccessToast } from "@/utils/showFetchToast";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 
@@ -39,8 +39,7 @@ const OrderPageContent = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const [error, setError] = useState<ErrorData | undefined>(undefined);
-  const { data, fetchData } = useFetch<OrderData, OrderBodyData>(API_ENDPOINTS.ORDER, {
+  const { fetchData } = useFetch<OrderData, OrderBodyData>(API_ENDPOINTS.ORDER, {
     method: "POST",
     autoFetch: false,
   });
@@ -62,19 +61,21 @@ const OrderPageContent = () => {
       ordererName: data.sender,
       receivers: data.recipients,
     };
-    const responseData = await fetchData(headers, body);
-    if (responseData.error) setError(responseData.error);
+    try {
+      const responseData = await fetchData(headers, body);
+      if (responseData?.success) {
+        showFetchSuccessToast("주문에 성공했습니다.", goHome);
+      }
+    } catch (error) {
+      if (isErrorData(error)) {
+        if (error?.statusCode === 401) {
+          showFetchErrorToast(error.statusCode, "유효하지 않은 계정입니다.", goLogin);
+        } else if (error) {
+          showFetchErrorToast(error.statusCode, error.message);
+        }
+      }
+    }
   };
-  useEffect(() => {
-    if (data?.success) {
-      showFetchSuccessToast("주문에 성공했습니다.", goHome);
-    }
-    if (error?.statusCode === 401) {
-      showFetchErrorToast(error.statusCode, "유효하지 않은 계정입니다.", goLogin);
-    } else if (error) {
-      showFetchErrorToast(error.statusCode, error.message);
-    }
-  }, [data, error, goHome, goLogin]);
   return (
     <Container>
       <Content onSubmit={createSubmitHandler(onSubmit)}>

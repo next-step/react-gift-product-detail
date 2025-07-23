@@ -14,10 +14,6 @@ interface UseFetchOptions<TBody> {
 interface UseFetchResponse<T> {
   data: T;
 }
-interface UseFetchResponseData<T> {
-  data: T | null;
-  error: ErrorData | undefined;
-}
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -61,7 +57,7 @@ const useFetch = <TResponse, TBody = unknown>(
       fetchHeaders: typeof headers = options.headers,
       fetchBody: typeof body = options.body,
       fetchParams: typeof params = options.params,
-    ): Promise<UseFetchResponseData<TResponse>> => {
+    ): Promise<TResponse | undefined> => {
       const base = options.baseUrl ? options.baseUrl : BASE_URL;
       const fetchUrl = new URL(url, base);
 
@@ -80,15 +76,14 @@ const useFetch = <TResponse, TBody = unknown>(
         });
         setError(undefined);
         setData(response.data.data);
-        return { data: response.data.data, error: undefined };
+        return response.data.data;
       } catch (error) {
         console.error("Error fetching themes data:", error);
         if (axios.isAxiosError<UseFetchResponse<ErrorData>>(error)) {
           setData(null);
           setError(error.response?.data.data);
-          return { data: null, error: error.response?.data.data };
+          throw error.response?.data.data;
         }
-        return { data: null, error: undefined };
       } finally {
         setIsLoading(false);
       }
