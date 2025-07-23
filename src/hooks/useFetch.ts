@@ -57,7 +57,7 @@ const useFetch = <TResponse, TBody = unknown>(
       fetchHeaders: typeof headers = options.headers,
       fetchBody: typeof body = options.body,
       fetchParams: typeof params = options.params,
-    ): Promise<TResponse | undefined> => {
+    ): Promise<TResponse> => {
       const base = options.baseUrl ? options.baseUrl : BASE_URL;
       const fetchUrl = new URL(url, base);
 
@@ -84,6 +84,7 @@ const useFetch = <TResponse, TBody = unknown>(
           setError(error.response?.data.data);
           throw error.response?.data.data;
         }
+        throw error;
       } finally {
         setIsLoading(false);
       }

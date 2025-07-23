@@ -5,11 +5,13 @@ import type { CategoryType } from "@/types/CategoryType";
 import { generatePath, Link } from "react-router-dom";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
+import { useQuery } from "@tanstack/react-query";
 
 const Category = () => {
-  const themes = useFetch<CategoryType[]>(API_ENDPOINTS.THEMES);
+  const { fetchData } = useFetch<CategoryType[]>(API_ENDPOINTS.THEMES, { autoFetch: false });
+  const { isPending, isError, data } = useQuery({ queryKey: ["themes"], queryFn: () => fetchData() });
 
-  if (themes.isLoading) {
+  if (isPending) {
     return (
       <Container>
         <Title>선물 테마</Title>
@@ -18,7 +20,7 @@ const Category = () => {
     );
   }
 
-  if (themes.error || themes.data?.length === 0) {
+  if (isError || data?.length === 0) {
     return null;
   }
 
@@ -26,7 +28,7 @@ const Category = () => {
     <Container>
       <Title>선물 테마</Title>
       <List>
-        {themes.data?.map((category) => (
+        {data?.map((category) => (
           <Item key={category.themeId} to={generatePath(ROUTE_PATH.THEMES, { themeId: String(category.themeId) })}>
             <Img src={category.image} alt={category.name} />
             <Name>{category.name}</Name>
