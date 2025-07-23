@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   fetchProductRanking,
   type RankType,
@@ -11,22 +11,18 @@ export const useProductRanking = (
   targetType: TargetType,
   rankType: RankType,
 ) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: products = [],
+    isLoading: loading,
+    isError,
+  } = useQuery<Product[], Error>({
+    queryKey: ["productRanking", targetType, rankType],
+    queryFn: () => fetchProductRanking(targetType, rankType),
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await fetchProductRanking(targetType, rankType);
-        setProducts(data);
-      } catch {
-        setError(ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [targetType, rankType]);
-
-  return { products, loading, error };
+  return {
+    products,
+    loading,
+    error: isError ? ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD : null,
+  };
 };
