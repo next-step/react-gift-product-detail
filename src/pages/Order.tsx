@@ -10,9 +10,8 @@ import { createOrder, fetchProductSummary } from '@/api/services'
 import { STORAGES } from '@/api/constants'
 import { toast } from 'react-toastify'
 import { useTheme } from '@emotion/react'
-import { useFetch } from '@/shared/hooks'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { decodeUserInfo, getCookie } from '@/shared/utils'
-import { useMutation } from '@tanstack/react-query'
 
 // * 주문하기 페이지 (주문하기 폼 Provider 포함)
 export const Order = () => {
@@ -37,7 +36,11 @@ export const OrderContent = () => {
     data: productInfo,
     isError,
     isLoading,
-  } = useFetch<ProductSummary>(() => fetchProductSummary(Number(id)), [id])
+  } = useQuery<ProductSummary>({
+    queryKey: ['productSummary', id],
+    queryFn: () => fetchProductSummary(Number(id)),
+    enabled: !!id,
+  })
 
   // * 카드 리스트
   const cardList: CardData[] = orderCardMock

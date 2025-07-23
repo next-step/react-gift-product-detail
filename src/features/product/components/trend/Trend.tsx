@@ -6,7 +6,7 @@ import { ProductItem } from './ProductItem'
 import { fetchProductRankList } from '@/api/services'
 import { isValidRankType, isValidTargetType, RankType, TargetType, type Product } from '@/api/types'
 import { useTheme } from '@emotion/react'
-import { useFetch } from '@/shared/hooks'
+import { useQuery } from '@tanstack/react-query'
 import { Button, Loading, Typography } from '@/shared/components'
 import { PRODUCT_UI_CONSTANTS } from '@/features/product/constants'
 
@@ -39,7 +39,10 @@ export const Trend = () => {
     isLoading,
     isError,
     data: products,
-  } = useFetch<Product[]>(() => fetchProductRankList(targetType, rankType), [targetType, rankType])
+  } = useQuery<Product[]>({
+    queryKey: ['productRankList', targetType, rankType],
+    queryFn: () => fetchProductRankList(targetType, rankType),
+  })
 
   // * 표시할 상품 리스트 결정
   const displayProducts = showAll ? (products ?? []) : (products ?? []).slice(0, INITIAL_SHOW_COUNT)
