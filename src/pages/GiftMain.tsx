@@ -5,9 +5,7 @@ import { CategorySection } from "@/components/category/CategorySection";
 import { FriendBanner } from "@/components/banner/FriendBanner";
 import { MessageBanner } from "@/components/banner/MessageBanner";
 import { RankingSection } from "@/components/ranking/RankingSection";
-import { Suspense } from "react";
-import { Spinner } from "@/components/common/Spinner";
-import ErrorBoundary from "@/components/common/ErrorBoundary";
+import AsyncBoundary from "@/components/common/AsyncBoundary";
 
 const GiftMain = () => {
   return (
@@ -15,11 +13,9 @@ const GiftMain = () => {
       <PageContainer>
         <Navigation />
         <FriendBanner />
-        <Suspense fallback={<Spinner size={48} withWrapper />}>
-          <ErrorBoundary>
-            <CategorySection />
-          </ErrorBoundary>
-        </Suspense>
+        <AsyncBoundary>
+          <CategorySection />
+        </AsyncBoundary>
         <MessageBanner />
         <RankingSection />
       </PageContainer>
