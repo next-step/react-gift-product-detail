@@ -1,20 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import CategoryItem from "@/components/CategorySection/CategoryItem";
+import CategoryItem from "@/pages/homepage/CategorySection/CategoryItem";
 import { useApiRequest } from "@/hooks/useApiRequest";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 import type { Theme } from "@/types/api_types";
 
 export default function CategorySection() {
-  const { data: themes, status } = useApiRequest<Theme[]>({
+  const query = useApiRequest<Theme[]>({
     url: API_ENDPOINTS.THEMES,
-  });
+    method: "get",
+  }) as import("@tanstack/react-query").UseQueryResult<Theme[], Error>;
   const navigate = useNavigate();
 
-  if (status === "loading") return <LoadingSpinner />;
-  if (status === "error" || !themes || themes.length === 0) return null;
+  if (query.isLoading) return <LoadingSpinner />;
+  if (query.isError || !query.data || query.data.length === 0) return null;
 
   const handleClick = (themeId: number) => {
     navigate(`/themes/${themeId}`);
@@ -24,13 +25,13 @@ export default function CategorySection() {
     <>
       <SectionTitle>선물 테마</SectionTitle>
       <Container>
-        {themes.map(({ themeId, name, image }) => (
+        {query.data?.map((theme: Theme) => (
           <div
-            key={themeId}
-            onClick={() => handleClick(themeId)}
+            key={theme.themeId}
+            onClick={() => handleClick(theme.themeId)}
             style={{ cursor: "pointer" }}
           >
-            <CategoryItem name={name} image={image} />
+            <CategoryItem name={theme.name} image={theme.image} />
           </div>
         ))}
       </Container>

@@ -1,85 +1,60 @@
-import { useEffect, useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import type {
+  UseQueryOptions,
+  UseMutationOptions,
+  UseQueryResult,
+  UseMutationResult,
+} from "@tanstack/react-query";
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
-
-type Status = "idle" | "loading" | "success" | "error";
 
 interface RequestConfig<T = any> extends AxiosRequestConfig {
   url: string;
   method?: "get" | "post" | "put" | "patch" | "delete";
   data?: T;
-  manual?: boolean;
+  queryOptions?: UseQueryOptions<T, Error>;
+  mutationOptions?: UseMutationOptions<T, Error, any>;
 }
 
 export function useApiRequest<T>({
   url,
   method = "get",
   data,
-  manual = false,
+  queryOptions,
+  mutationOptions,
   ...config
-}: RequestConfig) {
-  const [response, setResponse] = useState<T | null>(null);
-  const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
+}: RequestConfig<T>):
+  | UseQueryResult<T, Error>
+  | UseMutationResult<T, Error, any, unknown> {
+  const baseUrl = import.meta.env.VITE_API_BASE_URL + url;
 
-  useEffect(() => {
-    if (manual) return;
-
-    let isMounted = true;
-    const fetchData = async () => {
-      setStatus("loading");
-      try {
-        const res = await axios.request<{ data: T }>({
-          url: import.meta.env.VITE_API_BASE_URL + url,
-          method,
-          data,
-          ...config,
-        });
-        if (isMounted) {
-          setResponse(res.data.data);
-          setStatus("success");
-        }
-      } catch (err: any) {
-        if (isMounted) {
-          setError(err.message ?? "에러 발생");
-          setStatus("error");
-        }
-      }
-    };
-    fetchData();
-    return () => {
-      isMounted = false;
-    };
-  }, [
-    url,
-    method,
-    JSON.stringify(config.params),
-    JSON.stringify(data),
-    manual,
-  ]);
-
-  const refetch = async (overrideConfig?: {
-    data?: any;
-    params?: any;
-  }): Promise<{ data: T }> => {
-    setStatus("loading");
-    try {
+  const query = useQuery<T, Error>({
+    queryKey: [baseUrl, config.params, data],
+    queryFn: async () => {
       const res = await axios.request<{ data: T }>({
-        url: import.meta.env.VITE_API_BASE_URL + url,
+        url: baseUrl,
         method,
-        data: overrideConfig?.data ?? data,
-        params: overrideConfig?.params ?? config.params,
+        data,
         ...config,
       });
-      setResponse(res.data.data);
-      setStatus("success");
-      return res.data;
-    } catch (err: any) {
-      setError(err.message ?? "에러 발생");
-      setStatus("error");
-      throw err;
-    }
-  };
+      return res.data.data;
+    },
+    enabled: method === "get",
+    ...queryOptions,
+  });
 
-  return { data: response, status, error, refetch };
+  const mutation = useMutation<T, Error, any>({
+    mutationFn: async (body: any) => {
+      const res = await axios.request<{ data: T }>({
+        url: baseUrl,
+        method,
+        data: body,
+        ...config,
+      });
+      return res.data.data;
+    },
+    ...mutationOptions,
+  });
+
+  return method === "get" ? query : mutation;
 }

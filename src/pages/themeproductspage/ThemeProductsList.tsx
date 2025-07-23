@@ -27,18 +27,26 @@ export default function ThemeProductsList() {
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const { data, status, error, refetch } = useApiRequest<ThemeProductResponse>({
+  const query = useApiRequest<ThemeProductResponse>({
     url: `/api/themes/${themeId}/products${cursor ? `?cursor=${cursor}` : ""}`,
-    manual: true,
-  });
+    method: "get",
+    queryOptions: {
+      queryKey: ["theme-products", themeId, cursor],
+      enabled: false,
+    },
+  }) as import("@tanstack/react-query").UseQueryResult<
+    ThemeProductResponse,
+    Error
+  >;
+  const { data, isLoading, isError, error, refetch } = query;
 
   useEffect(() => {
-    if (status === "error" && error) {
+    if (isError && error) {
       handleApiError(error);
     }
-  }, [status, error, handleApiError]);
+  }, [isError, error, handleApiError]);
 
-  const loadingNext = status === "loading";
+  const loadingNext = isLoading;
 
   const initializeProducts = () => {
     setInitLoading(true);

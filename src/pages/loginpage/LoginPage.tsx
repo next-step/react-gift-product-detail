@@ -41,23 +41,30 @@ const LoginPage = () => {
     },
   });
 
-  const { refetch } = useApiRequest<{
+  const loginMutation = useApiRequest<{
     email: string;
     name: string;
     authToken: string;
   }>({
     url: API_ENDPOINTS.LOGIN,
     method: "post",
-    manual: true,
-  });
+  }) as import("@tanstack/react-query").UseMutationResult<
+    {
+      email: string;
+      name: string;
+      authToken: string;
+    },
+    Error,
+    LoginFormValues,
+    unknown
+  >;
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const result = await refetch({ data });
+      const result = await loginMutation.mutateAsync(data);
 
-      if (result?.data) {
-        const { email, name, authToken } = result.data;
-
+      if (result) {
+        const { email, name, authToken } = result;
         if (email && name && authToken) {
           login({ email, name, authToken });
           navigate(redirectTo);

@@ -33,22 +33,26 @@ const OrderPage = () => {
     fallbackMessage: "주문 중 오류가 발생했습니다.",
   });
 
-  const { data: product, status } = useApiRequest<ProductSummary>({
+  const productQuery = useApiRequest<ProductSummary>({
     url: API_ENDPOINTS.PRODUCT_SUMMARY(productId),
     method: "get",
-  });
+  }) as import("@tanstack/react-query").UseQueryResult<ProductSummary, Error>;
 
-  const createOrderRequest = useApiRequest<{ success: boolean }>({
+  const orderMutation = useApiRequest<{ success: boolean }>({
     url: API_ENDPOINTS.ORDER,
     method: "post",
-    manual: true,
     headers: {
       Authorization: userInfo.authToken,
     },
-  });
+  }) as import("@tanstack/react-query").UseMutationResult<
+    { success: boolean },
+    Error,
+    any,
+    unknown
+  >;
 
   useEffect(() => {
-    if (status === "error") {
+    if (productQuery.status === "error") {
       toast.error("오류가 발생했습니다. 홈으로 이동합니다.", {
         position: "top-center",
       });
@@ -56,7 +60,7 @@ const OrderPage = () => {
         navigate("/", { replace: true });
       }, 1000);
     }
-  }, [status, navigate]);
+  }, [productQuery.status, navigate]);
 
   const methods = useForm<FullOrderFormValues>({
     resolver: zodResolver(fullOrderSchema),
@@ -72,13 +76,13 @@ const OrderPage = () => {
     formState: { errors },
   } = methods;
 
-  if (status === "loading") {
+  if (productQuery.isLoading) {
     return <p>로딩 중...</p>;
   }
-  if (status === "error") {
+  if (productQuery.isError) {
     return null;
   }
-  if (status === "success" && !product) {
+  if (productQuery.isSuccess && !productQuery.data) {
     return <Navigate to="/notfound" replace />;
   }
 
@@ -87,28 +91,23 @@ const OrderPage = () => {
       toast.error("받는 사람이 없습니다.");
       return;
     }
-
-    if (!product) return;
+    if (!productQuery.data) return;
 
     try {
-      const result = await createOrderRequest.refetch({
-        data: {
-          productId: product.id,
-          message: data.message,
-          messageCardId: data.messageCardId,
-          ordererName: data.sender,
-          receivers: data.receivers,
-        },
+      const result = await orderMutation.mutateAsync({
+        productId: productQuery.data.id,
+        message: data.message,
+        messageCardId: data.messageCardId,
+        ordererName: data.sender,
+        receivers: data.receivers,
       });
 
-      if (result?.data?.success) {
-        alert(
-          `주문이 완료되었습니다.
-상품명: ${product.name}
+      if (result?.success) {
+        alert(`주문이 완료되었습니다.
+상품명: ${productQuery.data.name}
 구매 수량: ${data.receivers.reduce((acc, cur) => acc + cur.quantity, 0)}
 발신자 이름: ${data.sender}
-메시지: ${data.message}`
-        );
+메시지: ${data.message}`);
         navigate("/", { replace: true });
       }
     } catch (error: any) {
@@ -116,7 +115,7 @@ const OrderPage = () => {
     }
   };
 
-  if (!product) {
+  if (!productQuery.data) {
     return null;
   }
 
@@ -126,7 +125,7 @@ const OrderPage = () => {
         <MessageCardSection error={errors.message?.message} />
         <SenderInfoSection error={errors.sender?.message} />
         <ReceiverInfoSection />
-        <ProductSummarySection product={product} />
+        <ProductSummarySection product={productQuery.data} />
         <OrderButton
           color="yellow"
           label="주문하기"

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useApiRequest } from "@/hooks/useApiRequest";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import RisingItem from "@/components/RisingSection/RisingItem";
+import RisingItem from "@/pages/homepage/RisingSection/RisingItem";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 
 const INITIAL_VISIBLE_COUNT = 6;
@@ -17,17 +17,18 @@ export default function RisingList() {
   const targetType = searchParams.get("targetType") ?? "ALL";
   const rankType = searchParams.get("rankType") ?? "MANY_WISH";
 
-  const { data: products, status } = useApiRequest<Product[]>({
+  const query = useApiRequest<Product[]>({
     url: API_ENDPOINTS.RANKING,
     params: { targetType, rankType },
-  });
+    method: "get",
+  }) as import("@tanstack/react-query").UseQueryResult<Product[], Error>;
 
   const handleItemClick = (item: Product & { id: number }) => {
     navigate(`/order/${item.id}`);
   };
 
-  if (status === "loading") return <LoadingSpinner />;
-  if (status === "error" || !products || products.length === 0) {
+  if (query.isLoading) return <LoadingSpinner />;
+  if (query.isError || !query.data || query.data.length === 0) {
     return (
       <Wrapper>
         <EmptyMessage>상품이 없습니다.</EmptyMessage>
@@ -38,15 +39,15 @@ export default function RisingList() {
   return (
     <Wrapper>
       <Grid>
-        {products.slice(0, visibleCount).map((item, index) => (
+        {query.data.slice(0, visibleCount).map((item, index) => (
           <CardWrapper key={item.id} onClick={() => handleItemClick(item)}>
             <RankBadge>{index + 1}</RankBadge>
             <RisingItem product={item} />
           </CardWrapper>
         ))}
       </Grid>
-      {visibleCount < products.length && (
-        <MoreButton onClick={() => setVisibleCount(products.length)}>
+      {visibleCount < query.data.length && (
+        <MoreButton onClick={() => setVisibleCount(query.data.length)}>
           더보기
         </MoreButton>
       )}
