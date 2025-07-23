@@ -4,7 +4,6 @@ import { ERROR_MESSAGES } from "@/constants/messages";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { isAxiosError } from "axios";
-import { AxiosError } from "axios";
 
 export const useThemeInfo = (themeId: number | undefined) => {
   const [themeInfo, setThemeInfo] = useState<ThemeInfo | null>(null);
