@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from '@emotion/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
 import { MdFace2, MdFace, MdFace6 } from 'react-icons/md';
@@ -18,7 +18,7 @@ import TabButton from '../Shared/TabButton';
 import RankingCard from '../Shared/RankingCard';
 import { UserManagement } from '../../../Login/contexts/UserManagement';
 
-import { fetchRanking, type RankingItem } from '../../../../apis/ranking';
+import { useRanking } from '../../../../apis/ranking';
 
 const genderTabs = [
   { label: '전체', icon: <FaUser /> },
@@ -40,11 +40,9 @@ const RankingSection = () => {
 
   const [gender, setGender] = useState(initialGender);
   const [giftType, setGiftType] = useState(initialGiftType);
-
-  const [items, setItems] = useState<RankingItem[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [, setError] = useState(false);
+
+  const { data: items = [], isLoading, isError } = useRanking(gender, giftType);
 
   const updateFilters = (newGender: string, newGiftType: string) => {
     setSearchParams({ gender: newGender, giftType: newGiftType });
@@ -53,27 +51,7 @@ const RankingSection = () => {
     setIsExpanded(false);
   };
 
-  useEffect(() => {
-    const loadRanking = async () => {
-      setLoading(true);
-      setError(false);
-
-      try {
-        const data = await fetchRanking(gender, giftType);
-        setItems(data);
-      } catch {
-        setError(true);
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadRanking();
-  }, [gender, giftType]);
-
   const visibleItems = isExpanded ? items : items.slice(0, 6);
-
   const toggleExpanded = () => setIsExpanded((prev) => !prev);
 
   const handleCardClick = (itemId: number) => {
@@ -120,9 +98,9 @@ const RankingSection = () => {
         ))}
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <div>로딩 중...</div>
-      ) : items.length === 0 ? (
+      ) : isError || items.length === 0 ? (
         <div css={emptyStateStyle}>상품 목록이 없습니다.</div>
       ) : (
         <>

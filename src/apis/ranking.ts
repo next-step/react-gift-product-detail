@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 export type Price = {
   basicPrice: number;
@@ -41,16 +42,23 @@ export const fetchRanking = async (
   gender: string,
   giftType: string
 ): Promise<RankingItem[]> => {
-  try {
-    const targetType = genderToTargetTypeMap[gender] || 'ALL';
-    const rankType = giftTypeToRankTypeMap[giftType] || 'MANY_WISH';
+  const targetType = genderToTargetTypeMap[gender] || 'ALL';
+  const rankType = giftTypeToRankTypeMap[giftType] || 'MANY_WISH';
 
-    const response = await axios.get<RankingResponse>('/api/products/ranking', {
-      params: { targetType, rankType },
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error('Ranking API 호출 실패:', error);
-    return [];
+  const response = await axios.get<RankingResponse>('/api/products/ranking', {
+    params: { targetType, rankType },
+  });
+
+  if (!response.data || !Array.isArray(response.data.data)) {
+    throw new Error('Unexpected API response structure');
   }
+  return response.data.data;
+};
+
+export const useRanking = (gender: string, giftType: string) => {
+  return useQuery<RankingItem[], Error>({
+    queryKey: ['ranking', gender, giftType],
+    queryFn: () => fetchRanking(gender, giftType),
+    staleTime: 1000 * 60 * 5,
+  });
 };
