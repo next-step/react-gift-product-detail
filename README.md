@@ -11,7 +11,7 @@
             [v] theme.ts
             [v] raking.ts
             [v] product.ts
-            [ ] product_summary.ys
+            [v] product_summary.ys
             [v] orders.ts
             [v] info.ts
             [v] auth.ts

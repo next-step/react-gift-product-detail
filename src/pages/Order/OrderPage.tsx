@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useTheme } from '@emotion/react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   containerStyle,
   cardSelectorStyle,
@@ -29,13 +29,9 @@ import { cardTemplates } from '../../data/cardTemplates';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserManagement } from '../Login/contexts/UserManagement';
 
-import {
-  fetchProductSummary,
-  type ProductSummary,
-} from '../../apis/product_summary';
+import { useProductSummaryQuery } from '../../apis/product_summary';
 import { postOrder } from '../../apis/orders';
 import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
 
 const OrderPage = () => {
   const theme = useTheme();
@@ -44,7 +40,6 @@ const OrderPage = () => {
   const { user } = UserManagement();
   const authToken = user?.authToken || '';
 
-  const [product, setProduct] = useState<ProductSummary | null>(null);
   const [selectedCard, setSelectedCard] = useState(cardTemplates[0]);
   const [receivers, setReceivers] = useState<
     { name: string; phone: string; quantity: number }[]
@@ -57,7 +52,6 @@ const OrderPage = () => {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -66,64 +60,37 @@ const OrderPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (!productId) {
-      toast.error('잘못된 접근입니다.');
-      navigate('/');
-      return;
-    }
+  const {
+    data: product,
+    isLoading,
+    isError,
+    error,
+  } = useProductSummaryQuery(productId || '', authToken);
 
-    fetchProductSummary(productId, authToken)
-      .then(setProduct)
-      .catch((error) => {
-        toast.error(error.message);
-        navigate('/');
-      });
-  }, [productId, authToken, navigate]);
+  if (isLoading) {
+    return <div>제품 정보를 불러오는 중입니다...</div>;
+  }
+
+  if (isError) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : '제품 정보를 불러오는 중 에러가 발생했습니다.';
+    toast.error(message);
+    navigate('/');
+    return null;
+  }
+
+  if (!product) {
+    return <div>상품 정보를 가져오지 못했습니다.</div>;
+  }
 
   const handleCardSelect = (card: typeof selectedCard) => {
     setSelectedCard(card);
     setValue('message', card.defaultTextMessage);
   };
 
-  // React Query mutation 선언
-  const { mutate, status } = useMutation<
-    void,
-    Error,
-    Parameters<typeof postOrder>[0]
-  >({
-    mutationFn: (orderData) => postOrder(orderData, authToken),
-    onSuccess: () => {
-      if (!product) {
-        toast.error('상품 정보를 불러오지 못했습니다.');
-        return;
-      }
-      alert(
-        `주문이 완료되었습니다.\n상품명: ${product.name}\n총 구매 수량: ${totalQuantity}\n발신자 이름: ${getValues('senderName')}\n메시지: ${getValues('message')}\n받는 사람 수: ${receivers.length}`
-      );
-      navigate('/');
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || '주문에 실패했습니다.';
-
-        if (status === 401) {
-          toast.error('로그인이 필요합니다.');
-          navigate('/login');
-        } else {
-          toast.error(message);
-        }
-      } else {
-        toast.error('알 수 없는 에러가 발생했습니다.');
-        console.error(error);
-      }
-    },
-  });
-
-  const isLoading = status === 'pending';
-
-  const onSubmit = (data: { senderName: string; message: string }) => {
+  const onSubmit = async (data: { senderName: string; message: string }) => {
     if (receivers.length === 0) {
       toast.error('받는 사람이 없습니다.');
       return;
@@ -146,12 +113,30 @@ const OrderPage = () => {
       })),
     };
 
-    mutate(orderData);
-  };
+    try {
+      await postOrder(orderData, authToken);
 
-  if (!product) {
-    return <div>제품 정보를 불러오는 중입니다...</div>;
-  }
+      alert(
+        `주문이 완료되었습니다.\n상품명: ${product.name}\n총 구매 수량: ${totalQuantity}\n발신자 이름: ${data.senderName}\n메시지: ${data.message}\n받는 사람 수: ${receivers.length}`
+      );
+      navigate('/');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || '주문에 실패했습니다.';
+
+        if (status === 401) {
+          toast.error('로그인이 필요합니다.');
+          navigate('/login');
+        } else {
+          toast.error(message);
+        }
+      } else {
+        console.error('주문 실패 에러:', error);
+        toast.error('알 수 없는 에러가 발생했습니다.');
+      }
+    }
+  };
 
   return (
     <div css={containerStyle(theme)}>
@@ -259,14 +244,8 @@ const OrderPage = () => {
           </div>
         </div>
 
-        <button
-          css={orderButtonStyle(theme)}
-          type="submit"
-          disabled={isLoading}
-        >
-          {isLoading
-            ? '주문 중...'
-            : `${(product.price * totalQuantity).toLocaleString()}원 주문하기`}
+        <button css={orderButtonStyle(theme)} type="submit">
+          {(product.price * totalQuantity).toLocaleString()}원 주문하기
         </button>
       </form>
 
