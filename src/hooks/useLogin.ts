@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import apiClient from '@/api/apiClient';
-import { useMutation } from '@/hooks/useMutation';
+import { useMutation } from '@tanstack/react-query';
 
 interface User {
   name: string;
@@ -38,8 +38,8 @@ const getErrorMessage = (error: any): string => {
 };
 
 export const useLogin = () => {
-  const { mutate, isLoading } = useMutation(
-    async ({ email, password }: { email: string; password: string }) => {
+  const { mutate, isPending } = useMutation<User, Error, { email: string; password: string }>({
+    mutationFn: async ({ email, password }) => {
       const response = await apiClient.post<any>('/api/login', {
         email,
         password,
@@ -47,37 +47,31 @@ export const useLogin = () => {
       if (!isValidUser(response.data.data)) {
         throw new Error('Invalid user data');
       }
-      return response.data.data as User;
+      return response.data.data;
     },
-    {
-      onSuccess: (user) => {
-        sessionStorage.setItem(
-          'userInfo',
-          JSON.stringify({
-            name: user.name,
-            email: user.email,
-            authToken: user.authToken,
-          })
-        );
-        toast.success(`${user.name}님, 환영합니다!`);
-      },
-      onError: (error: any) => {
-        const errorMessage = getErrorMessage(error);
-        const stored = sessionStorage.getItem('userInfo');
+    onSuccess: (user) => {
+      sessionStorage.setItem(
+        'userInfo',
+        JSON.stringify({
+          name: user.name,
+          email: user.email,
+          token: user.authToken,
+        })
+      );
+      toast.success(`${user.name}님, 환영합니다!`);
+    },
+    onError: (error: any) => {
+      const errorMessage = getErrorMessage(error);
+      const stored = sessionStorage.getItem('userInfo');
 
-        if (error.response?.status === 401 && stored) {
-          toast.error('세션이 만료되었습니다. 다시 로그인해주세요.');
-          sessionStorage.removeItem('userInfo');
-        } else {
-          toast.error(errorMessage);
-        }
-      },
-    }
-  );
+      if (error.response?.status === 401 && stored) {
+        toast.error('세션이 만료되었습니다. 다시 로그인해주세요.');
+        sessionStorage.removeItem('userInfo');
+      } else {
+        toast.error(errorMessage);
+      }
+    },
+  });
 
-  const login = async (email: string, password: string) => {
-    return await mutate({ email, password });
-  };
-
-  return { login, isLoading };
+  return { login: mutate, isLoading: isPending };
 };

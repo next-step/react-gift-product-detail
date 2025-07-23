@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from '@/hooks/useLogin';
@@ -13,7 +13,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => void;
   logout: () => void;
   isLoading: boolean;
   redirectAfterLogin: string | null;
@@ -23,37 +23,50 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isLoggedIn, token, setUser, setIsLoggedIn, setToken, storage } =
-    useAuthUser();
-  const [redirectAfterLogin, onChangeRedirectAfterLogin] = useState<
-    string | null
-  >(null);
-  const { login: loginHandler, isLoading } = useLogin();
+  const {
+    user,
+    isLoggedIn,
+    token,
+    setUser,
+    setIsLoggedIn,
+    setToken,
+    storage,
+  } = useAuthUser();
+  const [redirectAfterLogin, onChangeRedirectAfterLogin] = useState<string | null>(
+    null
+  );
+  const { login: loginMutation, isLoading } = useLogin();
   const navigate = useNavigate();
 
-  const login = async (email: string, password: string) => {
-    try {
-      const loggedInUser = await loginHandler(email, password);
-      if (loggedInUser) {
-        const userData = {
-          name: loggedInUser.name,
-          email: loggedInUser.email,
-          token: loggedInUser.authToken,
-        };
-        setUser(userData);
-        setIsLoggedIn(true);
-        setToken(loggedInUser.authToken);
-        storage.set(userData);
-        navigate(redirectAfterLogin || '/');
-        onChangeRedirectAfterLogin(null);
-      }
-    } catch (error) {
-      setUser(null);
-      setIsLoggedIn(false);
-      setToken(null);
-      storage.clear();
-    }
-  };
+  const login = useCallback(
+    (email: string, password: string) => {
+      loginMutation(
+        { email, password },
+        {
+          onSuccess: (loggedInUser) => {
+            const userData = {
+              name: loggedInUser.name,
+              email: loggedInUser.email,
+              token: loggedInUser.authToken,
+            };
+            setUser(userData);
+            setIsLoggedIn(true);
+            setToken(loggedInUser.authToken);
+            storage.set(userData);
+            navigate(redirectAfterLogin || '/');
+            onChangeRedirectAfterLogin(null);
+          },
+          onError: () => {
+            setUser(null);
+            setIsLoggedIn(false);
+            setToken(null);
+            storage.clear();
+          },
+        }
+      );
+    },
+    [loginMutation, navigate, redirectAfterLogin, storage]
+  );
 
   const logout = () => {
     setUser(null);
@@ -73,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       redirectAfterLogin,
       onChangeRedirectAfterLogin,
     }),
-    [isLoggedIn, user, token, isLoading, redirectAfterLogin]
+    [isLoggedIn, user, token, login, isLoading, redirectAfterLogin]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

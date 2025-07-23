@@ -23,13 +23,8 @@ const LoginForm = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  const onSubmit = async (data: LoginFormInputs) => {
-    console.log('로그인 요청:', data);
-    try {
-      await login(data.id, data.password);
-    } catch (error) {
-      console.error('Login submission error:', error);
-    }
+  const onSubmit = (data: LoginFormInputs) => {
+    login(data.id, data.password);
   };
 
   return (
