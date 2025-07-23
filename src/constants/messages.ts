@@ -33,6 +33,7 @@ export const ERROR_MESSAGES = {
     FAIL_TO_LOAD: "상품 정보를 불러오지 못했습니다.",
     LOAD: "상품 정보를 불러오고 있습니다.",
     NONE: "상품이 없습니다,",
+    INVALID: "잘못된 상품 아이디 입니다.",
   },
   ORDER: {
     SUCCESS: "주문이 완료되었습니다!",

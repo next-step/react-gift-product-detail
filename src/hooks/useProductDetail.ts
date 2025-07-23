@@ -1,27 +1,26 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchProductById } from "@/api/product";
 import { ERROR_MESSAGES } from "@/constants/messages";
-import type { Product } from "@/types/product";
 
 export const useProductDetail = (productId: number | undefined) => {
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!productId) return;
-
-    (async () => {
-      try {
-        const data = await fetchProductById(productId);
-        setProduct(data);
-      } catch {
-        setError(ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD);
-      } finally {
-        setLoading(false);
+  const {
+    data: product,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["productDetail", productId],
+    queryFn: () => {
+      if (!productId) {
+        throw new Error(ERROR_MESSAGES.PRODUCT.INVALID);
       }
-    })();
-  }, [productId]);
+      return fetchProductById(productId);
+    },
+    enabled: !!productId,
+  });
 
-  return { product, loading, error };
+  return {
+    product,
+    loading,
+    error: error instanceof Error ? error.message : null,
+  };
 };
