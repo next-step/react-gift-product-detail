@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "@emotion/styled";
 import ProductCard from "@/components/ProductCard";
 import { useSearchParams } from "react-router";
-import { useGiftRanking } from "@/hooks/useGiftRanking";
+import { useGiftRankingQuery } from "@/hooks/useGiftRankingQuery";
 import AsyncBoundary from "@/components/AsyncBoundary";
 
 const Wrapper = styled.section`
@@ -106,7 +106,7 @@ export default function GiftRankingSection() {
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [showAll, setShowAll] = useState(false);
 
-  const { data, loading, error } = useGiftRanking(selectedFilter, selectedTab);
+  const { data, isLoading, isError } = useGiftRankingQuery(selectedFilter, selectedTab);
 
   const filters = [
     { label: "전체", icon: "ALL", value: "ALL" },
@@ -170,7 +170,7 @@ export default function GiftRankingSection() {
         ))}
       </TabWrapper>
 
-      <AsyncBoundary loading={loading} error={error} errorFallback={<Message>상품을 불러오는 데 실패했어요.</Message>}>
+      <AsyncBoundary loading={isLoading} error={isError} errorFallback={<Message>상품을 불러오는 데 실패했어요.</Message>}>
         {data?.length === 0 ? (
           <Message>상품이 없습니다.</Message>
         ) : (
