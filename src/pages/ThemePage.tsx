@@ -8,6 +8,7 @@ import type { ProductInfo } from "@/types/product";
 import { useFetchTheme } from "../hooks/useFetchTheme";
 import ThemeHeader from "@/components/theme/ThemeHeader";
 import ProductGrid from "@/components/theme/ProductGrid";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function ThemePage() {
   const { themeId } = useParams();
@@ -15,7 +16,6 @@ export default function ThemePage() {
   const [products, setProducts] = useState<ProductInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true); // 더 불러 올 게 있는지
-  const loader = useRef<HTMLDivElement | null>(null); // 마지막 감지
 
   const cursorRef = useRef(0);
 
@@ -49,29 +49,18 @@ export default function ThemePage() {
     fetchProducts();
   }, [themeId, themeLoading]);
 
-  // Intersection Observer로 무한 스크롤
-  useEffect(() => {
-    if (loading) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          fetchProducts();
-        }
-      },
-      { root: null, rootMargin: "20px", threshold: 1.0 },
-    );
-    if (loader.current) observer.observe(loader.current);
-    return () => {
-      if (loader.current) observer.unobserve(loader.current);
-    };
-  }, [fetchProducts, hasMore, loading]);
+  const { loaderRef } = useInfiniteScroll({
+    hasMore,
+    loading,
+    fetchMore: fetchProducts,
+  });
 
   if (!theme) return null;
 
   return (
     <Wrapper>
       <ThemeHeader theme={theme} />
-      <ProductGrid products={products} loader={loader} loading={loading} />
+      <ProductGrid products={products} loader={loaderRef} loading={loading} />
       {loading && <Spinner />}
     </Wrapper>
   );
