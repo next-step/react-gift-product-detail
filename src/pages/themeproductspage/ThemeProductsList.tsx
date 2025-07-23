@@ -42,7 +42,11 @@ export default function ThemeProductsList() {
 
   useEffect(() => {
     if (isError && error) {
-      handleApiError(error);
+      if ((error as any)?.response?.status === 404) {
+        handleApiError(error);
+      } else {
+        throw error;
+      }
     }
   }, [isError, error, handleApiError]);
 

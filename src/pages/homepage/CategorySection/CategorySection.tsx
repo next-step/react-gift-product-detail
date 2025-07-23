@@ -15,7 +15,8 @@ export default function CategorySection() {
   const navigate = useNavigate();
 
   if (query.isLoading) return <LoadingSpinner />;
-  if (query.isError || !query.data || query.data.length === 0) return null;
+  if (query.isError) throw query.error;
+  if (!query.data || query.data.length === 0) return null;
 
   const handleClick = (themeId: number) => {
     navigate(`/themes/${themeId}`);

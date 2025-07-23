@@ -28,7 +28,8 @@ export default function RisingList() {
   };
 
   if (query.isLoading) return <LoadingSpinner />;
-  if (query.isError || !query.data || query.data.length === 0) {
+  if (query.isError) throw query.error;
+  if (!query.data || query.data.length === 0) {
     return (
       <Wrapper>
         <EmptyMessage>상품이 없습니다.</EmptyMessage>

@@ -71,7 +71,11 @@ const LoginPage = () => {
         }
       }
     } catch (err: any) {
-      handleApiError(err);
+      if (err?.response?.status === HTTP_STATUS.BAD_REQUEST) {
+        handleApiError(err);
+      } else {
+        throw err;
+      }
     }
   };
 

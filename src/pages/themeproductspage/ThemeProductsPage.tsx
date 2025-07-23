@@ -23,13 +23,10 @@ export default function ThemeProductsPage() {
 
   if (!parsedThemeId) return null;
 
-  const {
-    data: themeInfo,
-    status: themeStatus,
-    error: themeError,
-  } = useApiRequest<ThemeInfo>({
+  const query = useApiRequest<ThemeInfo>({
     url: API_ENDPOINTS.THEME_INFO(parsedThemeId),
-  });
+  }) as import("@tanstack/react-query").UseQueryResult<ThemeInfo, Error>;
+  const { data: themeInfo, isLoading, isError, error: themeError } = query;
 
   const handleError = useApiErrorHandler({
     fallbackMessage: "테마 정보를 불러올 수 없습니다.",
@@ -43,12 +40,16 @@ export default function ThemeProductsPage() {
   });
 
   useEffect(() => {
-    if (themeStatus === "error" && themeError) {
-      handleError(themeError);
+    if (isError && themeError) {
+      if ((themeError as any)?.response?.status === HTTP_STATUS.NOT_FOUND) {
+        handleError(themeError);
+      } else {
+        throw themeError;
+      }
     }
-  }, [themeStatus, themeError, handleError]);
+  }, [isError, themeError, handleError]);
 
-  if (themeStatus === "loading") return <LoadingSpinner />;
+  if (isLoading) return <LoadingSpinner />;
 
   if (!themeInfo) {
     return <p>정보를 불러올 수 없습니다.</p>;

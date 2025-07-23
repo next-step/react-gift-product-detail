@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
 import { Navigate } from "react-router-dom";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -77,10 +78,10 @@ const OrderPage = () => {
   } = methods;
 
   if (productQuery.isLoading) {
-    return <p>로딩 중...</p>;
+    return <LoadingSpinner />;
   }
   if (productQuery.isError) {
-    return null;
+    throw productQuery.error;
   }
   if (productQuery.isSuccess && !productQuery.data) {
     return <Navigate to="/notfound" replace />;
