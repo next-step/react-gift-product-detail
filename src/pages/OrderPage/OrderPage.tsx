@@ -1,38 +1,42 @@
 import styled from '@emotion/styled'
 import { Navbar } from '@/components/Navbar/Navbar'
 import { Layout } from '@/components/Layout/Layout'
-import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { OrderForm } from '@/components/OrderPage/OrderForm'
 import { toast } from 'react-toastify'
 import type { Product } from '@/types/product'
+import { useQuery } from '@tanstack/react-query'
+
+const fetchProduct = async (id: string): Promise<Product> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_BASE_URL}/api/products/${id}`
+  )
+  return response.data.data
+}
+
+export function useProductQuery(id: string) {
+  return useQuery({
+    queryKey: ['product', id],
+    queryFn: () => fetchProduct(id),
+    retry: false,
+  })
+}
 
 export function OrderPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [product, setProduct] = useState<Product | null>(null)
+  const { data: product, isLoading, isError, error } = useProductQuery(id || '')
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/products/${id}`
-        )
-        setProduct(response.data.data)
-      } catch (error) {
-        if (error instanceof axios.AxiosError) {
-          const message = error.response?.data.data.message
-          toast.error(
-            typeof message === 'string' ? message : '잘못된 요청입니다.'
-          )
-          navigate('/', { replace: true })
-        }
-      }
+  if (isLoading) return <div>상품 로딩중...</div>
+
+  if (isError) {
+    if (error instanceof axios.AxiosError) {
+      const message = error.response?.data.data.message
+      toast.error(typeof message === 'string' ? message : '잘못된 요청입니다.')
+      navigate('/', { replace: true })
     }
-
-    fetchProduct()
-  }, [id, navigate])
+  }
 
   if (!product) return <div>상품을 찾을 수 없습니다.</div>
 
