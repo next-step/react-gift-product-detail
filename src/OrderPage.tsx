@@ -24,16 +24,8 @@ import { ErrorBoundary } from "react-error-boundary";
 
 type FormData = z.infer<typeof orderSchema>;
 
-function OrderPage() {
+function OrderPage({ productId }: { productId: number }) {
   const navigate = useNavigate();
-  const { id } = useParams();
-
-  const productId = Number(id);
-
-  if (isNaN(productId)) {
-    navigate("/");
-    return;
-  }
 
   const { data: product } = useProductSummaryQuery(productId);
 
@@ -151,10 +143,19 @@ function OrderPage() {
 const ProtectedOrderPage = withAuth(OrderPage);
 
 export default function SuspenseOrderPage() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const productId = Number(id);
+
+  if (isNaN(productId)) {
+    navigate("/");
+    return;
+  }
+
   return (
     <ErrorBoundary fallback={<p>에러가 발생했습니다. 다시 시도해주세요.</p>}>
       <Suspense fallback={<Spinner />}>
-        <ProtectedOrderPage />
+        <ProtectedOrderPage productId={productId} />
       </Suspense>
     </ErrorBoundary>
   );
