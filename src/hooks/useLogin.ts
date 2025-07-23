@@ -13,7 +13,12 @@ export const useLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const mutation = useMutation<LoginResponse, string, LoginRequest>({
+  const {
+    mutateAsync: handleLogin,
+    isPending,
+    isError,
+    error,
+  } = useMutation<LoginResponse, string, LoginRequest>({
     mutationFn: loginAPI,
     onSuccess: (res) => {
       login({
@@ -25,15 +30,15 @@ export const useLogin = () => {
       toast.success(ERROR_MESSAGES.LOGIN.SUCCESS);
       navigate("/");
     },
-    onError: (error) => {
-      toast.error(error ?? ERROR_MESSAGES.LOGIN.FAIL);
+    onError: (err) => {
+      toast.error(err || ERROR_MESSAGES.LOGIN.FAIL);
     },
   });
 
   return {
-    handleLogin: mutation.mutateAsync,
-    isPending: mutation.isPending,
-    isError: mutation.isError,
-    error: mutation.error,
+    handleLogin,
+    isPending,
+    isError,
+    error,
   };
 };
