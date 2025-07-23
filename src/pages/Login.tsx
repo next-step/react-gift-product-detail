@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 
 // * 로그인 화면
 export const Login = () => {
@@ -32,22 +33,20 @@ export const Login = () => {
     mode: 'onTouched', // * 첫 blur 이후 실시간 유효성 검사 (기존 useInput 동작과 동일)
   })
 
+  // * React Query의 useMutation으로 로그인 요청 관리
+  const mutation = useMutation({
+    // 로그인 API 함수 (axios 기반)
+    mutationFn: loginApi,
+    // 로그인 성공 시: 사용자 정보 저장 및 리다이렉트
+    onSuccess: ({ email, name, authToken }) => {
+      login({ email, name, authToken })
+      navigate(from, { replace: true }) // * 히스토리 정리
+    },
+  })
+
   // * 로그인 폼 제출 핸들러
   const onSubmit = async (data: LoginFormData) => {
-    const { email, name, authToken } = await loginApi({
-      email: data.email,
-      password: data.password,
-    })
-
-    // * 로그인 정보 저장 (쿠키에 암호화되어 저장)
-    login({
-      email,
-      name,
-      authToken,
-    })
-
-    // * 로그인 시 이전 페이지로 리다이렉트
-    navigate(from, { replace: true }) // * replace로 히스토리 정리
+    mutation.mutate(data)
   }
 
   return (
@@ -74,7 +73,13 @@ export const Login = () => {
         {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
 
         <SpacingDiv />
-        <Button type="submit" variant="kakao" size="medium" disabled={!isValid}>
+        <Button
+          type="submit"
+          variant="kakao"
+          size="medium"
+          // ? 비활성화 조건 : 입력값이 유효하지 않음 or 로그인 요청이 이미 진행 중
+          disabled={!isValid || mutation.isPending}
+        >
           로그인
         </Button>
       </LoginForm>
