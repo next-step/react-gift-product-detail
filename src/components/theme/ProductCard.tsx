@@ -37,10 +37,8 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
-  const goToOrder = useGoToOrder();
-
   return (
-    <Card onClick={() => goToOrder(product.id)}>
+    <Card onClick={useGoToOrder(product.id)}>
       <ItemImage src={product.imageURL} alt={product.name} />
       <Brand>{product.brandInfo.name}</Brand>
       <Name>{product.name}</Name>

@@ -12,3 +12,12 @@ export function createStorage<T>(key: string) {
     },
   };
 }
+
+const storageMap = new Map<string, ReturnType<typeof createStorage>>();
+
+export function getPersistentStorage<T>(key: string) {
+  if (!storageMap.has(key)) {
+    storageMap.set(key, createStorage<T>(key));
+  }
+  return storageMap.get(key)!;
+}

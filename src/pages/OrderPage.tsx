@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
@@ -15,6 +15,8 @@ import OrderButton from '@/components/order/OrderButton';
 
 import { useProductSummary } from '@/hooks/useProductSummary';
 import { useAuth } from '@/hooks/useAuth';
+import { useGoToHome } from '@/hooks/useGoTo';
+import { useGoToLogin } from '@/hooks/useGoTo';
 import { isBlank } from '@/utils/validation';
 import { cardTemplates } from '@/mock/cardTemplates';
 import type { Receiver } from '@/types/order';
@@ -36,7 +38,8 @@ interface FormValues {
 }
 
 export default function OrderPage() {
-  const navigate = useNavigate();
+  const goToHome = useGoToHome();
+  const goToLogin = useGoToLogin();
   const { user } = useAuth();
   const { id } = useParams<{ id: string }>();
   const { product, loading } = useProductSummary(id);
@@ -102,11 +105,11 @@ export default function OrderPage() {
           메시지: {data.message || '(없음)'}
         </div>,
       );
-      navigate('/');
+      goToHome();
     } catch (err: any) {
       if (err.message === '401') {
         toast.error('로그인이 필요합니다.');
-        navigate('/login');
+        goToLogin();
       } else {
         toast.error(err.message);
       }

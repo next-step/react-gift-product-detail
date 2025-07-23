@@ -7,23 +7,23 @@ export function useGoToHome() {
   };
 }
 
-export function useGoToProfile() {
+export function useGoToLogin() {
   const navigate = useNavigate();
   return () => {
     navigate('/my');
   };
 }
 
-export function useGoToOrder() {
+export function useGoToOrder(productId: number | string) {
   const navigate = useNavigate();
-  return (productId: number | string) => {
+  return () => {
     navigate(`/order/${productId}`);
   };
 }
 
-export function useGoToTheme() {
+export function useGoToTheme(themeId: number | string) {
   const navigate = useNavigate();
-  return (themeId: number | string) => {
+  return () => {
     navigate(`/themes/${themeId}`);
   };
 }
