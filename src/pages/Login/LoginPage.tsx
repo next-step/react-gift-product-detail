@@ -8,6 +8,7 @@ import { useAuth, type Auth } from "@/contexts/authContext";
 import useFetch from "@/hooks/useFetch";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import { isErrorData } from "@/types/FetchErrorData";
+import { useMutation } from "@tanstack/react-query";
 
 interface LoginBodyData {
   email: string;
@@ -17,23 +18,25 @@ interface LoginBodyData {
 const LoginPage = () => {
   const { user, onChange, onBlur, errorMsg } = useLoginInput();
   const { login } = useAuth();
-  const loginFetch = useFetch<Auth, LoginBodyData>("api/login", {
+  const { fetchData } = useFetch<Auth, LoginBodyData>("api/login", {
     method: "POST",
-    body: { email: user.id, password: user.password },
     autoFetch: false,
   });
-  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const responseData = await loginFetch.fetchData();
-      if (responseData) {
-        login(responseData);
-      }
-    } catch (error) {
+  const { mutate } = useMutation({
+    mutationFn: (body: LoginBodyData) => fetchData(undefined, body),
+    onSuccess: (data) => {
+      login(data);
+    },
+    onError: (error) => {
       if (isErrorData(error)) {
         showFetchErrorToast(error.statusCode, error.message);
       }
-    }
+    },
+  });
+  const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const body = { email: user.id, password: user.password };
+    mutate(body);
   };
   const isValidIdAndPassword = user.id.length !== 0 && user.password.length >= 8 && !errorMsg.id && !errorMsg.password;
   return (
