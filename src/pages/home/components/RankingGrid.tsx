@@ -12,19 +12,13 @@ type RankingGridProps = {
 };
 
 export const RankingGrid = ({ gender, tab }: RankingGridProps) => {
-  const { products, loading, error } = useProductRanking(gender, tab);
+  const { products } = useProductRanking(gender, tab);
 
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll
     ? products
     : products.slice(0, INITIAL_RANKING_COUNT);
   const canToggle = products.length > INITIAL_RANKING_COUNT;
-
-  if (error) return null;
-
-  if (loading) {
-    return <Placeholder>{ERROR_MESSAGES.PRODUCT.LOAD}</Placeholder>;
-  }
 
   if (products.length === 0) {
     return <Placeholder>{ERROR_MESSAGES.PRODUCT.NONE}</Placeholder>;
