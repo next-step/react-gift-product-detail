@@ -6,18 +6,21 @@ import ReceiverModalSection from "@/sections/OrderSection/ReceiverModalSection";
 import ProductInfoSection from "@/sections/OrderSection/ProductInfoSection";
 import BottomOrderBar from "@/sections/OrderSection/BottomOrderBar";
 import { useParams, useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { messageCardData } from "@/mocks/messageCardData";
 import { withAuth } from "@/hoc/withAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { orderSchema, type OrderFormData } from "@/utils/validateOrderSchema";
 import * as z from "zod";
-import { getProductSummary, type ProductSummary } from "@/apis/product";
 import { toast } from "react-toastify";
 import { AxiosError, HttpStatusCode } from "axios";
 import { useAuth } from "@/hooks/useAuth";
-import { orderProduct } from "@/apis/order";
+import { useOrderMutation } from "@/hooks/useOrderMutation";
+import { useProductSummaryQuery } from "@/hooks/useProductSummaryQuery";
+import { Suspense } from "react";
+import Spinner from "@/components/Spinner";
+import { ErrorBoundary } from "react-error-boundary";
 
 type FormData = z.infer<typeof orderSchema>;
 
@@ -26,36 +29,19 @@ function OrderPage() {
   const { id } = useParams();
 
   const productId = Number(id);
-  const [product, setProduct] = useState<ProductSummary | null>(null);
 
-  useEffect(() => {
-    if (isNaN(productId)) {
-      navigate("/");
-      return;
-    }
+  if (isNaN(productId)) {
+    navigate("/");
+    return;
+  }
 
-    const fetchProduct = async () => {
-      try {
-        const data = await getProductSummary(productId);
-        setProduct(data);
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          toast.error(error.response?.data?.message ?? "상품 정보를 불러올 수 없습니다.");
-        } else {
-          toast.error("알 수 없는 오류가 발생했습니다.");
-        }
-        navigate("/");
-      }
-    };
-
-    fetchProduct();
-  }, [productId, navigate]);
-
+  const { data: product } = useProductSummaryQuery(productId);
 
   const defaultCardId = messageCardData[0]?.id ?? 1;
   const [selectedCardId, setSelectedCardId] = useState(defaultCardId);
 
   const { user } = useAuth();
+  const { mutate: submitOrder } = useOrderMutation();
 
   const {
     register,
@@ -84,42 +70,46 @@ function OrderPage() {
 
   const totalPrice = product ? product.price * totalQuantity : 0;
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = (data: FormData) => {
     if (!product) return;
-    try {
-      await orderProduct({
-        productId: product.id,
-        message: data.message,
-        messageCardId: String(selectedCardId),
-        ordererName: data.sender,
-        receivers: data.receivers.map((r) => ({
-          name: r.name,
-          phoneNumber: r.phone,
-          quantity: r.quantity,
-        })),
-      }, user?.authToken || "");
-      const message =
-        `주문이 완료되었습니다.
+    submitOrder(
+      {
+        data: {
+          productId: product.id,
+          message: data.message,
+          messageCardId: String(selectedCardId),
+          ordererName: data.sender,
+          receivers: data.receivers.map((r) => ({
+            name: r.name,
+            phoneNumber: r.phone,
+            quantity: r.quantity,
+          })),
+        },
+        authToken: user?.authToken || "",
+      },
+      {
+        onSuccess: () => {
+          const message =
+            `주문이 완료되었습니다.
 상품명: ${product?.name}
 구매 수량: ${totalQuantity}
 발신자 이름: ${data.sender}
 메시지: ${data.message}`;
 
-      alert(message);
-      navigate("/");
-    } catch (error) {
-      if (error instanceof AxiosError && error.response?.status === HttpStatusCode.Unauthorized) {
-        toast.error("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        navigate("/login");
-      } else {
-        toast.error("주문에 실패했습니다. 다시 시도해주세요.")
+          alert(message);
+          navigate("/");
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError && error.response?.status === HttpStatusCode.Unauthorized) {
+            toast.error("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate("/login");
+          } else {
+            toast.error("주문에 실패했습니다. 다시 시도해주세요.")
+          }
+        },
       }
-    }
+    );
   };
-
-  if (!product) {
-    return <PageContainer>존재하지 않는 상품입니다.</PageContainer>;
-  }
 
   return (
     <PageContainer>
@@ -159,4 +149,13 @@ function OrderPage() {
   );
 }
 const ProtectedOrderPage = withAuth(OrderPage);
-export default ProtectedOrderPage;
+
+export default function SuspenseOrderPage() {
+  return (
+    <ErrorBoundary fallback={<p>에러가 발생했습니다. 다시 시도해주세요.</p>}>
+      <Suspense fallback={<Spinner />}>
+        <ProtectedOrderPage />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
