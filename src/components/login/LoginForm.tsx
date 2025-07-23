@@ -7,12 +7,13 @@ import {
   ErrorMessage,
   LoginButton,
 } from "./LoginFormStyles";
-import { postLogin } from "@/api/auth";
-import { userStorage } from "@/utils/userStorage";
 import { toast } from "react-toastify";
 
+import { useLogin } from "@/hooks/mutations/useLogin";
+import { userStorage } from "@/utils/userStorage";
+
 type Props = {
-  onLoginSuccess: (email: string, token: string) => void; 
+  onLoginSuccess: (email: string, token: string) => void;
 };
 
 export const LoginForm = ({ onLoginSuccess }: Props) => {
@@ -55,7 +56,21 @@ export const LoginForm = ({ onLoginSuccess }: Props) => {
     if (name === "password") setPasswordError(validatePassword(value));
   };
 
-  const handleSubmit = async () => {
+  const { mutate: loginMutate, isPending } = useLogin(
+    (data) => {
+      userStorage.set(data);
+      toast.success("로그인 성공!");
+      onLoginSuccess(data.email, data.authToken);
+    },
+    (msg) => {
+      toast.error(msg);
+    }
+  );
+
+  const isDisabled =
+    !email || !password || !!emailError || !!passwordError || isPending;
+
+  const handleSubmit = () => {
     const emailErr = getValidateEmail(email);
     const pwErr = validatePassword(password);
     setEmailError(emailErr);
@@ -68,20 +83,8 @@ export const LoginForm = ({ onLoginSuccess }: Props) => {
       return;
     }
 
-    try {
-      const data = await postLogin({ email, password });
-      userStorage.set(data);
-      toast.success("로그인 성공!");
-
-      onLoginSuccess(data.email, data.authToken);
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.data?.message || "로그인에 실패했습니다.";
-      toast.error(message);
-    }
+    loginMutate({ email, password });
   };
-
-  const disabled = !email || !password || !!emailError || !!passwordError;
 
   return (
     <FormSection>
@@ -111,8 +114,8 @@ export const LoginForm = ({ onLoginSuccess }: Props) => {
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
       </InputWrapper>
 
-      <LoginButton onClick={handleSubmit} disabled={disabled}>
-        로그인
+      <LoginButton onClick={handleSubmit} disabled={isDisabled}>
+        {isPending ? "로그인 중..." : "로그인"}
       </LoginButton>
     </FormSection>
   );
