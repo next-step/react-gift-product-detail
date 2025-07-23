@@ -21,13 +21,13 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Global styles={GlobalResetStyle} />
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <ErrorBoundary>
-            <Suspense fallback={<Spinner size={48} withWrapper />}>
-              <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter> 
+        <ThemeProvider theme={theme}>
+          <Global styles={GlobalResetStyle} />
+          <AuthProvider>
+            <ErrorBoundary>
+              <Suspense fallback={<Spinner size={48} withWrapper />}>
                 <Routes>
                   <Route path={PATH.HOME} element={<GiftMain />} />
                   <Route path={PATH.LOGIN} element={<Login />} />
@@ -51,12 +51,12 @@ const App = () => {
                   <Route path={PATH.NOT_FOUND} element={<NotFound />} />
                   <Route path={PATH.ALL} element={<NotFound />} />
                 </Routes>
-              </BrowserRouter>
-            </Suspense>
-          </ErrorBoundary>
-        </AuthProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+              </Suspense>
+            </ErrorBoundary>
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
