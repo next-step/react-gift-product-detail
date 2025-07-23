@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { Layout } from '@/components/Layout/Layout'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useLoginMutation } from '@/hooks/useLoginMutation'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -22,6 +23,8 @@ export function LoginPage() {
     }
   }, [user, navigate])
 
+  const { mutate: loginMutate } = useLoginMutation()
+
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault()
     email.onBlur()
@@ -29,26 +32,26 @@ export function LoginPage() {
 
     if (!validForm) return
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/login`,
-        {
-          email: email.value,
-          password: password.value,
-        }
-      )
-
-      const { email: userEmail, name, authToken } = response.data.data
-      login({ email: userEmail, name, authToken })
-      navigate(from, { replace: true })
-    } catch (error) {
-      if (error instanceof axios.AxiosError) {
-        const message = error.response?.data.data.message
-        toast.error(
-          typeof message === 'string' ? message : '잘못된 요청입니다.'
-        )
+    loginMutate(
+      {
+        email: email.value,
+        password: password.value,
+      },
+      {
+        onSuccess: ({ email: userEmail, name, authToken }) => {
+          login({ email: userEmail, name, authToken })
+          navigate(from, { replace: true })
+        },
+        onError: (error) => {
+          if (error instanceof axios.AxiosError) {
+            const message = error.response?.data.data.message
+            toast.error(
+              typeof message === 'string' ? message : '잘못된 요청입니다.'
+            )
+          }
+        },
       }
-    }
+    )
   }
 
   return (
