@@ -1,40 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState, useCallback } from "react";
 import styled from "@emotion/styled";
 
-import { fetchThemes } from "@/api/theme";
-import type { Theme } from "@/api/theme";
 import { CategoryCard } from "@/components/category/CategoryCard";
-import { Spinner } from "@/components/common/Spinner";
+import { useThemes } from "@/hooks/queries/useThemes";
 
 export const CategorySection = () => {
-  const [themes, setThemes] = useState<Theme[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { data: themes } = useThemes();
 
-  const fetchThemesData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await fetchThemes();
-      setThemes(data);
-      setError(false);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchThemesData();
-  }, [fetchThemesData]);
-
-  if (loading) {
-    return <Spinner size={48} withWrapper />;
-  }
-
-  if (error || themes.length === 0) {
-    return <ErrorBanner>해당 ID에 일치하는 데이터가 없습니다.</ErrorBanner>;
+  if (!themes || themes.length === 0) {
+    return <ErrorBanner>카테고리를 불러올 수 없습니다.</ErrorBanner>;
   }
 
   return (
