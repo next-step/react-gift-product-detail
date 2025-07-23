@@ -9,8 +9,8 @@ const topicOptions = ['받고 싶어한', '많이 선물한', '위시로 받은'
 export function ProductListSection() {
   const {
     products,
-    loading,
-    error,
+    isLoading,
+    isError,
     selectedGender,
     selectedTopic,
     selectGender,
@@ -51,13 +51,13 @@ export function ProductListSection() {
         ))}
       </SubTab>
 
-      {loading && <p>선물랭킹 로딩중...</p>}
+      {isLoading && <p>선물랭킹 로딩중...</p>}
 
-      {!loading && (error || !products || products.length === 0) && (
+      {!isLoading && (isError || !products || products.length === 0) && (
         <p>상품 목록이 없습니다.</p>
       )}
 
-      {!loading && !error && products.length > 0 && (
+      {!isLoading && !isError && products.length > 0 && (
         <>
           <ProductListWrapper>
             {displayedProducts.map((product, index) => (

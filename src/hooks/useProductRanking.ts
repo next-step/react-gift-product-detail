@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import type { Product } from '@/types/product'
+import { useQuery } from '@tanstack/react-query'
 
 const genderOptions = ['전체', '여성이', '남성이', '청소년이']
 const topicOptions = ['받고 싶어한', '많이 선물한', '위시로 받은']
@@ -18,28 +19,21 @@ const topicMap: Record<string, string> = {
   '위시로 받은': 'MANY_WISH_RECEIVE',
 }
 
+const fetchRanking = async (gender: string, topic: string) => {
+  const targetType = genderMap[gender]
+  const rankType = topicMap[topic]
+  const response = await axios.get<{ data: Product[] }>(
+    `${import.meta.env.VITE_API_BASE_URL}/api/products/ranking`,
+    {
+      params: { targetType, rankType },
+    }
+  )
+  return response.data.data
+}
+
 export function useProductRanking() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
   const [selectedGender, setSelectedGender] = useState('전체')
   const [selectedTopic, setSelectedTopic] = useState('받고 싶어한')
-
-  const fetchRanking = async (gender: string, topic: string) => {
-    try {
-      const targetType = genderMap[gender]
-      const rankType = topicMap[topic]
-      const response = await axios.get<{ data: Product[] }>(
-        `${import.meta.env.VITE_API_BASE_URL}/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
-      )
-      setProducts(response.data.data)
-    } catch (err) {
-      console.error('테마 목록 불러오기 실패:', err)
-      setError(true)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
     const savedGender = localStorage.getItem('selectedGender')
@@ -52,9 +46,15 @@ export function useProductRanking() {
     }
   }, [])
 
-  useEffect(() => {
-    fetchRanking(selectedGender, selectedTopic)
-  }, [selectedGender, selectedTopic])
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['productRanking', selectedGender, selectedTopic],
+    queryFn: () => fetchRanking(selectedGender, selectedTopic),
+    placeholderData: (previousData) => previousData,
+  })
 
   const selectGender = (option: string) => {
     setSelectedGender(option)
@@ -68,8 +68,8 @@ export function useProductRanking() {
 
   return {
     products,
-    loading,
-    error,
+    isLoading,
+    isError,
     selectedGender,
     selectedTopic,
     selectGender,
