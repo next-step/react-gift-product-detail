@@ -23,8 +23,8 @@ type GeneralInfoType = {
 };
 
 type DetailInfoType = {
-  description: number;
-  announcement: {
+  description: string;
+  announcements: {
     name: string;
     value: string;
     displayOrder: number;
