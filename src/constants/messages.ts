@@ -34,4 +34,8 @@ export const ERROR_MESSAGES = {
     LOAD: "상품 정보를 불러오고 있습니다.",
     NONE: "상품이 없습니다,",
   },
+  ORDER: {
+    SUCCESS: "주문이 완료되었습니다!",
+    FAIL: "주문에 실패했습니다.",
+  },
 };
