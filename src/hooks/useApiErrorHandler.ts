@@ -36,6 +36,12 @@ export const useApiErrorHandler = ({
       return;
     }
 
+    if (statusCode === HTTP_STATUS.NOT_FOUND) {
+      navigate("/notfound");
+      toast.error("페이지를 찾을 수 없습니다.");
+      return;
+    }
+
     if (
       HTTP_STATUS.BAD_REQUEST &&
       statusCode < HTTP_STATUS.INTERNAL_SERVER_ERROR

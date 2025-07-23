@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-interface SuspenseApiQueryOptions<T> {
+interface SuspenseApiQueryOptions {
   url: string;
   queryKey: any[];
   params?: any;
@@ -11,7 +11,7 @@ export function useSuspenseApiQuery<T>({
   url,
   queryKey,
   params,
-}: SuspenseApiQueryOptions<T>) {
+}: SuspenseApiQueryOptions) {
   const baseUrl = import.meta.env.VITE_API_BASE_URL + url;
   return useSuspenseQuery({
     queryKey,

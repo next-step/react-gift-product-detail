@@ -17,7 +17,6 @@ import { useApiMutation } from "@/hooks/useApiMutation";
 import type { ProductSummary } from "@/types/api_types";
 import { useAuth } from "@/contexts/AuthContext";
 import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
-import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -28,10 +27,6 @@ const OrderPage = () => {
     navigate("/login");
     return null;
   }
-
-  const handleApiError = useApiErrorHandler({
-    fallbackMessage: "주문 중 오류가 발생했습니다.",
-  });
 
   const { data: productData } = useSuspenseApiQuery<ProductSummary>({
     queryKey: [API_ENDPOINTS.PRODUCT_SUMMARY(productId), productId],
@@ -86,7 +81,7 @@ const OrderPage = () => {
         navigate("/", { replace: true });
       }
     } catch (error: any) {
-      handleApiError(error);
+      throw error;
     }
   };
 
