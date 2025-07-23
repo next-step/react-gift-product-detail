@@ -18,6 +18,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "@/components/common/ErrorFallback";
 
 function App() {
   return (
@@ -60,9 +62,11 @@ function App() {
             path="/order/:id"
             element={
               <PrivateRoute>
-                <Suspense fallback={<LoadingSpinner />}>
-                  <OrderPage />
-                </Suspense>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <OrderPage />
+                  </Suspense>
+                </ErrorBoundary>
               </PrivateRoute>
             }
           />
