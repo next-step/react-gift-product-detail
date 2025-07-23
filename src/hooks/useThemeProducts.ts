@@ -1,5 +1,5 @@
-import { useInfiniteQuery, type InfiniteData } from "@tanstack/react-query";
-import { fetchThemeProducts, type ThemeProductResponse } from "@/api/theme";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchThemeProducts } from "@/api/theme";
 import { PAGE_SIZE } from "@/constants/pagination";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
