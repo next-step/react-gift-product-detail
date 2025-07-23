@@ -12,37 +12,50 @@ import OrderPage from "./pages/OrderPage";
 import ThemeProduct from "./pages/ThemeProduct";
 import { PATH } from "@/constants/path";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { Spinner } from "@/components/common/Spinner";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Global styles={GlobalResetStyle} />
-      <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Routes>
-            <Route path={PATH.HOME} element={<GiftMain />} />
-            <Route path={PATH.LOGIN} element={<Login />} />
-            <Route
-              path={PATH.MY_PAGE}
-              element={
-                <RequireAuth>
-                  <MyPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path={PATH.ORDER()}
-              element={
-                <RequireAuth>
-                  <OrderPage />
-                </RequireAuth>
-              }
-            />
-            <Route path={PATH.THEME()} element={<ThemeProduct />} />
-            <Route path={PATH.NOT_FOUND} element={<NotFound />} />
-            <Route path={PATH.ALL} element={<NotFound />} />
-          </Routes>
+          <ErrorBoundary>
+            <Suspense fallback={<Spinner size={48} withWrapper />}>
+              <BrowserRouter>
+                <Routes>
+                  <Route path={PATH.HOME} element={<GiftMain />} />
+                  <Route path={PATH.LOGIN} element={<Login />} />
+                  <Route
+                    path={PATH.MY_PAGE}
+                    element={
+                      <RequireAuth>
+                        <MyPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route
+                    path={PATH.ORDER()}
+                    element={
+                      <RequireAuth>
+                        <OrderPage />
+                      </RequireAuth>
+                    }
+                  />
+                  <Route path={PATH.THEME()} element={<ThemeProduct />} />
+                  <Route path={PATH.NOT_FOUND} element={<NotFound />} />
+                  <Route path={PATH.ALL} element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </Suspense>
+          </ErrorBoundary>
         </AuthProvider>
-      </BrowserRouter>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };
