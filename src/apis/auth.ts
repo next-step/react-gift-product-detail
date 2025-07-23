@@ -5,7 +5,7 @@ interface LoginBody {
     password: string;
 }
 
-interface LoginResponse {
+export interface LoginResponse {
     email: string;
     name: string;
     authToken: string;

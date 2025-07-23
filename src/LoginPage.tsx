@@ -7,9 +7,9 @@ import { useInput } from "@/hooks/useInput";
 import { useValidate } from "@/hooks/useValidate";
 import { validateEmail, validatePassword } from "@/utils/validate";
 import { useAuth } from "@/hooks/useAuth";
-import { login } from "@/apis/auth";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import { useLoginMutation } from "@/hooks/useLoginMutation";
 
 const LogoImage = styled.img`
   width: 88px;
@@ -51,31 +51,36 @@ export default function LoginPage() {
   const passwordInput = useInput("");
   const passwordValidation = useValidate(passwordInput.value, validatePassword);
 
-  const handleLogin = async () => {
-    try {
-      const result = await login({
+  const { mutate, isPending } = useLoginMutation();
+
+  const handleLogin = () => {
+    mutate(
+      {
         email: emailInput.value,
         password: passwordInput.value,
-      });
-
-      setUser({
-        email: result.email,
-        name: result.name,
-        authToken: result.authToken,
-      });
-
-      if (window.history.length > 2) {
-        navigate(-1);
-      } else {
-        navigate("/");
+      },
+      {
+        onSuccess: (result) => {
+          setUser({
+            email: result.email,
+            name: result.name,
+            authToken: result.authToken,
+          });
+          if (window.history.length > 2) {
+            navigate(-1);
+          } else {
+            navigate("/");
+          }
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError) {
+            toast.error(error.response?.data?.message ?? "@kakao.com 이메일 주소만 가능합니다.");
+          } else {
+            toast.error("알 수 없는 오류가 발생했습니다.");
+          }
+        },
       }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message ?? "@kakao.com 이메일 주소만 가능합니다.");
-      } else {
-        toast.error("알 수 없는 오류가 발생했습니다.");
-      }
-    }
+    );
   };
 
   return (
@@ -97,7 +102,9 @@ export default function LoginPage() {
         onBlur={passwordValidation.onBlur}
         error={passwordValidation.error}
       />
-      <Button onClick={handleLogin} disabled={!(emailValidation.isValid && passwordValidation.isValid)}>로그인</Button>
+      <Button onClick={handleLogin} disabled={!(emailValidation.isValid && passwordValidation.isValid) || isPending}>
+        {isPending ? "로그인 중..." : "로그인"}
+      </Button>
     </PageContainer>
   );
 }
