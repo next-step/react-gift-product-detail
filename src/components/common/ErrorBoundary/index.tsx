@@ -1,29 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { handleApiError } from '@/apis/queryClient';
 import * as S from './styles';
+import { type FallbackProps } from 'react-error-boundary';
 
-interface ErrorFallbackProps {
-  error: Error;
-  resetErrorBoundary: () => void;
-}
-
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-  error,
-  resetErrorBoundary,
-}) => {
+const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const navigate = useNavigate();
+  const [redirecting, setRedirecting] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (error instanceof AxiosError) {
-      const errorResult = handleApiError(error);
-      if (errorResult.shouldRedirect && errorResult.path) {
-        navigate(errorResult.path);
+      const status = error.response?.status;
+      if (status === 401) {
+        const errorResult = handleApiError(error);
+        if (errorResult.shouldRedirect && errorResult.path) {
+          setRedirecting(true);
+          navigate(errorResult.path, { replace: true });
+        }
+      } else if (status && status >= 400 && status < 500) {
+        setRedirecting(true);
+        navigate('/', { replace: true });
       }
     }
   }, [error, navigate]);
+
+  if (redirecting) return null;
 
   return (
     <S.ErrorContainer>
@@ -41,7 +44,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
 interface ApiErrorBoundaryProps {
   children: React.ReactNode;
-  fallback?: React.ComponentType<ErrorFallbackProps>;
+  fallback?: React.ComponentType<FallbackProps>;
 }
 
 export const ApiErrorBoundary: React.FC<ApiErrorBoundaryProps> = ({
@@ -52,7 +55,6 @@ export const ApiErrorBoundary: React.FC<ApiErrorBoundaryProps> = ({
     <ReactErrorBoundary
       FallbackComponent={fallback}
       onReset={() => {
-        // 에러 상태를 리셋하고 컴포넌트를 다시 마운트
         window.location.reload();
       }}
     >
