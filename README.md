@@ -15,4 +15,4 @@
             [ ] orders.ts
             [ ] info.ts
             [ ] index.ts
-            [ ] auth.ts
+            [v] auth.ts
