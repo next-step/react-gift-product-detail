@@ -1,13 +1,20 @@
 import { fetchThemes } from '@/api/services'
 import type { Theme } from '@/api/types'
 import { Loading } from '@/shared/components'
-import { useFetch } from '@/shared/hooks'
+import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 
 // * 테마(Themes) 컴포넌트
 export const ThemesSection = () => {
-  const { isLoading, isError, data: themes } = useFetch<Theme[]>(fetchThemes)
+  const {
+    isLoading,
+    isError,
+    data: themes,
+  } = useQuery<Theme[]>({
+    queryKey: ['themesList'],
+    queryFn: fetchThemes,
+  })
 
   // * 빈 목록 or 에러 화면
   if (!isLoading && (isError || !themes || themes.length === 0)) return null

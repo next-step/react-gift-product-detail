@@ -6,7 +6,9 @@ import { ROUTE_PATH } from '@/shared/constants'
 import { Loading, PageContainer } from '@/shared/components/ui'
 import type { Product, ThemeInfo } from '@/api/types'
 import { HeroSection, ProductList } from '@/features/themes'
-import { useFetch, usePagination } from '@/shared/hooks'
+import { usePagination } from '@/shared/hooks'
+import { useQuery } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 
 // * 테마 목록 상품 페이지
 export const Themes = () => {
@@ -19,8 +21,12 @@ export const Themes = () => {
     data: themeInfo,
     isError: isInfoError,
     isLoading: isInfoLoading,
-    errorStatus: infoErrorStatus, // ! 에러 status code (404 등 구분용)
-  } = useFetch<ThemeInfo>(() => fetchThemeInfo(themeId), [themeId])
+    error: infoError,
+  } = useQuery<ThemeInfo>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
+    enabled: !!themeId,
+  })
 
   // * 상품 리스트 페이지네이션 커스텀 훅
   const {
@@ -44,10 +50,10 @@ export const Themes = () => {
 
   // ! 404 에러 시 홈으로 이동
   useEffect(() => {
-    if (isInfoError && infoErrorStatus === 404) {
+    if (isInfoError && (infoError as AxiosError)?.response?.status === 404) {
       navigate(ROUTE_PATH.HOME)
     }
-  }, [isInfoError, infoErrorStatus, navigate])
+  }, [isInfoError, infoError, navigate])
 
   // * 로딩 화면
   if (isInfoLoading) {
