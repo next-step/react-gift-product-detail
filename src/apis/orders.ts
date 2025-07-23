@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
 
 interface Receiver {
   name: string;
@@ -42,3 +43,9 @@ export async function postOrder(
     );
   }
 }
+
+export const usePostOrder = (authToken: string) => {
+  return useMutation<void, Error, OrderPayload>({
+    mutationFn: (payload) => postOrder(payload, authToken),
+  });
+};
