@@ -12,6 +12,7 @@ interface User {
 interface AuthContextType {
   isLoggedIn: boolean;
   user: User | null;
+  token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
@@ -22,7 +23,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isLoggedIn, setUser, setIsLoggedIn, storage } = useAuthUser();
+  const { user, isLoggedIn, token, setUser, setIsLoggedIn, setToken, storage } =
+    useAuthUser();
   const [redirectAfterLogin, onChangeRedirectAfterLogin] = useState<
     string | null
   >(null);
@@ -33,15 +35,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const loggedInUser = await loginHandler(email, password);
       if (loggedInUser) {
-        setUser({ name: loggedInUser.name, email: loggedInUser.email });
+        const userData = {
+          name: loggedInUser.name,
+          email: loggedInUser.email,
+          token: loggedInUser.authToken,
+        };
+        setUser(userData);
         setIsLoggedIn(true);
-        storage.set(loggedInUser);
+        setToken(loggedInUser.authToken);
+        storage.set(userData);
         navigate(redirectAfterLogin || '/');
         onChangeRedirectAfterLogin(null);
       }
     } catch (error) {
       setUser(null);
       setIsLoggedIn(false);
+      setToken(null);
       storage.clear();
     }
   };
@@ -49,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     setIsLoggedIn(false);
+    setToken(null);
     storage.clear();
   };
 
@@ -56,13 +66,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       isLoggedIn,
       user,
+      token,
       login,
       logout,
       isLoading,
       redirectAfterLogin,
       onChangeRedirectAfterLogin,
     }),
-    [isLoggedIn, user, isLoading, redirectAfterLogin]
+    [isLoggedIn, user, token, isLoading, redirectAfterLogin]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
