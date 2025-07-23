@@ -17,7 +17,9 @@ const GiftMain = () => {
           <CategorySection />
         </AsyncBoundary>
         <MessageBanner />
-        <RankingSection />
+        <AsyncBoundary>
+          <RankingSection />
+        </AsyncBoundary>
       </PageContainer>
     </PageLayout>
   );
