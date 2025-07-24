@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState, type RefObject } from "react";
+import { useCallback, type RefObject } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   getThemeProducts,
   type ThemeProductResponseBody,
 } from "@/api/themes/get-theme-product";
-import { useApiStatus } from "@/hooks/common/useApiStatus";
 import { useInView } from "@/hooks/common/useInview";
 import type { ProductType } from "@/types";
-
+import { queryKeys } from "@/lib/query-keys";
 interface UseThemeProductsResult {
   products: ProductType[];
   loading: boolean;
@@ -14,8 +14,9 @@ interface UseThemeProductsResult {
   hasMore: boolean;
   inView: boolean;
   ref: RefObject<HTMLDivElement | null>;
-  fetchNextPage: () => Promise<void>;
-  refresh: () => Promise<void>;
+  fetchNextPage: () => void;
+  refresh: () => void;
+  isFetchingNextPage: boolean;
 }
 
 export const useGetThemeProducts = (
@@ -23,67 +24,57 @@ export const useGetThemeProducts = (
   limit: number = 10,
   inViewOptions?: { threshold?: number; rootMargin?: string },
 ): UseThemeProductsResult => {
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
-  const { loading, error, execute } = useApiStatus<ThemeProductResponseBody>();
-
-  const fetchProducts = useCallback(
-    async (currentCursor: number, isRefresh: boolean = false) => {
-      try {
-        await execute(async () => {
-          const response = await getThemeProducts({
-            themeId,
-            cursor: currentCursor,
-            limit,
-          });
-
-          setProducts(prev =>
-            isRefresh ? response.list : [...prev, ...response.list],
-          );
-          setCursor(response.cursor);
-          setHasMore(response.hasMoreList);
-
-          return response;
-        });
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
+  const {
+    data,
+    error,
+    isError,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.themes.productList(themeId, limit),
+    queryFn: async ({ pageParam = 0 }) => {
+      return await getThemeProducts({
+        themeId,
+        cursor: pageParam,
+        limit,
+      });
     },
-    [execute, themeId, limit],
-  );
+    getNextPageParam: (lastPage: ThemeProductResponseBody) => {
+      return lastPage.hasMoreList ? lastPage.cursor : undefined;
+    },
+    initialPageParam: 0,
+    enabled: !!themeId,
+  });
 
-  const fetchNextPage = useCallback(async () => {
-    if (!loading && hasMore) {
-      await fetchProducts(cursor);
+  const products = data?.pages.flatMap(page => page.list) ?? [];
+
+  const handleFetchNextPage = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
-  }, [fetchProducts, cursor, loading, hasMore]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const refresh = useCallback(async () => {
-    setProducts([]);
-    setCursor(0);
-    setHasMore(true);
-    await fetchProducts(0, true);
-  }, [fetchProducts]);
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   const { ref, inView } = useInView({
-    callback: fetchNextPage,
+    callback: handleFetchNextPage,
     ...inViewOptions,
   });
 
-  useEffect(() => {
-    fetchProducts(0, true);
-  }, [themeId]);
-
   return {
     products,
-    loading,
-    error,
-    hasMore,
+    loading: isLoading,
+    error: isError ? (error as Error) : null,
+    hasMore: !!hasNextPage,
     inView,
     ref,
-    fetchNextPage,
-    refresh,
+    fetchNextPage: handleFetchNextPage,
+    refresh: handleRefresh,
+    isFetchingNextPage,
   };
 };

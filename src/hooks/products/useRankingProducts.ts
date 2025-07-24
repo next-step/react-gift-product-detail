@@ -1,19 +1,12 @@
-import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getRankingProduct } from "@/api/product";
-import type { ProductType } from "@/types";
 import { TAB_DATA, TAGS } from "@/constants";
 import { parseUrlParam } from "@/utils";
-import { useApiStatus } from "@/hooks/common/useApiStatus";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useRankingProducts = () => {
   const [searchParams] = useSearchParams();
-  const {
-    data: products,
-    loading,
-    error,
-    execute,
-  } = useApiStatus<ProductType[]>();
   const selectedTag = parseUrlParam(
     searchParams.get("targetType"),
     TAGS,
@@ -24,14 +17,19 @@ export const useRankingProducts = () => {
     TAB_DATA,
     "MANY_WISH",
   );
-  useEffect(() => {
-    execute(() =>
+
+  const {
+    data: products,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: queryKeys.products.ranking(selectedTag, selectedTab),
+    queryFn: () =>
       getRankingProduct({
         targetType: selectedTag,
         rankType: selectedTab,
       }),
-    );
-  }, [execute, selectedTab, selectedTag]);
+  });
 
   return {
     products: products || [],

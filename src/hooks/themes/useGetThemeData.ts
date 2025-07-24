@@ -1,23 +1,21 @@
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getThemes } from "@/api/themes";
-import type { GetThemesResponseBody } from "@/api/themes/get-themes";
-import { useApiStatus } from "@/hooks/common/useApiStatus";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useGetThemeData = () => {
   const {
     data: themes,
     error,
-    execute,
-    loading,
-  } = useApiStatus<GetThemesResponseBody[]>();
-  useEffect(() => {
-    execute(getThemes);
-  }, [execute]);
+    isLoading: loading,
+  } = useQuery({
+    queryKey: queryKeys.themes.list(),
+    queryFn: getThemes,
+  });
 
   return {
     themes: themes || [],
     loading,
     error,
-    isEmpty: themes?.length === 0,
+    isEmpty: (themes?.length ?? 0) === 0,
   };
 };
