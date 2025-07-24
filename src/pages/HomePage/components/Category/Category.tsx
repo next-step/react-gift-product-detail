@@ -22,6 +22,8 @@ function CategoryContent() {
     validateData: [(data) => data.length > 0],
   });
 
+  console.log(data);
+
   if (isError) {
     return (
       <ErrorContainer>
