@@ -8,13 +8,12 @@ import { ROUTE } from '@/constants/routes';
 import { useForm } from 'react-hook-form';
 import RecipientModal, { type Recipient } from '@/components/RecipientModal';
 import { zIndex } from '@/constants/zIndex';
-import { fetchProductSummary } from '@/api/product';
-import type { ProductSummary } from '@/types/product';
-import { postOrder } from '@/api/order';
 import type { OrderRequest } from '@/types/order';
 import { useUser } from '@/contexts/UserContext';
 import { toast, ToastContainer } from 'react-toastify';
 import axios, { HttpStatusCode } from 'axios';
+import { useProductSummary } from '@/hooks/useProduct';
+import { useOrderMutation } from '@/hooks/useOrder';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -155,30 +154,18 @@ const OrderPage = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const [product, setProduct] = useState<ProductSummary | null>(null);
   const [selectedCardId, setSelectedCardId] = useState(messageCardMockData[0].id);
   const selectedCard = messageCardMockData.find((c) => c.id === selectedCardId);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        if (!productId) return;
-        const data = await fetchProductSummary(Number(productId));
-        setProduct(data);
-      } catch (error) {
-        if (error instanceof axios.AxiosError) {
-          const msg = error.response?.data?.data?.message || '상품 정보를 불러올 수 없습니다.';
-          toast.error(msg);
-        } else {
-          toast.error('오류가 발생했습니다.');
-        }
-        navigate(ROUTE.MAIN);
-      }
-    };
-    loadProduct();
-  }, [productId, navigate]);
+  const {
+    data: product,
+    isLoading: isProductLoading,
+    isError: isProductError,
+  } = useProductSummary(Number(productId));
+
+  const { mutateAsync: orderMutate } = useOrderMutation();
 
   const {
     register,
@@ -195,13 +182,22 @@ const OrderPage = () => {
   });
 
   useEffect(() => {
+    if (isProductError) {
+      toast.error('상품 정보를 불러올 수 없습니다.');
+      navigate(ROUTE.MAIN);
+    }
+  }, [isProductError, navigate]);
+
+  useEffect(() => {
     if (user?.name) {
       setValue('sender', user.name);
     }
   }, [user, setValue]);
 
   const onSubmit = async (form: FormValues) => {
-    if (!product) return;
+    if (!product) {
+      return;
+    }
 
     if (recipients.length === 0) {
       toast.error('받는 사람이 없습니다.');
@@ -216,20 +212,20 @@ const OrderPage = () => {
         `메시지: ${form.message}`
     );
 
-    try {
-      const payload: OrderRequest = {
-        productId: product.id,
-        message: form.message,
-        messageCardId: String(selectedCardId),
-        ordererName: form.sender,
-        receivers: recipients.map((r) => ({
-          name: r.name,
-          phoneNumber: r.phone,
-          quantity: r.quantity,
-        })),
-      };
+    const payload: OrderRequest = {
+      productId: product.id,
+      message: form.message,
+      messageCardId: String(selectedCardId),
+      ordererName: form.sender,
+      receivers: recipients.map((r) => ({
+        name: r.name,
+        phoneNumber: r.phone,
+        quantity: r.quantity,
+      })),
+    };
 
-      await postOrder(payload);
+    try {
+      await orderMutate(payload);
       navigate(ROUTE.MAIN);
     } catch (error) {
       if (error instanceof axios.AxiosError) {
@@ -247,7 +243,7 @@ const OrderPage = () => {
     }
   };
 
-  if (!product) {
+  if (isProductLoading || !product) {
     return <div>상품을 찾을 수 없습니다.</div>;
   }
 
