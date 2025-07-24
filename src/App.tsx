@@ -9,11 +9,13 @@ import OrderPage from '@/pages/OrderPage';
 import PrivateRoute from '@/routes/PrivateRoute';
 import { ROUTES } from '@/constants/routes';
 import { ToastContainer } from 'react-toastify';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './queryClient';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
@@ -24,12 +26,11 @@ function App() {
             <Route path={ROUTES.MY} element={<MyPage />} />
             <Route path={ROUTES.ORDER_PATH} element={<OrderPage />} />
           </Route>
-
           <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer position="bottom-center" autoClose={2000} />
-    </>
+    </QueryClientProvider>
   );
 }
 
