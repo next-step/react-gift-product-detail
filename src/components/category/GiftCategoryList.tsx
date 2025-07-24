@@ -1,15 +1,12 @@
 import styled from '@emotion/styled';
-import { useApi } from '@/hooks/useApi';
+import { useQuery } from '@tanstack/react-query';
 import { fetchThemes } from '@/api/themesApi';
+import type { giftCategoryTheme } from '@/types/giftCategoryTheme';
+
 import { FadeLoader } from 'react-spinners';
 import { Grid, Item, ImageStyle } from '@/components/category/GiftCategoryGrid';
 import { Wrapper, Title } from '@/components/category/GiftCategory.style';
 import { useNavigate } from 'react-router-dom';
-interface Theme {
-  themeId: number;
-  name: string;
-  image: string;
-}
 
 const LoadingWrapper = styled.div`
   display: flex;
@@ -19,7 +16,16 @@ const LoadingWrapper = styled.div`
 
 const GiftCategoryList = () => {
   const navigate = useNavigate();
-  const { data: themes, isLoading, hasError } = useApi<Theme[]>(fetchThemes);
+
+  const {
+    data: themes,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['themes'], 
+    queryFn: fetchThemes, 
+    select: (res) => res.data.data, 
+  });
 
   if (isLoading) {
     return (
@@ -29,13 +35,13 @@ const GiftCategoryList = () => {
     );
   }
 
-  if (hasError || !themes || themes.length === 0) return null;
+  if (isError || !themes || themes.length === 0) return null;
 
   return (
     <Wrapper>
       <Title>선물 테마</Title>
       <Grid>
-        {themes.map((item) => (
+        {themes.map((item:giftCategoryTheme) => (
           <Item
             key={item.themeId}
             onClick={() => {
