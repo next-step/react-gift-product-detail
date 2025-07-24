@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/constants/routes';
 import { useUser } from '@/contexts/UserContext';
-import { fetchProductRanking } from '@/api/product';
-import type { Product } from '@/types/product';
 import Spinner from '@/components/Spinner';
+import { useProductRanking } from '@/hooks/useProduct';
 
 const genderTabs = ['전체', '여성이', '남성이', '청소년이'] as const;
 type GenderType = (typeof genderTabs)[number];
@@ -157,13 +156,16 @@ const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedGender = (searchParams.get('gender') as GenderType) || '전체';
   const selectedRank = (searchParams.get('rank') as keyof typeof RANK_MAP) || '많이 선물한';
-  const [productList, setProductList] = useState<Product[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   const navigate = useNavigate();
   const { user } = useUser();
+
+  const {
+    data: productList = [],
+    isLoading,
+    isError,
+  } = useProductRanking(GENDER_MAP[selectedGender], RANK_MAP[selectedRank]);
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
@@ -188,23 +190,6 @@ const RankingSection = () => {
   };
 
   const visibleCount = isExpanded ? productList.length : INIT_COUNT;
-
-  useEffect(() => {
-    const loadRanking = async () => {
-      setLoading(true);
-      setError(false);
-      try {
-        const data = await fetchProductRanking(GENDER_MAP[selectedGender], RANK_MAP[selectedRank]);
-        setProductList(data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadRanking();
-  }, [selectedGender, selectedRank]);
 
   return (
     <SectionWrapper>
@@ -235,9 +220,9 @@ const RankingSection = () => {
         ))}
       </TrendGroupTab>
 
-      {loading ? (
+      {isLoading ? (
         <Spinner />
-      ) : error || productList.length === 0 ? (
+      ) : isError || productList.length === 0 ? (
         <EmptyProduct>상품이 없습니다.</EmptyProduct>
       ) : (
         <>
