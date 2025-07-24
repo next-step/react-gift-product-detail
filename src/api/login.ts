@@ -2,12 +2,12 @@ import { API_PATHS } from "./apiPaths";
 import axiosInstance from "./axiosInstance";
 import type { User } from "@/types/user";
 
-type PostLoginParams = {
+export type PostLoginParams = {
   email: string;
   password: string;
 };
 
-type PostLoginResult = User;
+export type PostLoginResult = User;
 
 export const postLogin = async (
   params: PostLoginParams,

@@ -1,11 +1,15 @@
 import styled from "@emotion/styled";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
 import ErrorMessage from "../common/ErrorMessage";
-import { postLogin } from "@/api/login";
-import useApiRequest from "@/hooks/useApiRequest";
+import {
+  postLogin,
+  type PostLoginParams,
+  type PostLoginResult,
+} from "@/api/login";
 import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { LoginFormValues } from "@/types/user";
+import { useMutation } from "@tanstack/react-query";
 
 const LoginForm = () => {
   const method = useForm<LoginFormValues>({
@@ -18,32 +22,31 @@ const LoginForm = () => {
   const email = method.watch("email");
   const password = method.watch("password");
 
-  const {
-    data: userData,
-    isLoading,
+  const { data, isPending, isError, mutate } = useMutation<
+    PostLoginResult,
+    Error,
+    PostLoginParams
+  >({
+    mutationFn: postLogin,
+    onSuccess: () => {
+      method.reset();
+    },
+  });
+
+  useHandleLoginSuccess({
+    email: data?.email,
+    name: data?.name,
+    authToken: data?.authToken,
+    isPending,
     isError,
-    refetch: postLoginRequest,
-  } = useApiRequest({
-    requestFn: postLogin,
-    immediate: false,
   });
 
   const onValid: SubmitHandler<LoginFormValues> = async (
     data: LoginFormValues,
   ) => {
-    postLoginRequest({
-      email: data.email,
-      password: data.password,
-    });
+    const { email, password } = data;
+    mutate({ email, password });
   };
-
-  useHandleLoginSuccess({
-    email: userData?.email,
-    name: userData?.name,
-    authToken: userData?.authToken,
-    isLoading,
-    isError,
-  });
 
   return (
     <Form onSubmit={method.handleSubmit(onValid)}>
@@ -84,7 +87,7 @@ const LoginForm = () => {
       <Button
         type="submit"
         disabled={
-          isLoading ||
+          isPending ||
           !!checkEmailError(email) ||
           !!checkPasswordError(password)
         }

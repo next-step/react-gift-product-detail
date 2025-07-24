@@ -14,9 +14,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import type { OrderFormValue } from "@/types/order";
 import { fetchProductsSummary } from "@/api/productSummary";
-import useApiRequest from "@/hooks/useApiRequest";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
+import { useQuery } from "@tanstack/react-query";
 
 const OrderPage = () => {
   const location = useLocation();
@@ -49,17 +49,19 @@ const OrderPage = () => {
   const { id } = useParams<{ id: string }>();
   const {
     data: gift,
-    isLoading,
+    isPending,
     isError,
-  } = useApiRequest({
-    requestFn: () => fetchProductsSummary({ productId: Number(id) }),
+  } = useQuery({
+    queryKey: ["gift", id],
+    queryFn: () => fetchProductsSummary({ productId: Number(id) }),
+    enabled: !!id,
   });
 
   useEffect(() => {
-    if (!gift && !isLoading && isError) {
+    if (!gift && !isPending && isError) {
       navigate(ROUTE_PATH.HOME, { replace: true });
     }
-  }, [gift, isLoading, isError, navigate]);
+  }, [gift, isPending, isError, navigate]);
 
   if (!gift) return null;
 

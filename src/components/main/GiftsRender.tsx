@@ -2,9 +2,8 @@ import GiftsList from "./GiftsList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import BoxMessage from "@/components/common/BoxMessage";
 import { fetchProductsRanking } from "@/api/products";
-import useApiRequest from "@/hooks/useApiRequest";
 import type { TargetType, RankType } from "@/types/gift";
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type GiftsRenderProps = {
   targetType: TargetType;
@@ -14,22 +13,15 @@ type GiftsRenderProps = {
 const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
   const {
     data: gifts,
-    isLoading,
+    isPending,
     isError,
-    refetch,
-  } = useApiRequest({
-    requestFn: () =>
-      fetchProductsRanking({
-        targetType,
-        rankType,
-      }),
+  } = useQuery({
+    queryKey: ["gifts", targetType, rankType],
+    queryFn: () => fetchProductsRanking({ targetType, rankType }),
+    refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    refetch();
-  }, [targetType, rankType, refetch]);
-
-  if (isLoading) {
+  if (isPending) {
     return <LoadingSpinner height="266px" />;
   }
   if (isError) {

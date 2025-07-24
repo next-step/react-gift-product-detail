@@ -7,7 +7,7 @@ type UseHandleLoginSuccessParams = {
   email: string | undefined;
   name: string | undefined;
   authToken: string | undefined;
-  isLoading: boolean;
+  isPending: boolean;
   isError: boolean;
 };
 
@@ -15,7 +15,7 @@ const useHandleLoginSuccess = ({
   email,
   name,
   authToken,
-  isLoading,
+  isPending,
   isError,
 }: UseHandleLoginSuccessParams) => {
   const user = useUserInfo();
@@ -23,7 +23,7 @@ const useHandleLoginSuccess = ({
   const location = useLocation();
 
   useEffect(() => {
-    if (email && name && authToken && !isLoading && !isError && !user?.email) {
+    if (email && name && authToken && !isPending && !isError && !user?.email) {
       user?.setUserInfo({
         email,
         name,
@@ -37,7 +37,7 @@ const useHandleLoginSuccess = ({
     email,
     name,
     authToken,
-    isLoading,
+    isPending,
     isError,
     user,
     location.search,
