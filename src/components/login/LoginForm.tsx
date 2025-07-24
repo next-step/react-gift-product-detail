@@ -15,6 +15,8 @@ const LoginForm = () => {
       password: "",
     },
   });
+  const email = method.watch("email");
+  const password = method.watch("password");
 
   const {
     data: userData,
@@ -79,7 +81,14 @@ const LoginForm = () => {
           message={method.formState.errors.password.message || ""}
         />
       )}
-      <Button type="submit" disabled={isLoading || !method.formState.isValid}>
+      <Button
+        type="submit"
+        disabled={
+          isLoading ||
+          !!checkEmailError(email) ||
+          !!checkPasswordError(password)
+        }
+      >
         로그인
       </Button>
     </Form>
