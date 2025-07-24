@@ -1,8 +1,7 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useReceiver } from '@/entities/receiver/model/context';
-import { receiversModalSchema, type ReceiversFormData } from '@/entities/receiver/model/validation';
-import { orderFormSchema } from '@/entities/order/model/validation';
+import { receiversModalSchema, canOrder, type ReceiversFormData } from '@/entities/receiver/model/validation';
 
 export const useReceiverForm = () => {
   const { receiverList, updateReceiverList } = useReceiver();
@@ -34,10 +33,9 @@ export const useReceiverForm = () => {
 
   const canAddMore = fields.length < 10;
 
-  const canOrder = () => {
+  const isValidReceivers = () => {
     const currentReceivers = form.getValues('receivers');
-    const result = orderFormSchema.shape.receivers.safeParse(currentReceivers);
-    return result.success;
+    return canOrder(currentReceivers);
   };
 
   return {
@@ -49,6 +47,6 @@ export const useReceiverForm = () => {
     addReceiver,
     remove,  
     canAddMore,
-    canOrder,
+    canOrder: isValidReceivers,
   };
 };

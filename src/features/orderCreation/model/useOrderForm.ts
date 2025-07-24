@@ -10,6 +10,7 @@ import { type OrderRequest} from '@/entities/order/model/types';
 import { type ProductSummary } from '@/entities/product/model/types';
 import { type TextAreaChangeHandler, type InputChangeHandler } from '@/shared/types';
 import { useMutation } from '@tanstack/react-query';
+import { orderSchema } from '@/entities/order/model/validation';
 
 interface CardState {
   selectedCardId: number;
@@ -19,11 +20,6 @@ interface CardState {
 interface FormData {
   senderName: string;
 }
-
-const orderValidationSchema = z.object({
-  message: string().min(1, '메시지를 입력해주세요.'),
-  senderName: string().min(1, '보내는 사람 이름을 입력해주세요.'),
-});
 
 interface UseOrderFormProps {
   product?: ProductSummary;
@@ -99,7 +95,7 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
   };
 
   const validateForm = (): boolean => {
-    const result = orderValidationSchema.safeParse({
+    const result = orderSchema.safeParse({
       message: cardState.message,
       senderName: formData.senderName,
     });
