@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthContext';
 import Navigation from '@/components/Navigation';
@@ -15,10 +14,10 @@ import { FormProvider } from 'react-hook-form';
 import { useOrderForm } from '@/hooks/useOrderForm';
 import type { OrderFormValues } from '@/types/order';
 import { loading } from '@/components/common/Loading';
-import { ORDER_API_URL } from '@/hooks/constants/api';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { useProductSummary } from '@/hooks/useProductSummary';
 import { hasAxiosErrorStatus } from '@/utils/error';
+import { useOrderMutation } from '@/hooks/useOrderMutation';
 
 const OrderPage = () => {
   const { id } = useParams();
@@ -36,6 +35,7 @@ const OrderPage = () => {
   } = useOrderForm(product);
 
   const { authToken } = useAuth();
+  const orderMutation = useOrderMutation();
 
   const onSubmit = async (data: OrderFormValues) => {
     if (data.receivers.length === 0) {
@@ -43,30 +43,19 @@ const OrderPage = () => {
       return;
     }
 
+    if (!product) return;
+
     try {
-      await axios.post(
-        ORDER_API_URL,
-        {
-          productId: product?.id,
-          message: data.textMessage,
-          messageCardId: String(selectedCardId),
-          ordererName: data.senderName,
-          receivers: data.receivers.map(r => ({
-            name: r.name,
-            phoneNumber: r.phone,
-            quantity: r.quantity,
-          })),
-        },
-        {
-          headers: {
-            Authorization: `${authToken}`,
-          },
-        }
-      );
+      await orderMutation.mutateAsync({
+        formData: data,
+        productId: product.id,
+        messageCardId: String(selectedCardId),
+        authToken: authToken ?? '',
+      });
 
       alert(
         `주문이 완료되었습니다.\n` +
-          `상품명: ${product?.name}\n` +
+          `상품명: ${product.name}\n` +
           `구매 수량: ${totalQuantity}\n` +
           `발신자 이름: ${data.senderName}\n` +
           `메시지: ${data.textMessage}`
