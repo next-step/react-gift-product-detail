@@ -1,17 +1,15 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 const usePreservedCallback = <TArgs extends readonly unknown[], TReturn>(
   callback: (...args: TArgs) => TReturn,
 ): ((...args: TArgs) => TReturn) => {
   const callbackRef = useRef<(...args: TArgs) => TReturn>(callback);
-  const preservedCallback = useRef<((...args: TArgs) => TReturn) | null>(null);
+  callbackRef.current = callback;
 
-  if (!preservedCallback.current) {
-    preservedCallback.current = (...args: TArgs): TReturn => {
-      return callbackRef.current(...args);
-    };
-  }
-  return preservedCallback.current;
+  return useCallback(
+    (...args: TArgs): TReturn => callbackRef.current(...args),
+    [],
+  );
 };
 
 export default usePreservedCallback;
