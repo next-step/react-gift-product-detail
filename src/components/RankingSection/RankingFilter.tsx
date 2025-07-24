@@ -1,16 +1,20 @@
 import styled from '@emotion/styled';
+import {
+  TARGET_TYPE_META,
+  TARGET_TYPE_VALUES,
+  type TargetType,
+} from '@/constants/rankingParams';
 
 interface RankingFilterProps {
-  selectedFilter: string;
-  onSelect: (label: string) => void;
+  selectedFilter: TargetType;
+  onSelect: (value: TargetType) => void;
 }
 
-const filters = [
-  { emoji: 'ALL', label: '전체', value: 'ALL' },
-  { emoji: '👩🏻', label: '여성이', value: 'FEMALE' },
-  { emoji: '👨🏻', label: '남성이', value: 'MALE' },
-  { emoji: '👦🏻', label: '청소년이', value: 'TEEN' },
-];
+const filters = TARGET_TYPE_VALUES.map(value => ({
+  value,
+  emoji: TARGET_TYPE_META[value].emoji,
+  label: TARGET_TYPE_META[value].label,
+}));
 
 const RankingFilter = ({ selectedFilter, onSelect }: RankingFilterProps) => {
   return (

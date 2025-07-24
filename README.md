@@ -36,3 +36,6 @@
   - [x] WithApiUi를 사용하는 4개의 컴포넌트들에 대해 변경된 구조에 맞는지 한 번 더 점검하여주었습니다.
   - [x] 단일 객체를 data로 넘기는 ThemeHero의 경우 컴포넌트 파일 내에서 prop를 통해 대응하도록 나머지 3개는 배열을 data로 넘기기에 defaultIsEmpty를 사용하도록 해주었습니다.
   - [x] handleOrderSubmit.ts에 navigate 부분에 'window'를 추가해주었습니다.
+  - [x] rankingParams.ts를 만들어서 Ranking 부분과 관련있는 하드코딩된 부분과 타입을 상수처리해주었습니다.
+  - [x] RankingSort, RankingFilter에서 rankingParams에 정의된 상수를 가져와 사용하도록 해주었습니다.
+  - [x] useRankingParams.ts에서도 타입 정의 과정을 수행했습니다.
