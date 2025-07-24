@@ -7,8 +7,12 @@ import { useThemes } from "@/hooks/queries/useThemes";
 export const CategorySection = () => {
   const { data: themes } = useThemes();
 
-  if (!themes || themes.length === 0) {
+  if (!themes) {
     return <ErrorBanner>카테고리를 불러올 수 없습니다.</ErrorBanner>;
+  }
+
+  if (themes.length === 0) {
+    return <p>표시할 카테고리가 없습니다.</p>;
   }
 
   return (
