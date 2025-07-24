@@ -5,12 +5,33 @@ import { setUserInfo } from "@/utils/storage";
 import { useRouter } from "@/hooks/common/useRouter";
 import { loginSchema, showToast, type LoginFormData } from "@/utils";
 import { signin } from "@/api/login/signin";
-import { useApiStatus } from "@/hooks/common/useApiStatus";
+import { useMutation } from "@tanstack/react-query";
 
 export const useLoginForm = () => {
   const { navigate, location } = useRouter();
   const [searchParams] = useSearchParams();
-  const { loading: isLoading, error: loginError, execute } = useApiStatus();
+
+  const {
+    mutate: login,
+    isPending: isLoading,
+    error: loginError,
+  } = useMutation({
+    mutationFn: signin,
+    onSuccess: response => {
+      setUserInfo({
+        email: response.email,
+        name: response.name,
+        authToken: response.authToken,
+      });
+      const previousPage = location.state?.from;
+      const redirectPath = previousPage || searchParams.get("redirect") || "/";
+      navigate(redirectPath);
+    },
+    onError: error => {
+      showToast.error(error.message);
+      console.error("로그인 처리 중 오류 발생:", error);
+    },
+  });
 
   const {
     register,
@@ -26,6 +47,7 @@ export const useLoginForm = () => {
       password: "",
     },
   });
+
   const watchedValues = watch();
 
   const isFormValid = (() => {
@@ -38,30 +60,10 @@ export const useLoginForm = () => {
   })();
 
   const onSubmit = async (values: LoginFormData) => {
-    execute(async () => {
-      const response = await signin({
-        email: values.id,
-        password: values.password,
-      });
-
-      setUserInfo({
-        email: response.email,
-        authToken: response.authToken,
-        name: response.name,
-      });
-
-      return response;
-    })
-      .then(() => {
-        const previousPage = location.state?.from;
-        const redirectPath =
-          previousPage || searchParams.get("redirect") || "/";
-        navigate(redirectPath);
-      })
-      .catch(error => {
-        showToast.error(error.message);
-        console.error("로그인 처리 중 오류 발생:", error);
-      });
+    login({
+      email: values.id,
+      password: values.password,
+    });
   };
 
   return {
