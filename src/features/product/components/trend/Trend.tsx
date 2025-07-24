@@ -1,19 +1,67 @@
 import styled from '@emotion/styled'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { TrendFilter } from './TrendFilter'
 import { ProductItem } from './ProductItem'
 import { fetchProductRankList } from '@/api/services'
 import { isValidRankType, isValidTargetType, RankType, TargetType, type Product } from '@/api/types'
 import { useTheme } from '@emotion/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Button, Loading, Typography } from '@/shared/components'
 import { PRODUCT_UI_CONSTANTS } from '@/features/product/constants'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
 
 // * 초기 보여줄 상품 개수
 const INITIAL_SHOW_COUNT = PRODUCT_UI_CONSTANTS.INITIAL_SHOW_COUNT
 
-// * 실시간 급상승 컴포넌트
+// 상품 목록, 로딩, 에러, 빈 목록만 담당하는 내부 컴포넌트
+const TrendProductList = ({
+  targetType,
+  rankType,
+  showAll,
+  INITIAL_SHOW_COUNT,
+  handleMoreButtonClick,
+}: {
+  targetType: TargetType
+  rankType: RankType
+  showAll: boolean
+  INITIAL_SHOW_COUNT: number
+  handleMoreButtonClick: () => void
+}) => {
+  const { data: products } = useSuspenseQuery<Product[]>({
+    queryKey: ['productRankList', targetType, rankType],
+    queryFn: () => fetchProductRankList(targetType, rankType),
+  })
+  const safeProducts = Array.isArray(products) ? products : []
+  const displayProducts = showAll ? safeProducts : safeProducts.slice(0, INITIAL_SHOW_COUNT)
+  const shouldShowMoreButton = safeProducts.length > INITIAL_SHOW_COUNT
+
+  if (safeProducts.length === 0) {
+    return (
+      <LoadingContainer>
+        <EmptyMsg variant="subtitle2Regular">상품 목록이 없습니다.</EmptyMsg>
+      </LoadingContainer>
+    )
+  }
+
+  return (
+    <>
+      <ProductContainer>
+        {displayProducts.map((product: Product, index: number) => (
+          <ProductItem key={product.id} product={product} index={index} />
+        ))}
+      </ProductContainer>
+      {shouldShowMoreButton && (
+        <MoreButtonContainer>
+          <Button variant="outline" size="medium" onClick={handleMoreButtonClick}>
+            {showAll ? '접기' : `더보기`}
+          </Button>
+        </MoreButtonContainer>
+      )}
+    </>
+  )
+}
+
 export const Trend = () => {
   const theme = useTheme()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -24,7 +72,6 @@ export const Trend = () => {
     const urlTargetType = searchParams.get('targetType')
     return urlTargetType && isValidTargetType(urlTargetType) ? urlTargetType : TargetType.ALL
   }
-
   const getInitialRankType = (): RankType => {
     const urlRankType = searchParams.get('rankType')
     return urlRankType && isValidRankType(urlRankType) ? urlRankType : RankType.MANY_WISH
@@ -34,32 +81,13 @@ export const Trend = () => {
   const [targetType, setTargetType] = useState<TargetType>(getInitialTargetType)
   const [rankType, setRankType] = useState<RankType>(getInitialRankType)
 
-  // * 상품 랭킹 데이터 fetch
-  const {
-    isLoading,
-    isError,
-    data: products,
-  } = useQuery<Product[]>({
-    queryKey: ['productRankList', targetType, rankType],
-    queryFn: () => fetchProductRankList(targetType, rankType),
-  })
-
-  // * 표시할 상품 리스트 결정
-  const displayProducts = showAll ? (products ?? []) : (products ?? []).slice(0, INITIAL_SHOW_COUNT)
-
-  // * 더보기 버튼 표시 여부
-  const shouldShowMoreButton = (products?.length ?? 0) > INITIAL_SHOW_COUNT
-
   // * URL 파라미터 변경 감지
-  // ! 불필요한 리렌더링 방지를 위해 상태 변화 감지는 searchParams 만 적용
   useEffect(() => {
     const urlTargetType = searchParams.get('targetType')
     const urlRankType = searchParams.get('rankType')
-
     if (urlTargetType && isValidTargetType(urlTargetType)) {
       setTargetType(urlTargetType)
     }
-
     if (urlRankType && isValidRankType(urlRankType)) {
       setRankType(urlRankType)
     }
@@ -90,58 +118,32 @@ export const Trend = () => {
     setSearchParams(newSearchParams)
   }
 
-  // * 바뀌는 영역 조건부 관리
-  let body: React.ReactNode
-  if (isLoading) {
-    // * 로딩 화면
-    body = (
-      <LoadingContainer>
-        <Loading />
-      </LoadingContainer>
-    )
-  } else if (isError || !products || products.length === 0) {
-    // * 빈 목록 or 에러 화면
-    body = (
-      <LoadingContainer>
-        <EmptyMsg variant="subtitle2Regular">상품 목록이 없습니다.</EmptyMsg>
-      </LoadingContainer>
-    )
-  } else {
-    body = (
-      <>
-        <ProductContainer>
-          {displayProducts.map((product, index) => (
-            <ProductItem key={product.id} product={product} index={index} />
-          ))}
-        </ProductContainer>
-
-        {/* 더보기 버튼 */}
-        {shouldShowMoreButton && (
-          <MoreButtonContainer>
-            <Button variant="outline" size="medium" onClick={handleMoreButtonClick}>
-              {showAll ? '접기' : `더보기`}
-            </Button>
-          </MoreButtonContainer>
-        )}
-      </>
-    )
-  }
-
   return (
     <Container>
-      {/* 실시간 급상승 필터 컨테이너 */}
       <h1 css={theme.typography.title.title1Bold}>실시간 급상승 선물랭킹</h1>
-
-      {/* 필터 */}
       <TrendFilter
         targetType={targetType}
         rankType={rankType}
         onTargetTypeChange={handleTargetTypeChange}
         onRankTypeChange={handleRankTypeChange}
       />
-
-      {/* 조건부 렌더링 */}
-      {body}
+      <ErrorBoundary fallback={<LoadingContainer>에러가 발생했습니다.</LoadingContainer>}>
+        <Suspense
+          fallback={
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          }
+        >
+          <TrendProductList
+            targetType={targetType}
+            rankType={rankType}
+            showAll={showAll}
+            INITIAL_SHOW_COUNT={INITIAL_SHOW_COUNT}
+            handleMoreButtonClick={handleMoreButtonClick}
+          />
+        </Suspense>
+      </ErrorBoundary>
     </Container>
   )
 }
