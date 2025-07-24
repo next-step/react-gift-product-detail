@@ -1,57 +1,48 @@
 import { fetchThemes } from '@/api/services'
 import type { Theme } from '@/api/types'
 import { Loading } from '@/shared/components'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
+import { Suspense } from 'react'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
 
-// * 테마(Themes) 컴포넌트
-export const ThemesSection = () => {
-  const {
-    isLoading,
-    isError,
-    data: themes,
-  } = useQuery<Theme[]>({
+// * 테마 목록만 담당하는 내부 컴포넌트
+const ThemesList = () => {
+  const { data: themes } = useSuspenseQuery<Theme[]>({
     queryKey: ['themesList'],
     queryFn: fetchThemes,
   })
-
-  // * 빈 목록 or 에러 화면
-  if (!isLoading && (isError || !themes || themes.length === 0)) return null
-
-  // * 바뀌는 영역 조건부 관리
-  let body: React.ReactNode
-  if (isLoading) {
-    // * 로딩 화면
-    body = (
-      <LoadingSubContainer>
-        <Loading />
-      </LoadingSubContainer>
-    )
-  } else {
-    body = (
-      <SubContainer>
-        {themes?.map((themeItem) => (
-          // 테마 아이템
-          <Item to={`/themes/${themeItem.themeId}`} key={themeItem.themeId}>
-            <Image src={themeItem.image} alt={themeItem.name} />
-            <span css={(theme) => theme.typography.label.label2Regular}>{themeItem.name}</span>
-          </Item>
-        ))}
-      </SubContainer>
-    )
-  }
-
+  if (!themes || themes.length === 0) return null
   return (
-    // 외부 컨테이너
-    <Container>
-      {/* 테마 타이틀 */}
-      <h1 css={(theme) => theme.typography.title.title1Bold}>선물 테마</h1>
-      {/* 조건부 렌더링 */}
-      {body}
-    </Container>
+    <SubContainer>
+      {themes.map((themeItem) => (
+        <Item to={`/themes/${themeItem.themeId}`} key={themeItem.themeId}>
+          <Image src={themeItem.image} alt={themeItem.name} />
+          <span css={(theme) => theme.typography.label.label2Regular}>{themeItem.name}</span>
+        </Item>
+      ))}
+    </SubContainer>
   )
 }
+
+// * 테마(Themes) 섹션
+export const ThemesSection = () => (
+  <Container>
+    <h1 css={(theme) => theme.typography.title.title1Bold}>선물 테마</h1>
+    <ErrorBoundary fallback={null}>
+      <Suspense
+        fallback={
+          <LoadingSubContainer>
+            <Loading />
+          </LoadingSubContainer>
+        }
+      >
+        <ThemesList />
+      </Suspense>
+    </ErrorBoundary>
+  </Container>
+)
 
 // * 테마 컨테이너 (section 시맨틱 태그 사용)
 const Container = styled.section`

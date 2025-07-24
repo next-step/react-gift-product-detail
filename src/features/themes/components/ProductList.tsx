@@ -1,80 +1,93 @@
 import styled from '@emotion/styled'
-import { Typography, Loading } from '@/shared/components/ui'
-import type { Product } from '@/api/types'
+import { Loading, Typography } from '@/shared/components/ui'
+import type { ThemeProductListResponse } from '@/api/types'
 import { ProductItem } from '@/features/product'
 import { useRef } from 'react'
 import { useIntersectionObserver } from '@/shared/hooks'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { fetchThemeProducts } from '@/api/services'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
+import { Suspense } from 'react'
 
-interface ProductListProps {
-  products: Product[]
-  isLoading: boolean
-  isError: boolean
-  onMore?: () => void
-  hasMore?: boolean
+export interface ProductListProps {
+  themeId: number
 }
 
-// * 상품 리스트 섹션
-export const ProductList = ({
-  products,
-  isLoading,
-  isError,
-  onMore,
-  hasMore,
-}: ProductListProps) => {
-  // * 기준이 될 div의 ref 생성 (무한스크롤)
+// * 상품 목록 패칭 및 처리
+const ProductListInner = ({ themeId }: { themeId: number }) => {
   const loaderRef = useRef<HTMLDivElement | null>(null)
+  const {
+    data: productsPages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<ThemeProductListResponse>({
+    queryKey: ['themeProducts', themeId],
+    queryFn: ({ pageParam }) =>
+      fetchThemeProducts(themeId, typeof pageParam === 'number' ? pageParam : 0, 20),
+    getNextPageParam: (lastPage: ThemeProductListResponse) =>
+      lastPage.hasMoreList ? lastPage.cursor : undefined,
+    enabled: !!themeId,
+    initialPageParam: 0,
+  })
 
-  // * 옵저버 활성화 조건
-  const canObserve = !!hasMore && !isLoading && !isError
-
-  // * 무한스크롤 옵저버 훅
+  const hasMore = !!hasNextPage
+  const fetchMore = fetchNextPage
+  const canObserve = !!hasMore && !isFetchingNextPage
   useIntersectionObserver(
     loaderRef,
     () => {
-      if (onMore) onMore()
+      if (hasMore && !isFetchingNextPage) fetchMore()
     },
     canObserve,
   )
 
-  // * 조건부 렌더링을 body 변수로 분리
-  let body: React.ReactNode
+  if (!productsPages) return null
 
-  if (isLoading && products.length === 0) {
-    // * 첫 로딩
-    body = (
-      <SubContainer>
-        <Loading />
-      </SubContainer>
-    )
-  } else if (isError || products.length === 0) {
-    // * 에러 또는 빈 목록
-    body = (
+  const productList = Array.isArray(productsPages.pages)
+    ? (productsPages.pages as ThemeProductListResponse[]).flatMap((page) =>
+        Array.isArray(page.list) ? page.list : [],
+      )
+    : []
+  if (!productList || productList.length === 0) {
+    return (
       <SubContainer>
         <Typography variant="subtitle2Regular">상품이 없습니다.</Typography>
       </SubContainer>
     )
-  } else {
-    // * 정상적으로 불러온 경우(추가 로딩 포함)
-    body = (
-      <>
-        <ProductContainer>
-          {products.map((product) => (
-            <ProductItem key={product.id} product={product} />
-          ))}
-          {canObserve && <div ref={loaderRef} style={{ height: 0 }} />}
-        </ProductContainer>
-        {/* 추가 로딩 중일 때 하단에 로딩 표시 */}
-        {isLoading && products.length > 0 && (
-          <SubContainer>
-            <Loading />
-          </SubContainer>
-        )}
-      </>
-    )
   }
-
-  return <ProductListSection>{body}</ProductListSection>
+  return (
+    <ProductListSection>
+      <ProductContainer>
+        {productList.map((product) => (
+          <ProductItem key={product.id} product={product} />
+        ))}
+        {canObserve && <div ref={loaderRef} style={{ height: 0 }} />}
+      </ProductContainer>
+      {/* 추가 로딩 중일 때 하단에 로딩 표시 */}
+      {isFetchingNextPage && productList.length > 0 && (
+        <SubContainer>
+          <Loading />
+        </SubContainer>
+      )}
+    </ProductListSection>
+  )
 }
+
+// * 상품 목록 컴포넌트
+export const ProductList = ({ themeId }: ProductListProps) => (
+  <ErrorBoundary fallback={null}>
+    <Suspense
+      fallback={
+        <SubContainer>
+          <Loading />
+        </SubContainer>
+      }
+    >
+      <ProductListInner themeId={themeId} />
+    </Suspense>
+  </ErrorBoundary>
+)
 
 // * 상품 리스트 섹션
 const ProductListSection = styled.section`
@@ -109,4 +122,5 @@ const SubContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 2rem 0;
 `
