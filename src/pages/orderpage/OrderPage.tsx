@@ -1,25 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
-import { Navigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
+import { FormProvider } from "react-hook-form";
 import MessageCardSection from "@/pages/orderpage/MessageCardSection";
 import SenderInfoSection from "@/pages/orderpage/SenderInfoSection";
 import ReceiverInfoSection from "@/pages/orderpage/ReceiverInfoSection";
 import ProductSummarySection from "@/pages/orderpage/ProductSummarySection";
-import { useForm, FormProvider } from "react-hook-form";
 import OrderButton from "@/components/common/BaseButton";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { fullOrderSchema } from "@/utils/validator";
-import type { FullOrderFormValues } from "@/utils/validator";
-import { useSuspenseApiQuery } from "@/hooks/useSuspenseApiQuery";
-import { useApiMutation } from "@/hooks/useApiMutation";
-import type { ProductSummary } from "@/types/api_types";
+import { useOrderForm } from "@/pages/orderpage/hooks/useOrderForm";
+import { useOrderProductSummary } from "@/pages/orderpage/hooks/useOrderProductSummary";
 import { useAuth } from "@/contexts/AuthContext";
-import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 
 const OrderPage = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const productId = Number(id);
   const { userInfo } = useAuth();
@@ -28,62 +20,16 @@ const OrderPage = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const { data: productData } = useSuspenseApiQuery<ProductSummary>({
-    queryKey: [API_ENDPOINTS.PRODUCT_SUMMARY(productId), productId],
-    url: API_ENDPOINTS.PRODUCT_SUMMARY(productId),
-  });
+  const { data: productData } = useOrderProductSummary(productId);
 
-  const orderMutation = useApiMutation<{ success: boolean }>({
-    url: API_ENDPOINTS.ORDER,
-    method: "post",
-  });
-
-  const methods = useForm<FullOrderFormValues>({
-    resolver: zodResolver(fullOrderSchema),
-    defaultValues: {
-      message: "",
-      sender: userInfo?.name ?? "",
-      receivers: [],
-      messageCardId: "",
-    },
-  });
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { methods, handleSubmit, errors, onSubmit } = useOrderForm(
+    productData,
+    userInfo
+  );
 
   if (!productData) {
     return <Navigate to="/notfound" replace />;
   }
-
-  const onSubmit = async (data: FullOrderFormValues) => {
-    if (data.receivers.length === 0) {
-      toast.error("받는 사람이 없습니다.");
-      return;
-    }
-    if (!productData) return;
-
-    try {
-      const result = await orderMutation.mutateAsync({
-        productId: productData.id,
-        message: data.message,
-        messageCardId: data.messageCardId,
-        ordererName: data.sender,
-        receivers: data.receivers,
-      });
-
-      if (result?.success) {
-        alert(`주문이 완료되었습니다.
-상품명: ${productData.name}
-구매 수량: ${data.receivers.reduce((acc, cur) => acc + cur.quantity, 0)}
-발신자 이름: ${data.sender}
-메시지: ${data.message}`);
-        navigate("/", { replace: true });
-      }
-    } catch (error: any) {
-      throw error;
-    }
-  };
 
   return (
     <FormProvider {...methods}>
