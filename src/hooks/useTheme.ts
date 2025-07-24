@@ -2,39 +2,52 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import type { Product } from '@/types/product'
+import { useQuery } from '@tanstack/react-query'
 
 export interface ThemeInfo {
-  themeId: number
+  themeId: string
   name: string
   title: string
   description: string
   backgroundColor: string
 }
 
+const fetchThemeInfo = async (themeId: string): Promise<ThemeInfo> => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_API_BASE_URL}/api/themes/${themeId}/info`
+  )
+  return response.data.data
+}
+
+export function useThemeInfoQuery(themeId: string) {
+  return useQuery({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
+    retry: false,
+  })
+}
+
 export function useTheme(themeId?: string) {
   const navigate = useNavigate()
 
-  const [themeInfo, setThemeInfo] = useState<ThemeInfo | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [cursor, setCursor] = useState<number>(0)
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
 
   const observerRef = useRef<HTMLDivElement | null>(null)
+  const {
+    data: themeInfo,
+    error: themeError,
+    isLoading: themeLoading,
+  } = useThemeInfoQuery(themeId || '')
 
-  const fetchThemeInfo = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/api/themes/${themeId}/info`
-      )
-      setThemeInfo(response.data.data)
-    } catch (error) {
-      if (
-        error instanceof axios.AxiosError &&
-        error.response?.status === axios.HttpStatusCode.NotFound
-      ) {
-        navigate('/')
-      }
+  if (themeError) {
+    if (
+      themeError instanceof axios.AxiosError &&
+      themeError.response?.status === axios.HttpStatusCode.NotFound
+    ) {
+      navigate('/')
     }
   }
 
@@ -71,10 +84,6 @@ export function useTheme(themeId?: string) {
   )
 
   useEffect(() => {
-    fetchThemeInfo()
-  }, [themeId])
-
-  useEffect(() => {
     fetchProducts()
   }, [])
 
@@ -90,5 +99,7 @@ export function useTheme(themeId?: string) {
     themeInfo,
     products,
     observerRef,
+    themeLoading,
+    themeError,
   }
 }
