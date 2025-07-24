@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useApi } from '@/hooks/useApi'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { api } from '@/lib/axios'
 import type { Product } from '../types/ThemeTypes'
 
@@ -9,47 +8,44 @@ interface ThemeProductResponse {
   hasMoreList: boolean
 }
 
+const fetchThemeProducts = async ({
+  themeId,
+  cursor = 0,
+  limit = 10,
+}: {
+  themeId: number | null
+  cursor?: number
+  limit?: number
+}): Promise<ThemeProductResponse | null> => {
+  if (!themeId) return null
+  const res = await api.get(`/themes/${themeId}/products`, {
+    params: { cursor, limit },
+  })
+  return res.data.data as ThemeProductResponse
+}
+
 export const useThemeProducts = (themeId: number | null, limit = 10) => {
-  const [products, setProducts] = useState<Product[]>([])
-  const [cursor, setCursor] = useState(0)
-  const [hasMore, setHasMore] = useState(true)
-
-  const fetcher = useCallback(async () => {
-    if (!themeId) return null
-
-    const res = await api.get(`/themes/${themeId}/products`, {
-      params: { cursor, limit },
+  const { data, fetchNextPage, hasNextPage, isLoading, error, refetch } =
+    useInfiniteQuery({
+      queryKey: ['themeProducts', themeId],
+      queryFn: ({ pageParam = 0 }) =>
+        fetchThemeProducts({ themeId, cursor: pageParam, limit }),
+      getNextPageParam: (lastPage) => {
+        if (!lastPage) return undefined
+        return lastPage.hasMoreList ? lastPage.cursor : undefined
+      },
+      initialPageParam: 0,
+      enabled: !!themeId,
     })
-    return res.data.data as ThemeProductResponse
-  }, [themeId, cursor, limit])
 
-  const { data, loading, error } = useApi<ThemeProductResponse | null>(
-    fetcher,
-    [fetcher]
-  )
+  const products = data?.pages.flatMap((page) => page?.list ?? []) ?? []
 
-  useEffect(() => {
-    if (data) {
-      setProducts((prev) => {
-        const alreadyExist = new Set(prev.map((p) => p.id))
-        const newItems = data.list.filter((item) => !alreadyExist.has(item.id))
-        return [...prev, ...newItems]
-      })
-      setCursor(data.cursor)
-      setHasMore(data.hasMoreList)
-    }
-  }, [data])
-
-  const fetchNextPage = useCallback(() => {
-    if (loading || !hasMore) return
-    setCursor((prev) => prev + limit)
-  }, [loading, hasMore])
-
-  useEffect(() => {
-    setProducts([])
-    setCursor(0)
-    setHasMore(true)
-  }, [themeId])
-
-  return { products, loading, error, fetchNextPage, hasMore }
+  return {
+    products,
+    loading: isLoading,
+    error,
+    fetchNextPage,
+    hasMore: !!hasNextPage,
+    refetch,
+  }
 }
