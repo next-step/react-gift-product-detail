@@ -5,32 +5,31 @@ import ExpandButton from './ExpandButton';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import type { Product } from '@/types/product';
 
-interface ProductRanking {
-  data: Product[] | null;
-  pending: boolean;
-  error: boolean;
-}
-
 interface Props {
-  productRanking: ProductRanking;
+  data: Product[];
+  isLoading: boolean;
+  isError: boolean;
   visibleCount: number;
   toggleVisibleCount: () => void;
   isExpanded: boolean;
 }
 
 const RankingContent = ({
-  productRanking,
+  data,
+  isLoading,
+  isError,
   visibleCount,
   toggleVisibleCount,
   isExpanded,
 }: Props) => {
-  const { data, pending, error } = productRanking;
-
-  if (pending) return loading;
-  if (error || !data)
+  if (isLoading) return loading;
+  if (isError) {
     return <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>;
-  if (data.length === 0)
+  }
+
+  if (data.length === 0) {
     return <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>;
+  }
 
   const visibleProducts = isExpanded ? data : data.slice(0, visibleCount);
 

@@ -18,3 +18,5 @@
   - [x] App.tsx에 QueryClientProvider로 전체 구조를 감싸주었습니다.
   - [x] useCategoryThemes에서 useFetch 기반을 useQuery 기반으로 변경해주었습니다. (GET)
   - [x] CategoryContent에서 변경된 구조에 맞게 pending, error 제거 및 data = [] 구조로 단순화 작업을 했습니다.
+  - [x] useProductRanking.ts 역시 useFetch -> useQuery로 변경해주었습니다. (GET)
+  - [x] RankingGroup, RankingContent를 변경된 hook에 맞게 바꿔주었습니다.

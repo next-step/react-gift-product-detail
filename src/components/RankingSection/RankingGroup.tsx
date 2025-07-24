@@ -15,17 +15,16 @@ const RankingGroup = () => {
   const targetType = searchParams.get('targetType') || 'ALL';
   const rankType = searchParams.get('rankType') || 'MANY_WISH';
 
-  const productRanking = useProductRanking(targetType, rankType);
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useProductRanking(targetType, rankType);
 
-  const isExpanded =
-    productRanking.data !== null && visibleCount === productRanking.data.length;
+  const isExpanded = visibleCount === products.length;
 
   const toggleVisibleCount = () => {
-    if (productRanking.data) {
-      setVisibleCount(
-        isExpanded ? INITIAL_VISIBLE_COUNT : productRanking.data.length
-      );
-    }
+    setVisibleCount(isExpanded ? INITIAL_VISIBLE_COUNT : products.length);
   };
 
   const changeTargetType = (value: string) => {
@@ -44,7 +43,9 @@ const RankingGroup = () => {
       <RankingFilter selectedFilter={targetType} onSelect={changeTargetType} />
       <RankingSort selectedSort={rankType} onSelect={changeRankType} />
       <RankingContent
-        productRanking={productRanking}
+        data={products}
+        isLoading={isLoading}
+        isError={isError}
         visibleCount={visibleCount}
         toggleVisibleCount={toggleVisibleCount}
         isExpanded={isExpanded}
