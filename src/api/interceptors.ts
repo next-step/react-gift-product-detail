@@ -46,6 +46,10 @@ export const attachInterceptors = (instance: AxiosInstance) => {
         navigate(ROUTES.LOGIN);
       }
 
+      if (status == HttpStatusCode.NotFound) {
+        navigate(ROUTES.HOME);
+      }
+
       return Promise.reject(message || ERROR_MESSAGES.SYSTEM.UNKNOWN);
     },
   );

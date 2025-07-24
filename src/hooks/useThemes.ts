@@ -1,24 +1,20 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchThemes, type Theme } from "@/api/theme";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 export const useThemes = () => {
-  const [themes, setThemes] = useState<Theme[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: themes = [],
+    isLoading: loading,
+    isError,
+  } = useQuery<Theme[], Error>({
+    queryKey: ["themes"],
+    queryFn: fetchThemes,
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await fetchThemes();
-        setThemes(data);
-      } catch {
-        setError(ERROR_MESSAGES.THEME.FAIL_TO_LOAD);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  return { themes, loading, error };
+  return {
+    themes,
+    loading,
+    error: isError ? ERROR_MESSAGES.THEME.FAIL_TO_LOAD : null,
+  };
 };

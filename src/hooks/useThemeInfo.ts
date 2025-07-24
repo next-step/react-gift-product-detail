@@ -1,37 +1,26 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { type ThemeInfo, fetchThemeInfo } from "@/api/theme";
 import { ERROR_MESSAGES } from "@/constants/messages";
-import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/constants/routes";
-import { isAxiosError } from "axios";
-import { AxiosError } from "axios";
 
 export const useThemeInfo = (themeId: number | undefined) => {
-  const [themeInfo, setThemeInfo] = useState<ThemeInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!themeId) return;
-
-    (async () => {
-      try {
-        const data = await fetchThemeInfo(themeId);
-        setThemeInfo(data);
-      } catch (err) {
-        if (isAxiosError(err)) {
-          if (err.response?.status === 404) {
-            navigate(ROUTES.HOME);
-          }
-        }
-
-        setError(ERROR_MESSAGES.THEME.FAIL_TO_LOAD);
-      } finally {
-        setLoading(false);
+  const {
+    data: themeInfo,
+    isLoading: loading,
+    isError,
+  } = useQuery<ThemeInfo, string>({
+    queryKey: ["themeInfo", themeId],
+    queryFn: () => {
+      if (!themeId) {
+        return Promise.reject(ERROR_MESSAGES.THEME.INVALID);
       }
-    })();
-  }, [themeId, navigate]);
+      return fetchThemeInfo(themeId);
+    },
+    enabled: !!themeId,
+  });
 
-  return { themeInfo, loading, error };
+  return {
+    themeInfo,
+    loading,
+    error: isError ? ERROR_MESSAGES.THEME.FAIL_TO_LOAD : null,
+  };
 };

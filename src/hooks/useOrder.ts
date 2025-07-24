@@ -1,21 +1,32 @@
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createOrder } from "@/api/order";
-import type { OrderRequest } from "@/api/order";
+import { ERROR_MESSAGES } from "@/constants/messages";
 
 export const useOrder = () => {
   const navigate = useNavigate();
 
-  const submitOrder = async (payload: OrderRequest) => {
-    try {
-      await createOrder(payload);
-
-      toast.success("주문이 완료되었습니다!");
+  const {
+    mutateAsync: submitOrder,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: createOrder,
+    onSuccess: () => {
+      toast.success(ERROR_MESSAGES.ORDER.SUCCESS);
       navigate("/");
-    } catch (error) {
-      toast.error(String(error));
-    }
-  };
+    },
+    onError: (err: string) => {
+      toast.error(err || ERROR_MESSAGES.ORDER.FAIL);
+    },
+  });
 
-  return { submitOrder };
+  return {
+    submitOrder,
+    isPending,
+    isError,
+    error,
+  };
 };

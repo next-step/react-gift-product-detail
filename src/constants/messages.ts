@@ -6,6 +6,7 @@ export const ERROR_MESSAGES = {
     PW_TOO_SHORT: (min: number) =>
       `비밀번호는 최소 ${min}자 이상이어야 합니다.`,
     SUCCESS: "로그인에 성공했습니다.",
+    FAIL: "로그인에 실패했습니다.",
   },
 
   SYSTEM: {
@@ -27,10 +28,16 @@ export const ERROR_MESSAGES = {
     FAIL_TO_LOAD: "테마 정보를 불러오지 못했습니다.",
     LOAD: "테마 정보를 불러오고 있습니다.",
     NONE: "테마가 없습니다.",
+    INVALID: "잘못된 테마 아이디 입니다.",
   },
   PRODUCT: {
     FAIL_TO_LOAD: "상품 정보를 불러오지 못했습니다.",
     LOAD: "상품 정보를 불러오고 있습니다.",
     NONE: "상품이 없습니다,",
+    INVALID: "잘못된 상품 아이디 입니다.",
+  },
+  ORDER: {
+    SUCCESS: "주문이 완료되었습니다!",
+    FAIL: "주문에 실패했습니다.",
   },
 };

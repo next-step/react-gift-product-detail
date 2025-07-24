@@ -27,7 +27,7 @@ export default function OrderPage() {
   const id = Number(productId);
   const { product, loading, error } = useProductSummary(id);
   const { user } = useAuth();
-  const { submitOrder } = useOrder();
+  const { submitOrder, isPending } = useOrder();
 
   const messageCardRef = useRef<MessageCardHandle>(null);
   const senderInfoRef = useRef<SenderInfoHandle>(null);
@@ -45,6 +45,8 @@ export default function OrderPage() {
   const totalPrice = product?.price ? product.price * totalQuantity : 0;
 
   const handleOrderClick = async () => {
+    if (isPending) return;
+
     const isMessageValid = messageCardRef.current?.validate() ?? false;
     const isSenderValid = senderInfoRef.current?.validate() ?? false;
 
