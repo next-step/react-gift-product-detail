@@ -34,15 +34,15 @@ const TheHeader = () => {
 
   return (
     <Header>
-      <button onClick={handleClickBack}>
+      <Button onClick={handleClickBack}>
         <Back width={"28px"} height={"28px"} />
-      </button>
-      <button onClick={handleClickLogo}>
+      </Button>
+      <Button onClick={handleClickLogo}>
         <Logo size={"150px"} />
-      </button>
-      <button onClick={handleClickUser}>
+      </Button>
+      <Button onClick={handleClickUser}>
         <User width={"24px"} height={"24px"} />
-      </button>
+      </Button>
     </Header>
   );
 };
@@ -59,4 +59,10 @@ const Header = styled.header`
   padding: ${({ theme }) => theme.spacing.spacing2};
   height: 44px;
   background-color: ${({ theme }) => theme.colors.semantic.background.default};
+`;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
