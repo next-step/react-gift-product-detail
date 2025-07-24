@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import type { Product } from '@/types/product';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 const List = styled.ul`
   display: grid;
@@ -92,40 +93,21 @@ function ProductList({
   products: propProducts,
   showRank = true,
 }: ProductListProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (propProducts) {
-      setProducts(propProducts);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    (async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/products/ranking`,
-        );
-        if (Array.isArray(res.data.data)) {
-          setProducts(res.data.data);
-        } else {
-          setProducts([]);
-        }
-        setLoading(false);
-      } catch (error) {
-        setError('데이터를 불러오지 못했습니다.');
-        setLoading(false);
-      }
-    })();
-  }, [propProducts]);
-
   // 더보기/접기 state
   const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE);
-  const visibleProducts = products.slice(0, visibleCount);
+
+  const { data, isLoading, isError, error } = useQuery<Product[], Error>({
+    queryKey: ['products', 'ranking'],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/products/ranking`,
+      );
+      return res.data.data;
+    },
+  });
+
+  const products: Product[] = propProducts || (Array.isArray(data) ? data : []);
+  const visibleProducts: Product[] = products.slice(0, visibleCount);
   const isAllVisible = visibleCount >= products.length;
 
   const navigate = useNavigate();
@@ -139,8 +121,8 @@ function ProductList({
     }
   };
 
-  if (loading) return <div>로딩 중 ...</div>;
-  if (error) return <div>{error}</div>;
+  if (isLoading) return <div>로딩 중 ...</div>;
+  if (isError) return <div>{error?.message}</div>;
   if (visibleProducts.length === 0) return <div>상품 목록이 없습니다.</div>;
 
   return (

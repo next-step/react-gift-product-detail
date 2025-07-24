@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 const Box = styled.div`
   background-color: white;
@@ -55,64 +56,55 @@ type Theme = {
 };
 
 function CategoryList({ onHide }: { onHide?: () => void }) {
-  const [themes, setThemes] = useState<Theme[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { data, isLoading, isError, error } = useQuery<Theme[], Error>(
+    ['themes'],
+    async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/themes`);
+      return res.data.data;
+    },
+  );
 
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    (async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/themes`,
-        );
-        if (Array.isArray(res.data.data)) {
-          setThemes(res.data.data);
-          if (res.data.data.length === 0 && onHide) onHide();
-        } else {
-          setThemes([]);
-          if (onHide) onHide();
-        }
-        setLoading(false);
-      } catch (error) {
-        setError('데이터를 불러오지 못했습니다.');
-        setLoading(false);
-        if (onHide) onHide();
-      }
-    })();
-  }, [onHide]);
+  const themes: Theme[] = Array.isArray(data) ? data : [];
+
+  if (isLoading)
+    return (
+      <Box>
+        <Title>선물 테마</Title>
+        <div>로딩 중 ... </div>
+      </Box>
+    );
+  if (isError)
+    return (
+      <Box>
+        <Title>선물 테마</Title>
+        <div>{error?.message}</div>
+      </Box>
+    );
+  if (themes.length === 0)
+    return (
+      <Box>
+        <Title>선물 테마</Title>
+      </Box>
+    );
+
   return (
     <Box>
       <Title>선물 테마</Title>
-      {(() => {
-        if (loading) {
-          return <div>로딩 중 ... </div>;
-        }
-        if (error) {
-          return <div>{error}</div>;
-        }
-        if (themes.length === 0) {
-          return null;
-        }
-        return (
-          <List>
-            {themes.map((theme) => (
-              <Item
-                key={theme.themeId}
-                onClick={() => {
-                  navigate(`/themes/${theme.themeId}`);
-                  if (onHide) onHide();
-                }}
-              >
-                <Img src={theme.image} alt={theme.name} />
-                <Name>{theme.name}</Name>
-              </Item>
-            ))}
-          </List>
-        );
-      })()}
+      <List>
+        {themes.map((theme) => (
+          <Item
+            key={theme.themeId}
+            onClick={() => {
+              navigate(`/themes/${theme.themeId}`);
+              if (onHide) onHide();
+            }}
+          >
+            <Img src={theme.image} alt={theme.name} />
+            <Name>{theme.name}</Name>
+          </Item>
+        ))}
+      </List>
     </Box>
   );
 }
