@@ -57,6 +57,19 @@ interface ProductListProps {
   showRank?: boolean;
 }
 
+const getRankColor = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return '#FF3B30'; // 1등: 빨강
+    case 2:
+      return '#FF9500'; // 2등: 주황
+    case 3:
+      return '#FF2D55'; // 3등: 분홍
+    default:
+      return '#C4C4C4'; // 그 외: 회색
+  }
+};
+
 const RankBadge = styled.div<{ rank: number }>`
   position: absolute;
   top: 16px;
@@ -70,14 +83,7 @@ const RankBadge = styled.div<{ rank: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ rank }) =>
-    rank === 1
-      ? '#FF3B30' // 1등: 빨강
-      : rank === 2
-        ? '#FF3B30' // 2등: 주황
-        : rank === 3
-          ? '#FF3B30' // 3등: 분홍
-          : '#C4C4C4'}; // 그 외: 회색
+  background: ${({ rank }) => getRankColor(rank)};
   z-index: 2;
 `;
 
