@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import type { Product } from '@/types/product';
+import axios from 'axios';
 
 const List = styled.ul`
   display: grid;
@@ -104,23 +105,22 @@ function ProductList({
 
     setLoading(true);
     setError(null);
-    fetch(`${import.meta.env.VITE_API_URL}/api/products/ranking`)
-      .then((res) => {
-        if (!res.ok) throw new Error('서버 에러');
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data.data)) {
-          setProducts(data.data);
+    (async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products/ranking`,
+        );
+        if (Array.isArray(res.data.data)) {
+          setProducts(res.data.data);
         } else {
           setProducts([]);
         }
         setLoading(false);
-      })
-      .catch(() => {
+      } catch (error) {
         setError('데이터를 불러오지 못했습니다.');
         setLoading(false);
-      });
+      }
+    })();
   }, [propProducts]);
 
   // 더보기/접기 state

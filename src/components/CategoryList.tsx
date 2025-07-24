@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Box = styled.div`
   background-color: white;
@@ -62,26 +63,25 @@ function CategoryList({ onHide }: { onHide?: () => void }) {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`${import.meta.env.VITE_API_URL}/api/themes`)
-      .then((res) => {
-        if (!res.ok) throw new Error('서버 에러');
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data.data)) {
-          setThemes(data.data);
-          if (data.data.length === 0 && onHide) onHide();
+    (async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/themes`,
+        );
+        if (Array.isArray(res.data.data)) {
+          setThemes(res.data.data);
+          if (res.data.data.length === 0 && onHide) onHide();
         } else {
           setThemes([]);
           if (onHide) onHide();
         }
         setLoading(false);
-      })
-      .catch(() => {
+      } catch (error) {
         setError('데이터를 불러오지 못했습니다.');
         setLoading(false);
         if (onHide) onHide();
-      });
+      }
+    })();
   }, [onHide]);
   return (
     <Box>
