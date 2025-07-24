@@ -79,7 +79,7 @@ function OrderPage() {
       toast.error(API_ERROR_MESSAGES.PRODUCT_NOT_FOUND);
       navigate(ROUTES.HOME);
     }
-    return;
+    return null;
   }
 
   const totalQuantity = receivers.reduce(

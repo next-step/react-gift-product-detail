@@ -141,7 +141,7 @@
 
 ## 1 단계 - React Query 적용
 
-- [ ] API 들을 React Query 로 리펙토링
+- [x] API 들을 React Query 로 리펙토링
   - [x] 선물 테마 카테고리 api
   - [x] 로그인 시 유저 정보 api
   - [x] 실시간 급상승 선물 랭킹 api
