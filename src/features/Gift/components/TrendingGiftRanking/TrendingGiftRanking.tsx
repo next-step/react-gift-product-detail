@@ -5,12 +5,8 @@ import * as S from './TrendingGiftRanking.styles'
 import { FilterGender, FilterType } from './TrendingGiftRankingFilter'
 import ProductCard from '@/component/ProductCard/ProductCard'
 import { ROUTE_PATH } from '@/routes/Router'
-import {
-  useProductsRanking,
-  type Gender,
-  type Type,
-  type Product,
-} from '@/features/Gift/hooks/useProductsRanking'
+import { useProductsRanking } from '@/features/Gift/hooks/useProductsRanking'
+import type { Gender, Type, Product } from '@/features/Gift/types/GiftTypes'
 
 const INITIAL_VISIBLE_COUNT = 6
 const genderList = [
@@ -107,7 +103,7 @@ const TrendingGiftRanking = () => {
       </S.TypeTab>
 
       {loading && <Loading />}
-      {error && <S.ErrorText>{error}</S.ErrorText>}
+      {error && <S.ErrorText>{error.message}</S.ErrorText>}
 
       {!loading && !error && products.length === 0 && (
         <S.NoProduct>상품이 없습니다.</S.NoProduct>

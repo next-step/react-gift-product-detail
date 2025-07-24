@@ -26,7 +26,7 @@ const ThemeProducts = ({ themeId, onProductSelect }: ThemeProductsProps) => {
     rootMargin: '100px',
   })
 
-  if (productsError) return <S.ErrorText>{productsError}</S.ErrorText>
+  if (productsError) return <S.ErrorText>{productsError.message}</S.ErrorText>
   if (productsLoading && products.length === 0) return <Loading />
   if (!productsLoading && products.length === 0)
     return <S.NoProduct>상품이 없습니다.</S.NoProduct>

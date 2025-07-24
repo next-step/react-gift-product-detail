@@ -1,8 +1,17 @@
-import { useApi } from '@/hooks/useApi'
-import type { ThemeInfo } from '../types/ThemeTypes'
 import { api } from '@/lib/axios'
+import { useQuery } from '@tanstack/react-query'
 
-const fetchThemeInfo = async (themeId: number | null) => {
+interface ThemeInfo {
+  themeId: number
+  name: string
+  title: string
+  description: string
+  backgroundColor: string
+}
+
+const fetchThemeInfo = async (
+  themeId: number | null
+): Promise<ThemeInfo | null> => {
   if (!themeId) return null
 
   try {
@@ -17,11 +26,18 @@ const fetchThemeInfo = async (themeId: number | null) => {
 }
 
 export const useThemeInfo = (themeId: number | null) => {
-  const fetcher = () => fetchThemeInfo(themeId)
-  const { data, loading, error } = useApi<ThemeInfo | null>(fetcher, [themeId])
+  const {
+    data: themeInfo,
+    isLoading: loading,
+    error,
+  } = useQuery<ThemeInfo | null>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
+    enabled: !!themeId,
+  })
 
   return {
-    themeInfo: data,
+    themeInfo,
     loading,
     error,
   }
