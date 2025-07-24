@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { RankingFilter } from "@/pages/home/components/RankingFilter";
 import { RankingTab } from "@/pages/home/components/RankingTab";
 import { RankingGrid } from "@/pages/home/components/RankingGrid";
-import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import {
   type GenderType,
@@ -13,7 +12,7 @@ import {
 import { LOCAL_STORAGE_KEYS } from "@/constants/localStorage";
 import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { Spinner } from "@/components/common/Spinner";
-import { ErrorFallback } from "@/components/common/ErrorFallback";
+import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
 export const RankingSection = () => {
   const [gender, setGender] = useLocalStorageState<GenderType>(
@@ -33,7 +32,7 @@ export const RankingSection = () => {
       <Title>실시간 급상승 선물랭킹</Title>
       <RankingFilter selected={gender} onChange={setGender} />
       <RankingTab selected={tab} onChange={setTab} />
-      <ErrorBoundary FallbackComponent={ErrorFallback} key={`${gender}-${tab}`}>
+      <ErrorBoundary fallback={<p>문제가 발생했습니다. 새로고침 해주세요.</p>}>
         <Suspense fallback={<Spinner />}>
           <RankingGrid gender={gender} tab={tab} />
         </Suspense>
