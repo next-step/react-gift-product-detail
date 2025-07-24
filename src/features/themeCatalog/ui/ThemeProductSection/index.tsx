@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useThemeProducts } from '@/features/themeCatalog';
+import { useThemeProducts } from '../../model/useThemeProducts';
 import RankingItemCard from '@/entities/product/ui/RankingItemCard';
 import { Loading } from '@/shared/ui';
 import type { RankingProduct } from '@/entities/product/model/types';

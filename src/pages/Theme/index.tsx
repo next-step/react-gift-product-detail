@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { ThemeHeroSection } from '@/widgets/themeHero/ui';
-import {ThemeProductSection} from '@/widgets/themeProductList/ui';
+import { ThemeHeroSection, ThemeProductSection } from '@/features/themeCatalog';
 import * as S from './styles';
 
 const Theme = () => {
