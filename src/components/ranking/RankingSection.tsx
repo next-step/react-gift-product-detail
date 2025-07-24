@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "@emotion/react";
 
 import * as S from "./RankingSection.styles";
 import { RankingCard } from "./RankingCard";
-import { fetchRanking } from "@/api/ranking";
-import type { RankingItem, RankType, TargetType } from "@/api/ranking";
-import { Spinner } from "@/components/common/Spinner";
+import { useRanking } from "@/hooks/queries/useRanking";
+import type { RankType, TargetType } from "@/api/ranking";
 
 const GROUP_PARAM = "group";
 const ACTION_PARAM = "action";
@@ -28,71 +26,21 @@ const actionOptions: { key: RankType; label: string }[] = [
 
 export const RankingSection = () => {
   const theme = useTheme();
-  const [isExpanded, setIsExpanded] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const group = (searchParams.get(GROUP_PARAM) || "ALL") as TargetType;
   const action = (searchParams.get(ACTION_PARAM) || "MANY_WISH") as RankType;
 
-  const [data, setData] = useState<RankingItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { data: rankingList = [] } = useRanking({ targetType: group, rankType: action });
+  const isExpanded = rankingList.length > ITEM_COUNT;
 
-  const updateParam = useCallback(
-    (key: string, value: string) => {
-      const newParams = new URLSearchParams(searchParams);
-      newParams.set(key, value);
-      setSearchParams(newParams);
-    },
-    [searchParams, setSearchParams]
-  );
-
-  const visibleItems = useMemo(() => {
-    return isExpanded ? data : data.slice(0, ITEM_COUNT);
-  }, [isExpanded, data]);
-
-  const fetchRankingData = async () => {
-    try {
-      setLoading(true);
-      const result = await fetchRanking({ targetType: group, rankType: action });
-      setData(result);
-      setError(false);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+  const updateParam = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set(key, value);
+    setSearchParams(newParams);
   };
 
-  useEffect(() => {
-    fetchRankingData();
-  }, [group, action]);
-
-  const renderContent = () => {
-    if (loading) {
-    return <Spinner size={48} withWrapper />;
-  }
-
-    if (error || data.length === 0) {
-      return <EmptyState>상품이 없습니다.</EmptyState>;
-    }
-
-    return (
-      <div css={S.grid(theme)}>
-        {visibleItems.map((item, idx) => (
-          <RankingCard
-            key={item.id}
-            rank={idx + 1}
-            id={item.id}
-            imageURL={item.imageURL}
-            brandName={item.brandInfo.name}
-            productName={item.name}
-            price={item.price.sellingPrice}
-          />
-        ))}
-      </div>
-    );
-  };
+  const visibleItems = isExpanded ? rankingList.slice(0, ITEM_COUNT) : rankingList;
 
   return (
     <section css={S.section(theme)}>
@@ -125,12 +73,22 @@ export const RankingSection = () => {
         </div>
       </div>
 
-      {renderContent()}
-
-      {!loading && data.length > ITEM_COUNT && (
-        <button css={S.moreButton(theme)} onClick={() => setIsExpanded((prev) => !prev)}>
-          <p>{isExpanded ? "접기" : "더보기"}</p>
-        </button>
+      {rankingList.length === 0 ? (
+        <EmptyState>상품이 없습니다.</EmptyState>
+      ) : (
+        <div css={S.grid(theme)}>
+          {visibleItems.map((item, idx) => (
+            <RankingCard
+              key={item.id}
+              rank={idx + 1}
+              id={item.id}
+              imageURL={item.imageURL}
+              brandName={item.brandInfo.name}
+              productName={item.name}
+              price={item.price.sellingPrice}
+            />
+          ))}
+        </div>
       )}
     </section>
   );

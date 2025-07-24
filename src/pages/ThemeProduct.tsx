@@ -47,7 +47,15 @@ const ThemeProduct = () => {
     setIsLoadingMore(true);
     try {
       const data = await fetchThemeProducts(Number(id), cursor, 10);
-      setProducts(prev => [...prev, ...data.list]);
+
+      setProducts(prev => {
+        const existingIds = new Set(prev.map(item => item.id));
+        const uniqueNewItems = data.list.filter(
+          item => !existingIds.has(item.id),
+        );
+        return [...prev, ...uniqueNewItems];
+      });
+
       setCursor(data.cursor);
       setHasMore(data.hasMoreList);
     } catch {

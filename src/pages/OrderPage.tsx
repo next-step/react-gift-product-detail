@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import * as S from "@/styles/OrderPageStyles";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 import { orderFormSchema } from "@/validations/orderSchema";
 import type { OrderFormValues } from "@/validations/orderSchema";
+import type { AxiosError } from "axios";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Navigation } from "@/components/header/Navigation";
@@ -18,26 +19,21 @@ import ReceiverTable from "@/components/order/ReceiverTable";
 import OrderSummary from "@/components/order/OrderSummary";
 import OrderButton from "@/components/order/OrderButton";
 
-import { getProductSummary } from "@/api/product";
-import type { ProductSummary } from "@/api/product";
-import { postCreateOrder } from "@/api/orderapi";
 import { useAuth } from "@/contexts/AuthContext";
 import { PATH } from "@/constants/path";
 import { messageCards } from "@/mock/messageCards";
 
+import { useProductSummary } from "@/hooks/queries/useProductSummary";
+import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
+
 const OrderPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [product, setProduct] = useState<ProductSummary | null>(null);
-  const [isReceiverModalOpen, setReceiverModalOpen] = useState(false);
-
   const { token, isInitialized, isLoggedIn, user } = useAuth();
-  if (!isInitialized) return null;
 
-  if (!isLoggedIn) {
-    navigate(PATH.LOGIN, { replace: true });
-    return null;
-  }
+  const productId = Number(id);
+  const { data: product } = useProductSummary(productId);
+  const [isReceiverModalOpen, setReceiverModalOpen] = useState(false);
 
   const methods = useForm<OrderFormValues>({
     resolver: zodResolver(orderFormSchema),
@@ -49,6 +45,7 @@ const OrderPage = () => {
     },
     mode: "onBlur",
   });
+
   useEffect(() => {
     const defaultCard = messageCards.find(
       c => c.id === Number(methods.getValues("selectedCardId")),
@@ -57,6 +54,7 @@ const OrderPage = () => {
       methods.setValue("message", defaultCard.defaultTextMessage);
     }
   }, [methods]);
+
   const { handleSubmit, watch, setValue } = methods;
   const receivers = watch("receivers") ?? [];
 
@@ -70,64 +68,57 @@ const OrderPage = () => {
     setValue("receivers", data);
   };
 
-  const onValid = async (data: OrderFormValues) => {
-  if (!product) return;
+  const { mutate } = useCreateOrder({
+    productId: product?.id ?? 0,
+    token: token ?? "",
+  });
 
-  if (!token) {
-    toast.error("로그인이 필요합니다.");
-    navigate(PATH.LOGIN, { replace: true });
-    return;
-  }
+  const onValid = (data: OrderFormValues) => {
+    if (!product) return;
 
-  try {
-    await postCreateOrder(data, product.id, token);
-    methods.reset();
-
-    const totalQuantity = data.receivers.reduce((sum, r) => sum + r.quantity, 0);
-
-    const confirmed = window.confirm(
-      `주문이 완료되었습니다.\n` +
-      `상품명: ${product.name}\n` +
-      `구매 수량: ${totalQuantity}\n` +
-      `받는 사람: ${data.receivers[0]?.name}\n` +
-      `메시지: ${data.message}`
-    );
-
-    if (confirmed) {
-      navigate(PATH.HOME, { replace: true });
-    }
-  } catch (err: any) {
-    const msg =
-      err?.response?.data?.data?.message ||
-      "주문 요청 중 오류가 발생했습니다.";
-    toast.error(msg);
-  }
-};
-
-
-  const fetchProduct = useCallback(async () => {
-    if (!id || isNaN(Number(id))) {
-      toast.error("잘못된 상품 ID입니다.");
-      navigate(PATH.NOT_FOUND, { replace: true });
+    if (!token) {
+      toast.error("로그인이 필요합니다.");
+      navigate(PATH.LOGIN, { replace: true });
       return;
     }
 
-    try {
-      const data = await getProductSummary(Number(id));
-      setProduct(data);
-    } catch (err: any) {
-      const msg =
-        err?.response?.data?.data?.message ||
-        "상품 정보를 불러오지 못했습니다.";
-      toast.error(msg);
-      navigate(PATH.NOT_FOUND, { replace: true });
-    }
-  }, [id, navigate]);
+    mutate(data, {
+      onSuccess: (_response, variables) => {
+        methods.reset();
 
-  useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
+        const totalQuantity = variables.receivers.reduce(
+          (sum, r) => sum + r.quantity,
+          0,
+        );
 
+        const confirmed = window.confirm(
+          `🎉 주문이 완료되었습니다.\n\n` +
+            `상품명: ${product.name}\n` +
+            `구매 수량: ${totalQuantity}\n` +
+            `받는 사람: ${variables.receivers[0]?.name}\n` +
+            `메시지: ${variables.message}\n\n`,
+        );
+
+        if (confirmed) {
+          navigate(PATH.HOME, { replace: true });
+        }
+      },
+      onError: err => {
+        const axiosError = err as AxiosError<{
+          data: { message: string };
+        }>;
+
+        const msg =
+          axiosError.response?.data?.data?.message ||
+          axiosError.message ||
+          "주문 요청 중 오류가 발생했습니다.";
+
+        toast.error(msg);
+      },
+    });
+  };
+
+  if (!isInitialized || !isLoggedIn) return null;
   if (!product) return null;
 
   return (

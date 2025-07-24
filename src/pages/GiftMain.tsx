@@ -5,6 +5,7 @@ import { CategorySection } from "@/components/category/CategorySection";
 import { FriendBanner } from "@/components/banner/FriendBanner";
 import { MessageBanner } from "@/components/banner/MessageBanner";
 import { RankingSection } from "@/components/ranking/RankingSection";
+import AsyncBoundary from "@/components/common/AsyncBoundary";
 
 const GiftMain = () => {
   return (
@@ -12,9 +13,13 @@ const GiftMain = () => {
       <PageContainer>
         <Navigation />
         <FriendBanner />
-        <CategorySection />
+        <AsyncBoundary>
+          <CategorySection />
+        </AsyncBoundary>
         <MessageBanner />
-        <RankingSection />
+        <AsyncBoundary>
+          <RankingSection />
+        </AsyncBoundary>
       </PageContainer>
     </PageLayout>
   );
