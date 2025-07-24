@@ -20,6 +20,9 @@ const ThemeProductList = () => {
         errorFallback={
           <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>
         }
+        emptyFallback={
+          <ErrorText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</ErrorText>
+        }
       >
         <>
           <CardGrid>
@@ -47,7 +50,7 @@ const Wrapper = styled.div`
 
 const ErrorText = styled.p`
   padding: ${({ theme }) => theme.spacing[4]};
-  color: ${({ theme }) => theme.color.red[500]};
+  color: ${({ theme }) => theme.color.semantic.text};
   text-align: center;
 `;
 
