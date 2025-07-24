@@ -11,8 +11,9 @@
 ### 요구사항
 
 - [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
+  - [x] WithApiUi를 통해 조건별 UI 분기에 대해 작성을 해두었기에 해당 컴포넌트를 적용할 수 있는 CategoryContent, RankingContent, ThemeProductList에 대해 수정 작업을 진행했습니다.
 - [ ] 기능 단위로 나누어 커밋을 해주세요.
-- [ ] 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
+- [x] 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
   - [x] npm install을 통해 react-query를 설치했습니다.
   - [x] queryClient.ts를 통해 전역 QueryClient 인스턴스를 생성했습니다.
   - [x] App.tsx에 QueryClientProvider로 전체 구조를 감싸주었습니다.

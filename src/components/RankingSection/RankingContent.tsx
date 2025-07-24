@@ -4,6 +4,7 @@ import ProductGrid from './ProductGrid';
 import ExpandButton from './ExpandButton';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import type { Product } from '@/types/product';
+import WithApiUi from '@/components/common/WithApiUi';
 
 interface Props {
   data: Product[];
@@ -16,28 +17,27 @@ interface Props {
 
 const RankingContent = ({
   data,
-  isLoading,
   isError,
   visibleCount,
   toggleVisibleCount,
   isExpanded,
 }: Props) => {
-  if (isLoading) return loading;
-  if (isError) {
-    return <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>;
-  }
-
-  if (data.length === 0) {
-    return <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>;
-  }
-
   const visibleProducts = isExpanded ? data : data.slice(0, visibleCount);
 
   return (
-    <>
-      <ProductGrid products={visibleProducts} />
-      <ExpandButton isExpanded={isExpanded} onToggle={toggleVisibleCount} />
-    </>
+    <WithApiUi
+      data={data}
+      error={isError}
+      loading={loading}
+      errorFallback={
+        <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>
+      }
+    >
+      <>
+        <ProductGrid products={visibleProducts} />
+        <ExpandButton isExpanded={isExpanded} onToggle={toggleVisibleCount} />
+      </>
+    </WithApiUi>
   );
 };
 
