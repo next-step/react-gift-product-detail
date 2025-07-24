@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { Product } from '@/types/product';
-import { PRODUCT_RANKING_API_URL } from './constants/api';
+import { PRODUCT_RANKING_API_URL } from '@/hooks/constants/api';
 
 const fetchProductRankings = async (
   targetType: string,

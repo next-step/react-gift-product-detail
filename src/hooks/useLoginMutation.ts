@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { LOGIN_API_URL, SESSION_STORAGE_KEY } from './constants/api';
+import { LOGIN_API_URL, SESSION_STORAGE_KEY } from '@/hooks/constants/api';
 
 export type User = {
   email: string;

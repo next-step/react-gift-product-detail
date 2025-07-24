@@ -32,7 +32,7 @@ const ThemeProductList = () => {
               />
             ))}
           </CardGrid>
-          {hasMore && <ObserverTarget ref={observerRef} />}
+          {hasMore && <InfiniteScrollTrigger ref={observerRef} />}
         </>
       </WithApiUi>
     </Wrapper>
@@ -51,6 +51,6 @@ const ErrorText = styled.p`
   text-align: center;
 `;
 
-const ObserverTarget = styled.div`
+const InfiniteScrollTrigger = styled.div`
   height: 1px;
 `;

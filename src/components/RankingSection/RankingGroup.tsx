@@ -1,19 +1,17 @@
 import styled from '@emotion/styled';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 import RankingFilter from '@/components/RankingSection/RankingFilter';
 import RankingSort from '@/components/RankingSection/RankingSort';
-import { useState } from 'react';
-import { useProductRanking } from '@/hooks/useProductRanking';
 import RankingContent from '@/components/RankingSection/RankingContent';
+import { useProductRanking } from '@/hooks/useProductRanking';
+import { useRankingParams } from '@/hooks/useRankingParams';
 
 const INITIAL_VISIBLE_COUNT = 6;
 
 const RankingGroup = () => {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const targetType = searchParams.get('targetType') || 'ALL';
-  const rankType = searchParams.get('rankType') || 'MANY_WISH';
+  const { targetType, rankType, setTargetType, setRankType } =
+    useRankingParams();
 
   const {
     data: products = [],
@@ -27,21 +25,11 @@ const RankingGroup = () => {
     setVisibleCount(isExpanded ? INITIAL_VISIBLE_COUNT : products.length);
   };
 
-  const changeTargetType = (value: string) => {
-    searchParams.set('targetType', value);
-    setSearchParams(searchParams);
-  };
-
-  const changeRankType = (value: string) => {
-    searchParams.set('rankType', value);
-    setSearchParams(searchParams);
-  };
-
   return (
     <Section>
       <Title>실시간 급상승 선물랭킹</Title>
-      <RankingFilter selectedFilter={targetType} onSelect={changeTargetType} />
-      <RankingSort selectedSort={rankType} onSelect={changeRankType} />
+      <RankingFilter selectedFilter={targetType} onSelect={setTargetType} />
+      <RankingSort selectedSort={rankType} onSelect={setRankType} />
       <RankingContent
         data={products}
         isLoading={isLoading}

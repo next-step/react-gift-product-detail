@@ -4,7 +4,7 @@ import { getThemeProductsUrl } from './constants/api';
 import type { Product } from '@/types/product';
 import { useRef } from 'react';
 
-const LIMIT = 10;
+const THEME_PRODUCT_PAGE_LIMIT = 10;
 
 interface ThemeProductResponse {
   list: Product[];
@@ -20,7 +20,7 @@ const fetchThemeProducts = async ({
   themeId: string;
 }): Promise<ThemeProductResponse> => {
   const res = await fetch(
-    `${getThemeProductsUrl(themeId)}?cursor=${pageParam}&limit=${LIMIT}`
+    `${getThemeProductsUrl(themeId)}?cursor=${pageParam}&limit=${THEME_PRODUCT_PAGE_LIMIT}`
   );
   if (!res.ok) throw new Error('Failed to fetch theme products');
 
