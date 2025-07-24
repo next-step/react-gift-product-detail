@@ -4,7 +4,7 @@ import {
   GenderLabel,
   TypeButton,
 } from './TrendingGiftRanking.styles'
-import type { Gender, Type } from '@/features/Gift/hooks/useProductsRanking'
+import type { Gender, Type } from '@/features/Gift/types/GiftTypes'
 
 export const FilterGender: React.FC<{
   icon: string
