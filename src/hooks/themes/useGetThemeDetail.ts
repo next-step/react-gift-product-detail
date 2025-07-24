@@ -1,15 +1,21 @@
 import { ApiError } from "@/api/custom-error";
-import {
-  getThemeInfo,
-  type ThemeInfoResponseBody,
-} from "@/api/themes/get-theme-info";
-import { useApiStatus } from "@/hooks/common/useApiStatus";
+import { getThemeInfo } from "@/api/themes/get-theme-info";
+
 import { useRouter } from "@/hooks/common/useRouter";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 export const useGetThemeDetail = (themeId: number) => {
-  const { data, error, execute, loading } =
-    useApiStatus<ThemeInfoResponseBody>();
+  const {
+    data,
+    error,
+    isLoading: loading,
+    isError,
+  } = useQuery({
+    queryKey: ["themeInfo", themeId],
+    queryFn: () => getThemeInfo(themeId),
+    enabled: !!(themeId && !isNaN(themeId)),
+  });
   const { goHomePage } = useRouter();
 
   useEffect(() => {
@@ -17,18 +23,14 @@ export const useGetThemeDetail = (themeId: number) => {
       goHomePage();
       return;
     }
-    execute(() => getThemeInfo(themeId)).catch(error => {
-      if (error instanceof ApiError && error.name === "ApiError") {
-        const apiError = error;
-        if (apiError.statusCode === 404) {
-          goHomePage();
-        }
-      }
-    });
-  }, [execute, themeId]);
+
+    if (isError && error instanceof ApiError && error.statusCode === 404) {
+      goHomePage();
+    }
+  }, [themeId, isError, error, goHomePage]);
 
   return {
-    data,
+    data: data || null,
     error,
     loading,
   };
