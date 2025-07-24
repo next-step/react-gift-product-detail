@@ -1,31 +1,33 @@
-import { useEffect, useState } from 'react'
+// // React Query 사용 전, 직접 구현하여 사용했던 useApi 커스텀 훅
 
-export const useApi = <T>(
-  fetchFn: () => Promise<T>,
-  dependencies: any[] = []
-) => {
-  const [data, setData] = useState<T | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+// import { useEffect, useState } from 'react'
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      setError('')
+// export const useApi = <T>(
+//   fetchFn: () => Promise<T>,
+//   dependencies: any[] = []
+// ) => {
+//   const [data, setData] = useState<T | null>(null)
+//   const [loading, setLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
 
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 800))
-        const result = await fetchFn()
-        setData(result)
-      } catch (err) {
-        setError(String(err))
-      } finally {
-        setLoading(false)
-      }
-    }
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       setLoading(true)
+//       setError('')
 
-    fetchData()
-  }, dependencies)
+//       try {
+//         await new Promise((resolve) => setTimeout(resolve, 800))
+//         const result = await fetchFn()
+//         setData(result)
+//       } catch (err) {
+//         setError(String(err))
+//       } finally {
+//         setLoading(false)
+//       }
+//     }
 
-  return { data, loading, error }
-}
+//     fetchData()
+//   }, dependencies)
+
+//   return { data, loading, error }
+// }
