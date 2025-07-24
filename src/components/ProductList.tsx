@@ -139,53 +139,47 @@ function ProductList({
     }
   };
 
+  if (loading) return <div>로딩 중 ...</div>;
+  if (error) return <div>{error}</div>;
+  if (visibleProducts.length === 0) return <div>상품 목록이 없습니다.</div>;
+
   return (
     <>
-      {loading ? (
-        <div>로딩 중 ...</div>
-      ) : error ? (
-        <div>{error}</div>
-      ) : visibleProducts.length === 0 ? (
-        <div>상품 목록이 없습니다.</div>
-      ) : (
+      <List>
+        {visibleProducts.map((p, idx) => (
+          <Item
+            key={p.id}
+            onClick={() => handleItemClick(p.id)}
+            style={{ cursor: 'pointer' }}
+          >
+            {showRank && <RankBadge rank={idx + 1}>{idx + 1}</RankBadge>}
+            <img
+              src={p.imageURL}
+              alt={p.name}
+              style={{ width: '100%', borderRadius: 8 }}
+            />
+            <div style={{ color: '#888', fontSize: 14, marginTop: 8 }}>
+              {p.brandInfo.name}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 16, marginTop: 4 }}>
+              {p.name}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 18, marginTop: 4 }}>
+              {p.price.sellingPrice.toLocaleString()} 원
+            </div>
+          </Item>
+        ))}
+      </List>
+      {products.length > DEFAULT_VISIBLE && (
         <>
-          <List>
-            {visibleProducts.map((p, idx) => (
-              <Item
-                key={p.id}
-                onClick={() => handleItemClick(p.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                {showRank && <RankBadge rank={idx + 1}>{idx + 1}</RankBadge>}
-                <img
-                  src={p.imageURL}
-                  alt={p.name}
-                  style={{ width: '100%', borderRadius: 8 }}
-                />
-                <div style={{ color: '#888', fontSize: 14, marginTop: 8 }}>
-                  {p.brandInfo.name}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, marginTop: 4 }}>
-                  {p.name}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 18, marginTop: 4 }}>
-                  {p.price.sellingPrice.toLocaleString()} 원
-                </div>
-              </Item>
-            ))}
-          </List>
-          {products.length > DEFAULT_VISIBLE && (
-            <>
-              {!isAllVisible ? (
-                <MoreButton onClick={() => setVisibleCount(products.length)}>
-                  더보기
-                </MoreButton>
-              ) : (
-                <MoreButton onClick={() => setVisibleCount(DEFAULT_VISIBLE)}>
-                  접기
-                </MoreButton>
-              )}
-            </>
+          {!isAllVisible ? (
+            <MoreButton onClick={() => setVisibleCount(products.length)}>
+              더보기
+            </MoreButton>
+          ) : (
+            <MoreButton onClick={() => setVisibleCount(DEFAULT_VISIBLE)}>
+              접기
+            </MoreButton>
           )}
         </>
       )}
