@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { getThemeInfo } from '@/entities/theme/api/themeApi';
 import type { ThemeInfo } from '@/entities/theme/model/types';
-import { useFetchState } from '@/shared/lib/hooks/useFetchState';
-import { useErrorHandler } from '@/shared/lib/utils/errorHandler';
-import { Loading, ErrorMessage } from '@/shared/ui';
+import { Loading } from '@/shared/ui';
 import * as S from './styles';
 
 interface ThemeHeroSectionProps {
@@ -13,54 +12,38 @@ interface ThemeHeroSectionProps {
 
 const ThemeHeroSection = ({ themeId }: ThemeHeroSectionProps) => {
   const navigate = useNavigate();
-  const { handleError } = useErrorHandler();
-  const { fetchState, setLoading, setSuccess, setError, reset } = useFetchState<ThemeInfo | null>(null);
 
+  const { data, isLoading, isError } = useQuery<ThemeInfo>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => getThemeInfo(themeId!),
+    enabled: !!themeId,
+    retry: false,
+  });
+
+  //공식문서에서 API요청만 Tanstack Query로 처리하고 useEffect로 UI 처리하는 것을 권장하는듯해 이렇게 작성했습니다.
   useEffect(() => {
-    if (!themeId) {
-      reset();
-      return;
+    if (isError) {
+      navigate('/', { replace: true });
     }
+  }, [isError, navigate]);
 
-    const fetchThemeInfo = async () => {
-      setLoading(true);
-      try {
-        const themeInfo = await getThemeInfo(themeId);
-        setSuccess(themeInfo);
-      } catch (error) {
-        handleError(error, {
-          404: () => {
-            navigate('/');
-          }
-        });    
-        setError();
-      }
-    };
+  if (isLoading) {
+    return (
+      <S.ThemeHeroContainer>
+        <Loading height="80px" message="테마 정보를 불러오는 중..." />
+      </S.ThemeHeroContainer>
+    );
+  }
 
-    fetchThemeInfo();
-  }, [themeId, setLoading, setSuccess, setError, reset, handleError, navigate]);
+  if (!data) return null;
 
   return (
     <>
-      {fetchState.isLoading && (
-        <S.ThemeHeroContainer>
-          <Loading height="80px" message="테마 정보를 불러오는 중..." />
-        </S.ThemeHeroContainer>
-      )}
-
-      {fetchState.isError && (
-        <S.ThemeHeroContainer>
-          <ErrorMessage height="80px" />
-        </S.ThemeHeroContainer>
-      )}
-
-      {!fetchState.isLoading && !fetchState.isError && fetchState.data && (
-        <S.ThemeHeroContainer backgroundColor={fetchState.data.backgroundColor}>    
-          <S.ThemeName>{fetchState.data.name}</S.ThemeName>
-          <S.ThemeTitle>{fetchState.data.title}</S.ThemeTitle>
-          <S.ThemeDescription>{fetchState.data.description}</S.ThemeDescription>
-        </S.ThemeHeroContainer>
-      )}
+      <S.ThemeHeroContainer backgroundColor={data.backgroundColor}>
+        <S.ThemeName>{data.name}</S.ThemeName>
+        <S.ThemeTitle>{data.title}</S.ThemeTitle>
+        <S.ThemeDescription>{data.description}</S.ThemeDescription>
+      </S.ThemeHeroContainer>
     </>
   );
 };
