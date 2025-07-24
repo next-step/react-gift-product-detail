@@ -9,13 +9,14 @@ import { Loading, ErrorMessage } from '@/shared/ui';
 import OrderTemplate from '@/widgets/orderForm/ui/OrderTemplate';
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosErrorResponse } from '@/shared/types/api';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 const Order = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery<ProductSummary>({
-    queryKey: ['productSummary', productId],
+    queryKey: QUERY_KEYS.PRODUCT_SUMMARY(productId!),
     queryFn: () => getProductSummary(parseInt(productId!)),
     enabled: !!productId,
     retry: false,
@@ -31,7 +32,6 @@ const Order = () => {
   const {
     cardState,
     formData,
-    errors,
     selectedCard,
     handleCardClick,
     handleMessageChange,
@@ -60,7 +60,6 @@ const Order = () => {
       onMessageChange={handleMessageChange}
       formData={formData}
       onSenderNameChange={handleSenderNameChange}
-      errors={errors}
       product={data}
       onSubmit={handleOrder}
     />

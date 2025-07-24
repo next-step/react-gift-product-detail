@@ -5,6 +5,7 @@ import { getThemeInfo } from '@/entities/theme/api/themeApi';
 import type { ThemeInfo } from '@/entities/theme/model/types';
 import { Loading } from '@/shared/ui';
 import * as S from './styles';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 interface ThemeHeroSectionProps {
   themeId?: number;
@@ -14,7 +15,7 @@ const ThemeHeroSection = ({ themeId }: ThemeHeroSectionProps) => {
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery<ThemeInfo>({
-    queryKey: ['themeInfo', themeId],
+    queryKey: QUERY_KEYS.THEME_INFO(themeId!),
     queryFn: () => getThemeInfo(themeId!),
     enabled: !!themeId,
     retry: false,

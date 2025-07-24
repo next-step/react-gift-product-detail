@@ -7,6 +7,7 @@ import { RankingItemCard } from '@/entities/product/ui';
 import { Loading, ErrorMessage } from '@/shared/ui';
 import * as S from './styles';
 import { useQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,7 +18,7 @@ const RankingSection = () => {
   const selectedAction = searchParams.get('action') || 'MANY_WISH';
 
   const { data, isLoading, isError } = useQuery<RankingProduct[]>({
-    queryKey: ['rankingProducts', selectedGender, selectedAction],
+    queryKey: QUERY_KEYS.RANKING_PRODUCTS(selectedGender, selectedAction),
     queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
   });
 

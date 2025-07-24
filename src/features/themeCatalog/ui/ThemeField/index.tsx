@@ -3,10 +3,11 @@ import * as S from './styles';
 import { getThemes } from '@/entities/theme/api/themeApi';
 import { Loading, ErrorMessage } from '@/shared/ui';
 import { useQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 const ThemeField = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['themes'],
+    queryKey: QUERY_KEYS.THEMES,
     queryFn: getThemes,
   });
 

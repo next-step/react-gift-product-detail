@@ -20,11 +20,6 @@ interface FormData {
   senderName: string;
 }
 
-interface ValidationErrors {
-  message: string;
-  senderName: string;
-}
-
 interface OrderTemplateProps {
   orders: Order[];
   cardState: CardState;
@@ -33,7 +28,6 @@ interface OrderTemplateProps {
   onMessageChange: TextAreaChangeHandler;
   formData: FormData;
   onSenderNameChange: InputChangeHandler;
-  errors: ValidationErrors;
   product?: ProductSummary;
   onSubmit: () => void;
 }
@@ -46,7 +40,6 @@ const OrderTemplate = ({
   onMessageChange,
   formData,
   onSenderNameChange,
-  errors,
   product,
   onSubmit,
 }: OrderTemplateProps) => {
@@ -77,14 +70,12 @@ const OrderTemplate = ({
               value={cardState.message}
               onChange={onMessageChange}
               placeholder="메시지를 입력하세요"
-              error={errors.message}
             />
           </S.FirstSection>    
           <S.Spacer />        
           <SenderSection
             senderName={formData.senderName}
             onSenderNameChange={onSenderNameChange}
-            error={errors.senderName}
           />       
           <S.Spacer /> 
           <ReceiverSection
