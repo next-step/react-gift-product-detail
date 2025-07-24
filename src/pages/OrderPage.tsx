@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 import { orderFormSchema } from "@/validations/orderSchema";
 import type { OrderFormValues } from "@/validations/orderSchema";
-
+import type { AxiosError } from "axios";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Navigation } from "@/components/header/Navigation";
@@ -68,32 +68,9 @@ const OrderPage = () => {
     setValue("receivers", data);
   };
 
-  const { mutate: createOrder } = useCreateOrder({
+  const { mutate } = useCreateOrder({
     productId: product?.id ?? 0,
     token: token ?? "",
-    onSuccess: (_response, variables) => {
-      methods.reset();
-
-      const totalQuantity = variables.receivers.reduce(
-        (sum, r) => sum + r.quantity,
-        0,
-      );
-
-      const confirmed = window.confirm(
-        `🎉 주문이 완료되었습니다.\n\n` +
-          `상품명: ${product?.name}\n` +
-          `구매 수량: ${totalQuantity}\n` +
-          `받는 사람: ${variables.receivers[0]?.name}\n` +
-          `메시지: ${variables.message}\n\n`,
-      );
-
-      if (confirmed) {
-        navigate(PATH.HOME, { replace: true });
-      }
-    },
-    onError: msg => {
-      toast.error(msg);
-    },
   });
 
   const onValid = (data: OrderFormValues) => {
@@ -105,7 +82,40 @@ const OrderPage = () => {
       return;
     }
 
-    createOrder(data);
+    mutate(data, {
+      onSuccess: (_response, variables) => {
+        methods.reset();
+
+        const totalQuantity = variables.receivers.reduce(
+          (sum, r) => sum + r.quantity,
+          0,
+        );
+
+        const confirmed = window.confirm(
+          `🎉 주문이 완료되었습니다.\n\n` +
+            `상품명: ${product.name}\n` +
+            `구매 수량: ${totalQuantity}\n` +
+            `받는 사람: ${variables.receivers[0]?.name}\n` +
+            `메시지: ${variables.message}\n\n`,
+        );
+
+        if (confirmed) {
+          navigate(PATH.HOME, { replace: true });
+        }
+      },
+      onError: err => {
+        const axiosError = err as AxiosError<{
+          data: { message: string };
+        }>;
+
+        const msg =
+          axiosError.response?.data?.data?.message ||
+          axiosError.message ||
+          "주문 요청 중 오류가 발생했습니다.";
+
+        toast.error(msg);
+      },
+    });
   };
 
   if (!isInitialized || !isLoggedIn) return null;
