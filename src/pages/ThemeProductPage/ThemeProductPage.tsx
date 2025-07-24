@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 import ThemeProductsGrid from "./ThemeProductsGrid";
 import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
+import { useQuery } from "@tanstack/react-query";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
@@ -59,22 +60,21 @@ function ThemeProductPage() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const { data: themeInfo, isLoading: isThemeInfoLoading } = useFetch({
-    fetchFn: () => getThemeInfo(Number(params.themeId)),
-    errorHandler: () => {
-      navigate(ROUTES.HOME);
-    },
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["themeInfo", params.themeId],
+    queryFn: () => getThemeInfo(Number(params.themeId)),
+    retry: false,
   });
 
-  return (
-    <Layout>
-      {isThemeInfoLoading ? (
-        <Loading />
-      ) : (
-        themeInfo && <ThemeProductsContent themeInfo={themeInfo} />
-      )}
-    </Layout>
-  );
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    navigate(ROUTES.HOME);
+  }
+
+  return <Layout>{data && <ThemeProductsContent themeInfo={data} />}</Layout>;
 }
 
 export default ThemeProductPage;
