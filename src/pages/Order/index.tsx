@@ -4,46 +4,29 @@ import { toast } from 'react-toastify';
 import { orders } from '@/entities/order/model/constants';
 import { getProductSummary } from '@/entities/product/api/productApi';
 import type { ProductSummary } from '@/entities/product/model/types';
-import { useFetchState } from '@/shared/lib/hooks';
 import { useOrderForm } from '@/features/orderCreation/model/useOrderForm';
 import { Loading, ErrorMessage } from '@/shared/ui';
-import { useErrorHandler } from '@/shared/lib/utils';
 import OrderTemplate from '@/widgets/orderForm/ui/OrderTemplate';
+import { useQuery } from '@tanstack/react-query';
+import type { AxiosErrorResponse } from '@/shared/types/api';
 
 const Order = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  const { fetchState, setLoading, setSuccess, setError } = useFetchState<ProductSummary | undefined>(undefined, true);
-  const { handleError } = useErrorHandler();
+
+  const { data, isLoading, isError, error } = useQuery<ProductSummary>({
+    queryKey: ['productSummary', productId],
+    queryFn: () => getProductSummary(parseInt(productId!)),
+    enabled: !!productId,
+    retry: false,
+  });
 
   useEffect(() => {
-    if (!productId) {
-      return;
+    if (error && (error as AxiosErrorResponse)?.response?.status === 400) {
+      toast.error('현재 없는 상품입니다');
+      navigate('/');
     }
-
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        
-        const productData = await getProductSummary(parseInt(productId));
-        setSuccess(productData);
-      } catch (error: unknown) {
-        const customHandlers = {
-          400: (message?: string) => {
-            toast.error(message || '현재 없는 상품입니다');
-            navigate('/');
-          }
-        };
-
-        handleError(error, customHandlers);
-        setError();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [productId, navigate, setLoading, setSuccess, setError, handleError]);
+  }, [error, navigate]);
 
   const {
     cardState,
@@ -54,17 +37,17 @@ const Order = () => {
     handleMessageChange,
     handleSenderNameChange,
     handleOrder,
-  } = useOrderForm({ product: fetchState.data });
+  } = useOrderForm({ product: data });
 
-  if (fetchState.isLoading) {
+  if (isLoading) {
     return <Loading height="100vh" />;
   }
 
-  if (fetchState.isError) {
+  if (isError) {
     return <ErrorMessage height="100vh" message="Error loading product." />;
   }
 
-  if (!fetchState.data) {
+  if (!data) {
     return null;
   }
 
@@ -78,7 +61,7 @@ const Order = () => {
       formData={formData}
       onSenderNameChange={handleSenderNameChange}
       errors={errors}
-      product={fetchState.data}
+      product={data}
       onSubmit={handleOrder}
     />
   );
