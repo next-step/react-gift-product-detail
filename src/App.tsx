@@ -13,6 +13,7 @@ import OrderPage from "./pages/OrderPage/OrderPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeProductPage from "./pages/ThemeProductPage/ThemeProductPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const globalStyles = css`
   body {
@@ -20,32 +21,36 @@ const globalStyles = css`
   }
 `;
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <Global styles={[resetStyles, globalStyles]} />
-        <ViewportContainer>
-          <Routes>
-            <Route path={ROUTES.HOME} element={<HomePage />} />
-            <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-            <Route path={ROUTES.MY} element={<MyPage />} />
-            <Route path={ROUTES.ORDER} element={<OrderPage />} />
-            <Route
-              path={ROUTES.THEME_PRODUCTS}
-              element={<ThemeProductPage />}
-            />
-            <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
-          </Routes>
-        </ViewportContainer>
-      </AuthProvider>
-      <ToastContainer
-        position="bottom-center"
-        newestOnTop={false}
-        closeOnClick
-        hideProgressBar={true}
-      />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <Global styles={[resetStyles, globalStyles]} />
+          <ViewportContainer>
+            <Routes>
+              <Route path={ROUTES.HOME} element={<HomePage />} />
+              <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+              <Route path={ROUTES.MY} element={<MyPage />} />
+              <Route path={ROUTES.ORDER} element={<OrderPage />} />
+              <Route
+                path={ROUTES.THEME_PRODUCTS}
+                element={<ThemeProductPage />}
+              />
+              <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
+            </Routes>
+          </ViewportContainer>
+        </AuthProvider>
+        <ToastContainer
+          position="bottom-center"
+          newestOnTop={false}
+          closeOnClick
+          hideProgressBar={true}
+        />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

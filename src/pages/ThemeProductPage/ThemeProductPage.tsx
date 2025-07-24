@@ -1,7 +1,6 @@
 import { getThemeInfo, getThemeProducts } from "@/data/api";
-import { useFetch } from "@/hooks/useFetch";
 import Layout from "@/layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Loading } from "@/components/Loading/Loading";
 import {
   HeroDescription,
@@ -10,23 +9,23 @@ import {
   HeroTitle,
 } from "./HeroSection";
 import { ROUTES } from "@/constants/routes";
-import { THEME_PRODUCTS_API_MESSAGE } from "./constants/apiMessage";
 import type { ThemeInfo } from "@/types/ThemeInfo";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import ThemeProductsGrid from "./ThemeProductsGrid";
 import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/constants/queryKey";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState<number>(0);
 
-  const { data, isLoading: isThemeProductsLoading } = useFetch({
-    fetchFn: () => getThemeProducts(Number(themeInfo.themeId), cursor),
-    errorHandler: () => {
-      console.error(THEME_PRODUCTS_API_MESSAGE.FETCH_ERROR);
-    },
-    deps: [cursor],
+  const { data, isLoading: isThemeProductsLoading } = useQuery({
+    queryKey: QUERY_KEY.THEME_PRODUCTS(themeInfo.themeId, cursor),
+    queryFn: () => getThemeProducts(Number(themeInfo.themeId), cursor),
+    retry: false,
   });
 
   const { themeProducts } = useInfiniteScroll({
@@ -55,24 +54,28 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   );
 }
 
-function ThemeProductPage() {
-  const params = useParams();
-  const navigate = useNavigate();
+function ThemeProductFetcher() {
+  const { themeId } = useParams();
 
-  const { data: themeInfo, isLoading: isThemeInfoLoading } = useFetch({
-    fetchFn: () => getThemeInfo(Number(params.themeId)),
-    errorHandler: () => {
-      navigate(ROUTES.HOME);
-    },
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.THEME_INFO(themeId),
+    queryFn: () => getThemeInfo(Number(themeId)),
+    retry: false,
   });
 
+  return <ThemeProductsContent themeInfo={data!} />;
+}
+
+export function ThemeProductPage() {
   return (
     <Layout>
-      {isThemeInfoLoading ? (
-        <Loading />
-      ) : (
-        themeInfo && <ThemeProductsContent themeInfo={themeInfo} />
-      )}
+      <ErrorBoundary
+        FallbackComponent={() => <Navigate to={ROUTES.HOME} replace />}
+      >
+        <Suspense fallback={<Loading />}>
+          <ThemeProductFetcher />
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }

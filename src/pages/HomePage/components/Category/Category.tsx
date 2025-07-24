@@ -10,29 +10,24 @@ import {
 } from "./Category.styles";
 import { Loading } from "@/components/Loading/Loading";
 import { getThemes } from "@/data/api";
-import { useFetch } from "@/hooks/useFetch";
 import type { GiftThemeType } from "@/types/GiftThemeType";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { QUERY_KEY } from "@/constants/queryKey";
 
 function CategoryContent() {
-  const { data, isLoading, isError } = useFetch<GiftThemeType[]>({
-    fetchFn: getThemes,
-    errorHandler: () => {
-      console.error(CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR);
+  const { data } = useSuspenseQuery<GiftThemeType[]>({
+    queryKey: QUERY_KEY.THEMES,
+    queryFn: getThemes,
+    select: (data: GiftThemeType[]) => {
+      if (data.length === 0) {
+        throw new Error(CATEGORY_ERROR_MESSAGE.EMPTY_DATA_ERROR);
+      }
+
+      return data;
     },
-    validateData: [(data) => data.length > 0],
   });
-
-  if (isError) {
-    return (
-      <ErrorContainer>
-        <ErrorMessage>{CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}</ErrorMessage>
-      </ErrorContainer>
-    );
-  }
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <ThemeGrid>
@@ -54,7 +49,19 @@ function Category() {
       <SectionHeader>
         <SectionTitle>{CATEGORY_LABELS.SECTION_TITLE}</SectionTitle>
       </SectionHeader>
-      <CategoryContent />
+      <ErrorBoundary
+        fallback={
+          <ErrorContainer>
+            <ErrorMessage>
+              {CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}
+            </ErrorMessage>
+          </ErrorContainer>
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <CategoryContent />
+        </Suspense>
+      </ErrorBoundary>
     </GiftThemeSection>
   );
 }

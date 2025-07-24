@@ -5,9 +5,9 @@ import { AxiosError } from "axios";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { API_LOGIN_ERROR_MESSAGES } from "../constants/apiMessage";
-import type { User } from "@/types/User";
-import { useFetch } from "@/hooks/useFetch";
 import { isClientError } from "@/constants/httpStatus";
+import { useMutation } from "@tanstack/react-query";
+import type { User } from "@/types/User";
 
 interface UseLoginSubmitProps {
   email: string;
@@ -19,9 +19,19 @@ function useLoginSubmit({ email, password }: UseLoginSubmitProps) {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
-  const { data, executeFetch } = useFetch<User>({
-    fetchFn: () => getUserInfo(email, password),
-    errorHandler: (error) => {
+  const { login } = useAuth();
+
+  const loginMutation = useMutation<User, AxiosError, UseLoginSubmitProps>({
+    mutationFn: ({ email, password }) => getUserInfo(email, password),
+    onSuccess: (data) => {
+      login(data.email, data.name, data.authToken);
+
+      const redirectPath = searchParams.get("redirect");
+      const from = redirectPath || location.state?.from || ROUTES.HOME;
+
+      navigate(from, { replace: true });
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         const errorStatus = error.response?.status;
 
@@ -30,24 +40,12 @@ function useLoginSubmit({ email, password }: UseLoginSubmitProps) {
         }
       }
     },
-    enabled: false,
   });
-
-  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await executeFetch();
-
-    if (data) {
-      login(data.email, data.name, data.authToken);
-
-      const redirectPath = searchParams.get("redirect");
-      const from = redirectPath || location.state?.from || ROUTES.HOME;
-
-      navigate(from, { replace: true });
-    }
+    loginMutation.mutate({ email, password });
   };
 
   return { handleSubmit };
