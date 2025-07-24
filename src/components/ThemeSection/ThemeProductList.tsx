@@ -5,37 +5,36 @@ import CardGrid from '@/components/common/CardGrid';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { loading } from '@/components/common/Loading';
 import { useThemeProducts } from '@/hooks/useThemeProducts';
-import WithApiUi from '@/components/common/WithApiUi';
 
 const ThemeProductList = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const { products, pending, error, hasMore, observerRef } =
+  const { products, isLoading, isError, hasMore, observerRef } =
     useThemeProducts(themeId);
 
+  if (isLoading) return loading;
+
+  if (isError) {
+    return <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>;
+  }
+
+  if (products.length === 0) {
+    return <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>;
+  }
+
   return (
-    <WithApiUi
-      data={products}
-      error={error}
-      loading={<EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>}
-      errorFallback={
-        <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>
-      }
-    >
-      <Wrapper>
-        <CardGrid>
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              {...product}
-              rank={index + 1}
-              hideRank
-            />
-          ))}
-        </CardGrid>
-        {pending && loading}
-        {hasMore && <ObserverTarget ref={observerRef} />}
-      </Wrapper>
-    </WithApiUi>
+    <Wrapper>
+      <CardGrid>
+        {products.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            {...product}
+            rank={index + 1}
+            hideRank
+          />
+        ))}
+      </CardGrid>
+      {hasMore && <ObserverTarget ref={observerRef} />}
+    </Wrapper>
   );
 };
 

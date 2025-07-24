@@ -1,59 +1,60 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { getThemeProductsUrl } from '@/hooks/constants/api';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useFetch } from '@/hooks/useFetch';
+import { getThemeProductsUrl } from './constants/api';
 import type { Product } from '@/types/product';
+import { useRef } from 'react';
 
 const LIMIT = 10;
 
+interface ThemeProductResponse {
+  list: Product[];
+  hasMoreList: boolean;
+  cursor: number;
+}
+
+const fetchThemeProducts = async ({
+  pageParam = 0,
+  themeId,
+}: {
+  pageParam?: number;
+  themeId: string;
+}): Promise<ThemeProductResponse> => {
+  const res = await fetch(
+    `${getThemeProductsUrl(themeId)}?cursor=${pageParam}&limit=${LIMIT}`
+  );
+  if (!res.ok) throw new Error('Failed to fetch theme products');
+
+  const json = await res.json();
+  return json.data;
+};
+
 export const useThemeProducts = (themeId: string | undefined) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchProducts = useCallback(async () => {
-    if (!themeId) throw new Error('themeId is undefined');
-
-    const res = await fetch(
-      `${getThemeProductsUrl(themeId)}?cursor=${cursor}&limit=${LIMIT}`
-    );
-    if (!res.ok) throw new Error('Failed to fetch theme products');
-
-    const json = await res.json();
-    return json.data as {
-      list: Product[];
-      hasMoreList: boolean;
-      cursor: number;
-    };
-  }, [themeId, cursor]);
-
-  const { data, pending, error, refetch } = useFetch(fetchProducts);
-
-  useEffect(() => {
-    if (!data) return;
-    const { list, hasMoreList, cursor: nextCursor } = data;
-
-    setProducts(prev => {
-      const merged = [...prev, ...list];
-      const unique = Array.from(new Map(merged.map(p => [p.id, p])).values());
-      return unique;
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ['themeProducts', themeId],
+      queryFn: ({ pageParam }) =>
+        fetchThemeProducts({ pageParam, themeId: themeId! }),
+      enabled: !!themeId,
+      getNextPageParam: lastPage =>
+        lastPage.hasMoreList ? lastPage.cursor : undefined,
+      initialPageParam: 0,
     });
-    setHasMore(hasMoreList);
-    setCursor(nextCursor);
-  }, [data]);
+
+  const products = data ? data.pages.flatMap(page => page.list) : [];
 
   useIntersectionObserver({
     target: observerRef,
-    onIntersect: refetch,
-    enabled: hasMore && !pending,
+    onIntersect: fetchNextPage,
+    enabled: hasNextPage && !isLoading,
   });
 
   return {
     products,
-    pending,
-    error,
-    hasMore,
+    isLoading,
+    isError,
+    hasMore: hasNextPage,
     observerRef,
   };
 };
