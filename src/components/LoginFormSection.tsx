@@ -5,7 +5,7 @@ import { LOCATION_STATE_KEYS } from '@/constants/navigationState';
 import { ROUTES } from '@/constants/routes';
 import useLoginForm from '@/hooks/useLoginForm';
 import InputField from '@/components/common/InputField';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { hasErrorMessage } from '@/utils/error';

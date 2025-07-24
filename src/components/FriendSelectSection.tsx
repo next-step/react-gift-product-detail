@@ -1,6 +1,6 @@
 import Button from '@/components/common/Button';
 import styled from '@emotion/styled';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 
 const FriendSelectSection = () => {
   const { user } = useAuth();

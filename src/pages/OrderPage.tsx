@@ -13,7 +13,7 @@ import type { OrderFormValues } from '@/types/order';
 import { loading } from '@/components/common/Loading';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { useProductSummary } from '@/hooks/useProductSummary';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { useOrderMutation } from '@/hooks/useOrderMutation';
 import { handleOrderSubmit } from '@/hooks/handlers/handleOrderSubmit';
 

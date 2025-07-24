@@ -40,3 +40,8 @@
   - [x] RankingSort, RankingFilter에서 rankingParams에 정의된 상수를 가져와 사용하도록 해주었습니다.
   - [x] useRankingParams.ts에서도 타입 정의 과정을 수행했습니다.
   - [x] themeId가 없는 경우를 명시적으로 처리하도록 수정해주었습니다.
+  - [x] AuthContext 파일 세분화 작업을 진행했습니다.
+    - [x] createContext -> AuthContext.tsx
+    - [x] Provider 로직 → AuthProvider.tsx
+    - [x] useContext 호출 → useAuth.ts로 이동
+    - [x] 관련 타입 정의 → types/auth.ts로 분리
