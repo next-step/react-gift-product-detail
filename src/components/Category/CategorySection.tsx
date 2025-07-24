@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { CategoryItem } from '@/components/Category/CategoryItem'
 import { FiPlus } from 'react-icons/fi'
-import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '@/contexts/AuthContext'
+import { useQuery } from '@tanstack/react-query'
 
 interface Theme {
   themeId: number
@@ -11,36 +11,30 @@ interface Theme {
   image: string
 }
 
+const fetchThemes = async (): Promise<Theme[]> => {
+  const response = await axios.get<{ data: Theme[] }>(
+    `${import.meta.env.VITE_API_BASE_URL}/api/themes`
+  )
+  return response.data.data
+}
+
+export function useThemesQuery() {
+  return useQuery({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
+  })
+}
+
 export function CategorySection() {
-  const [themes, setThemes] = useState<Theme[] | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const { data: themes, isLoading, isError } = useThemesQuery()
   const { user } = useAuth()
 
-  useEffect(() => {
-    const fetchThemes = async () => {
-      try {
-        const response = await axios.get<{ data: Theme[] }>(
-          `${import.meta.env.VITE_API_BASE_URL}/api/themes`
-        )
-        console.log('theme data:', response.data.data)
-        setThemes(response.data.data)
-      } catch (err) {
-        console.error('테마 목록 불러오기 실패:', err)
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchThemes()
-  }, [])
-
-  if (loading) {
+  console.log('themes: ', themes)
+  if (isLoading) {
     return <p>선물 테마 로딩중...</p>
   }
 
-  if (error || !themes || themes.length === 0) {
+  if (isError || !themes || themes.length === 0) {
     return null
   }
 

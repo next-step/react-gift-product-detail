@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { useOrderMutation } from '@/hooks/useOrderMutation'
 
 export function useOrderForm(
   form: UseFormReturn<FormValues>,
@@ -33,6 +34,8 @@ export function useOrderForm(
   const { user } = useAuth()
   const navigate = useNavigate()
 
+  const { mutate: orderMutate } = useOrderMutation()
+
   const orderSuccessMessage = (data: FormValues) => {
     alert(`주문이 완료되었습니다.
       상품명: ${product.name}
@@ -50,42 +53,40 @@ export function useOrderForm(
   }
 
   const onSubmit = async (data: FormValues) => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/order`,
-        {
-          productId: product.id,
-          message: data.message,
-          messageCardId: String(selectedCard.id),
-          ordererName: data.sender,
-          receivers: finalReceivers.map((r) => ({
-            name: r.name,
-            phoneNumber: r.phone,
-            quantity: Number(r.quantity),
-          })),
+    orderMutate(
+      {
+        productId: product.id,
+        message: data.message,
+        messageCardId: String(selectedCard.id),
+        ordererName: data.sender,
+        receivers: finalReceivers.map((r) => ({
+          name: r.name,
+          phoneNumber: r.phone,
+          quantity: Number(r.quantity),
+        })),
+        authToken: user?.authToken || '',
+      },
+      {
+        onSuccess: () => {
+          orderSuccessMessage(data)
+          orderSuccess()
         },
-        {
-          headers: {
-            Authorization: user?.authToken || '',
-          },
-        }
-      )
-      orderSuccessMessage(data)
-      orderSuccess()
-    } catch (error) {
-      if (error instanceof axios.AxiosError) {
-        const status = error.response?.status
-        const message = error.response?.data.data.message || '주문 실패'
+        onError: (error) => {
+          if (error instanceof axios.AxiosError) {
+            const status = error.response?.status
+            const message = error.response?.data.data.message || '주문 실패'
 
-        if (status === axios.HttpStatusCode.Unauthorized) {
-          navigate('/login')
-        } else {
-          toast.error(
-            typeof message === 'string' ? message : '잘못된 요청입니다.'
-          )
-        }
+            if (status === axios.HttpStatusCode.Unauthorized) {
+              navigate('/login')
+            } else {
+              toast.error(
+                typeof message === 'string' ? message : '잘못된 요청입니다.'
+              )
+            }
+          }
+        },
       }
-    }
+    )
   }
 
   const validateAndSaveReceivers = async () => {
