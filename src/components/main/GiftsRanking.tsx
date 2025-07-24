@@ -1,29 +1,12 @@
 import styled from "@emotion/styled";
 import GiftTargetType from "./GiftTargetType";
 import { targetType, rankType } from "@/data/giftType";
-import { isValidTargetType, isValidRankType } from "@/utils/typeGuards";
-import { useState } from "react";
-import { useSearchParams } from "react-router";
 import GiftsRender from "./GiftsRender";
+import useGiftRankingFilter from "@/hooks/useGiftRankingFilter";
 
 const GiftsRanking = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const targetTypeParam = searchParams.get("targetType") || targetType[0].id;
-  const rankTypeParam = searchParams.get("rankType") || rankType[0].id;
-  const [selectedTypes, setSelectedTypes] = useState({
-    targetType: isValidTargetType(targetTypeParam)
-      ? targetTypeParam
-      : targetType[0].id,
-    rankType: isValidRankType(rankTypeParam) ? rankTypeParam : rankType[0].id,
-  });
-
-  const changeFilter = (key: string, selectedType: string) => {
-    const newSelectedTypes = { ...selectedTypes, [key]: selectedType };
-    setSelectedTypes(newSelectedTypes);
-
-    const searchParams = new URLSearchParams(newSelectedTypes);
-    setSearchParams(searchParams, { replace: true });
-  };
+  const { selectedTargetType, selectedRankType, changeFilter } =
+    useGiftRankingFilter();
 
   return (
     <Background>
@@ -34,7 +17,7 @@ const GiftsRanking = () => {
             key={index}
             icon={type.icon}
             name={type.name}
-            selected={selectedTypes.targetType === type.id}
+            selected={selectedTargetType === type.id}
             onClick={() => changeFilter("targetType", type.id)}
           />
         ))}
@@ -43,14 +26,17 @@ const GiftsRanking = () => {
         {rankType.map((type, index) => (
           <GiftRankType
             key={index}
-            selected={selectedTypes.rankType === type.id}
+            selected={selectedRankType === type.id}
             onClick={() => changeFilter("rankType", type.id)}
           >
             {type.name}
           </GiftRankType>
         ))}
       </GiftRankTypeFlex>
-      <GiftsRender {...selectedTypes} />
+      <GiftsRender
+        targetType={selectedTargetType}
+        rankType={selectedRankType}
+      />
     </Background>
   );
 };

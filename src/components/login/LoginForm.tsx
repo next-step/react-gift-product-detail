@@ -1,20 +1,14 @@
-import { ROUTE_PATH } from "@/routes/paths";
 import styled from "@emotion/styled";
-import { useLocation, useNavigate } from "react-router";
 import useFormInput from "@/hooks/useFormInput";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
 import ErrorMessage from "../common/ErrorMessage";
-import { useUserInfo } from "@/contexts/UserInfoContext";
 import { postLogin } from "@/api/login";
 import useApiRequest from "@/hooks/useApiRequest";
-import { useEffect } from "react";
+import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const emailInput = useFormInput(checkEmailError);
   const passwordInput = useFormInput(checkPasswordError);
-  const user = useUserInfo();
 
   const {
     data: userData,
@@ -34,18 +28,13 @@ const LoginForm = () => {
     });
   };
 
-  useEffect(() => {
-    if (userData && !isLoading && !isError && !user?.email) {
-      user?.setUserInfo({
-        email: userData.email,
-        name: userData.name,
-        authToken: userData.authToken,
-      });
-
-      const redirectPath = new URLSearchParams(location.search).get("redirect");
-      navigate(redirectPath || ROUTE_PATH.HOME);
-    }
-  }, [userData, isLoading, isError, user, location.search, navigate]);
+  useHandleLoginSuccess({
+    email: userData?.email,
+    name: userData?.name,
+    authToken: userData?.authToken,
+    isLoading,
+    isError,
+  });
 
   return (
     <Form onSubmit={handleSubmit}>
