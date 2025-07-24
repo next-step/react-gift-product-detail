@@ -10,13 +10,13 @@ export const productSummary = async (
   return response.data;
 };
 
-type OrderReceiver = {
+export type OrderReceiver = {
   name: string;
   phoneNumber: string;
   quantity: number;
 };
 
-type OrderRequest = {
+export type OrderRequest = {
   productId: number;
   message: string;
   messageCardId: string;
@@ -32,4 +32,10 @@ export const orderProduct = async (data: OrderRequest, authToken: string) => {
   });
 
   return response.data;
+};
+
+export type OrderResponse = {
+  orderId: number;
+  status: string;
+  message: string;
 };

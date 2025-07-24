@@ -7,11 +7,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import useOrderForm from "../components/order/useOrderForm";
 import { useEffect, useState } from "react";
 import type { Receiver } from "@/types/order";
-import { orderProduct, productSummary } from "@/services/order";
 import { showErrorToast } from "@/styles/toast";
-import type { Product } from "@/types/product";
 import axios from "axios";
 import { getUserFromSession } from "@/utils/getUserFromStorage";
+import { useProductSummary } from "@/hooks/useProductSummary";
+import { useOrderMutation } from "@/hooks/useOrderMutation";
 
 export default function OrderPage() {
   const navigate = useNavigate();
@@ -21,24 +21,7 @@ export default function OrderPage() {
   const sender = useOrderForm();
   const [receiverList, setReceiverList] = useState<Receiver[]>([]);
 
-  const [product, setProduct] = useState<{ data: Product } | null>(null);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        if (!itemId) return;
-        const data = await productSummary(itemId);
-        setProduct(data);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          showErrorToast("상품 정보를 불러올 수 없습니다.");
-          navigate("/gift", { replace: true });
-        }
-      }
-    };
-
-    fetchProduct();
-  }, [itemId, navigate]);
+  const { data: product, isLoading } = useProductSummary(itemId!);
 
   useEffect(() => {
     const userInfo = getUserFromSession();
@@ -53,10 +36,14 @@ export default function OrderPage() {
     0,
   );
 
-  if (!product) return null;
+  const userInfo = getUserFromSession();
+  const authToken = userInfo?.authToken || "";
+  const orderMutation = useOrderMutation(authToken);
+
+  if (isLoading || !product) return null;
   const totalPrice = product.data.price * totalQuantity;
 
-  const handleOrder = async () => {
+  const handleOrder = () => {
     const isMessageValid = message.validate();
     const isSenderValid = sender.validate();
     const isQuantityValid = receiverList.length > 0;
@@ -70,52 +57,49 @@ export default function OrderPage() {
       return;
     }
 
-    try {
-      const userInfo = getUserFromSession();
-      if (!userInfo) {
-        navigate("/login");
-        return;
-      }
+    if (!userInfo) {
+      navigate("/login");
+      return;
+    }
 
-      const authToken = userInfo.authToken;
+    if (!authToken) {
+      showErrorToast("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
 
-      if (!authToken) {
-        showErrorToast("로그인이 필요합니다.");
-        navigate("/login");
-        return;
-      }
-
-      await orderProduct(
-        {
-          productId: Number(itemId),
-          message: message.value,
-          messageCardId: "default-card",
-          ordererName: sender.value,
-          receivers: receiverList.map((r) => ({
-            name: r.name,
-            phoneNumber: r.phone,
-            quantity: r.quantity,
-          })),
-        },
-        authToken,
-      );
-
-      alert(`주문이 완료되었습니다.
+    orderMutation.mutate(
+      {
+        productId: Number(itemId),
+        message: message.value,
+        messageCardId: "default-card",
+        ordererName: sender.value,
+        receivers: receiverList.map((r) => ({
+          name: r.name,
+          phoneNumber: r.phone,
+          quantity: r.quantity,
+        })),
+      },
+      {
+        onSuccess: () => {
+          alert(`주문이 완료되었습니다.
 상품명: ${product.data.name}
 총 구매 수량: ${totalQuantity}
 받는 사람 수: ${receiverList.length}명
 발신자 이름: ${sender.value}
 메시지: ${message.value}`);
-
-      navigate("/");
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          showErrorToast("로그인이 필요합니다.");
-          navigate("/login");
+          navigate("/");
+        },
+        onError: (error) => {
+          if (axios.isAxiosError(error)) {
+            if (error.response?.status === 401) {
+              showErrorToast("로그인이 필요합니다.");
+              navigate("/login");
+            }
+          }
         }
       }
-    }
+    );
   };
 
   return (
