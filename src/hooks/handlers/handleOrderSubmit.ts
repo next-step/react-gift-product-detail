@@ -58,8 +58,8 @@ export const handleOrderSubmit = async ({
       navigate(ROUTES.LOGIN, {
         state: {
           from: {
-            pathname: location.pathname,
-            search: location.search,
+            pathname: window.location.pathname,
+            search: window.location.search,
           },
         },
       });

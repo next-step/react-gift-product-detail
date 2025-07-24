@@ -35,3 +35,4 @@
   - [x] WithApiUi의 isEmpty -> defaultIsEmpty로 변경 후 emptyPredicate의 함수로 지정해주었습니다.
   - [x] WithApiUi를 사용하는 4개의 컴포넌트들에 대해 변경된 구조에 맞는지 한 번 더 점검하여주었습니다.
   - [x] 단일 객체를 data로 넘기는 ThemeHero의 경우 컴포넌트 파일 내에서 prop를 통해 대응하도록 나머지 3개는 배열을 data로 넘기기에 defaultIsEmpty를 사용하도록 해주었습니다.
+  - [x] handleOrderSubmit.ts에 navigate 부분에 'window'를 추가해주었습니다.
