@@ -23,7 +23,7 @@ interface UseOrderSubmitProps {
   };
   receivers: Receiver[];
   messageCard: OrderCardType;
-  product: ProductInfoSummary | null;
+  product: ProductInfoSummary | undefined;
 }
 
 export const useOrderSubmit = ({
