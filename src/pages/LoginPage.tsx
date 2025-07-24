@@ -7,8 +7,8 @@ import { ROUTE } from '@/constants/routes';
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginRequest } from '@/api/auth';
 import { AxiosError } from 'axios';
+import { useLoginMutation } from '@/hooks/useAuth';
 
 const Wrapper = styled.section`
   display: flex;
@@ -89,9 +89,11 @@ const LoginPage = () => {
     reValidateMode: 'onChange',
   });
 
+  const { mutateAsync: loginMutate } = useLoginMutation();
+
   const onSubmit = async ({ email, password }: FormValues) => {
     try {
-      const data = await loginRequest({ email, password });
+      const data = await loginMutate({ email, password });
       login(data);
 
       const from = location.state?.from?.pathname || ROUTE.MAIN;
