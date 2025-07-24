@@ -24,19 +24,21 @@ const ThemeProductList = () => {
           <ErrorText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</ErrorText>
         }
       >
-        <>
-          <CardGrid>
-            {products.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                {...product}
-                rank={index + 1}
-                hideRank
-              />
-            ))}
-          </CardGrid>
-          {hasMore && <InfiniteScrollTrigger ref={observerRef} />}
-        </>
+        {products && (
+          <>
+            <CardGrid>
+              {products.map((product, index) => (
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  rank={index + 1}
+                  hideRank
+                />
+              ))}
+            </CardGrid>
+            {hasMore && <InfiniteScrollTrigger ref={observerRef} />}
+          </>
+        )}
       </WithApiUi>
     </Wrapper>
   );

@@ -32,6 +32,9 @@ const RankingContent = ({
       errorFallback={
         <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>
       }
+      emptyFallback={
+        <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>
+      }
     >
       <>
         <ProductGrid products={visibleProducts} />

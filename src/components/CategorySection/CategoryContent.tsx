@@ -18,6 +18,9 @@ const CategoryContent = () => {
       errorFallback={
         <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>
       }
+      emptyFallback={
+        <EmptyText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</EmptyText>
+      }
     >
       <Grid>
         {themes?.map(theme => (

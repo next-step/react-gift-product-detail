@@ -17,14 +17,20 @@ const ThemeHero = () => {
       errorFallback={
         <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</ErrorText>
       }
+      emptyFallback={
+        <ErrorText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</ErrorText>
+      }
+      emptyPredicate={data => !data || Object.keys(data).length === 0}
     >
-      <Section style={{ backgroundColor: themeInfo?.backgroundColor }}>
-        <TagText>{themeInfo?.name}</TagText>
-        <Title>{themeInfo?.title}</Title>
-        {themeInfo?.description && (
-          <Description>{themeInfo.description}</Description>
-        )}
-      </Section>
+      {themeInfo && (
+        <Section style={{ backgroundColor: themeInfo.backgroundColor }}>
+          <TagText>{themeInfo.name}</TagText>
+          <Title>{themeInfo.title}</Title>
+          {themeInfo.description && (
+            <Description>{themeInfo.description}</Description>
+          )}
+        </Section>
+      )}
     </WithApiUi>
   );
 };
