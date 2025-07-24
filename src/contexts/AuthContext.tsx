@@ -1,6 +1,6 @@
 import { getUserNameFromEmail } from "@/utils/getUserNameFromEmail";
 import React, { createContext, useContext } from "react";
-import { useStorageState } from "./hooks/useStorageState";
+import { useStorageState } from "@/contexts/hooks/useStorageState";
 
 type UserInfo = {
   email: string;

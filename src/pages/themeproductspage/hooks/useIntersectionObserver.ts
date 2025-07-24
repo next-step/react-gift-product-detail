@@ -7,7 +7,7 @@ interface UseInfiniteScrollOptions {
   threshold?: number;
 }
 
-const useInfiniteScroll = ({
+const useIntersectionObserver = ({
   targetRef,
   onIntersect,
   enabled,
@@ -34,4 +34,4 @@ const useInfiniteScroll = ({
   }, [enabled, onIntersect, targetRef, threshold]);
 };
 
-export default useInfiniteScroll;
+export default useIntersectionObserver;

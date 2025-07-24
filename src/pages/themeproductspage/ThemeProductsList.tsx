@@ -1,22 +1,21 @@
 import styled from "@emotion/styled";
 import { useParams, useNavigate } from "react-router-dom";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import { useThemeProductList } from "./hooks/useThemeProductList";
+import { useThemeInfiniteScroll } from "@/pages/themeproductspage/hooks/useThemeInfiniteScroll";
 
 export default function ThemeProductsList() {
-  const { themeId } = useParams<{ themeId: string }>();
+  const { themeId } = useParams<{ themeId?: string }>();
   const navigate = useNavigate();
 
-  const { products, isLoading, initLoading, observerRef } = useThemeProductList(
-    { themeId }
-  );
+  const { products, isLoading, observerRef } = useThemeInfiniteScroll({
+    themeId: themeId!,
+  });
 
   const handleItemClick = (id: number) => {
     navigate(`/order/${id}`);
   };
 
-  if (initLoading) return <LoadingSpinner />;
-  if (products.length === 0)
+  if (products.length === 0 && !isLoading)
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
 
   return (
@@ -80,5 +79,4 @@ const Price = styled.div`
 
 const ObserverTarget = styled.div`
   height: 100px;
-  margin-top: 32px;
 `;
