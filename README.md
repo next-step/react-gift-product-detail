@@ -24,3 +24,4 @@
   - [x] ThemeProductList.tsx에서 변경된 구조에 맞게 호출 방식을 수정해주었습니다.
   - [x] useLoginMutation.ts를 통해 useMutation을 사용하여주었습니다.
   - [x] AuthProvider에서는 login 함수 내부에 mutateAsync 사용을 통해 비동기를 바탕으로 로그인 처리를 해주었습니다.
+  - [x] QueryClientProvider, AuthProvider의 호출 순서, 중복 호출 문제를 해결하기 위해 App.tsx, main.tsx의 구조를 수정해주었습니다.
