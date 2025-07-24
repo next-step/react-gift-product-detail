@@ -6,7 +6,7 @@ import MyPageIcon from "@/components/common/MyPageIcon";
 export default function NavigationBar() {
   const navigate = useNavigate();
 
-  const handleBack = () => {
+  const goToBack = () => {
     const isInternalReferrer = document.referrer.includes(window.location.host);
     if (!isInternalReferrer) {
       navigate("/");
@@ -17,7 +17,7 @@ export default function NavigationBar() {
 
   return (
     <NavBar>
-      <BackButton onClick={handleBack}>←</BackButton>
+      <BackButton onClick={goToBack}>←</BackButton>
       <NavTitle to="/">선물하기</NavTitle>
       <LoginButton onClick={() => navigate("/my")}>
         <MyPageIcon />

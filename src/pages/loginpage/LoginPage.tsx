@@ -14,7 +14,7 @@ import { HTTP_STATUS } from "@/utils/HTTP_STATUS";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { setUserInfo } = useAuth();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/my";
 
@@ -57,7 +57,7 @@ const LoginPage = () => {
       if (result) {
         const { email, name, authToken } = result;
         if (email && name && authToken) {
-          login({ email, name, authToken });
+          setUserInfo({ email, name, authToken, isLoggedIn: true });
           navigate(redirectTo);
         }
       }

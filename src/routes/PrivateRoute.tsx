@@ -3,10 +3,10 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function PrivateRoute({ children }: { children: ReactNode }) {
-  const { isLoggedIn } = useAuth();
+  const { loggedIn } = useAuth();
   const location = useLocation();
 
-  if (!isLoggedIn) {
+  if (!loggedIn) {
     return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
   }
 
