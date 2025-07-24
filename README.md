@@ -20,3 +20,5 @@
   - [x] CategoryContent에서 변경된 구조에 맞게 pending, error 제거 및 data = [] 구조로 단순화 작업을 했습니다.
   - [x] useProductRanking.ts 역시 useFetch -> useQuery로 변경해주었습니다. (GET)
   - [x] RankingGroup, RankingContent를 변경된 hook에 맞게 바꿔주었습니다.
+  - [x] useThemeProduct.ts에 useFetch를 이용하던 무한 스크롤을 useInfiniteQuery로 대체하였습니다.
+  - [x] ThemeProductList.tsx에서 변경된 구조에 맞게 호출 방식을 수정해주었습니다.
