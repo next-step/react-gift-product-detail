@@ -12,10 +12,14 @@ export default function useIntersectionObserver({
   enabled = true,
 }: Props) {
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      return;
+    }
 
     const element = target.current;
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {

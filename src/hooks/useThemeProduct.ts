@@ -7,7 +7,8 @@ export function useThemeProduct(themeId: string) {
     queryKey: ["themeProduct", themeId],
     queryFn: ({ pageParam }) =>
       getThemeProduct(themeId, (pageParam as number) ?? 0),
-    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMoreList ? lastPage.cursor : undefined,
     initialPageParam: 0,
   });
 }

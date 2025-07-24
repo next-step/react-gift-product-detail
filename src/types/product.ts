@@ -22,5 +22,6 @@ export type ProductInfo = {
 
 export type ProductPage = {
   list: ProductInfo[];
-  nextCursor: number | null;
+  cursor: number;
+  hasMoreList: boolean;
 };

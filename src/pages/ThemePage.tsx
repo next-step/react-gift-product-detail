@@ -5,12 +5,22 @@ import styled from "@emotion/styled";
 import ThemeHeader from "@/components/theme/ThemeHeader";
 import ProductGrid from "@/components/theme/ProductGrid";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ThemePage() {
   const { themeId } = useParams();
   const { data: theme } = useFetchTheme(themeId);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useThemeProduct(themeId!);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProduct(themeId!);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    // 언마운트 시 쿼리 캐시 삭제
+    return () => {
+      queryClient.removeQueries({ queryKey: ["themeProduct", themeId || ""] as const });
+    };
+  }, [themeId, queryClient]);
 
   const { loaderRef } = useInfiniteScroll({
     hasMore: !!hasNextPage,
@@ -29,7 +39,7 @@ export default function ThemePage() {
       <ThemeHeader theme={theme} />
       <ProductGrid
         products={products}
-        loader={loaderRef}
+        loaderRef={loaderRef}
         loading={isFetchingNextPage}
       />
       {isFetchingNextPage && <Spinner />}

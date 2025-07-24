@@ -4,13 +4,13 @@ import type { ProductInfo } from "@/types/product";
 
 interface Props {
   products: ProductInfo[];
-  loader: React.RefObject<HTMLDivElement | null>;
+  loaderRef: React.RefObject<HTMLDivElement | null>;
   loading: boolean;
 }
 
-export default function ProductGrid({ products, loader, loading }: Props) {
+export default function ProductGrid({ products, loaderRef, loading }: Props) {
   return (
-    <>
+    <CardGrid isEmpty={products.length === 0}>
       {products.length === 0 && loading ? (
         <Spinner />
       ) : products.length === 0 ? (
@@ -18,23 +18,31 @@ export default function ProductGrid({ products, loader, loading }: Props) {
           <EmptyMessage>상품이 없습니다.</EmptyMessage>
         </EmptyBox>
       ) : (
-        <CardGrid>
-          {products.map((item) => (
-            <ProductCard key={item.id} item={item} />
-          ))}
-          <div ref={loader} style={{ height: 1 }} />
-        </CardGrid>
+        products.map((item) => (
+          <ProductCard key={item.id} item={item} />
+        ))
       )}
-    </>
+      <div ref={loaderRef} style={{ height: 40 }} />
+    </CardGrid>
   );
 }
 
-const CardGrid = styled.div`
+const CardGrid = styled.div<{ isEmpty: boolean }>`
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px 8px;
-  align-items: stretch;
+  ${({ isEmpty }) =>
+    isEmpty
+      ? `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 240px;
+  `
+      : `
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 8px;
+    align-items: stretch;
+  `}
 `;
 
 const Spinner = styled.div`
