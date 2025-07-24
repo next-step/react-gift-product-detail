@@ -1,25 +1,29 @@
 import { getThemeProducts } from '@/entities/theme/api/themeApi';
-import type { RankingProduct } from '@/entities/product/model/types';
-import { useInfiniteScroll } from '@/shared/lib/hooks'; 
-import { useCallback } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-export const useThemeProducts = (themeId: number, limit: number = 20) => {
-  const fetchThemeProducts = useCallback(async (cursor: number | null = 0) => {
-    const response = await getThemeProducts(themeId, cursor ?? 0, limit);
+export const useThemeProducts = (themeId: number, limit: number = 15) => {
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['themeProducts', themeId],
+    queryFn: ({ pageParam = 0 }) => getThemeProducts(themeId, pageParam, limit),
+    getNextPageParam: (lastPage) => lastPage.cursor,
+    initialPageParam: 0,
+  });
 
-    return {
-      list: response.list,
-      nextCursor: response.cursor,
-      hasMore: response.hasMoreList,
-    };
-  }, [themeId, limit]);
+  const products = data?.pages.flatMap(page => page.list) ?? [];
 
-  const { 
-    items: products,
+  return { 
+    products, 
     isLoading, 
-    hasMore, 
-    loadingRef 
-  } = useInfiniteScroll<RankingProduct>({ fetcher: fetchThemeProducts });
-
-  return { products, isLoading, hasMore, loadingRef };
+    isError,
+    hasMore: hasNextPage, 
+    fetchNextPage,
+    isFetchingNextPage,
+  };
 };
