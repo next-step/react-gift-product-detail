@@ -6,7 +6,7 @@ import type {
   FieldErrors,
 } from 'react-hook-form';
 import type { Receiver } from '@/types/receiver';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const DEFAULT_RECEIVERS: Receiver[] = [{ name: '', phone: '', quantity: 1 }];
 
