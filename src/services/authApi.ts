@@ -1,5 +1,8 @@
 import api from '@/lib/axiosInstance';
-
-export const FetchLogin = (body, token) => {
+type Props = {
+  email: string;
+  password: string;
+};
+export const FetchLogin = (body: Props) => {
   return api.post('/login', body).then((res) => res.data);
 };

@@ -15,8 +15,8 @@ import { ROUTE_PATH } from '@/routes/Router';
 import { useAuth } from '@/contexts/AuthContext';
 import type { ProductType } from '@/types/product';
 import { RankingProducts, RankingTitle, RankingWrapper, ShowMoreBtn } from './Ranking.styles';
-import { useFetch } from '@/hooks/useFetch';
 import { fetchRankingData } from '@/services/rankingApi';
+import { useQuery } from '@tanstack/react-query';
 
 //필터 옵션
 const personFilterOptions: { label: PersonFilterLabels; emoji: string; param: PersonParam }[] = [
@@ -72,10 +72,9 @@ const Ranking = () => {
   };
  
 
-  const { data: products, isLoading: isProductLoading } = useFetch<ProductType[]>({
-    fetcher: () => fetchRankingData(personParam, behaviorParam),
-    initValue: [],
-    deps: [personParam, behaviorParam], 
+  const { data: products = [], isLoading: isProductLoading } = useQuery<ProductType[]>({
+    queryFn: () => fetchRankingData(personParam, behaviorParam),
+    queryKey: ['products', personParam, behaviorParam],
   });
 
   const visible = showAll ? products : products.slice(0, 6);

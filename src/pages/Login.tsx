@@ -5,9 +5,9 @@ import useInput from '@/hooks/useInput';
 import { emailValidator, passwordValidator } from '@/utils/validators';
 import { useAuth } from '@/contexts/AuthContext';
 import { PaddingMd, PaddingSm } from '@/components/common/Padding';
-import usePost from '@/hooks/usePost';
 import { toast } from 'react-toastify';
 import { FetchLogin } from '@/services/authAPi';
+import { useMutation } from '@tanstack/react-query';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -67,35 +67,34 @@ const Login = () => {
   const email = useInput({ validator: emailValidator });
   const password = useInput({ validator: passwordValidator });
   const isActivatedBtn = email.isValid && password.isValid;
-  
-  const {  post } = usePost({
-    fetcher: FetchLogin,
+
+  const loginMutation = useMutation({
+    mutationFn: FetchLogin,
+    onSuccess: (loginData) => {
+      console.dir(loginData)
+      const { authToken, email: useremail, name } = loginData.data;
+      const userInfo = {
+        token: authToken,
+        email: useremail,
+        name,
+        isLoggedIn: true,
+      };
+      password.reset();
+      setUser(userInfo);
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      toast.success('로그인이 완료되었습니다.');
+      navigate('/');
+    },
+    onError: () => {
+      alert(e.message);
+    },
   });
 
   const handleLoginClick = async () => {
-
-    if (isActivatedBtn) {
-      try {
-        const loginData = await post({
-          email: email.value,
-          password: password.value,
-        });
-        const { authToken, email: useremail, name } = loginData;
-        const userInfo = {
-          token: authToken,
-          email:useremail,
-          name,
-          isLoggedIn: true,
-        };
-        password.reset();
-        setUser(userInfo);
-        localStorage.setItem('user', JSON.stringify(userInfo));
-toast.success("로그인이 완료되었습니다.") 
-       navigate('/');
-      } catch (e) {
-        alert(e.message);
-      }
-    }
+    loginMutation.mutate({
+      email: email.value,
+      password: password.value,
+    });
   };
 
   return (
