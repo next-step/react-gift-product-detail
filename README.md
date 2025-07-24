@@ -27,3 +27,4 @@
   - [x] QueryClientProvider, AuthProvider의 호출 순서, 중복 호출 문제를 해결하기 위해 App.tsx, main.tsx의 구조를 수정해주었습니다.
   - [x] useOrderMutation을 생성해서 login과 마찬가지로 useMutation을 사용하도록 해주었습니다. (POST)
   - [x] OrderPage에서 추가된 훅을 사용하며 로직을 분리해주어 조금 더 간결해지도록 해주었습니다.
+  - [x] useProductSummary에서 useFetch를 이용해 상품 요약 정보를 가져오던 것을 useQuery로 변경해주었습니다. (GET)

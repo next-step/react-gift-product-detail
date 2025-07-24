@@ -1,10 +1,9 @@
-import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { getProductSummaryUrl } from '@/hooks/constants/api';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { ROUTES } from '@/constants/routes';
-import { useFetch } from '@/hooks/useFetch';
 
 export interface ProductSummary {
   id: number;
@@ -17,36 +16,38 @@ export interface ProductSummary {
 export const useProductSummary = (id: string | undefined) => {
   const navigate = useNavigate();
 
-  const fetchProduct = useCallback(async (): Promise<
-    ProductSummary | undefined
-  > => {
-    if (!id) {
-      navigate(ROUTES.NOT_FOUND);
-      return undefined;
-    }
+  const query = useQuery<ProductSummary>({
+    queryKey: ['product-summary', id],
+    queryFn: async () => {
+      if (!id) {
+        navigate(ROUTES.NOT_FOUND);
+        throw new Error('No ID');
+      }
 
-    const res = await fetch(getProductSummaryUrl(id));
+      const res = await fetch(getProductSummaryUrl(id));
 
-    if (res.status === 404) {
-      navigate(ROUTES.NOT_FOUND);
-      return undefined;
-    }
+      if (res.status === 404) {
+        navigate(ROUTES.NOT_FOUND);
+        throw new Error('Not Found');
+      }
 
-    if (!res.ok) {
-      toast.error(ERROR_MESSAGES.LOAD_PRODUCT_FAIL, {
-        toastId: 'product-load-fail',
-      });
-      navigate(ROUTES.HOME);
-      return undefined;
-    }
+      if (!res.ok) {
+        toast.error(ERROR_MESSAGES.LOAD_PRODUCT_FAIL, {
+          toastId: 'product-load-fail',
+        });
+        navigate(ROUTES.HOME);
+        throw new Error('Failed to fetch');
+      }
 
-    const json = await res.json();
-    return json.data as ProductSummary;
-  }, [id, navigate]);
+      const json = await res.json();
+      return json.data;
+    },
+    enabled: !!id,
+    retry: false,
+  });
 
-  const { data: product, pending: isLoading } = useFetch<
-    ProductSummary | undefined
-  >(fetchProduct);
-
-  return { product, isLoading };
+  return {
+    product: query.data,
+    isLoading: query.isPending,
+  };
 };
