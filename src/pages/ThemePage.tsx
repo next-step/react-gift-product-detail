@@ -8,18 +8,16 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 export default function ThemePage() {
   const { themeId } = useParams();
-  const { data:theme } = useFetchTheme(themeId);
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useThemeProduct(themeId!);
+  const { data: theme } = useFetchTheme(themeId);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useThemeProduct(themeId!);
 
   const { loaderRef } = useInfiniteScroll({
     hasMore: !!hasNextPage,
     loading: isFetchingNextPage,
-    fetchMore: () => { fetchNextPage(); },
+    fetchMore: () => {
+      fetchNextPage();
+    },
   });
 
   const products = data?.pages.flatMap((page) => page.list ?? []) ?? [];
@@ -29,7 +27,11 @@ export default function ThemePage() {
   return (
     <Wrapper>
       <ThemeHeader theme={theme} />
-      <ProductGrid products={products} loader={loaderRef} loading={isFetchingNextPage} />
+      <ProductGrid
+        products={products}
+        loader={loaderRef}
+        loading={isFetchingNextPage}
+      />
       {isFetchingNextPage && <Spinner />}
     </Wrapper>
   );
@@ -55,4 +57,3 @@ const Spinner = styled.div`
     }
   }
 `;
-

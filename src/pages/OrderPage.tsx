@@ -97,8 +97,8 @@ export default function OrderPage() {
               navigate("/login");
             }
           }
-        }
-      }
+        },
+      },
     );
   };
 

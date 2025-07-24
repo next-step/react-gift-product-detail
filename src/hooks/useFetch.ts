@@ -4,6 +4,7 @@ import { get } from "@/services/request";
 export function useFetch<T>(url: string, queryParams?: Record<string, string>) {
   return useQuery({
     queryKey: [url, queryParams],
-    queryFn: () => get<{ data: T }>(url, { queryParams }).then(res => res.data),
+    queryFn: () =>
+      get<{ data: T }>(url, { queryParams }).then((res) => res.data),
   });
 }

@@ -14,5 +14,5 @@ export const getThemeProduct = async (
   const response = await baseHttp.get(`/themes/${themeId}/products`, {
     params: { cursor, limit },
   });
-  return response.data.data; 
+  return response.data.data;
 };
