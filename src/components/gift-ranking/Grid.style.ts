@@ -20,3 +20,12 @@ export const MoreButton = styled.button`
   border: 1px solid ${({ theme }) => theme.color.semantic.border.default};
   margin: 0 auto 10px auto;
 `;
+export const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const EmptyMessage = styled.div`
+  color: ${({ theme }) => theme.color.red.red700};
+  font-size: 0.875rem;
+`;

@@ -1,78 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { fetchProductRankings } from '@/api/productRankingApi';
+import type { ProductRanking,GiftGridProps } from '@/types/giftRankingTheme';
 import { FadeLoader } from 'react-spinners';
 import GiftItem from '@/components/gift-ranking/GiftItem';
-import { GridWrapper, MoreButton, ButtonWrapper } from '@/components/gift-ranking/Grid.style';
+import { GridWrapper, MoreButton, ButtonWrapper,LoadingWrapper ,EmptyMessage} from '@/components/gift-ranking/Grid.style';
 import { useAuth } from '@/context/AuthContext';
-import styled from '@emotion/styled';
 
-interface ProductRanking {
-  id: number;
-  name: string;
-  imageURL: string;
-  brandInfo: {
-    name: string;
-    imageURL: string;
-  };
-  price: {
-    basicPrice: number;
-    sellingPrice: number;
-    discountRate: number;
-  };
-}
-
-interface GiftGridProps {
-  gender: string;
-  category: string;
-}
-
-const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const EmptyMessage = styled.div`
-  color: ${({ theme }) => theme.color.red.red700};
-  font-size: 0.875rem;
-`;
 
 const GiftGrid = ({ gender, category }: GiftGridProps) => {
-  const [productRankings, setProductRankings] = useState<ProductRanking[]>([]);
   const [visibleCount, setVisibleCount] = useState(6);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => {
-    const loadRanking = async () => {
-      setIsLoading(true);
-      setHasError(false);
-      try {
-        const rankType = category.toUpperCase(); 
-        const targetType = gender.toUpperCase(); 
+  const {
+    data: productRankings,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['productRanking', gender, category],
+    queryFn: () =>
+      fetchProductRankings(category.toUpperCase(), gender.toUpperCase()).then(
+        (res) => res.data.data
+      ),
+  });
+  
 
-        const response = await fetchProductRankings(rankType, targetType);
-        setProductRankings(response.data.data);
-      } catch (error) {
-        console.error('상품 랭킹 불러오기 실패:', error);
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadRanking();
-  }, [category, gender]);
-
-  const handleCount = () => {
-    if (visibleCount >= 21) {
-      setVisibleCount(6);
-    } else {
-      setVisibleCount((prev) => prev + 6);
-    }
+const handleCount = () => {
+    setVisibleCount((prev) =>
+      productRankings && visibleCount >= productRankings.length ? 6 : prev + 6
+    );
   };
 
   if (isLoading) {
@@ -83,20 +41,21 @@ const GiftGrid = ({ gender, category }: GiftGridProps) => {
     );
   }
 
-  if (hasError) {
+  if (isError) {
     return <EmptyMessage>상품을 불러오는 데 실패했습니다.</EmptyMessage>;
   }
 
-  if (!isLoading && productRankings.length === 0) {
+  if (!productRankings || productRankings.length === 0) {
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
   }
 
   const visibleGifts = productRankings.slice(0, visibleCount);
 
+
   return (
     <>
       <GridWrapper>
-        {visibleGifts.map((gift, index) => (
+        {visibleGifts.map((gift:ProductRanking, index:number) => (
           <GiftItem
             key={gift.id}
             id={gift.id}
