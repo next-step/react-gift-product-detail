@@ -1,17 +1,15 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { createOrder } from "@/data/api";
-import { useFetch } from "@/hooks/useFetch";
 import type { Order } from "@/types/Order";
 import type { Receiver } from "@/types/Receiver";
 import type { OrderCardType } from "@/types/OrderCardType";
 import type { ProductInfoSummary } from "@/types/ProductInfoSummary";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_ERROR_MESSAGES } from "../constants/apiMessage";
 import { AxiosError } from "axios";
 import { ROUTES } from "@/constants/routes";
 import { ORDER_MESSAGES } from "../constants/alert";
 import { isUnauthorized } from "@/constants/httpStatus";
+import { useMutation } from "@tanstack/react-query";
 
 interface UseOrderSubmitProps {
   validateAllForms: () => Promise<boolean>;
@@ -36,31 +34,20 @@ export const useOrderSubmit = ({
 }: UseOrderSubmitProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [order, setOrder] = useState<Order | null>(null);
 
-  const { data } = useFetch<{ success: boolean }>({
-    fetchFn: () => {
-      if (!order) {
-        return Promise.reject(new Error(API_ERROR_MESSAGES.ORDER_NOT_FOUND));
-      }
-      return createOrder(user?.authToken || "", order);
+  const orderMutation = useMutation({
+    mutationFn: (order: Order) => createOrder(user?.authToken || "", order),
+    onSuccess: () => {
+      navigate(ROUTES.HOME);
     },
-    errorHandler: (error) => {
+    onError: (error) => {
       if (error instanceof AxiosError) {
         if (error.response?.status && isUnauthorized(error.response?.status)) {
           navigate(ROUTES.LOGIN);
         }
       }
     },
-    enabled: !!order, // order가 있을 때만 실행
-    deps: [order], // order가 변경되면 자동 실행
   });
-
-  useEffect(() => {
-    if (data && data.success) {
-      navigate(ROUTES.HOME);
-    }
-  }, [data, navigate]);
 
   const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,7 +82,7 @@ export const useOrderSubmit = ({
         receivers: transformedReceivers,
       };
 
-      setOrder(orderData);
+      orderMutation.mutate(orderData);
       return;
     }
   };
