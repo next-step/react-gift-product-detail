@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import TheHeader from "@/components/layout/TheHeader";
 import LoginForm from "@/components/login/LoginForm";
-import KakaoLogo from "@/components/UI/KakaoLogo";
+import KakaoLogo from "@/components/image/KakaoLogo";
 
 const LoginPage = () => {
   return (

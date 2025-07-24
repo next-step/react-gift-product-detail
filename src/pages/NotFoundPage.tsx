@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router";
 import TheHeader from "@/components/layout/TheHeader";
-import Wrong from "@/components/UI/Wrong";
+import Wrong from "@/components/image/Wrong";
 import { ROUTE_PATH } from "@/routes/paths";
 
 const NotFoundPage = () => {
