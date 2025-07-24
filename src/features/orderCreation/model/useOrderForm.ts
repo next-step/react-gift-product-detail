@@ -7,9 +7,9 @@ import { z, string } from 'zod';
 import { orders } from '@/entities/order/model/constants';
 import { createOrder } from '@/entities/order/api/orderApi';
 import { type OrderRequest} from '@/entities/order/model/types';
-import { handleApiError } from '@/shared/lib/utils';
 import { type ProductSummary } from '@/entities/product/model/types';
 import { type TextAreaChangeHandler, type InputChangeHandler } from '@/shared/types';
+import { useMutation } from '@tanstack/react-query';
 
 interface CardState {
   selectedCardId: number;
@@ -17,11 +17,6 @@ interface CardState {
 }
 
 interface FormData {
-  senderName: string;
-}
-
-interface ValidationErrors {
-  message: string;
   senderName: string;
 }
 
@@ -48,20 +43,37 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
     senderName: userInfo?.name || '',
   });
 
-  const [errors, setErrors] = useState<ValidationErrors>({
-    message: '',
-    senderName: '',
+  const { mutate: createOrderMutation, isPending } = useMutation({
+    mutationFn: ({ orderData, token }: { orderData: OrderRequest; token: string }) => 
+      createOrder(orderData, token),
+    onSuccess: () => {
+      const totalQuantity = receiverList.reduce((sum, receiver) => sum + receiver.quantity, 0);
+      const receiverNames = receiverList.map(receiver => receiver.name).join(', ');
+      
+      const orderInfo = `주문이 완료되었습니다.
+
+상품명: ${product?.name}
+구매수량: ${totalQuantity}개
+발신자이름: ${formData.senderName}
+받는사람: ${receiverNames}
+메시지: ${cardState.message}`;
+
+      alert(orderInfo);
+      navigate('/');
+    },
+    onError: (error: any) => {
+      if (error?.response?.status === 400) {
+        toast.error(error?.response?.data?.data?.message || '유효성 검사에 실패했습니다.');
+      } else {
+        toast.error('주문 처리 중 오류가 발생했습니다.');
+      }
+    },
   });
 
-  const selectedCard = useMemo(() => {
-    return orders.find(order => order.id === cardState.selectedCardId);
-  }, [cardState.selectedCardId]);
-
-  const clearError = (field: keyof ValidationErrors) => {
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  };
+  const selectedCard = useMemo(() => 
+    orders.find(order => order.id === cardState.selectedCardId),
+    [cardState.selectedCardId]
+  );
 
   const handleCardClick = (id: number) => {
     const card = orders.find(order => order.id === id);
@@ -70,7 +82,6 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
       selectedCardId: id,
       message: card?.defaultTextMessage || prev.message,
     }));
-    clearError('message');
   };
 
   const handleMessageChange: TextAreaChangeHandler = (e) => {
@@ -78,7 +89,6 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
       ...prev,
       message: e.target.value.trim(),
     }));
-    clearError('message');
   };
 
   const handleSenderNameChange: InputChangeHandler = (e) => {
@@ -86,7 +96,6 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
       ...prev,
       senderName: e.target.value.trim(),
     }));
-    clearError('senderName');
   };
 
   const validateForm = (): boolean => {
@@ -96,86 +105,52 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
     });
 
     if (!result.success) {
-      const newErrors: ValidationErrors = {
-        message: '',
-        senderName: '',
-      };
-
       result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof ValidationErrors;
-        newErrors[field] = issue.message;
+        toast.error(issue.message);
       });
-
-      setErrors(newErrors);
       return false;
     }
 
-    setErrors({ message: '', senderName: '' });
     return true;
   };
 
-  const handleOrder = async () => {
-    if (!validateForm()) {
-      return;
-    }
+  const handleOrder = () => {
+    if (!validateForm()) return;
 
     if (!product) {
-      alert('상품 정보를 불러올 수 없습니다.');
+      toast.error('상품 정보를 불러올 수 없습니다.');
       return;
     }
 
     if (!userInfo?.authToken) {
-      alert('로그인이 필요합니다.');
+      toast.error('로그인이 필요합니다.');
       navigate('/login');
       return;
     }
 
-    try {
-      const orderData: OrderRequest = {
-        productId: product.id,
-        message: cardState.message,
-        messageCardId: cardState.selectedCardId.toString(),
-        ordererName: formData.senderName,
-        receivers: receiverList.map(receiver => ({
-          name: receiver.name,
-          phoneNumber: receiver.phone,
-          quantity: receiver.quantity
-        }))
-      };
+    const orderData: OrderRequest = {
+      productId: product.id,
+      message: cardState.message,
+      messageCardId: cardState.selectedCardId.toString(),
+      ordererName: formData.senderName,
+      receivers: receiverList.map(receiver => ({
+        name: receiver.name,
+        phoneNumber: receiver.phone,
+        quantity: receiver.quantity
+      }))
+    };
 
-      await createOrder(orderData, userInfo.authToken);
-      
-      const totalQuantity = receiverList.reduce((sum, receiver) => sum + receiver.quantity, 0);
-      const receiverNames = receiverList.map(receiver => receiver.name).join(', ');
-      
-      const orderInfo = `주문이 완료되었습니다.
-
-상품명: ${product.name}
-구매수량: ${totalQuantity}개
-발신자이름: ${formData.senderName}
-받는사람: ${receiverNames}
-메시지: ${cardState.message}`;
-
-      alert(orderInfo);
-      navigate('/');
-    } catch (error: unknown) {
-      const customHandlers = {
-        400: (message?: string) => {
-          toast.error(message || '유효성 검사에 실패했습니다.');
-        }
-      }; 
-      handleApiError(error, navigate, customHandlers);
-    }
+    createOrderMutation({ orderData, token: userInfo.authToken });
   };
 
   return {
     cardState,
     formData,
-    errors,
     selectedCard,
     handleCardClick,
     handleMessageChange,
     handleSenderNameChange,
     handleOrder,
+    isPending,
   };
 }; 
