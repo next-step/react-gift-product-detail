@@ -5,19 +5,12 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import axios from 'axios';
-import { LOGIN_API_URL, SESSION_STORAGE_KEY } from '@/hooks/constants/api';
-
-type User = {
-  email: string;
-  name: string;
-  authToken: string;
-};
-
-type LoginParams = {
-  email: string;
-  password: string;
-};
+import { SESSION_STORAGE_KEY } from '@/hooks/constants/api';
+import {
+  useLoginMutation,
+  type LoginParams,
+  type User,
+} from '@/hooks/useLoginMutation';
 
 type AuthContextType = {
   user: User | null;
@@ -34,6 +27,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { mutateAsync: loginMutateAsync } = useLoginMutation(setUser);
+
   useEffect(() => {
     const storedUser = sessionStorage.getItem(SESSION_STORAGE_KEY);
     if (storedUser) {
@@ -42,14 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async ({ email, password }: LoginParams) => {
-    const res = await axios.post<{ data: User }>(`${LOGIN_API_URL}`, {
-      email,
-      password,
-    });
-    const userData = res.data.data;
-    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(userData));
-    setUser(userData);
+  const login = async (params: LoginParams) => {
+    await loginMutateAsync(params);
   };
 
   const logout = () => {

@@ -22,3 +22,5 @@
   - [x] RankingGroup, RankingContent를 변경된 hook에 맞게 바꿔주었습니다.
   - [x] useThemeProduct.ts에 useFetch를 이용하던 무한 스크롤을 useInfiniteQuery로 대체하였습니다.
   - [x] ThemeProductList.tsx에서 변경된 구조에 맞게 호출 방식을 수정해주었습니다.
+  - [x] useLoginMutation.ts를 통해 useMutation을 사용하여주었습니다.
+  - [x] AuthProvider에서는 login 함수 내부에 mutateAsync 사용을 통해 비동기를 바탕으로 로그인 처리를 해주었습니다.
