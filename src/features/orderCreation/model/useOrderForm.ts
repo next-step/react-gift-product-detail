@@ -3,40 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useReceiver } from '@/entities/receiver/model/context';
 import { useAuth } from '@/entities/user/model/context';
-import { z, string } from 'zod';
 import { orders } from '@/entities/order/model/constants';
 import { createOrder } from '@/entities/order/api/orderApi';
 import { type OrderRequest} from '@/entities/order/model/types';
-import { type ProductSummary } from '@/entities/product/model/types';
-import { type TextAreaChangeHandler, type InputChangeHandler } from '@/shared/types';
 import { useMutation } from '@tanstack/react-query';
-import { orderSchema } from '@/entities/order/model/validation';
-
-interface CardState {
-  selectedCardId: number;
-  message: string;
-}
-
-interface FormData {
-  senderName: string;
-}
-
-interface UseOrderFormProps {
-  product?: ProductSummary;
-}
+import { 
+  DEFAULT_CARD_STATE, 
+  DEFAULT_FORM_DATA, 
+  ERROR_MESSAGES, 
+  SUCCESS_MESSAGES, 
+  ORDER_INFO_TEMPLATE 
+} from './constants';
+import { createCardHandlers, createFormHandlers, validateOrderForm } from './orderutils';
+import type { CardState, FormData, UseOrderFormProps } from './types';
 
 export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
   const navigate = useNavigate();
   const { receiverList } = useReceiver();
   const { userInfo } = useAuth();
 
-  const [cardState, setCardState] = useState<CardState>({
-    selectedCardId: orders[0]?.id || 904,
-    message: orders[0]?.defaultTextMessage || '축하해요.',
-  });
+  const [cardState, setCardState] = useState<CardState>(DEFAULT_CARD_STATE);
 
   const [formData, setFormData] = useState<FormData>({
-    senderName: userInfo?.name || '',
+    senderName: userInfo?.name || DEFAULT_FORM_DATA.senderName,
   });
 
   const { mutate: createOrderMutation, isPending } = useMutation({
@@ -46,22 +35,21 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
       const totalQuantity = receiverList.reduce((sum, receiver) => sum + receiver.quantity, 0);
       const receiverNames = receiverList.map(receiver => receiver.name).join(', ');
       
-      const orderInfo = `주문이 완료되었습니다.
-
-상품명: ${product?.name}
-구매수량: ${totalQuantity}개
-발신자이름: ${formData.senderName}
-받는사람: ${receiverNames}
-메시지: ${cardState.message}`;
+      const orderInfo = `${SUCCESS_MESSAGES.ORDER_COMPLETED}
+${ORDER_INFO_TEMPLATE.PRODUCT_NAME}: ${product?.name}
+${ORDER_INFO_TEMPLATE.QUANTITY}: ${totalQuantity}개
+${ORDER_INFO_TEMPLATE.SENDER_NAME}: ${formData.senderName}
+${ORDER_INFO_TEMPLATE.RECEIVERS}: ${receiverNames}
+${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
 
       alert(orderInfo);
       navigate('/');
     },
     onError: (error: any) => {
       if (error?.response?.status === 400) {
-        toast.error(error?.response?.data?.data?.message || '유효성 검사에 실패했습니다.');
+        toast.error(error?.response?.data?.data?.message || ERROR_MESSAGES.VALIDATION_FAILED);
       } else {
-        toast.error('주문 처리 중 오류가 발생했습니다.');
+        toast.error(ERROR_MESSAGES.ORDER_PROCESSING_ERROR);
       }
     },
   });
@@ -71,55 +59,19 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
     [cardState.selectedCardId]
   );
 
-  const handleCardClick = (id: number) => {
-    const card = orders.find(order => order.id === id);
-    setCardState(prev => ({
-      ...prev,
-      selectedCardId: id,
-      message: card?.defaultTextMessage || prev.message,
-    }));
-  };
-
-  const handleMessageChange: TextAreaChangeHandler = (e) => {
-    setCardState(prev => ({
-      ...prev,
-      message: e.target.value.trim(),
-    }));
-  };
-
-  const handleSenderNameChange: InputChangeHandler = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      senderName: e.target.value.trim(),
-    }));
-  };
-
-  const validateForm = (): boolean => {
-    const result = orderSchema.safeParse({
-      message: cardState.message,
-      senderName: formData.senderName,
-    });
-
-    if (!result.success) {
-      result.error.issues.forEach((issue) => {
-        toast.error(issue.message);
-      });
-      return false;
-    }
-
-    return true;
-  };
+  const { handleCardClick, handleMessageChange } = createCardHandlers(setCardState);
+  const { handleSenderNameChange } = createFormHandlers(setFormData);
 
   const handleOrder = () => {
-    if (!validateForm()) return;
+    if (!validateOrderForm(cardState, formData)) return;
 
     if (!product) {
-      toast.error('상품 정보를 불러올 수 없습니다.');
+      toast.error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
       return;
     }
 
     if (!userInfo?.authToken) {
-      toast.error('로그인이 필요합니다.');
+      toast.error(ERROR_MESSAGES.LOGIN_REQUIRED);
       navigate('/login');
       return;
     }
