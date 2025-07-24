@@ -57,7 +57,7 @@ export default function TimeRanking() {
     }
   };
 
-  const { data, loading } = useFetch<ProductInfo[]>(API.PRODUCT_RANKING, {
+  const { data, isLoading } = useFetch<ProductInfo[]>(API.PRODUCT_RANKING, {
     targetType: searchTargetType(selectedGender),
     rankType: searchRankType(selectedRankType),
   });
@@ -123,7 +123,7 @@ export default function TimeRanking() {
 
       <Spacing height="16px" />
 
-      {loading ? (
+      {isLoading ? (
         <Spinner />
       ) : rankings.length === 0 ? (
         <EmptyBox>
