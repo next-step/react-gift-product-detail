@@ -1,5 +1,4 @@
 import { getThemeInfo, getThemeProducts } from "@/data/api";
-import { useFetch } from "@/hooks/useFetch";
 import Layout from "@/layout";
 import { useNavigate, useParams } from "react-router-dom";
 import { Loading } from "@/components/Loading/Loading";
@@ -10,7 +9,6 @@ import {
   HeroTitle,
 } from "./HeroSection";
 import { ROUTES } from "@/constants/routes";
-import { THEME_PRODUCTS_API_MESSAGE } from "./constants/apiMessage";
 import type { ThemeInfo } from "@/types/ThemeInfo";
 import { useRef, useState } from "react";
 import ThemeProductsGrid from "./ThemeProductsGrid";
@@ -22,12 +20,10 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState<number>(0);
 
-  const { data, isLoading: isThemeProductsLoading } = useFetch({
-    fetchFn: () => getThemeProducts(Number(themeInfo.themeId), cursor),
-    errorHandler: () => {
-      console.error(THEME_PRODUCTS_API_MESSAGE.FETCH_ERROR);
-    },
-    deps: [cursor],
+  const { data, isLoading: isThemeProductsLoading } = useQuery({
+    queryKey: ["themeProducts", themeInfo.themeId, cursor],
+    queryFn: () => getThemeProducts(Number(themeInfo.themeId), cursor),
+    retry: false,
   });
 
   const { themeProducts } = useInfiniteScroll({
@@ -66,15 +62,19 @@ function ThemeProductPage() {
     retry: false,
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   if (isError) {
     navigate(ROUTES.HOME);
   }
 
-  return <Layout>{data && <ThemeProductsContent themeInfo={data} />}</Layout>;
+  return (
+    <Layout>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        data && <ThemeProductsContent themeInfo={data} />
+      )}
+    </Layout>
+  );
 }
 
 export default ThemeProductPage;
