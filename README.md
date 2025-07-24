@@ -28,3 +28,4 @@
   - [x] useOrderMutation을 생성해서 login과 마찬가지로 useMutation을 사용하도록 해주었습니다. (POST)
   - [x] OrderPage에서 추가된 훅을 사용하며 로직을 분리해주어 조금 더 간결해지도록 해주었습니다.
   - [x] useProductSummary에서 useFetch를 이용해 상품 요약 정보를 가져오던 것을 useQuery로 변경해주었습니다. (GET)
+  - [x] useThemeInfo 역시 useQuery를 사용하여 정보를 얻어오도록 변경해주었습니다.
