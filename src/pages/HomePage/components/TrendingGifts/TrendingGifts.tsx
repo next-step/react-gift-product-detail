@@ -19,40 +19,21 @@ import {
   TRENDING_GIFTS_LABELS,
 } from "./constants/labels";
 import { getTrendingGifts } from "@/data/api";
-import { useFetch } from "@/hooks/useFetch";
 import TrendingGiftsProductsGrid from "./TrendingGiftsProductsGrid";
 import TabContentWrapper from "./TabContentWrapper";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from "react";
 
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
   const [subTabIdx, setSubTabIdx] = useSubTab();
 
-  const { data, isLoading, isError } = useFetch<TrendingGiftsType[]>({
-    fetchFn: () =>
+  const { data } = useSuspenseQuery<TrendingGiftsType[]>({
+    queryKey: ["trendingGifts", mainTabIdx, subTabIdx],
+    queryFn: () =>
       getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
-    errorHandler: () => {
-      console.error(TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR);
-    },
-    deps: [mainTabIdx, subTabIdx],
   });
-
-  const renderTrendingGiftsContent = () => {
-    if (isError) {
-      return (
-        <ErrorContainer>
-          <ErrorMessage>
-            {TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
-          </ErrorMessage>
-        </ErrorContainer>
-      );
-    }
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    return <TrendingGiftsProductsGrid products={data || []} />;
-  };
 
   return (
     <>
@@ -67,7 +48,19 @@ function TrendingGiftsContent() {
         ))}
       </TabsWrapper>
       <TabContentWrapper subTabIdx={subTabIdx} onClick={setSubTabIdx}>
-        {renderTrendingGiftsContent()}
+        <ErrorBoundary
+          fallback={
+            <ErrorContainer>
+              <ErrorMessage>
+                {TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
+              </ErrorMessage>
+            </ErrorContainer>
+          }
+        >
+          <Suspense fallback={<Loading />}>
+            <TrendingGiftsProductsGrid products={data} />
+          </Suspense>
+        </ErrorBoundary>
       </TabContentWrapper>
     </>
   );
