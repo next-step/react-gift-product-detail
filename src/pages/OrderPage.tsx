@@ -240,38 +240,33 @@ function OrderPage() {
     CreateOrderResponse,
     any,
     { orderData: any; authToken: string; product: any }
-  >(
-    async (variables: { orderData: any; authToken: string; product: any }) => {
+  >({
+    mutationFn: async (variables) => {
       const { orderData, authToken } = variables;
       const res = await createOrder(orderData, authToken);
       return res.data;
     },
-    {
-      onSuccess: (
-        data: CreateOrderResponse,
-        variables: { orderData: any; authToken: string; product: any },
-      ) => {
-        const { product } = variables;
-        alert(
-          `주문이 완료되었습니다.\n` +
-            `상품명: ${product.name}\n` +
-            `구매 수량: ${totalQuantity}\n` +
-            `발신자 이름: ${sender}\n` +
-            `메시지: ${message}`,
-        );
-        toast.success('주문이 완료되었습니다!');
-        navigate('/');
-      },
-      onError: (error: any) => {
-        if (error.response?.status === 401) {
-          toast.error('로그인이 필요합니다.');
-          navigate('/login');
-        } else {
-          toast.error(error.response?.data?.message || '주문에 실패했습니다.');
-        }
-      },
+    onSuccess: (data, variables) => {
+      const { product } = variables;
+      alert(
+        `주문이 완료되었습니다.\n` +
+          `상품명: ${product.name}\n` +
+          `구매 수량: ${totalQuantity}\n` +
+          `발신자 이름: ${sender}\n` +
+          `메시지: ${message}`,
+      );
+      toast.success('주문이 완료되었습니다!');
+      navigate('/');
     },
-  );
+    onError: (error: any) => {
+      if (error.response?.status === 401) {
+        toast.error('로그인이 필요합니다.');
+        navigate('/login');
+      } else {
+        toast.error(error.response?.data?.message || '주문에 실패했습니다.');
+      }
+    },
+  });
 
   const handleOrder = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

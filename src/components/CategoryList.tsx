@@ -57,13 +57,13 @@ type Theme = {
 
 function CategoryList({ onHide }: { onHide?: () => void }) {
   const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useQuery<Theme[], Error>(
-    ['themes'],
-    async () => {
+  const { data, isLoading, isError, error } = useQuery<Theme[], Error>({
+    queryKey: ['themes'],
+    queryFn: async () => {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/themes`);
       return res.data.data;
     },
-  );
+  });
 
   const themes: Theme[] = Array.isArray(data) ? data : [];
 
