@@ -1,6 +1,6 @@
 import TheHeader from "@/components/layout/TheHeader";
 import { useParams, useLocation, useNavigate } from "react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ROUTE_PATH } from "@/routes/paths";
 import { cards } from "@/data/card";
 import type { Card } from "@/types/card";
@@ -47,16 +47,12 @@ const OrderPage = () => {
   }, [location.pathname, navigate, userInfo]);
 
   const { id } = useParams<{ id: string }>();
-  const requestFn = useCallback(
-    () => fetchProductsSummary({ productId: Number(id) }),
-    [id],
-  );
   const {
     data: gift,
     isLoading,
     isError,
   } = useApiRequest({
-    requestFn,
+    requestFn: () => fetchProductsSummary({ productId: Number(id) }),
   });
 
   useEffect(() => {

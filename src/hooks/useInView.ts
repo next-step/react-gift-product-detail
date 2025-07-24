@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import usePreservedCallback from "./usePreservedCallback";
 
 type UseInViewOptions = {
   callback?: () => void;
@@ -14,7 +15,7 @@ export const useInView = <TElement extends HTMLElement = HTMLDivElement>(
   const [inView, setInView] = useState(false);
   const elementRef = useRef<TElement>(null);
 
-  const handleIntersection = useCallback(
+  const handleIntersection = usePreservedCallback(
     ([entry]: IntersectionObserverEntry[]) => {
       const isIntersecting = entry.isIntersecting;
 
@@ -24,7 +25,6 @@ export const useInView = <TElement extends HTMLElement = HTMLDivElement>(
         callback?.();
       }
     },
-    [callback],
   );
 
   useEffect(() => {

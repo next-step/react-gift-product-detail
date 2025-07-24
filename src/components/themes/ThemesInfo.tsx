@@ -2,24 +2,18 @@ import { fetchThemesInfo } from "@/api/themesInfo";
 import styled from "@emotion/styled";
 import type { ThemeInfo } from "@/types/theme";
 import useApiRequest from "@/hooks/useApiRequest";
-import { useCallback } from "react";
 
 type ThemesInfoProps = {
   id: string | undefined;
 };
 
 const ThemesInfo = ({ id }: ThemesInfoProps) => {
-  const requestFn = useCallback(
-    () => fetchThemesInfo({ themeId: Number(id) }),
-    [id],
-  );
-
   const {
     data: themeInfoData,
     isLoading,
     isError,
   } = useApiRequest<ThemeInfo>({
-    requestFn,
+    requestFn: () => fetchThemesInfo({ themeId: Number(id) }),
   });
 
   if (!themeInfoData && isLoading && !isError) {

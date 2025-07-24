@@ -2,7 +2,6 @@ import GiftsList from "./GiftsList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import BoxMessage from "@/components/common/BoxMessage";
 import { fetchProductsRanking } from "@/api/products";
-import { useCallback } from "react";
 import useApiRequest from "@/hooks/useApiRequest";
 import type { TargetType, RankType } from "@/types/gift";
 
@@ -12,12 +11,12 @@ type GiftsRenderProps = {
 };
 
 const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
-  const requestFn = useCallback(() => {
+  const requestFn = () => {
     return fetchProductsRanking({
       targetType,
       rankType,
     });
-  }, [targetType, rankType]);
+  };
   const { data: gifts, isLoading, isError } = useApiRequest({ requestFn });
 
   if (isLoading) {

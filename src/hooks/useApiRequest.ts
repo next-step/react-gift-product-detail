@@ -1,6 +1,7 @@
 import { ROUTE_PATH } from "@/routes/paths";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import usePreservedCallback from "./usePreservedCallback";
 
 type UseApiRequestProps<TData, TArgs extends unknown[] = []> = {
   requestFn: (...args: TArgs) => Promise<TData>;
@@ -15,12 +16,13 @@ const useApiRequest = <TData = unknown, TArgs extends unknown[] = []>({
   const [data, setData] = useState<TData | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(immediate);
   const [isError, setIsError] = useState(false);
+  const PreservedRequestFn = usePreservedCallback(requestFn);
 
   const fetchData = useCallback(
     (...args: TArgs) => {
       setIsLoading(true);
       setIsError(false);
-      requestFn(...args)
+      PreservedRequestFn(...args)
         .then(response => {
           setData(response);
         })
@@ -36,14 +38,14 @@ const useApiRequest = <TData = unknown, TArgs extends unknown[] = []>({
           setIsLoading(false);
         });
     },
-    [requestFn, navigate],
+    [PreservedRequestFn, navigate],
   );
 
   useEffect(() => {
     if (immediate) {
       fetchData(...([] as unknown as TArgs));
     }
-  }, [immediate, fetchData, requestFn]);
+  }, [immediate, fetchData]);
 
   return {
     data,
