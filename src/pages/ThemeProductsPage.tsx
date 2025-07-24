@@ -1,14 +1,11 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { fetchThemeDetail } from '@/api/theme';
-import { fetchThemeProducts } from '@/api/product';
-import type { Theme } from '@/types/theme';
-import type { Product } from '@/types/product';
 import { ROUTE } from '@/constants/routes';
-import axios, { HttpStatusCode } from 'axios';
-import { toast } from 'react-toastify';
 import Spinner from '@/components/Spinner';
+import { useThemeDetail } from '@/hooks/useTheme';
+import { useThemeProductsInfinite } from '@/hooks/useProduct';
+import { toast } from 'react-toastify';
 
 const Hero = styled.section<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -78,93 +75,44 @@ const EmptyMessage = styled.div`
 
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const [theme, setTheme] = useState<Theme | null>(null);
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const cursorRef = useRef(0);
-  const loadingRef = useRef(false);
+  const {
+    data: theme,
+    isLoading: isThemeLoading,
+    isError: isThemeError,
+  } = useThemeDetail(Number(themeId));
 
-  const LIMIT = 20;
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: isProductLoading,
+    isError: isProductError,
+  } = useThemeProductsInfinite(Number(themeId));
 
   useEffect(() => {
-    const loadTheme = async () => {
-      try {
-        if (!themeId) {
-          return;
-        }
-        const data = await fetchThemeDetail(Number(themeId));
-        setTheme(data);
-      } catch (error) {
-        if (error instanceof axios.AxiosError) {
-          const status = error.response?.status;
-          const msg = error.response?.data?.data?.message || '테마 정보를 불러오지 못했습니다.';
-
-          if (status === HttpStatusCode.NotFound) {
-            navigate(ROUTE.MAIN);
-          } else {
-            toast.error(msg);
-          }
-        } else {
-          toast.error('오류가 발생했습니다.');
-        }
-      }
-    };
-
-    loadTheme();
-  }, [themeId, navigate]);
-
-  const loadProducts = async () => {
-    if (!themeId || loadingRef.current || !hasMore) {
-      return;
+    if (isThemeError) {
+      toast.error('테마 정보를 불러오지 못했습니다.');
+      navigate(ROUTE.MAIN);
     }
+  }, [isThemeError, navigate]);
 
-    loadingRef.current = true;
-    setLoading(true);
-    try {
-      const res = await fetchThemeProducts({
-        themeId: Number(themeId),
-        cursor: cursorRef.current,
-        limit: LIMIT,
-      });
-
-      const seen = new Set(products.map((p) => p.id));
-      const newItems = res.list.filter((item) => !seen.has(item.id));
-
-      setProducts((prev) => [...prev, ...newItems]);
-      cursorRef.current = res.cursor;
-      setHasMore(res.hasMoreList);
-    } catch {
+  useEffect(() => {
+    if (isProductError) {
       toast.error('상품 정보를 불러오지 못했습니다.');
-    } finally {
-      setLoading(false);
-      loadingRef.current = false;
     }
-  };
+  }, [isProductError]);
 
-  useEffect(() => {
-    if (!themeId) {
-      return;
-    }
-    setProducts([]);
-    cursorRef.current = 0;
-    setHasMore(true);
-    loadingRef.current = false;
-
-    setTimeout(() => {
-      loadProducts();
-    }, 0);
-  }, [themeId]);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
-        if (first.isIntersecting && hasMore && !loading) {
-          loadProducts();
+        if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
       },
       {
@@ -173,16 +121,24 @@ const ThemeProductsPage = () => {
     );
 
     const current = observerRef.current;
-    if (current) observer.observe(current);
+    if (current) {
+      observer.observe(current);
+    }
 
     return () => {
       if (current) observer.unobserve(current);
     };
-  }, [hasMore, loading]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (!themeId || isThemeLoading || isProductLoading) {
+    return <Spinner />;
+  }
 
   if (!theme) {
     return null;
   }
+
+  const products = data?.pages.flatMap((page) => page.list) ?? [];
 
   return (
     <>
@@ -192,7 +148,7 @@ const ThemeProductsPage = () => {
         <Description>{theme.description}</Description>
       </Hero>
 
-      {products.length === 0 && !loading ? (
+      {products.length === 0 ? (
         <EmptyMessage>상품이 없습니다.</EmptyMessage>
       ) : (
         <>
@@ -208,7 +164,7 @@ const ThemeProductsPage = () => {
           </ProductGrid>
 
           <div ref={observerRef} style={{ height: '1px' }} />
-          {loading && <Spinner />}
+          {isFetchingNextPage && <Spinner />}
         </>
       )}
     </>
