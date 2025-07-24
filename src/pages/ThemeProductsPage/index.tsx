@@ -4,15 +4,26 @@ import ThemeProductList from './ThemeProductList';
 import { useGetThemeInfo } from './useGetThemeInfo';
 import { useCallback, useRef } from 'react';
 import { useGetThemeProducts } from './useGetThemeProducts';
+import SuspenseWrapper from '@/components/common/SuspenseWrapper';
+import ApiErrorBoundary from '@/components/common/ErrorBoundary';
 
 const ThemeProductsPage = () => {
+  return (
+    <ApiErrorBoundary>
+      <SuspenseWrapper>
+        <ThemeProductsPageContent />
+      </SuspenseWrapper>
+    </ApiErrorBoundary>
+  );
+};
+
+const ThemeProductsPageContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const id = Number(themeId);
-  const { themeInfo, error: themeError } = useGetThemeInfo(id);
+  const { themeInfo } = useGetThemeInfo(id);
   const {
     list: products,
     isLoading,
-    error: productsError,
     hasMore,
     loadMore,
   } = useGetThemeProducts(id, 10);
@@ -24,20 +35,20 @@ const ThemeProductsPage = () => {
 
       observer.current?.disconnect();
 
-      observer.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadMore();
-        }
-      }, { rootMargin: '0px 0px 300px 0px' });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore) {
+            loadMore();
+          }
+        },
+        { rootMargin: '0px 0px 300px 0px' }
+      );
 
       if (node) observer.current.observe(node);
     },
-    [isLoading, hasMore, loadMore],
+    [isLoading, hasMore, loadMore]
   );
 
-  if (themeError || productsError) {
-    return <div>Error: {(themeError || productsError)?.message}</div>;
-  }
   if (!themeInfo) {
     return <div>Loading theme…</div>;
   }
@@ -52,7 +63,9 @@ const ThemeProductsPage = () => {
 
       <ThemeProductList products={products} />
 
-      {!isLoading && products.length === 0 && <S.Noitem>상품이 없습니다.</S.Noitem>}
+      {!isLoading && products.length === 0 && (
+        <S.Noitem>상품이 없습니다.</S.Noitem>
+      )}
 
       {hasMore && <div ref={bottomRef} style={{ height: 1 }} />}
     </S.Frame>

@@ -8,7 +8,7 @@ import {
   ORDER_COMPLETE_MESSAGE,
   ORDER_ERROR_MESSAGE,
 } from './constants';
-import useApi from '@/apis/useApi';
+import { useMutationApi } from '@/apis/useMutationApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '@/constants/paths';
@@ -35,7 +35,7 @@ export function useOrderForm(
   const [receivers, setReceivers] = useState<Receivers>([]);
   const navigate = useNavigate();
 
-  const { execute: postOrder } = useApi<
+  const postOrderMutation = useMutationApi<
     { data: { success: boolean } },
     {
       productId: number;
@@ -67,7 +67,7 @@ export function useOrderForm(
       return;
     }
 
-    await postOrder({
+    await postOrderMutation.mutateAsync({
       productId: product!.id,
       message: formData.message,
       messageCardId: formData.messageCardId,
@@ -84,7 +84,6 @@ export function useOrderForm(
     );
     navigate(PATH.HOME);
   };
-
 
   const handleReceiverModalComplete = (
     selectedReceivers: ReceiverFormInput[]
@@ -103,6 +102,6 @@ export function useOrderForm(
     receivers,
     handleReceiverModalComplete,
     totalQuantity,
+    postOrderMutation,
   };
 }
-

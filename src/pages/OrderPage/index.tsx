@@ -20,15 +20,26 @@ import {
   ORDER_INFO_TITLE,
   PRODUCT_PRICE_LABEL,
   CURRENCY_UNIT,
-  PRODUCT_NOT_FOUND_MESSAGE,
 } from './constants';
 import { useLogin } from '@/contexts/LoginContext';
 import { useOrderForm } from './useOrderForm';
 import useGetProductSummary from './useGetProductSummary';
+import ApiErrorBoundary from '@/components/common/ErrorBoundary';
+import SuspenseWrapper from '@/components/common/SuspenseWrapper';
 
 function OrderPage() {
+  return (
+    <ApiErrorBoundary>
+      <SuspenseWrapper fallback={<Container>로딩 중...</Container>}>
+        <OrderPageContent />
+      </SuspenseWrapper>
+    </ApiErrorBoundary>
+  );
+}
+
+function OrderPageContent() {
   const { userInfo } = useLogin();
-  const { product, loading, error } = useGetProductSummary();
+  const { product } = useGetProductSummary();
   const {
     register,
     handleSubmit,
@@ -40,13 +51,7 @@ function OrderPage() {
     totalQuantity,
   } = useOrderForm(product, userInfo?.name);
 
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
-  if (!product) {
-    return <div>{PRODUCT_NOT_FOUND_MESSAGE}</div>;
-  }
+  if (product === null) return null;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,7 +66,6 @@ function OrderPage() {
         initialReceivers={receivers}
         Trigger={<ReceiverSelectBox recipients={receivers} />}
       />
-      {loading && <Container></Container>}
       <Container>
         <Title>{ORDER_INFO_TITLE}</Title>
         <Box>
