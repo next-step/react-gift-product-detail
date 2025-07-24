@@ -3,17 +3,21 @@ import { postLogin } from "@/api/auth";
 import type { LoginRequest, LoginResponse } from "@/api/auth";
 
 
-export const useLogin = (
-  onSuccess: (data: LoginResponse) => void,
-  onError: (message: string) => void
-) => {
+interface UseLoginOptions {
+  onSuccess: (data: LoginResponse) => void;
+  onError: (message: string) => void;
+}
+
+export const useLogin = ({ onSuccess, onError }: UseLoginOptions) => {
   return useMutation({
-    mutationFn: (form: LoginRequest) => postLogin(form),
-    onSuccess,
-    onError: (error: any) => {
-      const msg =
-        error?.response?.data?.data?.message || "로그인 중 오류가 발생했습니다.";
-      onError(msg);
+    mutationFn: (body: LoginRequest) => postLogin(body),
+    onSuccess: (data) => {
+      onSuccess(data);
+    },
+    onError: (err: any) => {
+      const message =
+        err?.response?.data?.data?.message || "로그인에 실패했습니다.";
+      onError(message);
     },
   });
 };
