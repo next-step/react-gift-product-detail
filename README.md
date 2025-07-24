@@ -11,7 +11,8 @@
 ### 요구사항
 
 - [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
-  - [x] WithApiUi를 통해 조건별 UI 분기에 대해 작성을 해두었기에 해당 컴포넌트를 적용할 수 있는 CategoryContent, RankingContent, ThemeProductList에 대해 수정 작업을 진행했습니다.
+  - [x] WithApiUi를 통해 조건별 UI 분기에 대해 작성을 해두었기에 해당 컴포넌트를 적용할 수 있는 CategoryContent, RankingContent, ThemeProductList에 대해 수정 작업을 진행했습니다.\
+  - [x] WithApiUi에서 T를 기존에는 배열만 지원했다면 단일 객체 역시 지원하게 하여 ThemeHero.tsx에도 WithApiUi를 적용하여주었습니다.
 - [ ] 기능 단위로 나누어 커밋을 해주세요.
 - [x] 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
   - [x] npm install을 통해 react-query를 설치했습니다.
