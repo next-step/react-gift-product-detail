@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { type ReactNode } from 'react';
-import { loginApi } from '@/api/LoginApi';
 import { useStorageState } from './useStorageState';
+import { useLoginMutation } from './useLoginMutation';
 
 interface User {
   authToken: string;
@@ -19,9 +19,10 @@ const AuthContext = createContext<AuthCtx | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser, clearUser] = useStorageState<User | null>('auth_user', null);
+  const { mutateAsync: loginMutate } = useLoginMutation();
 
   const login = async (email: string, password: string) => {
-    const res = await loginApi({ email, password });
+    const res = await loginMutate({ email, password });
     const userInfo: User = {
       authToken: res.authToken,
       email: res.email,
