@@ -1,14 +1,20 @@
 import styled from "@emotion/styled";
-import useFormInput from "@/hooks/useFormInput";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
 import ErrorMessage from "../common/ErrorMessage";
 import { postLogin } from "@/api/login";
 import useApiRequest from "@/hooks/useApiRequest";
 import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import type { LoginFormValues } from "@/types/user";
 
 const LoginForm = () => {
-  const emailInput = useFormInput(checkEmailError);
-  const passwordInput = useFormInput(checkPasswordError);
+  const method = useForm<LoginFormValues>({
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const {
     data: userData,
@@ -20,11 +26,12 @@ const LoginForm = () => {
     immediate: false,
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onValid: SubmitHandler<LoginFormValues> = async (
+    data: LoginFormValues,
+  ) => {
     postLoginRequest({
-      email: emailInput.value,
-      password: passwordInput.value,
+      email: data.email,
+      password: data.password,
     });
   };
 
@@ -37,33 +44,42 @@ const LoginForm = () => {
   });
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={method.handleSubmit(onValid)}>
       <Input
-        error={!!emailInput.error}
+        error={!!method.formState.errors.email}
         type="text"
-        value={emailInput.value}
         placeholder="이메일"
-        onChange={emailInput.onChange}
-        onBlur={emailInput.onBlur}
+        {...method.register("email", {
+          validate: checkEmailError,
+          onChange: () => {
+            if (method.formState.errors.email) {
+              method.trigger("email");
+            }
+          },
+        })}
       />
-      {emailInput.error && <ErrorMessage message={emailInput.error} />}
+      {method.formState.errors.email && (
+        <ErrorMessage message={method.formState.errors.email.message || ""} />
+      )}
       <Input
-        error={!!passwordInput.error}
+        error={!!method.formState.errors.password}
         type="password"
         placeholder="비밀번호"
-        value={passwordInput.value}
-        onChange={passwordInput.onChange}
-        onBlur={passwordInput.onBlur}
+        {...method.register("password", {
+          validate: checkPasswordError,
+          onChange: () => {
+            if (method.formState.errors.password) {
+              method.trigger("password");
+            }
+          },
+        })}
       />
-      {passwordInput.error && <ErrorMessage message={passwordInput.error} />}
-      <Button
-        type="submit"
-        disabled={
-          isLoading ||
-          !!checkEmailError(emailInput.value) ||
-          !!checkPasswordError(passwordInput.value)
-        }
-      >
+      {method.formState.errors.password && (
+        <ErrorMessage
+          message={method.formState.errors.password.message || ""}
+        />
+      )}
+      <Button type="submit" disabled={isLoading || !method.formState.isValid}>
         로그인
       </Button>
     </Form>
