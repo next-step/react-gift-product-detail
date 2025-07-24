@@ -1,6 +1,6 @@
 import { getThemeInfo, getThemeProducts } from "@/data/api";
 import Layout from "@/layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Loading } from "@/components/Loading/Loading";
 import {
   HeroDescription,
@@ -10,12 +10,13 @@ import {
 } from "./HeroSection";
 import { ROUTES } from "@/constants/routes";
 import type { ThemeInfo } from "@/types/ThemeInfo";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import ThemeProductsGrid from "./ThemeProductsGrid";
 import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
+import { ErrorBoundary } from "react-error-boundary";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
@@ -53,27 +54,28 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   );
 }
 
-function ThemeProductPage() {
-  const params = useParams();
-  const navigate = useNavigate();
+function ThemeProductFetcher() {
+  const { themeId } = useParams();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: QUERY_KEY.THEME_INFO(params.themeId),
-    queryFn: () => getThemeInfo(Number(params.themeId)),
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.THEME_INFO(themeId),
+    queryFn: () => getThemeInfo(Number(themeId)),
     retry: false,
   });
 
-  if (isError) {
-    navigate(ROUTES.HOME);
-  }
+  return <ThemeProductsContent themeInfo={data!} />;
+}
 
+export function ThemeProductPage() {
   return (
     <Layout>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        data && <ThemeProductsContent themeInfo={data} />
-      )}
+      <ErrorBoundary
+        FallbackComponent={() => <Navigate to={ROUTES.HOME} replace />}
+      >
+        <Suspense fallback={<Loading />}>
+          <ThemeProductFetcher />
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }
