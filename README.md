@@ -1,1 +1,1 @@
-# react-gift-product-detail
+충남대학교 FE 신재호 입니다. 잘부탁드립니다!!!
