@@ -34,9 +34,11 @@ export const useThemeProducts = (themeId: string | undefined) => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ['themeProducts', themeId],
-      queryFn: ({ pageParam }) =>
-        fetchThemeProducts({ pageParam, themeId: themeId! }),
       enabled: !!themeId,
+      queryFn: ({ pageParam }) => {
+        if (!themeId) throw new Error('themeId is required');
+        return fetchThemeProducts({ pageParam, themeId });
+      },
       getNextPageParam: lastPage =>
         lastPage.hasMoreList ? lastPage.cursor : undefined,
       initialPageParam: 0,

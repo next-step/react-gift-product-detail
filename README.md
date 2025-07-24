@@ -39,3 +39,4 @@
   - [x] rankingParams.ts를 만들어서 Ranking 부분과 관련있는 하드코딩된 부분과 타입을 상수처리해주었습니다.
   - [x] RankingSort, RankingFilter에서 rankingParams에 정의된 상수를 가져와 사용하도록 해주었습니다.
   - [x] useRankingParams.ts에서도 타입 정의 과정을 수행했습니다.
+  - [x] themeId가 없는 경우를 명시적으로 처리하도록 수정해주었습니다.
