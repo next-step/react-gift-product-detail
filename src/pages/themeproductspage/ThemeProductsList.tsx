@@ -7,8 +7,9 @@ export default function ThemeProductsList() {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
 
-  const { products, isLoading, initLoading, hasMore, observerRef } =
-    useThemeProductList({ themeId });
+  const { products, isLoading, initLoading, observerRef } = useThemeProductList(
+    { themeId }
+  );
 
   const handleItemClick = (id: number) => {
     navigate(`/order/${id}`);
