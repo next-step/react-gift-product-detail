@@ -10,8 +10,12 @@ import { createOrder, fetchProductSummary } from '@/api/services'
 import { STORAGES } from '@/api/constants'
 import { toast } from 'react-toastify'
 import { useTheme } from '@emotion/react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { decodeUserInfo, getCookie } from '@/shared/utils'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
+import { Suspense, useEffect } from 'react'
+import type { AxiosError } from 'axios'
 
 // * 주문하기 페이지 (주문하기 폼 Provider 포함)
 export const Order = () => {
@@ -21,7 +25,17 @@ export const Order = () => {
   return (
     // * Context API를 통해 전역적으로 관리되는 주문하기 폼 적용
     <OrderFormProvider defaultSender={userInfo?.name}>
-      <OrderContent />
+      <ErrorBoundary fallback={null}>
+        <Suspense
+          fallback={
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          }
+        >
+          <OrderContent />
+        </Suspense>
+      </ErrorBoundary>
     </OrderFormProvider>
   )
 }
@@ -32,16 +46,17 @@ export const OrderContent = () => {
   const navigate = useNavigate()
   // * URL 파라미터로 부터 상품 id 값 가져오기
   const { id } = useParams<{ id: string }>()
-  const {
-    data: productInfo,
-    isError,
-    isLoading,
-  } = useQuery<ProductSummary>({
+  // * 상품 정보 fetch (useSuspenseQuery)
+  const { data: productInfo, error } = useSuspenseQuery<ProductSummary>({
     queryKey: ['productSummary', id],
     queryFn: () => fetchProductSummary(Number(id)),
-    enabled: !!id,
   })
-
+  // ! 404 에러 시 홈으로 이동 (기존 로직 유지)
+  useEffect(() => {
+    if ((error as AxiosError)?.response?.status === 404) {
+      navigate(ROUTE_PATH.HOME)
+    }
+  }, [error, navigate])
   // * 카드 리스트
   const cardList: CardData[] = orderCardMock
 
@@ -73,7 +88,8 @@ export const OrderContent = () => {
       }
     },
   })
-
+  // * productInfo가 없을 때는 렌더링만 중단
+  if (!productInfo) return null
   // * 폼 제출 핸들러
   const onSubmit = handleSubmit((data) => {
     if (!productInfo) return
@@ -100,23 +116,6 @@ export const OrderContent = () => {
 
   // * 주문 총액 계산
   const totalPrice = productInfo ? getTotalPrice(productInfo.price) : 0
-
-  // * 로딩 중 화면
-  if (isLoading) {
-    return (
-      <LoadingContainer>
-        <Loading />
-      </LoadingContainer>
-    )
-  }
-
-  if (isError) {
-    // * 에러 발생 시 홈으로 이동
-    navigate(ROUTE_PATH.HOME)
-    return null
-  }
-
-  // * 상품 정보가 있을 경우
   return (
     <OrderContainer>
       {/* 주문하기 카드 섹션 */}
