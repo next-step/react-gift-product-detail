@@ -1,15 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext';
-
 import ReceiverInfo from '@/components/order/ReceiverInfo';
 import { fetchProductSummary } from '@/api/productApi';
 import { submitOrder } from '@/api/orderApi';
-
-import type { Receiver } from '@/types/receiver';
-import type { ProductSummary } from '@/types/product';
+import { useQuery } from '@tanstack/react-query';
 
 import {
   Wrapper,
@@ -26,6 +22,10 @@ import {
   OrderButton,
 } from '@/components/order/Order.style';
 
+import type { Receiver } from '@/types/receiver';
+import { useState, useEffect } from 'react';
+import { isAxiosError } from 'axios';
+
 interface GiftFormValues {
   sender: string;
   message: string;
@@ -41,7 +41,6 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
   const giftId = location.state?.id;
 
   const [receiverList, setReceiverList] = useState<Receiver[]>([]);
-  const [productInfo, setProductInfo] = useState<ProductSummary | null>(null);
   const { user } = useAuth();
 
   const {
@@ -63,19 +62,22 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     }
   }, [templateMessage, user?.name, setValue]);
 
-  useEffect(() => {
-    const loadProduct = async () => {
-      if (!giftId) return;
-      try {
-        const res = await fetchProductSummary(giftId);
-        setProductInfo(res.data.data);
-      } catch {
-        toast.error('존재하지 않는 상품입니다.');
-        navigate('/');
-      }
-    };
-    loadProduct();
-  }, [giftId, navigate]);
+  const {
+    data: productInfo,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['product', giftId],
+    queryFn: () => fetchProductSummary(giftId!), 
+    enabled: !!giftId,
+  });
+
+    useEffect(() => {
+    if (isError) {
+      toast.error('존재하지 않는 상품입니다.');
+      navigate('/');
+    }
+  }, [isError, navigate]);
 
   const validateReceivers = () => {
     if (receiverList.length === 0) {
@@ -131,8 +133,8 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
 
       toast.success('주문이 완료되었습니다!');
       navigate('/');
-    } catch (err: any) {
-      if (err?.response?.status === 401) {
+    } catch (err) {
+      if (isAxiosError(err) && err.response?.status === 401)  {
         toast.error('로그인이 만료되었습니다.');
         navigate('/login');
       } else {
@@ -141,7 +143,8 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     }
   };
 
-  if (!productInfo) return <div>상품 정보를 불러오는 중입니다...</div>;
+  if (isLoading) return <div>상품 정보를 불러오는 중입니다...</div>;
+  if (isError || !productInfo) return <div>상품 정보가 존재하지 않습니다.</div>;
 
   return (
     <Wrapper>
