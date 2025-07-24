@@ -14,10 +14,11 @@ import type { GiftThemeType } from "@/types/GiftThemeType";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { QUERY_KEY } from "@/constants/queryKey";
 
 function CategoryContent() {
   const { data } = useSuspenseQuery<GiftThemeType[]>({
-    queryKey: ["themes"],
+    queryKey: QUERY_KEY.THEMES,
     queryFn: getThemes,
     select: (data: GiftThemeType[]) => {
       if (data.length === 0) {

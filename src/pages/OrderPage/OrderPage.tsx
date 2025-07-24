@@ -18,6 +18,7 @@ import { ROUTES } from "@/constants/routes";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { API_ERROR_MESSAGES } from "./constants/apiMessage";
+import { QUERY_KEY } from "@/constants/queryKey";
 
 const OrderPageContainer = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ function OrderPage() {
     isError,
     error,
   } = useQuery<ProductInfoSummary, AxiosError>({
-    queryKey: ["productInfo", id],
+    queryKey: QUERY_KEY.PRODUCT_INFO(id),
     queryFn: () => getProductInfo(id!),
     retry: false,
   });

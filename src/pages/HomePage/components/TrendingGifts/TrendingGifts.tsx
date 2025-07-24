@@ -24,13 +24,14 @@ import TabContentWrapper from "./TabContentWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
+import { QUERY_KEY } from "@/constants/queryKey";
 
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
   const [subTabIdx, setSubTabIdx] = useSubTab();
 
   const { data } = useSuspenseQuery<TrendingGiftsType[]>({
-    queryKey: ["trendingGifts", mainTabIdx, subTabIdx],
+    queryKey: QUERY_KEY.TRENDING_GIFTS(mainTabIdx, subTabIdx),
     queryFn: () =>
       getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
   });

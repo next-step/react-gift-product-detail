@@ -15,13 +15,14 @@ import ThemeProductsGrid from "./ThemeProductsGrid";
 import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
 import { useQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/constants/queryKey";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState<number>(0);
 
   const { data, isLoading: isThemeProductsLoading } = useQuery({
-    queryKey: ["themeProducts", themeInfo.themeId, cursor],
+    queryKey: QUERY_KEY.THEME_PRODUCTS(themeInfo.themeId, cursor),
     queryFn: () => getThemeProducts(Number(themeInfo.themeId), cursor),
     retry: false,
   });
@@ -57,7 +58,7 @@ function ThemeProductPage() {
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["themeInfo", params.themeId],
+    queryKey: QUERY_KEY.THEME_INFO(params.themeId),
     queryFn: () => getThemeInfo(Number(params.themeId)),
     retry: false,
   });
