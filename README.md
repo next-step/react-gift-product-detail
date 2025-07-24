@@ -13,4 +13,3 @@
   - 로그인 페이지 react hook form 적용
   - usePreservedCallback을 사용할 수 있는 곳에서 사용하도록 리팩토링
 - 기존의 API를 React Query를 이용해서 리팩토링
-- Suspense와 ErrorBoundary를 사용하여 선언적 구조의 API 구현
