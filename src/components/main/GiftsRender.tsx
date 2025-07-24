@@ -4,6 +4,7 @@ import BoxMessage from "@/components/common/BoxMessage";
 import { fetchProductsRanking } from "@/api/products";
 import useApiRequest from "@/hooks/useApiRequest";
 import type { TargetType, RankType } from "@/types/gift";
+import { useEffect } from "react";
 
 type GiftsRenderProps = {
   targetType: TargetType;
@@ -11,13 +12,22 @@ type GiftsRenderProps = {
 };
 
 const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
-  const requestFn = () => {
-    return fetchProductsRanking({
-      targetType,
-      rankType,
-    });
-  };
-  const { data: gifts, isLoading, isError } = useApiRequest({ requestFn });
+  const {
+    data: gifts,
+    isLoading,
+    isError,
+    refetch,
+  } = useApiRequest({
+    requestFn: () =>
+      fetchProductsRanking({
+        targetType,
+        rankType,
+      }),
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [targetType, rankType, refetch]);
 
   if (isLoading) {
     return <LoadingSpinner height="266px" />;
