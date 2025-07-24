@@ -2,6 +2,7 @@ import { ApiError } from "@/api/custom-error";
 import { getThemeInfo } from "@/api/themes/get-theme-info";
 
 import { useRouter } from "@/hooks/common/useRouter";
+import { queryKeys } from "@/lib/query-keys";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
@@ -12,7 +13,7 @@ export const useGetThemeDetail = (themeId: number) => {
     isLoading: loading,
     isError,
   } = useQuery({
-    queryKey: ["themeInfo", themeId],
+    queryKey: queryKeys.themes.detail(themeId),
     queryFn: () => getThemeInfo(themeId),
     enabled: !!(themeId && !isNaN(themeId)),
   });

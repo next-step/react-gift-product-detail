@@ -3,6 +3,7 @@ import { getRankingProduct } from "@/api/product";
 import { TAB_DATA, TAGS } from "@/constants";
 import { parseUrlParam } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useRankingProducts = () => {
   const [searchParams] = useSearchParams();
@@ -22,7 +23,7 @@ export const useRankingProducts = () => {
     isLoading: loading,
     error,
   } = useQuery({
-    queryKey: ["rankingProducts", selectedTag, selectedTab],
+    queryKey: queryKeys.products.ranking(selectedTag, selectedTab),
     queryFn: () =>
       getRankingProduct({
         targetType: selectedTag,

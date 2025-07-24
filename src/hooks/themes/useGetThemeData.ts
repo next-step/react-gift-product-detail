@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getThemes } from "@/api/themes";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useGetThemeData = () => {
   const {
@@ -7,7 +8,7 @@ export const useGetThemeData = () => {
     error,
     isLoading: loading,
   } = useQuery({
-    queryKey: ["themes"],
+    queryKey: queryKeys.themes.list(),
     queryFn: getThemes,
   });
 

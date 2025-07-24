@@ -6,7 +6,7 @@ import {
 } from "@/api/themes/get-theme-product";
 import { useInView } from "@/hooks/common/useInview";
 import type { ProductType } from "@/types";
-
+import { queryKeys } from "@/lib/query-keys";
 interface UseThemeProductsResult {
   products: ProductType[];
   loading: boolean;
@@ -34,7 +34,7 @@ export const useGetThemeProducts = (
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["themeProducts", themeId, limit],
+    queryKey: queryKeys.themes.productList(themeId, limit),
     queryFn: async ({ pageParam = 0 }) => {
       return await getThemeProducts({
         themeId,

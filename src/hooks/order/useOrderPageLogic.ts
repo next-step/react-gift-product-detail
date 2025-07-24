@@ -12,6 +12,7 @@ import { ApiError, UnauthorizedError } from "@/api/custom-error";
 import { showToast } from "@/utils";
 import { API_ERROR_MESSAGE } from "@/constants";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useOrderPageLogic = () => {
   const { goHomePage, goLoginPage } = useRouter();
@@ -26,7 +27,7 @@ export const useOrderPageLogic = () => {
     error: productError,
     isLoading: isProductLoading,
   } = useQuery({
-    queryKey: ["productSummary", id],
+    queryKey: queryKeys.products.summary(Number(id)),
     queryFn: () => getProductSummary(Number(id)),
     enabled: !!id,
   });
