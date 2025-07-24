@@ -1,10 +1,8 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { fetchThemes } from '@/api/theme';
-import type { Theme } from '@/types/theme';
 import Spinner from '@/components/Spinner';
 import { ROUTE } from '@/constants/routes';
 import { useNavigate } from 'react-router-dom';
+import { useThemes } from '@/hooks/useTheme';
 
 const SectionWrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -51,30 +49,13 @@ const Label = styled.div`
 `;
 
 const CategorySection = () => {
-  const [themes, setThemes] = useState<Theme[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const { data: themes, isLoading, isError } = useThemes();
 
-  useEffect(() => {
-    const loadThemes = async () => {
-      try {
-        const data = await fetchThemes();
-        setThemes(data);
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadThemes();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
   }
-  if (error || themes.length === 0) {
+  if (isError || !themes || themes.length === 0) {
     return null;
   }
 
