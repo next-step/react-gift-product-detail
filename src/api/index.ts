@@ -35,13 +35,4 @@ apiClient.interceptors.response.use(
   }
 );
 
-export async function postOrder(orderData: any, authToken: string) {
-  const response = await apiClient.post('/api/order', orderData, {
-    headers: {
-      Authorization: authToken,
-    },
-  });
-  return response.data.data;
-}
-
 export default apiClient;
