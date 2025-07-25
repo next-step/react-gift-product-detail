@@ -1,4 +1,4 @@
-import type { TabType } from "@/pages/product/section/ProductTabSection";
+export type TabType = "description" | "review" | "announcement";
 
 export const PRODUCT_TABS: { key: TabType; label: string }[] = [
   { key: "description", label: "상품설명" },

@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import type { TabType } from "@/pages/product/section/ProductTabSection";
-import { PRODUCT_TABS } from "@/constants/product";
+import { PRODUCT_TABS, type TabType } from "@/constants/product";
 
 type Props = {
   selected: TabType;

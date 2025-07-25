@@ -7,13 +7,9 @@ import ProductTabSection from "./section/ProductTabSection";
 export default function ProductDetailPage() {
   return (
     <ErrorBoundary fallback={<div>~문제가 발생했습니다~</div>}>
-      <Suspense fallback={<Spinner />}>
-        <>
-          <ProductSummarySection />
-          <ProductTabSection />
-          {/* <ProductWishOrderFooter /> */}
-        </>
-      </Suspense>
+      <ProductSummarySection />
+      <ProductTabSection />
+      {/* <ProductWishOrderFooter /> */}
     </ErrorBoundary>
   );
 }
