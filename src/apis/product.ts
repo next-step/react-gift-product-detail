@@ -66,7 +66,7 @@ export const fetchThemeProducts = async (
 
 export const useThemeProducts = (themeId: number, limit: number = 10) => {
   return useInfiniteQuery<ThemeProductsResult, Error>({
-    queryKey: ['themeProducts', themeId],
+    queryKey: ['themeProducts', themeId, limit],
     queryFn: ({ pageParam = 0 }) =>
       fetchThemeProducts(themeId, pageParam as number, limit),
     getNextPageParam: (lastPage: ThemeProductsResult) =>
