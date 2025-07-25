@@ -8,11 +8,18 @@ import {
   StyledPresentRankingContainerTitle,
   StyledPrsentRankingDiv,
 } from '@src/components/Home/PresentRanking/Cotainer/StyledPresentRankingContainer';
-import { useRankingItem } from '@src/hooks/useRankingItem';
+import { useLocation } from 'react-router-dom';
+import { PARAMS } from '@src/assets/params';
+import { useRankingItemFetch } from './useRankingItemFetch';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);
-  const { goods, isLoading, isError } = useRankingItem();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const rankType = params.get(PARAMS.rankType);
+  const targetType = params.get(PARAMS.targetType);
+  const typeUrls = `?targetType=${targetType}&rankType=${rankType}`;
+  const { notNulldata, isLoading, error } = useRankingItemFetch(typeUrls);
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -28,9 +35,9 @@ const PresentRankingContainer = () => {
       </div>
       <StyledPrsentRankingDiv>
         <PresentRankingItem
-          goods={goods}
+          goods={notNulldata}
           isLoading={isLoading}
-          isError={isError}
+          isError={error}
           isVisible={isVisible}
           showRankingNumber={true}
         ></PresentRankingItem>
