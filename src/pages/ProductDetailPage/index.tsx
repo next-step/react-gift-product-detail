@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProductDetail, { useProductDetailDetail } from './useProductDetail';
+import {
+  useProductDetail,
+  useProductDetailDetail,
+  useProductDetailReview,
+} from './useProductDetail';
 import * as S from './styles';
 
 const TAB_LIST = [
@@ -16,7 +20,7 @@ const ProductDetailPage: React.FC = () => {
   const { product } = useProductDetail();
   const [selectedTab, setSelectedTab] = useState<TabKey>('description');
   const detail = useProductDetailDetail();
-
+  const review = useProductDetailReview();
   if (!product) return <div>상품 정보가 없습니다.</div>;
 
   return (
@@ -56,7 +60,16 @@ const ProductDetailPage: React.FC = () => {
               />
             </>
           )}
-          {selectedTab === 'review' && <div>선물후기 영역 (임시)</div>}
+          {selectedTab === 'review' && review && (
+            <S.Reviews>
+              {review.reviews.map((review) => (
+                <S.ReviewWrapper key={review.id}>
+                  <S.AuthorName>{review.authorName}</S.AuthorName>
+                  <S.ReviewContent>{review.content}</S.ReviewContent>
+                </S.ReviewWrapper>
+              ))}
+            </S.Reviews>
+          )}
           {selectedTab === 'detail' && <div>상세정보 영역 (임시)</div>}
         </S.TabContent>
       </S.Container>

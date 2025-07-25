@@ -18,7 +18,7 @@ interface Product {
   };
 }
 
-const useProductDetail = () => {
+export const useProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
   const { data } = useSuspenseQueryApi<{ data: Product }>(
     ['product', productId || ''],
@@ -48,4 +48,21 @@ export const useProductDetailDetail = () => {
   return data.data;
 };
 
-export default useProductDetail;
+interface ProductReview {
+  totalCount: number;
+  reviews: {
+    id: number;
+    authorName: string;
+    content: string;
+  }[];
+}
+
+export const useProductDetailReview = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const { data } = useSuspenseQueryApi<{ data: ProductReview }>(
+    ['product', productId || '', 'review'],
+    productId ? `/products/${productId}/highlight-review` : '',
+    { enabled: !!productId }
+  );
+  return data.data;
+};

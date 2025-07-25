@@ -127,3 +127,24 @@ export const DescriptionWrapper = styled.div`
     margin: 0 auto;
   }
 `;
+export const Reviews = styled.div`
+  width: 100%;
+  max-width: 720px;
+  overflow-x: auto;
+  word-break: break-all;
+`;
+export const ReviewWrapper = styled.div`
+  width: 100%;
+  max-width: 720px;
+  overflow-x: auto;
+  word-break: break-all;
+`;
+export const AuthorName = styled.p`
+  font: ${({ theme }) => theme.typography.label1Bold};
+  margin-bottom: 8px;
+  margin-top: 20px;
+`;
+export const ReviewContent = styled.span`
+  font: ${({ theme }) => theme.typography.body1Regular};
+  white-space: pre-line;
+`;
