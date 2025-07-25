@@ -31,6 +31,7 @@ export const useProductWish = (productId: number) => {
         (prev) => {
           if (!prev) return prev;
           return {
+            ...prev,
             isWished: nextWished,
             wishCount: prev.wishCount + (nextWished ? 1 : -1),
           };
@@ -44,9 +45,7 @@ export const useProductWish = (productId: number) => {
         queryClient.setQueryData(["productWish", productId], context.previous);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["productWish", productId] });
-    },
+    onSettled: () => {},
   });
 
   const toggleWish = () => {
