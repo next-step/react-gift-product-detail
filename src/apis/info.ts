@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, queryOptions } from '@tanstack/react-query';
 
 export type ThemeInfo = {
   themeId: number;
@@ -14,11 +14,14 @@ export const fetchThemeInfo = async (themeId: string): Promise<ThemeInfo> => {
   return response.data.data;
 };
 
-export const useThemeInfo = (themeId: string) => {
-  return useQuery<ThemeInfo, Error>({
+export const themeInfoQueryOptions = (themeId: string) =>
+  queryOptions({
     queryKey: ['themeInfo', themeId],
     queryFn: () => fetchThemeInfo(themeId),
     retry: false,
     throwOnError: true,
   });
+
+export const useThemeInfo = (themeId: string) => {
+  return useQuery(themeInfoQueryOptions(themeId));
 };
