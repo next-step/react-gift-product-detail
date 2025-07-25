@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorFallback from './ErrorFallback';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -35,15 +36,10 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        this.props.fallback || (
-          <div style={{ padding: 32, textAlign: 'center', color: '#fa342c' }}>
-            <h2>문제가 발생했습니다.</h2>
-            <pre>{this.state.error?.message}</pre>
-            <button onClick={this.handleReset} style={{ marginTop: 16 }}>
-              다시 시도
-            </button>
-          </div>
-        )
+        <ErrorFallback
+          error={this.state.error ?? undefined}
+          onReset={this.handleReset}
+        />
       );
     }
     return this.props.children;
