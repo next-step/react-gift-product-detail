@@ -40,20 +40,20 @@ export const fetchProductSummary = (
 };
 
 export const fetchProductInfo = async (productId: number): Promise<Product> => {
-  return await apiClient.get(`/api/products/${productId}`);
+  return await apiClient.get(`/products/${productId}`);
 };
 
 export const fetchProductDetail = async (
   productId: number,
 ): Promise<ProductDetail> => {
-  const response = await apiClient.get(`/api/products/${productId}/detail`);
+  const response = await apiClient.get(`/products/${productId}/detail`);
   return response.data.data;
 };
 
 export const fetchProductWish = async (
   productId: number,
 ): Promise<ProductWish> => {
-  const response = await apiClient.get(`/api/products/${productId}/wish`);
+  const response = await apiClient.get(`/products/${productId}/wish`);
   return response.data.data;
 };
 
@@ -61,7 +61,7 @@ export const fetchHighlightReview = async (
   productId: number,
 ): Promise<ProductReviewResponse> => {
   const response = await apiClient.get(
-    `/api/products/${productId}/highlight-review`,
+    `/products/${productId}/highlight-review`,
   );
   return response.data.data;
 };
