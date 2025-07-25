@@ -1,7 +1,5 @@
-import useFetch from "@/hooks/useFetch";
+import getProductSummary from "@/apis/products/getProductSummary";
 import type { OrderFormType } from "@/pages/Order/components/Order";
-import type { ApiErrorData } from "@/types/ApiErrorResponse";
-import type { ProductSummary } from "@/types/ProductType";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -11,10 +9,10 @@ import { useParams } from "react-router-dom";
 const OrderBtn = () => {
   const { watch } = useFormContext<OrderFormType>();
   const { productId } = useParams();
-  const { fetchData } = useFetch<ProductSummary>(`api/products/${productId}/summary`);
-  const { data } = useQuery<ProductSummary, ApiErrorData>({
+  const { data } = useQuery({
     queryKey: ["orderProduct", productId],
-    queryFn: () => fetchData(),
+    queryFn: () => getProductSummary({ productId: productId ?? "" }),
+    select: (data) => data.data.data,
     enabled: !!productId,
   });
   const product = useMemo(() => data, [data]);

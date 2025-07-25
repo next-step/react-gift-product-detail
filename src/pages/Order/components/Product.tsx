@@ -1,40 +1,39 @@
+import getProductSummary from "@/apis/products/getProductSummary";
 import Divider from "@/components/common/Divider";
 import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
-import API_ENDPOINTS from "@/constants/apiEndpoints";
-import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
-import { isApiErrorResponse, type ApiErrorData } from "@/types/ApiErrorResponse";
-import type { ProductSummary } from "@/types/ProductType";
+import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo } from "react";
+import axios from "axios";
+import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { generatePath, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Product = () => {
   const { setValue } = useFormContext<OrderFormType>();
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { fetchData } = useFetch<ProductSummary>(
-    generatePath(API_ENDPOINTS.PRODUCT_SUMMARY, { productId: productId ?? null }),
-  );
-  const { data, isPending, isError, error } = useQuery<ProductSummary, ApiErrorData>({
+
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["orderProduct", productId],
-    queryFn: () => fetchData(),
+    queryFn: () => getProductSummary({ productId: productId ?? "" }),
+    select: (data) => data.data.data,
     enabled: !!productId,
   });
-  const product = useMemo(() => data, [data]);
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
 
   useEffect(() => {
-    if (product) {
-      setValue("productId", product.id);
-    } else if (isApiErrorResponse(error)) {
-      showFetchErrorToast(error.statusCode, error.message, goHome);
+    if (data) {
+      setValue("productId", data.id);
+    } else if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
+      const statusCode = error.response?.data.data.statusCode as number;
+      const message = error.response?.data.data.message as string;
+      showFetchErrorToast(statusCode, message, goHome);
     }
-  }, [error, setValue, goHome, product]);
+  }, [isError, error, setValue, goHome, data]);
 
   if (isPending) {
     return <Loading height="170px" />;
@@ -50,13 +49,13 @@ const Product = () => {
       <Title>상품 정보</Title>
       <Divider spacing="1rem" />
       <ProductWrapper>
-        <ProductImg alt="product" src={product?.imageURL} />
+        <ProductImg alt="product" src={data?.imageURL} />
         <div>
-          <ProductTitle>{product?.name}</ProductTitle>
-          <ProductBrand>{product?.brandName}</ProductBrand>
+          <ProductTitle>{data?.name}</ProductTitle>
+          <ProductBrand>{data?.brandName}</ProductBrand>
           <ProductPrice>
             <ProductPriceInfo>상품가 </ProductPriceInfo>
-            {product?.price}원
+            {data?.price}원
           </ProductPrice>
         </div>
       </ProductWrapper>
