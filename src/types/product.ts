@@ -22,7 +22,7 @@ export type ProductAnnouncement = {
 
 export type ProductDetail = {
   description: string;
-  announcement: ProductAnnouncement[];
+  announcements: ProductAnnouncement[];
 };
 
 export type ProductWish = {
