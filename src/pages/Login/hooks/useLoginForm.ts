@@ -3,11 +3,7 @@ import { toast } from 'react-toastify';
 import { UserManagement } from '../contexts/UserManagement';
 import { useEmailInput } from './useEmailInput';
 import { usePasswordInput } from './usePasswordInput';
-import {
-  loginUser,
-  type LoginRequest,
-  type LoginResponse,
-} from '../../../apis/auth';
+import { loginUser } from '../../../apis/auth';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 
@@ -21,7 +17,7 @@ export const useLoginForm = () => {
   const isValid = email.isValid && password.isValid;
   const redirectPath = searchParams.get('redirect') || '/my';
 
-  const mutation = useMutation<LoginResponse, Error, LoginRequest>({
+  const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (resJson) => {
       const { email: userEmail, name, authToken } = resJson.data;
