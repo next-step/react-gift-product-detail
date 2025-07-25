@@ -29,7 +29,6 @@ export function CategorySection() {
   const { data: themes, isLoading, isError } = useThemesQuery()
   const { user } = useAuth()
 
-  console.log('themes: ', themes)
   if (isLoading) {
     return <p>선물 테마 로딩중...</p>
   }
