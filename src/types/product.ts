@@ -13,3 +13,19 @@ export type Product = {
     imageURL: string;
   };
 };
+
+export type ProductAnnouncement = {
+  name: string;
+  value: string;
+  displayOrder: number;
+};
+
+export type ProductDetail = {
+  description: string;
+  announcement: ProductAnnouncement[];
+};
+
+export type ProductWish = {
+  wishCount: number;
+  isWished: boolean;
+};

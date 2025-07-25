@@ -1,5 +1,5 @@
 import apiClient from "@/api/apiClient";
-import type { Product } from "@/types/product";
+import type { Product, ProductDetail, ProductWish } from "@/types/product";
 
 export type ProductSummary = {
   id: number;
@@ -36,4 +36,18 @@ export const fetchProductSummary = (
 
 export const fetchProductInfo = async (productId: number): Promise<Product> => {
   return await apiClient.get(`/api/products/${productId}`);
+};
+
+export const fetchProductDetail = async (
+  productId: number,
+): Promise<ProductDetail> => {
+  const response = await apiClient.get(`/api/products/${productId}/detail`);
+  return response.data.data;
+};
+
+export const fetchProductWish = async (
+  productId: number,
+): Promise<ProductWish> => {
+  const response = await apiClient.get(`/api/products/${productId}/wish`);
+  return response.data.data;
 };
