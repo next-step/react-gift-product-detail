@@ -1,16 +1,16 @@
 import GlobalStyle from '@/styles/global';
-import Layout from './components/Layout';
-import Header from './components/Header';
+import Layout from '@/components/Layout';
+import Header from '@/components/Header';
 import CategorySection from '@/sections/CategorySection';
-import FriendSelectBanner from './sections/FriendSelectBanner';
-import CampaignBanner from './sections/CampaignBanner';
+import FriendSelectBanner from '@/sections/FriendSelectBanner';
+import CampaignBanner from '@/sections/CampaignBanner';
 import GiftRankingSection from '@/sections/GiftRankingSection';
 import { Route, Routes } from 'react-router';
-import LoginPage from './LoginPage';
-import NotFoundPage from './NotFoundPage';
-import MyPage from './MyPage';
-import OrderPage from './OrderPage';
-import ThemePage from './ThemePage';
+import LoginPage from '@/pages/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import MyPage from '@/pages/MyPage';
+import OrderPage from '@/pages/OrderPage';
+import ThemePage from '@/pages/ThemePage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -2,11 +2,11 @@ import { useParams } from 'react-router';
 import PageContainer from '@/components/PageContainer';
 import ThemeHeroSection from '@/sections/ThemeSection/ThemeHeroSection';
 import ThemeProductSection from '@/sections/ThemeSection/ThemeProductSection';
-import { useThemeInfoQuery } from './hooks/useThemeInfoQuery';
+import { useThemeInfoQuery } from '../hooks/useThemeInfoQuery';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import Spinner from './components/Spinner';
+import Spinner from '../components/Spinner';
 
 function ThemeInfoSection({ themeId }: { themeId: string }) {
   const { data } = useThemeInfoQuery(themeId);
