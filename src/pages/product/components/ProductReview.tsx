@@ -27,12 +27,6 @@ const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
 `;
 
-const ReviewTitle = styled.h3`
-  ${({ theme }) => theme.typography.title2Bold};
-  margin-bottom: ${({ theme }) => theme.spacing.spacing4};
-  color: ${({ theme }) => theme.colors.semantic.text.default};
-`;
-
 const ReviewList = styled.ul`
   display: flex;
   flex-direction: column;
