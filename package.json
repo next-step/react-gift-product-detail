@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "start:be": "cd react-gift-mock-server && npm run start",
     "dev:all": "concurrently \"npm run dev\" \"npm run start:be\"",
-    "postinstall": "cd react-gift-mock-server && npm install",
+    "postinstall": "if [ \"$CI\" != \"true\" ]; then cd react-gift-mock-server && npm install; fi",
     "test": "vitest"
   },
   "dependencies": {
