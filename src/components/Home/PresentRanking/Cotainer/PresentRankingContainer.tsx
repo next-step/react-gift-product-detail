@@ -35,6 +35,7 @@ const PresentRankingContainer = () => {
       </div>
       <StyledPrsentRankingDiv>
         <PresentRankingItem
+
           goods={notNulldata}
           isLoading={isLoading}
           isError={isError}

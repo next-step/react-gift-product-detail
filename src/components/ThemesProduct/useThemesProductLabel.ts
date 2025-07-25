@@ -1,3 +1,4 @@
+
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 
 import { useQuery } from '@tanstack/react-query';
@@ -5,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import { useParams } from 'react-router-dom';
+
 
 type ThemeLabel = {
   themeId: number;

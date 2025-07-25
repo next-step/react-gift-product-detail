@@ -32,5 +32,4 @@ const ThemesProductItem = () => {
     </StyledTopestDiv>
   );
 };
-
 export default ThemesProductItem;
