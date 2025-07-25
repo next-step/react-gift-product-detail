@@ -26,10 +26,10 @@ export default function TimeRanking() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedGender, setSelectedGender] = useState(
-    () => searchParams.get("gender") || "ALL",
+    () => searchParams.get("gender") || "ALL"
   );
   const [selectedRankType, setSelectedRankType] = useState(
-    () => searchParams.get("rankType") || "받고 싶어한",
+    () => searchParams.get("rankType") || "받고 싶어한"
   );
   const [showAll, setShowAll] = useState(false);
 
@@ -57,9 +57,13 @@ export default function TimeRanking() {
     }
   };
 
-  const { data, isLoading } = useFetch<ProductInfo[]>(["Ranking"],API.PRODUCT_RANKING, {
-    targetType: searchTargetType(selectedGender),
-    rankType: searchRankType(selectedRankType),
+  const { data, isLoading } = useFetch<ProductInfo[]>({
+    queryKey: ["Ranking", selectedGender, selectedRankType],
+    url: API.PRODUCT_RANKING,
+    queryParams: {
+      targetType: searchTargetType(selectedGender),
+      rankType: searchRankType(selectedRankType),
+    },
   });
 
   const rankings = data ?? []; // ranking이 nulld인 경우 방지
