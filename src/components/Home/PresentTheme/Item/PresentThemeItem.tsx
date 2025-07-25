@@ -5,25 +5,25 @@ import {
   StyledPresentThemeItemP,
 } from '@src/components/Home/PresentTheme/Item/StyledPresnetThemeItem';
 import { StyledPresentThemeCommonP } from '@src/components/Home/PresentTheme/StyledPresentThemeCommonP';
-import { usePresentTheme } from '../../../../hooks/usePresentTheme';
 import type { Theme } from './ThemeType';
+import { usePresentThemeFetch } from '@src/hooks/usePresentThemeFetch';
 
 const PresentThemeItem = () => {
-  const { themes, isLoading, isError } = usePresentTheme();
+  const { data, error, isLoading } = usePresentThemeFetch();
 
   if (isLoading) {
     return <div>Loading</div>;
-  } else if (isError) {
+  } else if (error) {
     return <>{alert('에러 발생')}</>;
   } else {
     return (
       <>
         <StyledPresentThemeCommonP>선물 테마</StyledPresentThemeCommonP>
         <StyledPresentThemeDiv>
-          {themes &&
-            themes.data?.map((item: Theme) => (
+          {data &&
+            data?.data.map((item: Theme) => (
               <a href={'/themes/' + item.themeId} key={item.themeId}>
-                <StyledPresentThemeItemDiv className='border'>
+                <StyledPresentThemeItemDiv key={item.themeId} className='border'>
                   <StyledImage src={item.image} alt={item.name} />
                   <StyledPresentThemeItemP>{item.name}</StyledPresentThemeItemP>
                 </StyledPresentThemeItemDiv>
