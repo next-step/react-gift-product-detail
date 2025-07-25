@@ -17,6 +17,66 @@ import {
   OrderButtonContainer,
 } from "./ProductDetailPage.styles";
 import { ROUTES } from "@/constants/routes";
+import styled from "@emotion/styled";
+
+const Divider = styled.div`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.gray[300]};
+`;
+
+const ProductDetailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ProductImage = styled.img`
+  width: 100%;
+  object-fit: contain;
+`;
+
+const ProductInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing[5]};
+  gap: ${({ theme }) => theme.spacing[3]};
+`;
+
+const ProductName = styled.h1`
+  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.text.default};
+`;
+
+const ProductPrice = styled.p`
+  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.text.default};
+`;
+
+const ProductPriceUnit = styled.span`
+  font-size: ${({ theme }) => theme.typography.title.title1Regular.fontSize};
+  font-weight: ${({ theme }) =>
+    theme.typography.title.title1Regular.fontWeight};
+  color: ${({ theme }) => theme.colors.text.default};
+  margin-left: ${({ theme }) => theme.spacing[1]};
+`;
+
+const BrandInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: ${({ theme }) => theme.spacing[5]};
+  gap: ${({ theme }) => theme.spacing[3]};
+`;
+
+const BrandImage = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: contain;
+`;
+
+const BrandName = styled.p``;
 
 function BottomNavigation({ productId }: { productId: string }) {
   const navigate = useNavigate();
@@ -54,7 +114,24 @@ function ProductDetailPage() {
         }
       >
         <Suspense fallback={<Loading />}>
-          <div>ProductDetailPage: {id}</div>
+          <ProductDetailContainer>
+            <ProductImage src={data.imageURL} alt={data.name} />
+            <ProductInfoContainer>
+              <ProductName>{data.name}</ProductName>
+              <ProductPrice>
+                {data.price.sellingPrice}
+                <ProductPriceUnit>원</ProductPriceUnit>
+              </ProductPrice>
+            </ProductInfoContainer>
+            <Divider />
+            <BrandInfoContainer>
+              <BrandImage
+                src={data.brandInfo.imageURL}
+                alt={data.brandInfo.name}
+              />
+              <BrandName>{data.brandInfo.name}</BrandName>
+            </BrandInfoContainer>
+          </ProductDetailContainer>
         </Suspense>
       </ErrorBoundary>
       <BottomNavigation productId={id!} />
