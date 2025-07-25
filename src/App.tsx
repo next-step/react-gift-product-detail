@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { AppWrapper } from '@/styles/App.styles';
+import { Routes, Route } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import WithHeaderLayout from '@/Layout/WithHeaderLayout';
+import ResetStyles from '@/styles/ResetStyles';
+import MainLayout from '@/Layout/MainLayout';
+import Login from '@/pages/Login';
+import Mypage from '@/pages/Mypage';
+import Order from '@/pages/Order/Order';
+import NotFound from '@/NotFound';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useContext } from 'react';
+import { LoginInfoContext } from '@/contexts/LoginInfoContext';
+import ThemeDetail from './pages/ThemeDetail';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { userInfo } = useContext(LoginInfoContext);
+
+  function handleBackClick() {
+    if (location.pathname !== '/') navigate(-1);
+  }
+
+  function HandleLoginClick() {
+    if (userInfo.authToken) navigate('/my');
+    else navigate('/login');
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AppWrapper>
+      <ToastContainer autoClose={2000} />
+      <ResetStyles />
+      <Routes>
+        <Route
+          element={
+            <WithHeaderLayout
+              handleBackClick={handleBackClick}
+              handleLoginClick={HandleLoginClick}
+            />
+          }
+        >
+          <Route path="/" element={<MainLayout />} />
+          <Route path="/login" element={<Login onLogin={handleBackClick} />} />
+          <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
+          <Route path="/order/:orderId" element={<Order />} />
+          <Route path="/themes/:themeId" element={<ThemeDetail />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </AppWrapper>
+  );
 }
 
-export default App
+export default App;
