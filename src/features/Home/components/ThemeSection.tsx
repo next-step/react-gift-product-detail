@@ -1,6 +1,7 @@
+import { fetchThemes } from '@apis/themeApi';
 import LoadingSpinner from '@components/common/LoadingSpinner';
 import styled from '@emotion/styled';
-import useFetch from '@hooks/useFetch';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 interface GiftTheme {
   themeId: number;
@@ -8,24 +9,25 @@ interface GiftTheme {
   image: string;
 }
 
-const CategorySection = () => {
-  const { data: themes, loading, error } = useFetch<GiftTheme[]>('/themes');
-  const navigate = useNavigate();
+const ThemeSection = () => {
+  const {
+    data: themes,
+    isError,
+    isPending,
+  } = useQuery<GiftTheme[]>({
+    queryKey: ['Themes'],
+    queryFn: fetchThemes,
+  });
+
   return (
     <Section>
       <SectionTitle>선물 테마</SectionTitle>
-      {loading && <LoadingSpinner />}
+      {isPending && <LoadingSpinner />}
 
-      {!loading && !error && themes && themes.length > 0 && (
+      {!isPending && !isError && themes && themes.length > 0 && (
         <Grid>
           {themes.map((theme: GiftTheme) => (
-            <Item
-              key={theme.themeId}
-              onClick={() => navigate(`/theme/${theme.themeId}`)}
-            >
-              <Image src={theme.image} alt={theme.name} />
-              <Label>{theme.name}</Label>
-            </Item>
+            <Theme key={theme.themeId} theme={theme} />
           ))}
         </Grid>
       )}
@@ -33,7 +35,21 @@ const CategorySection = () => {
   );
 };
 
-export default CategorySection;
+interface ThemeProps {
+  theme: GiftTheme;
+}
+
+const Theme = ({ theme }: ThemeProps) => {
+  const navigate = useNavigate();
+  return (
+    <Item onClick={() => navigate(`/theme/${theme.themeId}`)}>
+      <Image src={theme.image} alt={theme.name} />
+      <Label>{theme.name}</Label>
+    </Item>
+  );
+};
+
+export default ThemeSection;
 
 const Section = styled.section`
   height: 16.6875rem;
@@ -53,6 +69,7 @@ const Item = styled.div`
 const Image = styled.img`
   width: 56px;
   height: 56px;
+  border-radius: 12px;
 `;
 
 const Label = styled.p`

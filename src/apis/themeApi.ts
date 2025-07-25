@@ -3,7 +3,7 @@ import type { ThemeProducts } from '@features/ThemeProductList/components/Produc
 
 export const fetchThemes = async () => {
   const res = await axiosInstance.get('/themes');
-  return res.data;
+  return res.data.data;
 };
 
 export const fetchThemeProducts = async (
