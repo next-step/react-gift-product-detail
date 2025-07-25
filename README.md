@@ -15,5 +15,6 @@
 - get: Theme
 - get: 랭킹 상품
 - get: 상품 상세 정보
+- get: Theme Hero 정보
 
 ## 리뷰 반영

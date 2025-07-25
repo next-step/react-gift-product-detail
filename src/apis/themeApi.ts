@@ -6,6 +6,11 @@ export const fetchThemes = async () => {
   return res.data.data;
 };
 
+export const fetchThemeInfo = async (id: string | undefined) => {
+  const res = await axiosInstance.get(`/themes/${id}/info`);
+  return res.data.data;
+};
+
 export const fetchThemeProducts = async (
   id: number,
   cursor: number,

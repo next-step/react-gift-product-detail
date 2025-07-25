@@ -72,7 +72,7 @@ const GiftOrderPage = () => {
         );
       }
     }
-  }, [error, navigate]);
+  }, [error, navigate, isError]);
 
   // 로딩 처리
   if (isPending) return <LoadingSpinner />;

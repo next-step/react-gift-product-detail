@@ -1,6 +1,7 @@
+import { fetchThemeInfo } from '@apis/themeApi';
 import LoadingSpinner from '@components/common/LoadingSpinner';
 import styled from '@emotion/styled';
-import useFetch from '@hooks/useFetch';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,11 +16,15 @@ interface ThemeInfo {
 }
 
 const ThemeHero = ({ id }: { id: string }) => {
-  const { data, loading, error } = useFetch<ThemeInfo>(`/themes/${id}/info`);
+  const { data, isPending, isError, error } = useQuery<ThemeInfo>({
+    queryKey: ['themeInfo', id],
+    queryFn: ({ queryKey }) =>
+      fetchThemeInfo(queryKey[1] as string | undefined),
+  });
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (error && axios.isAxiosError(error)) {
+    if (isError && axios.isAxiosError(error)) {
       const status = error.status;
       if (status === 404) {
         toast.error('해당 테마와 일치하는 데이터가 없습니다.', {
@@ -30,9 +35,9 @@ const ThemeHero = ({ id }: { id: string }) => {
         toast.error(error.message);
       }
     }
-  }, [error, navigate]);
+  }, [error, isError, navigate]);
 
-  if (loading) return <LoadingSpinner />;
+  if (isPending) return <LoadingSpinner />;
 
   return (
     <Banner color={data?.backgroundColor}>
