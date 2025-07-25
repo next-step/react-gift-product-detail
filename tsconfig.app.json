@@ -19,9 +19,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
 
     /* Alias */
     "types": ["node"],
@@ -31,7 +29,10 @@
     },
 
     /* For intellisense performance */
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+
+    "composite": true,
+    "outDir": "./dist"
   },
   "include": ["src"]
 }

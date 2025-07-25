@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true, // 느릴 경우 false
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
