@@ -10,14 +10,7 @@ import Spinner from '../components/Spinner';
 
 function ThemeInfoSection({ themeId }: { themeId: string }) {
   const { data } = useThemeInfoQuery(themeId);
-  return (
-    <ThemeHeroSection
-      name={data.name}
-      title={data.title}
-      description={data.description}
-      backgroundColor={data.backgroundColor}
-    />
-  );
+  return <ThemeHeroSection {...data} />;
 }
 
 export default function ThemePage() {
