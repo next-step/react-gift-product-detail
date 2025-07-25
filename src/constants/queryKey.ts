@@ -12,4 +12,5 @@ export const QUERY_KEY = {
     cursor,
   ],
   PRODUCT_INFO: (id: string | number | undefined) => ["productInfo", id],
+  PRODUCT_DETAIL: (id: string | number | undefined) => ["productDetail", id],
 } as const;

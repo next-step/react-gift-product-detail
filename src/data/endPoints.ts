@@ -6,4 +6,5 @@ export const END_POINTS = {
   ORDER: "/api/order",
   THEME_INFO: "/api/themes/:themeId/info",
   THEME_PRODUCTS: "/api/themes/:themeId/products?cursor=:cursor",
+  PRODUCT_DETAIL: "/api/products/:productId",
 } as const;
