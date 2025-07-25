@@ -9,11 +9,11 @@ import type { Theme } from './ThemeType';
 import { usePresentThemeFetch } from '@src/hooks/usePresentThemeFetch';
 
 const PresentThemeItem = () => {
-  const { data, error, isLoading } = usePresentThemeFetch();
+  const { data, isError, isLoading } = usePresentThemeFetch();
 
   if (isLoading) {
     return <div>Loading</div>;
-  } else if (error) {
+  } else if (isError) {
     return <>{alert('에러 발생')}</>;
   } else {
     return (

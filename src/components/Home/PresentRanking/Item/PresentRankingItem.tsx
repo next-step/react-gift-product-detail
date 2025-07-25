@@ -10,15 +10,13 @@ import {
 } from '@src/components/Home/PresentRanking/Item/StyledPresentRankingItem';
 import type { Good } from '@src/types/Goods';
 import { useNavigate } from 'react-router-dom';
-
 interface Props {
   goods: Good[] | null;
   isLoading: boolean;
-  isError: Error | null;
+  isError: boolean;
   isVisible?: boolean;
   showRankingNumber?: boolean;
 }
-const defaultError: Error = { name: '', message: '' };
 const BASIC_RANKING_COMPONENT_NUMBER = 6;
 const MANY_RANKING_COMPONENT_NUMBER = 18;
 
@@ -27,7 +25,7 @@ const PresentProductList = ({
   isVisible = false,
   showRankingNumber = false,
   isLoading = true,
-  isError = defaultError,
+  isError = false,
 }: Props) => {
   const navigate = useNavigate();
   const repeatCnt = isVisible ? MANY_RANKING_COMPONENT_NUMBER : BASIC_RANKING_COMPONENT_NUMBER;

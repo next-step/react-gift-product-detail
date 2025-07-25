@@ -1,21 +1,19 @@
 import StyledTopestDiv from '@src/styles/StyledTopesDiv';
-import { usePresentThemeFetch } from './useThemesProductLabel';
 import {
   StyledThemesProductGridContainer,
   StyledThemesProductPaddingContainer,
 } from './StyledThemesProductItem';
 import { useThemesProductItem } from './useThemesProductItem';
-import { useNavigate } from 'react-router-dom';
 import { useIntersectionObserver } from './useIntersectionObserver';
 import PresentProductList from '../Home/PresentRanking/Item/PresentRankingItem';
 import { ThemesProductionLabel } from './ThemesProductionLabel';
 
 const ThemesProductItem = () => {
-  const navigate = useNavigate();
-  const { goods, isLoading, isError, loadItem, hasMore } = useThemesProductItem(navigate);
+  const { goods, isLoading, isError, fetchNextPage, hasNextPage } = useThemesProductItem();
+
   const loaderRef = useIntersectionObserver({
-    onIntersect: loadItem,
-    canLoadMore: hasMore,
+    onIntersect: fetchNextPage,
+    canLoadMore: hasNextPage,
   });
 
   return (
@@ -30,4 +28,5 @@ const ThemesProductItem = () => {
     </StyledTopestDiv>
   );
 };
+
 export default ThemesProductItem;

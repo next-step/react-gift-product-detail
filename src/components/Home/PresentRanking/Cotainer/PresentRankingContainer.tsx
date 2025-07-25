@@ -19,7 +19,7 @@ const PresentRankingContainer = () => {
   const rankType = params.get(PARAMS.rankType);
   const targetType = params.get(PARAMS.targetType);
   const typeUrls = `?targetType=${targetType}&rankType=${rankType}`;
-  const { notNulldata, isLoading, error } = useRankingItemFetch(typeUrls);
+  const { notNulldata, isLoading, isError } = useRankingItemFetch(typeUrls);
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -37,7 +37,7 @@ const PresentRankingContainer = () => {
         <PresentRankingItem
           goods={notNulldata}
           isLoading={isLoading}
-          isError={error}
+          isError={isError}
           isVisible={isVisible}
           showRankingNumber={true}
         ></PresentRankingItem>

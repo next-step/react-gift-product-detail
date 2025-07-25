@@ -12,14 +12,14 @@ const getFetch = async (): Promise<Themes> => {
 };
 
 export const usePresentThemeFetch = () => {
-  const { data, error, isLoading } = useQuery<Themes>({
+  const { data, isError, isLoading } = useQuery<Themes>({
     queryKey: ['themes'],
     queryFn: getFetch,
   });
 
   return {
     data,
-    error,
+    isError,
     isLoading,
   };
 };
