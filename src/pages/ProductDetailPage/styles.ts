@@ -111,4 +111,19 @@ export const TabButton = styled.button<{ active: boolean }>`
 
 export const TabContent = styled.div`
   min-height: 200px;
+  padding: 20px;
+  margin-bottom: 60px;
+`;
+
+export const DescriptionWrapper = styled.div`
+  width: 100%;
+  max-width: 720px;
+  overflow-x: auto;
+  word-break: break-all;
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
 `;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useProductDetail from './useProductDetail';
+import useProductDetail, { useProductDetailDetail } from './useProductDetail';
 import * as S from './styles';
 
 const TAB_LIST = [
@@ -15,6 +15,7 @@ const ProductDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { product } = useProductDetail();
   const [selectedTab, setSelectedTab] = useState<TabKey>('description');
+  const detail = useProductDetailDetail();
 
   if (!product) return <div>상품 정보가 없습니다.</div>;
 
@@ -48,7 +49,13 @@ const ProductDetailPage: React.FC = () => {
           ))}
         </S.TabButtonWrapper>
         <S.TabContent>
-          {selectedTab === 'description' && <div>상품설명 영역 (임시)</div>}
+          {selectedTab === 'description' && detail && (
+            <>
+              <S.DescriptionWrapper
+                dangerouslySetInnerHTML={{ __html: detail.description }}
+              />
+            </>
+          )}
           {selectedTab === 'review' && <div>선물후기 영역 (임시)</div>}
           {selectedTab === 'detail' && <div>상세정보 영역 (임시)</div>}
         </S.TabContent>

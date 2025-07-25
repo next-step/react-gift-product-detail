@@ -29,4 +29,23 @@ const useProductDetail = () => {
   return { product };
 };
 
+interface ProductDetail {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
+}
+
+export const useProductDetailDetail = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const { data } = useSuspenseQueryApi<{ data: ProductDetail }>(
+    ['product', productId || '', 'detail'],
+    productId ? `/products/${productId}/detail` : '',
+    { enabled: !!productId }
+  );
+  return data.data;
+};
+
 export default useProductDetail;
