@@ -6,6 +6,8 @@ import {
   useProductDetailReview,
 } from './useProductDetail';
 import * as S from './styles';
+import SuspenseWrapper from '@/components/common/SuspenseWrapper';
+import ApiErrorBoundary from '@/components/common/ErrorBoundary';
 
 const TAB_LIST = [
   { key: 'description', label: '상품설명' },
@@ -16,6 +18,16 @@ const TAB_LIST = [
 type TabKey = (typeof TAB_LIST)[number]['key'];
 
 const ProductDetailPage: React.FC = () => {
+  return (
+    <ApiErrorBoundary>
+      <SuspenseWrapper>
+        <ProductDetailContent />
+      </SuspenseWrapper>
+    </ApiErrorBoundary>
+  );
+};
+
+const ProductDetailContent: React.FC = () => {
   const navigate = useNavigate();
   const { product } = useProductDetail();
   const [selectedTab, setSelectedTab] = useState<TabKey>('description');
