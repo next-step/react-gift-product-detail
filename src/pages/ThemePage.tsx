@@ -40,7 +40,7 @@ export default function ThemePage() {
       <ProductGrid
         products={products}
         loaderRef={loaderRef}
-        loading={isFetchingNextPage}
+        isLoading={isFetchingNextPage}
       />
       {isFetchingNextPage && <Spinner />}
     </Wrapper>

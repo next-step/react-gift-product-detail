@@ -5,13 +5,13 @@ import type { ProductInfo } from "@/types/product";
 interface Props {
   products: ProductInfo[];
   loaderRef: React.RefObject<HTMLDivElement | null>;
-  loading: boolean;
+  isLoading: boolean;
 }
 
-export default function ProductGrid({ products, loaderRef, loading }: Props) {
+export default function ProductGrid({ products, loaderRef, isLoading }: Props) {
   return (
     <CardGrid isEmpty={products.length === 0}>
-      {products.length === 0 && loading ? (
+      {products.length === 0 && isLoading ? (
         <Spinner />
       ) : products.length === 0 ? (
         <EmptyBox>
