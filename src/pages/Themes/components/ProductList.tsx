@@ -2,7 +2,7 @@ import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import usePaginationFetch from "@/hooks/usePaginationFetch";
-import type { RankingProductType } from "@/types/RankingProductType";
+import type { ProductData } from "@/types/ProductType";
 import styled from "@emotion/styled";
 import { generatePath, Link, useParams } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const PRODUCT_LIST_LIMIT = 20;
 
 const ProductList = () => {
   const { themeId } = useParams();
-  const { items, isLoading, hasMoreList, loader } = usePaginationFetch<RankingProductType>(
+  const { items, isLoading, hasMoreList, loader } = usePaginationFetch<ProductData>(
     generatePath(API_ENDPOINTS.THEME_PRODUCTS, { themeId: themeId ?? null }),
     PRODUCT_LIST_LIMIT,
     0.5,

@@ -1,4 +1,9 @@
-export type RankingProductType = {
+export type ProductRankingFilterOption = {
+  targetType: "ALL" | "FEMALE" | "MALE" | "TEEN";
+  rankType: "MANY_WISH" | "MANY_RECEIVE" | "MANY_WISH_RECEIVE";
+};
+
+export type ProductData = {
   id: number;
   name: string;
   imageURL: string;
@@ -14,7 +19,7 @@ export type RankingProductType = {
   };
 };
 
-export type ProductType = {
+export type ProductSummary = {
   id: number;
   name: string;
   brandName: string;

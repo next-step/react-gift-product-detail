@@ -1,7 +1,7 @@
 import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import type { ApiErrorData } from "@/types/ApiErrorResponse";
-import type { ProductType } from "@/types/RankingProductType";
+import type { ProductSummary } from "@/types/ProductType";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
@@ -11,8 +11,8 @@ import { useParams } from "react-router-dom";
 const OrderBtn = () => {
   const { watch } = useFormContext<OrderFormType>();
   const { productId } = useParams();
-  const { fetchData } = useFetch<ProductType>(`api/products/${productId}/summary`);
-  const { data } = useQuery<ProductType, ApiErrorData>({
+  const { fetchData } = useFetch<ProductSummary>(`api/products/${productId}/summary`);
+  const { data } = useQuery<ProductSummary, ApiErrorData>({
     queryKey: ["orderProduct", productId],
     queryFn: () => fetchData(),
     enabled: !!productId,

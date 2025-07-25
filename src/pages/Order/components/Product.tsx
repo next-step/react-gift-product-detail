@@ -5,7 +5,7 @@ import API_ENDPOINTS from "@/constants/apiEndpoints";
 import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import { isApiErrorResponse, type ApiErrorData } from "@/types/ApiErrorResponse";
-import type { ProductType } from "@/types/RankingProductType";
+import type { ProductSummary } from "@/types/ProductType";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
@@ -17,10 +17,10 @@ const Product = () => {
   const { setValue } = useFormContext<OrderFormType>();
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { fetchData } = useFetch<ProductType>(
+  const { fetchData } = useFetch<ProductSummary>(
     generatePath(API_ENDPOINTS.PRODUCT_SUMMARY, { productId: productId ?? null }),
   );
-  const { data, isPending, isError, error } = useQuery<ProductType, ApiErrorData>({
+  const { data, isPending, isError, error } = useQuery<ProductSummary, ApiErrorData>({
     queryKey: ["orderProduct", productId],
     queryFn: () => fetchData(),
     enabled: !!productId,
