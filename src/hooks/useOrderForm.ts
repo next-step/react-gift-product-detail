@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useMemo } from 'react';
 import { messageCards } from '@/data/messageCards';
 import type { OrderFormValues } from '@/types/order';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import type { ProductSummary } from '@/types/product';
 
 const DEFAULT_CARD = messageCards[0];

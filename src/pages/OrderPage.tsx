@@ -1,8 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useAuth } from '@/contexts/AuthContext';
 import Navigation from '@/components/Navigation';
 import CardSelector from '@/components/OrderSection/CardSelector';
 import MessageInput from '@/components/OrderSection/MessageInput';
@@ -10,15 +7,15 @@ import SenderForm from '@/components/OrderSection/SenderForm';
 import ReceiverForm from '@/components/ReceiverFormSection/ReceiverForm';
 import ProductInfo from '@/components/OrderSection/ProductInfo';
 import OrderSubmitButton from '@/components/OrderSection/OrderSubmitButton';
-import { ROUTES } from '@/constants/routes';
 import { FormProvider } from 'react-hook-form';
 import { useOrderForm } from '@/hooks/useOrderForm';
 import type { OrderFormValues } from '@/types/order';
 import { loading } from '@/components/common/Loading';
-import { ORDER_API_URL } from '@/hooks/constants/api';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { useProductSummary } from '@/hooks/useProductSummary';
-import { hasAxiosErrorStatus } from '@/utils/error';
+import { useAuth } from '@/hooks/useAuth';
+import { useOrderMutation } from '@/hooks/useOrderMutation';
+import { handleOrderSubmit } from '@/hooks/handlers/handleOrderSubmit';
 
 const OrderPage = () => {
   const { id } = useParams();
@@ -36,57 +33,20 @@ const OrderPage = () => {
   } = useOrderForm(product);
 
   const { authToken } = useAuth();
+  const orderMutation = useOrderMutation();
 
-  const onSubmit = async (data: OrderFormValues) => {
-    if (data.receivers.length === 0) {
-      toast.error(ERROR_MESSAGES.EMPTY_RECEIVERS);
-      return;
-    }
+  const onSubmit = (data: OrderFormValues) => {
+    if (!product) return;
 
-    try {
-      await axios.post(
-        ORDER_API_URL,
-        {
-          productId: product?.id,
-          message: data.textMessage,
-          messageCardId: String(selectedCardId),
-          ordererName: data.senderName,
-          receivers: data.receivers.map(r => ({
-            name: r.name,
-            phoneNumber: r.phone,
-            quantity: r.quantity,
-          })),
-        },
-        {
-          headers: {
-            Authorization: `${authToken}`,
-          },
-        }
-      );
-
-      alert(
-        `주문이 완료되었습니다.\n` +
-          `상품명: ${product?.name}\n` +
-          `구매 수량: ${totalQuantity}\n` +
-          `발신자 이름: ${data.senderName}\n` +
-          `메시지: ${data.textMessage}`
-      );
-      navigate(ROUTES.HOME);
-    } catch (err: unknown) {
-      if (hasAxiosErrorStatus(err, 401)) {
-        toast.error(ERROR_MESSAGES.LOGIN_REQUIRED);
-        navigate(ROUTES.LOGIN, {
-          state: {
-            from: {
-              pathname: location.pathname,
-              search: location.search,
-            },
-          },
-        });
-      } else {
-        toast.error(ERROR_MESSAGES.ORDER_FAIL);
-      }
-    }
+    handleOrderSubmit({
+      data,
+      product,
+      selectedCardId,
+      authToken: authToken ?? '',
+      totalQuantity,
+      navigate,
+      mutateAsync: orderMutation.mutateAsync,
+    });
   };
 
   if (isLoading) return loading;

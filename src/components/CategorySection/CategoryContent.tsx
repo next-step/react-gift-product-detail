@@ -1,42 +1,39 @@
 import styled from '@emotion/styled';
-import { loading } from '@/components/common/Loading';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { useCategoryThemes } from '@/hooks/useCategoryThemes';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/routes';
+import { loading } from '@/components/common/Loading';
+import WithApiUi from '@/components/common/WithApiUi';
 
 const CategoryContent = () => {
-  const { data, pending, error } = useCategoryThemes();
+  const { data: themes, isError } = useCategoryThemes();
   const navigate = useNavigate();
 
-  if (pending) {
-    return (
-      <Grid>
-        <LoadingWrapper>{loading}</LoadingWrapper>
-      </Grid>
-    );
-  }
-
-  if (error) {
-    return <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>;
-  }
-
-  if (!data || data.length === 0) {
-    return <EmptyText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</EmptyText>;
-  }
-
   return (
-    <Grid>
-      {data.map(theme => (
-        <Item
-          key={theme.themeId}
-          onClick={() => navigate(ROUTES.THEME(theme.themeId))}
-        >
-          <CategoryImage src={theme.image} alt={theme.name} />
-          <CategoryText>{theme.name}</CategoryText>
-        </Item>
-      ))}
-    </Grid>
+    <WithApiUi
+      data={themes ?? null}
+      error={isError}
+      loading={loading}
+      errorFallback={
+        <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>
+      }
+      emptyFallback={
+        <EmptyText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</EmptyText>
+      }
+    >
+      <Grid>
+        {themes?.map(theme => (
+          <Item
+            key={theme.themeId}
+            onClick={() => navigate(ROUTES.THEME(theme.themeId))}
+          >
+            <CategoryImage src={theme.image} alt={theme.name} />
+            <CategoryText>{theme.name}</CategoryText>
+          </Item>
+        ))}
+      </Grid>
+    </WithApiUi>
   );
 };
 
@@ -47,14 +44,6 @@ const Grid = styled.div`
   grid-template-columns: repeat(5, 1fr);
   gap: ${({ theme }) => `${theme.spacing[5]} ${theme.spacing[1]}`};
   min-height: 250px;
-`;
-
-const LoadingWrapper = styled.div`
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing[6]};
 `;
 
 const EmptyText = styled.p`

@@ -1,30 +1,37 @@
-import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { getThemeInfoUrl } from '@/hooks/constants/api';
 import { ROUTES } from '@/constants/routes';
-import { useFetch } from '@/hooks/useFetch';
 import type { ThemeInfo } from '@/types/theme';
 
 export const useThemeInfo = (themeId: string | undefined) => {
   const navigate = useNavigate();
 
-  const fetchThemeInfo = useCallback(async () => {
-    if (!themeId) throw new Error('themeId is undefined');
+  const query = useQuery<ThemeInfo>({
+    queryKey: ['theme-info', themeId],
+    queryFn: async () => {
+      if (!themeId) throw new Error('themeId is undefined');
 
-    const res = await fetch(getThemeInfoUrl(themeId));
-    if (res.status === 404) {
-      navigate(ROUTES.NOT_FOUND);
-      throw new Error('404 Not Found');
-    }
-    if (!res.ok) {
-      throw new Error('Theme info fetch failed');
-    }
+      const res = await fetch(getThemeInfoUrl(themeId));
 
-    const json = await res.json();
-    return json.data as ThemeInfo;
-  }, [themeId, navigate]);
+      if (res.status === 404) {
+        navigate(ROUTES.NOT_FOUND);
+        throw new Error('404 Not Found');
+      }
 
-  const { data, error } = useFetch<ThemeInfo>(fetchThemeInfo);
+      if (!res.ok) {
+        throw new Error('Theme info fetch failed');
+      }
 
-  return { data, error };
+      const json = await res.json();
+      return json.data as ThemeInfo;
+    },
+    enabled: !!themeId,
+    retry: false,
+  });
+
+  return {
+    data: query.data,
+    error: query.isError,
+  };
 };

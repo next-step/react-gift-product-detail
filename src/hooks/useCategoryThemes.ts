@@ -1,15 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { Category } from '@/types/category';
-import { CATEGORY_THEMES_API_URL } from '@/hooks/constants/api';
-import { useFetch } from './useFetch';
+import { CATEGORY_THEMES_API_URL } from './constants/api';
 
-const fetchCategoryThemes = async (): Promise<Category[] | undefined> => {
-  try {
-    const res = await axios.get<{ data: Category[] }>(CATEGORY_THEMES_API_URL);
-    return res.data.data;
-  } catch {
-    return undefined;
-  }
+const fetchCategoryThemes = async (): Promise<Category[]> => {
+  const res = await axios.get<{ data: Category[] }>(CATEGORY_THEMES_API_URL);
+  return res.data.data;
 };
 
-export const useCategoryThemes = () => useFetch(fetchCategoryThemes);
+export const useCategoryThemes = () =>
+  useQuery<Category[]>({
+    queryKey: ['themes'],
+    queryFn: fetchCategoryThemes,
+  });

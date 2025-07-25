@@ -1,32 +1,30 @@
 import styled from '@emotion/styled';
 
-interface Option {
-  label: string;
-  value: string;
+interface SegmentedControlProps<T extends string> {
+  options: { label: string; value: T }[];
+  selectedValue: T;
+  onSelect: (value: T) => void;
 }
 
-interface SegmentedControlProps {
-  options: Option[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
-}
-
-const SegmentedControl = ({
+const SegmentedControl = <T extends string>({
   options,
   selectedValue,
   onSelect,
-}: SegmentedControlProps) => {
+}: SegmentedControlProps<T>) => {
   return (
     <Wrapper>
-      {options.map(({ label, value }) => (
-        <Button
-          key={value}
-          isActive={selectedValue === value}
-          onClick={() => onSelect(value)}
-        >
-          {label}
-        </Button>
-      ))}
+      {options.map(({ label, value }) => {
+        const isSelected = selectedValue === value;
+        return (
+          <Button
+            key={value}
+            isSelected={isSelected}
+            onClick={() => onSelect(value)}
+          >
+            {label}
+          </Button>
+        );
+      })}
     </Wrapper>
   );
 };
@@ -35,28 +33,22 @@ export default SegmentedControl;
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
-  border: 1px solid rgba(70, 132, 233, 0.1);
-  background-color: ${({ theme }) => theme.color.blue[100]};
-  border-radius: 0.5rem;
-  padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[4]}`};
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.color.gray[200]};
   margin-bottom: ${({ theme }) => theme.spacing[4]};
 `;
 
-const Button = styled.button<{ isActive: boolean }>`
-  flex: 1 1 0%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  ${({ theme, isActive }) =>
-    isActive
+const Button = styled.button<{ isSelected: boolean }>`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing[2]};
+  ${({ theme, isSelected }) =>
+    isSelected
       ? theme.typography.subtitle.subtitle2Bold
       : theme.typography.subtitle.subtitle2Regular};
-  color: ${({ theme, isActive }) =>
-    isActive ? theme.color.blue[600] : theme.color.blue[400]};
+  color: ${({ theme, isSelected }) =>
+    isSelected ? theme.color.blue[600] : theme.color.blue[400]};
   background-color: ${({ theme }) => theme.color.blue[100]};
   border: none;
   cursor: pointer;
-  border-radius: 8px;
-  transition: 200ms;
 `;

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import PresentLogo from '@/assets/present.webp';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/constants/routes';
 
 interface NavigationProps {

@@ -3,23 +3,35 @@ import styled from '@emotion/styled';
 import { useThemeInfo } from '@/hooks/useThemeInfo';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import { loading } from '@/components/common/Loading';
+import WithApiUi from '@/components/common/WithApiUi';
 
 const ThemeHero = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const { data: themeInfo, error } = useThemeInfo(themeId);
 
-  if (error)
-    return <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</ErrorText>;
-  if (!themeInfo) return loading;
-
   return (
-    <Section style={{ backgroundColor: themeInfo.backgroundColor }}>
-      <TagText>{themeInfo.name}</TagText>
-      <Title>{themeInfo.title}</Title>
-      {themeInfo.description && (
-        <Description>{themeInfo.description}</Description>
+    <WithApiUi
+      data={themeInfo}
+      error={error}
+      loading={loading}
+      errorFallback={
+        <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</ErrorText>
+      }
+      emptyFallback={
+        <ErrorText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</ErrorText>
+      }
+      emptyPredicate={data => !data || Object.keys(data).length === 0}
+    >
+      {themeInfo && (
+        <Section style={{ backgroundColor: themeInfo.backgroundColor }}>
+          <TagText>{themeInfo.name}</TagText>
+          <Title>{themeInfo.title}</Title>
+          {themeInfo.description && (
+            <Description>{themeInfo.description}</Description>
+          )}
+        </Section>
       )}
-    </Section>
+    </WithApiUi>
   );
 };
 

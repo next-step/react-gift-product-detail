@@ -9,33 +9,38 @@ import WithApiUi from '@/components/common/WithApiUi';
 
 const ThemeProductList = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const { products, pending, error, hasMore, observerRef } =
-    useThemeProducts(themeId);
+  const { products, isError, hasMore, observerRef } = useThemeProducts(themeId);
 
   return (
-    <WithApiUi
-      data={products}
-      error={error}
-      loading={<EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>}
-      errorFallback={
-        <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>
-      }
-    >
-      <Wrapper>
-        <CardGrid>
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              {...product}
-              rank={index + 1}
-              hideRank
-            />
-          ))}
-        </CardGrid>
-        {pending && loading}
-        {hasMore && <ObserverTarget ref={observerRef} />}
-      </Wrapper>
-    </WithApiUi>
+    <Wrapper>
+      <WithApiUi
+        data={products}
+        error={isError}
+        loading={loading}
+        errorFallback={
+          <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>
+        }
+        emptyFallback={
+          <ErrorText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</ErrorText>
+        }
+      >
+        {products && (
+          <>
+            <CardGrid>
+              {products.map((product, index) => (
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  rank={index + 1}
+                  hideRank
+                />
+              ))}
+            </CardGrid>
+            {hasMore && <InfiniteScrollTrigger ref={observerRef} />}
+          </>
+        )}
+      </WithApiUi>
+    </Wrapper>
   );
 };
 
@@ -47,16 +52,10 @@ const Wrapper = styled.div`
 
 const ErrorText = styled.p`
   padding: ${({ theme }) => theme.spacing[4]};
-  color: ${({ theme }) => theme.color.red[500]};
+  color: ${({ theme }) => theme.color.semantic.text};
   text-align: center;
 `;
 
-const EmptyText = styled.p`
-  padding: ${({ theme }) => theme.spacing[4]};
-  color: ${({ theme }) => theme.color.gray[500]};
-  text-align: center;
-`;
-
-const ObserverTarget = styled.div`
+const InfiniteScrollTrigger = styled.div`
   height: 1px;
 `;

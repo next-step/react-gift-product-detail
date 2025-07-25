@@ -4,41 +4,43 @@ import ProductGrid from './ProductGrid';
 import ExpandButton from './ExpandButton';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import type { Product } from '@/types/product';
-
-interface ProductRanking {
-  data: Product[] | null;
-  pending: boolean;
-  error: boolean;
-}
+import WithApiUi from '@/components/common/WithApiUi';
 
 interface Props {
-  productRanking: ProductRanking;
+  data: Product[];
+  isLoading: boolean;
+  isError: boolean;
   visibleCount: number;
   toggleVisibleCount: () => void;
   isExpanded: boolean;
 }
 
 const RankingContent = ({
-  productRanking,
+  data,
+  isError,
   visibleCount,
   toggleVisibleCount,
   isExpanded,
 }: Props) => {
-  const { data, pending, error } = productRanking;
-
-  if (pending) return loading;
-  if (error || !data)
-    return <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>;
-  if (data.length === 0)
-    return <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>;
-
   const visibleProducts = isExpanded ? data : data.slice(0, visibleCount);
 
   return (
-    <>
-      <ProductGrid products={visibleProducts} />
-      <ExpandButton isExpanded={isExpanded} onToggle={toggleVisibleCount} />
-    </>
+    <WithApiUi
+      data={data}
+      error={isError}
+      loading={loading}
+      errorFallback={
+        <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</EmptyText>
+      }
+      emptyFallback={
+        <EmptyText>{ERROR_MESSAGES.NO_PRODUCTS_AVAILABLE}</EmptyText>
+      }
+    >
+      <>
+        <ProductGrid products={visibleProducts} />
+        <ExpandButton isExpanded={isExpanded} onToggle={toggleVisibleCount} />
+      </>
+    </WithApiUi>
   );
 };
 

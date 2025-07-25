@@ -1,15 +1,19 @@
 import SegmentedControl from '@/components/common/SegmentedControl';
+import {
+  RANK_TYPE_META,
+  RANK_TYPE_VALUES,
+  type RankType,
+} from '@/constants/rankingParams';
 
 interface RankingSortProps {
-  selectedSort: string;
-  onSelect: (value: string) => void;
+  selectedSort: RankType;
+  onSelect: (value: RankType) => void;
 }
 
-const options = [
-  { label: '받고 싶어한', value: 'MANY_WISH' },
-  { label: '많이 선물한', value: 'MANY_RECEIVE' },
-  { label: '위시로 받은', value: 'MANY_WISH_RECEIVE' },
-];
+const options = RANK_TYPE_VALUES.map(value => ({
+  value,
+  label: RANK_TYPE_META[value].label,
+}));
 
 const RankingSort = ({ selectedSort, onSelect }: RankingSortProps) => {
   return (

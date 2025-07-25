@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useFormContext, useWatch } from 'react-hook-form';
+import type { FieldErrors } from 'react-hook-form';
 import InputField from '@/components/common/InputField';
 import {
   ERROR_MESSAGES,
@@ -51,7 +52,7 @@ export default ReceiverInputItem;
 const getReceiverFields = (
   index: number,
   receivers: Receiver[],
-  errors: any
+  errors: FieldErrors<{ receivers: Receiver[] }>
 ) => {
   const isDuplicate = (phone: string) =>
     receivers.filter((r, i) => r?.phone === phone && i !== index).length > 0;
