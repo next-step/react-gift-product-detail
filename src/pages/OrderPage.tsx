@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { Section } from '@/components/layout';
 import Container from '@/components/layout/Container';
 import { RecipientList, RecipientModal } from '@/components/order';
-import { useProduct } from '@/hooks';
+import { useProduct } from '@/api/product';
 import { useAuth } from '@/hooks';
 import { cardTemplates } from '@/data/cardTemplates';
 import type { Recipient } from '@/types';
@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
 import { useOrderMutation } from '@/api/order';
-import type { ProductSummary } from '../hooks/useProduct';
+import type { ProductSummary } from '@/api/product';
 import { Suspense } from 'react';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
