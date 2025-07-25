@@ -1,15 +1,16 @@
 import styled from "@emotion/styled";
 import Loading from "@/components/common/Loading";
-import useFetch from "@/hooks/useFetch";
-import type { CategoryType } from "@/types/CategoryType";
 import { generatePath, Link } from "react-router-dom";
 import { ROUTE_PATH } from "@/components/routes/routePath";
-import API_ENDPOINTS from "@/constants/apiEndpoints";
 import { useQuery } from "@tanstack/react-query";
+import { getThemes } from "@/apis/themes/getThemes";
 
 const Category = () => {
-  const { fetchData } = useFetch<CategoryType[]>(API_ENDPOINTS.THEMES, { autoFetch: false });
-  const { isPending, isError, data } = useQuery({ queryKey: ["themes"], queryFn: () => fetchData() });
+  const { isPending, isError, data } = useQuery({
+    queryKey: ["themes"],
+    queryFn: getThemes,
+    select: (data) => data.data.data,
+  });
 
   if (isPending) {
     return (
@@ -20,7 +21,7 @@ const Category = () => {
     );
   }
 
-  if (isError || data?.length === 0) {
+  if (isError || data.length === 0) {
     return null;
   }
 
@@ -28,7 +29,7 @@ const Category = () => {
     <Container>
       <Title>선물 테마</Title>
       <List>
-        {data?.map((category) => (
+        {data.map((category) => (
           <Item key={category.themeId} to={generatePath(ROUTE_PATH.THEMES, { themeId: String(category.themeId) })}>
             <Img src={category.image} alt={category.name} />
             <Name>{category.name}</Name>

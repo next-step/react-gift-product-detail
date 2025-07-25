@@ -1,4 +1,4 @@
-import type { ErrorData } from "@/types/FetchErrorData";
+import type { ApiErrorData } from "@/types/ApiErrorResponse";
 import axios, { AxiosHeaders, type Method } from "axios";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -49,7 +49,7 @@ const useFetch = <TResponse, TBody = unknown>(
   );
 
   const [isLoading, setIsLoading] = useState(autoFetch);
-  const [error, setError] = useState<ErrorData | undefined>(undefined);
+  const [error, setError] = useState<ApiErrorData | undefined>(undefined);
   const [data, setData] = useState<TResponse | null>(null);
 
   const fetchData = useCallback(
@@ -79,7 +79,7 @@ const useFetch = <TResponse, TBody = unknown>(
         return response.data.data;
       } catch (error) {
         console.error("Error fetching themes data:", error);
-        if (axios.isAxiosError<UseFetchResponse<ErrorData>>(error)) {
+        if (axios.isAxiosError<UseFetchResponse<ApiErrorData>>(error)) {
           setData(null);
           setError(error.response?.data.data);
           throw error.response?.data.data;

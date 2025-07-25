@@ -10,7 +10,7 @@ import { AUTH_COOKIE_KEY_TOKEN, useAuth } from "@/contexts/authContext";
 import { AxiosHeaders } from "axios";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { useNavigate } from "react-router-dom";
-import { isErrorData } from "@/types/FetchErrorData";
+import { isApiErrorResponse } from "@/types/ApiErrorResponse";
 import { showFetchErrorToast, showFetchSuccessToast } from "@/utils/showFetchToast";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import { useMutation } from "@tanstack/react-query";
@@ -53,7 +53,7 @@ const OrderPageContent = () => {
       }
     },
     onError: (error) => {
-      if (isErrorData(error)) {
+      if (isApiErrorResponse(error)) {
         if (error.statusCode === 401) {
           showFetchErrorToast(error.statusCode, "유효하지 않은 계정입니다.", goLogin);
         } else if (error) {

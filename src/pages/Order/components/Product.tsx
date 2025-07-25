@@ -4,7 +4,7 @@ import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
-import { isErrorData, type ErrorData } from "@/types/FetchErrorData";
+import { isApiErrorResponse, type ApiErrorData } from "@/types/ApiErrorResponse";
 import type { ProductType } from "@/types/RankingProductType";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
@@ -20,7 +20,7 @@ const Product = () => {
   const { fetchData } = useFetch<ProductType>(
     generatePath(API_ENDPOINTS.PRODUCT_SUMMARY, { productId: productId ?? null }),
   );
-  const { data, isPending, isError, error } = useQuery<ProductType, ErrorData>({
+  const { data, isPending, isError, error } = useQuery<ProductType, ApiErrorData>({
     queryKey: ["orderProduct", productId],
     queryFn: () => fetchData(),
     enabled: !!productId,
@@ -31,7 +31,7 @@ const Product = () => {
   useEffect(() => {
     if (product) {
       setValue("productId", product.id);
-    } else if (isErrorData(error)) {
+    } else if (isApiErrorResponse(error)) {
       showFetchErrorToast(error.statusCode, error.message, goHome);
     }
   }, [error, setValue, goHome, product]);

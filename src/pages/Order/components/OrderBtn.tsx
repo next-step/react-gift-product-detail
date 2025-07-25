@@ -1,6 +1,6 @@
 import useFetch from "@/hooks/useFetch";
 import type { OrderFormType } from "@/pages/Order/components/Order";
-import type { ErrorData } from "@/types/FetchErrorData";
+import type { ApiErrorData } from "@/types/ApiErrorResponse";
 import type { ProductType } from "@/types/RankingProductType";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ const OrderBtn = () => {
   const { watch } = useFormContext<OrderFormType>();
   const { productId } = useParams();
   const { fetchData } = useFetch<ProductType>(`api/products/${productId}/summary`);
-  const { data } = useQuery<ProductType, ErrorData>({
+  const { data } = useQuery<ProductType, ApiErrorData>({
     queryKey: ["orderProduct", productId],
     queryFn: () => fetchData(),
     enabled: !!productId,

@@ -3,7 +3,7 @@ import { useInfiniteQuery, type QueryFunctionContext } from "@tanstack/react-que
 import useFetch from "@/hooks/useFetch";
 import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import { isErrorData, type ErrorData } from "@/types/FetchErrorData";
+import { isApiErrorResponse, type ApiErrorData } from "@/types/ApiErrorResponse";
 
 interface PaginationData<T> {
   list: T[];
@@ -38,7 +38,7 @@ const usePaginationFetch = <T>(
 
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
     PaginationData<T>,
-    ErrorData
+    ApiErrorData
   >({
     queryKey: ["themeProducts", url],
     queryFn: fetchPageData,
@@ -49,7 +49,7 @@ const usePaginationFetch = <T>(
   });
 
   useEffect(() => {
-    if (error && isErrorData(error)) {
+    if (error && isApiErrorResponse(error)) {
       showFetchErrorToast(error.statusCode, errorMessage);
     }
   }, [error, errorMessage]);

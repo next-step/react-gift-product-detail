@@ -7,7 +7,7 @@ import useLoginInput from "@/hooks/useLoginInput";
 import { useAuth, type Auth } from "@/contexts/authContext";
 import useFetch from "@/hooks/useFetch";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import { isErrorData } from "@/types/FetchErrorData";
+import { isApiErrorResponse } from "@/types/ApiErrorResponse";
 import { useMutation } from "@tanstack/react-query";
 
 interface LoginBodyData {
@@ -28,7 +28,7 @@ const LoginPage = () => {
       login(data);
     },
     onError: (error) => {
-      if (isErrorData(error)) {
+      if (isApiErrorResponse(error)) {
         showFetchErrorToast(error.statusCode, error.message);
       }
     },

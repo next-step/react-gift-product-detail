@@ -2,7 +2,7 @@ import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import useFetch from "@/hooks/useFetch";
-import type { ErrorData } from "@/types/FetchErrorData";
+import type { ApiErrorData } from "@/types/ApiErrorResponse";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
 import { useQuery } from "@tanstack/react-query";
@@ -22,7 +22,7 @@ const HeroSection = () => {
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
   const { themeId } = useParams();
   const { fetchData } = useFetch<HeroSectionData>(generatePath(API_ENDPOINTS.THEME_INFO, { themeId: themeId ?? null }));
-  const { data, isPending, error } = useQuery<HeroSectionData, ErrorData>({
+  const { data, isPending, error } = useQuery<HeroSectionData, ApiErrorData>({
     queryKey: ["theme", themeId],
     queryFn: () => fetchData(),
   });
