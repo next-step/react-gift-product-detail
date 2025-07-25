@@ -38,5 +38,10 @@ export const receiversModalSchema = z.object({
     })
 });
 
+export const canOrder = (receivers: z.infer<typeof receiverSchema>[]) => {
+  const result = receiversModalSchema.shape.receivers.safeParse(receivers);
+  return result.success;
+};
+
 export type ReceiverInfo = z.infer<typeof receiverSchema>;
 export type ReceiversFormData = z.infer<typeof receiversModalSchema>; 

@@ -1,11 +1,11 @@
 import { FriendSelector } from '@/features/friendSelection';
-import { ThemeField } from '@/features/themeCatalog';
+import { ThemeSection } from '@/widgets/themeSection';
 import { RankingSection } from '@/features/productRanking/ui';
 
 const Home = () => (
   <>
     <FriendSelector />
-    <ThemeField />
+    <ThemeSection />
     <RankingSection />
   </>
 );

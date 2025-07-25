@@ -4,7 +4,7 @@ import { AuthContext } from '@/entities/user/model/context';
 import type { UserInfo } from '@/entities/user/model/types';
 import { login as loginApi } from '@/entities/user/api/authApi';
 import { STORAGE_KEYS } from '@/shared/config/storageKeys';
-import { handleApiError } from '@/shared/lib/utils/errorHandler';
+import { useMutation } from '@tanstack/react-query';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -24,25 +24,35 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return null;
   });
 
+  const { mutate: loginMutation } = useMutation({
+    mutationFn: loginApi,
+    onSuccess: (response: UserInfo) => {
+      setUserInfo(response);
+      sessionStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(response));
+      toast.success('로그인에 성공했습니다.');
+    },
+    onError: (error: any) => {
+      if (error?.response?.status === 400) {
+        toast.error(error?.response?.data?.data?.message || '로그인에 실패했습니다.');
+      } else {
+        toast.error('로그인에 실패했습니다.');
+      }
+    },
+  });
+
   const login = useCallback(async (email: string, password: string, onSuccess?: () => void) => {
-    try {
-      const response = await loginApi({ email, password });
-      
-      const newUserInfo: UserInfo = response;
-      
-      setUserInfo(newUserInfo);
-      sessionStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(newUserInfo));
-      onSuccess?.();
-    } catch (error: unknown) {
-      const customHandlers = {
-        400: (message?: string) => {
-          toast.error(message || '로그인에 실패했습니다.');
-        }
-      };
-      
-      handleApiError(error, undefined, customHandlers);
-    }
-  }, []);
+    return new Promise<void>((resolve, reject) => {
+      loginMutation({ email, password }, {
+        onSuccess: () => {
+          onSuccess?.();
+          resolve();
+        },
+        onError: (error) => {
+          reject(error);
+        },
+      });
+    });
+  }, [loginMutation]);
 
   const logout = useCallback(() => {
     setUserInfo(null);

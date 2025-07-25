@@ -1,37 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { getRankingProducts } from '@/entities/product/api/productApi';
 import type { RankingProduct, TargetType, RankType } from '@/entities/product/model/types';
 import { genderItems, actionItems } from '../../model/constants';
-import { useFetchState } from '@/shared/lib/hooks';
 import { RankingItemCard } from '@/entities/product/ui';
 import { Loading, ErrorMessage } from '@/shared/ui';
 import * as S from './styles';
+import { useQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isExpanded, setIsExpanded] = useState(false);
-  const { fetchState, setLoading, setSuccess, setError } = useFetchState<RankingProduct[]>([],true);
   const navigate = useNavigate();
 
   const selectedGender = searchParams.get('gender') || 'ALL';
   const selectedAction = searchParams.get('action') || 'MANY_WISH';
 
-  useEffect(() => {
-    const fetchRankingProducts = async () => {
-      setLoading(true);
-      try {
-        const data = await getRankingProducts(selectedGender as TargetType, selectedAction as RankType);
-        setSuccess(data);
-      } catch {
-        setError();
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchRankingProducts();
-  }, [selectedGender, selectedAction]);
+  const { data, isLoading, isError } = useQuery<RankingProduct[]>({
+    queryKey: QUERY_KEYS.RANKING_PRODUCTS(selectedGender, selectedAction),
+    queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
+  });
 
   const handleGenderChange = (gender: string) => {
     setSearchParams(prev => {
@@ -52,6 +41,24 @@ const RankingSection = () => {
   const handleItemCardClick = (item: RankingProduct) => {
     navigate(`/order/${item.id}`);
   };
+
+  if (isError) {
+    return (
+      <S.Section>
+        <ErrorMessage height="400px" />
+      </S.Section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <S.Section>
+        <Loading height="400px" />
+      </S.Section>
+    );
+  }
+
+  if (!data) return null;
 
   return (
     <S.Section>
@@ -84,16 +91,10 @@ const RankingSection = () => {
         </S.ActionFilterContainer>
       </S.FilterContainer>
       
-      {fetchState.isLoading ? (
-        <Loading height="400px" />
-      ) : fetchState.isError ? (
-        <ErrorMessage height="400px" />
-      ) : fetchState.data.length === 0 ? (
-        <S.EmptyMessage>상품이 없습니다.</S.EmptyMessage>
-      ) : (
+      
         <>
           <S.Grid>
-            {(isExpanded ? fetchState.data : fetchState.data.slice(0, 6)).map((item, index) => (
+            {(isExpanded ? data : data?.slice(0, 6))?.map((item, index) => (
               <RankingItemCard
                 key={item.id}
                 imageUrl={item.imageURL}
@@ -110,7 +111,6 @@ const RankingSection = () => {
             {isExpanded ? '접기' : '더보기'}
           </S.MoreButton>
         </>
-      )}
     </S.Section>
   );
 };
