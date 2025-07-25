@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import styled from '@emotion/styled';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/service/authHooks';
 
 const HeaderContainer = styled.header`
   display: flex;

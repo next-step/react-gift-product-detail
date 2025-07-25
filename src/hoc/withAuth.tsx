@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/service/authHooks';
 import { Navigate, useLocation } from 'react-router';
 import type { ComponentType, PropsWithChildren } from 'react';
 

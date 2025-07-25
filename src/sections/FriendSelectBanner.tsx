@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/service/authHooks';
 
 const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
