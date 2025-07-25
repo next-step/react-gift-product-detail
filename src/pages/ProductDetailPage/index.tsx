@@ -70,7 +70,16 @@ const ProductDetailPage: React.FC = () => {
               ))}
             </S.Reviews>
           )}
-          {selectedTab === 'detail' && <div>상세정보 영역 (임시)</div>}
+          {selectedTab === 'detail' && detail && (
+            <S.Details>
+              {detail.announcements.map((detail) => (
+                <S.DetailWrapper key={detail.name}>
+                  <S.DetailName>{detail.name}</S.DetailName>
+                  <S.DetailValue>{detail.value}</S.DetailValue>
+                </S.DetailWrapper>
+              ))}
+            </S.Details>
+          )}
         </S.TabContent>
       </S.Container>
       <S.ButtonContainer>
