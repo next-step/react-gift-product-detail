@@ -2,7 +2,6 @@ import StyledTopestDiv from '@src/styles/StyledTopesDiv';
 import { usePresentThemeFetch } from './useThemesProductLabel';
 import {
   StyledThemesProductGridContainer,
-  StyledThemesProductLabelItem,
   StyledThemesProductPaddingContainer,
 } from './StyledThemesProductItem';
 import { useThemesProductItem } from './useThemesProductItem';

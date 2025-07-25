@@ -16,8 +16,8 @@ type ThemeLabel = {
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const getFetch = async (themeId: string | undefined): Promise<ThemeLabel> => {
-  const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme + `themes/${themeId}/info`);
-  const data = res.data;
+  const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme + `/${themeId}/info`);
+  const data = res.data.data;
   return data;
 };
 export const usePresentThemeFetch = () => {
