@@ -9,6 +9,7 @@ import { generatePath, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import getProductsRanking from "@/apis/products/getProductsRanking";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 interface RankingListProps {
   targetType: ProductRankingFilterOption["targetType"];
@@ -26,7 +27,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   };
 
   const { data, isPending, isError } = useQuery({
-    queryKey: ["rankingList", targetType, rankType],
+    queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
     queryFn: () => getProductsRanking({ targetType, rankType }),
     select: (data) => data.data.data,
   });

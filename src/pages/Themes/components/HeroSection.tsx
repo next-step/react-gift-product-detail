@@ -8,6 +8,7 @@ import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const HeroSection = () => {
   const { themeId } = useParams();
 
   const { data, isPending, error, isError } = useQuery({
-    queryKey: ["theme", themeId],
+    queryKey: QUERY_KEYS.THEME_INFO(themeId ?? ""),
     queryFn: () => getThemeInfo({ themeId: themeId ?? "" }),
     select: (data) => data.data.data,
   });

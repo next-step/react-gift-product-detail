@@ -4,6 +4,7 @@ import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import { isApiErrorResponse } from "@/types/ApiErrorResponse";
 import getThemeProducts from "@/apis/themes/getThemeProducts";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const usePaginationFetch = <T>(
   themeId: string,
@@ -14,7 +15,7 @@ const usePaginationFetch = <T>(
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
   const { data, error, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ["themeProducts", themeId],
+    queryKey: QUERY_KEYS.THEME_PRODUCTS(themeId),
     queryFn: ({ pageParam }) => getThemeProducts<T>({ themeId, params: { cursor: pageParam as number, limit } }),
     getNextPageParam: (lastPage) => {
       return lastPage.data.data.hasMoreList ? lastPage.data.data.cursor : undefined;

@@ -2,6 +2,7 @@ import getProductSummary from "@/apis/products/getProductSummary";
 import Divider from "@/components/common/Divider";
 import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
@@ -18,7 +19,7 @@ const Product = () => {
   const navigate = useNavigate();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["orderProduct", productId],
+    queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
     select: (data) => data.data.data,
     enabled: !!productId,

@@ -4,10 +4,11 @@ import { generatePath, Link } from "react-router-dom";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { useQuery } from "@tanstack/react-query";
 import { getThemes } from "@/apis/themes/getThemes";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const Category = () => {
   const { isPending, isError, data } = useQuery({
-    queryKey: ["themes"],
+    queryKey: QUERY_KEYS.THEMES,
     queryFn: getThemes,
     select: (data) => data.data.data,
   });
