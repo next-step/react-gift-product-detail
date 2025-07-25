@@ -8,6 +8,7 @@ export const Divider = styled.div`
 export const ProductDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background.default};
 `;
 
 export const ProductImage = styled.img`

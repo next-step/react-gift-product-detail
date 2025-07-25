@@ -50,8 +50,3 @@ export const OrderButton = styled.button`
   color: ${({ theme }) => theme.colors.text.default};
   cursor: pointer;
 `;
-
-export const BottomMargin = styled.div`
-  flex: 1;
-  margin-bottom: 3.2rem;
-`;

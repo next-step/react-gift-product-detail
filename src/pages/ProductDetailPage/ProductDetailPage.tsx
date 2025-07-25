@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ErrorContainer } from "../HomePage/components/Category/Category.styles";
 import LikeIconImage from "./assets/heart.png";
 import {
-  BottomMargin,
   LikeCount,
   LikeIcon,
   LikeIconContainer,
@@ -20,6 +19,29 @@ import {
 import { ROUTES } from "@/constants/routes";
 import ProductHeader from "./components/ProductHeader/ProductHeader";
 import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
+import styled from "@emotion/styled";
+
+const ContentLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3.2rem;
+  gap: ${({ theme }) => theme.spacing[3]};
+  background-color: ${({ theme }) => theme.colors.background.disabled};
+`;
+
+const ProductInfoTabContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.background.default};
+`;
+
+function ProductDetailContentLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <ContentLayout>{children}</ContentLayout>;
+}
 
 function BottomNavigationWrapper({
   children,
@@ -41,7 +63,7 @@ function BottomNavigationWrapper({
 
   return (
     <>
-      <BottomMargin>{children}</BottomMargin>
+      <ProductDetailContentLayout>{children}</ProductDetailContentLayout>
       <OrderButtonContainer>
         <LikeIconContainer>
           <LikeIcon src={LikeIconImage} alt="" />
@@ -65,21 +87,24 @@ function ProductDetailPage() {
 
   return (
     <Layout>
-      <BottomNavigationWrapper productId={id!}>
-        <ErrorBoundary
-          fallback={
-            <ErrorContainer>
-              <ErrorMessage>
-                {PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE}
-              </ErrorMessage>
-            </ErrorContainer>
-          }
-        >
-          <Suspense fallback={<Loading />}>
+      <ErrorBoundary
+        fallback={
+          <ErrorContainer>
+            <ErrorMessage>
+              {PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE}
+            </ErrorMessage>
+          </ErrorContainer>
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <BottomNavigationWrapper productId={id!}>
             <ProductHeader data={data} />
-          </Suspense>
-        </ErrorBoundary>
-      </BottomNavigationWrapper>
+            <ProductInfoTabContainer>
+              <p>product info tab</p>
+            </ProductInfoTabContainer>
+          </BottomNavigationWrapper>
+        </Suspense>
+      </ErrorBoundary>
     </Layout>
   );
 }
