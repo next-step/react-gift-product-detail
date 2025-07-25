@@ -1,5 +1,5 @@
 import type { CategoryValue, SortValue } from './constants';
-import { useQueryApi } from '@/apis/useQueryApi';
+import { useSuspenseQueryApi } from '@/apis/useQueryApi';
 
 type Product = {
   id: number;
@@ -22,15 +22,12 @@ type ApiResponse = {
 };
 
 const useGetRanking = (targetType: CategoryValue, rankType: SortValue) => {
-  const { data } = useQueryApi<ApiResponse>(
+  const { data } = useSuspenseQueryApi<ApiResponse>(
     ['products', 'ranking', targetType, rankType],
-    `/products/ranking?targetType=${targetType}&rankType=${rankType}`,
-    {
-      suspense: true,
-    }
+    `/products/ranking?targetType=${targetType}&rankType=${rankType}`
   );
 
-  return { products: data?.data || [] };
+  return { products: data.data };
 };
 
 export default useGetRanking;

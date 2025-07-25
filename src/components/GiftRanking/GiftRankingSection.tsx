@@ -48,7 +48,7 @@ const GiftRankingSection = () => {
         }}
       />
       <ApiErrorBoundary>
-        <SuspenseWrapper fallback={<None>로딩중...</None>}>
+        <SuspenseWrapper>
           <GiftRankingContent
             selectedCategory={selectedCategory}
             selectedSort={selectedSort}

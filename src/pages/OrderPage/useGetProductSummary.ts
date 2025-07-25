@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useQueryApi } from '@/apis/useQueryApi';
+import { useSuspenseQueryApi } from '@/apis/useQueryApi';
 
 interface ProductSummary {
   id: number;
@@ -11,13 +11,13 @@ interface ProductSummary {
 
 const useGetProductSummary = () => {
   const { productId } = useParams<{ productId: string }>();
-  const { data } = useQueryApi<{ data: ProductSummary }>(
+  const { data } = useSuspenseQueryApi<{ data: ProductSummary }>(
     ['product', 'summary', productId || ''],
     productId ? `/products/${productId}/summary` : '',
-    { enabled: !!productId, suspense: true }
+    { enabled: !!productId }
   );
 
-  const product = data?.data || null;
+  const product = data.data;
   return { product };
 };
 

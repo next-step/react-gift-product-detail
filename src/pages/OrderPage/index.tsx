@@ -30,7 +30,7 @@ import SuspenseWrapper from '@/components/common/SuspenseWrapper';
 function OrderPage() {
   return (
     <ApiErrorBoundary>
-      <SuspenseWrapper fallback={<Container>로딩 중...</Container>}>
+      <SuspenseWrapper>
         <OrderPageContent />
       </SuspenseWrapper>
     </ApiErrorBoundary>

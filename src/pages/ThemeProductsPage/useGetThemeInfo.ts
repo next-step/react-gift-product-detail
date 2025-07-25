@@ -1,4 +1,4 @@
-import { useQueryApi } from '@/apis/useQueryApi';
+import { useSuspenseQueryApi } from '@/apis/useQueryApi';
 import { API_URLS } from './constants';
 
 interface ThemeInfo {
@@ -10,11 +10,11 @@ interface ThemeInfo {
 }
 
 export const useGetThemeInfo = (themeId: number) => {
-  const { data } = useQueryApi<{ data: ThemeInfo }>(
+  const { data } = useSuspenseQueryApi<{ data: ThemeInfo }>(
     ['theme', 'info', String(themeId)],
     API_URLS.THEME_INFO(themeId),
-    { enabled: !!themeId, suspense: true }
+    { enabled: !!themeId }
   );
 
-  return { themeInfo: data?.data };
+  return { themeInfo: data.data };
 };

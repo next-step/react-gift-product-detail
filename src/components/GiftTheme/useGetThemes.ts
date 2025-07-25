@@ -1,4 +1,4 @@
-import { useQueryApi } from '@/apis/useQueryApi';
+import { useSuspenseQueryApi } from '@/apis/useQueryApi';
 
 export interface Theme {
   themeId: number;
@@ -11,8 +11,6 @@ interface ApiResponse {
 }
 
 export const useGetThemes = () => {
-  const { data } = useQueryApi<ApiResponse>(['themes'], '/themes', {
-    suspense: true,
-  });
-  return { themes: data?.data || [] };
+  const { data } = useSuspenseQueryApi<ApiResponse>(['themes'], '/themes');
+  return { themes: data.data };
 };
