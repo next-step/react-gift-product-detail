@@ -1,60 +1,51 @@
-import { useCallback, useEffect, useState } from "react";
-import useFetch from "@/hooks/useFetch";
+import { useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import useInView from "@/hooks/useInView";
-
-interface PaginationData<T> {
-  list: T[];
-  cursor: number;
-  hasMoreList: boolean;
-}
+import { showFetchErrorToast } from "@/utils/showFetchToast";
+import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
+import getThemeProducts from "@/apis/themes/getThemeProducts";
+import { QUERY_KEYS } from "@/constants/queryKeys";
+import axios from "axios";
 
 const usePaginationFetch = <T>(
-  url: string,
+  themeId: string,
   limit: number = 10,
   threshold: number = 0.5,
   errorMessage: string = "데이터를 불러오는데 실패했습니다.",
 ) => {
-  const [items, setItems] = useState<T[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMoreList, setHasMoreList] = useState(true);
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
-  const { fetchData, isLoading } = useFetch<PaginationData<T>>(url, {
-    autoFetch: false,
+  const { data, error, isError, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
+    queryKey: QUERY_KEYS.THEME_PRODUCTS(themeId),
+    queryFn: ({ pageParam }) => getThemeProducts<T>({ themeId, params: { cursor: pageParam as number, limit } }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.data.hasMoreList ? lastPage.data.data.cursor : undefined;
+    },
+    initialPageParam: 0,
   });
 
-  const loadMoreItems = useCallback(async () => {
-    if (isLoading || !hasMoreList) return null;
-
-    try {
-      const response = await fetchData(undefined, undefined, {
-        cursor,
-        limit,
-      });
-
-      if (response.error) {
-        setHasMoreList(false);
-        return null;
-      }
-
-      if (response.data) {
-        setItems((prev) => [...prev, ...(response.data?.list ?? [])]);
-        setCursor(response.data.cursor);
-        setHasMoreList(response.data.hasMoreList);
-      }
-    } catch (error) {
-      console.error(errorMessage, error);
-      setHasMoreList(false);
+  useEffect(() => {
+    if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
+      const statusCode = error.response?.data.data.statusCode as number;
+      const message = error.response?.data.data.message as string;
+      showFetchErrorToast(statusCode, message);
     }
-  }, [cursor, hasMoreList, isLoading, fetchData, limit, errorMessage]);
+  }, [isError, error, errorMessage]);
 
   useEffect(() => {
-    if (isInView && hasMoreList && !isLoading) {
-      loadMoreItems();
+    if (isInView && hasNextPage && !isFetching) {
+      fetchNextPage();
     }
-  }, [hasMoreList, loadMoreItems, isInView, isLoading]);
+  }, [isInView, hasNextPage, isFetching, fetchNextPage]);
 
-  return { items, isLoading, hasMoreList, loader };
+  const items: T[] = data?.pages.flatMap((page) => page.data.data.list) ?? [];
+
+  return {
+    items,
+    isFetching,
+    hasMoreList: hasNextPage ?? false,
+    loader,
+  };
 };
 
 export default usePaginationFetch;

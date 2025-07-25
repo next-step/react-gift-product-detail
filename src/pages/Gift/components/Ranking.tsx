@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import RankingList from "@/pages/Gift/components/RankingList";
 import { rankingRankCategoryList, rankingTargetCategory } from "@/assets/rankingCategory";
 import useRankingFilter from "@/hooks/useRankingFilter";
+import type { ProductRankingFilterOption } from "@/types/ProductType";
 
 const Ranking = () => {
   const { selectedTarget, selectedRank, changeTargetType, changeRankType } = useRankingFilter();
@@ -32,7 +33,7 @@ const Ranking = () => {
               key={keyword}
               selected={checkSelected(keyword, selectedRank)}
               onClick={() => {
-                changeRankType(keyword);
+                changeRankType(keyword as ProductRankingFilterOption["rankType"]);
               }}
             >
               {rankCategory}

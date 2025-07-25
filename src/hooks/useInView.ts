@@ -7,22 +7,22 @@ const useInView = <T extends HTMLDivElement>(threshold: number = 0.5) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-        ([entries]) => {
-          setIsInView(entries.isIntersecting);
-        },
-        { threshold },
-      );
-  
-      const el = ref.current;
+      ([entries]) => {
+        setIsInView(entries.isIntersecting);
+      },
+      { threshold },
+    );
+
+    const el = ref.current;
+    if (el) {
+      observer.observe(el);
+    }
+
+    return () => {
       if (el) {
-        observer.observe(el);
+        observer.unobserve(el);
       }
-  
-      return () => {
-        if (el) {
-          observer.unobserve(el);
-        }
-      };
+    };
   }, [threshold, ref, setIsInView]);
 
   return { ref, isInView };

@@ -3,16 +3,17 @@ import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
 import { useState } from "react";
 import Button from "@/components/common/Button";
-import useFetch from "@/hooks/useFetch";
 import Loading from "@/components/common/Loading";
-import type { RankingProductType } from "@/types/RankingProductType";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { generatePath, Link } from "react-router-dom";
-import API_ENDPOINTS from "@/constants/apiEndpoints";
+import { useQuery } from "@tanstack/react-query";
+import getProductsRanking from "@/apis/products/getProductsRanking";
+import type { ProductRankingFilterOption } from "@/types/ProductType";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 interface RankingListProps {
-  targetType: string;
-  rankType: string;
+  targetType: ProductRankingFilterOption["targetType"];
+  rankType: ProductRankingFilterOption["rankType"];
 }
 
 const RANKING_LIST_ITEM_VIEW_COUNT = 6;
@@ -25,15 +26,16 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     setViewCount(nextViewCount);
   };
 
-  const rankingListData = useFetch<RankingProductType[]>(API_ENDPOINTS.PRODUCTS_RANKING, {
-    params: { targetType, rankType },
-    dependency: [targetType, rankType],
+  const { data, isPending, isError } = useQuery({
+    queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
+    queryFn: () => getProductsRanking({ targetType, rankType }),
+    select: (data) => data.data.data,
   });
 
-  if (rankingListData.isLoading) {
+  if (isPending) {
     return <Loading height="625px" />;
   }
-  if (rankingListData.error || rankingListData.data?.length === 0) {
+  if (isError || data?.length === 0) {
     return (
       <Empty>
         <Msg>상품이 없습니다.</Msg>
@@ -43,7 +45,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   return (
     <Container>
       <Content>
-        {rankingListData.data?.slice(0, viewCount).map((item, index) => (
+        {data?.slice(0, viewCount).map((item, index) => (
           <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
             <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
             <ItemContent>

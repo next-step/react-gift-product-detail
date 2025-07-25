@@ -1,43 +1,43 @@
 import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
-import API_ENDPOINTS from "@/constants/apiEndpoints";
-import useFetch from "@/hooks/useFetch";
+import getThemeInfo from "@/apis/themes/getThemeInfo";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
-import { generatePath, useNavigate, useParams } from "react-router-dom";
-
-interface HeroSectionData {
-  themeId: number;
-  name: string;
-  title: string;
-  description: string;
-  backgroundColor: string;
-}
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const HeroSection = () => {
   const navigate = useNavigate();
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
   const { themeId } = useParams();
-  const { data, isLoading, error } = useFetch<HeroSectionData>(
-    generatePath(API_ENDPOINTS.THEME_INFO, { themeId: themeId ?? null }),
-  );
+
+  const { data, isPending, error, isError } = useQuery({
+    queryKey: QUERY_KEYS.THEME_INFO(themeId ?? ""),
+    queryFn: () => getThemeInfo({ themeId: themeId ?? "" }),
+    select: (data) => data.data.data,
+  });
 
   useEffect(() => {
-    if (error) {
-      if (error?.statusCode === 404) {
-        showFetchErrorToast(error.statusCode, error.message, goHome);
+    if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
+      const statusCode = error.response?.data.data.statusCode as number;
+      const message = error.response?.data.data.message as string;
+      if (statusCode === 404) {
+        showFetchErrorToast(statusCode, message, goHome);
       } else {
-        showFetchErrorToast(error?.statusCode ?? 500, error?.message ?? "잠시 후 다시 시도해주세요.");
+        showFetchErrorToast(statusCode, "잠시 후 다시 시도해주세요.", goHome);
       }
     }
-  }, [error, goHome]);
+  }, [isError, error, goHome]);
 
-  if (isLoading) {
+  if (isPending) {
     return <Loading height="127.2px" />;
   }
 
-  if (error || !data) {
+  if (isError || !data) {
     return null;
   }
 

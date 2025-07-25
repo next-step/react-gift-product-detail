@@ -1,6 +1,6 @@
-import type { RankingProductType } from "@/types/RankingProductType";
+import type { ProductData } from "@/types/ProductType";
 
-export const rankingItemMock: RankingProductType[] = [
+export const rankingItemMock: ProductData[] = [
   {
     id: 123,
     name: "BBQ 양념치킨+크림치즈볼+콜라1.25L",
