@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import useFetch from '@hooks/useFetch';
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import TargetTab from './TargetTab';
@@ -15,6 +14,8 @@ import {
 } from './RankingTypes';
 import RankTab from './RankTab';
 import ProductGrid from './ProductGrid';
+import { useQuery } from '@tanstack/react-query';
+import { fetchRankedProducts } from '@apis/rankingApi';
 
 const addRanking = (products: Product[]): RankedProduct[] => {
   return products.map((product, i) => ({
@@ -44,9 +45,12 @@ const RankingSection = () => {
     setSearchParams(newParams);
   };
 
-  const { data, loading, error } = useFetch<Product[]>(
-    `/products/ranking?targetType=${Target_MAP[selectedTarget]}&rankType=${Rank_MAP[selectedRank]}`
-  );
+  const apiTargetType = Target_MAP[selectedTarget];
+  const apiRankType = Rank_MAP[selectedRank];
+  const { data, isError, isPending } = useQuery<Product[]>({
+    queryKey: ['RankedProducts', apiTargetType, apiRankType],
+    queryFn: () => fetchRankedProducts(apiTargetType, apiRankType),
+  });
 
   const products = data ? addRanking(data) : [];
 
@@ -70,8 +74,8 @@ const RankingSection = () => {
 
       <ProductGrid
         products={products}
-        loading={loading}
-        error={error}
+        isPending={isPending}
+        isError={isError}
         isExpanded={isExpanded}
         toggleExpand={() => setIsExpanded((prev) => !prev)}
         onClickItem={handleClick}

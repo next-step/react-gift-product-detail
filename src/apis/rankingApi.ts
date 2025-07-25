@@ -7,5 +7,5 @@ export const fetchRankedProducts = async (
   const res = await axiosInstance.get(
     `/products/ranking?targetType=${apiTargetType}&rankType=${apiRankType}`
   );
-  return res.data;
+  return res.data.data;
 };

@@ -5,8 +5,8 @@ import EmptyMessage from '@components/common/EmptyMessage';
 
 const ProductGrid = ({
   products,
-  loading,
-  error,
+  isError,
+  isPending,
   isExpanded,
   toggleExpand,
   onClickItem,
@@ -14,9 +14,9 @@ const ProductGrid = ({
   const visibleItems = isExpanded ? products : products.slice(0, 6);
   return (
     <>
-      {loading && <LoadingSpinner />}
+      {isPending && <LoadingSpinner />}
 
-      {!loading && !error && products.length > 0 ? (
+      {!isPending && !isError && products.length > 0 ? (
         <Grid>
           {visibleItems.map((item: RankedProduct) => (
             <ProductCard
