@@ -1,3 +1,4 @@
+import { PRODUCT_DETAIL_LABELS } from "../../constants/labels";
 import {
   ProductDetailContainer,
   ProductImage,
@@ -20,7 +21,9 @@ function ProductHeader({ data }: { data: ThemeProduct }) {
         <ProductName>{data.name}</ProductName>
         <ProductPrice>
           {data.price.sellingPrice}
-          <ProductPriceUnit>원</ProductPriceUnit>
+          <ProductPriceUnit>
+            {PRODUCT_DETAIL_LABELS.PRICE_UNIT}
+          </ProductPriceUnit>
         </ProductPrice>
       </ProductInfoContainer>
       <Divider />

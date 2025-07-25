@@ -19,6 +19,7 @@ import {
 } from "./ProductDetailPage.styles";
 import { ROUTES } from "@/constants/routes";
 import ProductHeader from "./components/ProductHeader/ProductHeader";
+import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
 
 function BottomNavigationWrapper({
   children,
@@ -41,7 +42,9 @@ function BottomNavigationWrapper({
           <LikeIcon src={LikeIconImage} alt="Like Icon" />
           <LikeCount>1237</LikeCount>
         </LikeIconContainer>
-        <OrderButton onClick={handleOrderButtonClick}>주문하기</OrderButton>
+        <OrderButton onClick={handleOrderButtonClick}>
+          {PRODUCT_DETAIL_LABELS.ORDER_BUTTON}
+        </OrderButton>
       </OrderButtonContainer>
     </>
   );
@@ -61,7 +64,9 @@ function ProductDetailPage() {
         <ErrorBoundary
           fallback={
             <ErrorContainer>
-              <ErrorMessage>등록된 상품이 없습니다.</ErrorMessage>
+              <ErrorMessage>
+                {PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE}
+              </ErrorMessage>
             </ErrorContainer>
           }
         >
