@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ErrorContainer } from "../HomePage/components/Category/Category.styles";
 import LikeIconImage from "./assets/heart.png";
 import {
+  BottomMargin,
   LikeCount,
   LikeIcon,
   LikeIconContainer,
@@ -17,67 +18,15 @@ import {
   OrderButtonContainer,
 } from "./ProductDetailPage.styles";
 import { ROUTES } from "@/constants/routes";
-import styled from "@emotion/styled";
+import ProductHeader from "./components/ProductHeader/ProductHeader";
 
-const Divider = styled.div`
-  height: 1px;
-  background-color: ${({ theme }) => theme.colors.gray[300]};
-`;
-
-const ProductDetailContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ProductImage = styled.img`
-  width: 100%;
-  object-fit: contain;
-`;
-
-const ProductInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: ${({ theme }) => theme.spacing[4]};
-  gap: ${({ theme }) => theme.spacing[3]};
-`;
-
-const ProductName = styled.h1`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
-const ProductPrice = styled.p`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
-const ProductPriceUnit = styled.span`
-  font-size: ${({ theme }) => theme.typography.title.title1Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.title.title1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
-const BrandInfoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding: ${({ theme }) => theme.spacing[4]};
-  gap: ${({ theme }) => theme.spacing[2]};
-`;
-
-const BrandImage = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: contain;
-`;
-
-const BrandName = styled.p``;
-
-function BottomNavigation({ productId }: { productId: string }) {
+function BottomNavigationWrapper({
+  children,
+  productId,
+}: {
+  children: React.ReactNode;
+  productId: string;
+}) {
   const navigate = useNavigate();
 
   const handleOrderButtonClick = () => {
@@ -85,13 +34,16 @@ function BottomNavigation({ productId }: { productId: string }) {
   };
 
   return (
-    <OrderButtonContainer>
-      <LikeIconContainer>
-        <LikeIcon src={LikeIconImage} alt="Like Icon" />
-        <LikeCount>1237</LikeCount>
-      </LikeIconContainer>
-      <OrderButton onClick={handleOrderButtonClick}>주문하기</OrderButton>
-    </OrderButtonContainer>
+    <>
+      <BottomMargin>{children}</BottomMargin>
+      <OrderButtonContainer>
+        <LikeIconContainer>
+          <LikeIcon src={LikeIconImage} alt="Like Icon" />
+          <LikeCount>1237</LikeCount>
+        </LikeIconContainer>
+        <OrderButton onClick={handleOrderButtonClick}>주문하기</OrderButton>
+      </OrderButtonContainer>
+    </>
   );
 }
 
@@ -105,7 +57,7 @@ function ProductDetailPage() {
 
   return (
     <Layout>
-      <div style={{ flex: 1, marginBottom: "3.2rem" }}>
+      <BottomNavigationWrapper productId={id!}>
         <ErrorBoundary
           fallback={
             <ErrorContainer>
@@ -114,28 +66,10 @@ function ProductDetailPage() {
           }
         >
           <Suspense fallback={<Loading />}>
-            <ProductDetailContainer>
-              <ProductImage src={data.imageURL} alt={data.name} />
-              <ProductInfoContainer>
-                <ProductName>{data.name}</ProductName>
-                <ProductPrice>
-                  {data.price.sellingPrice}
-                  <ProductPriceUnit>원</ProductPriceUnit>
-                </ProductPrice>
-              </ProductInfoContainer>
-              <Divider />
-              <BrandInfoContainer>
-                <BrandImage
-                  src={data.brandInfo.imageURL}
-                  alt={data.brandInfo.name}
-                />
-                <BrandName>{data.brandInfo.name}</BrandName>
-              </BrandInfoContainer>
-            </ProductDetailContainer>
+            <ProductHeader data={data} />
           </Suspense>
         </ErrorBoundary>
-      </div>
-      <BottomNavigation productId={id!} />
+      </BottomNavigationWrapper>
     </Layout>
   );
 }
