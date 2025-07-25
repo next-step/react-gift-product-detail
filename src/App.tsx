@@ -6,19 +6,25 @@ import { theme } from './styles/theme/index';
 import Container from './styles/Container.tsx/Container';
 import { AppRouter } from './routes/Router';
 import AuthProvider from './contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
-  return (
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <Container>
-          <GlobalStyles />
-          <ToastContainer />
+  const queryClient = new QueryClient();
 
-          <AppRouter />
-        </Container>
-      </ThemeProvider>
-    </AuthProvider>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <Container>
+            <GlobalStyles />
+            <ToastContainer />
+
+            <AppRouter />
+          </Container>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+
   );
 }
 export default App;

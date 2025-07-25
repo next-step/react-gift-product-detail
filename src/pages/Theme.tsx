@@ -2,15 +2,15 @@ import Navbar from '@/components/navbar/Navbar';
 import { PaddingSm } from './../components/common/Padding';
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { useFetch } from '@/hooks/useFetch';
 import { useParams } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { fetchthemeInfo, fetchThemeProducts } from '@/services/themeApi';
-import { type ErrorInfo } from '@/types/error';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Router';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+
 
 const Header = styled.section`
   width: 100%;
@@ -55,49 +55,47 @@ const Theme = () => {
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
-  const [products, setProducts] = useState<Type[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasNext, setHasNext] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
+
   const LIMIT = 10;
 
-  useEffect(() => {
-    if (!inView || !hasNext || isFetching) return;
 
-    if (inView) {
-      setIsFetching(true);
-      fetchThemeProducts(themeIdNumber, cursor, LIMIT)
-        .then((data) => {
-          setProducts((prev) => [...prev, ...data.list]);
-          setCursor(data.cursor);
-          setHasNext(data.hasMoreList);
-          setIsFetching(false)
-        })
-        .catch((error) => {
-          console.error('테마 상품 로딩 중 오류 발생:', error);
-        });
-    }
-  }, [inView, cursor, hasNext]);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['themeProducts', themeIdNumber],
+      queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeIdNumber, pageParam, LIMIT),
+      getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+    });
+useEffect(()=>{
+  if (inView && hasNextPage && !isFetchingNextPage) {
+    fetchNextPage();
+  }}, [inView, hasNextPage, isFetchingNextPage])
+
 
   const {
     data: themeData,
     isLoading,
     error,
-  } = useFetch({
-    fetcher: () => fetchthemeInfo(themeIdNumber),
-    initValue: null,
-    deps: [themeIdNumber],
-  });
+  } = useQuery({
+    queryKey:['theme', themeIdNumber],
+    queryFn:()=>fetchthemeInfo(themeIdNumber)
+  
+  })
+ 
 useEffect(()=>{
   if(error){
-    const statusCode = error?.statusCode;
-if(statusCode&& statusCode===404){
-  toast.error("선물 테마 정보를 받아올 수 없어요..")
-  navigate(ROUTE_PATH.HOME)
-
-}
+  if(axios.isAxiosError(error)){
+    const status= error.status
+    if(status===404){
+      toast.error("선물 테마 정보를 받아올 수 없어요.")
+      navigate(ROUTE_PATH.HOME)
+    }
   }
-})
+
+console.dir(error)}
+}, [error])
+
+const products = data?.pages.flatMap((page) => page.list) ?? [];
+
 
   console.dir(products);
   if (isLoading || !themeData) return <div>로딩중...</div>;

@@ -6,7 +6,8 @@ export const fetchProductSummary = (product_id: number) => {
     .then((res) => res.data.data);
 };
 
-export const fetchOrder = async (body, token) => {
+export const fetchOrder = async ({body, token}) => {
+
   return api
     .post(`/order`, body, {
       headers: {

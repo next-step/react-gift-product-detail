@@ -8,29 +8,29 @@ import {
   CategoryImage,
 } from './Category.styles';
 import type { CategoryType } from '@/types/category';
-import { useFetch } from '@/hooks/useFetch';
 import { fetchCategories } from '@/services/themeApi';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Router';
+import { useQuery } from '@tanstack/react-query';
 
 const Category = () => {
-  const navigete= useNavigate();
+  const navigete = useNavigate();
   const {
-    data: category,
+    data: category=[],
     isLoading,
     error,
-  } = useFetch<CategoryType[]>({
-    fetcher: fetchCategories,
-    initValue: [],
-    deps:[]
+  } = useQuery<CategoryType[]>({
+    queryKey: ['category'],
+    queryFn: fetchCategories,
   });
-const handleClickCategory = (themeId: number) => {
-navigete(ROUTE_PATH.THEME.replace(":themeId", String(themeId)))
-};
+  const handleClickCategory = (themeId: number) => {
+    navigete(ROUTE_PATH.THEME.replace(':themeId', String(themeId)));
+  };
 
   if (isLoading) return <div>📢 카테고리가 로딩중입니다..</div>;
   if (error) return <div>❌ 오류 발생: {String(error)}</div>;
-  if (category.length === 0) return <div>📭 선물 테마가 없습니다.</div>;
+  if (category?.length === 0) return <div>📭 선물 테마가 없습니다.</div>;
+
 
   return (
     <CategoryWrapper>
