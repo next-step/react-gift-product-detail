@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { PATH } from '@/constants/paths';
 import PageLayout from '@/Layout/PageLayout';
-import HomePage from '@/pages/HomPage';
+import HomePage from '@/pages/HomePage';
 import LoginPage from '@/pages/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { LoginProvider } from '../contexts/LoginContext';
