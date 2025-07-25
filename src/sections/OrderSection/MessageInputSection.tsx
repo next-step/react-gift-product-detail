@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import type { UseFormRegister } from "react-hook-form";
-import type { OrderFormData } from "@/utils/validateOrderSchema";
+import styled from '@emotion/styled';
+import type { UseFormRegister } from 'react-hook-form';
+import type { OrderFormData } from '@/utils/validateOrderSchema';
 
 const Section = styled.section`
   width: 100%;
@@ -31,11 +31,10 @@ interface Props {
   touched?: boolean;
 }
 
-
-export default function MessageInputSection({ register, error, touched, }: Props) {
+export default function MessageInputSection({ register, error, touched }: Props) {
   return (
     <Section>
-      <TextArea {...register("message")} placeholder="메시지를 입력하세요" />
+      <TextArea {...register('message')} placeholder="메시지를 입력하세요" />
       {touched && error && <ErrorText>{error}</ErrorText>}
     </Section>
   );

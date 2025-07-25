@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { useNavigate } from "react-router";
+import styled from '@emotion/styled';
+import { useNavigate } from 'react-router';
 
 interface ProductCardProps {
   item: {
@@ -28,7 +28,8 @@ const RankBadge = styled.div<{ isTop3: boolean }>`
   position: absolute;
   top: -8px;
   left: -8px;
-  background-color: ${({ theme, isTop3 }) => isTop3 ? theme.color.red.red700 : theme.color.gray.gray500};
+  background-color: ${({ theme, isTop3 }) =>
+    isTop3 ? theme.color.red.red700 : theme.color.gray.gray500};
   color: white;
   font-weight: bold;
   padding: 4px 8px;
@@ -60,7 +61,7 @@ export default function ProductCard({ item, rank }: ProductCardProps) {
 
   const handleClick = () => {
     navigate(`/order/${item.id}`);
-  }
+  };
   return (
     <Card onClick={handleClick}>
       {rank !== undefined && <RankBadge isTop3={rank <= 3}>{rank}</RankBadge>}

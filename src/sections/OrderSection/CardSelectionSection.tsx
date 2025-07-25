@@ -27,7 +27,7 @@ const CardImage = styled.img<{ isSelected: boolean }>`
   height: 64px;
   border-radius: 50%;
   border: ${({ isSelected, theme }) =>
-        isSelected ? `2px solid ${theme.color.semantic.kakaoBrown}` : 'none'};
+    isSelected ? `2px solid ${theme.color.semantic.kakaoBrown}` : 'none'};
   cursor: pointer;
   flex-shrink: 0;
 `;
@@ -40,45 +40,45 @@ const PreviewImage = styled.img`
 `;
 
 interface CardSelectionSectionProps {
-    selectedCardId: number;
-    onSelect: (id: number) => void;
-    setMessage: (message: string) => void;
+  selectedCardId: number;
+  onSelect: (id: number) => void;
+  setMessage: (message: string) => void;
 }
 
 export default function CardSelectionSection({
-    selectedCardId,
-    onSelect,
-    setMessage,
+  selectedCardId,
+  onSelect,
+  setMessage,
 }: CardSelectionSectionProps) {
-    const selectedCard = messageCardData.find((card) => card.id === selectedCardId);
+  const selectedCard = messageCardData.find(card => card.id === selectedCardId);
 
-    const handleSelect = (id: number, message: string) => {
-        onSelect(id);
-        setMessage(message);
-    };
+  const handleSelect = (id: number, message: string) => {
+    onSelect(id);
+    setMessage(message);
+  };
 
-    return (
-        <Section>
-            <InnerContainer>
-                <ScrollContainer>
-                    <CardList>
-                        {messageCardData.map((card) => (
-                            <CardImage
-                                key={card.id}
-                                src={card.imageUrl}
-                                alt={card.defaultTextMessage}
-                                isSelected={card.id === selectedCardId}
-                                onClick={() => handleSelect(card.id, card.defaultTextMessage)}
-                            />
-                        ))}
-                    </CardList>
-                </ScrollContainer>
-                {selectedCard && (
-                    <>
-                        <PreviewImage src={selectedCard.imageUrl} alt={selectedCard.defaultTextMessage} />
-                    </>
-                )}
-            </InnerContainer>
-        </Section>
-    );
+  return (
+    <Section>
+      <InnerContainer>
+        <ScrollContainer>
+          <CardList>
+            {messageCardData.map(card => (
+              <CardImage
+                key={card.id}
+                src={card.imageUrl}
+                alt={card.defaultTextMessage}
+                isSelected={card.id === selectedCardId}
+                onClick={() => handleSelect(card.id, card.defaultTextMessage)}
+              />
+            ))}
+          </CardList>
+        </ScrollContainer>
+        {selectedCard && (
+          <>
+            <PreviewImage src={selectedCard.imageUrl} alt={selectedCard.defaultTextMessage} />
+          </>
+        )}
+      </InnerContainer>
+    </Section>
+  );
 }

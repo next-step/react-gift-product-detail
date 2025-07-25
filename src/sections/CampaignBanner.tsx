@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
@@ -27,12 +27,12 @@ const Title = styled.p`
 `;
 
 export default function CampaignBanner() {
-    return (
-        <Wrapper>
-            <Banner>
-                <Subtitle>카카오테크 캠퍼스 3기 여러분</Subtitle>
-                <Title>프론트엔드 2단계 과제 화이팅! 🎉</Title>
-            </Banner>
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      <Banner>
+        <Subtitle>카카오테크 캠퍼스 3기 여러분</Subtitle>
+        <Title>프론트엔드 2단계 과제 화이팅! 🎉</Title>
+      </Banner>
+    </Wrapper>
+  );
 }

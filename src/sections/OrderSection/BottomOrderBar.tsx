@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const Bar = styled.div`
   background-color: ${({ theme }) => theme.color.semantic.kakaoYellow};
@@ -18,17 +18,17 @@ const Button = styled.button`
 `;
 
 interface Props {
-    totalPrice: number;
-    isValid: boolean;
-    onOrder: () => void;
+  totalPrice: number;
+  isValid: boolean;
+  onOrder: () => void;
 }
 
 export default function BottomOrderBar({ totalPrice, isValid, onOrder }: Props) {
-    return (
-        <Bar>
-            <Button onClick={onOrder} disabled={!isValid}>
-                {totalPrice.toLocaleString()}원 주문하기
-            </Button>
-        </Bar>
-    );
+  return (
+    <Bar>
+      <Button onClick={onOrder} disabled={!isValid}>
+        {totalPrice.toLocaleString()}원 주문하기
+      </Button>
+    </Bar>
+  );
 }

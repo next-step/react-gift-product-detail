@@ -26,24 +26,24 @@ const Img = styled.img`
 `;
 
 interface Product {
-    imageUrl: string;
-    name: string;
-    brand: string;
-    price: number;
+  imageUrl: string;
+  name: string;
+  brand: string;
+  price: number;
 }
 
 export default function ProductInfoSection({ product }: { product: Product }) {
-    return (
-        <Wrapper>
-            <Label htmlFor="productInfo">상품 정보</Label>
-            <InfoWrapper>
-                <Img src={product.imageUrl} alt={product.name} />
-                <div>
-                    <div>{product.name}</div>
-                    <div>{product.brand}</div>
-                    <div>상품가 {product.price.toLocaleString()}원</div>
-                </div>
-            </InfoWrapper>
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      <Label htmlFor="productInfo">상품 정보</Label>
+      <InfoWrapper>
+        <Img src={product.imageUrl} alt={product.name} />
+        <div>
+          <div>{product.name}</div>
+          <div>{product.brand}</div>
+          <div>상품가 {product.price.toLocaleString()}원</div>
+        </div>
+      </InfoWrapper>
+    </Wrapper>
+  );
 }

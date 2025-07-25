@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import type { UseFormRegister } from "react-hook-form";
-import type { OrderFormData } from "@/utils/validateOrderSchema";
+import styled from '@emotion/styled';
+import type { UseFormRegister } from 'react-hook-form';
+import type { OrderFormData } from '@/utils/validateOrderSchema';
 
 const Section = styled.section`
   width: 100%;
@@ -38,7 +38,7 @@ export default function SenderSection({ register, error, touched }: Props) {
   return (
     <Section>
       <Label htmlFor="sender">보내는 사람</Label>
-      <Input {...register("sender")} placeholder="이름을 입력하세요" />
+      <Input {...register('sender')} placeholder="이름을 입력하세요" />
       {touched && error && <ErrorText>{error}</ErrorText>}
     </Section>
   );

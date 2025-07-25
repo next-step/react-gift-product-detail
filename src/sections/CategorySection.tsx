@@ -1,7 +1,10 @@
-import styled from "@emotion/styled";
-import CategoryCard from "@/components/CategoryCard";
-import { useThemes } from "@/hooks/useThemes";
-import AsyncBoundary from "@/components/AsyncBoundary";
+import styled from '@emotion/styled';
+import CategoryCard from '@/components/CategoryCard';
+import { useThemesQuery } from '@/hooks/queries/useThemesQuery';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import Spinner from '@/components/Spinner';
 
 const Section = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5} 0;
@@ -19,21 +22,33 @@ const Grid = styled.div`
   gap: ${({ theme }) => theme.spacing.spacing3};
 `;
 
-export default function CategorySection() {
-  const { themes, loading, error } = useThemes();
+function CategoryList() {
+  const { data: themes } = useThemesQuery();
 
+  if (themes.length === 0) return null;
+
+  return (
+    <Grid>
+      {themes.map(({ themeId, name, image }) => (
+        <CategoryCard key={themeId} themeId={themeId} name={name} image={image} />
+      ))}
+    </Grid>
+  );
+}
+
+export default function CategorySection() {
   return (
     <Section>
       <SectionTitle>선물 테마</SectionTitle>
-      <AsyncBoundary loading={loading} error={error} errorFallback={null}>
-        {themes && themes.length > 0 && (
-          <Grid>
-            {themes.map(({ themeId, name, image }) => (
-              <CategoryCard key={themeId} themeId={themeId} name={name} image={image} />
-            ))}
-          </Grid>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset} fallbackRender={() => null}>
+            <Suspense fallback={<Spinner />}>
+              <CategoryList />
+            </Suspense>
+          </ErrorBoundary>
         )}
-      </AsyncBoundary>
+      </QueryErrorResetBoundary>
     </Section>
   );
 }

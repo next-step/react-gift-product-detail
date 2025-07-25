@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
+import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 const spin = keyframes`
   to {
@@ -24,9 +24,9 @@ const SpinnerCircle = styled.div`
 `;
 
 export default function Spinner() {
-    return (
-        <SpinnerWrapper>
-            <SpinnerCircle />
-        </SpinnerWrapper>
-    );
+  return (
+    <SpinnerWrapper>
+      <SpinnerCircle />
+    </SpinnerWrapper>
+  );
 }

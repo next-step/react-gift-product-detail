@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router";
-import styled from "@emotion/styled";
-import KakaoLogo from "@/assets/kakaologo.svg";
-import PageContainer from "@/components/PageContainer";
-import Input from "@/components/Input";
-import { useInput } from "@/hooks/useInput";
-import { useValidate } from "@/hooks/useValidate";
-import { validateEmail, validatePassword } from "@/utils/validate";
-import { useAuth } from "@/hooks/useAuth";
-import { login } from "@/apis/auth";
-import { toast } from "react-toastify";
-import { AxiosError } from "axios";
+import { useNavigate } from 'react-router';
+import styled from '@emotion/styled';
+import KakaoLogo from '@/assets/kakaologo.svg';
+import PageContainer from '@/components/PageContainer';
+import Input from '@/components/Input';
+import { useInput } from '@/hooks/service/useInput';
+import { useValidate } from '@/hooks/service/useValidate';
+import { validateEmail, validatePassword } from '@/utils/validate';
+import { useAuth } from '@/hooks/service/authHooks';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { useLoginMutation } from '@/hooks/service/authHooks';
 
 const LogoImage = styled.img`
   width: 88px;
@@ -33,7 +33,7 @@ const Button = styled.button<{ disabled?: boolean }>`
     background-color: ${({ theme }) => theme.color.semantic.kakaoYellowPressed};
     border: none;
   }
-  
+
   &:disabled {
     background-color: ${({ theme }) => theme.color.yellow.yellow300};
     color: ${({ theme }) => theme.color.semantic.textDisabled};
@@ -45,37 +45,42 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
-  const emailInput = useInput("");
+  const emailInput = useInput('');
   const emailValidation = useValidate(emailInput.value, validateEmail);
 
-  const passwordInput = useInput("");
+  const passwordInput = useInput('');
   const passwordValidation = useValidate(passwordInput.value, validatePassword);
 
-  const handleLogin = async () => {
-    try {
-      const result = await login({
+  const { mutate, isPending } = useLoginMutation();
+
+  const handleLogin = () => {
+    mutate(
+      {
         email: emailInput.value,
         password: passwordInput.value,
-      });
-
-      setUser({
-        email: result.email,
-        name: result.name,
-        authToken: result.authToken,
-      });
-
-      if (window.history.length > 2) {
-        navigate(-1);
-      } else {
-        navigate("/");
-      }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message ?? "@kakao.com 이메일 주소만 가능합니다.");
-      } else {
-        toast.error("알 수 없는 오류가 발생했습니다.");
-      }
-    }
+      },
+      {
+        onSuccess: result => {
+          setUser({
+            email: result.email,
+            name: result.name,
+            authToken: result.authToken,
+          });
+          if (window.history.length > 2) {
+            navigate(-1);
+          } else {
+            navigate('/');
+          }
+        },
+        onError: error => {
+          if (error instanceof AxiosError) {
+            toast.error(error.response?.data?.message ?? '@kakao.com 이메일 주소만 가능합니다.');
+          } else {
+            toast.error('알 수 없는 오류가 발생했습니다.');
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -97,7 +102,12 @@ export default function LoginPage() {
         onBlur={passwordValidation.onBlur}
         error={passwordValidation.error}
       />
-      <Button onClick={handleLogin} disabled={!(emailValidation.isValid && passwordValidation.isValid)}>로그인</Button>
+      <Button
+        onClick={handleLogin}
+        disabled={!(emailValidation.isValid && passwordValidation.isValid) || isPending}
+      >
+        {isPending ? '로그인 중...' : '로그인'}
+      </Button>
     </PageContainer>
   );
 }

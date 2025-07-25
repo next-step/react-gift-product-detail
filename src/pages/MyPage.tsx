@@ -1,8 +1,8 @@
-import styled from "@emotion/styled";
-import PageContainer from "@/components/PageContainer";
-import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router";
-import { withAuth } from "@/hoc/withAuth";
+import styled from '@emotion/styled';
+import PageContainer from '@/components/PageContainer';
+import { useAuth } from '@/hooks/service/authHooks';
+import { useNavigate } from 'react-router';
+import { withAuth } from '@/hoc/withAuth';
 
 const UserInfo = styled.p`
   ${({ theme }) => theme.typography.body.body1Regular};
@@ -34,14 +34,18 @@ function MyPage() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate('/login');
   };
 
   return (
     <PageContainer>
       {user && (
         <>
-          <UserInfo>{user.name}님 안녕하세요!<br />이메일 주소는 {user.email}입니다.</UserInfo>
+          <UserInfo>
+            {user.name}님 안녕하세요!
+            <br />
+            이메일 주소는 {user.email}입니다.
+          </UserInfo>
           <Button onClick={handleLogout}>로그아웃</Button>
         </>
       )}
