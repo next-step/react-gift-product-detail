@@ -23,7 +23,7 @@ export const fetchThemes = async (): Promise<Category[]> => {
   throw new Error('Unexpected API response structure');
 };
 
-export const useThemes = () => {
+export const useThemeCategories = () => {
   return useQuery<Category[], Error>({
     queryKey: ['themes'],
     queryFn: fetchThemes,

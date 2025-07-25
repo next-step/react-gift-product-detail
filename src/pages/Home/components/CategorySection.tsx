@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme, type Theme as ThemeType } from '@emotion/react';
 import CategoryItem from './Shared/CategoryItem';
-import { useThemes } from '../../../apis/theme';
+import { useThemeCategories } from '../../../apis/theme';
 import theme from '../../../styles/theme';
 
 const sectionStyle = css`
@@ -26,7 +26,7 @@ const gridStyle = css`
 
 const CategorySection = () => {
   const theme = useTheme();
-  const { data: categories } = useThemes();
+  const { data: categories } = useThemeCategories();
 
   return (
     <section css={sectionStyle}>
