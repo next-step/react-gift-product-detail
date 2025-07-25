@@ -9,6 +9,7 @@ import PrivateRoute from '@/components/PrivateRoute/PrivateRoute';
 import MyPage from '@/pages/MyPage';
 import OrderPage from '@/pages/OrderPage';
 import ThemeProductsPage from '@/pages/ThemeProductsPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
           { path: PATH.MY_PAGE.slice(1), element: <MyPage /> },
           { path: PATH.ORDER.slice(1) + '/:productId', element: <OrderPage /> },
           { path: 'themes/:themeId', element: <ThemeProductsPage /> },
+          { path: 'product/:productId', element: <ProductDetailPage /> },
         ],
       },
       { path: PATH.NOT_FOUND, element: <NotFoundPage /> },
