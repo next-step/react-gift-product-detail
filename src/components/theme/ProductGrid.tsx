@@ -18,9 +18,7 @@ export default function ProductGrid({ products, loaderRef, isLoading }: Props) {
           <EmptyMessage>상품이 없습니다.</EmptyMessage>
         </EmptyBox>
       ) : (
-        products.map((item) => (
-          <ProductCard key={item.id} item={item} />
-        ))
+        products.map((item) => <ProductCard key={item.id} item={item} />)
       )}
       <div ref={loaderRef} style={{ height: 40 }} />
     </CardGrid>

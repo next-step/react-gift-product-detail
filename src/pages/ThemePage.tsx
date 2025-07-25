@@ -11,14 +11,17 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function ThemePage() {
   const { themeId } = useParams();
   const { data: theme } = useFetchTheme(themeId);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProduct(themeId!);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useThemeProduct(themeId!);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     // 언마운트 시 쿼리 캐시 삭제
     return () => {
-      queryClient.removeQueries({ queryKey: ["themeProduct", themeId || ""] as const });
+      queryClient.removeQueries({
+        queryKey: ["themeProduct", themeId || ""] as const,
+      });
     };
   }, [themeId, queryClient]);
 

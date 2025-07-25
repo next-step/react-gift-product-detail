@@ -13,9 +13,9 @@ type Theme = {
 export default function Category() {
   const { data, isLoading, isError } = useFetch<Theme[]>({
     queryKey: ["themeList"],
-    url: API.THEMES
+    url: API.THEMES,
   });
-  const categories = data ?? []; 
+  const categories = data ?? [];
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError || categories.length === 0) return null;

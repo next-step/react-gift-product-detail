@@ -7,6 +7,6 @@ export function useFetchTheme(themeId?: string) {
     url: `/themes/${themeId}/info`,
     options: {
       enabled: !!themeId,
-    }
+    },
   });
 }

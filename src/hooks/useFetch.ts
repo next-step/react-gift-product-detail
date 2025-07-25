@@ -1,4 +1,8 @@
-import { useQuery, type QueryKey, type UseQueryOptions } from "@tanstack/react-query";
+import {
+  useQuery,
+  type QueryKey,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
 import { get } from "@/services/request";
 
 interface UseFetchParams<T> {
