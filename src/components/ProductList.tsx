@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import type { Product } from '@/types/product';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { fetchProductRanking } from '@/api/product';
 
 const List = styled.ul`
   display: grid;
@@ -98,12 +99,7 @@ function ProductList({
 
   const { data, isLoading, isError, error } = useQuery<Product[], Error>({
     queryKey: ['products', 'ranking'],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/products/ranking`,
-      );
-      return res.data.data;
-    },
+    queryFn: fetchProductRanking,
   });
 
   const products: Product[] = propProducts || (Array.isArray(data) ? data : []);
