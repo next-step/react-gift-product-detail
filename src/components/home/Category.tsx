@@ -11,7 +11,7 @@ type Theme = {
 };
 
 export default function Category() {
-  const { data, isLoading, isError } = useFetch<Theme[]>(API.THEMES);
+  const { data, isLoading, isError } = useFetch<Theme[]>(["themeList"], API.THEMES);
   const categories = data ?? []; 
 
   if (isLoading) return <div>로딩 중...</div>;

@@ -57,7 +57,7 @@ export default function TimeRanking() {
     }
   };
 
-  const { data, isLoading } = useFetch<ProductInfo[]>(API.PRODUCT_RANKING, {
+  const { data, isLoading } = useFetch<ProductInfo[]>(["Ranking"],API.PRODUCT_RANKING, {
     targetType: searchTargetType(selectedGender),
     rankType: searchRankType(selectedRankType),
   });
