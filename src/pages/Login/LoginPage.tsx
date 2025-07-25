@@ -4,13 +4,14 @@ import Divider from "@/components/common/Divider";
 import styled from "@emotion/styled";
 import type React from "react";
 import useLoginInput from "@/hooks/useLoginInput";
-import { useAuth, type Auth } from "@/contexts/authContext";
-import useFetch from "@/hooks/useFetch";
+import { useAuth } from "@/contexts/authContext";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import { isApiErrorResponse } from "@/types/ApiErrorResponse";
+import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { useMutation } from "@tanstack/react-query";
+import postLogin from "@/apis/login/postLogin";
+import axios from "axios";
 
-interface LoginBodyData {
+interface LoginData {
   email: string;
   password: string;
 }
@@ -18,27 +19,29 @@ interface LoginBodyData {
 const LoginPage = () => {
   const { user, onChange, onBlur, errorMsg } = useLoginInput();
   const { login } = useAuth();
-  const { fetchData } = useFetch<Auth, LoginBodyData>("api/login", {
-    method: "POST",
-    autoFetch: false,
-  });
+
   const { mutate } = useMutation({
-    mutationFn: (body: LoginBodyData) => fetchData(undefined, body),
+    mutationFn: (data: LoginData) => postLogin(data),
     onSuccess: (data) => {
-      login(data);
+      login(data.data.data);
     },
     onError: (error) => {
-      if (isApiErrorResponse(error)) {
-        showFetchErrorToast(error.statusCode, error.message);
+      if (axios.isAxiosError<ApiErrorResponse>(error)) {
+        const statusCode = error.response?.data.data.statusCode as number;
+        const message = error.response?.data.data.message as string;
+        showFetchErrorToast(statusCode, message);
       }
     },
   });
+
   const handleLoginSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const body = { email: user.id, password: user.password };
     mutate(body);
   };
+
   const isValidIdAndPassword = user.id.length !== 0 && user.password.length >= 8 && !errorMsg.id && !errorMsg.password;
+
   return (
     <Container>
       <Content>
