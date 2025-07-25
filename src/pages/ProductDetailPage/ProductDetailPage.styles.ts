@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 
 export const LikeIconContainer = styled.div`
-  height: 40px;
-  aspect-ratio: 1.4/1;
+  height: 3.2rem;
+  aspect-ratio: 1.2/1;
   display: flex;
   align-items: center;
   justify-content: center;

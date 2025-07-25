@@ -37,7 +37,7 @@ const ProductImage = styled.img`
 const ProductInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: ${({ theme }) => theme.spacing[5]};
+  padding: ${({ theme }) => theme.spacing[4]};
   gap: ${({ theme }) => theme.spacing[3]};
 `;
 
@@ -58,15 +58,14 @@ const ProductPriceUnit = styled.span`
   font-weight: ${({ theme }) =>
     theme.typography.title.title1Regular.fontWeight};
   color: ${({ theme }) => theme.colors.text.default};
-  margin-left: ${({ theme }) => theme.spacing[1]};
 `;
 
 const BrandInfoContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
-  padding: ${({ theme }) => theme.spacing[5]};
-  gap: ${({ theme }) => theme.spacing[3]};
+  padding: ${({ theme }) => theme.spacing[4]};
+  gap: ${({ theme }) => theme.spacing[2]};
 `;
 
 const BrandImage = styled.img`
@@ -106,34 +105,36 @@ function ProductDetailPage() {
 
   return (
     <Layout>
-      <ErrorBoundary
-        fallback={
-          <ErrorContainer>
-            <ErrorMessage>등록된 상품이 없습니다.</ErrorMessage>
-          </ErrorContainer>
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <ProductDetailContainer>
-            <ProductImage src={data.imageURL} alt={data.name} />
-            <ProductInfoContainer>
-              <ProductName>{data.name}</ProductName>
-              <ProductPrice>
-                {data.price.sellingPrice}
-                <ProductPriceUnit>원</ProductPriceUnit>
-              </ProductPrice>
-            </ProductInfoContainer>
-            <Divider />
-            <BrandInfoContainer>
-              <BrandImage
-                src={data.brandInfo.imageURL}
-                alt={data.brandInfo.name}
-              />
-              <BrandName>{data.brandInfo.name}</BrandName>
-            </BrandInfoContainer>
-          </ProductDetailContainer>
-        </Suspense>
-      </ErrorBoundary>
+      <div style={{ flex: 1, marginBottom: "3.2rem" }}>
+        <ErrorBoundary
+          fallback={
+            <ErrorContainer>
+              <ErrorMessage>등록된 상품이 없습니다.</ErrorMessage>
+            </ErrorContainer>
+          }
+        >
+          <Suspense fallback={<Loading />}>
+            <ProductDetailContainer>
+              <ProductImage src={data.imageURL} alt={data.name} />
+              <ProductInfoContainer>
+                <ProductName>{data.name}</ProductName>
+                <ProductPrice>
+                  {data.price.sellingPrice}
+                  <ProductPriceUnit>원</ProductPriceUnit>
+                </ProductPrice>
+              </ProductInfoContainer>
+              <Divider />
+              <BrandInfoContainer>
+                <BrandImage
+                  src={data.brandInfo.imageURL}
+                  alt={data.brandInfo.name}
+                />
+                <BrandName>{data.brandInfo.name}</BrandName>
+              </BrandInfoContainer>
+            </ProductDetailContainer>
+          </Suspense>
+        </ErrorBoundary>
+      </div>
       <BottomNavigation productId={id!} />
     </Layout>
   );
