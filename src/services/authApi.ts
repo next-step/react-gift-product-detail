@@ -4,5 +4,6 @@ type Props = {
   password: string;
 };
 export const FetchLogin = (body: Props) => {
+
   return api.post('/login', body).then((res) => res.data);
 };

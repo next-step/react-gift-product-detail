@@ -13,16 +13,19 @@ import CardSelector from '@/components/order/CardSelector';
 import ReceiverModal from '@/components/order/receivermodal/ReceiverModal';
 import ReceiverList from '@/components/order/receiverlist/ReceiverList';
 
+
 import { useAuth } from '@/contexts/AuthContext';
 import type { OrderFormData } from '@/components/order/receiverlist/types';
 import { ROUTE_PATH } from '@/routes/Router';
 import { fetchOrder, fetchProductSummary } from '@/services/orderApi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
+
 type SelectedCard = {
   id: number;
   message: string;
 };
+
 
 const Order = () => {
   const navigate = useNavigate();
@@ -88,6 +91,7 @@ const Order = () => {
     },
   });
 
+
   useEffect(() => {
     if (user?.name) {
       reset((prev) => ({
@@ -102,6 +106,7 @@ const Order = () => {
       setValue('cardMessage', selectedCard.message);
     }
   }, [selectedCard, setValue]);
+
   const handleClickOrderBtn = handleSubmit((formData) => {
     const body = {
       productId: product_id,
@@ -120,6 +125,7 @@ const Order = () => {
   if (isOrderPosting || !summaryData || !user?.name) return <div>로딩중.....</div>;
 
   const productPrice = summaryData.price;
+
   const receiversTotalQuantity = receivers.reduce((sum, r) => sum + r.quantity, 0);
   const totalPrice = productPrice * receiversTotalQuantity;
 
@@ -137,6 +143,7 @@ const Order = () => {
       <ReceiverList fields={fields} receivers={receivers} setIsVisible={setIsModalVisible} />
       <PaddingGraySm />
       <ProductInfo product={summaryData} />
+
       <OrderBtn totalPrice={totalPrice} onClick={handleClickOrderBtn} />
 
       {isModalVisible && (

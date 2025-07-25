@@ -31,6 +31,7 @@ const Category = () => {
   if (error) return <div>❌ 오류 발생: {String(error)}</div>;
   if (category?.length === 0) return <div>📭 선물 테마가 없습니다.</div>;
 
+
   return (
     <CategoryWrapper>
       <CategoryHeader>

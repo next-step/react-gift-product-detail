@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Router';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
+
 const Header = styled.section`
   width: 100%;
   padding: 1.625rem 1rem 1.375rem;
@@ -69,6 +70,7 @@ useEffect(()=>{
     fetchNextPage();
   }}, [inView, hasNextPage, isFetchingNextPage])
 
+
   const {
     data: themeData,
     isLoading,
@@ -93,6 +95,7 @@ console.dir(error)}
 }, [error])
 
 const products = data?.pages.flatMap((page) => page.list) ?? [];
+
 
   console.dir(products);
   if (isLoading || !themeData) return <div>로딩중...</div>;
