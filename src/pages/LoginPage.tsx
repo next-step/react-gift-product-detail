@@ -8,18 +8,19 @@ import { Layout } from '@/components/Layout/Layout'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useLoginMutation } from '@/hooks/useLoginMutation'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const from = location.state?.from?.pathname || '/my'
+  const from = location.state?.from?.pathname || ROUTE_PATH.MY
 
   const { login, user } = useAuth()
   const { email, password, validForm } = useLoginForm()
 
   useEffect(() => {
     if (user) {
-      navigate('/my', { replace: true })
+      navigate(ROUTE_PATH.MY, { replace: true })
     }
   }, [user, navigate])
 

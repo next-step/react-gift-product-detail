@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Product } from '@/types/product'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export const ProductItem = memo(function ProductItem({
   id,
@@ -19,7 +20,7 @@ export const ProductItem = memo(function ProductItem({
     if (user) {
       navigate(`/order/${id}`)
     } else {
-      navigate('/login', { state: { from: `/order/${id}` } })
+      navigate(ROUTE_PATH.LOGIN, { state: { from: `/order/${id}` } })
     }
   }
 

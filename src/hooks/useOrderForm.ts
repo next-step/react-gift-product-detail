@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useOrderMutation } from '@/hooks/useOrderMutation'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export function useOrderForm(
   form: UseFormReturn<FormValues>,
@@ -49,7 +50,7 @@ export function useOrderForm(
     setSelectedCard(cardMock[0])
     setValue('message', cardMock[0].defaultTextMessage)
     setFinalReceivers([])
-    navigate('/')
+    navigate(ROUTE_PATH.HOME)
   }
 
   const onSubmit = async (data: FormValues) => {
@@ -77,7 +78,7 @@ export function useOrderForm(
             const message = error.response?.data.data.message || '주문 실패'
 
             if (status === axios.HttpStatusCode.Unauthorized) {
-              navigate('/login')
+              navigate(ROUTE_PATH.LOGIN)
             } else {
               toast.error(
                 typeof message === 'string' ? message : '잘못된 요청입니다.'

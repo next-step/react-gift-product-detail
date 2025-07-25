@@ -4,6 +4,7 @@ import axios from 'axios'
 import type { Product } from '@/types/product'
 import { useQuery } from '@tanstack/react-query'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export interface ThemeInfo {
   themeId: string
@@ -83,7 +84,7 @@ export function useTheme(themeId?: string) {
         themeError instanceof axios.AxiosError &&
         themeError.response?.status === axios.HttpStatusCode.NotFound
       ) {
-        navigate('/')
+        navigate(ROUTE_PATH.HOME)
       }
     }
   }, [themeError, navigate])

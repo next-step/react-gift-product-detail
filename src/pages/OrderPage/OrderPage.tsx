@@ -7,6 +7,7 @@ import { OrderForm } from '@/components/OrderPage/OrderForm'
 import { toast } from 'react-toastify'
 import type { Product } from '@/types/product'
 import { useQuery } from '@tanstack/react-query'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 const fetchProduct = async (id: string): Promise<Product> => {
   const response = await axios.get(
@@ -34,7 +35,7 @@ export function OrderPage() {
     if (error instanceof axios.AxiosError) {
       const message = error.response?.data.data.message
       toast.error(typeof message === 'string' ? message : '잘못된 요청입니다.')
-      navigate('/', { replace: true })
+      navigate(ROUTE_PATH.HOME, { replace: true })
     }
   }
 
