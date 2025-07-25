@@ -55,17 +55,19 @@ type Theme = {
   image: string;
 };
 
+type BaseResponse<T> = { data: T };
+
 function CategoryList({ onHide }: { onHide?: () => void }) {
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useQuery<Theme[], Error>({
     queryKey: ['themes'],
     queryFn: async () => {
-      const res = await axios.get('/api/themes');
+      const res = await axios.get<BaseResponse<Theme[]>>('/api/themes');
       return res.data.data;
     },
   });
 
-  const themes: Theme[] = Array.isArray(data) ? data : [];
+  const themes: Theme[] = data || [];
 
   if (isLoading)
     return (
