@@ -33,3 +33,7 @@ export const fetchProductSummary = (
 ): Promise<ProductSummary> => {
   return apiClient.get(`/products/${productId}/summary`);
 };
+
+export const fetchProductInfo = async (productId: number): Promise<Product> => {
+  return await apiClient.get(`/api/products/${productId}`);
+};
