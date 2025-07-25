@@ -12,9 +12,8 @@ import type { Recipient } from '@/types';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
-import { postOrder } from '@/api';
+import { useOrderMutation } from '@/api/order';
 import type { ProductSummary } from '../hooks/useProduct';
-import { useMutation } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
@@ -294,13 +293,11 @@ const OrderPageContent = () => {
   const { data: product, isLoading, error } = useProduct(productId ?? '');
 
   // 주문 생성 useMutation
-  const orderMutation = useMutation({
-    mutationFn: (variables: { orderData: any; authToken: string }) =>
-      postOrder(variables.orderData, variables.authToken),
-    onSuccess: (_data, variables) => {
+  const orderMutation = useOrderMutation({
+    onSuccess: (_data: any, variables: any) => {
       onSuccessCreateOrder(product, variables, navigate);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       handleOrderError(error, navigate, toast, ROUTE_LOGIN);
     },
   });
@@ -379,7 +376,10 @@ const OrderPageContent = () => {
   const handleOrderSubmit = handleSubmit(async (data) => {
     if (!product || !user) return;
     const orderData = makeOrderData(product, data, selectedCardId);
-    await orderMutation.mutateAsync({ orderData, authToken: user.authToken });
+    await orderMutation.mutateAsync({
+      orderData,
+      authToken: user.authToken,
+    } as any);
   });
 
   // 로딩 중
