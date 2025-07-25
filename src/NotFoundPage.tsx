@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
-import styled from "@emotion/styled";
-import NotFoundImage from "@/assets/img_not_found.png";
-import PageContainer from "@/components/PageContainer";
+import { useNavigate } from 'react-router';
+import styled from '@emotion/styled';
+import NotFoundImage from '@/assets/img_not_found.png';
+import PageContainer from '@/components/PageContainer';
 
 const NotFound = styled.img`
   width: 150px;
@@ -35,13 +35,13 @@ const HomeButton = styled.button`
 `;
 
 export default function NotFoundPage() {
-    const navigate = useNavigate();
-    return (
-        <PageContainer>
-            <NotFound src={NotFoundImage} alt="not found image" />
-            <Error>잘못된 접근입니다.</Error>
-            <Message>찾으시는 페이지가 존재하지 않습니다.</Message>
-            <HomeButton onClick={() => navigate("/")}>홈으로</HomeButton>
-        </PageContainer>
-    );
+  const navigate = useNavigate();
+  return (
+    <PageContainer>
+      <NotFound src={NotFoundImage} alt="not found image" />
+      <Error>잘못된 접근입니다.</Error>
+      <Message>찾으시는 페이지가 존재하지 않습니다.</Message>
+      <HomeButton onClick={() => navigate('/')}>홈으로</HomeButton>
+    </PageContainer>
+  );
 }

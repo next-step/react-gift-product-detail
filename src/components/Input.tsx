@@ -17,7 +17,9 @@ const InputField = styled.input<{ hasError: boolean }>`
   max-width: 320px;
   padding: 12px;
   border: none;
-  border-bottom: 1px solid ${({ theme, hasError }) => hasError ? theme.color.semantic.critical : theme.color.semantic.borderDefault};
+  border-bottom: 1px solid
+    ${({ theme, hasError }) =>
+      hasError ? theme.color.semantic.critical : theme.color.semantic.borderDefault};
 
   &::placeholder {
     color: ${({ theme }) => theme.color.gray.gray700};
@@ -25,7 +27,8 @@ const InputField = styled.input<{ hasError: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${({ theme, hasError }) => hasError ? theme.color.semantic.critical : theme.color.gray.gray700};
+    border-color: ${({ theme, hasError }) =>
+      hasError ? theme.color.semantic.critical : theme.color.gray.gray700};
   }
 `;
 

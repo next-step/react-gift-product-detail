@@ -1,18 +1,18 @@
-import GlobalStyle from "@/styles/global";
-import Layout from "./components/Layout";
-import Header from "./components/Header";
-import CategorySection from "@/sections/CategorySection";
-import FriendSelectBanner from "./sections/FriendSelectBanner";
-import CampaignBanner from "./sections/CampaignBanner";
-import GiftRankingSection from "@/sections/GiftRankingSection";
-import { Route, Routes } from "react-router";
-import LoginPage from "./LoginPage";
-import NotFoundPage from "./NotFoundPage";
-import MyPage from "./MyPage";
-import OrderPage from "./OrderPage";
-import ThemePage from "./ThemePage";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"
+import GlobalStyle from '@/styles/global';
+import Layout from './components/Layout';
+import Header from './components/Header';
+import CategorySection from '@/sections/CategorySection';
+import FriendSelectBanner from './sections/FriendSelectBanner';
+import CampaignBanner from './sections/CampaignBanner';
+import GiftRankingSection from '@/sections/GiftRankingSection';
+import { Route, Routes } from 'react-router';
+import LoginPage from './LoginPage';
+import NotFoundPage from './NotFoundPage';
+import MyPage from './MyPage';
+import OrderPage from './OrderPage';
+import ThemePage from './ThemePage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -22,29 +22,22 @@ function App() {
       <Layout>
         <Header />
         <Routes>
-          <Route path="/" element={
-            <>
-              <FriendSelectBanner />
-              <CategorySection />
-              <CampaignBanner />
-              <GiftRankingSection />
-            </>
-          } />
-          <Route path="/login" element={
-            <LoginPage />
-          } />
-          <Route path="/my" element={
-            <MyPage />
-          } />
-          <Route path="/order/:id" element={
-            <OrderPage />
-          } />
-          <Route path="/theme/:themeId" element={
-            <ThemePage />
-          } />
-          <Route path="/*" element={
-            <NotFoundPage />
-          } />
+          <Route
+            path="/"
+            element={
+              <>
+                <FriendSelectBanner />
+                <CategorySection />
+                <CampaignBanner />
+                <GiftRankingSection />
+              </>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/my" element={<MyPage />} />
+          <Route path="/order/:id" element={<OrderPage />} />
+          <Route path="/theme/:themeId" element={<ThemePage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </Layout>
     </>

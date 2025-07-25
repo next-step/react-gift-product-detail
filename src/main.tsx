@@ -1,10 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from '@emotion/react';
-import theme from '@/styles/theme/theme.ts'
+import theme from '@/styles/theme/theme.ts';
 import App from './App.tsx';
-import 'pretendard/dist/web/static/pretendard.css'
-import { BrowserRouter } from "react-router";
+import 'pretendard/dist/web/static/pretendard.css';
+import { BrowserRouter } from 'react-router';
 import { AuthProvider } from '@/contexts/AuthProvider.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 

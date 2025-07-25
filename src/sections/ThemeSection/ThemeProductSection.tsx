@@ -1,13 +1,12 @@
-import styled from "@emotion/styled";
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
-import Spinner from "@/components/Spinner";
-import { useThemeProductsQuery } from "@/hooks/useThemeProductsQuery";
-import { type ThemeProduct } from "@/apis/theme";
-
+import styled from '@emotion/styled';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
+import Spinner from '@/components/Spinner';
+import { useThemeProductsQuery } from '@/hooks/useThemeProductsQuery';
+import { type ThemeProduct } from '@/apis/theme';
 
 interface ThemeProductSectionProps {
-    themeId: string;
+  themeId: string;
 }
 
 const Section = styled.section`
@@ -64,67 +63,67 @@ const EmptyWrapper = styled.div`
 `;
 
 export default function ThemeProductSection({ themeId }: ThemeProductSectionProps) {
-    const observerRef = useRef<HTMLDivElement | null>(null);
-    const navigate = useNavigate();
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsQuery(themeId);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsQuery(themeId);
 
-    const handleClick = (id: number) => () => {
-        navigate(`/order/${id}`);
-    };
+  const handleClick = (id: number) => () => {
+    navigate(`/order/${id}`);
+  };
 
-    useEffect(() => {
-        if (!hasNextPage || isFetchingNextPage) return;
-        const observer = new IntersectionObserver(
-            (entries) => {
-                if (entries[0].isIntersecting) {
-                    fetchNextPage();
-                }
-            },
-            { threshold: 0.1 }
-        );
-
-        const currentRef = observerRef.current;
-
-        if (currentRef) {
-            observer.observe(currentRef);
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage) return;
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
         }
-
-        return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef);
-            }
-        };
-    }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-    const products = data.pages.flatMap((page) => page.list);
-
-    if (products.length === 0) {
-        return (
-            <Section>
-                <EmptyWrapper>
-                    <Message>상품이 없습니다.</Message>
-                </EmptyWrapper>
-            </Section>
-        );
-    }
-    return (
-        <Section>
-            <Grid>
-                {products.map((product: ThemeProduct) => (
-                    <ProductCard key={product.id} onClick={handleClick(product.id)}>
-                        <ProductImage src={product.imageURL} alt={product.name} />
-                        <Brand>{product.brandInfo.name}</Brand>
-                        <Name>{product.name}</Name>
-                        <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
-                    </ProductCard>
-                ))}
-            </Grid>
-            {hasNextPage && (
-                <div ref={observerRef} style={{ height: "20px" }}>
-                    {isFetchingNextPage && <Spinner />}
-                </div>
-            )}
-        </Section>
+      },
+      { threshold: 0.1 },
     );
+
+    const currentRef = observerRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  const products = data.pages.flatMap(page => page.list);
+
+  if (products.length === 0) {
+    return (
+      <Section>
+        <EmptyWrapper>
+          <Message>상품이 없습니다.</Message>
+        </EmptyWrapper>
+      </Section>
+    );
+  }
+  return (
+    <Section>
+      <Grid>
+        {products.map((product: ThemeProduct) => (
+          <ProductCard key={product.id} onClick={handleClick(product.id)}>
+            <ProductImage src={product.imageURL} alt={product.name} />
+            <Brand>{product.brandInfo.name}</Brand>
+            <Name>{product.name}</Name>
+            <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
+          </ProductCard>
+        ))}
+      </Grid>
+      {hasNextPage && (
+        <div ref={observerRef} style={{ height: '20px' }}>
+          {isFetchingNextPage && <Spinner />}
+        </div>
+      )}
+    </Section>
+  );
 }

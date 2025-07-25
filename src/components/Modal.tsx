@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { type ReactNode } from "react";
+import styled from '@emotion/styled';
+import { type ReactNode } from 'react';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -25,14 +25,14 @@ const ModalContent = styled.div`
 `;
 
 interface ModalProps {
-    children: ReactNode;
-    onClose: () => void;
+  children: ReactNode;
+  onClose: () => void;
 }
 
 export default function Modal({ children, onClose }: ModalProps) {
-    return (
-        <ModalOverlay onClick={onClose}>
-            <ModalContent onClick={(e) => e.stopPropagation()}>{children}</ModalContent>
-        </ModalOverlay>
-    );
+  return (
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={e => e.stopPropagation()}>{children}</ModalContent>
+    </ModalOverlay>
+  );
 }

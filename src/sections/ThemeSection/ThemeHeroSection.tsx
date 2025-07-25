@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 interface ThemeHeroSectionProps {
-    name: string;
-    title: string;
-    description: string;
-    backgroundColor: string;
+  name: string;
+  title: string;
+  description: string;
+  backgroundColor: string;
 }
 
 const Hero = styled.section<{ backgroundColor: string }>`
@@ -34,16 +34,16 @@ const HeroDescription = styled.p`
 `;
 
 export default function ThemeHeroSection({
-    name,
-    title,
-    description,
-    backgroundColor,
+  name,
+  title,
+  description,
+  backgroundColor,
 }: ThemeHeroSectionProps) {
-    return (
-        <Hero backgroundColor={backgroundColor}>
-            <ThemeName>{name}</ThemeName>
-            <HeroTitle>{title}</HeroTitle>
-            <HeroDescription>{description}</HeroDescription>
-        </Hero>
-    );
+  return (
+    <Hero backgroundColor={backgroundColor}>
+      <ThemeName>{name}</ThemeName>
+      <HeroTitle>{title}</HeroTitle>
+      <HeroDescription>{description}</HeroDescription>
+    </Hero>
+  );
 }

@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
-import CategoryCard from "@/components/CategoryCard";
-import { useThemesQuery } from "@/hooks/useThemesQuery";
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import Spinner from "@/components/Spinner";
+import styled from '@emotion/styled';
+import CategoryCard from '@/components/CategoryCard';
+import { useThemesQuery } from '@/hooks/useThemesQuery';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import Spinner from '@/components/Spinner';
 
 const Section = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5} 0;

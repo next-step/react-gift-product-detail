@@ -1,12 +1,12 @@
-import { useState } from "react";
-import styled from "@emotion/styled";
-import ProductCard from "@/components/ProductCard";
-import { useSearchParams } from "react-router";
-import { useGiftRankingQuery } from "@/hooks/useGiftRankingQuery";
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import Spinner from "@/components/Spinner";
+import { useState } from 'react';
+import styled from '@emotion/styled';
+import ProductCard from '@/components/ProductCard';
+import { useSearchParams } from 'react-router';
+import { useGiftRankingQuery } from '@/hooks/useGiftRankingQuery';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import Spinner from '@/components/Spinner';
 
 const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
@@ -45,7 +45,7 @@ const Icon = styled.div<{ active?: boolean }>`
   border-radius: 12px;
   background-color: ${({ theme, active }) =>
     active ? theme.color.blue.blue700 : theme.color.blue.blue100};
-  color: ${({ active }) => (active ? "#fff" : "#555")};
+  color: ${({ active }) => (active ? '#fff' : '#555')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -127,9 +127,7 @@ function GiftRankingContent({
         ))}
       </Grid>
       {data.length > DEFAULT_VISIBLE_COUNT && (
-        <LoadMore onClick={toggleShowAll}>
-          {showAll ? "접기" : "더보기"}
-        </LoadMore>
+        <LoadMore onClick={toggleShowAll}>{showAll ? '접기' : '더보기'}</LoadMore>
       )}
     </>
   );
@@ -138,24 +136,24 @@ function GiftRankingContent({
 export default function GiftRankingSection() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialFilter = searchParams.get("targetType") || "ALL";
-  const initialTab = searchParams.get("rankType") || "MANY_WISH";
+  const initialFilter = searchParams.get('targetType') || 'ALL';
+  const initialTab = searchParams.get('rankType') || 'MANY_WISH';
 
   const [selectedFilter, setSelectedFilter] = useState(initialFilter);
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [showAll, setShowAll] = useState(false);
 
   const filters = [
-    { label: "전체", icon: "ALL", value: "ALL" },
-    { label: "여성이", icon: "👩🏻", value: "FEMALE" },
-    { label: "남성이", icon: "👨🏻", value: "MALE" },
-    { label: "청소년이", icon: "👦🏻", value: "TEEN" },
+    { label: '전체', icon: 'ALL', value: 'ALL' },
+    { label: '여성이', icon: '👩🏻', value: 'FEMALE' },
+    { label: '남성이', icon: '👨🏻', value: 'MALE' },
+    { label: '청소년이', icon: '👦🏻', value: 'TEEN' },
   ];
 
   const tabs = [
-    { label: "받고 싶어한", value: "MANY_WISH" },
-    { label: "많이 선물한", value: "MANY_RECEIVE" },
-    { label: "위시로 받은", value: "MANY_WISH_RECEIVE" },
+    { label: '받고 싶어한', value: 'MANY_WISH' },
+    { label: '많이 선물한', value: 'MANY_RECEIVE' },
+    { label: '위시로 받은', value: 'MANY_WISH_RECEIVE' },
   ];
 
   const updateParams = (target: string, rank: string) => {
@@ -206,9 +204,17 @@ export default function GiftRankingSection() {
 
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <ErrorBoundary onReset={reset} fallbackRender={() => <Message>상품을 불러오는데 실패했어요.</Message>}>
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={() => <Message>상품을 불러오는데 실패했어요.</Message>}
+          >
             <Suspense fallback={<Spinner />}>
-              <GiftRankingContent selectedFilter={selectedFilter} selectedTab={selectedTab} showAll={showAll} toggleShowAll={() => setShowAll((prev) => !prev)} />
+              <GiftRankingContent
+                selectedFilter={selectedFilter}
+                selectedTab={selectedTab}
+                showAll={showAll}
+                toggleShowAll={() => setShowAll(prev => !prev)}
+              />
             </Suspense>
           </ErrorBoundary>
         )}
