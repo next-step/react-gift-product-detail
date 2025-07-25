@@ -209,8 +209,8 @@ const Order = () => {
 
   const {
     data: product,
-    loading,
-    error,
+    isLoading,
+    isError,
   } = useGiftProductById(productId);
 
   const [selected, setSelected] = useState(orderCardTemplates[0].id);
@@ -284,28 +284,28 @@ const Order = () => {
     }
   };
 
-  if (loading)
+  if (isLoading)
     return (
       <div style={{ padding: 20 }}>
         상품 정보를 불러오는 중입니다...
       </div>
     );
 
-  if (error || !product)
+  if (isError || !product)
     return (
       <div style={{ padding: 20 }}>
         상품 정보를 불러오지 못했습니다.
       </div>
     );
 
-  if (loading)
+  if (isLoading)
     return (
       <div style={{ padding: 20 }}>
         상품 정보를 불러오는 중입니다...
       </div>
     );
 
-  if (error || !product)
+  if (isError || !product)
     return (
       <div style={{ padding: 20 }}>
         상품 정보를 불러오지 못했습니다.

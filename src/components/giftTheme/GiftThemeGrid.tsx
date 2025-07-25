@@ -44,11 +44,11 @@ const Label = styled.span`
 `;
 
 export const GiftThemeGrid = () => {
-  const { data, loading, error } = useGiftThemes();
+  const { data, isLoading, isError } = useGiftThemes();
   const navigate = useNavigate();
 
-  if (loading) return <p>로딩 중...</p>;
-  if (error || !data || data.length === 0) return null;
+  if (isLoading) return <p>로딩 중...</p>;
+  if (isError || !data || data.length === 0) return null;
 
   return (
     <>
