@@ -246,6 +246,25 @@ function makeOrderCompleteMessage(
   return `주문이 완료되었습니다.\n상품명: ${product.name}\n보내는 사람: ${data.sender}\n받는사람 목록:\n${recipientList}\n총 수량: ${totalQuantity}개\n총 가격: ${totalPrice.toLocaleString()}원\n메시지: ${data.message}`;
 }
 
+// 주문 성공 핸들러 함수
+function onSuccessCreateOrder(
+  product: ProductSummary | null | undefined,
+  variables: { orderData: any },
+  navigate: (path: string, options?: any) => void
+) {
+  if (!product) return;
+  const totalQuantity = getTotalQuantity(variables.orderData.receivers);
+  const totalPrice = getTotalPrice(product.price, totalQuantity);
+  const msg = makeOrderCompleteMessage(
+    product,
+    { ...variables.orderData, recipients: variables.orderData.receivers },
+    totalQuantity,
+    totalPrice
+  );
+  alert(msg);
+  navigate('/');
+}
+
 // 에러 핸들링 함수
 function handleOrderError(
   error: any,
@@ -279,18 +298,7 @@ const OrderPageContent = () => {
     mutationFn: (variables: { orderData: any; authToken: string }) =>
       postOrder(variables.orderData, variables.authToken),
     onSuccess: (_data, variables) => {
-      // 성공 시 안내 메시지 및 이동
-      if (!product) return;
-      const totalQuantity = getTotalQuantity(variables.orderData.receivers);
-      const totalPrice = getTotalPrice(product.price, totalQuantity);
-      const msg = makeOrderCompleteMessage(
-        product,
-        { ...variables.orderData, recipients: variables.orderData.receivers },
-        totalQuantity,
-        totalPrice
-      );
-      alert(msg);
-      navigate('/');
+      onSuccessCreateOrder(product, variables, navigate);
     },
     onError: (error) => {
       handleOrderError(error, navigate, toast, ROUTE_LOGIN);
