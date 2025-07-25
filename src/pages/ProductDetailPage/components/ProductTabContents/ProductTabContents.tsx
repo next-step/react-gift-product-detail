@@ -1,36 +1,11 @@
-import styled from "@emotion/styled";
 import { useState } from "react";
-
-const ProductInfoTabContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
-`;
-
-const TabSwitcherContainer = styled.div<{ isActive: boolean }>`
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: 1.2rem;
-  border-bottom: ${({ isActive }) => (isActive ? "2px solid black" : "none")};
-  cursor: pointer;
-`;
-
-const TabSwitcherRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const TabSwitcherLabel = styled.p<{ isActive: boolean }>`
-  font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-  text-align: center;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
-`;
+import {
+  ProductInfoTabContainer,
+  TabSwitcherContainer,
+  TabSwitcherLabel,
+  TabSwitcherRow,
+} from "./ProductTabContents.styles";
+import { TAB_LABELS } from "../../constants/tab";
 
 type Tab = "info" | "review" | "detail";
 
@@ -73,19 +48,19 @@ function ProductTabContents() {
     <ProductInfoTabContainer>
       <TabSwitcherRow>
         <TabSwitcher
-          label="상품설명"
+          label={TAB_LABELS.INFO}
           tab="info"
           isActive={currentTab === "info"}
           setCurrentTab={setCurrentTab}
         />
         <TabSwitcher
-          label="선물후기"
+          label={TAB_LABELS.REVIEW}
           tab="review"
           isActive={currentTab === "review"}
           setCurrentTab={setCurrentTab}
         />
         <TabSwitcher
-          label="상세정보"
+          label={TAB_LABELS.DETAIL}
           tab="detail"
           isActive={currentTab === "detail"}
           setCurrentTab={setCurrentTab}
