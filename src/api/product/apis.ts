@@ -1,10 +1,10 @@
-import apiClient from './index';
+import apiClient from '../index';
 import type {
   RankingResponse,
   TargetType,
   RankType,
   ProductResponse,
-} from './types';
+} from '../types';
 import axios from 'axios';
 
 /**
@@ -45,8 +45,3 @@ export async function getProductSummary(productId: string) {
   );
   return response.data.data;
 }
-
-export default {
-  getRankingProducts,
-  getProductById,
-};
