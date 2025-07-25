@@ -29,3 +29,14 @@ export type ProductWish = {
   wishCount: number;
   isWished: boolean;
 };
+
+export type ProductReview = {
+  id: string;
+  authorName: string;
+  content: string;
+};
+
+export type ProductReviewResponse = {
+  totalCount: number;
+  reviews: ProductReview[];
+};
