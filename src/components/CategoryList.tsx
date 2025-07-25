@@ -60,7 +60,7 @@ function CategoryList({ onHide }: { onHide?: () => void }) {
   const { data, isLoading, isError, error } = useQuery<Theme[], Error>({
     queryKey: ['themes'],
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/themes`);
+      const res = await axios.get('/api/themes');
       return res.data.data;
     },
   });
