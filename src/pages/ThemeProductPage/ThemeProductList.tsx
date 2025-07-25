@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import ProductCard from '../Home/components/Shared/RankingCard';
 import theme from '../../styles/theme';
@@ -48,8 +48,7 @@ const ThemeProductList = () => {
 
   if (isError) {
     console.error('상품 로딩 실패:', error);
-    navigate('/');
-    return null;
+    return <Navigate to={''} />;
   }
 
   const allProducts = data?.pages.flatMap((page) => page.products) ?? [];
