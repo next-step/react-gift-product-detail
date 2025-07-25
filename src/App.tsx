@@ -14,6 +14,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ThemeProductPage from "./pages/ThemeProductPage/ThemeProductPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
 
 const globalStyles = css`
   body {
@@ -44,6 +45,10 @@ function App() {
               <Route
                 path={ROUTES.THEME_PRODUCTS}
                 element={<ThemeProductPage />}
+              />
+              <Route
+                path={ROUTES.PRODUCT_DETAIL}
+                element={<ProductDetailPage />}
               />
               <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />
             </Routes>

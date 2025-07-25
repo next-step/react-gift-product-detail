@@ -39,7 +39,7 @@ function ProductCard({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    const redirectPath = ROUTES.ORDER.replace(":id", id.toString());
+    const redirectPath = ROUTES.PRODUCT_DETAIL.replace(":id", id.toString());
 
     navigate(
       isLoggedIn
