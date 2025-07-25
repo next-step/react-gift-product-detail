@@ -10,7 +10,18 @@ import theme from './styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from './ErrorBoundary';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // 쿼리 기본 옵션
+      throwOnError: true,
+    },
+    mutations: {
+      // 뮤테이션 기본 옵션
+      throwOnError: true,
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
