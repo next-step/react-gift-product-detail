@@ -15,27 +15,34 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '@contexts/AuthContext';
 
-import useFetch from '@hooks/useFetch';
 import useGiftOrderForm from './hooks/useGiftOrderForm';
 import useReceiveModal from './hooks/useReceiveModal';
 import useOrderSubmit from './hooks/useOrderSubmit';
 import useOrderInvalid from './hooks/useOrderInvalid';
 import type { ProductSummaryInfo } from './OrderTypes';
 import EmptyMessage from '@components/common/EmptyMessage';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProductSummury } from '@apis/giftOrderApi';
 
 const GiftOrderPage = () => {
   // 데이터 fetch
   const { id } = useParams();
+
   const {
     data: productInfo,
-    loading,
+    isError,
+    isPending,
     error,
-  } = useFetch<ProductSummaryInfo>(`/products/${id}/summary`);
+  } = useQuery<ProductSummaryInfo>({
+    queryKey: ['productSummary', id],
+    queryFn: ({ queryKey }) =>
+      fetchProductSummury(queryKey[1] as string | undefined),
+  });
 
   //useForm 사용
   const methods = useGiftOrderForm();
   const { handleSubmit, setValue, watch } = methods;
-  const onSubmit = useOrderSubmit(productInfo);
+  const onSubmit = useOrderSubmit(productInfo ?? null);
   const onInvalid = useOrderInvalid();
 
   //modal
@@ -53,7 +60,7 @@ const GiftOrderPage = () => {
   //에러 처리
   const navigate = useNavigate();
   useEffect(() => {
-    if (error && axios.isAxiosError(error)) {
+    if (isError && axios.isAxiosError(error)) {
       const status = error.status;
       if (status && status >= 400 && status < 500) {
         toast.error(
@@ -68,7 +75,7 @@ const GiftOrderPage = () => {
   }, [error, navigate]);
 
   // 로딩 처리
-  if (loading) return <LoadingSpinner />;
+  if (isPending) return <LoadingSpinner />;
   if (!productInfo)
     return <EmptyMessage>상품정보를 찾을 수 없습니다</EmptyMessage>;
 
