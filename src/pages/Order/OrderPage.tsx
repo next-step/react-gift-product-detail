@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useTheme } from '@emotion/react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   containerStyle,
   cardSelectorStyle,
@@ -29,10 +29,7 @@ import { cardTemplates } from '../../data/cardTemplates';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserManagement } from '../Login/contexts/UserManagement';
 
-import {
-  fetchProductSummary,
-  type ProductSummary,
-} from '../../apis/product_summary';
+import { useProductSummaryQuery } from '../../apis/product_summary';
 import { postOrder } from '../../apis/orders';
 import axios from 'axios';
 
@@ -43,7 +40,6 @@ const OrderPage = () => {
   const { user } = UserManagement();
   const authToken = user?.authToken || '';
 
-  const [product, setProduct] = useState<ProductSummary | null>(null);
   const [selectedCard, setSelectedCard] = useState(cardTemplates[0]);
   const [receivers, setReceivers] = useState<
     { name: string; phone: string; quantity: number }[]
@@ -64,20 +60,30 @@ const OrderPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (!productId) {
-      toast.error('잘못된 접근입니다.');
-      navigate('/');
-      return;
-    }
+  const {
+    data: product,
+    isLoading,
+    isError,
+    error,
+  } = useProductSummaryQuery(productId || '', authToken);
 
-    fetchProductSummary(productId, authToken)
-      .then(setProduct)
-      .catch((error) => {
-        toast.error(error.message);
-        navigate('/');
-      });
-  }, [productId, authToken, navigate]);
+  if (isLoading) {
+    return <div>제품 정보를 불러오는 중입니다...</div>;
+  }
+
+  if (isError) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : '제품 정보를 불러오는 중 에러가 발생했습니다.';
+    toast.error(message);
+    navigate('/');
+    return null;
+  }
+
+  if (!product) {
+    return <div>상품 정보를 가져오지 못했습니다.</div>;
+  }
 
   const handleCardSelect = (card: typeof selectedCard) => {
     setSelectedCard(card);
@@ -107,14 +113,9 @@ const OrderPage = () => {
       })),
     };
 
-    // console.log('주문 요청 데이터:', orderData);
-
     try {
       await postOrder(orderData, authToken);
-      if (!product) {
-        toast.error('상품 정보를 불러오지 못했습니다.');
-        return;
-      }
+
       alert(
         `주문이 완료되었습니다.\n상품명: ${product.name}\n총 구매 수량: ${totalQuantity}\n발신자 이름: ${data.senderName}\n메시지: ${data.message}\n받는 사람 수: ${receivers.length}`
       );
@@ -136,10 +137,6 @@ const OrderPage = () => {
       }
     }
   };
-
-  if (!product) {
-    return <div>제품 정보를 불러오는 중입니다...</div>;
-  }
 
   return (
     <div css={containerStyle(theme)}>
