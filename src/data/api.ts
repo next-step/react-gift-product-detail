@@ -7,6 +7,7 @@ import type { ProductInfoSummary } from "@/types/ProductInfoSummary";
 import type { Order } from "@/types/Order";
 import type { ThemeInfo } from "@/types/ThemeInfo";
 import type { ThemeProduct, ThemeProducts } from "@/types/ThemeProducts";
+import type { Wish } from "@/types/Wish";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -87,6 +88,13 @@ export const getProductDetail = async (
 ): Promise<ThemeProduct> => {
   const response = await apiClient.get(
     END_POINTS.PRODUCT_DETAIL.replace(":productId", productId)
+  );
+  return response.data.data;
+};
+
+export const getProductWish = async (productId: string): Promise<Wish> => {
+  const response = await apiClient.get(
+    END_POINTS.PRODUCT_WISH.replace(":productId", productId)
   );
   return response.data.data;
 };

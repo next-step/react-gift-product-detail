@@ -157,7 +157,7 @@
     - [x] 상품 정보 API: `/api/products/:productId`
     - [ ] 상품 세부 정보 API: `/api/products/:productId/detail`
     - [ ] 상품 주요 리뷰 API: `/api/products/:productId/highlight-review`
-    - [ ] 상품 관심 등록 수 API: `/api/products/:productId/wish`
+    - [x] 상품 관심 등록 수 API: `/api/products/:productId/wish`
   - [ ] 상세 페이지 UI 구현
   - [ ] 관심 상품 등록 버튼 클릭 시 낙관적 업데이트 사용
     - API 사용 x, 새로고침 시 다시 사라짐

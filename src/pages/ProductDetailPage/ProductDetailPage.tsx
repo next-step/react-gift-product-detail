@@ -1,9 +1,9 @@
 import { ErrorMessage } from "@/components/common/Input/FormErrorMessage";
 import { Loading } from "@/components/Loading/Loading";
 import { QUERY_KEY } from "@/constants/queryKey";
-import { getProductDetail } from "@/data/api";
+import { getProductDetail, getProductWish } from "@/data/api";
 import Layout from "@/layout";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,6 +30,11 @@ function BottomNavigationWrapper({
 }) {
   const navigate = useNavigate();
 
+  const { data } = useQuery({
+    queryKey: QUERY_KEY.PRODUCT_WISH(productId),
+    queryFn: () => getProductWish(productId),
+  });
+
   const handleOrderButtonClick = () => {
     navigate(ROUTES.ORDER.replace(":id", productId));
   };
@@ -39,8 +44,8 @@ function BottomNavigationWrapper({
       <BottomMargin>{children}</BottomMargin>
       <OrderButtonContainer>
         <LikeIconContainer>
-          <LikeIcon src={LikeIconImage} alt="Like Icon" />
-          <LikeCount>1237</LikeCount>
+          <LikeIcon src={LikeIconImage} alt="" />
+          <LikeCount>{data?.wishCount}</LikeCount>
         </LikeIconContainer>
         <OrderButton onClick={handleOrderButtonClick}>
           {PRODUCT_DETAIL_LABELS.ORDER_BUTTON}

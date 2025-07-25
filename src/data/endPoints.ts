@@ -7,4 +7,5 @@ export const END_POINTS = {
   THEME_INFO: "/api/themes/:themeId/info",
   THEME_PRODUCTS: "/api/themes/:themeId/products?cursor=:cursor",
   PRODUCT_DETAIL: "/api/products/:productId",
+  PRODUCT_WISH: "/api/products/:productId/wish",
 } as const;
