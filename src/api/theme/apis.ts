@@ -1,7 +1,5 @@
-import apiClient from './index';
-import type { ThemeResponse } from './types';
-import type { Theme } from './types';
-import type { Product } from './types';
+import apiClient from '../index';
+import type { ThemeResponse, Theme, Product } from '../types';
 
 export interface ThemeProductsResponse {
   list: Product[];
@@ -42,8 +40,4 @@ export const getThemeProducts = async (
     { params }
   );
   return response.data.data;
-};
-
-export default {
-  getThemes,
 };
