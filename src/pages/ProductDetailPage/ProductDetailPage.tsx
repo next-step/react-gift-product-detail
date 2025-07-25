@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ErrorContainer } from "../HomePage/components/Category/Category.styles";
 import LikeIconImage from "./assets/heart.png";
 import {
+  ContentLayout,
   LikeCount,
   LikeIcon,
   LikeIconContainer,
@@ -19,21 +20,7 @@ import {
 import { ROUTES } from "@/constants/routes";
 import ProductHeader from "./components/ProductHeader/ProductHeader";
 import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
-import styled from "@emotion/styled";
-
-const ContentLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 3.2rem;
-  gap: ${({ theme }) => theme.spacing[3]};
-  background-color: ${({ theme }) => theme.colors.background.disabled};
-`;
-
-const ProductInfoTabContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
-`;
+import ProductTabContents from "./components/ProductTabContents/ProductTabContents";
 
 function ProductDetailContentLayout({
   children,
@@ -99,9 +86,7 @@ function ProductDetailPage() {
         <Suspense fallback={<Loading />}>
           <BottomNavigationWrapper productId={id!}>
             <ProductHeader data={data} />
-            <ProductInfoTabContainer>
-              <p>product info tab</p>
-            </ProductInfoTabContainer>
+            <ProductTabContents />
           </BottomNavigationWrapper>
         </Suspense>
       </ErrorBoundary>

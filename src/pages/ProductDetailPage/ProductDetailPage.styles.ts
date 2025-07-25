@@ -50,3 +50,11 @@ export const OrderButton = styled.button`
   color: ${({ theme }) => theme.colors.text.default};
   cursor: pointer;
 `;
+
+export const ContentLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3.2rem;
+  gap: ${({ theme }) => theme.spacing[2]};
+  background-color: ${({ theme }) => theme.colors.background.disabled};
+`;
