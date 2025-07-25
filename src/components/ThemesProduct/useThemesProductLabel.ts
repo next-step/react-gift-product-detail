@@ -1,9 +1,10 @@
-import { apiClient } from '@src/api/FetchData';
-import type { HttpTypes } from '@src/api/HttpType';
-import { URLS } from '@src/assets/urls';
-import type { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
-import { useParams, type NavigateFunction } from 'react-router-dom';
+import { BASIC_ENDPOINT } from '@src/assets/endpoints';
+
+import { useQuery } from '@tanstack/react-query';
+
+import axios from 'axios';
+
+import { useParams } from 'react-router-dom';
 
 type ThemeLabel = {
   themeId: number;
@@ -12,32 +13,26 @@ type ThemeLabel = {
   description: string;
   backgroundColor: string;
 };
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const useThemesProductLabel = (navigate: NavigateFunction) => {
+const getFetch = async (themeId: string | undefined): Promise<ThemeLabel> => {
+  const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme + `themes/${themeId}/info`);
+  const data = res.data;
+  return data;
+};
+export const usePresentThemeFetch = () => {
   const { themeId } = useParams();
-  const [label, setLabel] = useState<ThemeLabel | null>(null);
 
-  useEffect(() => {
-    const reqeustLabel = async () => {
-      const apiReqeustParmas = {
-        methods: 'GET' as HttpTypes,
-        requestName: `themes/${themeId}/info`,
-        body: {},
-        params: '',
-        headers: null,
-      };
-      try {
-        const fetchData = await apiClient(apiReqeustParmas);
-        setLabel(fetchData.data);
-      } catch (error: unknown) {
-        if ((error as AxiosError).status === 404) navigate(URLS.home);
-      }
-    };
-
-    reqeustLabel();
-  }, [themeId, navigate]);
-
+  const { data, error, isLoading } = useQuery<ThemeLabel>({
+    queryKey: ['productsLabel', { themeId }],
+    queryFn: () => getFetch(themeId),
+  });
+  const label = data;
+  const labelError = error;
+  const isLabelLoading = isLoading;
   return {
     label,
+    labelError,
+    isLabelLoading,
   };
 };

@@ -1,5 +1,5 @@
 import StyledTopestDiv from '@src/styles/StyledTopesDiv';
-import { useThemesProductLabel } from './useThemesProductLabel';
+import { usePresentThemeFetch } from './useThemesProductLabel';
 import {
   StyledThemesProductGridContainer,
   StyledThemesProductLabelItem,
@@ -9,10 +9,10 @@ import { useThemesProductItem } from './useThemesProductItem';
 import { useNavigate } from 'react-router-dom';
 import { useIntersectionObserver } from './useIntersectionObserver';
 import PresentProductList from '../Home/PresentRanking/Item/PresentRankingItem';
+import { ThemesProductionLabel } from './ThemesProductionLabel';
 
 const ThemesProductItem = () => {
   const navigate = useNavigate();
-  const { label } = useThemesProductLabel(navigate);
   const { goods, isLoading, isError, loadItem, hasMore } = useThemesProductItem(navigate);
   const loaderRef = useIntersectionObserver({
     onIntersect: loadItem,
@@ -21,11 +21,7 @@ const ThemesProductItem = () => {
 
   return (
     <StyledTopestDiv>
-      <StyledThemesProductLabelItem background={label?.backgroundColor}>
-        <p className='label1Reuglar color-white'>{label?.name}</p>
-        <p className='title2Bold color-white'>{label?.title}</p>
-        <p className='title2Regular color-white'>{label?.description}</p>
-      </StyledThemesProductLabelItem>
+      <ThemesProductionLabel />
       <StyledThemesProductPaddingContainer className='padding-container'>
         <StyledThemesProductGridContainer className='theme-grid-container'>
           <PresentProductList goods={goods} isError={isError} isLoading={isLoading} />

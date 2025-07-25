@@ -1,8 +1,11 @@
 import { apiClient } from '@src/api/FetchData';
 import type { HttpTypes } from '@src/api/HttpType';
+import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import { URLS } from '@src/assets/urls';
 import type { Good } from '@src/types/Goods';
+import { useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { useParams, type NavigateFunction } from 'react-router-dom';
 
@@ -14,6 +17,36 @@ type FetchDataType = {
   };
 };
 
+// const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// const getFetch = async (
+//   themeId: string | undefined,
+//   cursor_value: number
+// ): Promise<FetchDataType> => {
+//   const params = { cursor: cursor_value };
+//   const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme + `themes/${themeId}/products`, {
+//     params,
+//   });
+//   const data = res.data;
+//   return data;
+// };
+// export const usePresentThemeFetch = () => {
+//   const { themeId } = useParams();
+//   const [cursor, setCursor] = useState(0);
+//   const [hasMore, setHasMore] = useState(true);
+
+//   const { data, error, isLoading } = useQuery<FetchDataType>({
+//     queryKey: ['products', { themeId, cursor }],
+//     queryFn: () => getFetch(themeId, cursor),
+//   });
+
+//   return {
+//     data,
+//     error,
+//     isLoading,
+//     setCursor,
+//   };
+// };
 export const useThemesProductItem = (navigate: NavigateFunction) => {
   const { themeId } = useParams();
   const [goods, setGoods] = useState<Good[] | null>(null);
