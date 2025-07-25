@@ -1,6 +1,5 @@
 import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
-import API_ENDPOINTS from "@/constants/apiEndpoints";
 import usePaginationFetch from "@/hooks/usePaginationFetch";
 import type { ProductData } from "@/types/ProductType";
 import styled from "@emotion/styled";
@@ -10,8 +9,8 @@ const PRODUCT_LIST_LIMIT = 20;
 
 const ProductList = () => {
   const { themeId } = useParams();
-  const { items, isLoading, hasMoreList, loader } = usePaginationFetch<ProductData>(
-    generatePath(API_ENDPOINTS.THEME_PRODUCTS, { themeId: themeId ?? null }),
+  const { items, isFetching, hasMoreList, loader } = usePaginationFetch<ProductData>(
+    themeId ?? "",
     PRODUCT_LIST_LIMIT,
     0.5,
     "상품 목록을 불러오는데 실패했습니다.",
@@ -32,9 +31,9 @@ const ProductList = () => {
         ))}
       </Content>
       <Loader ref={loader}>
-        {isLoading && <Loading height="50px" />}
-        {!isLoading && !hasMoreList && items.length === 0 && <Empty>상품이 없습니다.</Empty>}
-        {!isLoading && !hasMoreList && items.length > 0 && <EndMessage>모든 상품을 불러왔습니다.</EndMessage>}
+        {isFetching && <Loading height="50px" />}
+        {!isFetching && !hasMoreList && items.length === 0 && <Empty>상품이 없습니다.</Empty>}
+        {!isFetching && !hasMoreList && items.length > 0 && <EndMessage>모든 상품을 불러왔습니다.</EndMessage>}
       </Loader>
     </Container>
   );

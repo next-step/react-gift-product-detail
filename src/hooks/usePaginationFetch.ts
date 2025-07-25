@@ -1,49 +1,23 @@
-import { useCallback, useEffect } from "react";
-import { useInfiniteQuery, type QueryFunctionContext } from "@tanstack/react-query";
-import useFetch from "@/hooks/useFetch";
+import { useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import { isApiErrorResponse, type ApiErrorData } from "@/types/ApiErrorResponse";
-
-interface PaginationData<T> {
-  list: T[];
-  cursor: number;
-  hasMoreList: boolean;
-}
+import { isApiErrorResponse } from "@/types/ApiErrorResponse";
+import getThemeProducts from "@/apis/themes/getThemeProducts";
 
 const usePaginationFetch = <T>(
-  url: string,
+  themeId: string,
   limit: number = 10,
   threshold: number = 0.5,
   errorMessage: string = "데이터를 불러오는데 실패했습니다.",
 ) => {
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
-  const { fetchData } = useFetch<PaginationData<T>>(url, {
-    autoFetch: false,
-  });
-
-  const fetchPageData = useCallback(
-    async (context: QueryFunctionContext): Promise<PaginationData<T>> => {
-      const pageParam = (context.pageParam as number) ?? 0;
-
-      const responseData = await fetchData(undefined, undefined, {
-        cursor: pageParam,
-        limit,
-      });
-      return responseData;
-    },
-    [limit, fetchData],
-  );
-
-  const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery<
-    PaginationData<T>,
-    ApiErrorData
-  >({
-    queryKey: ["themeProducts", url],
-    queryFn: fetchPageData,
-    getNextPageParam: (lastPage: PaginationData<T>) => {
-      return lastPage.hasMoreList ? lastPage.cursor : undefined;
+  const { data, error, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
+    queryKey: ["themeProducts", themeId],
+    queryFn: ({ pageParam }) => getThemeProducts<T>({ themeId, params: { cursor: pageParam as number, limit } }),
+    getNextPageParam: (lastPage) => {
+      return lastPage.data.data.hasMoreList ? lastPage.data.data.cursor : undefined;
     },
     initialPageParam: 0,
   });
@@ -55,16 +29,16 @@ const usePaginationFetch = <T>(
   }, [error, errorMessage]);
 
   useEffect(() => {
-    if (isInView && hasNextPage && !isFetchingNextPage && !isLoading) {
+    if (isInView && hasNextPage && !isFetching) {
       fetchNextPage();
     }
-  }, [isInView, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage]);
+  }, [isInView, hasNextPage, isFetching, fetchNextPage]);
 
-  const items = data?.pages.flatMap((page) => page.list) ?? [];
+  const items: T[] = data?.pages.flatMap((page) => page.data.data.list) ?? [];
 
   return {
     items,
-    isLoading: isLoading || isFetchingNextPage,
+    isFetching,
     hasMoreList: hasNextPage ?? false,
     loader,
   };
