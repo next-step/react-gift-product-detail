@@ -35,14 +35,6 @@ apiClient.interceptors.response.use(
   }
 );
 
-export async function loginApi(email: string, password: string) {
-  const response = await apiClient.post('/api/login', {
-    email,
-    password,
-  });
-  return response.data.data;
-}
-
 export async function postOrder(orderData: any, authToken: string) {
   const response = await apiClient.post('/api/order', orderData, {
     headers: {

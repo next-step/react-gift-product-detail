@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { User, AuthContextType } from '@/types/auth';
 import { useLocalStorageState } from '@/hooks';
-import { loginApi } from '@/api';
+import { loginApi } from '@/api/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
