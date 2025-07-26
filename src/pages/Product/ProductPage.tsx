@@ -19,7 +19,7 @@ const ProductPage = () => {
       <Suspense fallback={<Loading height="90vh" />}>
         <ProductInfo productId={productId} />
         <Divider spacing="0.5rem" fill={false} />
-        <ProductContent />
+        <ProductContent productId={productId} />
       </Suspense>
     </Container>
   );

@@ -26,3 +26,14 @@ export type ProductSummary = {
   price: number;
   imageURL: string;
 };
+
+export type ProductDetailAnnouncement = {
+  name: string;
+  value: string;
+  displayOrder: number;
+};
+
+export type ProductDetail = {
+  description: string;
+  announcements: ProductDetailAnnouncement[];
+};

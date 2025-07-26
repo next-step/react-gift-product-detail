@@ -3,10 +3,26 @@ import { useState } from "react";
 import Description from "@/pages/Product/components/Description";
 import Detail from "@/pages/Product/components/Detail";
 import Review from "@/pages/Product/components/Review";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/queryKeys";
+import getProductDetail from "@/apis/products/getProductDetail";
+
+interface ProductContentProps {
+  productId: string;
+}
 
 const PRODUCT_CONTENT_TAB_TITLE = ["상품설명", "선물후기", "상세정보"];
 
-const ProductContent = () => {
+const ProductContent = ({ productId }: ProductContentProps) => {
+  const [detail] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: QUERY_KEYS.PRODUCT_DETAIL(productId),
+        queryFn: () => getProductDetail({ productId }),
+      },
+    ],
+  });
+
   const [selected, setSelected] = useState(0);
 
   return (
@@ -21,9 +37,9 @@ const ProductContent = () => {
         })}
       </TabWrapper>
       <ContentWrapper>
-        {selected === 0 && <Description />}
+        {selected === 0 && <Description data={detail.data.description} />}
         {selected === 1 && <Review />}
-        {selected === 2 && <Detail />}
+        {selected === 2 && <Detail data={detail.data.announcements} />}
       </ContentWrapper>
     </Container>
   );
