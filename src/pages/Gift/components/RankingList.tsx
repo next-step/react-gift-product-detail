@@ -39,7 +39,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     <Container>
       <Content>
         {data?.slice(0, viewCount).map((item, index) => (
-          <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
+          <Item key={item.id} to={generatePath(ROUTE_PATH.PRODUCT, { productId: String(item.id) })}>
             <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
             <ItemContent>
               <ItemContentImg src={item.imageURL} />
