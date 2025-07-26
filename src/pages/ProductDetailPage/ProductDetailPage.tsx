@@ -87,7 +87,12 @@ const ProductDetailPage = () => {
         {activeTab === 'REVIEW' && review && (
           <ul>
             {review.reviews.map((r) => (
-              <li key={r.id}>{r.content}</li>
+              <li key={r.id}>
+                <p>
+                  <strong css={reviewAuthorStyle}>{r.authorName}</strong>
+                </p>
+                <p>{r.content}</p>
+              </li>
             ))}
           </ul>
         )}
@@ -95,7 +100,10 @@ const ProductDetailPage = () => {
           <ul>
             {detail.announcements.map((a) => (
               <li key={a.name}>
-                <strong>{a.name}</strong>: {a.value}
+                <p>
+                  <strong>{a.name}</strong>
+                </p>
+                <p>{a.value}</p>
               </li>
             ))}
           </ul>
@@ -141,6 +149,11 @@ const errorStyle = css`
   padding: 40px;
   text-align: center;
   color: red;
+`;
+
+const reviewAuthorStyle = css`
+  font-weight: 600;
+  color: #333;
 `;
 
 const productImage = css`
