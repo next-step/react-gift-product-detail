@@ -8,6 +8,7 @@ import type { Order } from "@/types/Order";
 import type { ThemeInfo } from "@/types/ThemeInfo";
 import type { ThemeProduct, ThemeProducts } from "@/types/ThemeProducts";
 import type { Wish } from "@/types/Wish";
+import type { ProductHighlightReview } from "@/types/HighlighReview";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -95,6 +96,15 @@ export const getProductDetail = async (
 export const getProductWish = async (productId: string): Promise<Wish> => {
   const response = await apiClient.get(
     END_POINTS.PRODUCT_WISH.replace(":productId", productId)
+  );
+  return response.data.data;
+};
+
+export const getProductHighlightReview = async (
+  productId: string
+): Promise<ProductHighlightReview> => {
+  const response = await apiClient.get(
+    END_POINTS.PRODUCT_HIGHLIGHT_REVIEW.replace(":productId", productId)
   );
   return response.data.data;
 };

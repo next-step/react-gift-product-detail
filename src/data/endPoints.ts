@@ -8,4 +8,5 @@ export const END_POINTS = {
   THEME_PRODUCTS: "/api/themes/:themeId/products?cursor=:cursor",
   PRODUCT_DETAIL: "/api/products/:productId",
   PRODUCT_WISH: "/api/products/:productId/wish",
+  PRODUCT_HIGHLIGHT_REVIEW: "/api/products/:productId/highlight-review",
 } as const;

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import {
   ProductInfoTabContainer,
+  TabContentLayout,
   TabSwitcherContainer,
   TabSwitcherLabel,
   TabSwitcherRow,
 } from "./ProductTabContents.styles";
 import { TAB_LABELS } from "../../constants/tab";
 import Info from "./Info";
+import Review from "./Reivew";
 
 type Tab = "info" | "review" | "detail";
 
@@ -18,13 +20,21 @@ function TabContent({
   productId: string;
 }) {
   if (currentTab === "info") {
-    return <Info productId={productId} />;
+    return (
+      <TabContentLayout>
+        <Info productId={productId} />
+      </TabContentLayout>
+    );
   }
   if (currentTab === "review") {
-    return <div>review</div>;
+    return (
+      <TabContentLayout>
+        <Review productId={productId} />
+      </TabContentLayout>
+    );
   }
 
-  return <div>detail</div>;
+  return <TabContentLayout>detail</TabContentLayout>;
 }
 
 function TabSwitcher({
