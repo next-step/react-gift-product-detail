@@ -63,7 +63,7 @@ const ThemeProductList = () => {
         {allProducts.map((item) => (
           <div
             key={item.id}
-            onClick={() => navigate(`/order/${item.id}`)}
+            onClick={() => navigate(`/detail/${item.id}`)}
             css={{ cursor: 'pointer' }}
           >
             <ProductCard

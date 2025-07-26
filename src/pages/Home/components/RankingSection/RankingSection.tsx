@@ -56,9 +56,9 @@ const RankingSection = () => {
 
   const handleCardClick = (itemId: number) => {
     if (user) {
-      navigate(`/order/${itemId}`);
+      navigate(`/detail/${itemId}`);
     } else {
-      navigate(`/login?redirect=/order/${itemId}`);
+      navigate(`/login?redirect=/detail/${itemId}`);
     }
   };
 
