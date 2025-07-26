@@ -4,13 +4,11 @@ import { useThemes } from "@/hooks/useThemes";
 import { ERROR_MESSAGES } from "@/constants/messages";
 
 export const CategorySection = () => {
-  const { themes, loading, error } = useThemes();
+  const { themes } = useThemes();
 
-  if (error) return null;
-
-  if (loading) return <Placeholder>{ERROR_MESSAGES.THEME.LOAD}</Placeholder>;
-  if (themes.length === 0)
+  if (themes.length === 0) {
     return <Placeholder>{ERROR_MESSAGES.THEME.NONE}</Placeholder>;
+  }
 
   return (
     <Section>
