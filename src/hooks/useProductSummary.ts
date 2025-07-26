@@ -9,12 +9,7 @@ export const useProductSummary = (productId: number | undefined) => {
     isError,
   } = useQuery<ProductSummary, Error>({
     queryKey: ["productSummary", productId],
-    queryFn: () => {
-      if (!productId) {
-        throw new Error(ERROR_MESSAGES.PRODUCT.INVALID);
-      }
-      return fetchProductSummary(productId);
-    },
+    queryFn: () => fetchProductSummary(productId!),
     enabled: !!productId,
   });
 
