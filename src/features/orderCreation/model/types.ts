@@ -14,4 +14,3 @@ export interface UseOrderFormProps {
 }
 
 export type CardStateUpdater = (updater: (prev: CardState) => CardState) => void;
-export type FormDataUpdater = (updater: (prev: FormData) => FormData) => void;

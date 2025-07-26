@@ -14,8 +14,9 @@ import {
   SUCCESS_MESSAGES, 
   ORDER_INFO_TEMPLATE 
 } from './constants';
-import { createCardHandlers, createFormHandlers, validateOrderForm } from './orderutils';
+import { createCardHandlers, validateOrderForm } from './orderutils';
 import type { CardState, FormData, UseOrderFormProps } from './types';
+import type { InputChangeHandler } from '@/shared/types';
 
 export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
   const navigate = useNavigate();
@@ -60,7 +61,12 @@ ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
   );
 
   const { handleCardClick, handleMessageChange } = createCardHandlers(setCardState);
-  const { handleSenderNameChange } = createFormHandlers(setFormData);
+  const handleSenderNameChange: InputChangeHandler = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      senderName: e.target.value.trim(),
+    }));
+  };
 
   const handleOrder = () => {
     if (!validateOrderForm(cardState, formData)) return;

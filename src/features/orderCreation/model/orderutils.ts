@@ -1,8 +1,8 @@
 import { toast } from 'react-toastify';
 import { orders } from '@/entities/order/model/constants';
 import { orderSchema } from '@/entities/order/model/validation';
-import type { CardState, FormData, CardStateUpdater, FormDataUpdater } from './types';
-import type { TextAreaChangeHandler, InputChangeHandler } from '@/shared/types';
+import type { CardState, FormData, CardStateUpdater } from './types';
+import type { TextAreaChangeHandler } from '@/shared/types';
 
 export const createCardHandlers = (setCardState: CardStateUpdater) => {
   const handleCardClick = (id: number) => {
@@ -24,17 +24,6 @@ export const createCardHandlers = (setCardState: CardStateUpdater) => {
   return { handleCardClick, handleMessageChange };
 };
 
-export const createFormHandlers = (setFormData: FormDataUpdater) => {
-  const handleSenderNameChange: InputChangeHandler = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      senderName: e.target.value.trim(),
-    }));
-  };
-
-  return { handleSenderNameChange };
-};
-
 export const validateOrderForm = (cardState: CardState, formData: FormData): boolean => {
   const result = orderSchema.safeParse({
     message: cardState.message,
@@ -47,6 +36,5 @@ export const validateOrderForm = (cardState: CardState, formData: FormData): boo
     });
     return false;
   }
-
   return true;
 };
