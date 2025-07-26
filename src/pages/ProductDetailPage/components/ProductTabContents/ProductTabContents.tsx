@@ -21,25 +21,13 @@ function TabContent({
   productId: string;
 }) {
   if (currentTab === "info") {
-    return (
-      <TabContentLayout>
-        <Info productId={productId} />
-      </TabContentLayout>
-    );
+    return <Info productId={productId} />;
   }
   if (currentTab === "review") {
-    return (
-      <TabContentLayout>
-        <Review productId={productId} />
-      </TabContentLayout>
-    );
+    return <Review productId={productId} />;
   }
 
-  return (
-    <TabContentLayout>
-      <Detail productId={productId} />
-    </TabContentLayout>
-  );
+  return <Detail productId={productId} />;
 }
 
 function TabSwitcher({
@@ -88,7 +76,9 @@ function ProductTabContents({ productId }: { productId: string }) {
           setCurrentTab={setCurrentTab}
         />
       </TabSwitcherRow>
-      <TabContent currentTab={currentTab} productId={productId} />
+      <TabContentLayout>
+        <TabContent currentTab={currentTab} productId={productId} />
+      </TabContentLayout>
     </ProductInfoTabContainer>
   );
 }
