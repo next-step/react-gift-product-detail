@@ -9,4 +9,5 @@ export const END_POINTS = {
   PRODUCT_DETAIL: "/api/products/:productId",
   PRODUCT_WISH: "/api/products/:productId/wish",
   PRODUCT_HIGHLIGHT_REVIEW: "/api/products/:productId/highlight-review",
+  PRODUCT_DETAIL_INFO: "/api/products/:productId/detail",
 } as const;

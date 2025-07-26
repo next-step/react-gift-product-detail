@@ -4,7 +4,7 @@ interface Review {
   content: string;
 }
 
-export type ProductHighlightReview = {
+export interface ProductHighlightReview {
   totalCount: number;
   reviews: Review[];
-};
+}

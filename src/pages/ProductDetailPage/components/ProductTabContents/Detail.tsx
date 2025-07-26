@@ -1,9 +1,9 @@
 import { QUERY_KEY } from "@/constants/queryKey";
-import { getProductHighlightReview } from "@/data/api";
+import { getProductDetailInfo } from "@/data/api";
 import styled from "@emotion/styled";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-const ReviewListContainer = styled.div`
+const DetailListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing[8]};
@@ -11,41 +11,43 @@ const ReviewListContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing[7]};
 `;
 
-const ReviewContainer = styled.div`
+const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing[3]};
 `;
 
-const ReviewerName = styled.h1`
+const DetailTitle = styled.h1`
   font-size: ${({ theme }) => theme.typography.body.body2Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body2Bold.fontWeight};
   color: ${({ theme }) => theme.colors.text.default};
 `;
 
-const ReviewerContent = styled.p`
+const DetailContent = styled.p`
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
   line-height: ${({ theme }) => theme.typography.body.body1Regular.lineHeight};
   color: ${({ theme }) => theme.colors.text.default};
 `;
 
-function Review({ productId }: { productId: string }) {
+function Detail({ productId }: { productId: string }) {
   const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_HIGHLIGHT_REVIEW(productId),
-    queryFn: () => getProductHighlightReview(productId),
+    queryKey: QUERY_KEY.PRODUCT_DETAIL_INFO(productId),
+    queryFn: () => getProductDetailInfo(productId),
   });
 
   return (
-    <ReviewListContainer>
-      {data.reviews.map((el) => (
-        <ReviewContainer>
-          <ReviewerName>{el.authorName}</ReviewerName>
-          <ReviewerContent>{el.content}</ReviewerContent>
-        </ReviewContainer>
-      ))}
-    </ReviewListContainer>
+    <DetailListContainer>
+      {data.announcements.map((el) => {
+        return (
+          <DetailContainer>
+            <DetailTitle>{el.name}</DetailTitle>
+            <DetailContent>{el.value}</DetailContent>
+          </DetailContainer>
+        );
+      })}
+    </DetailListContainer>
   );
 }
 
-export default Review;
+export default Detail;

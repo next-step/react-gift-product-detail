@@ -18,4 +18,8 @@ export const QUERY_KEY = {
     "productHighlightReview",
     id,
   ],
+  PRODUCT_DETAIL_INFO: (id: string | number | undefined) => [
+    "productDetailInfo",
+    id,
+  ],
 } as const;

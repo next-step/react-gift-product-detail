@@ -153,9 +153,9 @@
 ## 2단계 - 상품 상세 페이지 API 구현하기
 
 - [ ] 제품 상세 페이지
-  - [ ] 상세 페이지 api
+  - [x] 상세 페이지 api
     - [x] 상품 정보 API: `/api/products/:productId`
-    - [ ] 상품 세부 정보 API: `/api/products/:productId/detail`
+    - [x] 상품 세부 정보 API: `/api/products/:productId/detail`
     - [x] 상품 주요 리뷰 API: `/api/products/:productId/highlight-review`
     - [x] 상품 관심 등록 수 API: `/api/products/:productId/wish`
   - [ ] 상세 페이지 UI 구현

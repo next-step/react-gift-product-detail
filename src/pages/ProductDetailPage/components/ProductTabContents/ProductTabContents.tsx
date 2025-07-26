@@ -9,6 +9,7 @@ import {
 import { TAB_LABELS } from "../../constants/tab";
 import Info from "./Info";
 import Review from "./Reivew";
+import Detail from "./Detail";
 
 type Tab = "info" | "review" | "detail";
 
@@ -34,7 +35,11 @@ function TabContent({
     );
   }
 
-  return <TabContentLayout>detail</TabContentLayout>;
+  return (
+    <TabContentLayout>
+      <Detail productId={productId} />
+    </TabContentLayout>
+  );
 }
 
 function TabSwitcher({
