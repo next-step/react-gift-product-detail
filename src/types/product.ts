@@ -19,3 +19,9 @@ export type ProductInfo = {
     name: string;
   };
 };
+
+export type ProductPage = {
+  list: ProductInfo[];
+  cursor: number;
+  hasMoreList: boolean;
+};

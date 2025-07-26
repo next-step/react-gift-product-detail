@@ -11,11 +11,14 @@ type Theme = {
 };
 
 export default function Category() {
-  const { data, loading, error } = useFetch<Theme[]>(API.THEMES);
-  const categories = data ?? []; // data가 null인 경우 방지
+  const { data, isLoading, isError } = useFetch<Theme[]>({
+    queryKey: ["themeList"],
+    url: API.THEMES,
+  });
+  const categories = data ?? [];
 
-  if (loading) return <div>로딩 중...</div>;
-  if (error || categories.length === 0) return null; // 데이터 없거나 에러면 렌더링 안함
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError || categories.length === 0) return null;
 
   return (
     <>

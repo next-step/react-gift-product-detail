@@ -27,7 +27,7 @@ export default function GiftCardSelector({ value, onChange, error }: Props) {
         },
       } as React.ChangeEvent<HTMLTextAreaElement>);
     },
-    [onChange, setSelectedCardIndex]
+    [onChange, setSelectedCardIndex],
   );
 
   return (

@@ -57,9 +57,13 @@ export default function TimeRanking() {
     }
   };
 
-  const { data, loading } = useFetch<ProductInfo[]>(API.PRODUCT_RANKING, {
-    targetType: searchTargetType(selectedGender),
-    rankType: searchRankType(selectedRankType),
+  const { data, isLoading } = useFetch<ProductInfo[]>({
+    queryKey: ["Ranking", selectedGender, selectedRankType],
+    url: API.PRODUCT_RANKING,
+    queryParams: {
+      targetType: searchTargetType(selectedGender),
+      rankType: searchRankType(selectedRankType),
+    },
   });
 
   const rankings = data ?? []; // ranking이 nulld인 경우 방지
@@ -123,7 +127,7 @@ export default function TimeRanking() {
 
       <Spacing height="16px" />
 
-      {loading ? (
+      {isLoading ? (
         <Spinner />
       ) : rankings.length === 0 ? (
         <EmptyBox>

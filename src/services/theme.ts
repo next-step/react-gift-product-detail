@@ -1,3 +1,4 @@
+import type { ProductPage } from "@/types/product";
 import baseHttp from "./baseHttp";
 
 export const getThemeInfo = async (themeId: string) => {
@@ -9,9 +10,9 @@ export const getThemeProduct = async (
   themeId: string,
   cursor = 0,
   limit = 10,
-) => {
-  const product = await baseHttp.get(`/themes/${themeId}/products`, {
+): Promise<ProductPage> => {
+  const response = await baseHttp.get(`/themes/${themeId}/products`, {
     params: { cursor, limit },
   });
-  return product.data;
+  return response.data.data;
 };
