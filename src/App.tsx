@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ThemeProductPage from './pages/ThemeProductPage';
 import theme from './styles/theme';
 import { css } from '@emotion/react';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 const Home = () => (
   <main>
@@ -75,6 +76,7 @@ function App() {
             <Route path="/order/:productId" element={<OrderPage />} />
             <Route path="/themes/:themeId" element={<ThemeProductPage />} />
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="/detail/:productId" element={<ProductDetailPage />} />
           </Routes>
         </div>
         <ToastContainer
