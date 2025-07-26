@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, generatePath } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { getThemeInfo } from '@/api/themes';
+import { getThemeInfo } from '@/api/theme';
 import type { Theme } from '@/api/types';
 import { ROUTE_HOME, ROUTE_ORDER } from '@/constants';
 import ProductGrid from '@/components/ranking/ProductGrid';
-import { getThemeProducts } from '@/api/themes';
+import { getThemeProducts } from '@/api/theme';
 import type { Product } from '@/api/types';
-import type { ThemeProductsResponse } from '@/api/themes';
+import type { ThemeProductsResponse } from '@/api/theme';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 const HeroSection = styled.div<{ bg: string }>`

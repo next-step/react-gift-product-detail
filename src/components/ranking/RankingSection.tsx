@@ -6,7 +6,7 @@ import ProductGrid from './ProductGrid';
 import MoreButton from './MoreButton';
 import { getValidValue, getValidValues } from '@/utils';
 import { targetOptions, rankOptions, ROUTE_ORDER } from '@/constants';
-import { useRankingProducts } from '@/hooks';
+import { useRankingProducts } from '@/api/product';
 import type { Product, TargetType, RankType } from '@/api/types';
 import RankingSkeleton from './RankingSkeleton';
 

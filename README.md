@@ -1,14 +1,18 @@
-# 미션 4 - 0단계 기본 코드 준비
+# 미션 4 - 1단계 - React Query 적용
 
-## 프로젝트 진행 과정
+4단계 미션까지 완성 되었을 때의 결과물 링크에요.
 
-### 미션 3 완료
+해당 링크를 참고하여 1단계 미션을 완성시켜보세요.
 
-- **이전 레포지토리**: [next-step/react-gift-product-list](https://github.com/next-step/react-gift-product-list)
-- **내용**: 카테캠 2단계 - 미션3 "상품 목록 - API 연동 기초" 구현 완료
+> 참고 URL: https://kakaotech-mission4-api-advanced.pages.dev/
 
-### 미션 4 시작 - 기본 코드 준비
+## **목표**
 
-1. **새 레포지토리 fork**: [next-step/react-gift-product-detail](https://github.com/next-step/react-gift-product-detail) 에서 fork
-2. **기존 코드 이전**: 미션 3 완료 레포지토리에서 `.git`과 `node_modules`를 제외한 모든 파일 복사
-3. **현재 상태**: 미션 3의 모든 구현 내용이 포함된 상태로 미션 4 시작 준비 완료
+- React Query를 사용하여 API 사용 방식과 사용자 경험을 고도화 해요.
+- Suspense와 ErrorBoundary를 사용하여 선언적 구조의 API를 구현해보세요.
+
+## **과제 진행 요구사항**
+
+- 본인만의 기준으로 일관된 코드를 작성해주세요.
+- 기능 단위로 나누어 커밋을 해주세요.
+- 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)

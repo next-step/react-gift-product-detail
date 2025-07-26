@@ -1,10 +1,15 @@
-import apiClient from './index';
+// TODO: 아래 API는 아직 미구현입니다.
+// - /api/products/:productId/detail (상세 정보)
+// - /api/products/:productId/wish (찜 정보)
+// - /api/products/:productId/highlight-review (리뷰)
+
+import apiClient from '../index';
 import type {
   RankingResponse,
   TargetType,
   RankType,
   ProductResponse,
-} from './types';
+} from '../types';
 import axios from 'axios';
 
 /**
@@ -45,8 +50,3 @@ export async function getProductSummary(productId: string) {
   );
   return response.data.data;
 }
-
-export default {
-  getRankingProducts,
-  getProductById,
-};

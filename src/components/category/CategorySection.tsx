@@ -1,6 +1,6 @@
 import { Section } from '@/components/layout';
 import CategoryGrid, { type CategoryData } from './CategoryGrid';
-import { useThemes } from '@/hooks';
+import { useThemesQuery } from '@/api/theme';
 import CategorySkeleton from './CategorySkeleton';
 
 interface CategorySectionProps {
@@ -8,7 +8,7 @@ interface CategorySectionProps {
 }
 
 const CategorySection = ({ onCategoryClick }: CategorySectionProps) => {
-  const { data, isLoading, error } = useThemes();
+  const { data, isLoading, error } = useThemesQuery();
 
   // 로딩 중일 때 스켈레톤 UI 표시
   if (isLoading) {

@@ -5,15 +5,17 @@ import styled from '@emotion/styled';
 import { Section } from '@/components/layout';
 import Container from '@/components/layout/Container';
 import { RecipientList, RecipientModal } from '@/components/order';
-import { useProduct } from '@/hooks';
+import { useProduct } from '@/api/product';
 import { useAuth } from '@/hooks';
 import { cardTemplates } from '@/data/cardTemplates';
 import type { Recipient } from '@/types';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
-import { postOrder } from '@/api';
-import type { ProductSummary } from '../hooks/useProduct';
+import { useOrderMutation } from '@/api/order';
+import type { ProductSummary } from '@/api/product';
+import { Suspense } from 'react';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 interface OrderFormData {
   selectedCardId: number;
@@ -243,6 +245,25 @@ function makeOrderCompleteMessage(
   return `주문이 완료되었습니다.\n상품명: ${product.name}\n보내는 사람: ${data.sender}\n받는사람 목록:\n${recipientList}\n총 수량: ${totalQuantity}개\n총 가격: ${totalPrice.toLocaleString()}원\n메시지: ${data.message}`;
 }
 
+// 주문 성공 핸들러 함수
+function onSuccessCreateOrder(
+  product: ProductSummary | null | undefined,
+  variables: { orderData: any },
+  navigate: (path: string, options?: any) => void
+) {
+  if (!product) return;
+  const totalQuantity = getTotalQuantity(variables.orderData.receivers);
+  const totalPrice = getTotalPrice(product.price, totalQuantity);
+  const msg = makeOrderCompleteMessage(
+    product,
+    { ...variables.orderData, recipients: variables.orderData.receivers },
+    totalQuantity,
+    totalPrice
+  );
+  alert(msg);
+  navigate('/');
+}
+
 // 에러 핸들링 함수
 function handleOrderError(
   error: any,
@@ -263,13 +284,23 @@ function handleOrderError(
   }
 }
 
-const OrderPage = () => {
+const OrderPageContent = () => {
   const { user } = useAuth();
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
   // API에서 상품 정보 가져오기
-  const { product, isLoading, error } = useProduct(productId ?? '');
+  const { data: product, isLoading, error } = useProduct(productId ?? '');
+
+  // 주문 생성 useMutation
+  const orderMutation = useOrderMutation({
+    onSuccess: (_data: any, variables: any) => {
+      onSuccessCreateOrder(product, variables, navigate);
+    },
+    onError: (error: any) => {
+      handleOrderError(error, navigate, toast, ROUTE_LOGIN);
+    },
+  });
 
   useEffect(() => {
     if (error) {
@@ -341,27 +372,14 @@ const OrderPage = () => {
     setIsModalOpen(false);
   };
 
-  // 주문 제출 핸들러
+  // 주문 제출 핸들러 (useMutation 활용)
   const handleOrderSubmit = handleSubmit(async (data) => {
     if (!product || !user) return;
-
-    try {
-      const orderData = makeOrderData(product, data, selectedCardId);
-      console.log('orderData to send:', orderData);
-      await postOrder(orderData, user.authToken);
-      const totalQuantity = getTotalQuantity(data.recipients);
-      const totalPrice = getTotalPrice(product.price, totalQuantity);
-      const msg = makeOrderCompleteMessage(
-        product,
-        data,
-        totalQuantity,
-        totalPrice
-      );
-      alert(msg);
-      navigate('/');
-    } catch (error) {
-      handleOrderError(error, navigate, toast, ROUTE_LOGIN);
-    }
+    const orderData = makeOrderData(product, data, selectedCardId);
+    await orderMutation.mutateAsync({
+      orderData,
+      authToken: user.authToken,
+    } as any);
   });
 
   // 로딩 중
@@ -478,5 +496,30 @@ const OrderPage = () => {
     </Container>
   );
 };
+
+const OrderPage = () => (
+  <ErrorBoundary>
+    <Suspense
+      fallback={
+        <Container>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '50vh',
+              fontSize: 18,
+              color: '#666',
+            }}
+          >
+            상품 정보를 불러오는 중...
+          </div>
+        </Container>
+      }
+    >
+      <OrderPageContent />
+    </Suspense>
+  </ErrorBoundary>
+);
 
 export default OrderPage;
