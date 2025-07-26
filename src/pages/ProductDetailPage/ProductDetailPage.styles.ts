@@ -9,6 +9,7 @@ export const LikeIconContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background.default};
   flex-direction: column;
   gap: 4px;
+  cursor: pointer;
 `;
 
 export const LikeIcon = styled.img`
