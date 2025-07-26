@@ -5,4 +5,6 @@ export const QUERY_KEYS = {
   THEMES: ["themes"] as const,
   THEME_INFO: (themeId: string) => ["themeInfo", themeId] as const,
   THEME_PRODUCTS: (themeId: string) => ["themeProducts", themeId] as const,
+
+  PRODUCT: (productId: string) => ["product", productId] as const,
 } as const;

@@ -1,24 +1,33 @@
+import getProductInfo from "@/apis/products/getProductInfo";
 import Divider from "@/components/common/Divider";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 import styled from "@emotion/styled";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 interface ProductInfoProps {
   productId: string;
 }
 
-const ProductInfo = ({}: ProductInfoProps) => {
+const ProductInfo = ({ productId }: ProductInfoProps) => {
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEYS.PRODUCT(productId),
+    queryFn: () => getProductInfo({ productId }),
+  });
+
   return (
     <Container>
-      <ProductImg src="https://st.kakaocdn.net/product/gift/product/20250218142602_030fce0196af42189694554c03a54fbb.jpg" />
+      <ProductImg src={data.imageURL} alt={data.name} />
       <InfoWrapper>
-        <ProductName>부드러운 고구마 라떼 케이크</ProductName>
+        <ProductName>{data.name}</ProductName>
         <ProductPrice>
-          26359<Span>원</Span>
+          {data.price.sellingPrice}
+          <Span>원</Span>
         </ProductPrice>
       </InfoWrapper>
       <Divider spacing="2px" fill={false} />
       <BrandWrapper>
-        <BrandImg src="https://st.kakaocdn.net/product/gift/gift_brand/20250331162129_e8de4166853848729c5abad9834405b0.jpg" />
-        <BrandName>뚜레쥬르</BrandName>
+        <BrandImg src={data.brandInfo.imageURL} />
+        <BrandName>{data.brandInfo.name}</BrandName>
       </BrandWrapper>
     </Container>
   );
