@@ -5,12 +5,7 @@ import { showFetchErrorToast } from "@/utils/showFetchToast";
 import getThemeProducts from "@/apis/themes/getThemeProducts";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
-const usePaginationFetch = <T>(
-  themeId: string,
-  limit: number = 10,
-  threshold: number = 0.5,
-  errorMessage: string = "데이터를 불러오는데 실패했습니다.",
-) => {
+const usePaginationFetch = <T>(themeId: string, limit: number = 10, threshold: number = 0.5) => {
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
   const { data, error, isError, fetchNextPage, hasNextPage, isFetching } = useSuspenseInfiniteQuery({
@@ -26,7 +21,7 @@ const usePaginationFetch = <T>(
     if (isError && error) {
       showFetchErrorToast(error);
     }
-  }, [isError, error, errorMessage]);
+  }, [isError, error]);
 
   useEffect(() => {
     if (isInView && hasNextPage && !isFetching) {

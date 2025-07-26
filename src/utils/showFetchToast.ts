@@ -27,7 +27,6 @@ export const showFetchErrorToast = (error: Error, onClose?: () => void) => {
     } else if (statusCode >= 500) {
       toast.error(`잠시 후 다시 시도해주세요.\n${message}`, {
         ...defaultToastOptions,
-        onClose: onClose,
       });
     }
   }
