@@ -13,7 +13,8 @@ export const TabSwitcherContainer = styled.div<{ isActive: boolean }>`
   justify-content: center;
   align-items: center;
   padding: 1.2rem;
-  border-bottom: ${({ isActive }) => (isActive ? "2px solid black" : "none")};
+  border-bottom: ${({ isActive }) =>
+    isActive ? "2px solid black" : "1px solid #E0E0E0"};
   cursor: pointer;
 `;
 
