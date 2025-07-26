@@ -56,9 +56,7 @@ const ProductDetailPage = () => {
   const { data: review, isLoading: isLoadingReview } =
     useHighlightReview(productId);
 
-  const { data: wish } = useWishInfo(productId);
-
-  const [] = useState(wish?.isWished ?? false);
+  useWishInfo(productId);
 
   if (isLoadingProduct || isLoadingDetail || isLoadingReview) {
     return <div css={loadingStyle}>불러오는 중...</div>;

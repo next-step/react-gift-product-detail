@@ -2,35 +2,67 @@
 import { css, type Theme as ThemeType } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
 import { useWishInfo } from '../../apis/product_detail';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FixedBottomBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const match = location.pathname.match(/^\/detail\/(\d+)$/);
   const productId = match?.[1];
+  const queryClient = useQueryClient();
 
   const { data: wish } = useWishInfo(productId || '');
-  const [isWished, setIsWished] = useState(wish?.isWished ?? false);
 
-  useEffect(() => {
-    if (wish) {
-      setIsWished(wish.isWished);
-    }
-  }, [wish]);
+  const mutation = useMutation({
+    mutationFn: async (newWish: boolean) => {
+      // 실제 API 호출은 없으므로 아무 작업도 안 함
+      return newWish;
+    },
+    onMutate: async (newWish: boolean) => {
+      if (!productId) return;
 
-  if (!productId) return null;
+      const previousWish = queryClient.getQueryData(['wishInfo', productId]);
+
+      // 낙관적 업데이트
+      queryClient.setQueryData(['wishInfo', productId], (old: any) => {
+        if (!old) return;
+        return {
+          ...old,
+          isWished: newWish,
+          wishCount: old.wishCount + (newWish ? 1 : -1),
+        };
+      });
+
+      return { previousWish };
+    },
+    onError: (_err, _newWish, context) => {
+      if (context?.previousWish && productId) {
+        queryClient.setQueryData(['wishInfo', productId], context.previousWish);
+      }
+    },
+    onSettled: () => {
+      if (productId) {
+        queryClient.invalidateQueries({ queryKey: ['wishInfo', productId] });
+      }
+    },
+  });
+
+  if (!productId || !wish) return null;
+
+  const handleWishClick = () => {
+    mutation.mutate(!wish.isWished);
+  };
 
   return (
     <div css={barStyle}>
-      <button css={wishButton} onClick={() => setIsWished((prev) => !prev)}>
-        {isWished ? (
+      <button css={wishButton} onClick={handleWishClick}>
+        {wish.isWished ? (
           <AiFillHeart size={24} color="red" />
         ) : (
           <AiOutlineHeart size={24} />
         )}
-        <span>{wish?.wishCount?.toLocaleString()}</span>
+        <span>{wish.wishCount.toLocaleString()}</span>
       </button>
       <button css={orderButton} onClick={() => navigate(`/order/${productId}`)}>
         주문하기
