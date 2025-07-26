@@ -10,7 +10,6 @@ const Category = () => {
   const { isPending, isError, data } = useQuery({
     queryKey: QUERY_KEYS.THEMES,
     queryFn: getThemes,
-    select: (data) => data.data.data,
   });
 
   if (isPending) {

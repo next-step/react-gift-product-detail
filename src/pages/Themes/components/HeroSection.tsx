@@ -18,7 +18,6 @@ const HeroSection = () => {
   const { data, isPending, error, isError } = useQuery({
     queryKey: QUERY_KEYS.THEME_INFO(themeId ?? ""),
     queryFn: () => getThemeInfo({ themeId: themeId ?? "" }),
-    select: (data) => data.data.data,
   });
 
   useEffect(() => {

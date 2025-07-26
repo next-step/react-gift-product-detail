@@ -29,7 +29,6 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   const { data, isPending, isError } = useQuery({
     queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
     queryFn: () => getProductsRanking({ targetType, rankType }),
-    select: (data) => data.data.data,
   });
 
   if (isPending) {

@@ -19,7 +19,7 @@ const usePaginationFetch = <T>(
     queryKey: QUERY_KEYS.THEME_PRODUCTS(themeId),
     queryFn: ({ pageParam }) => getThemeProducts<T>({ themeId, params: { cursor: pageParam as number, limit } }),
     getNextPageParam: (lastPage) => {
-      return lastPage.data.data.hasMoreList ? lastPage.data.data.cursor : undefined;
+      return lastPage.hasMoreList ? lastPage.cursor : undefined;
     },
     initialPageParam: 0,
   });
@@ -38,7 +38,7 @@ const usePaginationFetch = <T>(
     }
   }, [isInView, hasNextPage, isFetching, fetchNextPage]);
 
-  const items: T[] = data?.pages.flatMap((page) => page.data.data.list) ?? [];
+  const items: T[] = data?.pages.flatMap((page) => page.list) ?? [];
 
   return {
     items,

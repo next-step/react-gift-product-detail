@@ -1,8 +1,6 @@
 import { apiInstance } from "@/apis/instance";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import type { RecipientType } from "@/pages/Order/components/Order";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
-import type { AxiosResponse } from "axios";
 
 export interface PostOrderParams {
   productId: number;
@@ -18,10 +16,9 @@ interface PostOrderResponse {
   };
 }
 
-export const postOrder = async (
-  params: PostOrderParams,
-): Promise<AxiosResponse<PostOrderResponse, ApiErrorResponse>> => {
-  return await apiInstance.post<PostOrderResponse>(API_ENDPOINTS.ORDER, params);
+export const postOrder = async (params: PostOrderParams): Promise<PostOrderResponse> => {
+  const response = await apiInstance.post<PostOrderResponse>(API_ENDPOINTS.ORDER, params);
+  return response.data;
 };
 
 export default postOrder;

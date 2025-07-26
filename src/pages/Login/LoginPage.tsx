@@ -23,7 +23,7 @@ const LoginPage = () => {
   const { mutate } = useMutation({
     mutationFn: (data: LoginData) => postLogin(data),
     onSuccess: (data) => {
-      login(data.data.data);
+      login(data);
     },
     onError: (error) => {
       if (axios.isAxiosError<ApiErrorResponse>(error)) {

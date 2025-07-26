@@ -13,7 +13,6 @@ const OrderBtn = () => {
   const { data } = useQuery({
     queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
-    select: (data) => data.data.data,
     enabled: !!productId,
   });
   const product = useMemo(() => data, [data]);

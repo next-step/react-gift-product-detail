@@ -21,7 +21,6 @@ const Product = () => {
   const { data, isPending, isError, error } = useQuery({
     queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
-    select: (data) => data.data.data,
     enabled: !!productId,
   });
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
