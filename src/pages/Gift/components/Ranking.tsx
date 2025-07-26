@@ -3,6 +3,8 @@ import RankingList from "@/pages/Gift/components/RankingList";
 import { rankingRankCategoryList, rankingTargetCategory } from "@/assets/rankingCategory";
 import useRankingFilter from "@/hooks/useRankingFilter";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
+import { Suspense } from "react";
+import Loading from "@/components/common/Loading";
 
 const Ranking = () => {
   const { selectedTarget, selectedRank, changeTargetType, changeRankType } = useRankingFilter();
@@ -41,7 +43,9 @@ const Ranking = () => {
           ))}
         </RankCategoryList>
       </NavBar>
-      <RankingList targetType={selectedTarget} rankType={selectedRank} />
+      <Suspense fallback={<Loading height="625px" />}>
+        <RankingList targetType={selectedTarget} rankType={selectedRank} />
+      </Suspense>
     </Container>
   );
 };

@@ -3,10 +3,9 @@ import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
 import { useState } from "react";
 import Button from "@/components/common/Button";
-import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { generatePath, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import getProductsRanking from "@/apis/products/getProductsRanking";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
 import { QUERY_KEYS } from "@/constants/queryKeys";
@@ -26,14 +25,11 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     setViewCount(nextViewCount);
   };
 
-  const { data, isPending, isError } = useQuery({
+  const { data, isError } = useSuspenseQuery({
     queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
     queryFn: () => getProductsRanking({ targetType, rankType }),
   });
 
-  if (isPending) {
-    return <Loading height="625px" />;
-  }
   if (isError || data?.length === 0) {
     return (
       <Empty>
