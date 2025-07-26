@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { TopNavBar } from '@/components/TopNavBar';
+import { TopNavBar } from '@/components/shared/TopNavBar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useValidateId from '@/hooks/useValidateId';
 import useValidatePassword from '@/hooks/useValidatePassword';

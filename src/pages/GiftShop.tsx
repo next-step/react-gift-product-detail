@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { TopNavBar } from '@/components/TopNavBar';
+import { TopNavBar } from '@/components/shared/TopNavBar';
 import { Category } from '@/components/gift_list_page/Category';
 import { SelectFriend } from '@/components/gift_list_page/SelectFriend';
 import { Banner } from '@/components/gift_list_page/Banner';

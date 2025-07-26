@@ -5,20 +5,9 @@ import { useCallback, useEffect, useState } from 'react';
 import Close from '@/assets/close.svg?react';
 import { useFormContext, type UseFieldArrayRemove } from 'react-hook-form';
 import { isMobilePhone } from 'validator';
+import type { FormValues } from '@/types/orderForm';
 
-interface RecipientForm {
-  recipientName: string;
-  phoneNumber: string;
-  amount: number;
-}
-
-type FormValues = {
-  message: string;
-  senderName: string;
-  recipientInfo: RecipientForm[];
-};
-
-interface RecipientInputInModal {
+interface RecipientInput {
   index: number;
   removeRecipient: UseFieldArrayRemove;
 }
@@ -145,7 +134,7 @@ const ErrorText = styled.div`
 
 const svgSize = 20;
 
-export const RecipientInput = ({ index, removeRecipient }: RecipientInputInModal) => {
+export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
   const [selectedInput, setSelectedInput] = useState<InputType>('');
   const [nameInputFieldStyle, setNameInputFieldStyle] = useState<InputStyle>('idle');
   const [phoneNumberInputFieldStyle, setPhoneNumberInputFieldStyle] = useState<InputStyle>('idle');

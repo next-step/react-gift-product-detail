@@ -4,7 +4,7 @@ import { GiftMessageCard } from './GiftMessageCard';
 import { useCallback, useEffect, useState } from 'react';
 import type { InputStyle } from '@/types/inputStyle';
 import { useFormContext } from 'react-hook-form';
-import type { FormValues } from '@/types/orderFormType';
+import type { FormValues } from '@/types/orderForm';
 import useProductInfo from '@/hooks/useProductInfo';
 
 const Container = styled.div`

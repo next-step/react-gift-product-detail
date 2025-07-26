@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import React, { useCallback, useEffect } from 'react';
 import { TargetButton } from './TargetButton';
 import { TopicButton } from './TopicButton';
-import type { GiftItemDataType } from '@/types/giftItem';
+import type { GiftItemData } from '@/types/giftItemData';
 
 interface Header {
-  getGiftItemList: React.Dispatch<React.SetStateAction<GiftItemDataType[] | null>>;
+  getGiftItemList: React.Dispatch<React.SetStateAction<GiftItemData[] | null>>;
   targetType: string;
   setTargetType: React.Dispatch<React.SetStateAction<string>>;
   rankType: string;

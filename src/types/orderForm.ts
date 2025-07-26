@@ -1,8 +1,8 @@
-interface RecipientForm {
+type RecipientForm = {
   recipientName: string;
   phoneNumber: string;
   amount: number;
-}
+};
 
 export type FormValues = {
   message: string;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import type { CategoryDataType } from '@/types/category';
+import type { CategoryCardData } from '@/types/categoryCardData';
 import { CategoryCard } from '@/components/gift_list_page/Category/CategoryCard';
-import publicApi from '@/apiClient/publicApi';
+import publicClient from '@/api/clients/publicClient';
 import { keyframes } from '@emotion/react';
 
 const Container = styled.div`
@@ -65,12 +65,12 @@ const Spinner = styled.div`
 export const Category = () => {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [categories, setCategories] = useState<CategoryDataType[] | null>(null);
+  const [categories, setCategories] = useState<CategoryCardData[] | null>(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await publicApi.get('/api/themes');
+        const response = await publicClient.get('/api/themes');
         setCategories(response.data.data);
         setIsError(false);
       } catch (error) {

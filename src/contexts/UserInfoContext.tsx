@@ -1,14 +1,10 @@
+import type { LoginPayload } from '@/types/loginPayload';
 import { createContext } from 'react';
 
-interface User {
-  email: string;
-  password: string;
-}
-
-interface UserInfoContextType {
+type UserInfoContext = {
   isValid: boolean;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
-}
+  user: LoginPayload;
+  setUser: React.Dispatch<React.SetStateAction<LoginPayload>>;
+};
 
-export const UserInfoContext = createContext<UserInfoContextType | null>(null);
+export const UserInfoContext = createContext<UserInfoContext | null>(null);

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { GiftItemCard } from '../GiftItemCard';
+import { GiftItemCard } from '../shared/GiftItemCard';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { keyframes } from '@emotion/react';
-import type { GiftItemDataType } from '@/types/giftItem';
+import type { GiftItemData } from '@/types/giftItemData';
 import { useParams } from 'react-router-dom';
-import publicApi from '@/apiClient/publicApi';
+import publicClient from '@/api/clients/publicClient';
 
 const Container = styled.div`
   flex: 1;
@@ -62,13 +62,15 @@ export const GiftList = () => {
   const [isError, setIsError] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [cursor, setCursor] = useState(0);
-  const [giftItemList, setGiftItemList] = useState<GiftItemDataType[] | null>(null);
+  const [giftItemList, setGiftItemList] = useState<GiftItemData[] | null>(null);
 
   console.log(cursor);
 
   const getData = useCallback(async () => {
     try {
-      const response = await publicApi.get(`/api/themes/${id}/products?cursor=${cursor}&limit=10`);
+      const response = await publicClient.get(
+        `/api/themes/${id}/products?cursor=${cursor}&limit=10`
+      );
       console.log(response.data.data);
 
       if (!response.data.data.hasMoreList) {

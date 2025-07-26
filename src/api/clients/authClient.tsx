@@ -1,7 +1,7 @@
 import { navigate } from '@/utils/navigate';
 import axios, { isAxiosError } from 'axios';
 
-const authApi = axios.create({
+const authClient = axios.create({
   baseURL: import.meta.env.VITE_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -9,7 +9,7 @@ const authApi = axios.create({
   timeout: 3000,
 });
 
-authApi.interceptors.request.use((config) => {
+authClient.interceptors.request.use((config) => {
   const storedUserInfo = sessionStorage.getItem('userInfo');
   const token = storedUserInfo ? JSON.parse(storedUserInfo).authToken : '';
   if (token) {
@@ -18,7 +18,7 @@ authApi.interceptors.request.use((config) => {
   return config;
 });
 
-authApi.interceptors.response.use(
+authClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (isAxiosError(error) && error.response?.status === 401) {
@@ -29,4 +29,4 @@ authApi.interceptors.response.use(
   }
 );
 
-export default authApi;
+export default authClient;

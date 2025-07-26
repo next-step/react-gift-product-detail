@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { Modal } from '../Modal';
+import { Modal } from '../shared/Modal';
 import { useEffect, useState } from 'react';
 import { RecipientInput } from './RecipientInput';
 import { CompleteButton } from './CompleteButton';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import type { FormValues } from '@/types/orderFormType';
+import type { FormValues } from '@/types/orderForm';
 
 const Container = styled.div`
   display: flex;

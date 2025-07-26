@@ -1,4 +1,4 @@
-import type { FormValues } from '@/types/orderFormType';
+import type { FormValues } from '@/types/orderForm';
 import styled from '@emotion/styled';
 import type React from 'react';
 import { useFormContext, type FieldPath } from 'react-hook-form';

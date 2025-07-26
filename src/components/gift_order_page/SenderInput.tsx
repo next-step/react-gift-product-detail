@@ -1,5 +1,5 @@
 import type { InputStyle } from '@/types/inputStyle';
-import type { FormValues } from '@/types/orderFormType';
+import type { FormValues } from '@/types/orderForm';
 import styled from '@emotion/styled';
 import { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';

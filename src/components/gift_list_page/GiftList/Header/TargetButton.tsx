@@ -1,5 +1,11 @@
-import type { TargetButtonType } from '@/types/button';
 import styled from '@emotion/styled';
+import type { ButtonHTMLAttributes } from 'react';
+
+interface TargetButton extends ButtonHTMLAttributes<HTMLButtonElement> {
+  targetType: string;
+  isClicked: boolean;
+  setTargetType: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const Button = styled.button`
   all: unset;
@@ -35,12 +41,7 @@ const Text = styled.div<{ isClicked: boolean }>`
   transition: color 0.3s;
 `;
 
-export const TargetButton = ({
-  targetType,
-  isClicked,
-  setTargetType,
-  ...props
-}: TargetButtonType) => {
+export const TargetButton = ({ targetType, isClicked, setTargetType, ...props }: TargetButton) => {
   let icon = '?';
   let text = '?';
   const icons = ['ALL', '👩🏻', '👨🏻', '👦🏻'];

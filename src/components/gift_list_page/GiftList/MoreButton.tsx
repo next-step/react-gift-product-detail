@@ -1,5 +1,9 @@
-import type { MoreButtonType } from '@/types/button';
 import styled from '@emotion/styled';
+
+interface MoreButton {
+  isViewMore: boolean;
+  setIsViewMore: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +28,7 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export const MoreButton = ({ isViewMore, setIsViewMore }: MoreButtonType) => {
+export const MoreButton = ({ isViewMore, setIsViewMore }: MoreButton) => {
   return (
     <Container>
       {isViewMore ? (

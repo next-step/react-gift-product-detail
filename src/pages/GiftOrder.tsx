@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { TopNavBar } from '@/components/TopNavBar';
+import { TopNavBar } from '@/components/shared/TopNavBar';
 import { GiftMessageCardTemplates } from '@/components/gift_order_page/GiftMessageCardTemplates';
 import { Spacing } from '@/components/gift_order_page/Spacing';
 import { SenderInput } from '@/components/gift_order_page/SenderInput';

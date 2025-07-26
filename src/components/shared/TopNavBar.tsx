@@ -4,7 +4,7 @@ import User from '@/assets/user.svg?react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserInfo from '@/hooks/useUserInfo';
 
-interface TopNavBarType {
+interface TopNavBar {
   title: string;
   mainPath: string;
 }
@@ -33,7 +33,7 @@ const Btn = styled.button`
 
 const svgSize = 30;
 
-export const TopNavBar = ({ title, mainPath }: TopNavBarType) => {
+export const TopNavBar = ({ title, mainPath }: TopNavBar) => {
   const url = useLocation();
   const navigate = useNavigate();
   const { user } = useUserInfo();

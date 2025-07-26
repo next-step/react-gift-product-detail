@@ -1,6 +1,6 @@
 import { Banner } from '@/components/gift_themed_list_page/Banner';
 import { GiftList } from '@/components/gift_themed_list_page/GiftList';
-import { TopNavBar } from '@/components/TopNavBar';
+import { TopNavBar } from '@/components/shared/TopNavBar';
 import styled from '@emotion/styled';
 
 const Container = styled.div`

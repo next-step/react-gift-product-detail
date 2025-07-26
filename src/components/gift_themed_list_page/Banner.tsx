@@ -1,4 +1,4 @@
-import publicApi from '@/apiClient/publicApi';
+import publicClient from '@/api/clients/publicClient';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -47,7 +47,7 @@ export const Banner = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await publicApi.get(`/api/themes/${id}/info`);
+        const response = await publicClient.get(`/api/themes/${id}/info`);
         setThemeName(response.data.data.name);
         setTitle(response.data.data.title);
         setDescription(response.data.data.description);

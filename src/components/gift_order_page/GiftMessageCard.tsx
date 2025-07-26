@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-interface GiftMessageCardType {
+interface GiftMessageCard {
   id: number;
   image: string;
   selectedCardId: number;
@@ -38,7 +38,7 @@ export const GiftMessageCard = ({
   image,
   selectedCardId,
   setSelectedCardId,
-}: GiftMessageCardType) => {
+}: GiftMessageCard) => {
   return (
     <Border isSelected={id === selectedCardId}>
       <Card

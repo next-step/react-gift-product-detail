@@ -1,4 +1,16 @@
-import type { ProductInfo } from '@/types/productInfo';
 import { createContext } from 'react';
 
-export const ProductInfoContext = createContext<ProductInfo | null>(null);
+type ProductInfoContext = {
+  messageCardId: string;
+  setMessageCardId: React.Dispatch<React.SetStateAction<string>>;
+  id: number;
+  setId: React.Dispatch<React.SetStateAction<number>>;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  price: number;
+  setPrice: React.Dispatch<React.SetStateAction<number>>;
+  brand: string;
+  setBrand: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export const ProductInfoContext = createContext<ProductInfoContext | null>(null);

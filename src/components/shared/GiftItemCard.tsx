@@ -1,7 +1,15 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import useUserInfo from '@/hooks/useUserInfo';
-import type { GiftItemCardType } from '@/types/giftItem';
+
+interface GiftItemCard {
+  rank?: number;
+  id: number;
+  name: string;
+  image: string;
+  brandName: string;
+  price: number;
+}
 
 const Card = styled.button`
   all: unset;
@@ -56,7 +64,7 @@ const Price = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.spacing5};
 `;
 
-export const GiftItemCard = ({ rank, id, name, image, brandName, price }: GiftItemCardType) => {
+export const GiftItemCard = ({ rank, id, name, image, brandName, price }: GiftItemCard) => {
   const navigate = useNavigate();
   const { user } = useUserInfo();
 

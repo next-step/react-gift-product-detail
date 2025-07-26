@@ -1,10 +1,10 @@
 import useProductInfo from '@/hooks/useProductInfo';
-import type { FormValues } from '@/types/orderFormType';
+import type { FormValues } from '@/types/orderForm';
 import styled from '@emotion/styled';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber';
-import authApi from '@/apiClient/authApi';
+import authClient from '@/api/clients/authClient';
 
 const Container = styled.button`
   all: unset;
@@ -51,7 +51,7 @@ export const OrderButton = () => {
 
   const order = async () => {
     try {
-      const response = await authApi.post('/api/order', {
+      const response = await authClient.post('/api/order', {
         productId: id,
         message: message,
         messageCardId: messageCardId,

@@ -1,5 +1,11 @@
-import type { TopicButtonType } from '@/types/button';
 import styled from '@emotion/styled';
+import type { ButtonHTMLAttributes } from 'react';
+
+interface TopicButton extends ButtonHTMLAttributes<HTMLButtonElement> {
+  topicType: string;
+  isClicked: boolean;
+  setRankType: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const Button = styled.button`
   all: unset;
@@ -19,7 +25,7 @@ const Text = styled.div<{ isClicked: boolean }>`
   transition: color 0.3s;
 `;
 
-export const TopicButton = ({ topicType, isClicked, setRankType, ...props }: TopicButtonType) => {
+export const TopicButton = ({ topicType, isClicked, setRankType, ...props }: TopicButton) => {
   let text = '?';
   const texts = ['받고 싶어한', '많이 선물한', '위시로 받은'];
 

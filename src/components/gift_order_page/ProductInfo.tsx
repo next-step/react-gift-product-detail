@@ -1,10 +1,10 @@
-import publicApi from '@/apiClient/publicApi';
+import publicClient from '@/api/clients/publicClient';
 import useProductInfo from '@/hooks/useProductInfo';
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { GiftItemDataType } from '@/types/giftItem';
+import type { GiftItemData } from '@/types/giftItemData';
 
 const Container = styled.div`
   display: flex;
@@ -85,13 +85,13 @@ export const ProductInfo = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const [currentGift, setCurrentGift] = useState<GiftItemDataType>();
+  const [currentGift, setCurrentGift] = useState<GiftItemData>();
   const { setId, setName, setPrice, setBrand } = useProductInfo();
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await publicApi.get(`/api/products/${parsedId}`);
+        const response = await publicClient.get(`/api/products/${parsedId}`);
         setCurrentGift(response.data.data);
       } catch {
         toast.warn('⚠️ 상품 요청 처리 중 오류가 발생했습니다.', {

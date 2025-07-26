@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import type { GiftItemDataType } from '@/types/giftItem';
-import { GiftItemCard } from '@/components/GiftItemCard';
+import type { GiftItemData } from '@/types/giftItemData';
+import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
-import publicApi from '@/apiClient/publicApi';
+import publicClient from '@/api/clients/publicClient';
 import { keyframes } from '@emotion/react';
 
 const Container = styled.div`
@@ -53,8 +53,8 @@ const ErrorText = styled.div`
 export const GiftList = () => {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [giftItemList, getGiftItemList] = useState<GiftItemDataType[] | null>(null);
-  const [giftItems, setGiftItems] = useState<GiftItemDataType[]>([]);
+  const [giftItemList, getGiftItemList] = useState<GiftItemData[] | null>(null);
+  const [giftItems, setGiftItems] = useState<GiftItemData[]>([]);
   const [isViewMore, setIsViewMore] = useState(false);
   const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
@@ -62,7 +62,7 @@ export const GiftList = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await publicApi.get(
+        const response = await publicClient.get(
           `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
         );
         console.log(response.data.data);

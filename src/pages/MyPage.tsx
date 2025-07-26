@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { TopNavBar } from '@/components/TopNavBar';
+import { TopNavBar } from '@/components/shared/TopNavBar';
 import AccountCircle from '@/assets/account_circle.svg?react';
 import useUserInfo from '@/hooks/useUserInfo';
 import { useNavigate } from 'react-router-dom';
