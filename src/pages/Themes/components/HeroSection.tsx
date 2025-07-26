@@ -1,9 +1,8 @@
-import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import getThemeInfo from "@/apis/themes/getThemeInfo";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -15,7 +14,7 @@ const HeroSection = () => {
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
   const { themeId } = useParams();
 
-  const { data, isPending, error, isError } = useQuery({
+  const { data, error, isError } = useSuspenseQuery({
     queryKey: QUERY_KEYS.THEME_INFO(themeId ?? ""),
     queryFn: () => getThemeInfo({ themeId: themeId ?? "" }),
   });
@@ -32,11 +31,7 @@ const HeroSection = () => {
     }
   }, [isError, error, goHome]);
 
-  if (isPending) {
-    return <Loading height="127.2px" />;
-  }
-
-  if (isError || !data) {
+  if (isError) {
     return null;
   }
 

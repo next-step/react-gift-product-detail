@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
@@ -15,7 +15,7 @@ const usePaginationFetch = <T>(
 ) => {
   const { ref: loader, isInView } = useInView<HTMLDivElement>(threshold);
 
-  const { data, error, isError, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
+  const { data, error, isError, fetchNextPage, hasNextPage, isFetching } = useSuspenseInfiniteQuery({
     queryKey: QUERY_KEYS.THEME_PRODUCTS(themeId),
     queryFn: ({ pageParam }) => getThemeProducts<T>({ themeId, params: { cursor: pageParam as number, limit } }),
     getNextPageParam: (lastPage) => {
