@@ -2,6 +2,7 @@ import { createBrowserRouter} from 'react-router-dom';
 import Layout from '../layout';
 import ProtectedRoute from './ProtectedRoute';
 import { Home, Login, MyPage, Order, NotFound, Theme } from '@/pages';
+import { ROUTES } from '@/shared/config';
 
 const router = createBrowserRouter([
   {
@@ -13,15 +14,15 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'login',
+        path: ROUTES.LOGIN,
         element: <Login />,
       },
       {
-        path: 'themes/:themeId',
+        path: `${ROUTES.THEME}/:themeId`,
         element: <Theme />,
       },
       {
-        path: 'mypage',
+        path: ROUTES.MYPAGE,
         element: (
           <ProtectedRoute>
             <MyPage />
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'order/:productId?',
+        path: `${ROUTES.ORDER}/:productId?`,
         element: (
           <ProtectedRoute>
             <Order />
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '*',
+        path: ROUTES.NOT_FOUND,
         element: <NotFound />,
       },
     ],

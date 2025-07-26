@@ -6,6 +6,7 @@ import type { ThemeInfo } from '@/entities/theme/model/types';
 import { Loading } from '@/shared/ui';
 import * as S from './styles';
 import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { ROUTES } from '@/shared/config';
 
 interface ThemeHeroSectionProps {
   themeId?: number;
@@ -24,7 +25,7 @@ const ThemeHeroSection = ({ themeId }: ThemeHeroSectionProps) => {
   //공식문서에서 API요청만 Tanstack Query로 처리하고 useEffect로 UI 처리하는 것을 권장하는듯해 이렇게 작성했습니다.
   useEffect(() => {
     if (isError) {
-      navigate('/', { replace: true });
+      navigate(`/${ROUTES.HOME}`, { replace: true });
     }
   }, [isError, navigate]);
 

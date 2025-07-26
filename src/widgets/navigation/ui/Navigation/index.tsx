@@ -3,6 +3,7 @@ import * as S from './styles';
 import { IconButton } from '@/shared/ui';
 import { useAuth } from '@/entities/user/model/context';
 import { ChevronLeft, User } from 'lucide-react';
+import { ROUTES } from '@/shared/config';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -13,11 +14,11 @@ const Navigation = () => {
   };
 
   const handleLogoClick = () => {
-    navigate('/');
+    navigate(`/${ROUTES.HOME}`);
   };
 
   const handleLoginClick = () => {
-    navigate(isLoggedIn ? '/mypage' : '/login');
+    navigate(isLoggedIn ? `/${ROUTES.MYPAGE}` : `/${ROUTES.LOGIN}`);
   };
 
   return (

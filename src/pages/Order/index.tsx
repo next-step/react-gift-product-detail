@@ -10,6 +10,7 @@ import OrderTemplate from '@/widgets/orderForm/ui/OrderTemplate';
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosErrorResponse } from '@/shared/types/api';
 import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { ROUTES } from '@/shared/config';
 
 const Order = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -25,7 +26,7 @@ const Order = () => {
   useEffect(() => {
     if (error && (error as AxiosErrorResponse)?.response?.status === 400) {
       toast.error('현재 없는 상품입니다');
-      navigate('/');
+      navigate(`/${ROUTES.HOME}`);
     }
   }, [error, navigate]);
 

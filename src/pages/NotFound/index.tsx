@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import * as S from './styles';
+import { ROUTES } from '@/shared/config';
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/');
+    navigate(`/${ROUTES.HOME}`);
   };
 
   return (

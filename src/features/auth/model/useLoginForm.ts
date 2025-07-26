@@ -3,6 +3,7 @@ import { useAuth } from '@/entities/user/model/context';
 import { useInput } from '@/shared/lib/hooks';
 import { validateEmail, validatePassword } from './login';
 import { type FormSubmitHandler } from '@/shared/types';
+import { ROUTES } from '@/shared/config';
 
 export const useLoginForm = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const useLoginForm = () => {
     }
 
     login(email.value, password.value, () => {
-      const from = location.state?.from || '/';
+      const from = location.state?.from || `/${ROUTES.HOME}`;
       navigate(from, { replace: true });
     });
   };

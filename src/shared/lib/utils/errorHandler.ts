@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { AxiosErrorResponse } from '@/shared/types';
+import { ROUTES } from '@/shared/config';
 
 const isAxiosError = (error: unknown): error is AxiosErrorResponse => {
   return (
@@ -35,7 +36,7 @@ export const handleApiError = (
       case 401:
         toast.error(message || '로그인이 필요합니다.');
         if (navigate) {
-          navigate('/login');
+          navigate(`/${ROUTES.LOGIN}`);
         }
         break;
       case 400:
