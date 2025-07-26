@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import MyPage from "./pages/MyPage";
 import OrderPage from "./pages/OrderPage";
 import ThemeProduct from "./pages/ThemeProduct";
+import ProductDetail from "./pages/ProductDetail";
+
 import { PATH } from "@/constants/path";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -47,6 +49,8 @@ const App = () => {
                 <Route path={PATH.THEME()} element={<ThemeProduct />} />
                 <Route path={PATH.NOT_FOUND} element={<NotFound />} />
                 <Route path={PATH.ALL} element={<NotFound />} />
+                <Route path={PATH.PRODUCT()} element={<ProductDetail />} />
+
               </Routes>
             </AuthProvider>
           </AsyncBoundary>
