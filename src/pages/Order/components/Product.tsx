@@ -1,41 +1,27 @@
 import getProductSummary from "@/apis/products/getProductSummary";
 import Divider from "@/components/common/Divider";
-import { ROUTE_PATH } from "@/components/routes/routePath";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import type { OrderFormType } from "@/pages/Order/components/Order";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
-import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Product = () => {
   const { setValue } = useFormContext<OrderFormType>();
   const { productId } = useParams();
-  const navigate = useNavigate();
 
-  const { data, isError, error } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
   });
-  const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
 
   useEffect(() => {
     if (data) {
       setValue("productId", data.id);
-    } else if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
-      const statusCode = error.response?.data.data.statusCode as number;
-      const message = error.response?.data.data.message as string;
-      showFetchErrorToast(statusCode, message, goHome);
     }
-  }, [isError, error, setValue, goHome, data]);
-
-  if (isError) {
-    return null;
-  }
+  }, [setValue, data]);
 
   return (
     <Content>

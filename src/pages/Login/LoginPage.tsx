@@ -6,10 +6,8 @@ import type React from "react";
 import useLoginInput from "@/hooks/useLoginInput";
 import { useAuth } from "@/contexts/authContext";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { useMutation } from "@tanstack/react-query";
 import postLogin from "@/apis/login/postLogin";
-import axios from "axios";
 
 interface LoginData {
   email: string;
@@ -26,11 +24,7 @@ const LoginPage = () => {
       login(data);
     },
     onError: (error) => {
-      if (axios.isAxiosError<ApiErrorResponse>(error)) {
-        const statusCode = error.response?.data.data.statusCode as number;
-        const message = error.response?.data.data.message as string;
-        showFetchErrorToast(statusCode, message);
-      }
+      showFetchErrorToast(error);
     },
   });
 

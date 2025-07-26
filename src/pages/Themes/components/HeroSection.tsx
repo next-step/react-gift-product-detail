@@ -5,8 +5,6 @@ import styled from "@emotion/styled";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const HeroSection = () => {
@@ -20,14 +18,8 @@ const HeroSection = () => {
   });
 
   useEffect(() => {
-    if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
-      const statusCode = error.response?.data.data.statusCode as number;
-      const message = error.response?.data.data.message as string;
-      if (statusCode === 404) {
-        showFetchErrorToast(statusCode, message, goHome);
-      } else {
-        showFetchErrorToast(statusCode, "잠시 후 다시 시도해주세요.", goHome);
-      }
+    if (isError) {
+      showFetchErrorToast(error, goHome);
     }
   }, [isError, error, goHome]);
 

@@ -2,10 +2,8 @@ import { useEffect } from "react";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import useInView from "@/hooks/useInView";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import getThemeProducts from "@/apis/themes/getThemeProducts";
 import { QUERY_KEYS } from "@/constants/queryKeys";
-import axios from "axios";
 
 const usePaginationFetch = <T>(
   themeId: string,
@@ -25,10 +23,8 @@ const usePaginationFetch = <T>(
   });
 
   useEffect(() => {
-    if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
-      const statusCode = error.response?.data.data.statusCode as number;
-      const message = error.response?.data.data.message as string;
-      showFetchErrorToast(statusCode, message);
+    if (isError && error) {
+      showFetchErrorToast(error);
     }
   }, [isError, error, errorMessage]);
 

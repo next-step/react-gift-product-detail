@@ -14,6 +14,8 @@ import axios from "axios";
 import type { PostOrderParams } from "@/apis/order/postOrder";
 import postOrder from "@/apis/order/postOrder";
 import Loading from "@/components/common/Loading";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import NotFoundPage from "@/pages/NotFound/NotFoundPage";
 
 const OrderPage = () => {
   return (
@@ -36,12 +38,10 @@ const OrderPageContent = () => {
     },
     onError: (error) => {
       if (axios.isAxiosError<ApiErrorResponse>(error)) {
-        const statusCode = error.response?.data.data.statusCode as number;
-        const message = error.response?.data.data.message as string;
-        if (statusCode === 401) {
-          showFetchErrorToast(statusCode, "유효하지 않은 계정입니다.", goLogin);
+        if (error.response?.data.data.statusCode === 401) {
+          showFetchErrorToast(error, goLogin);
         } else {
-          showFetchErrorToast(statusCode, message);
+          showFetchErrorToast(error);
         }
       }
     },
@@ -66,27 +66,29 @@ const OrderPageContent = () => {
     mutate(body);
   };
   return (
-    <Suspense fallback={<Loading height="100vh" />}>
-      <Container>
-        <Content onSubmit={createSubmitHandler(onSubmit)}>
-          <Order.Card />
-          <Divider spacing="0.5rem" fill={false} />
-          <Order.Sender />
-          <Divider spacing="0.5rem" fill={false} />
-          <Order.Recipient openModal={openModal} />
-          <Divider spacing="0.5rem" fill={false} />
-          <Order.Product />
-          <Divider spacing="3.125rem" />
-          <Order.Btn />
-        </Content>
-        {isModalOpen && (
-          <Order.Modal
-            closeModal={closeModal}
-            initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))}
-          />
-        )}
-      </Container>
-    </Suspense>
+    <ErrorBoundary fallback={<NotFoundPage />} onError={(error) => showFetchErrorToast(error, goHome)}>
+      <Suspense fallback={<Loading height="100vh" />}>
+        <Container>
+          <Content onSubmit={createSubmitHandler(onSubmit)}>
+            <Order.Card />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Sender />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Recipient openModal={openModal} />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Product />
+            <Divider spacing="3.125rem" />
+            <Order.Btn />
+          </Content>
+          {isModalOpen && (
+            <Order.Modal
+              closeModal={closeModal}
+              initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))}
+            />
+          )}
+        </Container>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
