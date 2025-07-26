@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
   }, []);
-
+      
   // 로그인 처리 (react-query mutation 활용)
   const login = useCallback(async (email: string, password: string) => {
     setError(null);

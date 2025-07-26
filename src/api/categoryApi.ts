@@ -35,8 +35,6 @@ export const fetchThemeInfo = async (themeId: number): Promise<ThemeInfo> => {
 };
 
 
-// 테마별 상품 목록 데이터 타입
-// ...기존 코드 유지...
 
 export const fetchThemeProducts = async (
   themeId: number,

@@ -38,7 +38,6 @@ const nameStyle = css({
 const CategoryList = () => {
   const { data: categoryData, isLoading: loading, error } = useCategoriesQuery();
   const navigate = useNavigate();
-
   if (loading) {
     return (
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
