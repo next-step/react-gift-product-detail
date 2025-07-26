@@ -15,14 +15,14 @@ const defaultToastOptions: ToastOptions = {
   },
 };
 
-export const showFetchErrorToast = (error: Error, onClose?: () => void) => {
+export const showFetchErrorToast = (error: Error, onOpen?: () => void) => {
   if (axios.isAxiosError<ApiErrorResponse>(error)) {
     const statusCode = error.response?.data.data.statusCode as number;
     const message = error.response?.data.data.message as string;
     if (statusCode >= 400 && statusCode < 500) {
       toast.error(message, {
         ...defaultToastOptions,
-        onClose: onClose,
+        onOpen: onOpen,
       });
     } else if (statusCode >= 500) {
       toast.error(`잠시 후 다시 시도해주세요.\n${message}`, {
@@ -32,7 +32,7 @@ export const showFetchErrorToast = (error: Error, onClose?: () => void) => {
   }
 };
 
-export const showFetchSuccessToast = (message: string, onClose?: () => void) => {
+export const showFetchSuccessToast = (message: string, onOpen?: () => void) => {
   toast.success(message, {
     position: "top-center",
     autoClose: 3000,
@@ -41,6 +41,6 @@ export const showFetchSuccessToast = (message: string, onClose?: () => void) => 
     draggable: true,
     progress: undefined,
     theme: "colored",
-    onClose: onClose,
+    onOpen: onOpen,
   });
 };
