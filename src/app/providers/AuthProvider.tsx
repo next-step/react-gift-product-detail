@@ -5,7 +5,7 @@ import type { UserInfo } from '@/entities/user/model/types';
 import { login as loginApi } from '@/entities/user/api/authApi';
 import { STORAGE_KEYS } from '@/shared/config/storageKeys';
 import { useMutation } from '@tanstack/react-query';
-import type { AxiosErrorResponse } from '@/shared/types/api';
+import { mutationErrorHandler } from '@/shared/lib/utils/errorHandler';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -32,13 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       sessionStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(response));
       toast.success('로그인에 성공했습니다.');
     },
-    onError: (error: AxiosErrorResponse) => {
-      if (error?.response?.status === 400) {
-        toast.error(error?.response?.data?.data?.message || '로그인에 실패했습니다.');
-      } else {
-        toast.error('로그인에 실패했습니다.');
-      }
-    },
+    onError: mutationErrorHandler('로그인에 실패했습니다.'),
   });
 
   const login = useCallback(async (email: string, password: string, onSuccess?: () => void) => {

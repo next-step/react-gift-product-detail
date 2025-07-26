@@ -16,8 +16,9 @@ import {
 } from './constants';
 import { createCardHandlers, validateOrderForm } from './orderutils';
 import type { CardState, FormData, UseOrderFormProps } from './types';
-import type { InputChangeHandler, AxiosErrorResponse } from '@/shared/types';
+import type { InputChangeHandler } from '@/shared/types';
 import { ROUTES } from '@/shared/config';
+import { mutationErrorHandler } from '@/shared/lib/utils/errorHandler';
 
 export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
   const navigate = useNavigate();
@@ -47,13 +48,7 @@ ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
       alert(orderInfo);
       navigate(`/${ROUTES.HOME}`);
     },
-    onError: (error: AxiosErrorResponse) => {
-      if (error?.response?.status === 400) {
-        toast.error(error?.response?.data?.data?.message || ERROR_MESSAGES.VALIDATION_FAILED);
-      } else {
-        toast.error(ERROR_MESSAGES.ORDER_PROCESSING_ERROR);
-      }
-    },
+    onError: mutationErrorHandler(ERROR_MESSAGES.ORDER_PROCESSING_ERROR),
   });
 
   const selectedCard = useMemo(() => 

@@ -70,4 +70,12 @@ export const useErrorHandler = () => {
   }, [navigate]);
   
   return { handleError };
+};
+
+export const mutationErrorHandler = (defaultMessage: string) => {
+  return (error: unknown) => {
+    handleApiError(error, undefined, {
+      400: (message) => toast.error(message || defaultMessage),
+    });
+  };
 }; 
