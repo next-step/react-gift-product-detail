@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useParams, useNavigate } from 'react-router-dom';
-import { css } from '@emotion/react';
 import { useState } from 'react';
 import {
   useProductInfo,
@@ -9,6 +8,26 @@ import {
   useWishInfo,
 } from '../../apis/product_detail';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import {
+  containerStyle,
+  loadingStyle,
+  errorStyle,
+  productImage,
+  infoSection,
+  productName,
+  price,
+  brand,
+  brandImage,
+  brandName,
+  tabContainer,
+  tabButton,
+  activeTabStyle,
+  tabContent,
+  reviewAuthorStyle,
+  bottomActionSection,
+  wishButton,
+  orderButton,
+} from './styles';
 
 const TAB = {
   DESCRIPTION: '상품설명',
@@ -138,143 +157,3 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
-
-// 스타일
-const containerStyle = css`
-  max-width: 768px;
-  margin: 0 auto;
-  padding: 24px;
-`;
-
-const loadingStyle = css`
-  padding: 40px;
-  text-align: center;
-  color: #666;
-`;
-
-const errorStyle = css`
-  padding: 40px;
-  text-align: center;
-  color: red;
-`;
-
-const reviewAuthorStyle = css`
-  font-weight: 600;
-  color: #333;
-`;
-
-const productImage = css`
-  width: 100%;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  border-radius: 12px;
-`;
-
-const infoSection = css`
-  margin-top: 24px;
-  margin-bottom: 32px;
-`;
-
-const productName = css`
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-
-const brand = css`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-`;
-
-const price = css`
-  font-size: 20px;
-  font-weight: 600;
-  color: #000;
-`;
-
-const tabContainer = css`
-  display: flex;
-  justify-content: space-around;
-  margin: 24px 0 16px;
-  border-bottom: 1px solid #eee;
-`;
-
-const tabButton = css`
-  flex: 1;
-  padding: 12px 0;
-  font-size: 16px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #555;
-  transition: color 0.2s;
-`;
-
-const activeTabStyle = css`
-  color: #000;
-  font-weight: bold;
-  border-bottom: 2px solid #000;
-`;
-
-const tabContent = css`
-  font-size: 14px;
-  line-height: 1.6;
-  padding-bottom: 24px;
-
-  ul {
-    padding-left: 20px;
-    list-style: disc;
-
-    li {
-      margin-bottom: 8px;
-    }
-  }
-
-  strong {
-    font-weight: 600;
-  }
-`;
-
-const bottomActionSection = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 24px;
-  border-top: 1px solid #eee;
-`;
-
-const wishButton = css`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-`;
-
-const orderButton = css`
-  background: #feda00;
-  color: #000;
-  font-weight: bold;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-`;
-
-const brandImage = css`
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const brandName = css`
-  font-size: 14px;
-  color: #777;
-`;
