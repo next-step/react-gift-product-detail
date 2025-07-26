@@ -65,13 +65,13 @@ export const GiftList = () => {
         const response = await publicClient.get(
           `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
         );
-        console.log(response.data.data);
-        getGiftItemList(response.data.data);
+        const { data } = response.data;
+        getGiftItemList(data);
         setIsError(false);
       } catch (error) {
         setIsError(true);
         setLoading(false);
-        console.log('⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요. ', error);
+        console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
       }
     };
     setTimeout(() => {

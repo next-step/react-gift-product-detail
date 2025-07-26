@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber';
 import authClient from '@/api/clients/authClient';
+import { toast } from 'react-toastify';
 
 const Container = styled.button`
   all: unset;
@@ -69,6 +70,11 @@ export const OrderButton = () => {
       navigate('/');
     } catch (error) {
       console.log('주문 실패: ', error);
+      toast.warn('⚠️ 주문 요청 처리 중 오류가 발생했습니다.', {
+        style: {
+          width: '25rem',
+        },
+      });
     }
   };
 

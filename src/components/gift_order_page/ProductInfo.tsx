@@ -92,7 +92,8 @@ export const ProductInfo = () => {
     const getData = async () => {
       try {
         const response = await publicClient.get(`/api/products/${parsedId}`);
-        setCurrentGift(response.data.data);
+        const { data } = response.data;
+        setCurrentGift(data);
       } catch {
         toast.warn('⚠️ 상품 요청 처리 중 오류가 발생했습니다.', {
           style: {

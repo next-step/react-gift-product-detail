@@ -1,6 +1,5 @@
 import publicClient from '@/api/clients/publicClient';
 import styled from '@emotion/styled';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -36,6 +35,12 @@ const Description = styled.div`
   color: white;
 `;
 
+const ErrorText = styled.div`
+  margin: auto;
+  font-size: 1rem;
+  font-weight: 500;
+`;
+
 export const Banner = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -43,6 +48,7 @@ export const Banner = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -54,12 +60,10 @@ export const Banner = () => {
         setTitle(title);
         setDescription(description);
         setBackgroundColor(backgroundColor);
+        setIsError(false);
       } catch (error) {
         console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-        if (axios.isAxiosError(error) && error.response?.status === 404) {
-          console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-          navigate('/main');
-        }
+        setIsError(true);
       }
     };
     getData();
@@ -70,6 +74,7 @@ export const Banner = () => {
       {themeName && <ThemeName>{themeName}</ThemeName>}
       {title && <Title>{title}</Title>}
       {description && <Description>{description}</Description>}
+      {isError && <ErrorText>⚠️ 테마 정보를 불러오는 데 실패했습니다.</ErrorText>}
     </Container>
   );
 };

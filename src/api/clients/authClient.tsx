@@ -25,6 +25,10 @@ authClient.interceptors.response.use(
       navigate('/login');
     }
 
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      navigate('/main');
+    }
+
     return Promise.reject(error);
   }
 );
