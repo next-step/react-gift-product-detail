@@ -166,3 +166,28 @@ export const DetailName = styled.p`
 export const DetailValue = styled.p`
   font: ${({ theme }) => theme.typography.body1Regular};
 `;
+export const Heart = styled.button`
+  width: 4rem;
+  height: 50px;
+  background-color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+`;
+export const HeartIcon = styled.svg<{ liked: boolean }>`
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: fill 0.2s;
+  fill: ${({ liked }) => (liked ? '#FF4500' : 'none')};
+  stroke: ${({ theme }) => theme.colors.semantic.textDefault};
+  stroke-width: ${({ liked }) => (liked ? 0 : 1.5)};
+`;
+export const HeartPath = styled.path``;
+export const HeartCount = styled.div`
+  font: ${({ theme }) => theme.typography.label2Regular};
+  font-size: 0.625rem;
+`;
