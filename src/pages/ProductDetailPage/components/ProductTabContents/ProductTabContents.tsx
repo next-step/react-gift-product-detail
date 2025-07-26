@@ -6,12 +6,19 @@ import {
   TabSwitcherRow,
 } from "./ProductTabContents.styles";
 import { TAB_LABELS } from "../../constants/tab";
+import Info from "./Info";
 
 type Tab = "info" | "review" | "detail";
 
-function TabContent({ currentTab }: { currentTab: Tab }) {
+function TabContent({
+  currentTab,
+  productId,
+}: {
+  currentTab: Tab;
+  productId: string;
+}) {
   if (currentTab === "info") {
-    return <div>info</div>;
+    return <Info productId={productId} />;
   }
   if (currentTab === "review") {
     return <div>review</div>;
@@ -41,7 +48,7 @@ function TabSwitcher({
   );
 }
 
-function ProductTabContents() {
+function ProductTabContents({ productId }: { productId: string }) {
   const [currentTab, setCurrentTab] = useState<Tab>("info");
 
   return (
@@ -66,7 +73,7 @@ function ProductTabContents() {
           setCurrentTab={setCurrentTab}
         />
       </TabSwitcherRow>
-      <TabContent currentTab={currentTab} />
+      <TabContent currentTab={currentTab} productId={productId} />
     </ProductInfoTabContainer>
   );
 }

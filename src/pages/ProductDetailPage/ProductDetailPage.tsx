@@ -86,7 +86,7 @@ function ProductDetailPage() {
         <Suspense fallback={<Loading />}>
           <BottomNavigationWrapper productId={id!}>
             <ProductHeader data={data} />
-            <ProductTabContents />
+            <ProductTabContents productId={id!} />
           </BottomNavigationWrapper>
         </Suspense>
       </ErrorBoundary>

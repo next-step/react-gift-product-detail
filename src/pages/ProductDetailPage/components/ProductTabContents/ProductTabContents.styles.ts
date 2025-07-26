@@ -30,3 +30,9 @@ export const TabSwitcherLabel = styled.p<{ isActive: boolean }>`
   text-align: center;
   opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
 `;
+
+export const TabContentLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing[4]};
+`;
