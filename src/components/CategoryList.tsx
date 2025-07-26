@@ -1,11 +1,8 @@
 import { css } from '@emotion/react';
-import { toast } from 'react-toastify';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
-import { useState, useEffect } from 'react';
-import { fetchCategories } from '../api/categoryApi';
-import type { CategoryItem } from '../types/category';
+import { useCategoriesQuery } from '../api/categoryQuery';
 import { spinnerStyle } from '@/styles/common';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,28 +36,8 @@ const nameStyle = css({
 });
 
 const CategoryList = () => {
-  const [categoryData, setCategoryData] = useState<CategoryItem[]>([]); // 상태로 categoryData 관리
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
-  const [error, setError] = useState<string | null>(null); // 에러 상태 추가
+  const { data: categoryData, isLoading: loading, error } = useCategoriesQuery();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchCategories();
-        setCategoryData(data);
-      } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
-        setError(errorMessage);
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCategories();
-  }, []);
 
   if (loading) {
     return (
@@ -71,14 +48,14 @@ const CategoryList = () => {
     );
   }
 
-  if (error || categoryData.length === 0) {
+  if (error || (categoryData ?? []).length === 0) {
     return null; // 에러가 발생하거나 데이터가 없으면 아무것도 렌더링하지 않음
   }
 
   return (
     <section css={sectionStyle}>
       <div css={listStyle}>
-        {categoryData.map((item) => (
+        {(categoryData ?? []).map((item) => (
           <div
             key={item.themeId}
             css={itemStyle}

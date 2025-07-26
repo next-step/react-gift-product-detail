@@ -1,3 +1,13 @@
+// 테마별 상품 목록 데이터 타입
+export interface ThemeProductList {
+  list: import('./product').Product[];
+  cursor: number;
+  hasMoreList: boolean;
+}
+
+export interface ThemeProductListResponse {
+  data: ThemeProductList;
+}
 // 카테고리 아이템 타입 정의
 export interface CategoryItem {
   themeId: number;

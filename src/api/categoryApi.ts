@@ -1,5 +1,4 @@
-import type { CategoryItem, CategoryResponse, ThemeInfo, ThemeInfoResponse } from '../types/category';
-import type { Product } from '../types/product';
+import type { CategoryItem, CategoryResponse, ThemeInfo, ThemeInfoResponse, ThemeProductList, ThemeProductListResponse } from '../types/category';
 import { apiRequest } from './apiClient';
 
 // 카테고리 데이터 가져오기
@@ -37,15 +36,7 @@ export const fetchThemeInfo = async (themeId: number): Promise<ThemeInfo> => {
 
 
 // 테마별 상품 목록 데이터 타입
-export interface ThemeProductList {
-  list: Product[];
-  cursor: number;
-  hasMoreList: boolean;
-}
-
-export interface ThemeProductListResponse {
-  data: ThemeProductList;
-}
+// ...기존 코드 유지...
 
 export const fetchThemeProducts = async (
   themeId: number,
