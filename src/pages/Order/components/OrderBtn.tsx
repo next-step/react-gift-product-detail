@@ -1,7 +1,7 @@
 import getProductSummary from "@/apis/products/getProductSummary";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import styled from "@emotion/styled";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -10,10 +10,9 @@ import { QUERY_KEYS } from "@/constants/queryKeys";
 const OrderBtn = () => {
   const { watch } = useFormContext<OrderFormType>();
   const { productId } = useParams();
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
-    enabled: !!productId,
   });
   const product = useMemo(() => data, [data]);
   const recipients = watch("recipients");

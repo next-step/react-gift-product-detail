@@ -3,7 +3,7 @@ import Container from "@/components/common/Container";
 import Divider from "@/components/common/Divider";
 import Order from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import type { PostOrderParams } from "@/apis/order/postOrder";
 import postOrder from "@/apis/order/postOrder";
+import Loading from "@/components/common/Loading";
 
 const OrderPage = () => {
   return (
@@ -65,22 +66,27 @@ const OrderPageContent = () => {
     mutate(body);
   };
   return (
-    <Container>
-      <Content onSubmit={createSubmitHandler(onSubmit)}>
-        <Order.Card />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Sender />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Recipient openModal={openModal} />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Product />
-        <Divider spacing="3.125rem" />
-        <Order.Btn />
-      </Content>
-      {isModalOpen && (
-        <Order.Modal closeModal={closeModal} initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))} />
-      )}
-    </Container>
+    <Suspense fallback={<Loading height="100vh" />}>
+      <Container>
+        <Content onSubmit={createSubmitHandler(onSubmit)}>
+          <Order.Card />
+          <Divider spacing="0.5rem" fill={false} />
+          <Order.Sender />
+          <Divider spacing="0.5rem" fill={false} />
+          <Order.Recipient openModal={openModal} />
+          <Divider spacing="0.5rem" fill={false} />
+          <Order.Product />
+          <Divider spacing="3.125rem" />
+          <Order.Btn />
+        </Content>
+        {isModalOpen && (
+          <Order.Modal
+            closeModal={closeModal}
+            initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))}
+          />
+        )}
+      </Container>
+    </Suspense>
   );
 };
 

@@ -1,13 +1,12 @@
 import getProductSummary from "@/apis/products/getProductSummary";
 import Divider from "@/components/common/Divider";
-import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
@@ -18,10 +17,9 @@ const Product = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isError, error } = useSuspenseQuery({
     queryKey: QUERY_KEYS.ORDER_PRODUCTS(productId ?? ""),
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
-    enabled: !!productId,
   });
   const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
 
@@ -34,10 +32,6 @@ const Product = () => {
       showFetchErrorToast(statusCode, message, goHome);
     }
   }, [isError, error, setValue, goHome, data]);
-
-  if (isPending) {
-    return <Loading height="170px" />;
-  }
 
   if (isError) {
     return null;
