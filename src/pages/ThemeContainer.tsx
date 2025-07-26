@@ -1,36 +1,22 @@
-import { useState, useEffect } from 'react';
 import ThemeItem from '@/components/ThemeItem';
 import type { Themetype } from '@/types/DTO/themeDTO';
 import { ThemeContainerWrapper, ThemeTitle, Message } from '@/styles/Theme/ThemeContainer.styles';
 import { getThemes } from '@/apis/theme';
-import axios from 'axios';
+
+import { useQuery } from '@tanstack/react-query';
 
 function ThemeContainer() {
-  const [themes, setTheme] = useState<Themetype[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    const getTheme = async () => {
-      try {
-        const data = await getThemes();
-        setTheme(data);
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          const status = err.response?.data?.data?.status || '에러 발생';
-          setError(status);
-        } else {
-          setError('알 수 없는 에러');
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getTheme();
-  }, []);
+  const {
+    data: themes = [],
+    isLoading,
+    error,
+  } = useQuery<Themetype[]>({
+    queryKey: ['themes'],
+    queryFn: getThemes,
+  });
 
   if (isLoading) return <>테마를 부르는 중입니다.</>;
-  if (error) return <p>{error}</p>;
+  if (error) return <p>{error.message}</p>;
 
   return (
     <ThemeContainerWrapper>
