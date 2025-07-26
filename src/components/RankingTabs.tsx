@@ -1,10 +1,9 @@
 import { css } from '@emotion/react'
-import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
-import { useEffect } from 'react';
-import { fetchProductRanking } from '../api/productApi';
+import { useProductRankingQuery } from '../api/productQuery';
 import type { Product } from '../types/product';
 import { usePersistentState } from '../hooks/usePersistentState';
 
@@ -70,23 +69,13 @@ const RankingTabs = ({ onDataChange }: RankingTabsProps) => {
   const [selected, setSelected] = usePersistentState('rankingTab', 'FEMALE');
   const [selectedWantedTab, setSelectedWantedTab] = usePersistentState('wantedTab', 'MANY_WISH');
 
-  // API 호출 함수
-  const fetchRankingData = async (targetType: string, rankType: string) => {
-    try {
-      const products = await fetchProductRanking(targetType, rankType);
-      onDataChange(products);
-    } catch (error) {
-      console.error('랭킹 데이터를 불러오는데 실패했습니다:', error);
-      const errorMessage = error instanceof Error ? error.message : '랭킹 데이터를 불러오는데 실패했습니다.';
-      toast.error(errorMessage);
-      onDataChange([]); // 에러 시 빈 배열 전달
-    }
-  };
-
-  // 탭 변경 시 API 호출
+  // 리액트 쿼리 훅 사용
+  const { data: products } = useProductRankingQuery(selected, selectedWantedTab);
+  // 데이터 변경 시 부모에 전달
   useEffect(() => {
-    fetchRankingData(selected, selectedWantedTab);
-  }, [selected, selectedWantedTab]);
+    if (products) onDataChange(products);
+    else onDataChange([]);
+  }, [products, onDataChange]);
 
   const handleTargetTabChange = (value: string) => {
     setSelected(value);
