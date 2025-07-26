@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
+import { css, type Theme as ThemeType } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
@@ -41,7 +41,7 @@ const FixedBottomBar = () => {
 
 export default FixedBottomBar;
 
-const barStyle = css`
+export const barStyle = (theme: ThemeType) => css`
   position: fixed;
   bottom: 0;
   left: 0;
@@ -52,32 +52,40 @@ const barStyle = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
-  border-top: 1px solid #eee;
-  background-color: #fff;
+  padding: ${theme.spacing[3]} ${theme.spacing[4]};
+  border-top: 1px solid ${theme.color.gray.gray300};
+  background-color: ${theme.color.gray.gray00};
   z-index: 10;
 `;
 
-const wishButton = css`
+export const wishButton = (theme: ThemeType) => css`
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: ${theme.spacing[2]};
+  font-size: ${theme.typography.label1Regular.fontSize};
   background: none;
   border: none;
   cursor: pointer;
 `;
 
-const orderButton = css`
+export const orderButton = (theme: ThemeType) => css`
   flex: 1;
-  margin-left: 16px;
-  background: #feda00;
-  color: #000;
-  font-weight: bold;
-  padding: 12px 16px;
+  margin-left: ${theme.spacing[4]};
+  background: ${theme.color.semantic.kakaoYellow};
+  color: ${theme.color.semantic.textDefault};
+  font-weight: ${theme.typography.body1Bold.fontWeight};
+  padding: ${theme.spacing[3]} ${theme.spacing[4]};
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  font-size: ${theme.typography.body1Bold.fontSize};
   text-align: center;
+
+  &:hover {
+    background: ${theme.color.semantic.kakaoYellowHover};
+  }
+
+  &:active {
+    background: ${theme.color.semantic.kakaoYellowActive};
+  }
 `;

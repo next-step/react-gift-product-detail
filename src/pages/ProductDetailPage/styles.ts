@@ -5,6 +5,7 @@ export const containerStyle = (theme: ThemeType) => css`
   max-width: 768px;
   margin: 0 auto;
   padding: ${theme.spacing[6]};
+  padding-bottom: 80px;
 `;
 
 export const loadingStyle = (theme: ThemeType) => css`

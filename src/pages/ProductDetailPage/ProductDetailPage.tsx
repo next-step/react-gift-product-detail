@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import {
   useProductInfo,
@@ -7,7 +7,6 @@ import {
   useHighlightReview,
   useWishInfo,
 } from '../../apis/product_detail';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import {
   containerStyle,
   loadingStyle,
@@ -24,9 +23,6 @@ import {
   activeTabStyle,
   tabContent,
   reviewAuthorStyle,
-  bottomActionSection,
-  wishButton,
-  orderButton,
 } from './styles';
 
 const TAB = {
@@ -39,7 +35,6 @@ type TabKey = keyof typeof TAB;
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>('DESCRIPTION');
 
   if (!productId) {
@@ -63,11 +58,7 @@ const ProductDetailPage = () => {
 
   const { data: wish } = useWishInfo(productId);
 
-  const [isWished, setIsWished] = useState(wish?.isWished ?? false);
-
-  const toggleWish = () => {
-    setIsWished((prev) => !prev);
-  };
+  const [] = useState(wish?.isWished ?? false);
 
   if (isLoadingProduct || isLoadingDetail || isLoadingReview) {
     return <div css={loadingStyle}>불러오는 중...</div>;
@@ -134,23 +125,6 @@ const ProductDetailPage = () => {
             ))}
           </ul>
         )}
-      </section>
-
-      <section css={bottomActionSection}>
-        <button css={wishButton} onClick={toggleWish}>
-          {isWished ? (
-            <AiFillHeart size={24} color="red" />
-          ) : (
-            <AiOutlineHeart size={24} />
-          )}
-          <span>{wish?.wishCount.toLocaleString()}</span>
-        </button>
-        <button
-          css={orderButton}
-          onClick={() => navigate(`/order/${productId}`)}
-        >
-          주문하기
-        </button>
       </section>
     </main>
   );
