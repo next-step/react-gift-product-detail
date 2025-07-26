@@ -32,7 +32,7 @@ export const RankingSection = () => {
       <Title>실시간 급상승 선물랭킹</Title>
       <RankingFilter selected={gender} onChange={setGender} />
       <RankingTab selected={tab} onChange={setTab} />
-      <ErrorBoundary fallback={<p>문제가 발생했습니다. 새로고침 해주세요.</p>}>
+      <ErrorBoundary fallback={<p>~문제가 발생했습니다~</p>}>
         <Suspense fallback={<Spinner />}>
           <RankingGrid gender={gender} tab={tab} />
         </Suspense>
