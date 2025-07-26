@@ -7,7 +7,7 @@ import {
   useProductDetail,
   useHighlightReview,
   useWishInfo,
-} from '../apis/product_detail';
+} from '../../apis/product_detail';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 const TAB = {

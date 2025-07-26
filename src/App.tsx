@@ -20,7 +20,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import ThemeProductPage from './pages/ThemeProductPage';
 import theme from './styles/theme';
 import { css } from '@emotion/react';
-import ProductDetailPage from './pages/ProductDetailPage';
+import ProductDetailPage from './pages/ProductDetailPage/ProductDetailPage';
+import FixedBottomBar from './pages/ProductDetailPage/FixedBottomBar';
 
 const Home = () => (
   <main>
@@ -79,6 +80,7 @@ function App() {
             <Route path="/detail/:productId" element={<ProductDetailPage />} />
           </Routes>
         </div>
+        <FixedBottomBar />
         <ToastContainer
           position="bottom-center"
           autoClose={3000}
