@@ -1,8 +1,10 @@
-import postRequest from '@apis/postRequest';
+import { postLogin } from '@apis/loginApi';
+import { useMutation } from '@tanstack/react-query';
+import handleAxiosError from '@utils/handleAxiosError';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-interface LoginCredentials {
+export interface LoginCredentials {
   email: string;
   password: string;
 }
@@ -32,28 +34,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsInitialized(true);
   }, []);
 
+  const { mutateAsync: loginMutate } = useMutation({
+    mutationFn: postLogin,
+  });
+
   const login = async ({
     email,
     password,
   }: LoginCredentials): Promise<boolean> => {
     //임시 검증 로직
 
-    const { data, success, error, status } = await postRequest<User>('/login', {
-      email,
-      password,
-    });
-
-    if (success && data) {
+    try {
+      const data = await loginMutate({ email, password });
       setUser(data);
       sessionStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('로그인 성공');
       return true;
-    } else {
-      if (status && status >= 400 && status < 500) {
-        toast.error(error);
-      } else {
-        toast.error('서버 오류 또는 네트워크 문제 발생');
-      }
+    } catch (error) {
+      handleAxiosError(error);
       return false;
     }
   };
