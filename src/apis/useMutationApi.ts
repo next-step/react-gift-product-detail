@@ -4,13 +4,10 @@ import { AxiosError } from 'axios';
 import apiClient from './httpClient';
 import { handleApiError } from './queryClient';
 
-export interface MutationApiOptions<TData, TVariables>
-  extends Omit<
-    UseMutationOptions<TData, AxiosError, TVariables>,
-    'mutationFn'
-  > {
-  onError?: (error: AxiosError) => void;
-}
+export type MutationApiOptions<TData, TVariables> = Omit<
+  UseMutationOptions<TData, AxiosError, TVariables>,
+  'mutationFn'
+>;
 
 export const useMutationApi = <TData, TVariables = void>(
   method: 'post' | 'put' | 'delete',
@@ -24,10 +21,9 @@ export const useMutationApi = <TData, TVariables = void>(
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;
-        handleApiError(axiosError);
 
-        if (options?.onError) {
-          options.onError(axiosError);
+        if (!url.includes('/wish')) {
+          handleApiError(axiosError);
         }
 
         throw axiosError;
