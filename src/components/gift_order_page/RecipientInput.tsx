@@ -132,7 +132,7 @@ const ErrorText = styled.div`
   color: ${({ theme }) => theme.colors.red700};
 `;
 
-const svgSize = 20;
+const SVG_SIZE = 20;
 
 export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
   const [selectedInput, setSelectedInput] = useState<InputType>('');
@@ -199,7 +199,7 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
             removeRecipient(index);
           }}
         >
-          <Close width={svgSize} height={svgSize} fill="black" style={{ marginLeft: '5px' }} />
+          <Close width={SVG_SIZE} height={SVG_SIZE} fill="black" style={{ marginLeft: '5px' }} />
         </CloseButton>
       </Header>
       <FormField>

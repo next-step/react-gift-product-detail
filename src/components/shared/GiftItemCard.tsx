@@ -23,6 +23,8 @@ const Card = styled.button`
   height: 100%;
 `;
 
+const TOP_RANK_THRESHOLD = 3;
+
 const Rank = styled.div<{ rank?: number }>`
   display: flex;
   justify-content: center;
@@ -36,7 +38,7 @@ const Rank = styled.div<{ rank?: number }>`
   background-color: ${({ theme, rank }) => {
     if (!rank) return;
 
-    return rank <= 3 ? theme.colors.red600 : theme.colors.gray600;
+    return rank <= TOP_RANK_THRESHOLD ? theme.colors.red600 : theme.colors.gray600;
   }};
   color: white;
   font-size: 0.75rem;
