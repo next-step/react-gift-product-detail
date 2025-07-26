@@ -1,5 +1,5 @@
 import Container from "@/components/common/Container";
-import Category from "@/pages/Gift/components/Category";
+import Themes from "@/pages/Gift/components/Themes";
 import Ranking from "@/pages/Gift/components/Ranking";
 import Friend from "@/pages/Gift/components/Friend";
 import Divider from "@/components/common/Divider";
@@ -10,7 +10,7 @@ const GiftPage = () => {
     <Container>
       <Friend />
       <Divider />
-      <Category />
+      <Themes />
       <Divider />
       <Banner />
       <Divider />
