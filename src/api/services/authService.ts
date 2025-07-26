@@ -4,9 +4,11 @@ import type { UserInfo } from '@/types/userInfo';
 
 export const authService = async (payload: LoginPayload): Promise<UserInfo> => {
   const response = await publicClient.post('/api/login', payload);
+  const { data } = response.data;
+  const { email, name, authToken } = data;
   return {
-    email: response.data.data.email,
-    name: response.data.data.name,
-    authToken: response.data.data.authToken,
+    email,
+    name,
+    authToken,
   };
 };

@@ -64,8 +64,6 @@ export const GiftList = () => {
   const [cursor, setCursor] = useState(0);
   const [giftItemList, setGiftItemList] = useState<GiftItemData[] | null>(null);
 
-  console.log(cursor);
-
   const getData = useCallback(async () => {
     try {
       const response = await publicClient.get(

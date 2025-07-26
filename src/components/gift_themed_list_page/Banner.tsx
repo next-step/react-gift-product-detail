@@ -48,11 +48,12 @@ export const Banner = () => {
     const getData = async () => {
       try {
         const response = await publicClient.get(`/api/themes/${id}/info`);
-        setThemeName(response.data.data.name);
-        setTitle(response.data.data.title);
-        setDescription(response.data.data.description);
-        setBackgroundColor(response.data.data.backgroundColor);
-        console.log(response.data.data);
+        const { data } = response.data;
+        const { name, title, description, backgroundColor } = data;
+        setThemeName(name);
+        setTitle(title);
+        setDescription(description);
+        setBackgroundColor(backgroundColor);
       } catch (error) {
         console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
         if (axios.isAxiosError(error) && error.response?.status === 404) {
