@@ -1,9 +1,10 @@
-import { orders } from '@/entities/order/model/constants';
-
 // 기본 카드 상태 상수
+const DEFAULT_SELECTED_CARD_ID = 904;
+const DEFAULT_MESSAGE = '축하해요.';
+    
 export const DEFAULT_CARD_STATE = {
-  selectedCardId: orders[0]?.id || 904,
-  message: orders[0]?.defaultTextMessage || '축하해요.',
+  selectedCardId: DEFAULT_SELECTED_CARD_ID,
+  message: DEFAULT_MESSAGE,
 };
 
 // 폼 데이터 기본값
