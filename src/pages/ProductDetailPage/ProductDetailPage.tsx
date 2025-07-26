@@ -64,8 +64,15 @@ const ProductDetailPage = () => {
 
       <section css={infoSection}>
         <h1 css={productName}>{product.name}</h1>
-        <p css={brand}>{product.brandInfo.name}</p>
         <p css={price}>{product.price.sellingPrice.toLocaleString()}원</p>
+        <div css={brand}>
+          <img
+            src={product.brandInfo.imageURL}
+            alt={product.brandInfo.name}
+            css={brandImage}
+          />
+          <span css={brandName}>{product.brandInfo.name}</span>
+        </div>
       </section>
 
       <section css={tabContainer}>
@@ -176,8 +183,9 @@ const productName = css`
 `;
 
 const brand = css`
-  font-size: 14px;
-  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 4px;
 `;
 
@@ -257,4 +265,16 @@ const orderButton = css`
   border: none;
   cursor: pointer;
   font-size: 16px;
+`;
+
+const brandImage = css`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const brandName = css`
+  font-size: 14px;
+  color: #777;
 `;
