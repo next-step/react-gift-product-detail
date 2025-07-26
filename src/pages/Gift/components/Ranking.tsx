@@ -5,6 +5,8 @@ import useRankingFilter from "@/hooks/useRankingFilter";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
 import { Suspense } from "react";
 import Loading from "@/components/common/Loading";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import RankingListEmpty from "./RankingListEmpty";
 
 const Ranking = () => {
   const { selectedTarget, selectedRank, changeTargetType, changeRankType } = useRankingFilter();
@@ -43,9 +45,11 @@ const Ranking = () => {
           ))}
         </RankCategoryList>
       </NavBar>
-      <Suspense fallback={<Loading height="625px" />}>
-        <RankingList targetType={selectedTarget} rankType={selectedRank} />
-      </Suspense>
+      <ErrorBoundary fallback={<RankingListEmpty />}>
+        <Suspense fallback={<Loading height="625px" />}>
+          <RankingList targetType={selectedTarget} rankType={selectedRank} />
+        </Suspense>
+      </ErrorBoundary>
     </Container>
   );
 };

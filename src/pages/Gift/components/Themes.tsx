@@ -2,15 +2,18 @@ import styled from "@emotion/styled";
 import Loading from "@/components/common/Loading";
 import { Suspense } from "react";
 import ThemesList from "./ThemesList";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
 
 const Themes = () => {
   return (
-    <Container>
-      <Title>선물 테마</Title>
-      <Suspense fallback={<Loading height="250px" />}>
-        <ThemesList />
-      </Suspense>
-    </Container>
+    <ErrorBoundary fallback={null}>
+      <Container>
+        <Title>선물 테마</Title>
+        <Suspense fallback={<Loading height="250px" />}>
+          <ThemesList />
+        </Suspense>
+      </Container>
+    </ErrorBoundary>
   );
 };
 

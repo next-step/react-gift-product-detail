@@ -9,6 +9,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import getProductsRanking from "@/apis/products/getProductsRanking";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
 import { QUERY_KEYS } from "@/constants/queryKeys";
+import RankingListEmpty from "./RankingListEmpty";
 
 interface RankingListProps {
   targetType: ProductRankingFilterOption["targetType"];
@@ -25,18 +26,15 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     setViewCount(nextViewCount);
   };
 
-  const { data, isError } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
     queryFn: () => getProductsRanking({ targetType, rankType }),
   });
 
-  if (isError || data?.length === 0) {
-    return (
-      <Empty>
-        <Msg>상품이 없습니다.</Msg>
-      </Empty>
-    );
+  if (data?.length === 0) {
+    return <RankingListEmpty />;
   }
+
   return (
     <Container>
       <Content>
@@ -66,18 +64,6 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   );
 };
 
-const Empty = styled.div`
-  width: 100%;
-  display: flex;
-  height: 240px;
-  justify-content: center;
-  align-items: center;
-`;
-const Msg = styled.p`
-  width: 100%;
-  font: ${({ theme }) => theme.typography.label1Regular};
-  text-align: center;
-`;
 const Container = styled.div`
   width: 100%;
 `;
