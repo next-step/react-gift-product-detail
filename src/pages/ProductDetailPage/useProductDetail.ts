@@ -66,3 +66,18 @@ export const useProductDetailReview = () => {
   );
   return data.data;
 };
+
+interface ProductHeart {
+  wishCount: number;
+  isWished: boolean;
+}
+
+export const useProductDetailHeart = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const { data } = useSuspenseQueryApi<{ data: ProductHeart }>(
+    ['product', productId || '', 'heart'],
+    productId ? `/products/${productId}/wish` : '',
+    { enabled: !!productId }
+  );
+  return data.data;
+};
