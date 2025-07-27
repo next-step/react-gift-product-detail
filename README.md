@@ -1,3 +1,12 @@
+## step1 피드백 반영 내용
+
+- 각종 함수 이름 기능에 맞게 바꾸고, 변수 이름을 일관성있게 통일했습니다.
+- 최상위 레이어에 있던 필요없는 suspense 제거했습니다.
+- RisingItem.tsx에서 prop으로 product를 받아 바로 요소를 분해하여 사용하는 방식으로 변경했습니다.
+- RisingList.tsx에서 바로 사용하던 useSuspenseApiQuery를 useProducts 훅으로 한단계 추상화 했습니다.
+- useOrderForm.ts에서 잘못사용되고 있던 try/catch 를 제거했습니다.
+- IntersectionObserver에서 onIntersect에 entries를 넘기도록 변경했습니다.
+
 ## step1 구현 내용
 
 - useApiRequest.ts를 useApiQuery.ts, useApiMutation.ts, useSuspenseApiQuery.ts 세개의 커스텀훅으로 분리하여 react-query방식으로 api를 다룰 수 있게 했습니다.
