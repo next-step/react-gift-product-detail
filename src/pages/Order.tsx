@@ -14,8 +14,7 @@ import { useMutation } from '@tanstack/react-query'
 import { decodeUserInfo, getCookie } from '@/shared/utils'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import ErrorBoundary from '@/shared/components/ErrorBoundary'
-import { Suspense, useEffect } from 'react'
-import type { AxiosError } from 'axios'
+import { Suspense } from 'react'
 
 // * 주문하기 페이지 (주문하기 폼 Provider 포함)
 export const Order = () => {
@@ -47,16 +46,10 @@ export const OrderContent = () => {
   // * URL 파라미터로 부터 상품 id 값 가져오기
   const { id } = useParams<{ id: string }>()
   // * 상품 정보 fetch (useSuspenseQuery)
-  const { data: productInfo, error } = useSuspenseQuery<ProductSummary>({
+  const { data: productInfo } = useSuspenseQuery<ProductSummary>({
     queryKey: ['productSummary', id],
     queryFn: () => fetchProductSummary(Number(id)),
   })
-  // ! 404 에러 시 홈으로 이동 (기존 로직 유지)
-  useEffect(() => {
-    if ((error as AxiosError)?.response?.status === 404) {
-      navigate(ROUTE_PATH.HOME)
-    }
-  }, [error, navigate])
   // * 카드 리스트
   const cardList: CardData[] = orderCardMock
 
