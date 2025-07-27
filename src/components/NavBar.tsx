@@ -10,6 +10,7 @@ function NavBar() {
   return (
     <NavBarWrapper>
       <Button
+        aria-label="뒤로가기"
         onClick={() => {
           navigate(-1);
         }}
@@ -17,6 +18,7 @@ function NavBar() {
         <ArrowBackIosNewIcon />
       </Button>
       <Button
+        aria-label="홈으로 이동"
         onClick={() => {
           navigate(PATH.MAIN);
         }}
@@ -24,6 +26,7 @@ function NavBar() {
         <h2>선물하기</h2>
       </Button>
       <Button
+        aria-label="마이페이지로 이동"
         onClick={() => {
           navigate(PATH.MY);
         }}
