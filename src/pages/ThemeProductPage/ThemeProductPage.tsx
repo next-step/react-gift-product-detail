@@ -16,7 +16,7 @@ import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
@@ -54,7 +54,7 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   );
 }
 
-function ThemeProductFetcher() {
+function ThemeProductQueryContent() {
   const { themeId } = useParams();
 
   const { data } = useSuspenseQuery({
@@ -69,11 +69,9 @@ function ThemeProductFetcher() {
 export function ThemeProductPage() {
   return (
     <Layout>
-      <ErrorBoundary
-        FallbackComponent={() => <Navigate to={ROUTES.HOME} replace />}
-      >
+      <ErrorBoundary fallback={<Navigate to={ROUTES.HOME} replace />}>
         <Suspense fallback={<Loading />}>
-          <ThemeProductFetcher />
+          <ThemeProductQueryContent />
         </Suspense>
       </ErrorBoundary>
     </Layout>

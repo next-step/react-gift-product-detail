@@ -22,19 +22,13 @@ import { getTrendingGifts } from "@/data/api";
 import TrendingGiftsProductsGrid from "./TrendingGiftsProductsGrid";
 import TabContentWrapper from "./TabContentWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { Suspense } from "react";
 import { QUERY_KEY } from "@/constants/queryKey";
 
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
   const [subTabIdx, setSubTabIdx] = useSubTab();
-
-  const { data } = useSuspenseQuery<TrendingGiftsType[]>({
-    queryKey: QUERY_KEY.TRENDING_GIFTS(mainTabIdx, subTabIdx),
-    queryFn: () =>
-      getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
-  });
 
   return (
     <>
@@ -59,12 +53,31 @@ function TrendingGiftsContent() {
           }
         >
           <Suspense fallback={<Loading />}>
-            <TrendingGiftsProductsGrid products={data} />
+            <TrendingGiftsQueryContent
+              mainTabIdx={mainTabIdx}
+              subTabIdx={subTabIdx}
+            />
           </Suspense>
         </ErrorBoundary>
       </TabContentWrapper>
     </>
   );
+}
+
+function TrendingGiftsQueryContent({
+  mainTabIdx,
+  subTabIdx,
+}: {
+  mainTabIdx: number;
+  subTabIdx: number;
+}) {
+  const { data } = useSuspenseQuery<TrendingGiftsType[]>({
+    queryKey: QUERY_KEY.TRENDING_GIFTS(mainTabIdx, subTabIdx),
+    queryFn: () =>
+      getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
+  });
+
+  return <TrendingGiftsProductsGrid products={data} />;
 }
 
 function TrendingGifts() {

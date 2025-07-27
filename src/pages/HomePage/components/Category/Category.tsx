@@ -13,7 +13,7 @@ import { getThemes } from "@/data/api";
 import type { GiftThemeType } from "@/types/GiftThemeType";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { QUERY_KEY } from "@/constants/queryKey";
 
 function CategoryContent() {

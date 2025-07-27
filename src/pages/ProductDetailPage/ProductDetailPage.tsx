@@ -1,13 +1,15 @@
-import { ErrorMessage } from "@/components/common/Input/FormErrorMessage";
 import { Loading } from "@/components/Loading/Loading";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { getProductDetail, getProductWish } from "@/data/api";
 import Layout from "@/layout";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense, useEffect, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
 import { useNavigate, useParams } from "react-router-dom";
-import { ErrorContainer } from "../HomePage/components/Category/Category.styles";
+import {
+  ErrorContainer,
+  ErrorMessage,
+} from "../HomePage/components/Category/Category.styles";
 import LikeIconImage from "./assets/heart.png";
 import LikeIconImageFill from "./assets/heart-fill.png";
 import {
@@ -43,7 +45,7 @@ function BottomNavigationWrapper({
   const [isLiked, setIsLiked] = useState(false);
   const [wishCount, setWishCount] = useState(0);
 
-  // 낙관적 업데이트 - data 에 유저의 좋아요 유무 정보가 포함되어 있다고 가정
+  // 낙관적 업데이트 - data 에 유저의 좋아요 유무 정보(isLiked)가 포함되어 있다고 가정
   const { data } = useQuery({
     queryKey: QUERY_KEY.PRODUCT_WISH(productId),
     queryFn: () => getProductWish(productId),
@@ -97,7 +99,7 @@ function BottomNavigationWrapper({
   );
 }
 
-function ProductDetailPage() {
+function ProductDetailQueryContent() {
   const { id } = useParams();
 
   const { data } = useSuspenseQuery({
@@ -105,6 +107,15 @@ function ProductDetailPage() {
     queryFn: () => getProductDetail(id!),
   });
 
+  return (
+    <BottomNavigationWrapper productId={id!}>
+      <ProductHeader data={data} />
+      <ProductTabContents productId={id!} />
+    </BottomNavigationWrapper>
+  );
+}
+
+function ProductDetailPage() {
   return (
     <Layout>
       <ErrorBoundary
@@ -117,10 +128,7 @@ function ProductDetailPage() {
         }
       >
         <Suspense fallback={<Loading />}>
-          <BottomNavigationWrapper productId={id!}>
-            <ProductHeader data={data} />
-            <ProductTabContents productId={id!} />
-          </BottomNavigationWrapper>
+          <ProductDetailQueryContent />
         </Suspense>
       </ErrorBoundary>
     </Layout>
