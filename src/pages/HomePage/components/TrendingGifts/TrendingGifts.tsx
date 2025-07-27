@@ -7,8 +7,6 @@ import {
   MainTabButton,
   TabIconContainer,
   TabLabel,
-  ErrorContainer,
-  ErrorMessage,
 } from "./TrendingGifts.styles";
 import { LocalStorageProvider } from "@/pages/HomePage/context/TabStorageContext";
 import { useMainTab, useSubTab } from "@/pages/HomePage/hooks/useTabStorage";
@@ -22,9 +20,10 @@ import { getTrendingGifts } from "@/data/api";
 import TrendingGiftsProductsGrid from "./TrendingGiftsProductsGrid";
 import TabContentWrapper from "./TabContentWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { Suspense } from "react";
 import { QUERY_KEY } from "@/constants/queryKey";
+import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
@@ -45,11 +44,9 @@ function TrendingGiftsContent() {
       <TabContentWrapper subTabIdx={subTabIdx} onClick={setSubTabIdx}>
         <ErrorBoundary
           fallback={
-            <ErrorContainer>
-              <ErrorMessage>
-                {TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
-              </ErrorMessage>
-            </ErrorContainer>
+            <FallbackMessage
+              message={TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
+            />
           }
         >
           <Suspense fallback={<Loading />}>

@@ -1,8 +1,6 @@
 import ThemeCard from "./ThemeCard";
 import { CATEGORY_ERROR_MESSAGE, CATEGORY_LABELS } from "./constants/labels";
 import {
-  ErrorContainer,
-  ErrorMessage,
   GiftThemeSection,
   SectionHeader,
   SectionTitle,
@@ -13,8 +11,9 @@ import { getThemes } from "@/data/api";
 import type { GiftThemeType } from "@/types/GiftThemeType";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
-import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { QUERY_KEY } from "@/constants/queryKey";
+import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
 function CategoryContent() {
   const { data } = useSuspenseQuery<GiftThemeType[]>({
@@ -51,11 +50,9 @@ function Category() {
       </SectionHeader>
       <ErrorBoundary
         fallback={
-          <ErrorContainer>
-            <ErrorMessage>
-              {CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}
-            </ErrorMessage>
-          </ErrorContainer>
+          <FallbackMessage
+            message={CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}
+          />
         }
       >
         <Suspense fallback={<Loading />}>

@@ -4,12 +4,8 @@ import { getProductDetail, getProductWish } from "@/data/api";
 import Layout from "@/layout";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense, useEffect, useState } from "react";
-import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ErrorContainer,
-  ErrorMessage,
-} from "../HomePage/components/Category/Category.styles";
 import LikeIconImage from "./assets/heart.png";
 import LikeIconImageFill from "./assets/heart-fill.png";
 import {
@@ -24,6 +20,7 @@ import { ROUTES } from "@/constants/routes";
 import ProductHeader from "./components/ProductHeader/ProductHeader";
 import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
 import ProductTabContents from "./components/ProductTabContents/ProductTabContents";
+import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
 function ProductDetailContentLayout({
   children,
@@ -120,11 +117,7 @@ function ProductDetailPage() {
     <Layout>
       <ErrorBoundary
         fallback={
-          <ErrorContainer>
-            <ErrorMessage>
-              {PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE}
-            </ErrorMessage>
-          </ErrorContainer>
+          <FallbackMessage message={PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE} />
         }
       >
         <Suspense fallback={<Loading />}>

@@ -16,7 +16,7 @@ import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
-import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
