@@ -11,6 +11,11 @@ export interface ThemeProductsResponse {
 }
 import { fetchApi } from './client'
 
+export interface FetchThemeProductsParams {
+  cursor?: number
+  limit?: number
+}
+
 export async function fetchThemes(): Promise<Theme[]> {
   const data = await fetchApi<Theme[]>('/api/themes')
 
@@ -22,8 +27,7 @@ export async function fetchThemes(): Promise<Theme[]> {
 
 export async function fetchThemeProducts(
   themeId: number,
-  cursor = 0,
-  limit = 10,
+  { cursor = 0, limit = 10 }: FetchThemeProductsParams = {},
 ): Promise<ThemeProductsResponse> {
   const data = await fetchApi<ThemeProductsResponse>(
     `/api/themes/${themeId}/products`,
