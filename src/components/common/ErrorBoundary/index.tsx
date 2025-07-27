@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { handleApiError } from '@/apis/queryClient';
 import * as S from './styles';
-import { type FallbackProps } from 'react-error-boundary';
+
+interface FallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const navigate = useNavigate();
@@ -47,20 +50,54 @@ interface ApiErrorBoundaryProps {
   fallback?: React.ComponentType<FallbackProps>;
 }
 
+interface ApiErrorBoundaryState {
+  error: Error | null;
+}
+
+class ErrorBoundary extends React.Component<
+  { fallback: React.ComponentType<FallbackProps>; children: React.ReactNode },
+  ApiErrorBoundaryState
+> {
+  constructor(props: {
+    fallback: React.ComponentType<FallbackProps>;
+    children: React.ReactNode;
+  }) {
+    super(props);
+    this.state = { error: null };
+    this.resetErrorBoundary = this.resetErrorBoundary.bind(this);
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  // componentDidCatch(error: Error, info: React.ErrorInfo) {}
+
+  resetErrorBoundary() {
+    this.setState({ error: null });
+    window.location.reload();
+  }
+
+  render() {
+    const { error } = this.state;
+    const { fallback: FallbackComponent, children } = this.props;
+    if (error) {
+      return (
+        <FallbackComponent
+          error={error}
+          resetErrorBoundary={this.resetErrorBoundary}
+        />
+      );
+    }
+    return children;
+  }
+}
+
 export const ApiErrorBoundary: React.FC<ApiErrorBoundaryProps> = ({
   children,
   fallback = ErrorFallback,
 }) => {
-  return (
-    <ReactErrorBoundary
-      FallbackComponent={fallback}
-      onReset={() => {
-        window.location.reload();
-      }}
-    >
-      {children}
-    </ReactErrorBoundary>
-  );
+  return <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>;
 };
 
 export default ApiErrorBoundary;

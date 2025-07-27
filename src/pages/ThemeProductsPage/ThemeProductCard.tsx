@@ -1,4 +1,10 @@
-import { Card, ProductImage, BrandName, ItemName, Price } from '@/components/GiftRanking/GiftRanking.styles';
+import {
+  Card,
+  ProductImage,
+  BrandName,
+  ItemName,
+  Price,
+} from '@/components/GiftRanking/GiftRanking.styles';
 import { Link } from 'react-router-dom';
 import { PATH } from '@/constants/paths';
 
@@ -10,8 +16,14 @@ type ProductCardProps = {
   price: number;
 };
 
-const ThemeProductCard = ({ id, imageURL, brand, name, price }: ProductCardProps) => (
-  <Link to={`${PATH.ORDER}/${id}`}>
+const ThemeProductCard = ({
+  id,
+  imageURL,
+  brand,
+  name,
+  price,
+}: ProductCardProps) => (
+  <Link to={PATH.PRODUCT_DETAIL.replace(':productId', String(id))}>
     <Card>
       <ProductImage src={imageURL} alt={name} />
       <BrandName>{brand}</BrandName>

@@ -26,7 +26,7 @@ const ProductCard = ({
   name,
   price,
 }: ProductCardProps) => (
-  <Link to={`${PATH.ORDER}/${id}`}>
+  <Link to={`/product/${id}`}>
     <Card>
       <RankBadge rank={rank}>{rank}</RankBadge>
       <ProductImage src={imageURL} alt={name} />
