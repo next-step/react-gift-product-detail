@@ -37,3 +37,14 @@ export type ProductDetail = {
   description: string;
   announcements: ProductDetailAnnouncement[];
 };
+
+export type ProductReview = {
+  id: string;
+  authorName: string;
+  content: string;
+};
+
+export type ProductHighlightReviews = {
+  totalCount: number;
+  reviews: ProductReview[];
+};

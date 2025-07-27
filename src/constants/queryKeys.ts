@@ -8,5 +8,6 @@ export const QUERY_KEYS = {
 
   PRODUCT: (productId: string) => ["product", productId] as const,
   PRODUCT_DETAIL: (productId: string) => ["productDetail", productId] as const,
+  PRODUCT_HIGHLIGHT_REVIEW: (productId: string) => ["productHighlightReview", productId] as const,
   PRODUCT_WISH: (productId: string) => ["productWish", productId] as const,
 } as const;

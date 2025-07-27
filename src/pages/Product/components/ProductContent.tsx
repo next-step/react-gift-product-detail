@@ -6,6 +6,7 @@ import Review from "@/pages/Product/components/Review";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import getProductDetail from "@/apis/products/getProductDetail";
+import getProductHighlightReview from "@/apis/products/getProductHighlightReview";
 
 interface ProductContentProps {
   productId: string;
@@ -14,11 +15,15 @@ interface ProductContentProps {
 const PRODUCT_CONTENT_TAB_TITLE = ["상품설명", "선물후기", "상세정보"];
 
 const ProductContent = ({ productId }: ProductContentProps) => {
-  const [detail] = useSuspenseQueries({
+  const [detail, highlightReview] = useSuspenseQueries({
     queries: [
       {
         queryKey: QUERY_KEYS.PRODUCT_DETAIL(productId),
         queryFn: () => getProductDetail({ productId }),
+      },
+      {
+        queryKey: QUERY_KEYS.PRODUCT_HIGHLIGHT_REVIEW(productId),
+        queryFn: () => getProductHighlightReview({ productId }),
       },
     ],
   });
@@ -38,7 +43,7 @@ const ProductContent = ({ productId }: ProductContentProps) => {
       </TabWrapper>
       <ContentWrapper>
         {selected === 0 && <Description data={detail.data.description} />}
-        {selected === 1 && <Review />}
+        {selected === 1 && <Review data={highlightReview.data.reviews} />}
         {selected === 2 && <Detail data={detail.data.announcements} />}
       </ContentWrapper>
     </Container>
