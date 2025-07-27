@@ -15,3 +15,8 @@ export const getProductSummary = async (productId: number): Promise<ProductSumma
     const response = await api.get<{data: ProductSummary}>(`/products/${productId}/summary`);
     return response.data.data;
 }
+
+export const getProductById = async (productId: number): Promise<RankingProduct> => {
+    const response = await api.get<{data: RankingProduct}>(`/products/${productId}`);
+    return response.data.data;
+}
