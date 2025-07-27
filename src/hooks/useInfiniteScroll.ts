@@ -1,35 +1,33 @@
 import { useEffect, useRef } from 'react';
 
 interface UseInfiniteScrollParams {
-  fetchNextPage: () => Promise<void>;
-  hasMoreList: boolean;
-  isFetching: boolean;
+  onIntersect: () => void;
+  enabled: boolean;
 }
 
 const useInfiniteScroll = ({
-  fetchNextPage,
-  hasMoreList,
-  isFetching,
+  enabled,
+  onIntersect,
 }: UseInfiniteScrollParams) => {
   //Ref
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    if (!sentinelRef.current || !hasMoreList || isFetching) return;
+    if (!sentinelRef.current || !enabled) return;
 
     observerRef.current?.disconnect();
 
     observerRef.current = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        fetchNextPage();
+        onIntersect();
       }
     });
 
     observerRef.current.observe(sentinelRef.current);
 
     return () => observerRef.current?.disconnect();
-  }, [fetchNextPage, hasMoreList, isFetching]);
+  }, [onIntersect, enabled]);
   return { sentinelRef };
 };
 

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import type { ThemeProductProps } from '../themeProductType';
 
 interface ThemeInfo {
   themeId: number;
@@ -15,7 +16,7 @@ interface ThemeInfo {
   backgroundColor: string;
 }
 
-const ThemeHero = ({ id }: { id: string }) => {
+const ThemeHero = ({ id }: ThemeProductProps) => {
   const { data, isPending, isError, error } = useQuery<ThemeInfo>({
     queryKey: ['themeInfo', id],
     queryFn: ({ queryKey }) =>

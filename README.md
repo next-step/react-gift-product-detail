@@ -18,5 +18,6 @@
 - get: Theme Hero 정보
 - post: 로그인 리팩토링
 - post: 주문하기 리팩토링
+- get: theme 세부 상품 무한 스크롤
 
 ## 리뷰 반영

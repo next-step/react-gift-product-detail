@@ -1,89 +1,53 @@
 import ProductCard from './ProductCard';
 import styled from '@emotion/styled';
 import LoadingSpinner from '@components/common/LoadingSpinner';
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import { fetchThemeProducts } from '@apis/themeApi';
 import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import EmptyMessage from '@components/common/EmptyMessage';
+import {
+  useInfiniteQuery,
+  type QueryFunctionContext,
+} from '@tanstack/react-query';
+import type { ThemeProductProps, ThemeProducts } from '../themeProductType';
 
-export interface ThemeProduct {
-  id: number;
-  name: string;
-  price: {
-    basicPrice: number;
-    sellingPrice: number;
-    discountRate: number;
-  };
-  imageURL: string;
-  brandInfo: {
-    id: number;
-    name: string;
-    imageURL: string;
-  };
-}
-
-export interface ThemeProducts {
-  list: ThemeProduct[];
-  cursor: number;
-  hasMoreList: boolean;
-}
-
-const ProductList = ({ id }: { id: string }) => {
-  const [products, setProducts] = useState<ThemeProduct[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMoreList, setHasMoreList] = useState(true);
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState<unknown | null>(null);
-
-  const isMounted = useRef(false);
-
-  const fetchNextPage = async () => {
-    if (!hasMoreList || isFetching) return;
-
-    setIsFetching(true);
-    setError(null);
-    try {
-      const data = await fetchThemeProducts(Number(id), cursor);
-      setProducts((prev) => [...prev, ...data.list]);
-      setCursor(data.cursor);
-      setHasMoreList(data.hasMoreList);
-    } catch (error) {
-      console.log('상품 목록 불러오기 실패:', error);
-      setError(error);
-    } finally {
-      setIsFetching(false);
-    }
-  };
-
-  useEffect(() => {
-    if (error && axios.isAxiosError(error)) {
-      const status = error.status;
-      if (status === 404) {
-        //중복 알람 위험 있음
-        toast.error('해당 테마를 찾을 수 없습니다.');
-      } else {
-        toast.error(error.message);
-      }
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (isMounted.current) return; //중복 호출 방지
-    isMounted.current = true;
-    fetchNextPage();
-  }, []);
-
-  const { sentinelRef } = useInfiniteScroll({
+const ProductList = ({ id }: ThemeProductProps) => {
+  const {
+    data,
+    error,
+    isError,
+    isPending,
     fetchNextPage,
-    hasMoreList,
-    isFetching,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<ThemeProducts, Error>({
+    queryKey: ['themeProducts', id],
+
+    queryFn: ({ pageParam = 0 }: QueryFunctionContext) =>
+      fetchThemeProducts(Number(id), pageParam as number),
+
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMoreList ? lastPage.cursor : undefined,
+    initialPageParam: 0,
   });
 
-  if (isFetching && products.length === 0) return <LoadingSpinner />;
+  const { sentinelRef } = useInfiniteScroll({
+    onIntersect: fetchNextPage,
+    enabled: !!hasNextPage && !isFetchingNextPage,
+  });
 
-  if (!isFetching && products.length === 0)
+  console.log(data);
+  const products = data?.pages.flatMap((page) => page.list) ?? [];
+
+  if (isPending) return <LoadingSpinner />;
+
+  if (isError)
+    return (
+      <EmptyMessage>
+        {error.message ?? '상품을 불러오는데 실패했습니다.'}
+      </EmptyMessage>
+    );
+
+  if (products.length === 0)
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
 
   return (
@@ -93,7 +57,7 @@ const ProductList = ({ id }: { id: string }) => {
           <ProductCard key={index} {...item} />
         ))}
       </GridWrqpper>
-      {hasMoreList && <div ref={sentinelRef} style={{ height: '1px' }} />}
+      {hasNextPage && <div ref={sentinelRef} style={{ height: '1px' }} />}
     </>
   );
 };
