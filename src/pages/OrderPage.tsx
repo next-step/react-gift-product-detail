@@ -5,11 +5,7 @@ import { Layout } from '@/components/Layout';
 import { NavBar } from '@/components/NavBar';
 import type { MessageCard } from '@/types';
 import { messageCardTemplates } from '@/data/messageCards';
-import { toastError, toastSuccess } from '@/utils/toast';
-import axios from 'axios';
-import { getProductSummary, createOrder } from '@/api/services';
-import { useFetch } from '@/hooks/useFetch';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { toastError } from '@/utils/toast';
 
 import * as S from '@/styles/OrderPage.styles';
 import { MessageCardSection } from '@/components/order/MessageCardSection';
@@ -20,17 +16,15 @@ import { AddRecipientModal } from '@/components/order/AddRecipientModal';
 import { RecipientList } from '@/components/order/RecipientList';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { orderFormSchema, type OrderFormValues } from '@/lib/schemas';
+import { useProductSummaryQuery } from '@/hooks/queries/useProductSummaryQuery';
+import { useCreateOrderMutation } from '@/hooks/queries/useCreateOrderMutation';
 
 const OrderPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: item, isLoading, error } = useQuery({
-    queryKey: ['productSummary', itemId],
-    queryFn: () => getProductSummary(itemId!),
-    enabled: !!itemId,
-  });
+  const { data: item, isLoading, error } = useProductSummaryQuery(itemId);
 
   useEffect(() => {
     if (error) {
@@ -72,26 +66,12 @@ const OrderPage = () => {
     setIsModalOpen(false);
   };
 
-  const { mutate: orderMutate } = useMutation({
-    mutationFn: (orderData: any) => createOrder(orderData), // createOrder는 orderData를 인자로 받음
-    onSuccess: () => {
-      toastSuccess('주문이 성공적으로 완료되었습니다!');
-      navigate('/');
-    },
-    onError: (err) => {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        toastError('로그인이 필요합니다.');
-        navigate('/login');
-      } else {
-        toastError('주문 처리 중 오류가 발생했습니다.');
-      }
-    },
-  });
+  const { mutate: orderMutate } = useCreateOrderMutation();
 
   const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
     const orderData = {
       productId: Number(itemId),
-      message: data.message,
+      message: data.message ?? '',
       messageCardId: selectedCard.id.toString(),
       ordererName: data.senderName,
       receivers: data.recipients.map(r => ({
