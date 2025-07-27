@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 
-import { useGetGiftThemeInfo } from "@/features/theme/services/getGiftThemeInfo";
+import { useGetGiftThemeInfo } from "@/entities/gift/services/getGiftThemeInfo";
 
 import { VerticalSpacing } from "@/widgets/layouts/Spacing.styled";
 

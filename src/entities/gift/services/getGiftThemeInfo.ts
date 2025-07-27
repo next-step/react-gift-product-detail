@@ -4,7 +4,9 @@ import { isAxiosError } from "axios";
 
 import { api } from "@/app/lib/api";
 
-import { useHTTP } from "@/shared/hooks/useHTTP";
+import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
+
+import { useQuery } from "@tanstack/react-query";
 
 export interface GetTHemeInfoResponseBody {
     themeId: number;
@@ -24,14 +26,23 @@ export async function getGiftThemeInfo(themeId?: number) {
 export const useGetGiftThemeInfo = (themeId: number) => {
     const navigate = useNavigate();
 
-    return useHTTP({
-        apiFunction: () => getGiftThemeInfo(themeId),
-        requestOnMount: true,
-        onError: (error) => {
-            if (!isAxiosError(error)) throw error;
-            if (error.response?.status === 404) {
+    const { isPending, data, error, refetch } = useQuery({
+        queryKey: GIFT_QUERY_KEYS.GIFT_THEME_INFO(themeId),
+        queryFn: () => getGiftThemeInfo(themeId),
+        enabled: Boolean(themeId),
+        retry: (failureCount, error) => {
+            if (isAxiosError(error) && error.response?.status === 404) {
                 navigate("/");
+                return false;
             }
+            return failureCount < 3;
         },
     });
+
+    return {
+        isPending,
+        data: data || null,
+        error,
+        request: refetch,
+    };
 };

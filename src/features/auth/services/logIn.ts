@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 
 import { api } from "@/app/lib/api";
 
-import { useHTTP } from "@/shared/hooks/useHTTP";
+import { useMutation } from "@tanstack/react-query";
 
 export type LoginRequestBody = {
     email: string;
@@ -23,8 +23,8 @@ export async function logIn(body?: LoginRequestBody) {
 }
 
 export const useLogIn = () => {
-    return useHTTP<LoginRequestBody, LoginResponseBody>({
-        apiFunction: logIn,
+    const { mutateAsync, isPending, data, error } = useMutation({
+        mutationFn: logIn,
         onError: (error) => {
             if (!isAxiosError(error)) throw error;
             switch (error.response?.status) {
@@ -37,4 +37,11 @@ export const useLogIn = () => {
             }
         },
     });
+
+    return {
+        isPending,
+        data: data || null,
+        error,
+        request: mutateAsync,
+    };
 };

@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+import { useGiftThemes } from "@/entities/gift/services/getGiftThemes";
 import { GiftCategoryGrid, GiftCategoryItem } from "@/entities/gift/ui";
-
-import { useGiftThemes } from "@/features/theme/services/getGiftThemes";
 
 import { Spinner } from "@/shared/ui/Spinner";
 

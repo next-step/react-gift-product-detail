@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import { useInView } from "@/shared/hooks/useInView";
-import { cursorGenerator, type CursorPaginateApiFunction } from "@/shared/utils/cursorGenerator";
+import { type CursorPaginateApiFunction } from "@/shared/utils/cursorGenerator";
+
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export const USE_INFINITE_SCROLL_DEFAULT_OPTIONS = {
     LIMIT: 10,
@@ -16,6 +18,7 @@ export interface UseInfiniteScrollOptions<T, K extends string> {
     enabled?: boolean;
     threshold?: number;
     rootMargin?: string;
+    queryKey: string[];
 }
 
 export function useInfiniteScroll<T, K extends string>({
@@ -24,60 +27,43 @@ export function useInfiniteScroll<T, K extends string>({
     enabled = USE_INFINITE_SCROLL_DEFAULT_OPTIONS.ENABLED,
     threshold = USE_INFINITE_SCROLL_DEFAULT_OPTIONS.THRESHOLD,
     rootMargin = USE_INFINITE_SCROLL_DEFAULT_OPTIONS.ROOT_MARGIN,
+    queryKey,
 }: UseInfiniteScrollOptions<T, K>) {
-    const [items, setItems] = useState<T[]>([]);
-    const [hasMore, setHasMore] = useState(true);
-    const [isPending, setIsPending] = useState(false);
-    const [error, setError] = useState<unknown>(null);
+    const { data, isPending, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+        useInfiniteQuery({
+            queryKey,
+            queryFn: async ({ pageParam = 0 }) => {
+                const result = await apiFunction(pageParam as number, limit);
+                return result.data;
+            },
+            initialPageParam: 0,
+            getNextPageParam: (lastPage) => {
+                if (!lastPage.hasMoreList) return undefined;
+                return lastPage.cursor;
+            },
+            enabled,
+        });
 
-    const generatorRef = useRef<AsyncGenerator<
-        BasePaginatedResponse<T, K>["data"],
-        void,
-        unknown
-    > | null>(null);
+    const items = useMemo(() => {
+        if (!data) return [];
 
-    const initGenerator = useCallback(() => {
-        if (!enabled) return;
-        generatorRef.current = cursorGenerator<T, K>(0, limit, apiFunction);
-    }, [apiFunction, limit, enabled]);
-
-    const loadMore = useCallback(async () => {
-        if (isPending || !enabled || !hasMore) return;
-        setIsPending(true);
-        setError(null);
-
-        try {
-            if (!generatorRef.current) initGenerator();
-            if (!generatorRef.current) return;
-
-            const { value, done } = await generatorRef.current.next();
-
-            if (done || !value) {
-                setHasMore(false);
-                return;
-            }
-
-            const listKey = Object.keys(value).find(
+        return data.pages.flatMap((page) => {
+            const listKey = Object.keys(page).find(
                 (key) =>
                     key !== "hasMoreList" &&
                     key !== "cursor" &&
-                    Array.isArray(value[key as keyof typeof value]),
+                    Array.isArray(page[key as keyof typeof page]),
             ) as K;
 
-            if (!listKey) {
-                setHasMore(false);
-                return;
-            }
+            return listKey ? (page[listKey] as T[]) : [];
+        });
+    }, [data]);
 
-            const newItems = value[listKey] as T[];
-            setItems((prev) => [...prev, ...newItems]);
-            setHasMore(value.hasMoreList);
-        } catch (err) {
-            setError(err);
-        } finally {
-            setIsPending(false);
+    const loadMore = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
         }
-    }, [enabled, isPending, hasMore, initGenerator]);
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     const { ref: loadMoreRef } = useInView({
         onInView: loadMore,
@@ -86,27 +72,14 @@ export function useInfiniteScroll<T, K extends string>({
     });
 
     const reset = useCallback(() => {
-        generatorRef.current = null;
-        setItems([]);
-        setHasMore(true);
-        setError(null);
-        setIsPending(false);
-    }, []);
-
-    useEffect(() => {
-        reset();
-
-        if (enabled) {
-            loadMore();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enabled]);
+        refetch();
+    }, [refetch]);
 
     return {
         items,
-        isPending,
+        isPending: isPending || isFetchingNextPage,
         error,
-        hasMore,
+        hasMore: hasNextPage,
         loadMore,
         loadMoreRef,
         reset,

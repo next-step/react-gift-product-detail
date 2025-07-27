@@ -4,8 +4,9 @@ import { isAxiosError } from "axios";
 
 import { api } from "@/app/lib/api";
 
-import { useHTTP } from "@/shared/hooks/useHTTP";
 import { useRedirect } from "@/shared/hooks/useRedirect";
+
+import { useMutation } from "@tanstack/react-query";
 
 export interface CreateOrderRequestBody {
     productId: number;
@@ -34,8 +35,8 @@ export async function createOrder(body?: CreateOrderRequestBody) {
 export const useCreateOrder = () => {
     const { navigateWithRedirect } = useRedirect();
 
-    return useHTTP<CreateOrderRequestBody, CreateOrderResponseBody>({
-        apiFunction: createOrder,
+    const { mutateAsync, isPending, data, error } = useMutation({
+        mutationFn: createOrder,
         onError: (error) => {
             if (!isAxiosError(error)) throw error;
             switch (error.response?.status) {
@@ -52,4 +53,11 @@ export const useCreateOrder = () => {
             }
         },
     });
+
+    return {
+        isPending,
+        data: data || null,
+        error,
+        request: mutateAsync,
+    };
 };

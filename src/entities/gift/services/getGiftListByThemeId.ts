@@ -1,5 +1,7 @@
 import { api } from "@/app/lib/api";
 
+import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
+
 import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
 import { type CursorPaginateApiFunction } from "@/shared/utils/cursorGenerator";
 
@@ -19,7 +21,7 @@ export interface GetGiftListResponseBody {
     };
 }
 
-export async function getGiftList(themeId: number, cursor: number, limit: number) {
+export async function getGiftListByThemeId(themeId: number, cursor: number, limit: number) {
     const { data: response } = await api<BasePaginatedResponse<GetGiftListResponseBody, "list">>(
         `/themes/${themeId}/products`,
         { params: { cursor, limit } },
@@ -32,7 +34,7 @@ export const useGetGiftListByCursorBasedPagination = (themeId: number, limit = 1
         cursor: number,
         limit: number,
     ) => {
-        const data = await getGiftList(themeId, cursor, limit);
+        const data = await getGiftListByThemeId(themeId, cursor, limit);
         return { data };
     };
 
@@ -40,5 +42,6 @@ export const useGetGiftListByCursorBasedPagination = (themeId: number, limit = 1
         apiFunction,
         limit,
         enabled: Boolean(themeId),
+        queryKey: GIFT_QUERY_KEYS.GIFT_LIST_BY_THEME_ID(themeId),
     });
 };

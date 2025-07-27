@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 
-import { useGetGiftListByCursorBasedPagination } from "@/entities/gift/services/getGiftList";
+import { useGetGiftListByCursorBasedPagination } from "@/entities/gift/services/getGiftListByThemeId";
 import { GiftCard, GiftCardGrid } from "@/entities/gift/ui";
-
-import { ThemeInfoBanner } from "@/features/theme/ui/ThemeInfoBanner";
+import { ThemeInfoBanner } from "@/entities/gift/ui/ThemeInfoBanner";
 
 import { Spinner } from "@/shared/ui/Spinner";
 

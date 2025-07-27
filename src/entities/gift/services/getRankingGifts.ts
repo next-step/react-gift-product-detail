@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from "react";
-
 import { api } from "@/app/lib/api";
 
 import type { RankTypeQuery } from "@/entities/gift/constants/rankType";
 import type { TargetGroupQuery } from "@/entities/gift/constants/targetType";
+import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
 
-import { useHTTP } from "@/shared/hooks/useHTTP";
 import { useQueryParamState } from "@/shared/hooks/useQueryParamState";
+
+import { useQuery } from "@tanstack/react-query";
 
 export type GetRankingGiftsResponseBody = Array<{
     id: number;
@@ -36,20 +36,19 @@ export const useRankingGifts = () => {
     const [targetType] = useQueryParamState<TargetGroupQuery>("targetType", "ALL");
     const [rankType] = useQueryParamState<RankTypeQuery>("rankType", "MANY_WISH");
 
-    const apiFunction = useCallback(() => {
-        if (!targetType || !rankType) {
-            return getRankingGifts("ALL", "MANY_WISH");
-        }
-        return getRankingGifts(targetType, rankType);
-    }, [targetType, rankType]);
-
-    const { isPending, data, error, request } = useHTTP<void, GetRankingGiftsResponseBody>({
-        apiFunction,
+    const { isPending, data, error, refetch } = useQuery({
+        queryKey: GIFT_QUERY_KEYS.RANKING_GIFT_BY_QUERY(
+            targetType || "ALL",
+            rankType || "MANY_WISH",
+        ),
+        queryFn: () => getRankingGifts(targetType || "ALL", rankType || "MANY_WISH"),
+        enabled: Boolean(targetType && rankType),
     });
 
-    useEffect(() => {
-        if (targetType && rankType) request();
-    }, [targetType, rankType, request]);
-
-    return { isPending, data, error, request };
+    return {
+        isPending,
+        data: data || null,
+        error,
+        request: refetch,
+    };
 };
