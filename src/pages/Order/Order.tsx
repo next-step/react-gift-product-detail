@@ -129,7 +129,15 @@ function Order() {
         quantity: receiver.count,
       })),
     };
-    orderMutation.mutate(orderData);
+
+    // 주문 성공 시 상세 정보를 보여주기 위해 mutation에 context 전달
+    orderMutation.mutate(orderData, {
+      onSuccess: () => {
+        alert(
+          `주문이 완료되었습니다.\n상품명: ${item?.name}\n구매 수량: ${data.count}\n발신자 이름: ${data.sender}\n메시지: ${data.text}`,
+        );
+      },
+    });
   }
 
   if (isItemLoading) return <div>로딩 중...</div>;
