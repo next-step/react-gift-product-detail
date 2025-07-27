@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import type { Product } from '@/types/product'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 const genderOptions = ['전체', '여성이', '남성이', '청소년이']
 const topicOptions = ['받고 싶어한', '많이 선물한', '위시로 받은']
@@ -46,14 +46,9 @@ export function useProductRanking() {
     }
   }, [])
 
-  const {
-    data: products = [],
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: products = [] } = useSuspenseQuery({
     queryKey: ['productRanking', selectedGender, selectedTopic],
     queryFn: () => fetchRanking(selectedGender, selectedTopic),
-    placeholderData: (previousData) => previousData,
   })
 
   const selectGender = (option: string) => {
@@ -68,8 +63,6 @@ export function useProductRanking() {
 
   return {
     products,
-    isLoading,
-    isError,
     selectedGender,
     selectedTopic,
     selectGender,
