@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import type { BaseResponse } from '@/types/common';
 
 const Box = styled.div`
   background-color: white;
@@ -54,8 +55,6 @@ type Theme = {
   name: string;
   image: string;
 };
-
-type BaseResponse<T> = { data: T };
 
 function CategoryList({ onHide }: { onHide?: () => void }) {
   const navigate = useNavigate();

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import type { Product } from '@/types/product';
-
-type BaseResponse<T> = { data: T };
+import type { BaseResponse } from '@/types/common';
 
 export async function fetchProductRanking(): Promise<Product[]> {
   const res = await axios.get<BaseResponse<Product[]>>('/api/products/ranking');
