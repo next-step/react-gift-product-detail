@@ -6,12 +6,12 @@ import { NavBar } from '@/components/NavBar';
 import { ThemeHeader } from '@/components/ThemeHeader';
 import { RankingGrid } from '@/components/RankingGrid';
 import { RankingGridSkeleton } from '@/components/RankingGridSkeleton';
-import { useFetch } from '@/hooks/useFetch';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { getThemeInfo, getThemeProducts } from '@/api/services';
 import type { GiftItem } from '@/types';
 import { css } from '@emotion/react';
+import { useQuery } from '@tanstack/react-query';
 
 const centeredMessage = css`
   text-align: center;
@@ -23,11 +23,11 @@ const ThemePage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
 
-  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useFetch(
-    () => getThemeInfo(themeId!),
-    [themeId],
-    { enabled: !!themeId }
-  );
+  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useQuery({
+    queryKey: ['themeInfo', themeId], 
+    queryFn: () => getThemeInfo(themeId!), 
+    enabled: !!themeId, 
+  });
 
   const {
     data: productsData,
