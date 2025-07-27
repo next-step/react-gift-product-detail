@@ -1,21 +1,25 @@
 import API from './axiosInstance';
 import type { ThemeInfo } from '@/types/themeInfo';
+import type { GiftCategoryTheme } from '@/types/giftCategoryTheme';
+import type { ThemeProductResponse } from '@/types/themeProduct'; 
 
-export const fetchThemes = () => API.get('/api/themes');
+export const fetchThemes = async (): Promise<GiftCategoryTheme[]> => {
+  const res = await API.get('/api/themes');
+  return res.data.data;
+};
 
 export const fetchThemeInfo = async (themeId: number): Promise<ThemeInfo> => {
   const res = await API.get(`/api/themes/${themeId}/info`);
-  return res.data.data; 
+  return res.data.data;
 };
-
 
 export const fetchThemeProducts = async (
   themeId: number,
   cursor = 0,
   limit = 10
-) => {
-  const response = await API.get(`/api/themes/${themeId}/products`, {
+): Promise<ThemeProductResponse> => {
+  const res = await API.get(`/api/themes/${themeId}/products`, {
     params: { cursor, limit },
   });
-  return response.data.data; 
+  return res.data.data; 
 };
