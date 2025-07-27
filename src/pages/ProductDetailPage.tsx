@@ -22,12 +22,13 @@ const Container = styled.div`
   margin: 0 auto;
   background: #fff;
   min-height: 100vh;
+  padding-bottom: 30px;
 `;
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 300px;
-  object-fit: cover;
+  height: 685px;
+  padding-top: 10px;
   background: #f5f6fa;
 `;
 
@@ -211,6 +212,7 @@ const OrderButton = styled.button`
   border-radius: 0 0 18px 18px;
   cursor: pointer;
   z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const LoadingSpinner = styled.div`
