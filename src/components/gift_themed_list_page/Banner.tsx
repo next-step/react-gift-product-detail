@@ -1,7 +1,7 @@
-import publicClient from '@/api/clients/publicClient';
+import { getThemeInfo } from '@/api/services/getThemeInfo';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
@@ -41,37 +41,35 @@ const ErrorText = styled.div`
   font-weight: 500;
 `;
 
-export const Banner = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [themeName, setThemeName] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [backgroundColor, setBackgroundColor] = useState('');
-  const [isError, setIsError] = useState(false);
+type ThemeInfo = {
+  name: string;
+  title: string;
+  description: string;
+  backgroundColor: string;
+};
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await publicClient.get(`/api/themes/${id}/info`);
-        const { data } = response.data;
-        const { name, title, description, backgroundColor } = data;
-        setThemeName(name);
-        setTitle(title);
-        setDescription(description);
-        setBackgroundColor(backgroundColor);
-        setIsError(false);
-      } catch (error) {
-        console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-        setIsError(true);
-      }
-    };
-    getData();
-  }, [navigate, id]);
+type Params = {
+  id: number;
+};
+
+export const Banner = () => {
+  const { id } = useParams();
+  if (!id) throw new Error('id가 없습니다');
+  const parsedId = parseInt(id!);
+  const { data, isError } = useQuery<ThemeInfo, Error, ThemeInfo, [string, Params]>({
+    queryKey: ['ThemeInfo', { id: parsedId }],
+    queryFn: getThemeInfo,
+  });
+  const { name, title, description, backgroundColor } = data || {
+    name: '',
+    title: '',
+    description: '',
+    backgroundColor: '#FFFFFF',
+  };
 
   return (
     <Container backgroundColor={backgroundColor}>
-      {themeName && <ThemeName>{themeName}</ThemeName>}
+      {name && <ThemeName>{name}</ThemeName>}
       {title && <Title>{title}</Title>}
       {description && <Description>{description}</Description>}
       {isError && <ErrorText>⚠️ 테마 정보를 불러오는 데 실패했습니다.</ErrorText>}

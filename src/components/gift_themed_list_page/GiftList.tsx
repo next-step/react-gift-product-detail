@@ -71,7 +71,7 @@ export const GiftList = () => {
       );
       console.log(response.data.data);
 
-      if (!response.data.data.hasMoreList) {
+      if (giftItemList !== null && !response.data.data.hasMoreList) {
         setHasMore(false);
         return;
       }
