@@ -9,3 +9,4 @@ export { default as Loading } from './Loading';
 export { default as Text } from './Text';
 export { default as TextArea } from './TextArea'; 
 export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as RedirectOnError } from './RedirectOnError';
