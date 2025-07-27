@@ -4,6 +4,6 @@ import { productMockData } from "../productMockData";
 
 export const handlers = [
   http.get(BE.API.PRODUCT.RANKING, () => {
-    return HttpResponse.json(productMockData);
+    return HttpResponse.json({ data: [productMockData] });
   })
 ];
