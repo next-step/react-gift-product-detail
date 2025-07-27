@@ -12,7 +12,7 @@ import {
 
 import GiftRankingList from './GiftRankingList';
 import { RankFilterOption, RankType, TargetFilterOption, TargetType } from '@/type/giftRanking';
-import {EmptyDiv16h, EmptyDiv20h, Title } from '@/styles/CommomStyle/Common.styled';
+import { Gap, Title } from '@/styles/CommomStyle/Common.styled';
 import { ProductDiv } from '@/styles/CommomStyle/ProductList';
 
 
@@ -32,7 +32,7 @@ const GiftRanking = () => {
   return (
     <GiftRanKingSection>
       <Title> 실시간 급상승 선물랭킹 </Title>
-      <EmptyDiv20h/>
+      <Gap height={20} />
       <CategoryGroup>
         <PeopleGroup>
 
@@ -48,7 +48,7 @@ const GiftRanking = () => {
           ))}
         </PeopleGroup>
 
-        <EmptyDiv16h />
+        <Gap height={16}  />
         <WishGroup>
           {RankFilterOption.map(({ type, text }) => (
             <WishFilterButton
@@ -63,7 +63,7 @@ const GiftRanking = () => {
 
         </WishGroup>
       </CategoryGroup>
-      <EmptyDiv16h/>
+      <Gap height={16} />
       <ProductDiv>
         <GiftRankingList targetType={targetType} rankType={rankType} />
       </ProductDiv>

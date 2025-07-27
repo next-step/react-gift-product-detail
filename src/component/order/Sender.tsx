@@ -1,5 +1,5 @@
 import { useOrder } from '@/context/OrderContext';
-import { DefaultComponentDiv, EmptyDiv12h, EmptyDiv24h, EmptyDiv4h, EmptyDiv8h, ErrorText, SideBlankDiv, SimpleInput, SubText, SubTitle } from '@/styles/CommomStyle/Common.styled';
+import { DefaultComponentDiv, ErrorText, Gap, SideBlankDiv, SimpleInput, SubText, SubTitle } from '@/styles/CommomStyle/Common.styled';
 
 
 
@@ -9,9 +9,9 @@ const Sender = () => {
     return (
         <DefaultComponentDiv>
             <SideBlankDiv>
-                <EmptyDiv8h />
+                <Gap height={8}  />
                 <SubTitle>보내는 사람</SubTitle>
-                <EmptyDiv12h />
+                <Gap height={12}  />
                 <SimpleInput
                     type="text"
                     placeholder="이름을 입력하세요."
@@ -20,17 +20,17 @@ const Sender = () => {
                 />
                 {!error ? (
                     <>
-                        <EmptyDiv4h />
+                        <Gap height={4}  />
                         <SubText>* 실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.</SubText>
                     </>
 
                 ) : (
                     <>
-                        <EmptyDiv4h />
+                        <Gap height={4}  />
                         <ErrorText>{error}</ErrorText>
                     </>
                 )}
-                <EmptyDiv24h />
+                <Gap height={24}  />
             </SideBlankDiv>
         </DefaultComponentDiv>
     );

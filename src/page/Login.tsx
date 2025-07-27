@@ -13,8 +13,8 @@ import {
 } from './Login.styled';
 import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { EmptyDiv16h, EmptyDiv48h } from '../styles/CommomStyle/Common.styled';
 import { toast, ToastContainer } from 'react-toastify';
+import { Gap } from '@/styles/CommomStyle/Common.styled';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Login = () => {
               />
               {!id.isValid && <ErrorMessage>{id.error}</ErrorMessage>}
             </div>
-            <EmptyDiv16h />
+            <Gap height={16}  />
             <div>
               <InputSection
                 type="password"
@@ -67,7 +67,7 @@ const Login = () => {
               />
               {!pw.isValid && <ErrorMessage>{pw.error}</ErrorMessage>}
             </div>
-            <EmptyDiv48h />
+            <Gap height={48}  />
             <LoginButton
               disabled={!canSubmit}
               onClick={handleLoginClick}
