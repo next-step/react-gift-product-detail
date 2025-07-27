@@ -9,6 +9,7 @@ import { toastError, toastSuccess } from '@/utils/toast';
 import axios from 'axios';
 import { getProductSummary, createOrder } from '@/api/services';
 import { useFetch } from '@/hooks/useFetch';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import * as S from '@/styles/OrderPage.styles';
 import { MessageCardSection } from '@/components/order/MessageCardSection';
@@ -25,7 +26,12 @@ const OrderPage = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: item, isLoading, error } = useFetch(() => getProductSummary(itemId!), [itemId]);
+  const { data: item, isLoading, error } = useQuery({
+    queryKey: ['productSummary', itemId],
+    queryFn: () => getProductSummary(itemId!),
+    enabled: !!itemId,
+  });
+
   useEffect(() => {
     if (error) {
       toastError('상품 정보를 불러오는 데 실패했습니다.');
@@ -54,7 +60,7 @@ const OrderPage = () => {
   const recipients = useWatch({ control, name: 'recipients' });
   const messageValue = useWatch({ control, name: 'message' });
   const selectedCardId = useWatch({ control, name: 'selectedCardId' });
-  
+
   const handleCardSelect = (card: MessageCard) => {
     setValue('selectedCardId', card.id);
     setValue('message', card.defaultTextMessage);
@@ -66,27 +72,35 @@ const OrderPage = () => {
     setIsModalOpen(false);
   };
 
-  const onSubmit: SubmitHandler<OrderFormValues> = async (data) => {
-    const orderData = {
-      productId: Number(itemId),
-      message: data.message,
-      messageCardId: selectedCard.id.toString(),
-      ordererName: data.senderName,
-      receivers: data.recipients.map(r => ({ name: r.name, phoneNumber: r.phone, quantity: r.quantity })),
-    };
-    try {
-      await createOrder(orderData);
+  const { mutate: orderMutate } = useMutation({
+    mutationFn: (orderData: any) => createOrder(orderData), // createOrder는 orderData를 인자로 받음
+    onSuccess: () => {
       toastSuccess('주문이 성공적으로 완료되었습니다!');
       navigate('/');
-    } catch (err) {
+    },
+    onError: (err) => {
       if (axios.isAxiosError(err) && err.response?.status === 401) {
         toastError('로그인이 필요합니다.');
         navigate('/login');
       } else {
         toastError('주문 처리 중 오류가 발생했습니다.');
-        console.error(err);
       }
-    }
+    },
+  });
+
+  const onSubmit: SubmitHandler<OrderFormValues> = (data) => {
+    const orderData = {
+      productId: Number(itemId),
+      message: data.message,
+      messageCardId: selectedCard.id.toString(),
+      ordererName: data.senderName,
+      receivers: data.recipients.map(r => ({
+        name: r.name,
+        phoneNumber: r.phone,
+        quantity: r.quantity,
+      })),
+    };
+    orderMutate(orderData);
   };
 
   if (isLoading || !item) {
