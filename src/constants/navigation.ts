@@ -1,1 +1,1 @@
-export const HIDE_BACK_BUTTON_PATHS = ["/login", "/my", "/order"];
+export const HIDE_BACK_BUTTON_PATHS = ["/login", "/my", "/order", "/product"];

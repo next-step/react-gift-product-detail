@@ -10,6 +10,7 @@ import { ROUTES } from "@/constants/routes";
 import { useEffect } from "react";
 import { setNavigate } from "@/lib/navigation";
 import ThemePage from "@/pages/themes";
+import ProductDetailPage from "@/pages/product";
 
 function InitNavigateSetter() {
   const navigate = useNavigate();
@@ -42,6 +43,14 @@ export default function Router() {
           element={
             <AuthGuard>
               <OrderPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path={ROUTES.PRODUCT_DETAIL_TEMPLATE}
+          element={
+            <AuthGuard>
+              <ProductDetailPage />
             </AuthGuard>
           }
         />

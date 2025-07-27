@@ -5,4 +5,5 @@ export const ROUTES = {
   ORDER_DETAIL: (productId: number | string) => `/order/${productId}`,
   ORDER_DETAIL_TEMPLATE: "/order/:productId",
   THEME_DETAIL_TEMPLATE: "/themes/:themeId",
+  PRODUCT_DETAIL_TEMPLATE: "/product/:productId",
 };

@@ -12,7 +12,7 @@ export const ProductCard = ({ product }: Props) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(ROUTES.ORDER_DETAIL_TEMPLATE.replace(":productId", String(id)));
+    navigate(ROUTES.PRODUCT_DETAIL_TEMPLATE.replace(":productId", String(id)));
   };
 
   return (

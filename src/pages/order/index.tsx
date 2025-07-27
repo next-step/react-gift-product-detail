@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import MessageCard, {
   type MessageCardHandle,
 } from "@/pages/order/components/MessageCard";
@@ -12,7 +12,7 @@ import ReceiverListSection, {
 import ProductInfo from "@/pages/order/components/ProductInfo";
 import OrderFooter from "@/pages/order/components/OrderFooter";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { validateReceiverCount } from "@/utils/validators";
 import { ERROR_MESSAGES } from "@/constants/messages";
 import { useProductSummary } from "@/hooks/useProductSummary";
@@ -22,10 +22,9 @@ import { toast } from "react-toastify";
 
 export default function OrderPage() {
   const { productId } = useParams();
-  const navigate = useNavigate();
 
   const id = Number(productId);
-  const { product, loading, error } = useProductSummary(id);
+  const { product } = useProductSummary(id);
   const { user } = useAuth();
   const { submitOrder, isPending } = useOrder();
 
@@ -80,20 +79,6 @@ export default function OrderPage() {
     setReceivers(newReceivers);
   }, []);
 
-  useEffect(() => {
-    if (error) {
-      toast.error(ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD);
-      navigate("/");
-    }
-  }, [error, navigate]);
-
-  if (loading) {
-    return <Placeholder>{ERROR_MESSAGES.PRODUCT.LOAD}</Placeholder>;
-  }
-  if (!product) {
-    return <Placeholder>{ERROR_MESSAGES.PRODUCT.FAIL_TO_LOAD}</Placeholder>;
-  }
-
   return (
     <>
       <MessageCard
@@ -124,11 +109,4 @@ export default function OrderPage() {
 const SectionDivider = styled.div`
   height: 12px;
   background-color: ${({ theme }) => theme.colors.semantic.background.disabled};
-`;
-
-const Placeholder = styled.div`
-  text-align: center;
-  padding: 40px 0;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.semantic.text.disabled};
 `;
