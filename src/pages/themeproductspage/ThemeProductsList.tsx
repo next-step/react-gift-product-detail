@@ -1,90 +1,21 @@
 import styled from "@emotion/styled";
 import { useParams, useNavigate } from "react-router-dom";
-import { useApiRequest } from "@/hooks/useApiRequest";
-import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
-import type { Product } from "@/types/api_types";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import { useEffect, useRef, useState, useCallback } from "react";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
-
-type ThemeProductResponse = {
-  list: Product[];
-  cursor?: string | null;
-  hasMoreList?: boolean;
-};
+import { useThemeInfiniteScroll } from "@/pages/themeproductspage/hooks/useThemeInfiniteScroll";
 
 export default function ThemeProductsList() {
-  const { themeId } = useParams<{ themeId: string }>();
+  const { themeId } = useParams<{ themeId?: string }>();
   const navigate = useNavigate();
 
-  const handleApiError = useApiErrorHandler({
-    fallbackMessage: "상품 정보를 불러오는데 실패했어요.",
-  });
-
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cursor, setCursor] = useState<string | null | undefined>(undefined);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [initLoading, setInitLoading] = useState<boolean>(true);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  const { data, status, error, refetch } = useApiRequest<ThemeProductResponse>({
-    url: `/api/themes/${themeId}/products${cursor ? `?cursor=${cursor}` : ""}`,
-    manual: true,
-  });
-
-  useEffect(() => {
-    if (status === "error" && error) {
-      handleApiError(error);
-    }
-  }, [status, error, handleApiError]);
-
-  const loadingNext = status === "loading";
-
-  const initializeProducts = () => {
-    setInitLoading(true);
-    setProducts([]);
-    setCursor(undefined);
-    setHasMore(true);
-    refetch();
-  };
-
-  const updateProductList = (data: ThemeProductResponse) => {
-    setProducts((prev) => {
-      const existingIds = new Set(prev.map((item) => item.id));
-      const filtered = data.list.filter((item) => !existingIds.has(item.id));
-      return [...prev, ...filtered];
-    });
-    setCursor(data.cursor ?? null);
-    setHasMore(data.hasMoreList !== false && !!data.list.length);
-    setInitLoading(false);
-  };
-
-  useEffect(() => {
-    initializeProducts();
-  }, [themeId]);
-
-  useEffect(() => {
-    if (!data) return;
-    updateProductList(data);
-  }, [data]);
-
-  const handleObserver = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
-  useInfiniteScroll({
-    targetRef: observerRef,
-    onIntersect: handleObserver,
-    enabled: hasMore && !loadingNext && !initLoading && products.length > 0,
-    threshold: 0.4,
+  const { products, isLoading, observerRef } = useThemeInfiniteScroll({
+    themeId: themeId!,
   });
 
   const handleItemClick = (id: number) => {
     navigate(`/order/${id}`);
   };
 
-  if (initLoading) return <LoadingSpinner />;
-  if (products.length === 0)
+  if (products.length === 0 && !isLoading)
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
 
   return (
@@ -100,7 +31,7 @@ export default function ThemeProductsList() {
         ))}
       </List>
       <ObserverTarget ref={observerRef} />
-      {loadingNext && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner />}
     </>
   );
 }
@@ -148,5 +79,4 @@ const Price = styled.div`
 
 const ObserverTarget = styled.div`
   height: 100px;
-  margin-top: 32px;
 `;

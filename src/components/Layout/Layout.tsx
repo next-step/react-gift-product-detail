@@ -1,7 +1,6 @@
-// src/components/Layout/Layout.tsx
 /** @jsxImportSource @emotion/react */
-import styled from '@emotion/styled';
-import type { ReactNode } from 'react';
+import styled from "@emotion/styled";
+import type { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
