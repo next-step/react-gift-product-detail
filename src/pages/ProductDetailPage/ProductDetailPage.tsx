@@ -22,12 +22,36 @@ import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
 import ProductTabContents from "./components/ProductTabContents/ProductTabContents";
 import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
-function ProductDetailContentLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <ContentLayout>{children}</ContentLayout>;
+function ProductDetailPage() {
+  return (
+    <Layout>
+      <ErrorBoundary
+        fallback={
+          <FallbackMessage message={PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE} />
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <ProductDetailQueryContent />
+        </Suspense>
+      </ErrorBoundary>
+    </Layout>
+  );
+}
+
+function ProductDetailQueryContent() {
+  const { id } = useParams();
+
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.PRODUCT_DETAIL(id),
+    queryFn: () => getProductDetail(id!),
+  });
+
+  return (
+    <BottomNavigationWrapper productId={id!}>
+      <ProductHeader data={data} />
+      <ProductTabContents productId={id!} />
+    </BottomNavigationWrapper>
+  );
 }
 
 function BottomNavigationWrapper({
@@ -96,36 +120,12 @@ function BottomNavigationWrapper({
   );
 }
 
-function ProductDetailQueryContent() {
-  const { id } = useParams();
-
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL(id),
-    queryFn: () => getProductDetail(id!),
-  });
-
-  return (
-    <BottomNavigationWrapper productId={id!}>
-      <ProductHeader data={data} />
-      <ProductTabContents productId={id!} />
-    </BottomNavigationWrapper>
-  );
-}
-
-function ProductDetailPage() {
-  return (
-    <Layout>
-      <ErrorBoundary
-        fallback={
-          <FallbackMessage message={PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE} />
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <ProductDetailQueryContent />
-        </Suspense>
-      </ErrorBoundary>
-    </Layout>
-  );
+function ProductDetailContentLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <ContentLayout>{children}</ContentLayout>;
 }
 
 export default ProductDetailPage;

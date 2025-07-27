@@ -25,6 +25,19 @@ import { Suspense } from "react";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
+function TrendingGifts() {
+  return (
+    <LocalStorageProvider>
+      <TrendingGiftsSection>
+        <TitleWarpper>
+          <SectionTitle>{TRENDING_GIFTS_LABELS.SECTION_TITLE}</SectionTitle>
+        </TitleWarpper>
+        <TrendingGiftsContent />
+      </TrendingGiftsSection>
+    </LocalStorageProvider>
+  );
+}
+
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
   const [subTabIdx, setSubTabIdx] = useSubTab();
@@ -75,19 +88,6 @@ function TrendingGiftsQueryContent({
   });
 
   return <TrendingGiftsProductsGrid products={data} />;
-}
-
-function TrendingGifts() {
-  return (
-    <LocalStorageProvider>
-      <TrendingGiftsSection>
-        <TitleWarpper>
-          <SectionTitle>{TRENDING_GIFTS_LABELS.SECTION_TITLE}</SectionTitle>
-        </TitleWarpper>
-        <TrendingGiftsContent />
-      </TrendingGiftsSection>
-    </LocalStorageProvider>
-  );
 }
 
 export default TrendingGifts;

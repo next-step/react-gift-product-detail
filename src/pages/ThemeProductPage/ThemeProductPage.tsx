@@ -18,6 +18,30 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
 import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 
+export function ThemeProductPage() {
+  return (
+    <Layout>
+      <ErrorBoundary fallback={<Navigate to={ROUTES.HOME} replace />}>
+        <Suspense fallback={<Loading />}>
+          <ThemeProductQueryContent />
+        </Suspense>
+      </ErrorBoundary>
+    </Layout>
+  );
+}
+
+function ThemeProductQueryContent() {
+  const { themeId } = useParams();
+
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.THEME_INFO(themeId),
+    queryFn: () => getThemeInfo(Number(themeId)),
+    retry: false,
+  });
+
+  return <ThemeProductsContent themeInfo={data!} />;
+}
+
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState<number>(0);
@@ -51,30 +75,6 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
         isLoaderRef={loader as React.RefObject<HTMLDivElement>}
       />
     </>
-  );
-}
-
-function ThemeProductQueryContent() {
-  const { themeId } = useParams();
-
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.THEME_INFO(themeId),
-    queryFn: () => getThemeInfo(Number(themeId)),
-    retry: false,
-  });
-
-  return <ThemeProductsContent themeInfo={data!} />;
-}
-
-export function ThemeProductPage() {
-  return (
-    <Layout>
-      <ErrorBoundary fallback={<Navigate to={ROUTES.HOME} replace />}>
-        <Suspense fallback={<Loading />}>
-          <ThemeProductQueryContent />
-        </Suspense>
-      </ErrorBoundary>
-    </Layout>
   );
 }
 

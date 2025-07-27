@@ -15,6 +15,27 @@ import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
 
+function Category() {
+  return (
+    <GiftThemeSection>
+      <SectionHeader>
+        <SectionTitle>{CATEGORY_LABELS.SECTION_TITLE}</SectionTitle>
+      </SectionHeader>
+      <ErrorBoundary
+        fallback={
+          <FallbackMessage
+            message={CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}
+          />
+        }
+      >
+        <Suspense fallback={<Loading />}>
+          <CategoryContent />
+        </Suspense>
+      </ErrorBoundary>
+    </GiftThemeSection>
+  );
+}
+
 function CategoryContent() {
   const { data } = useSuspenseQuery<GiftThemeType[]>({
     queryKey: QUERY_KEY.THEMES,
@@ -39,27 +60,6 @@ function CategoryContent() {
         />
       ))}
     </ThemeGrid>
-  );
-}
-
-function Category() {
-  return (
-    <GiftThemeSection>
-      <SectionHeader>
-        <SectionTitle>{CATEGORY_LABELS.SECTION_TITLE}</SectionTitle>
-      </SectionHeader>
-      <ErrorBoundary
-        fallback={
-          <FallbackMessage
-            message={CATEGORY_ERROR_MESSAGE.DATA_LOADING_ERROR}
-          />
-        }
-      >
-        <Suspense fallback={<Loading />}>
-          <CategoryContent />
-        </Suspense>
-      </ErrorBoundary>
-    </GiftThemeSection>
   );
 }
 
