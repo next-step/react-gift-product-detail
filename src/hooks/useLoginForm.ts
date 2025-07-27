@@ -6,6 +6,7 @@ import { login as loginService } from '@/api/services';
 import { toastError } from '@/utils/toast';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
+import { useLoginMutation } from './queries/useLoginMutation';
 
 export const useLoginForm = () => {
   const [id, setId] = useState('');
@@ -39,26 +40,11 @@ export const useLoginForm = () => {
 
   const isValid = !!(id && !!pw && !idError && !pwError);
 
-  const { mutate: loginMutation } = useMutation({
-    mutationFn: () => loginService(id, pw),
-    onSuccess: (data) => {
-      const { email, name, authToken } = data;
-      login({ email, name }, authToken);
-      navigate(from, { replace: true });
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 400) {
-        toastError(error.response.data.data.message || '로그인에 실패했습니다.');
-      } else {
-        toastError('알 수 없는 오류가 발생했습니다.');
-        console.error(error);
-      }
-    },
-  });
+  const { mutate: loginMutate} = useLoginMutation();
 
   const onSubmit = () => {
     if (isValid) {
-      loginMutation();
+      loginMutate({ email: id, password: pw });
     }
   };
 
