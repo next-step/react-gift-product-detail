@@ -1,9 +1,9 @@
 import API from './axiosInstance';
 import type { ThemeInfo } from '@/types/themeInfo';
-import type { giftCategoryTheme } from '@/types/giftCategoryTheme';
+import type { GiftCategoryTheme } from '@/types/giftCategoryTheme';
 import type { ThemeProductResponse } from '@/types/themeProduct'; 
 
-export const fetchThemes = async (): Promise<giftCategoryTheme[]> => {
+export const fetchThemes = async (): Promise<GiftCategoryTheme[]> => {
   const res = await API.get('/api/themes');
   return res.data.data;
 };

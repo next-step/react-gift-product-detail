@@ -1,4 +1,4 @@
-export interface giftCategoryTheme {
+export interface GiftCategoryTheme {
   themeId: number;
   name: string;     
   image: string;      
