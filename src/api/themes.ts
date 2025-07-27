@@ -1,4 +1,5 @@
 import { createAppError, createThemeNotFoundError, createApiError, ERROR_MESSAGES } from '../constants/errors';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 export interface Theme {
   themeId: number;
@@ -46,6 +47,7 @@ export interface ThemeDetailResponse {
   data: ThemeDetail;
 }
 
+// 기존 API 함수들 (React Query hooks에서 사용)
 export const fetchThemes = async (): Promise<Theme[]> => {
   try {
     const response = await fetch('/api/themes');
@@ -111,4 +113,32 @@ export const fetchThemeProducts = async (
     }
     throw error;
   }
+};
+
+// React Query Hooks
+export const useThemes = () => {
+  return useQuery({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
+  });
+};
+
+export const useThemeDetail = (themeId: number) => {
+  return useQuery({
+    queryKey: ['theme', 'detail', themeId],
+    queryFn: () => fetchThemeDetail(themeId),
+    enabled: !!themeId,
+  });
+};
+
+export const useThemeProducts = (themeId: number, limit: number = 10) => {
+  return useInfiniteQuery({
+    queryKey: ['theme', 'products', themeId],
+    queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeId, pageParam, limit),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasMoreList ? lastPage.cursor : undefined;
+    },
+    enabled: !!themeId,
+  });
 }; 
