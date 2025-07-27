@@ -4,4 +4,5 @@ export const ROUTE_PATH = {
   MY: '/my',
   PRODUCT_DETAIL: '/products/:productId',
   ORDER: '/order/:productId',
+  THEME_PRODUCT: '/themes/:themeId',
 };

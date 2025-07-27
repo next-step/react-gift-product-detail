@@ -22,15 +22,15 @@ export const router = createBrowserRouter([
     element: <MyPage />,
   },
   {
-    path: '/order/:productId',
+    path: ROUTE_PATH.ORDER,
     element: <OrderPage />,
   },
   {
-    path: '/products/:productId',
+    path: ROUTE_PATH.PRODUCT_DETAIL,
     element: <ProductDetailPage />,
   },
   {
-    path: '/themes/:themeId',
+    path: ROUTE_PATH.THEME_PRODUCT,
     element: <ThemeProductPage />,
   },
   {

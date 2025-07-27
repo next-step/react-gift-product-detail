@@ -170,46 +170,51 @@ const ReviewContent = styled.div`
   white-space: pre-line;
 `;
 
-const WishSection = styled.div`
+const WishButton = styled.button<{ isWished: boolean }>`
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-360px);
+  width: 80px;
+  height: 56px;
+  background: #f5f6fa;
+  border: none;
+  cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-top: 16px;
+  justify-content: center;
+  gap: 2px;
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0 18px;
 `;
 
-const WishButton = styled.button<{ isWished: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border: 1px solid ${({ isWished }) => (isWished ? '#ff3b30' : '#ddd')};
-  border-radius: 20px;
-  background: ${({ isWished }) => (isWished ? '#ff3b30' : '#fff')};
-  color: ${({ isWished }) => (isWished ? '#fff' : '#666')};
-  font-size: 14px;
-  cursor: pointer;
+const WishIcon = styled.div<{ isWished: boolean }>`
+  font-size: 20px;
+  color: ${({ isWished }) => (isWished ? '#ff3b30' : '#666')};
   transition: all 0.2s;
 `;
 
-const WishCount = styled.span`
-  font-size: 14px;
+const WishCount = styled.div`
+  font-size: 12px;
   color: #666;
+  font-weight: 500;
 `;
 
 const OrderButton = styled.button`
   position: fixed;
   left: 50%;
   bottom: 0;
-  transform: translateX(-50%);
-  width: 100vw;
-  max-width: 720px;
+  transform: translateX(-280px);
+  width: 640px;
   height: 56px;
   background: #ffe812;
   color: #222;
   font-size: 18px;
   font-weight: bold;
   border: none;
-  border-radius: 0 0 18px 18px;
+  border-radius: 0 0 18px 0;
   cursor: pointer;
   z-index: 100;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -387,17 +392,6 @@ function ProductDetailPage() {
               />
               <BrandName>{productBasic.brandInfo.name}</BrandName>
             </BrandInfo>
-
-            <WishSection>
-              <WishButton
-                isWished={productWish?.isWished || false}
-                onClick={handleWishToggle}
-                disabled={wishMutation.isPending}
-              >
-                ♥ {productWish?.isWished ? '찜됨' : '찜하기'}
-              </WishButton>
-              <WishCount>{productWish?.wishCount || 0}명이 찜함</WishCount>
-            </WishSection>
           </ProductInfo>
 
           <TabNavigation>
@@ -496,6 +490,14 @@ function ProductDetailPage() {
           </TabContent>
         </Container>
 
+        <WishButton
+          isWished={productWish?.isWished || false}
+          onClick={handleWishToggle}
+          disabled={wishMutation.isPending}
+        >
+          <WishIcon isWished={productWish?.isWished || false}>♥</WishIcon>
+          <WishCount>{productWish?.wishCount || 0}</WishCount>
+        </WishButton>
         <OrderButton onClick={handleOrderClick}>주문하기</OrderButton>
       </Suspense>
     </ErrorBoundary>
