@@ -5,11 +5,11 @@ import { ROUTES } from '@/shared/config';
 import { getProductById } from '@/entities/product/api/productApi';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { RankingProduct } from '@/entities/product/model/types';
-import ProductOverview from '@/entities/product/ui/ProductOverview';
+import { ProductOverview, ProductTabs } from '@/entities/product/ui';
 
 // TODO: 상품 상세 페이지 구현
 // 1. getProductById : 최상단 꽉, [이미지,이름,가격, devider, 브랜드사진과 이름] (done)
-// 2. 필터링 - 쿼리 파람 아님
+// 2. 필터링 - 쿼리 파람 아님 (done)    
 // 3. /api/products/:productId/detail {description} : 상품설명 
 // 4. /api/products/:productId/highlight-review : 선물후기
 // 5. /api/products/:productId/detail {announcements} : 상세정보
@@ -34,6 +34,7 @@ const Product = () => {
         <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
             <Suspense fallback={<Loading height="100vh" />}>
                 <ProductOverview data={data} />
+                <ProductTabs />
                 {/* <button onClick={() => navigate(`/${ROUTES.ORDER}/${numericProductId}`)}>Order</button> */}
             </Suspense>
         </ErrorBoundary>
