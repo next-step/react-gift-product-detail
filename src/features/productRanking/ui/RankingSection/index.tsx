@@ -4,9 +4,8 @@ import { getRankingProducts } from '@/entities/product/api/productApi';
 import type { RankingProduct, TargetType, RankType } from '@/entities/product/model/types';
 import { genderItems, actionItems } from '../../model/constants';
 import { RankingItemCard } from '@/entities/product/ui';
-import { Loading, ErrorMessage } from '@/shared/ui';
 import * as S from './styles';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/config/queryKeys';
 
 const RankingSection = () => {
@@ -17,7 +16,7 @@ const RankingSection = () => {
   const selectedGender = searchParams.get('gender') || 'ALL';
   const selectedAction = searchParams.get('action') || 'MANY_WISH';
 
-  const { data, isLoading, isError } = useQuery<RankingProduct[]>({
+  const { data } = useSuspenseQuery<RankingProduct[]>({
     queryKey: QUERY_KEYS.RANKING_PRODUCTS(selectedGender, selectedAction),
     queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
   });
@@ -41,24 +40,6 @@ const RankingSection = () => {
   const handleItemCardClick = (item: RankingProduct) => {
     navigate(`/order/${item.id}`);
   };
-
-  if (isError) {
-    return (
-      <S.Section>
-        <ErrorMessage height="400px" />
-      </S.Section>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <S.Section>
-        <Loading height="400px" />
-      </S.Section>
-    );
-  }
-
-  if (!data) return null;
 
   return (
     <S.Section>
@@ -94,7 +75,7 @@ const RankingSection = () => {
       
         <>
           <S.Grid>
-            {(isExpanded ? data : data?.slice(0, 6))?.map((item, index) => (
+            {(isExpanded ? data : data.slice(0, 6)).map((item, index) => (
               <RankingItemCard
                 key={item.id}
                 imageUrl={item.imageURL}
