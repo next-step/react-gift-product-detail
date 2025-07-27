@@ -4,15 +4,11 @@ import { BE } from "@src/apis/BackEnd/apiEndPoints";
 import { productMockData } from "@src/mock/productMockData";
 import { render, screen } from "@testing-library/react";
 import RealTimeRankPanel from "@src/components/RealTimeRankPanel/RealTimeRankPanel";
-import MockApp from "./MockApp";
+import MockApp from "../MockApp";
 
 beforeAll(() => mockBE.listen());
 afterEach(() => mockBE.resetHandlers());
 afterAll(() => mockBE.close());
-
-const renderRealTimeRankPanel = () => {
-  render(<MockApp children={<RealTimeRankPanel />} />);
-};
 
 describe("MSW 테스트", () => {
   it("MSW가 API를 잘 MOCKING 합니다.", async () => {
@@ -26,7 +22,7 @@ describe("MSW 테스트", () => {
 
 describe("RealTimeRankPanel 렌더링 테스트", () => {
   it("1개의 상품의 이름, 브랜드, 가격 정보가 렌더링됩니다.", async () => {
-    renderRealTimeRankPanel();
+    render(<MockApp children={<RealTimeRankPanel />} />);
 
     const name = await screen.findByText(productMockData.name);
     const brand = await screen.findByText(productMockData.brandInfo.name);
