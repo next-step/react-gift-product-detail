@@ -1,34 +1,27 @@
-import { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Suspense } from 'react';
+import { useParams } from 'react-router-dom';
 import { orders } from '@/entities/order/model/constants';
 import { getProductSummary } from '@/entities/product/api/productApi';
 import type { ProductSummary } from '@/entities/product/model/types';
 import { useOrderForm } from '@/features/orderCreation/model/useOrderForm';
-import { Loading, ErrorMessage } from '@/shared/ui';
+import { ErrorBoundary, Loading, RedirectOnError } from '@/shared/ui';
 import OrderTemplate from '@/widgets/orderForm/ui/OrderTemplate';
-import { useQuery } from '@tanstack/react-query';
-import type { AxiosErrorResponse } from '@/shared/types/api';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/config/queryKeys';
 import { ROUTES } from '@/shared/config';
 
-const Order = () => {
+const OrderContent = () => {
   const { productId } = useParams<{ productId: string }>();
-  const navigate = useNavigate();
+  const numericProductId = productId ? parseInt(productId, 10) : undefined;
 
-  const { data, isLoading, isError, error } = useQuery<ProductSummary>({
-    queryKey: QUERY_KEYS.PRODUCT_SUMMARY(productId!),
-    queryFn: () => getProductSummary(parseInt(productId!)),
-    enabled: !!productId,
-    retry: false,
+  if (!numericProductId) {
+    return null;
+  }
+
+  const { data } = useSuspenseQuery<ProductSummary>({
+    queryKey: QUERY_KEYS.PRODUCT_SUMMARY(numericProductId),
+    queryFn: () => getProductSummary(numericProductId),
   });
-
-  useEffect(() => {
-    if (error && (error as AxiosErrorResponse)?.response?.status === 400) {
-      toast.error('현재 없는 상품입니다');
-      navigate(`/${ROUTES.HOME}`);
-    }
-  }, [error, navigate]);
 
   const {
     cardState,
@@ -39,18 +32,6 @@ const Order = () => {
     handleSenderNameChange,
     handleOrder,
   } = useOrderForm({ product: data });
-
-  if (isLoading) {
-    return <Loading height="100vh" />;
-  }
-
-  if (isError) {
-    return <ErrorMessage height="100vh" message="Error loading product." />;
-  }
-
-  if (!data) {
-    return null;
-  }
 
   return (
     <OrderTemplate
@@ -64,6 +45,16 @@ const Order = () => {
       product={data}
       onSubmit={handleOrder}
     />
+  );
+};
+
+const Order = () => {
+  return (
+    <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
+      <Suspense fallback={<Loading/>}>
+        <OrderContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
