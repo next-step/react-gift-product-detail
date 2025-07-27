@@ -1,14 +1,15 @@
 import { GiftThemeSection, ThemeGrid, ThemeImage, ThemeItem, ThemeLabel } from './GiftTheme.styled';
-import { EmptyDiv24h, Spinner, SpinnerWrapper, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
+import { Gap, Spinner, SpinnerWrapper, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
 import { useNavigate } from 'react-router-dom';
 import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import { themeUrl } from '@/constant/api';
+import { getFromUrl } from '@/utils/getFromUrl';
 
 
 
 
 const GiftThemeList = () => {
-  const { item, loading, error } = useFetchFromUrlT<[]>(themeUrl, []);
+  const { item, loading, error } = useFetchFromUrlT<[]>(themeUrl, getFromUrl, []);
   const navigate = useNavigate();
 
   if (error) return null
@@ -38,10 +39,10 @@ const GiftTheme = () => {
 
   return (
     <GiftThemeSection>
-      <EmptyDiv24h />
+      <Gap height={24}  />
       <TitleDiv><Title>선물 테마</Title></TitleDiv>
       <GiftThemeList />
-      <EmptyDiv24h />
+      <Gap height={24}  />
     </GiftThemeSection>
   );
 };

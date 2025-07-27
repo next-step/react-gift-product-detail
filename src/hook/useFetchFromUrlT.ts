@@ -1,8 +1,7 @@
 import type { ApiResponse } from "@/type/GiftAPI/product";
-import { getFromUrl } from "@/utils/getFromUrl";
 import { useEffect, useState } from "react";
 
-function useFetchFromUrlT<T>(url: string, defaultT: T, infinite : boolean = false) {
+function useFetchFromUrlT<T>( url: string, fetchFn : (url : string) => Promise<ApiResponse<T>>, defaultT: T) {
     const [item, setItem] = useState<T>(defaultT);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
@@ -10,10 +9,10 @@ function useFetchFromUrlT<T>(url: string, defaultT: T, infinite : boolean = fals
 
     useEffect(() => {
         let isMounted = true;
-        if(!infinite) setLoading(true);
+        setLoading(true);
         const fetchData = async () => {
             try {
-                const newItem = await getFromUrl<ApiResponse<T>>(url);
+                const newItem = await fetchFn(url);
 
 
                 if (!isMounted) return;

@@ -6,10 +6,11 @@ import { defaultProductItemFromTheme, type ProductItem, type ProductItemFromThem
 import { CentorAlignDiv240,} from '@/styles/CommomStyle/Common.styled';
 
 import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import { useEffect, useState } from 'react';
 import Loading from '../Loading';
 import { BaseUrl } from '@/constant/api';
+import { getFromUrl } from '@/utils/getFromUrl';
+import useInfiniteFetchFromUrlT from '@/hook/useInfiniteFetchFromUrlT';
 
 
 const ProductList = () => {
@@ -23,7 +24,7 @@ const ProductList = () => {
   const [extraLoading, setExtraLoading] = useState(false);
 
   const productsUrl = `${BaseUrl}/api/themes/${themeId}/products?cursor=${cursor}`
-  const { item, loading, error } = useFetchFromUrlT<ProductItemFromTheme>(productsUrl, defaultProductItemFromTheme,true);
+  const { item, loading, error } = useInfiniteFetchFromUrlT<ProductItemFromTheme>(productsUrl, getFromUrl, defaultProductItemFromTheme);
 
 
   useEffect(() => {

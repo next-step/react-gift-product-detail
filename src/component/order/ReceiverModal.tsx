@@ -1,8 +1,8 @@
 import { useReceiver } from '@/context/ReceiverContext';
 import {
   Div100p,
-  EmptyDiv12h,
   ErrorText,
+  Gap,
   LowField,
   MiniText,
   ModalBox,
@@ -19,10 +19,10 @@ import type { Receiver } from '@/type/GiftAPI/order';
 
 type ModalStateProps = {
   isOpen: boolean;
-  onClose: () => void;
+  closeModal: () => void;
 };
 
-const ReceiverModal = ({ isOpen, onClose }: ModalStateProps) => {
+const ReceiverModal = ({ isOpen, closeModal }: ModalStateProps) => {
   const { setReceivers } = useReceiver();
 
 
@@ -50,7 +50,7 @@ const ReceiverModal = ({ isOpen, onClose }: ModalStateProps) => {
 
   const onSubmit = async(data: FormData) => {
     setReceivers(data.receiver);
-    onClose();
+    closeModal();
   };
 
   return (
@@ -63,7 +63,7 @@ const ReceiverModal = ({ isOpen, onClose }: ModalStateProps) => {
             <SubText>
               * 받는 사람의 전화번호를 중복으로 입력할 수 없어요.
             </SubText>
-            <EmptyDiv12h />
+            <Gap height={12}  />
 
             <SimpleButton 
               disabled = {fields.length >= 10}
@@ -151,7 +151,7 @@ const ReceiverModal = ({ isOpen, onClose }: ModalStateProps) => {
             ))}
           </ScrollBox>
           <ButtonSpace>
-          <CancleButton type="button" onClick={onClose}>
+          <CancleButton type="button" onClick={closeModal}>
             취소
           </CancleButton>
           <SubmitButton type="submit">{fields.length}명 완료</SubmitButton>
