@@ -37,18 +37,19 @@ const ProductListInner = ({ themeId }: { themeId: number }) => {
   useIntersectionObserver(
     loaderRef,
     () => {
-      if (hasMore && !isFetchingNextPage) fetchMore()
+      if (canObserve) fetchMore()
     },
     canObserve,
   )
 
   if (!productsPages) return null
 
-  const productList = Array.isArray(productsPages.pages)
-    ? (productsPages.pages as ThemeProductListResponse[]).flatMap((page) =>
-        Array.isArray(page.list) ? page.list : [],
-      )
-    : []
+  const productList = productsPages.pages
+    .filter(
+      (page): page is ThemeProductListResponse =>
+        page && typeof page === 'object' && 'list' in page && Array.isArray(page.list),
+    )
+    .flatMap((page) => page.list)
   if (!productList || productList.length === 0) {
     return (
       <SubContainer>
