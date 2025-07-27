@@ -5,7 +5,6 @@ import { cardMock } from '@/pages/OrderPage/cardMock'
 import type { FormValues, ReceiverInfo } from '@/components/OrderPage/OrderForm'
 import type { Product } from '@/types/product'
 import axios from 'axios'
-import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useOrderMutation } from '@/hooks/useOrderMutation'
@@ -32,7 +31,6 @@ export function useOrderForm(
   )
   const totalPrice = product.price.sellingPrice * totalQuantity
 
-  const { user } = useAuth()
   const navigate = useNavigate()
 
   const { mutate: orderMutate } = useOrderMutation()
@@ -65,7 +63,6 @@ export function useOrderForm(
           phoneNumber: r.phone,
           quantity: Number(r.quantity),
         })),
-        authToken: user?.authToken || '',
       },
       {
         onSuccess: () => {
