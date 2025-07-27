@@ -1,42 +1,17 @@
-import {
-  beforeAll,
-  afterEach,
-  afterAll,
-  expect,
-  describe,
-  it,
-  vi
-} from "vitest";
+import { beforeAll, afterEach, afterAll, expect, describe, it } from "vitest";
 import { mockBE } from "@src/mock/msw/server";
 import { BE } from "@src/apis/BackEnd/apiEndPoints";
 import { productMockData } from "@src/mock/productMockData";
 import { render, screen } from "@testing-library/react";
 import RealTimeRankPanel from "@src/components/RealTimeRankPanel/RealTimeRankPanel";
-import { QueryClientProvider } from "@tanstack/react-query";
-import queryClient from "@src/apis/BackEnd/query/client";
-import { BrowserRouter } from "react-router-dom";
-import UserContext from "@src/contexts/UserContext";
+import MockApp from "./MockApp";
 
 beforeAll(() => mockBE.listen());
 afterEach(() => mockBE.resetHandlers());
 afterAll(() => mockBE.close());
 
 const renderRealTimeRankPanel = () => {
-  const fakeUserContext = {
-    authToken: { value: "authToken", setValue: vi.fn() },
-    email: { value: "test@kakao.com", setValue: vi.fn() },
-    user: { value: "test", setValue: vi.fn() }
-  };
-
-  render(
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <UserContext.Provider value={fakeUserContext}>
-          <RealTimeRankPanel />
-        </UserContext.Provider>
-      </BrowserRouter>
-    </QueryClientProvider>
-  );
+  render(<MockApp children={<RealTimeRankPanel />} />);
 };
 
 describe("MSW 테스트", () => {

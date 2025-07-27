@@ -1,11 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import UserContext from "@src/contexts/UserContext";
 import LoginPage from "@src/pages/LoginPage";
-import queryClient from "@src/apis/BackEnd/query/client";
+import MockApp from "./MockApp";
 
 // mock toast
 vi.mock("react-toastify", () => ({
@@ -14,21 +11,7 @@ vi.mock("react-toastify", () => ({
 }));
 
 const renderLoginPage = () => {
-  const fakeUserContext = {
-    authToken: { value: "", setValue: vi.fn() },
-    email: { value: "", setValue: vi.fn() },
-    user: { value: "", setValue: vi.fn() }
-  };
-
-  render(
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <UserContext.Provider value={fakeUserContext}>
-          <LoginPage />
-        </UserContext.Provider>
-      </BrowserRouter>
-    </QueryClientProvider>
-  );
+  render(<MockApp children={<LoginPage />} userContext={false} />);
 };
 
 describe("LoginPage.tsx 페이지 테스트", () => {
