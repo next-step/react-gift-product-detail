@@ -152,7 +152,7 @@
 
 ## 2단계 - 상품 상세 페이지 API 구현하기
 
-- [ ] 제품 상세 페이지
+- [x] 제품 상세 페이지
   - [x] 상세 페이지 api
     - [x] 상품 정보 API: `/api/products/:productId`
     - [x] 상품 세부 정보 API: `/api/products/:productId/detail`
