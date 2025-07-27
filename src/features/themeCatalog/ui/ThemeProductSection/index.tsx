@@ -5,6 +5,7 @@ import RankingItemCard from '@/entities/product/ui/RankingItemCard';
 import { Loading } from '@/shared/ui';
 import type { RankingProduct } from '@/entities/product/model/types';
 import * as S from './styles';
+import { ROUTES } from '@/shared/config';
 
 interface ThemeProductSectionProps {
   themeId: number;
@@ -16,7 +17,7 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   const { products, hasMore, fetchNextPage, isFetchingNextPage } = useThemeProducts(themeId);
 
   const handleProductClick = (product: RankingProduct) => {
-    navigate(`/order/${product.id}`);
+    navigate(`/${ROUTES.PRODUCT}/${product.id}`);
   };
 
   useEffect(() => {

@@ -4,3 +4,4 @@ export { default as MyPage } from './MyPage';
 export { default as NotFound } from './NotFound';
 export { default as Order } from './Order';
 export { default as Theme } from './Theme';
+export { default as Product } from './Product';

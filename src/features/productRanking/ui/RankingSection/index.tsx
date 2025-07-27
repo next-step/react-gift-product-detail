@@ -7,6 +7,7 @@ import { RankingItemCard } from '@/entities/product/ui';
 import * as S from './styles';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { ROUTES } from '@/shared/config';
 
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,8 +38,8 @@ const RankingSection = () => {
     });
   };
 
-  const handleItemCardClick = (item: RankingProduct) => {
-    navigate(`/order/${item.id}`);
+  const handleItemCardClick = (productId: number) => {
+    navigate(`/${ROUTES.PRODUCT}/${productId}`);
   };
 
   return (
@@ -83,7 +84,7 @@ const RankingSection = () => {
                 subtitle={item.brandInfo.name}
                 price={item.price.sellingPrice}
                 rank={index + 1}
-                onClick={() => handleItemCardClick(item)}
+                onClick={() => handleItemCardClick(item.id)}
               />
             ))}
           </S.Grid>

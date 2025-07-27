@@ -1,7 +1,7 @@
 import { createBrowserRouter} from 'react-router-dom';
 import Layout from '../layout';
 import ProtectedRoute from './ProtectedRoute';
-import { Home, Login, MyPage, Order, NotFound, Theme } from '@/pages';
+import { Home, Login, MyPage, Order, NotFound, Theme, Product } from '@/pages';
 import { ROUTES } from '@/shared/config';
 
 const router = createBrowserRouter([
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: `${ROUTES.THEME}/:themeId`,
         element: <Theme />,
+      },
+      {
+        path: `${ROUTES.PRODUCT}/:productId`,
+        element: <Product />,
       },
       {
         path: ROUTES.MYPAGE,

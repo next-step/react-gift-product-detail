@@ -4,5 +4,6 @@ export const ROUTES = {
   MYPAGE: 'mypage',
   ORDER: 'order',
   THEME: 'themes',
+  PRODUCT: 'product',
   NOT_FOUND: '*',
 } as const;
