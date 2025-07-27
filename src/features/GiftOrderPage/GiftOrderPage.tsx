@@ -90,7 +90,12 @@ const GiftOrderPage = () => {
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
+        <form
+          onSubmit={handleSubmit(
+            (formData) => onSubmit({ formData }),
+            onInvalid
+          )}
+        >
           <CardSelector />
           <Divider />
           <SenderForm />

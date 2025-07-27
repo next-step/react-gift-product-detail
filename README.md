@@ -17,5 +17,6 @@
 - get: 상품 상세 정보
 - get: Theme Hero 정보
 - post: 로그인 리팩토링
+- post: 주문하기 리팩토링
 
 ## 리뷰 반영
