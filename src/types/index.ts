@@ -46,3 +46,20 @@ export interface ProductSummary {
   price: number;
   imageURL: string;
 }
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export interface OrderPayload {
+  productId: number;
+  message: string;
+  messageCardId: string;
+  ordererName: string;
+  receivers: {
+    name: string;
+    phoneNumber: string;
+    quantity: number;
+  }[];
+}
