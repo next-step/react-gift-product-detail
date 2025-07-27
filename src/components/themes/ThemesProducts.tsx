@@ -43,7 +43,12 @@ const ThemesProducts = ({ id }: ThemesProductsProps) => {
               to={ROUTE_PATH.ORDER.replace(":id", String(product.id))}
               key={product.id}
             >
-              <ThemesItem product={product} />
+              <ThemesItem
+                name={product.name}
+                imageURL={product.imageURL}
+                price={product.price.sellingPrice}
+                brandName={product.brandInfo.name}
+              />
             </Link>
           ))}
         </ProductsGrid>

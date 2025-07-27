@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
 import type { Card } from "@/types/card";
 
-type CardThumbnailProps = {
-  card: Card;
+type CardThumbnailProps = Pick<Card, "thumbUrl" | "defaultTextMessage"> & {
   isSelected: boolean;
   onClick: () => void;
 };
 
-const CardThumbnail = ({ card, isSelected, onClick }: CardThumbnailProps) => {
+const CardThumbnail = ({
+  thumbUrl,
+  defaultTextMessage,
+  isSelected,
+  onClick,
+}: CardThumbnailProps) => {
   return (
     <CardDiv onClick={onClick} isSelected={isSelected}>
-      <Img src={card.thumbUrl} alt={card.defaultTextMessage} />
+      <Img src={thumbUrl} alt={defaultTextMessage} />
     </CardDiv>
   );
 };

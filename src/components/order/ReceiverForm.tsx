@@ -11,7 +11,7 @@ import type {
   FieldErrors,
 } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
-import Close from "@/components/UI/Close";
+import Close from "@/assets/close.svg?react";
 import type { FormValues } from "@/types/order";
 
 type ReceiverFormProps = {
@@ -40,7 +40,7 @@ const ReceiverForm = ({
             remove(index);
           }}
         >
-          <Close size="20" />
+          <Close width="20" />
         </CloseButton>
       </TitleDiv>
       <InputDiv>

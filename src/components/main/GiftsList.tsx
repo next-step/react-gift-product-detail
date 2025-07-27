@@ -6,34 +6,37 @@ import { ROUTE_PATH } from "@/routes/paths";
 import type { Gift } from "@/types/gift";
 
 type GiftsListProps = {
-  gifts: Gift[];
+  items: Gift[];
 };
 
-const GiftsList = ({ gifts }: GiftsListProps) => {
+const GiftsList = ({ items }: GiftsListProps) => {
   const navigate = useNavigate();
   const [showMore, setShowMore] = useState(false);
 
-  const handleGiftClick = (giftId: number) => {
+  const navigateToOrder = (giftId: number) => {
     navigate(`${ROUTE_PATH.ORDER.replace(":id", giftId.toString())}`);
   };
 
   useEffect(() => {
     setShowMore(false);
-  }, [gifts]);
+  }, [items]);
 
-  const visibleGifts = showMore ? gifts : gifts.slice(0, 6);
+  const visibleItems = showMore ? items : items.slice(0, 6);
 
   return (
     <>
       <GiftsGrid>
-        {visibleGifts.map((gift, index) => (
+        {visibleItems.map((item, index) => (
           <GiftItem
-            key={gift.id}
-            gift={gift}
+            key={item.id}
+            imageURL={item.imageURL}
+            name={item.name}
+            brandName={item.brandInfo.name}
+            price={item.price.sellingPrice}
             rank={index + 1}
             as="button"
             type="button"
-            onClick={() => handleGiftClick(gift.id)}
+            onClick={() => navigateToOrder(item.id)}
           />
         ))}
       </GiftsGrid>

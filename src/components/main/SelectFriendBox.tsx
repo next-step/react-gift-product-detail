@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Plus from "@/components/UI/Plus";
+import Plus from "@/assets/plus.svg?react";
 import { useUserInfo } from "@/contexts/UserInfoContext";
 
 const SelectFriendBox = () => {
@@ -9,7 +9,7 @@ const SelectFriendBox = () => {
   return (
     <Box>
       <PlusDiv>
-        <Plus size="24px" />
+        <Plus width="24px" height="24px" />
       </PlusDiv>
       <SelectText>
         {name && `${name}님! `}선물할 친구를 선택해 주세요.

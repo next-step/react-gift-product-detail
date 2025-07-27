@@ -1,14 +1,14 @@
-import type { Card } from "@/types/card";
 import styled from "@emotion/styled";
 
 type CardImageProps = {
-  selectedCard: Card;
+  imageUrl: string;
+  defaultTextMessage: string;
 };
 
-const CardImage = ({ selectedCard }: CardImageProps) => {
+const CardImage = ({ imageUrl, defaultTextMessage }: CardImageProps) => {
   return (
     <CardDiv>
-      <Img src={selectedCard.imageUrl} alt={selectedCard.defaultTextMessage} />
+      <Img src={imageUrl} alt={defaultTextMessage} />
     </CardDiv>
   );
 };

@@ -2,27 +2,26 @@ import GiftsList from "./GiftsList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import BoxMessage from "@/components/common/BoxMessage";
 import { fetchProductsRanking } from "@/api/products";
-import { useCallback } from "react";
-import useApiRequest from "@/hooks/useApiRequest";
 import type { TargetType, RankType } from "@/types/gift";
+import { useQuery } from "@tanstack/react-query";
 
 type GiftsRenderProps = {
-  selectedTypes: {
-    targetType: TargetType;
-    rankType: RankType;
-  };
+  targetType: TargetType;
+  rankType: RankType;
 };
 
-const GiftsRender = ({ selectedTypes }: GiftsRenderProps) => {
-  const requestFn = useCallback(() => {
-    return fetchProductsRanking({
-      targetType: selectedTypes.targetType,
-      rankType: selectedTypes.rankType,
-    });
-  }, [selectedTypes]);
-  const { data: gifts, isLoading, isError } = useApiRequest({ requestFn });
+const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
+  const {
+    data: gifts,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["gifts", targetType, rankType],
+    queryFn: () => fetchProductsRanking({ targetType, rankType }),
+    refetchOnWindowFocus: false,
+  });
 
-  if (isLoading) {
+  if (isPending) {
     return <LoadingSpinner height="266px" />;
   }
   if (isError) {
@@ -36,7 +35,7 @@ const GiftsRender = ({ selectedTypes }: GiftsRenderProps) => {
   if (!gifts || gifts.length === 0) {
     return <BoxMessage message="상품이 없습니다." height="266px" />;
   }
-  return <GiftsList gifts={gifts} />;
+  return <GiftsList items={gifts} />;
 };
 
 export default GiftsRender;

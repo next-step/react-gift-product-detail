@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import Back from "@/components/UI/Back";
-import Logo from "@/components/UI/Logo";
-import User from "@/components/UI/User";
+import Back from "@/assets/back.svg?react";
+import User from "@/assets/user.svg?react";
+import Logo from "@/components/image/Logo";
 import { useLocation, useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
 import { useUserInfo } from "@/contexts/UserInfoContext";
@@ -34,15 +34,15 @@ const TheHeader = () => {
 
   return (
     <Header>
-      <button onClick={handleClickBack}>
-        <Back size={"28px"} />
-      </button>
-      <button onClick={handleClickLogo}>
+      <Button onClick={handleClickBack}>
+        <Back width={"28px"} height={"28px"} />
+      </Button>
+      <Button onClick={handleClickLogo}>
         <Logo size={"150px"} />
-      </button>
-      <button onClick={handleClickUser}>
-        <User size={"24px"} />
-      </button>
+      </Button>
+      <Button onClick={handleClickUser}>
+        <User width={"24px"} height={"24px"} />
+      </Button>
     </Header>
   );
 };
@@ -59,4 +59,10 @@ const Header = styled.header`
   padding: ${({ theme }) => theme.spacing.spacing2};
   height: 44px;
   background-color: ${({ theme }) => theme.colors.semantic.background.default};
+`;
+
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

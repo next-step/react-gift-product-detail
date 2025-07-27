@@ -1,78 +1,95 @@
-import { ROUTE_PATH } from "@/routes/paths";
 import styled from "@emotion/styled";
-import { useLocation, useNavigate } from "react-router";
-import useFormInput from "@/hooks/useFormInput";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
 import ErrorMessage from "../common/ErrorMessage";
-import { useUserInfo } from "@/contexts/UserInfoContext";
-import { postLogin } from "@/api/login";
-import useApiRequest from "@/hooks/useApiRequest";
-import { useEffect } from "react";
+import {
+  postLogin,
+  type PostLoginParams,
+  type PostLoginResult,
+} from "@/api/login";
+import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import type { LoginFormValues } from "@/types/user";
+import { useMutation } from "@tanstack/react-query";
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const emailInput = useFormInput(checkEmailError);
-  const passwordInput = useFormInput(checkPasswordError);
-  const user = useUserInfo();
+  const method = useForm<LoginFormValues>({
+    mode: "onBlur",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const email = method.watch("email");
+  const password = method.watch("password");
 
-  const {
-    data: userData,
-    isLoading,
-    isError,
-    refetch: postLoginRequest,
-  } = useApiRequest({
-    requestFn: postLogin,
-    immediate: false,
+  const { data, isPending, isError, mutate } = useMutation<
+    PostLoginResult,
+    Error,
+    PostLoginParams
+  >({
+    mutationFn: postLogin,
+    onSuccess: () => {
+      method.reset();
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    postLoginRequest({
-      email: emailInput.value,
-      password: passwordInput.value,
-    });
+  useHandleLoginSuccess({
+    email: data?.email,
+    name: data?.name,
+    authToken: data?.authToken,
+    isPending,
+    isError,
+  });
+
+  const onValid: SubmitHandler<LoginFormValues> = async (
+    data: LoginFormValues,
+  ) => {
+    const { email, password } = data;
+    mutate({ email, password });
   };
 
-  useEffect(() => {
-    if (userData && !isLoading && !isError && !user?.email) {
-      user?.setUserInfo({
-        email: userData.email,
-        name: userData.name,
-        authToken: userData.authToken,
-      });
-
-      const redirectPath = new URLSearchParams(location.search).get("redirect");
-      navigate(redirectPath || ROUTE_PATH.HOME);
-    }
-  }, [userData, isLoading, isError, user, location.search, navigate]);
-
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={method.handleSubmit(onValid)}>
       <Input
-        error={!!emailInput.error}
+        error={!!method.formState.errors.email}
         type="text"
-        value={emailInput.value}
         placeholder="이메일"
-        onChange={emailInput.onChange}
-        onBlur={emailInput.onBlur}
+        {...method.register("email", {
+          validate: checkEmailError,
+          onChange: () => {
+            if (method.formState.errors.email) {
+              method.trigger("email");
+            }
+          },
+        })}
       />
-      {emailInput.error && <ErrorMessage message={emailInput.error} />}
+      {method.formState.errors.email && (
+        <ErrorMessage message={method.formState.errors.email.message || ""} />
+      )}
       <Input
-        error={!!passwordInput.error}
+        error={!!method.formState.errors.password}
         type="password"
         placeholder="비밀번호"
-        value={passwordInput.value}
-        onChange={passwordInput.onChange}
-        onBlur={passwordInput.onBlur}
+        {...method.register("password", {
+          validate: checkPasswordError,
+          onChange: () => {
+            if (method.formState.errors.password) {
+              method.trigger("password");
+            }
+          },
+        })}
       />
-      {passwordInput.error && <ErrorMessage message={passwordInput.error} />}
+      {method.formState.errors.password && (
+        <ErrorMessage
+          message={method.formState.errors.password.message || ""}
+        />
+      )}
       <Button
         type="submit"
         disabled={
-          isLoading ||
-          !!checkEmailError(emailInput.value) ||
-          !!checkPasswordError(passwordInput.value)
+          isPending ||
+          !!checkEmailError(email) ||
+          !!checkPasswordError(password)
         }
       >
         로그인

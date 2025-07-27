@@ -1,20 +1,22 @@
-import type { ThemeProduct } from "@/types/theme";
 import styled from "@emotion/styled";
 
 type ThemesItemProps = {
-  product: ThemeProduct;
+  name: string;
+  imageURL: string;
+  price: number;
+  brandName: string;
 };
 
-const ThemesItem = ({ product }: ThemesItemProps) => {
+const ThemesItem = ({ name, imageURL, price, brandName }: ThemesItemProps) => {
   return (
     <Container>
       <div>
-        <Img src={product.imageURL} alt={product.name} />
-        <BrandName>{product.brandInfo.name}</BrandName>
-        <ProductName>{product.name}</ProductName>
+        <Img src={imageURL} alt={name} />
+        <BrandName>{brandName}</BrandName>
+        <ProductName>{name}</ProductName>
       </div>
       <Price>
-        {product.price.sellingPrice} <Span>원</Span>
+        {price} <Span>원</Span>
       </Price>
     </Container>
   );

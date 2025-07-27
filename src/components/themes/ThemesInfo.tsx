@@ -1,28 +1,24 @@
 import { fetchThemesInfo } from "@/api/themesInfo";
 import styled from "@emotion/styled";
 import type { ThemeInfo } from "@/types/theme";
-import useApiRequest from "@/hooks/useApiRequest";
-import { useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 type ThemesInfoProps = {
   id: string | undefined;
 };
 
 const ThemesInfo = ({ id }: ThemesInfoProps) => {
-  const requestFn = useCallback(
-    () => fetchThemesInfo({ themeId: Number(id) }),
-    [id],
-  );
-
   const {
     data: themeInfoData,
-    isLoading,
+    isPending,
     isError,
-  } = useApiRequest<ThemeInfo>({
-    requestFn,
+  } = useQuery<ThemeInfo>({
+    queryKey: ["themeInfo", id],
+    queryFn: () => fetchThemesInfo({ themeId: Number(id) }),
+    enabled: !!id,
   });
 
-  if (!themeInfoData && isLoading && !isError) {
+  if (!themeInfoData && isPending && !isError) {
     return null;
   }
 

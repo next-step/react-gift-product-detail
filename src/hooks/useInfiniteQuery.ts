@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useApiRequest from "./useApiRequest";
 import { useInView } from "./useInView";
 import usePreservedCallback from "./usePreservedCallback";
@@ -25,12 +25,8 @@ function useInfiniteQuery<TRes, TItem, TParams>({
   const preservedGetCursor = usePreservedCallback(getCursor);
   const preservedGetHasMore = usePreservedCallback(getHasMore);
 
-  const requestFn = useCallback(
-    () => fetcher({ ...initialParams, cursor, limit: 20 }),
-    [cursor, initialParams, fetcher],
-  );
   const { data, isError, isLoading, refetch } = useApiRequest({
-    requestFn,
+    requestFn: () => fetcher({ ...initialParams, cursor, limit: 20 }),
     immediate: false,
   });
 

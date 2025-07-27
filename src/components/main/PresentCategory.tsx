@@ -3,36 +3,39 @@ import PresentTheme from "./PresentTheme";
 import { fetchTheme } from "@/api/theme";
 import type { Theme } from "@/types/theme";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-import useApiRequest from "@/hooks/useApiRequest";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
+import { useQuery } from "@tanstack/react-query";
 
 const PresentCategory = () => {
   const navigate = useNavigate();
   const {
     data: presentThemes,
-    isLoading,
+    isPending,
     isError,
-  } = useApiRequest<Theme[]>({ requestFn: fetchTheme });
+  } = useQuery<Theme[]>({
+    queryKey: ["presentThemes"],
+    queryFn: fetchTheme,
+  });
 
   if (isError) {
     return <></>;
   }
 
-  const handleThemeClick = (themeId: number) => {
+  const navigateToTheme = (themeId: number) => {
     navigate(`${ROUTE_PATH.THEMES.replace(":id", themeId.toString())}`);
   };
 
   return (
     <Background>
       <CategoryTitle>선물 테마</CategoryTitle>
-      {presentThemes && !isLoading ? (
+      {presentThemes && !isPending ? (
         <ThemeGrid>
           {presentThemes.map(theme => (
             <button
               type="button"
               key={theme.themeId}
-              onClick={() => handleThemeClick(theme.themeId)}
+              onClick={() => navigateToTheme(theme.themeId)}
             >
               <PresentTheme theme={theme} />
             </button>

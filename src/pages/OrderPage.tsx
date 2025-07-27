@@ -1,6 +1,6 @@
 import TheHeader from "@/components/layout/TheHeader";
 import { useParams, useLocation, useNavigate } from "react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ROUTE_PATH } from "@/routes/paths";
 import { cards } from "@/data/card";
 import type { Card } from "@/types/card";
@@ -14,9 +14,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import type { OrderFormValue } from "@/types/order";
 import { fetchProductsSummary } from "@/api/productSummary";
-import useApiRequest from "@/hooks/useApiRequest";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
+import { useQuery } from "@tanstack/react-query";
 
 const OrderPage = () => {
   const location = useLocation();
@@ -47,23 +47,21 @@ const OrderPage = () => {
   }, [location.pathname, navigate, userInfo]);
 
   const { id } = useParams<{ id: string }>();
-  const requestFn = useCallback(
-    () => fetchProductsSummary({ productId: Number(id) }),
-    [id],
-  );
   const {
     data: gift,
-    isLoading,
+    isPending,
     isError,
-  } = useApiRequest({
-    requestFn,
+  } = useQuery({
+    queryKey: ["gift", id],
+    queryFn: () => fetchProductsSummary({ productId: Number(id) }),
+    enabled: !!id,
   });
 
   useEffect(() => {
-    if (!gift && !isLoading && isError) {
+    if (!gift && !isPending && isError) {
       navigate(ROUTE_PATH.HOME, { replace: true });
     }
-  }, [gift, isLoading, isError, navigate]);
+  }, [gift, isPending, isError, navigate]);
 
   if (!gift) return null;
 
@@ -111,13 +109,10 @@ const OrderPage = () => {
       <Main>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit(onValid)}>
-            <CardSection
-              selectedCard={selectedCard}
-              setSelectedCard={setSelectedCard}
-            />
+            <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
             <SenderSection />
             <ReceiverSection />
-            <GiftInformationSection selectedGift={gift} />
+            <GiftInformationSection {...gift} />
             <Button type="submit">
               {gift.price *
                 watchedReceiver.reduce(

@@ -1,14 +1,19 @@
 import styled from "@emotion/styled";
-import type { Gift } from "@/types/gift";
 
 type GiftItemProps<TElement extends React.ElementType = "div"> = {
-  gift: Gift;
+  name: string;
+  imageURL: string;
+  price: number;
+  brandName: string;
   rank: number;
   as?: TElement;
 } & React.ComponentPropsWithoutRef<TElement>;
 
 const GiftItem = <TElement extends React.ElementType = "div">({
-  gift,
+  name,
+  imageURL,
+  brandName,
+  price,
   rank,
   as,
   ...rest
@@ -16,11 +21,11 @@ const GiftItem = <TElement extends React.ElementType = "div">({
   return (
     <GiftItemBox as={as} {...rest}>
       <RankDiv rank={rank}>{rank}</RankDiv>
-      <Img src={gift.imageURL} alt={gift.name} />
-      <BrandP>{gift.brandInfo.name}</BrandP>
-      <NameP>{gift.name}</NameP>
+      <Img src={imageURL} alt={name} />
+      <BrandP>{brandName}</BrandP>
+      <NameP>{name}</NameP>
       <PriceP>
-        {gift.price.sellingPrice}
+        {price}
         <WonSpan> 원</WonSpan>
       </PriceP>
     </GiftItemBox>

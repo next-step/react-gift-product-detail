@@ -8,11 +8,18 @@ import { useFormContext } from "react-hook-form";
 import { checkMessageError } from "@/utils/validation";
 
 type CardSectionProps = {
-  selectedCard: Card;
+  id: number;
+  imageUrl: string;
+  defaultTextMessage: string;
   setSelectedCard: (card: Card) => void;
 };
 
-const CardSection = ({ selectedCard, setSelectedCard }: CardSectionProps) => {
+const CardSection = ({
+  id,
+  imageUrl,
+  defaultTextMessage,
+  setSelectedCard,
+}: CardSectionProps) => {
   const {
     register,
     formState: { errors },
@@ -24,13 +31,13 @@ const CardSection = ({ selectedCard, setSelectedCard }: CardSectionProps) => {
         {cards.map(card => (
           <CardThumbnail
             key={card.id}
-            card={card}
-            isSelected={card.id === selectedCard.id}
+            {...card}
+            isSelected={card.id === id}
             onClick={() => setSelectedCard(card)}
           />
         ))}
       </CardList>
-      <CardImage selectedCard={selectedCard} />
+      <CardImage imageUrl={imageUrl} defaultTextMessage={defaultTextMessage} />
       <CardTextarea
         {...register("message", {
           validate: value => checkMessageError(value),
