@@ -4,7 +4,7 @@ import { ReceiverProvider } from './providers/ReceiverProvider';
 import router from './router/router';
 import { ToastContainer } from 'react-toastify';
 import QueryClientProvider from './providers/QueryClientProvider';
-import ErrorBoundary from './providers/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/ui';
 
 function App() {
   return (
