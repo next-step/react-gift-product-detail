@@ -12,6 +12,7 @@ import { getThemeInfo, getThemeProducts } from '@/api/services';
 import type { GiftItem } from '@/types';
 import { css } from '@emotion/react';
 import { useQuery } from '@tanstack/react-query';
+import { useThemeInfoQuery } from '@/hooks/queries/useThemeInfoQuery';
 
 const centeredMessage = css`
   text-align: center;
@@ -23,11 +24,7 @@ const ThemePage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
 
-  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useQuery({
-    queryKey: ['themeInfo', themeId], 
-    queryFn: () => getThemeInfo(themeId!), 
-    enabled: !!themeId, 
-  });
+  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useThemeInfoQuery(themeId);
 
   const {
     data: productsData,
