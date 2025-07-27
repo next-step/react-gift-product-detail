@@ -10,6 +10,7 @@ import type { ThemeProduct, ThemeProducts } from "@/types/ThemeProducts";
 import type { Wish } from "@/types/Wish";
 import type { ProductHighlightReview } from "@/types/HighlighReview";
 import type { ProductDetailInfo } from "@/types/ProductDetail";
+import { CATEGORY_ERROR_MESSAGE } from "@/pages/HomePage/components/Category/constants/labels";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -18,9 +19,19 @@ export const apiClient = axios.create({
   },
 });
 
-export const getThemes = async (): Promise<GiftThemeType[]> => {
+const getThemes = async (): Promise<GiftThemeType[]> => {
   const response = await apiClient.get(END_POINTS.THEMES);
   return response.data.data;
+};
+
+export const getValidThemes = async (): Promise<GiftThemeType[]> => {
+  const response = await getThemes();
+
+  if (response.length === 0) {
+    throw new Error(CATEGORY_ERROR_MESSAGE.EMPTY_DATA_ERROR);
+  }
+
+  return response;
 };
 
 export const getTrendingGifts = async (

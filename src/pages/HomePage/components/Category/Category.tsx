@@ -7,7 +7,7 @@ import {
   ThemeGrid,
 } from "./Category.styles";
 import { Loading } from "@/components/Loading/Loading";
-import { getThemes } from "@/data/api";
+import { getValidThemes } from "@/data/api";
 import type { GiftThemeType } from "@/types/GiftThemeType";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
@@ -39,14 +39,7 @@ function Category() {
 function CategoryContent() {
   const { data } = useSuspenseQuery<GiftThemeType[]>({
     queryKey: QUERY_KEY.THEMES,
-    queryFn: getThemes,
-    select: (data: GiftThemeType[]) => {
-      if (data.length === 0) {
-        throw new Error(CATEGORY_ERROR_MESSAGE.EMPTY_DATA_ERROR);
-      }
-
-      return data;
-    },
+    queryFn: getValidThemes,
   });
 
   return (
