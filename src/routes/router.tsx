@@ -5,6 +5,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import MyPage from '@/pages/MyPage';
 import OrderPage from '@/pages/OrderPage';
 import ThemeProductPage from '@/pages/ThemeProductPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 import { ROUTE_PATH } from '@/constants/routes';
 
 export const router = createBrowserRouter([
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
   {
     path: '/order/:productId',
     element: <OrderPage />,
+  },
+  {
+    path: '/products/:productId',
+    element: <ProductDetailPage />,
   },
   {
     path: '/themes/:themeId',

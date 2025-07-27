@@ -109,11 +109,7 @@ function ProductList({
   const { user } = useAuth();
 
   const handleItemClick = (id: number) => {
-    if (user && user.name) {
-      navigate(`/order/${id}`);
-    } else {
-      navigate(`/login?from=${encodeURIComponent(`/order/${id}`)}`);
-    }
+    navigate(`/products/${id}`);
   };
 
   if (isLoading) return <div>로딩 중 ...</div>;
