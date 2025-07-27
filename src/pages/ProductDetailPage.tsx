@@ -241,7 +241,6 @@ function ProductDetailPage() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<TabType>('description');
 
-  // 상품 기본 정보 조회
   const {
     data: productBasic,
     isLoading: isLoadingBasic,
@@ -252,7 +251,6 @@ function ProductDetailPage() {
     enabled: !!productId,
   });
 
-  // 상품 상세 정보 조회
   const {
     data: productDetail,
     isLoading: isLoadingDetail,
@@ -263,7 +261,6 @@ function ProductDetailPage() {
     enabled: !!productId,
   });
 
-  // 상품 찜 정보 조회
   const {
     data: productWish,
     isLoading: isLoadingWish,
@@ -274,7 +271,6 @@ function ProductDetailPage() {
     enabled: !!productId,
   });
 
-  // 상품 하이라이트 리뷰 조회
   const {
     data: productReviews,
     isLoading: isLoadingReviews,
@@ -285,11 +281,9 @@ function ProductDetailPage() {
     enabled: !!productId && activeTab === 'reviews',
   });
 
-  // 찜 토글 뮤테이션 (낙관적 업데이트)
   const wishMutation = useMutation({
-    mutationFn: () => fetchProductWish(Number(productId)), // 실제로는 POST 요청이어야 함
+    mutationFn: () => fetchProductWish(Number(productId)),
     onMutate: async () => {
-      // 이전 데이터 백업
       await queryClient.cancelQueries({
         queryKey: ['product', 'wish', productId],
       });
@@ -299,7 +293,6 @@ function ProductDetailPage() {
         productId,
       ]);
 
-      // 낙관적 업데이트
       queryClient.setQueryData(
         ['product', 'wish', productId],
         (old: ProductWish | undefined) => {
@@ -315,7 +308,6 @@ function ProductDetailPage() {
       return { previousWish };
     },
     onError: (err, variables, context) => {
-      // 에러 시 이전 데이터로 롤백
       if (context?.previousWish) {
         queryClient.setQueryData(
           ['product', 'wish', productId],
@@ -324,7 +316,6 @@ function ProductDetailPage() {
       }
     },
     onSettled: () => {
-      // 성공/실패 관계없이 쿼리 재검증
       queryClient.invalidateQueries({
         queryKey: ['product', 'wish', productId],
       });
@@ -341,7 +332,6 @@ function ProductDetailPage() {
     }
   };
 
-  // 로딩 상태
   if (isLoadingBasic) {
     return (
       <>
@@ -353,7 +343,6 @@ function ProductDetailPage() {
     );
   }
 
-  // 에러 상태
   if (errorBasic) {
     return (
       <>
