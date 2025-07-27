@@ -21,7 +21,7 @@ const ProfilePage = () => {
         <UserInfo>{userName} 님 안녕하세요</UserInfo>
         <UserInfo>이메일 주소는 {auth?.email}입니다.</UserInfo>
         <Divider />
-        <Button variant="secondary" size="small" onClick={onLogout}>
+        <Button variant="secondary" size="small" round onClick={onLogout}>
           로그아웃
         </Button>
       </Content>

@@ -55,7 +55,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
       </Content>
       <Divider />
       <ItemContent>
-        <Button variant="secondary" onClick={toggleView}>
+        <Button variant="secondary" round onClick={toggleView}>
           {isCollapsed ? "더보기" : "접기"}
         </Button>
       </ItemContent>

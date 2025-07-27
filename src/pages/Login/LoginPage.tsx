@@ -66,7 +66,7 @@ const LoginPage = () => {
             {errorMsg.password && <ErrorMsg>{errorMsg.password}</ErrorMsg>}
           </InputWrapper>
           <Divider />
-          <Button fullWidth={true} type="submit" disabled={!isValidIdAndPassword}>
+          <Button fullWidth round type="submit" disabled={!isValidIdAndPassword}>
             로그인
           </Button>
         </Form>
