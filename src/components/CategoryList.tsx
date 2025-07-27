@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import type { BaseResponse } from '@/types/common';
 import type { Theme } from '@/types/theme';
 import { fetchThemes } from '@/api/theme';
 

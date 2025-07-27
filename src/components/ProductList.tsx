@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Product } from '@/types/product';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProductRanking } from '@/api/product';
 
