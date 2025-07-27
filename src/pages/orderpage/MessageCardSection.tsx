@@ -11,7 +11,7 @@ interface Props {
 
 const MessageCardSection = ({ error }: Props) => {
   const { control } = useFormContext<FullOrderFormValues>();
-  const { selectedCard, handleSelect } = useMessageCard();
+  const { selectedCard, selectMessageCard } = useMessageCard();
 
   return (
     <Wrapper>
@@ -19,7 +19,7 @@ const MessageCardSection = ({ error }: Props) => {
         {MESSAGE_CARD_LIST.map((card) => (
           <ThumbButton
             key={card.id}
-            onClick={() => handleSelect(card)}
+            onClick={() => selectMessageCard(card)}
             type="button"
             selected={selectedCard.id === card.id}
           >

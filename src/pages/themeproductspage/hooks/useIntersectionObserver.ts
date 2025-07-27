@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 interface UseInfiniteScrollOptions {
   targetRef: React.RefObject<HTMLDivElement | null>;
-  onIntersect: () => void;
+  onIntersect: (entries: IntersectionObserverEntry[]) => void;
   enabled: boolean;
   threshold?: number;
 }
@@ -19,7 +19,7 @@ const useIntersectionObserver = ({
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          onIntersect();
+          onIntersect(entries);
         }
       },
       { threshold }

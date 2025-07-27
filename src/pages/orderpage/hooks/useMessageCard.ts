@@ -15,7 +15,7 @@ export function useMessageCard() {
     setValue("messageCardId", String(MESSAGE_CARD_LIST[0].id));
   }, [setValue]);
 
-  const handleSelect = (card: MessageCard) => {
+  const selectMessageCard = (card: MessageCard) => {
     setSelectedCard(card);
     setValue("message", card.defaultTextMessage);
     setValue("messageCardId", String(card.id));
@@ -23,6 +23,6 @@ export function useMessageCard() {
 
   return {
     selectedCard,
-    handleSelect,
+    selectMessageCard,
   };
 }

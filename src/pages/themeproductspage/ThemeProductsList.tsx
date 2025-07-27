@@ -7,7 +7,7 @@ export default function ThemeProductsList() {
   const { themeId } = useParams<{ themeId?: string }>();
   const navigate = useNavigate();
 
-  const { products, isLoading, observerRef } = useThemeInfiniteScroll({
+  const { products, loading, observerRef } = useThemeInfiniteScroll({
     themeId: themeId!,
   });
 
@@ -15,7 +15,7 @@ export default function ThemeProductsList() {
     navigate(`/order/${id}`);
   };
 
-  if (products.length === 0 && !isLoading)
+  if (products.length === 0 && !loading)
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
 
   return (
@@ -31,7 +31,7 @@ export default function ThemeProductsList() {
         ))}
       </List>
       <ObserverTarget ref={observerRef} />
-      {isLoading && <LoadingSpinner />}
+      {loading && <LoadingSpinner />}
     </>
   );
 }
