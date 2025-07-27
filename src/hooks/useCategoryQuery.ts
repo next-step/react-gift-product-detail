@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { CategoryItem, ThemeInfo, ThemeProductList } from '../types/category';
-import { fetchCategories, fetchThemeInfo, fetchThemeProducts } from './categoryApi';
+import { fetchCategories, fetchThemeInfo, fetchThemeProducts } from '../api/categoryApi';
 
 export const useCategoriesQuery = () => {
   return useQuery<CategoryItem[]>({

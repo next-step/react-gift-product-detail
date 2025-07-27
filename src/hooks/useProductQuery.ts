@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchProductRanking, fetchProductSummary } from './productApi';
+import { fetchProductRanking, fetchProductSummary } from '../api/productApi';
 import type { Product, ProductSummary } from '../types/product';
 
 export const useProductRankingQuery = (targetType: string = 'ALL', rankType: string = 'MANY_WISH') => {
