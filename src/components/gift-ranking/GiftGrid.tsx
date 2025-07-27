@@ -14,9 +14,13 @@ const GiftGrid = ({ gender, category }: GiftGridProps) => {
 
   const { data: productRankings, isLoading, isError } = useProductRankings(category, gender);
 
-  const handleCount = () => {
+  const VISIBLE_COUNT_INCREMENT = 6;
+
+  const handleClickMore = () => {
     setVisibleCount((prev) =>
-      productRankings && visibleCount >= productRankings.length ? 6 : prev + 6
+      productRankings && visibleCount >= productRankings.length
+        ? VISIBLE_COUNT_INCREMENT
+        : prev + VISIBLE_COUNT_INCREMENT
     );
   };
 
@@ -64,7 +68,7 @@ const GiftGrid = ({ gender, category }: GiftGridProps) => {
         ))}
       </GridWrapper>
       <ButtonWrapper>
-        <MoreButton onClick={handleCount}>
+        <MoreButton onClick={handleClickMore}>
           {visibleCount >= productRankings.length ? '접기' : '더보기'}
         </MoreButton>
       </ButtonWrapper>
