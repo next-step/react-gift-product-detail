@@ -1,4 +1,4 @@
-import Input from "@/components/common/Input/Input";
+import Input from "@/components/Input/Input";
 import styled from "@emotion/styled";
 import SENDER_SECTION_CONSTANTS from "@/pages/OrderPage/constants/senderSection";
 import { Controller, type Control, type FieldErrors } from "react-hook-form";

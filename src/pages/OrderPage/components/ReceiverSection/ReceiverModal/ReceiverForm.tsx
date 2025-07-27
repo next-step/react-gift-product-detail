@@ -18,7 +18,7 @@ import {
   FormField,
   SectionTitle,
 } from "../ReceiverSection.styles";
-import Input from "@/components/common/Input/Input";
+import Input from "@/components/Input/Input";
 
 interface FormData {
   receivers: {
