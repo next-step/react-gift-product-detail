@@ -5,7 +5,7 @@ import { spacing } from '@/styles/spacing';
 import { typography } from '@/styles/typography';
 import GlobalStyle from '@/styles/GlobalStyle';
 import Header from '@/components/Header';
-import { useThemeInfoQuery, useThemeProductsQuery } from '@/api/categoryQuery';
+import { useThemeInfoQuery, useThemeProductsQuery } from '@/hooks/useCategoryQuery';
 import type { ThemeProductList } from '@/types/category';
 import ThemeProductGrid from '@/components/ThemeProductGrid';
 import { spinnerStyle } from '@/styles/common';

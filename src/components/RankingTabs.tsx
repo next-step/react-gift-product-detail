@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
-import { useProductRankingQuery } from '../api/productQuery';
+import { useProductRankingQuery } from '../hooks/useProductQuery';
 import type { Product } from '../types/product';
 import { usePersistentState } from '../hooks/usePersistentState';
 

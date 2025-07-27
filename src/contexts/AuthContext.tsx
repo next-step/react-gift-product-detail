@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect, useMemo, useCallback, type ReactNode } from 'react';
 import { toast } from 'react-toastify';
-import { useLoginMutation } from '../api/authQuery';
+import { useLoginMutation } from '../hooks/useAuthQuery';
 import { STORAGE_KEYS } from '../constants/storage';
 import type { User } from '../types/auth';
 

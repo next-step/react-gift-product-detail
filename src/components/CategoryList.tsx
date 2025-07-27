@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
-import { useCategoriesQuery } from '../api/categoryQuery';
+import { useCategoriesQuery } from '../hooks/useCategoryQuery';
 import { spinnerStyle } from '@/styles/common';
 import { useNavigate } from 'react-router-dom';
 
