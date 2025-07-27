@@ -18,9 +18,9 @@ const Theme = () => {
       <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
         <Suspense fallback={<Loading height="200px"/>}>
           <ThemeHeroSection themeId={numericThemeId} />
+          <ThemeProductSection themeId={numericThemeId} />
         </Suspense>
       </ErrorBoundary>
-      <ThemeProductSection themeId={numericThemeId} />
     </S.Container>
   );
 };
