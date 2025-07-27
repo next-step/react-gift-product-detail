@@ -19,13 +19,11 @@ const TrendProductList = ({
   targetType,
   rankType,
   showAll,
-  INITIAL_SHOW_COUNT,
   handleMoreButtonClick,
 }: {
   targetType: TargetType
   rankType: RankType
   showAll: boolean
-  INITIAL_SHOW_COUNT: number
   handleMoreButtonClick: () => void
 }) => {
   const { data: products } = useSuspenseQuery<Product[]>({
@@ -139,7 +137,6 @@ export const Trend = () => {
             targetType={targetType}
             rankType={rankType}
             showAll={showAll}
-            INITIAL_SHOW_COUNT={INITIAL_SHOW_COUNT}
             handleMoreButtonClick={handleMoreButtonClick}
           />
         </Suspense>
