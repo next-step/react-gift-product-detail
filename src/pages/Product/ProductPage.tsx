@@ -5,6 +5,7 @@ import { useParams, Navigate } from "react-router-dom";
 import { Suspense } from "react";
 import Loading from "@/components/common/Loading";
 import Divider from "@/components/common/Divider";
+import ProductOrder from "./components/ProductOrder";
 
 const ProductPage = () => {
   const params = useParams();
@@ -20,6 +21,8 @@ const ProductPage = () => {
         <ProductInfo productId={productId} />
         <Divider spacing="0.5rem" fill={false} />
         <ProductContent productId={productId} />
+        <Divider spacing="4rem" />
+        <ProductOrder productId={productId} />
       </Suspense>
     </Container>
   );
