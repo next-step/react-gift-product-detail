@@ -1,4 +1,5 @@
 import type { GenderFilter, RankingType, Product } from "../types/ranking";
+import { useQuery } from "@tanstack/react-query";
 
 const targetTypeMap: Record<GenderFilter, string> = {
   all: "ALL",
@@ -13,6 +14,7 @@ const rankTypeMap: Record<RankingType, string> = {
   wished: "MANY_WISH_RECEIVE",
 };
 
+// 기존 API 함수 (React Query hook에서 사용)
 export const fetchRankingProducts = async (
   filter: GenderFilter,
   rankingType: RankingType,
@@ -26,4 +28,12 @@ export const fetchRankingProducts = async (
 
   const productsData = Array.isArray(data) ? data : data.data || [];
   return productsData;
+};
+
+// React Query Hook
+export const useRankingProducts = (filter: GenderFilter, rankingType: RankingType) => {
+  return useQuery({
+    queryKey: ['ranking', 'products', filter, rankingType],
+    queryFn: () => fetchRankingProducts(filter, rankingType),
+  });
 };

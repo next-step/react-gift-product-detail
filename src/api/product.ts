@@ -1,5 +1,7 @@
 import type { ProductSummary, ProductError } from "../types/product";
+import { useQuery } from "@tanstack/react-query";
 
+// 기존 API 함수 (React Query hook에서 사용)
 export const fetchProductSummary = async (
   productId: number,
 ): Promise<ProductSummary> => {
@@ -17,4 +19,13 @@ export const fetchProductSummary = async (
 
   // 실제 상품 정보는 result.data에 있음
   return result.data;
+};
+
+// React Query Hook
+export const useProductSummary = (productId: number) => {
+  return useQuery({
+    queryKey: ['product', 'summary', productId],
+    queryFn: () => fetchProductSummary(productId),
+    enabled: !!productId,
+  });
 };

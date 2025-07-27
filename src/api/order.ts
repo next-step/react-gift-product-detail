@@ -1,5 +1,7 @@
 import type { OrderRequest, OrderResponse, OrderError } from "../types/product";
+import { useMutation } from "@tanstack/react-query";
 
+// 기존 API 함수 (React Query hook에서 사용)
 export const createOrder = async (
   orderData: OrderRequest,
   authToken: string,
@@ -25,4 +27,20 @@ export const createOrder = async (
   }
 
   return data;
+};
+
+// React Query Hook
+export const useCreateOrder = () => {
+  return useMutation({
+    mutationFn: ({ orderData, authToken }: { orderData: OrderRequest; authToken: string }) =>
+      createOrder(orderData, authToken),
+    onSuccess: (data) => {
+      console.log("주문 생성 성공:", data);
+      // 주문 성공 시 필요한 처리 (예: 주문 완료 페이지로 이동, 장바구니 비우기 등)
+    },
+    onError: (error: OrderError) => {
+      console.error("주문 생성 실패:", error);
+      // 주문 실패 시 필요한 처리 (예: 에러 메시지 표시 등)
+    },
+  });
 };
