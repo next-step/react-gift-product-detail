@@ -1,6 +1,7 @@
 import axios from 'axios';
 import axiosInstance from './axiosInstance';
 
+//Tanstack-query로 리팩토링 하기 전 사용하던 POST 요청 추상 메서드
 interface PostRequestResult<T> {
   data: T | null;
   success: boolean;

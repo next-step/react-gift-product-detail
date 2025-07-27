@@ -27,7 +27,6 @@ import { fetchProductSummury } from '@apis/giftOrderApi';
 const GiftOrderPage = () => {
   // 데이터 fetch
   const { id } = useParams();
-
   const {
     data: productInfo,
     isError,
@@ -49,7 +48,7 @@ const GiftOrderPage = () => {
   const { isReceiveModalOpen, openReceiveModal, closeReceiveModal } =
     useReceiveModal(watch, setValue);
 
-  //초기화 로직
+  //보내는 사람 초기화 로직
   const { user } = useAuth();
   useEffect(() => {
     if (user?.name) {
@@ -79,7 +78,7 @@ const GiftOrderPage = () => {
   if (!productInfo)
     return <EmptyMessage>상품정보를 찾을 수 없습니다</EmptyMessage>;
 
-  // 가격 계산
+  // 주문하기 버튼(OrderButton)에 표시할 가격 계산
   const recipients = watch('recipients') ?? [];
   const totalQuantity = recipients.reduce(
     (acc, curr) => acc + curr.quantity,

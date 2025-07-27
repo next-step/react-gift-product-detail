@@ -11,6 +11,7 @@ const ProductGrid = ({
   toggleExpand,
   onClickItem,
 }: GridProps) => {
+  // 더보기 버튼이 클릭되지 않았을 경우 전체 배열중 6개만 이용(1등~6등)
   const visibleItems = isExpanded ? products : products.slice(0, 6);
   return (
     <>

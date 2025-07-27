@@ -17,6 +17,7 @@ import ProductGrid from './ProductGrid';
 import { useQuery } from '@tanstack/react-query';
 import { fetchRankedProducts } from '@apis/rankingApi';
 
+// Product 타입에 ranking을 추가해주는 함수
 const addRanking = (products: Product[]): RankedProduct[] => {
   return products.map((product, i) => ({
     ...product,
@@ -45,6 +46,7 @@ const RankingSection = () => {
     setSearchParams(newParams);
   };
 
+  // 랭킹 상품 API 요청
   const apiTargetType = Target_MAP[selectedTarget];
   const apiRankType = Rank_MAP[selectedRank];
   const { data, isError, isPending } = useQuery<Product[]>({
@@ -52,8 +54,10 @@ const RankingSection = () => {
     queryFn: () => fetchRankedProducts(apiTargetType, apiRankType),
   });
 
+  // Product 타입에 ranking을 추가
   const products = data ? addRanking(data) : [];
 
+  // 상품 클릭시 해당 상품의 order page로 이동
   const navigate = useNavigate();
   const handleClick = (item: RankedProduct) => {
     navigate(`/order/${item.id}`);

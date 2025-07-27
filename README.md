@@ -1,5 +1,7 @@
 # react-gift-product-list
 
+! VITE_API_BASE_URL에 대한 예시는 .env.example에 작성해두었습니다.
+
 ## 구현할 기능 목록
 
 - post: 로그인 리팩토링

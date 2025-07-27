@@ -3,17 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import handleAxiosError from '@utils/handleAxiosError';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface User {
-  email: string;
-  name: string;
-  authToken: string;
-}
+import type { LoginCredentials, User } from 'src/types/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -22,12 +12,18 @@ interface AuthContextType {
   isInitialized: boolean;
 }
 
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  // 유저 정보 및 초기화 종료 여부 Stae
   const [user, setUser] = useState<User | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // 세션 스토리지에 저장된 정보 불러오기
   useEffect(() => {
     const savedUser = sessionStorage.getItem('userInfo');
     if (savedUser) setUser(JSON.parse(savedUser));
@@ -42,8 +38,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     email,
     password,
   }: LoginCredentials): Promise<boolean> => {
-    //임시 검증 로직
-
     try {
       const data = await loginMutate({ email, password });
       setUser(data);
