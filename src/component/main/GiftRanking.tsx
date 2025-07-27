@@ -63,9 +63,9 @@ const GiftRanking = () => {
 
         </WishGroup>
       </CategoryGroup>
-      <EmptyDiv16h />
+      <EmptyDiv16h/>
       <ProductDiv>
-        <GiftRankingList targetType ={targetType} rankType = {rankType} />
+        <GiftRankingList targetType={targetType} rankType={rankType} />
       </ProductDiv>
     </GiftRanKingSection>
   );

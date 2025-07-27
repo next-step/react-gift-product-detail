@@ -22,7 +22,6 @@ function useFetchFromUrlT<T>(url: string, defaultT: T, infinite : boolean = fals
 
             } catch (error) {
                 setError(error as Error);
-                throw new Error(`${url} 데이터 Fetch 실패,  ${(error as Error).message}`);
             } finally {
                 setLoading(false);
             }

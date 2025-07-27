@@ -15,7 +15,7 @@ const PresentCardSelector= () => {
       <LowSlideDiv>
         {CardTemplete.map((card, i) => (
           <CardMiniImg
-            key={i}
+            key={card.id}
             src={card.thumbUrl}
             alt={card.defaultTextMessage}
             onClick={() => {

@@ -55,7 +55,7 @@ const Receiver = () => {
           </ReceiverList>
         )}
 
-        <ReceiverModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+        <ReceiverModal isOpen={isOpen} closeModal={() => setIsOpen(false)} />
         <EmptyDiv8h />
       </SideBlankDiv>
       <EmptyDiv24h />
