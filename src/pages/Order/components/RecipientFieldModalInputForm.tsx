@@ -57,9 +57,12 @@ const RecipientFieldModalInputForm = ({ index, remove }: RecipientFieldModalInpu
             <InputTitle>{config.title}</InputTitle>
             <InputWrapper>
               <Input
-                {...register(`recipients.${index}.${config.key}` as const)}
+                {...register(`recipients.${index}.${config.key}` as const, {
+                  valueAsNumber: config.key === "quantity",
+                })}
                 placeholder={config.placeholder}
                 errorMsg={errors.recipients?.[index]?.[config.key]?.message}
+                type={config.type}
               />
             </InputWrapper>
           </InputWrapper>

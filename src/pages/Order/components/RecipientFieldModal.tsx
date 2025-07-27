@@ -128,7 +128,7 @@ const AddBtn = styled.button<ComponentPropsWithoutRef<"button">>`
 const FieldWrapper = styled.div`
   flex: 1 1 0%;
   overflow: auto;
-  & > div:not(:first-to-type) {
+  & > div:not(:first-of-type) {
     border-top: 1px solid ${({ theme }) => theme.color.gray500};
     padding-top: ${({ theme }) => theme.spacing.spacing2};
     margin-top: ${({ theme }) => theme.spacing.spacing4};

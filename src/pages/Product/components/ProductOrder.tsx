@@ -102,4 +102,12 @@ const OrderBtn = styled(Link)`
   align-items: center;
   font: ${({ theme }) => theme.typography.body1Bold};
   cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.color.kakaoYellowHover};
+  }
+  &:active {
+    background-color: ${({ theme }) => theme.color.kakaoYellowActive};
+  }
 `;
