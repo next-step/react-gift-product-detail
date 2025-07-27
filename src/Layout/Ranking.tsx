@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import SexContainer from '@/pages/SexContainer';
 import CategoryContainer from '@/pages/CategoryContainer';
 import ItemContainer from '@/pages/ItemContainer';
@@ -14,15 +13,10 @@ function Ranking() {
     items,
     handleSelect,
     handleCategoryClick,
-    getRank,
   } = useRanking();
 
-  useEffect(() => {
-    getRank();
-  }, [selectedSex, selectCategory]);
-
-  if (isLoading) <>로딩중입니다.</>;
-  if (error) return <p>{error}</p>;
+  if (isLoading) return <div>로딩중입니다.</div>;
+  if (error) return <p>{String(error)}</p>;
 
   return (
     <RankingContainer>
