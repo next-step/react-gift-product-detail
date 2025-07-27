@@ -7,6 +7,7 @@ import type { ThemeInfo } from '@/types/theme';
 import type { Product } from '@/types/product';
 import Header from '@/components/Header';
 import styled from '@emotion/styled';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -19,56 +20,51 @@ const PageContainer = styled.div`
 const ThemeProductPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const [theme, setTheme] = useState<ThemeInfo | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  // 추가 상품 불러오기
-  const loadMore = useCallback(() => {
-    if (!themeId || loading || !hasMore) return;
-    setLoading(true);
-    fetchThemeProducts(Number(themeId), cursor, 10)
-      .then((res) => {
-        setProducts((prev) => [...prev, ...res.data.list]);
-        setCursor(res.data.cursor);
-        setHasMore(res.data.hasMoreList);
-      })
-      .catch(() => setError('상품 목록을 불러올 수 없습니다.'))
-      .finally(() => setLoading(false));
-  }, [themeId, cursor, loading, hasMore]);
-
-  // 최초 테마 정보 + 첫 상품 목록 불러오기
+  // 테마 정보는 기존 방식 유지
   useEffect(() => {
     if (!themeId) return;
-    setLoading(true);
     fetchThemeInfo(Number(themeId))
       .then((themeRes) => setTheme(themeRes.data))
       .catch(() => setError('테마 정보를 불러올 수 없습니다.'));
-
-    fetchThemeProducts(Number(themeId), 0, 10)
-      .then((productsRes) => {
-        setProducts(productsRes.data.list);
-        setCursor(productsRes.data.cursor);
-        setHasMore(productsRes.data.hasMoreList);
-        setError(null);
-      })
-      .catch(() => {
-        setError('상품 목록을 불러올 수 없습니다.');
-        setProducts([]);
-      })
-      .finally(() => setLoading(false));
   }, [themeId]);
 
-  // Intersection Observer로 하단 감지
+  // useInfiniteQuery로 상품 목록 무한 스크롤 처리
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    error: queryError,
+  } = useInfiniteQuery<
+    { list: Product[]; cursor: number; hasMoreList: boolean },
+    Error
+  >({
+    queryKey: ['theme-products', themeId],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await fetchThemeProducts(
+        Number(themeId),
+        pageParam as number,
+        10,
+      );
+      return res.data;
+    },
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMoreList ? lastPage.cursor : undefined,
+    enabled: !!themeId,
+    initialPageParam: 0,
+  });
+
+  // Intersection Observer로 하단 감지 → fetchNextPage
   useEffect(() => {
-    if (!hasMore) return;
+    if (!hasNextPage) return;
     const observer = new window.IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          loadMore();
+          fetchNextPage();
         }
       },
       { threshold: 1 },
@@ -77,20 +73,24 @@ const ThemeProductPage = () => {
     return () => {
       if (observerRef.current) observer.unobserve(observerRef.current);
     };
-  }, [loadMore, hasMore]);
+  }, [fetchNextPage, hasNextPage]);
 
-  if (loading && products.length === 0) return <div>로딩중...</div>;
-  if (error) return <div>{error}</div>;
+  if (isLoading) return <div>로딩중...</div>;
+  if (isError || error || queryError)
+    return <div>{error || queryError?.message || '에러 발생'}</div>;
   if (!theme) return <div>테마 정보를 찾을 수 없습니다.</div>;
+
+  // 모든 페이지의 상품을 합쳐서 전달
+  const products = data?.pages.flatMap((page) => page.list as Product[]) || [];
 
   return (
     <PageContainer>
       <Header />
       <ThemeHeroSection theme={theme} />
       <ProductList products={products} showRank={false} />
-      {loading && <div>로딩중...</div>}
+      {isLoading && <div>로딩중...</div>}
       <div ref={observerRef} style={{ height: 1 }} />
-      {!hasMore && products.length === 0 && <div>상품이 없습니다.</div>}
+      {!hasNextPage && products.length === 0 && <div>상품이 없습니다.</div>}
     </PageContainer>
   );
 };

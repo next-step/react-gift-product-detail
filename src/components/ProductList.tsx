@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Product } from '@/types/product';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProductRanking } from '@/api/product';
 
 const List = styled.ul`
   display: grid;
@@ -57,6 +59,19 @@ interface ProductListProps {
   showRank?: boolean;
 }
 
+const getRankColor = (rank: number) => {
+  switch (rank) {
+    case 1:
+      return '#FF3B30'; // 1등: 빨강
+    case 2:
+      return '#FF9500'; // 2등: 주황
+    case 3:
+      return '#FF2D55'; // 3등: 분홍
+    default:
+      return '#C4C4C4'; // 그 외: 회색
+  }
+};
+
 const RankBadge = styled.div<{ rank: number }>`
   position: absolute;
   top: 16px;
@@ -70,14 +85,7 @@ const RankBadge = styled.div<{ rank: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ rank }) =>
-    rank === 1
-      ? '#FF3B30' // 1등: 빨강
-      : rank === 2
-        ? '#FF3B30' // 2등: 주황
-        : rank === 3
-          ? '#FF3B30' // 3등: 분홍
-          : '#C4C4C4'}; // 그 외: 회색
+  background: ${({ rank }) => getRankColor(rank)};
   z-index: 2;
 `;
 
@@ -85,41 +93,16 @@ function ProductList({
   products: propProducts,
   showRank = true,
 }: ProductListProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (propProducts) {
-      setProducts(propProducts);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    fetch(`${import.meta.env.VITE_API_URL}/api/products/ranking`)
-      .then((res) => {
-        if (!res.ok) throw new Error('서버 에러');
-        return res.json();
-      })
-      .then((data) => {
-        if (Array.isArray(data.data)) {
-          setProducts(data.data);
-        } else {
-          setProducts([]);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setError('데이터를 불러오지 못했습니다.');
-        setLoading(false);
-      });
-  }, [propProducts]);
-
   // 더보기/접기 state
   const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE);
-  const visibleProducts = products.slice(0, visibleCount);
+
+  const { data, isLoading, isError, error } = useQuery<Product[], Error>({
+    queryKey: ['products', 'ranking'],
+    queryFn: fetchProductRanking,
+  });
+
+  const products: Product[] = propProducts || (Array.isArray(data) ? data : []);
+  const visibleProducts: Product[] = products.slice(0, visibleCount);
   const isAllVisible = visibleCount >= products.length;
 
   const navigate = useNavigate();
@@ -133,53 +116,47 @@ function ProductList({
     }
   };
 
+  if (isLoading) return <div>로딩 중 ...</div>;
+  if (isError) return <div>{error?.message}</div>;
+  if (visibleProducts.length === 0) return <div>상품 목록이 없습니다.</div>;
+
   return (
     <>
-      {loading ? (
-        <div>로딩 중 ...</div>
-      ) : error ? (
-        <div>{error}</div>
-      ) : visibleProducts.length === 0 ? (
-        <div>상품 목록이 없습니다.</div>
-      ) : (
+      <List>
+        {visibleProducts.map((p, idx) => (
+          <Item
+            key={p.id}
+            onClick={() => handleItemClick(p.id)}
+            style={{ cursor: 'pointer' }}
+          >
+            {showRank && <RankBadge rank={idx + 1}>{idx + 1}</RankBadge>}
+            <img
+              src={p.imageURL}
+              alt={p.name}
+              style={{ width: '100%', borderRadius: 8 }}
+            />
+            <div style={{ color: '#888', fontSize: 14, marginTop: 8 }}>
+              {p.brandInfo.name}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 16, marginTop: 4 }}>
+              {p.name}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 18, marginTop: 4 }}>
+              {p.price.sellingPrice.toLocaleString()} 원
+            </div>
+          </Item>
+        ))}
+      </List>
+      {products.length > DEFAULT_VISIBLE && (
         <>
-          <List>
-            {visibleProducts.map((p, idx) => (
-              <Item
-                key={p.id}
-                onClick={() => handleItemClick(p.id)}
-                style={{ cursor: 'pointer' }}
-              >
-                {showRank && <RankBadge rank={idx + 1}>{idx + 1}</RankBadge>}
-                <img
-                  src={p.imageURL}
-                  alt={p.name}
-                  style={{ width: '100%', borderRadius: 8 }}
-                />
-                <div style={{ color: '#888', fontSize: 14, marginTop: 8 }}>
-                  {p.brandInfo.name}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, marginTop: 4 }}>
-                  {p.name}
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 18, marginTop: 4 }}>
-                  {p.price.sellingPrice.toLocaleString()} 원
-                </div>
-              </Item>
-            ))}
-          </List>
-          {products.length > DEFAULT_VISIBLE && (
-            <>
-              {!isAllVisible ? (
-                <MoreButton onClick={() => setVisibleCount(products.length)}>
-                  더보기
-                </MoreButton>
-              ) : (
-                <MoreButton onClick={() => setVisibleCount(DEFAULT_VISIBLE)}>
-                  접기
-                </MoreButton>
-              )}
-            </>
+          {!isAllVisible ? (
+            <MoreButton onClick={() => setVisibleCount(products.length)}>
+              더보기
+            </MoreButton>
+          ) : (
+            <MoreButton onClick={() => setVisibleCount(DEFAULT_VISIBLE)}>
+              접기
+            </MoreButton>
           )}
         </>
       )}

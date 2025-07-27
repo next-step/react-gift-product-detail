@@ -5,3 +5,9 @@ export interface ThemeInfo {
   description: string;
   backgroundColor: string;
 }
+
+export type Theme = {
+  themeId: number;
+  name: string;
+  image: string;
+};
