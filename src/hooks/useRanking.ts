@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { SEX_TYPE } from '@/types/sex';
 import type { SexType } from '@/types/sex';
 import type { CategoryType } from '@/types/category';
 import { CATEGORY_TYPE } from '@/types/category';
 import { getRanking } from '@/apis/product';
 import type { RankItemType } from '@/types/DTO/productDTO';
+import { useQuery } from '@tanstack/react-query';
 
 function useRanking() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+
   function getInitialSex(): SexType {
     const saved = localStorage.getItem('selectedSex');
     if (saved && Object.values(SEX_TYPE).some((sex) => sex.value === saved))
@@ -34,41 +33,26 @@ function useRanking() {
     setSelectCategory(category);
     localStorage.setItem('selectedCategory', category);
   }
-  const [items, setItems] = useState<RankItemType[]>([]);
-
-  const getRank = async () => {
-    try {
-      const data = await getRanking({
+  const { data, isLoading, error } = useQuery<RankItemType[]>({
+    queryKey: ['ranking', selectedSex, selectCategory],
+    queryFn: () =>
+      getRanking({
         targetType: selectedSex,
         rankType: selectCategory,
-      });
-      console.log(data);
-      setItems(data);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        const status = err.response?.data?.data?.status || '에러 발생';
-        setError(status);
-      } else {
-        setError('알 수 없는 에러');
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+      }),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
   return {
     isLoading,
     error,
     selectedSex,
     selectCategory,
-    items,
-    setIsLoading,
-    setError,
+    items: data || [],
     setSelectedSex,
     setSelectCategory,
     handleSelect,
     handleCategoryClick,
-    getRank,
   };
 }
 

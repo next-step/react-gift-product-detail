@@ -9,10 +9,12 @@ import {
 } from '@/styles/Login.styles';
 import { postLogin } from '@/apis/login';
 import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
 import { useContext } from 'react';
+import { AxiosError } from 'axios';
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import { setAccessToken } from '@/apis/apiClient';
+import { useMutation } from '@tanstack/react-query';
+import type { LoginRequestDTO, LoginResponseDto } from '@/types/DTO/loginDTO';
 
 type LoginProps = {
   onLogin: () => void;
@@ -33,27 +35,30 @@ function Login({ onLogin }: LoginProps) {
   } = useLoginForm();
   const { setLoginInfo } = useContext(LoginInfoContext);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      if (!isValidForm()) return;
-
-      const responseInfo = await postLogin({ email: id, password: pw });
-      setAccessToken(responseInfo.authToken);
-      setLoginInfo(responseInfo);
-      localStorage.setItem('userInfo', JSON.stringify(responseInfo));
+  const loginMutation = useMutation<LoginResponseDto, Error, LoginRequestDTO>({
+    mutationFn: postLogin,
+    onSuccess: (data) => {
+      setAccessToken(data.authToken);
+      setLoginInfo(data);
+      localStorage.setItem('userInfo', JSON.stringify(data));
       onLogin();
-    } catch (err) {
-      const error = err as AxiosError;
-      if (error.response && error.response.status >= 400 && error.response.status < 500) {
+    },
+    onError: (err: Error) => {
+      const axiosError = err as AxiosError;
+      if (axiosError.response && axiosError.response.status >= 400 && axiosError.response.status < 500) {
         toast.error(
-          (error.response.data as { message?: string })?.message ||
-            '클라이언트 에러가 발생했습니다.',
+          (axiosError.response.data as { message?: string })?.message || '클라이언트 에러가 발생했습니다.',
         );
       } else {
         toast.error('알 수 없는 에러가 발생했습니다.');
       }
-    }
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isValidForm()) return;
+    loginMutation.mutate({ email: id, password: pw });
   };
 
   return (

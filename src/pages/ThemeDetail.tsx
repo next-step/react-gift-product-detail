@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { getThemeInfo } from '@/apis/theme';
+import { useEffect } from 'react';
 import type { ThemeInfoResponseDTO } from '@/types/DTO/themeDTO';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import {
@@ -13,23 +13,32 @@ import {
   ProductBrand,
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
+import { useQuery } from '@tanstack/react-query';
+
 
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
-  const [themeInfo, setThemeInfo] = useState<ThemeInfoResponseDTO>();
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
+  const {
+    data: themeInfo,
+    isLoading,
+    isError,
+  } = useQuery<ThemeInfoResponseDTO>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => getThemeInfo(Number(themeId)),
+  });
+
   useEffect(() => {
-    if (!themeId) return;
-    getThemeInfo(Number(themeId))
-      .then((data) => setThemeInfo(data))
-      .catch((err) => {
-        if (err?.response?.status === 404) {
-          navigate('/');
-        }
-      });
-  }, [themeId, navigate]);
+    if (isError) {
+      navigate('/');
+    }
+  }, [isError, navigate]);
+
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <ThemeContainerWrapper>

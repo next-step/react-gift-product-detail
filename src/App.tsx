@@ -13,6 +13,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useContext } from 'react';
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import ThemeDetail from './pages/ThemeDetail';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   const navigate = useNavigate();
@@ -29,27 +32,29 @@ function App() {
   }
 
   return (
-    <AppWrapper>
-      <ToastContainer autoClose={2000} />
-      <ResetStyles />
-      <Routes>
-        <Route
-          element={
-            <WithHeaderLayout
-              handleBackClick={handleBackClick}
-              handleLoginClick={HandleLoginClick}
-            />
-          }
-        >
-          <Route path="/" element={<MainLayout />} />
-          <Route path="/login" element={<Login onLogin={handleBackClick} />} />
-          <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
-          <Route path="/order/:orderId" element={<Order />} />
-          <Route path="/themes/:themeId" element={<ThemeDetail />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </AppWrapper>
+    <QueryClientProvider client={queryClient}>
+      <AppWrapper>
+        <ToastContainer autoClose={2000} />
+        <ResetStyles />
+        <Routes>
+          <Route
+            element={
+              <WithHeaderLayout
+                handleBackClick={handleBackClick}
+                handleLoginClick={HandleLoginClick}
+              />
+            }
+          >
+            <Route path="/" element={<MainLayout />} />
+            <Route path="/login" element={<Login onLogin={handleBackClick} />} />
+            <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
+            <Route path="/order/:orderId" element={<Order />} />
+            <Route path="/themes/:themeId" element={<ThemeDetail />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AppWrapper>
+    </QueryClientProvider>
   );
 }
 

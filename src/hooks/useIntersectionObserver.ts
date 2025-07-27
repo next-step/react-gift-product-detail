@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { RankItemType } from '@/types/DTO/productDTO';
 import { getThemeProducts } from '@/apis/theme';
+import { useQuery } from '@tanstack/react-query';
+import type { ThemeProductsResponseDTO } from '@/types/DTO/themeDTO';
 
 export function useIntersectionObserver(themeId: number) {
   const [products, setProducts] = useState<RankItemType[]>([]);
@@ -23,18 +25,22 @@ export function useIntersectionObserver(themeId: number) {
     [loading, hasMore],
   );
 
+  const { data, isLoading } = useQuery<ThemeProductsResponseDTO>({
+    queryKey: ['themeProducts', themeId, cursor],
+    queryFn: () => getThemeProducts(Number(themeId), cursor, limit),
+  });
+
   useEffect(() => {
-    if (!themeId || !hasMore) return;
-    setLoading(true);
-    getThemeProducts(Number(themeId), cursor, limit)
-      .then((data) => {
-        setProducts((prev) => [...prev, ...data.list]);
-        setHasMore(data.hasMoreList);
-      })
-      .finally(() => {
-        setTimeout(() => setLoading(false));
-      });
-  }, [themeId, cursor]);
+    if (data) {
+      setProducts((prev) => [...prev, ...data.list]);
+      setHasMore(data.hasMoreList);
+      setLoading(false);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
   return { products, loading, observer, lastProductRef };
 }
