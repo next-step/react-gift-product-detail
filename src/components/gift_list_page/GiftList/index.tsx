@@ -4,8 +4,9 @@ import type { GiftItemData } from '@/types/giftItemData';
 import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
-import publicClient from '@/api/clients/publicClient';
 import { keyframes } from '@emotion/react';
+import getGiftItems from '@/api/services/getGiftItems';
+import { useQuery } from '@tanstack/react-query';
 
 const Container = styled.div`
   width: 100%;
@@ -50,65 +51,47 @@ const ErrorText = styled.div`
   font-weight: 500;
 `;
 
+type Params = {
+  targetType: string;
+  rankType: string;
+};
+
 export const GiftList = () => {
-  const [loading, setLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [giftItemList, getGiftItemList] = useState<GiftItemData[] | null>(null);
   const [giftItems, setGiftItems] = useState<GiftItemData[]>([]);
   const [isViewMore, setIsViewMore] = useState(false);
   const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
+  const { data, isLoading, isError } = useQuery<
+    GiftItemData[],
+    Error,
+    GiftItemData[],
+    [string, Params]
+  >({
+    queryKey: ['giftItems', { targetType, rankType }],
+    queryFn: getGiftItems,
+  });
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await publicClient.get(
-          `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
-        );
-        const { data } = response.data;
-        getGiftItemList(data);
-        setIsError(false);
-      } catch (error) {
-        setIsError(true);
-        setLoading(false);
-        console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-      }
-    };
-    setTimeout(() => {
-      getData();
-    }, 1000);
-  }, [targetType, rankType]);
-
-  useEffect(() => {
-    if (giftItemList === null) return;
-
-    setLoading(false);
-  }, [giftItemList]);
-
-  useEffect(() => {
-    if (giftItemList === null) return;
+    if (isLoading) return;
 
     if (isViewMore) {
-      setGiftItems(giftItemList!);
+      setGiftItems(data!);
     } else {
-      setGiftItems(giftItemList!.slice(0, 6));
+      setGiftItems(data!.slice(0, 6));
     }
-  }, [giftItemList, isViewMore]);
+  }, [data, isLoading, isViewMore]);
 
   return (
     <>
       <Header
-        getGiftItemList={getGiftItemList}
-        setIsError={setIsError}
         targetType={targetType}
         setTargetType={setTargetType}
         rankType={rankType}
         setRankType={setRankType}
-        setLoading={setLoading}
       />
       <Container>
-        {loading && <Spinner />}
-        {!loading && (
+        {isLoading && <Spinner />}
+        {!isLoading && (
           <List>
             {giftItems.map((item, i) => {
               return (
@@ -128,9 +111,9 @@ export const GiftList = () => {
         {isError && (
           <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
         )}
-        {!loading && giftItemList?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
+        {!isLoading && giftItems?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
       </Container>
-      {!loading && !isError && !(giftItemList?.length === 0) && (
+      {!isLoading && !isError && !(giftItems?.length === 0) && (
         <MoreButton isViewMore={isViewMore} setIsViewMore={setIsViewMore} />
       )}
     </>
