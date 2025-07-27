@@ -1,15 +1,4 @@
-interface RecipientForm {
-  recipientName: string;
-  phoneNumber: string;
-  amount: number;
-}
-
-type FormValues = {
-  message: string;
-  senderName: string;
-  recipientInfo: RecipientForm[];
-};
-
+import type { FormValues } from '@/types/orderForm';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
