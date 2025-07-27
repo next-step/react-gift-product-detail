@@ -29,6 +29,10 @@ export const showFetchErrorToast = (error: Error, onOpen?: () => void) => {
         ...defaultToastOptions,
       });
     }
+  } else {
+    if (onOpen) {
+      onOpen();
+    }
   }
 };
 
