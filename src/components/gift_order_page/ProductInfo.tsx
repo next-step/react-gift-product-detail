@@ -1,10 +1,10 @@
-import publicClient from '@/api/clients/publicClient';
 import useProductInfo from '@/hooks/useProductInfo';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import type { GiftItemData } from '@/types/giftItemData';
+import { useQuery } from '@tanstack/react-query';
+import { getGiftItemDetail } from '@/api/services/getGiftItemDetail';
 
 const Container = styled.div`
   display: flex;
@@ -80,52 +80,40 @@ const PriceValue = styled.div`
   margin-left: 0.3rem;
 `;
 
+type Params = {
+  id: number;
+};
+
 export const ProductInfo = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const [currentGift, setCurrentGift] = useState<GiftItemData>();
+  const { data, isLoading } = useQuery<GiftItemData, Error, GiftItemData, [string, Params]>({
+    queryKey: ['giftItemDetail', { id: parsedId }],
+    queryFn: getGiftItemDetail,
+  });
   const { setId, setName, setPrice, setBrand } = useProductInfo();
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await publicClient.get(`/api/products/${parsedId}`);
-        const { data } = response.data;
-        setCurrentGift(data);
-      } catch {
-        toast.warn('⚠️ 상품 요청 처리 중 오류가 발생했습니다.', {
-          style: {
-            width: '25rem',
-          },
-        });
-        navigate('/');
-      }
-    };
-    getData();
-  }, [navigate, parsedId]);
+    if (isLoading) return;
 
-  useEffect(() => {
-    if (!currentGift) return;
-
-    setId(currentGift.id);
-    setName(currentGift.name);
-    setPrice(currentGift.price.basicPrice);
-    setBrand(currentGift.brandInfo.name);
-  }, [currentGift, setBrand, setId, setName, setPrice]);
+    setId(data!.id);
+    setName(data!.name);
+    setPrice(data!.price.basicPrice);
+    setBrand(data!.brandInfo.name);
+  }, [data, isLoading, setBrand, setId, setName, setPrice]);
 
   return (
     <Container>
       <Label>상품 정보</Label>
       <Body>
-        {currentGift?.imageURL && <ProductImg src={currentGift.imageURL} />}
+        {data?.imageURL && <ProductImg src={data.imageURL} />}
         <Info>
-          <Name>{currentGift?.name}</Name>
-          <Brand>{currentGift?.brandInfo.name}</Brand>
+          <Name>{data?.name}</Name>
+          <Brand>{data?.brandInfo.name}</Brand>
           <Price>
             <PriceLabel>상품가</PriceLabel>
-            <PriceValue>{currentGift?.price.basicPrice}원</PriceValue>
+            <PriceValue>{data?.price.basicPrice}원</PriceValue>
           </Price>
         </Info>
       </Body>
