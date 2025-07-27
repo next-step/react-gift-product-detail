@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import type { BaseResponse } from '@/types/common';
+import type { Theme } from '@/types/theme';
+import { fetchThemes } from '@/api/theme';
 
 const Box = styled.div`
   background-color: white;
@@ -50,20 +52,11 @@ const Name = styled.div`
   font-size: 12px;
 `;
 
-type Theme = {
-  themeId: number;
-  name: string;
-  image: string;
-};
-
 function CategoryList({ onHide }: { onHide?: () => void }) {
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useQuery<Theme[], Error>({
     queryKey: ['themes'],
-    queryFn: async () => {
-      const res = await axios.get<BaseResponse<Theme[]>>('/api/themes');
-      return res.data.data;
-    },
+    queryFn: fetchThemes,
   });
 
   const themes: Theme[] = data || [];

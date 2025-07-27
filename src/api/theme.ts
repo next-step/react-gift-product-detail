@@ -1,7 +1,12 @@
 import axios from 'axios';
-import type { ThemeInfo } from '@/types/theme';
+import type { ThemeInfo, Theme } from '@/types/theme';
 import type { Product } from '@/types/product';
 import type { BaseResponse } from '@/types/common';
+
+export async function fetchThemes(): Promise<Theme[]> {
+  const res = await axios.get<BaseResponse<Theme[]>>('/api/themes');
+  return res.data.data;
+}
 
 export async function fetchThemeInfo(themeId: number) {
   const res = await axios.get<BaseResponse<ThemeInfo>>(
