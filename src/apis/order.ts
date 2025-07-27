@@ -8,7 +8,7 @@ export async function postOrder({
   ordererName,
   receivers,
 }: orderRequsetDTO): Promise<orderResponseDTO> {
-  const response = await apiClient.post('/order', {
+  const response = await apiClient.post<orderResponseDTO>('/order', {
     productId,
     message,
     messageCardId,

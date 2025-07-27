@@ -5,6 +5,7 @@ import type {
   ProductSummaryRequestDTO,
   ProductSummaryResponseDTO,
   RankingQuery,
+  ProductSummary,
 } from '@/types/DTO/productDTO';
 
 export async function getRanking({ targetType, rankType }: RankingQuery): Promise<RankItemType[]> {
@@ -17,9 +18,7 @@ export async function getRanking({ targetType, rankType }: RankingQuery): Promis
   return response.data.data;
 }
 
-export async function getSummary({
-  productId,
-}: ProductSummaryRequestDTO): Promise<ProductSummaryResponseDTO> {
+export async function getSummary({ productId }: ProductSummaryRequestDTO): Promise<ProductSummary> {
   const response = await apiClient.get<ProductSummaryResponseDTO>(`/products/${productId}/summary`);
-  return response.data;
+  return response.data.data;
 }
