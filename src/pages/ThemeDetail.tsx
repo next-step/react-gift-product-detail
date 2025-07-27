@@ -15,6 +15,7 @@ import {
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
 
+
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();

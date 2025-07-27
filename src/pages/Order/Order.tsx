@@ -130,7 +130,6 @@ function Order() {
       })),
     };
 
-    // 주문 성공 시 상세 정보를 보여주기 위해 mutation에 context 전달
     orderMutation.mutate(orderData, {
       onSuccess: () => {
         alert(

@@ -8,6 +8,7 @@ import type { RankItemType } from '@/types/DTO/productDTO';
 import { useQuery } from '@tanstack/react-query';
 
 function useRanking() {
+
   function getInitialSex(): SexType {
     const saved = localStorage.getItem('selectedSex');
     if (saved && Object.values(SEX_TYPE).some((sex) => sex.value === saved))
@@ -42,7 +43,6 @@ function useRanking() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
-
   return {
     isLoading,
     error,

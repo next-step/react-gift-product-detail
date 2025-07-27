@@ -17,7 +17,6 @@ export async function getRanking({ targetType, rankType }: RankingQuery): Promis
   });
   return response.data.data;
 }
-
 export async function getSummary({ productId }: ProductSummaryRequestDTO): Promise<ProductSummary> {
   const response = await apiClient.get<ProductSummaryResponseDTO>(`/products/${productId}/summary`);
   return response.data.data;
