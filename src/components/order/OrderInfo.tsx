@@ -31,8 +31,8 @@ interface ApiProductData {
   id: number;
   name: string;
   imageURL: string;
-  brandName: string; 
-  price: number; 
+  brandName: string;
+  price: number;
 }
 
 export interface ProductSummary {
@@ -91,7 +91,7 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     data: productInfo,
     isLoading,
     isError,
-  } = useQuery<ApiProductData, Error, ProductSummary>({ 
+  } = useQuery<ApiProductData, Error, ProductSummary>({
     queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
     queryFn: () => fetchProductSummary(giftId!),
     enabled: !!giftId,
@@ -104,12 +104,12 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
         brandInfo: {
           id: 0,
           name: apiData.brandName,
-          imageURL: '', 
+          imageURL: '',
         },
         price: {
           basicPrice: apiData.price,
-          sellingPrice: apiData.price, 
-          discountRate: 0, 
+          sellingPrice: apiData.price,
+          discountRate: 0,
         },
       };
     },
@@ -118,16 +118,8 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
   useEffect(() => {
     if (!giftId) {
       toast.error('잘못된 접근입니다.');
-      navigate('/');
     }
-  }, [giftId, navigate]);
-
-  useEffect(() => {
-    if (isError) {
-      toast.error('존재하지 않는 상품입니다.');
-      navigate('/');
-    }
-  }, [isError, navigate]);
+  }, [giftId]);
 
   const validateReceivers = () => {
     if (receiverList.length === 0) {
@@ -186,12 +178,29 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     }
   };
 
-  if (isLoading || !productInfo) {
-    return <div>상품 정보를 불러오는 중...</div>;
+  if (isLoading) {
+    return (
+      <Wrapper>
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <p style={{ fontSize: '16px' }}>상품 정보를 불러오는 중입니다...</p>
+        </div>
+      </Wrapper>
+    );
   }
 
-  if (isError) {
-    return <div>상품 정보를 불러오는 데 실패했습니다.</div>;
+  if (isError || !productInfo) {
+    return (
+      <Wrapper>
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <p style={{ fontSize: '16px', marginBottom: '16px' }}>
+            상품 정보를 불러오는 데 실패했습니다.
+          </p>
+          <OrderButton type="button" onClick={() => navigate('/')}>
+            홈으로 돌아가기
+          </OrderButton>
+        </div>
+      </Wrapper>
+    );
   }
 
   return (
@@ -239,7 +248,9 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
             </ProductDetails>
           </ProductInfo>
         </Section>
-        <OrderButton type="submit">{productInfo.price.sellingPrice.toLocaleString()}원 주문하기</OrderButton>
+        <OrderButton type="submit">
+          {productInfo.price.sellingPrice.toLocaleString()}원 주문하기
+        </OrderButton>
       </form>
     </Wrapper>
   );
