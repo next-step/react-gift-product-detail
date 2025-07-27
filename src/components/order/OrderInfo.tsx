@@ -6,6 +6,9 @@ import ReceiverInfo from '@/components/order/ReceiverInfo';
 import { fetchProductSummary } from '@/api/productApi';
 import { submitOrder } from '@/api/orderApi';
 import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { isAxiosError } from 'axios';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 
 import {
   Wrapper,
@@ -23,8 +26,30 @@ import {
 } from '@/components/order/Order.style';
 
 import type { Receiver } from '@/types/receiver';
-import { useState, useEffect } from 'react';
-import { isAxiosError } from 'axios';
+
+interface ApiProductData {
+  id: number;
+  name: string;
+  imageURL: string;
+  brandName: string; 
+  price: number; 
+}
+
+export interface ProductSummary {
+  id: number;
+  name: string;
+  imageURL: string;
+  brandInfo: {
+    id: number;
+    name: string;
+    imageURL: string;
+  };
+  price: {
+    basicPrice: number;
+    sellingPrice: number;
+    discountRate: number;
+  };
+}
 
 interface GiftFormValues {
   sender: string;
@@ -38,7 +63,7 @@ interface GiftSenderProps {
 const GiftForm = ({ templateMessage }: GiftSenderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const giftId = location.state?.id;
+  const giftId = location.state?.id as number | undefined;
 
   const [receiverList, setReceiverList] = useState<Receiver[]>([]);
   const { user } = useAuth();
@@ -66,13 +91,38 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     data: productInfo,
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ['product', giftId],
-    queryFn: () => fetchProductSummary(giftId!), 
+  } = useQuery<ApiProductData, Error, ProductSummary>({ 
+    queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
+    queryFn: () => fetchProductSummary(giftId!),
     enabled: !!giftId,
+
+    select: (apiData) => {
+      return {
+        id: apiData.id,
+        name: apiData.name,
+        imageURL: apiData.imageURL,
+        brandInfo: {
+          id: 0,
+          name: apiData.brandName,
+          imageURL: '', 
+        },
+        price: {
+          basicPrice: apiData.price,
+          sellingPrice: apiData.price, 
+          discountRate: 0, 
+        },
+      };
+    },
   });
 
-    useEffect(() => {
+  useEffect(() => {
+    if (!giftId) {
+      toast.error('잘못된 접근입니다.');
+      navigate('/');
+    }
+  }, [giftId, navigate]);
+
+  useEffect(() => {
     if (isError) {
       toast.error('존재하지 않는 상품입니다.');
       navigate('/');
@@ -84,34 +134,27 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
       toast.error('최소 1명의 받는 사람을 등록해주세요.');
       return false;
     }
-
     const phoneSet = new Set<string>();
     for (let i = 0; i < receiverList.length; i++) {
       const r = receiverList[i];
-
       if (!r.name.trim()) {
         toast.error(`${i + 1}번 받는 사람 이름을 입력해주세요.`);
         return false;
       }
-
       if (!/^010\d{8}$/.test(r.phone)) {
         toast.error(`${i + 1}번 전화번호는 01012345678 형식이어야 합니다.`);
         return false;
       }
-
       if (phoneSet.has(r.phone)) {
         toast.error(`${i + 1}번 전화번호가 중복됩니다.`);
         return false;
       }
-
       phoneSet.add(r.phone);
-
       if (r.quantity < 1) {
         toast.error(`${i + 1}번 수량은 1 이상이어야 합니다.`);
         return false;
       }
     }
-
     return true;
   };
 
@@ -134,7 +177,7 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
       toast.success('주문이 완료되었습니다!');
       navigate('/');
     } catch (err) {
-      if (isAxiosError(err) && err.response?.status === 401)  {
+      if (isAxiosError(err) && err.response?.status === 401) {
         toast.error('로그인이 만료되었습니다.');
         navigate('/login');
       } else {
@@ -143,8 +186,13 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     }
   };
 
-  if (isLoading) return <div>상품 정보를 불러오는 중입니다...</div>;
-  if (isError || !productInfo) return <div>상품 정보가 존재하지 않습니다.</div>;
+  if (isLoading || !productInfo) {
+    return <div>상품 정보를 불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return <div>상품 정보를 불러오는 데 실패했습니다.</div>;
+  }
 
   return (
     <Wrapper>
@@ -183,7 +231,7 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
         <Section>
           <Label>상품 정보</Label>
           <ProductInfo>
-            <ProductImage src={productInfo.imageURL} alt={productInfo.name} />
+            <ProductImage src={productInfo.imageURL} alt={productInfo.name ?? '상품 이미지'} />
             <ProductDetails>
               <strong>{productInfo.name}</strong>
               <span>{productInfo.brandInfo.name}</span>
@@ -191,10 +239,7 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
             </ProductDetails>
           </ProductInfo>
         </Section>
-
-        <OrderButton type="submit">
-          {productInfo.price.sellingPrice.toLocaleString()}원 주문하기
-        </OrderButton>
+        <OrderButton type="submit">{productInfo.price.sellingPrice.toLocaleString()}원 주문하기</OrderButton>
       </form>
     </Wrapper>
   );

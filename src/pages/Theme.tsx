@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import NavigationBar from '@/components/navigation-bar/NavigationBar';
@@ -11,18 +10,15 @@ import {
   Gap,
   LoadingWrapper,
 } from '@/components/theme/TopBanner.style';
-
 import { ProductGrid } from '@/components/theme/ThemeGrid.style';
 import { FadeLoader } from 'react-spinners';
-import { fetchThemeInfo, fetchThemeProducts } from '@/api/themesApi';
-import type { ThemeInfo } from '@/types/themeInfo';
-import type { ThemeProductResponse } from '@/types/themeProduct';
 import ThemeProductCard from '@/components/theme/ThemeProductCard';
+import { useThemeInfo } from '@/hooks/useThemeInfo';
+import { useThemeProducts } from '@/hooks/useThemeProducts';
 
 const Theme = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
-
   const observerRef = useRef<IntersectionObserver | null>(null);
   const lastItemRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,17 +26,7 @@ const Theme = () => {
     data: themeInfo,
     isLoading: themeLoading,
     isError: themeError,
-  } = useQuery<ThemeInfo, Error>({
-    queryKey: ['theme', themeId],
-    queryFn: () => fetchThemeInfo(Number(themeId)),
-    enabled: !!themeId,
-  });
-
-  useEffect(() => {
-    if (themeError) {
-      navigate('/');
-    }
-  }, [themeError, navigate]);
+  } = useThemeInfo(Number(themeId));
 
   const {
     data,
@@ -48,23 +34,18 @@ const Theme = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading: productLoading,
-  } = useInfiniteQuery<ThemeProductResponse, Error>({
-    queryKey: ['theme-products', themeId],
-    queryFn: ({ pageParam }: { pageParam: unknown }) =>
-      fetchThemeProducts(Number(themeId), pageParam as number),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
-    enabled: !!themeId,
-  });
+  } = useThemeProducts(Number(themeId));
+
+  useEffect(() => {
+    if (themeError) navigate('/');
+  }, [themeError, navigate]);
 
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
     if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchNextPage();
-      }
+      if (entries[0].isIntersecting) fetchNextPage();
     });
 
     if (lastItemRef.current) {
@@ -98,7 +79,9 @@ const Theme = () => {
       </HeroSection>
 
       {products.length === 0 ? (
-        <p style={{ textAlign: 'center', padding: '40px', fontSize: '16px' }}>상품이 없습니다.</p>
+        <p style={{ textAlign: 'center', padding: '40px', fontSize: '16px' }}>
+          상품이 없습니다.
+        </p>
       ) : (
         <ProductGrid>
           {products.map((product, index) => {

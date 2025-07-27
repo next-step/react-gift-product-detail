@@ -1,33 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { fetchProductRankings } from '@/api/productRankingApi';
-import type { ProductRanking,GiftGridProps } from '@/types/giftRankingTheme';
 import { FadeLoader } from 'react-spinners';
 import GiftItem from '@/components/gift-ranking/GiftItem';
-import { GridWrapper, MoreButton, ButtonWrapper,LoadingWrapper ,EmptyMessage} from '@/components/gift-ranking/Grid.style';
 import { useAuth } from '@/context/AuthContext';
-
+import { useProductRankings } from '@/hooks/useProductRankings';
+import type { GiftGridProps } from '@/types/giftRankingTheme';
+import { GridWrapper, MoreButton, ButtonWrapper, LoadingWrapper, EmptyMessage } from './Grid.style';
 
 const GiftGrid = ({ gender, category }: GiftGridProps) => {
   const [visibleCount, setVisibleCount] = useState(6);
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
-  const {
-    data: productRankings,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['productRanking', gender, category],
-    queryFn: () =>
-      fetchProductRankings(category.toUpperCase(), gender.toUpperCase()).then(
-        (res) => res.data.data
-      ),
-  });
-  
+  const { data: productRankings, isLoading, isError } = useProductRankings(category, gender);
 
-const handleCount = () => {
+  const handleCount = () => {
     setVisibleCount((prev) =>
       productRankings && visibleCount >= productRankings.length ? 6 : prev + 6
     );
@@ -51,11 +38,10 @@ const handleCount = () => {
 
   const visibleGifts = productRankings.slice(0, visibleCount);
 
-
   return (
     <>
       <GridWrapper>
-        {visibleGifts.map((gift:ProductRanking, index:number) => (
+        {visibleGifts.map((gift, index) => (
           <GiftItem
             key={gift.id}
             id={gift.id}
@@ -71,6 +57,7 @@ const handleCount = () => {
                 navigate('/login');
                 return;
               }
+              navigate('/order', { state: { id: gift.id } });
               navigate('/order', { state: { id: gift.id } });
             }}
           />

@@ -1,12 +1,10 @@
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
-import { fetchThemes } from '@/api/themesApi';
-import type { giftCategoryTheme } from '@/types/giftCategoryTheme';
-
+import { useNavigate } from 'react-router-dom';
 import { FadeLoader } from 'react-spinners';
+
+import { useThemes } from '@/hooks/useThemes';
 import { Grid, Item, ImageStyle } from '@/components/category/GiftCategoryGrid';
 import { Wrapper, Title } from '@/components/category/GiftCategory.style';
-import { useNavigate } from 'react-router-dom';
 
 const LoadingWrapper = styled.div`
   display: flex;
@@ -16,16 +14,7 @@ const LoadingWrapper = styled.div`
 
 const GiftCategoryList = () => {
   const navigate = useNavigate();
-
-  const {
-    data: themes,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['themes'], 
-    queryFn: fetchThemes, 
-    select: (res) => res.data.data, 
-  });
+  const { data: themes, isLoading, isError } = useThemes();
 
   if (isLoading) {
     return (
@@ -41,12 +30,10 @@ const GiftCategoryList = () => {
     <Wrapper>
       <Title>선물 테마</Title>
       <Grid>
-        {themes.map((item:giftCategoryTheme) => (
+        {themes.map((item) => (
           <Item
             key={item.themeId}
-            onClick={() => {
-              navigate(`/theme/${item.themeId}`);
-            }}
+            onClick={() => navigate(`/theme/${item.themeId}`)}
             style={{ cursor: 'pointer' }}
           >
             <ImageStyle src={item.image} alt={item.name} />
