@@ -10,6 +10,8 @@ export const ROUTE_PATH = {
   ORDER: '/order',
   // * 테마 상품 목록 페이지
   THEMES: '/themes',
+  // * 상품 상세 페이지
+  PRODUCT: '/product',
   // * 404 페이지
   NOT_FOUND: '*',
 } as const

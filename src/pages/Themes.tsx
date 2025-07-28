@@ -63,3 +63,5 @@ const ThemesContainer = styled(PageContainer)`
   justify-content: start;
   align-items: start;
 `
+
+export default Themes
