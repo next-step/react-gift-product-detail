@@ -22,5 +22,14 @@ export interface ProductSummary {
     imageURL: string;
 }
 
+export interface ProductDetail {
+    description: string;
+    announcement: Array<{
+        name: string;
+        value: string;
+        displayOrder: number;
+    }>;
+}
+
 export type TargetType = 'ALL' | 'FEMALE' | 'MALE' | 'TEEN';
 export type RankType = 'MANY_WISH' | 'MANY_RECEIVE' | 'MANY_WISH_RECEIVE';
