@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import GlobalStyle from '@/styles/GlobalStyle';
 import Header from '@/components/Header';
 import { colors } from '@/styles/colors';
+import { useNavigate } from 'react-router-dom';
 import {
   useProductBasicQuery,
   useProductDetailQuery,
@@ -13,11 +14,11 @@ import {
 
 
 
-
 const tabList = ['상품설명', '선물후기', '상세정보'];
 
 
 function ProductPage() {
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(0);
 
   // 라우터 param에서 productId 받아오기
@@ -42,7 +43,10 @@ function ProductPage() {
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>상품 정보를 불러올 수 없습니다.</div>;
 
-  
+  const handleProductClick = (productId) => {
+    navigate(`/order/${productId}`);
+  }
+
 
   return (
     <>
@@ -108,16 +112,17 @@ function ProductPage() {
       <footer css={footerStyle}>
         <button css={likeButtonStyle}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto' }}>
-            <path d="M12.1 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54l-1.35 1.31z" fill="#FF4F4F"/>
+            <path d="M12.1 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54l-1.35 1.31z" fill="#FF4F4F" />
           </svg>
           <span>{wish?.wishCount}</span>
         </button>
-        <button css={orderButtonStyle}>주문하기</button>
+        <button onClick={() => handleProductClick(productId)} css={orderButtonStyle}>주문하기</button>
       </footer>
-    
+
     </>
   );
 }
+
 
 const likeButtonStyle = css({
   backgroundColor: 'white',

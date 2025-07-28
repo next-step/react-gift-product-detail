@@ -83,7 +83,7 @@ const ProductGrid = ({ products, loading = false }: ProductGridProps) => {
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
     if (isAuthenticated) {
-      navigate(`/order/${productId}`);
+      navigate(`/product/${productId}`);
     } else {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }

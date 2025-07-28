@@ -93,7 +93,7 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
     if (isAuthenticated) {
-      navigate(`/order/${productId}`);
+      navigate(`/product/${productId}`);
     } else {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }

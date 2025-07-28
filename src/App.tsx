@@ -10,6 +10,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import AuthGuard from '@/components/AuthGuard'
 import PageWrapper from '@/components/PageWrapper'
 import ThemeProductsPage from '@/pages/ThemeProductsPage'
+import ProductPage from '@/pages/ProductPage'
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
               <AuthGuard>
                 <MyPage />
               </AuthGuard>
+            } />
+            <Route path="/product/:productId" element={
+                <ProductPage />
             } />
             <Route path="/order/:productId" element={
               <AuthGuard>
