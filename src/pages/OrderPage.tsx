@@ -25,6 +25,8 @@ import { messageCards } from "@/mock/messageCards";
 
 import { useProductSummary } from "@/hooks/queries/useProductSummary";
 import { useCreateOrder } from "@/hooks/mutations/useCreateOrder";
+import AsyncBoundary from "@/components/common/AsyncBoundary";
+import { Spinner } from "@/components/common/Spinner";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -119,60 +121,63 @@ const OrderPage = () => {
   };
 
   if (!isInitialized || !isLoggedIn) return null;
-  if (!product) return null;
 
   return (
     <PageLayout>
       <PageContainer>
         <Navigation />
 
-        <FormProvider {...methods}>
-          <S.Form onSubmit={handleSubmit(onValid)}>
-            <S.Container>
-              <S.SectionCard>
-                <MessageCardSection />
-              </S.SectionCard>
+        <AsyncBoundary fallback={<Spinner withWrapper />}>
+          {!product ? null : (
+            <FormProvider {...methods}>
+              <S.Form onSubmit={handleSubmit(onValid)}>
+                <S.Container>
+                  <S.SectionCard>
+                    <MessageCardSection />
+                  </S.SectionCard>
 
-              <S.SectionCard>
-                <SenderInfoSection />
-              </S.SectionCard>
+                  <S.SectionCard>
+                    <SenderInfoSection />
+                  </S.SectionCard>
 
-              <S.SectionCard>
-                <S.SectionHeader>
-                  <S.SectionTitle>받는 사람</S.SectionTitle>
-                  <S.AddReceiverButton
-                    type="button"
-                    onClick={() => setReceiverModalOpen(true)}
-                  >
-                    {receivers.length > 0 ? "수정" : "추가"}
-                  </S.AddReceiverButton>
-                </S.SectionHeader>
+                  <S.SectionCard>
+                    <S.SectionHeader>
+                      <S.SectionTitle>받는 사람</S.SectionTitle>
+                      <S.AddReceiverButton
+                        type="button"
+                        onClick={() => setReceiverModalOpen(true)}
+                      >
+                        {receivers.length > 0 ? "수정" : "추가"}
+                      </S.AddReceiverButton>
+                    </S.SectionHeader>
 
-                {receivers.length === 0 ? (
-                  <S.EmptyBox>
-                    <S.EmptyText>
-                      받는 사람이 없습니다.
-                      <br />
-                      받는 사람을 추가해주세요.
-                    </S.EmptyText>
-                  </S.EmptyBox>
-                ) : (
-                  <ReceiverTable />
-                )}
-              </S.SectionCard>
+                    {receivers.length === 0 ? (
+                      <S.EmptyBox>
+                        <S.EmptyText>
+                          받는 사람이 없습니다.
+                          <br />
+                          받는 사람을 추가해주세요.
+                        </S.EmptyText>
+                      </S.EmptyBox>
+                    ) : (
+                      <ReceiverTable />
+                    )}
+                  </S.SectionCard>
 
-              <S.SectionCard>
-                <OrderSummary product={product} />
-              </S.SectionCard>
-            </S.Container>
+                  <S.SectionCard>
+                    <OrderSummary product={product} />
+                  </S.SectionCard>
+                </S.Container>
 
-            <S.StickyFooter>
-              <S.StickyInner>
-                <OrderButton amount={totalAmount} type="submit" />
-              </S.StickyInner>
-            </S.StickyFooter>
-          </S.Form>
-        </FormProvider>
+                <S.StickyFooter>
+                  <S.StickyInner>
+                    <OrderButton amount={totalAmount} type="submit" />
+                  </S.StickyInner>
+                </S.StickyFooter>
+              </S.Form>
+            </FormProvider>
+          )}
+        </AsyncBoundary>
 
         <ReceiverModal
           isOpen={isReceiverModalOpen}

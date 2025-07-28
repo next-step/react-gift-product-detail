@@ -8,7 +8,7 @@ import { DetailTab } from "@/components/product/DetailTab";
 import { useRequireNavigate } from "@/hooks/useRequireNavigate";
 import { useProductWish } from "@/hooks/queries/useProductWish";
 import { useToggleWish } from "@/hooks/mutations/useToggleWish";
-
+import AsyncBoundary from "@/components/common/AsyncBoundary";
 import styled from "@emotion/styled";
 
 const ProductDetail = () => {
@@ -33,29 +33,37 @@ const ProductDetail = () => {
     <PageLayout>
       <PageContainer>
         <Navigation />
-        <Wrapper>
-          <Image src={product.imageURL} alt={product.name} />
-          <Info>
-            <Brand>{product.brandInfo.name}</Brand>
-            <Name>{product.name}</Name>
-            <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
-          </Info>
-          <DetailTab productId={product.id} />
+        <AsyncBoundary fallback={<div>상품 정보를 불러오는 중입니다...</div>}>
+          <Wrapper>
+            <Image src={product.imageURL} alt={product.name} />
+            <Info>
+              <Brand>{product.brandInfo.name}</Brand>
+              <Name>{product.name}</Name>
+              <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
+            </Info>
 
-          <StickyFooter>
-            <PageContainer>
-              <FooterInner>
-                <WishBox onClick={handleWishClick}>
-                  <HeartIcon filled={wishData?.isWished ?? false} />
-                  <span className="count">{wishData?.wishCount ?? 0}</span>
-                </WishBox>
-                <OrderButton onClick={() => goTo(`/order/${product.id}`)}>
-                  주문하기
-                </OrderButton>
-              </FooterInner>
-            </PageContainer>
-          </StickyFooter>
-        </Wrapper>
+            <AsyncBoundary
+              fallback={<div>상세 정보를 불러오는 중입니다...</div>}
+              errorFallback={<div>상세 정보 로딩에 실패했어요.</div>}
+            >
+              <DetailTab productId={product.id} />
+            </AsyncBoundary>
+
+            <StickyFooter>
+              <PageContainer>
+                <FooterInner>
+                  <WishBox onClick={handleWishClick}>
+                    <HeartIcon filled={wishData?.isWished ?? false} />
+                    <span className="count">{wishData?.wishCount ?? 0}</span>
+                  </WishBox>
+                  <OrderButton onClick={() => goTo(`/order/${product.id}`)}>
+                    주문하기
+                  </OrderButton>
+                </FooterInner>
+              </PageContainer>
+            </StickyFooter>
+          </Wrapper>
+        </AsyncBoundary>
       </PageContainer>
     </PageLayout>
   );

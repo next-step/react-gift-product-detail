@@ -6,7 +6,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PATH } from "@/constants/path"; 
+import { PATH } from "@/constants/path";
+import AsyncBoundary from "@/components/common/AsyncBoundary";
+import { Spinner } from "@/components/common/Spinner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -23,17 +25,19 @@ const LoginPage = () => {
   return (
     <PageContainer>
       <Navigation />
-      <Container>
-        <Logo src="/assets/kakao_logo.svg" alt="카카오 로고" />
-        <LoginForm onLoginSuccess={handleLoginSuccess} />
-        <ToastContainer
-          position="bottom-center"
-          autoClose={3_000}
-          hideProgressBar={false}
-          pauseOnHover
-          closeOnClick
-        />
-      </Container>
+      <AsyncBoundary fallback={<Spinner withWrapper />}>
+        <Container>
+          <Logo src="/assets/kakao_logo.svg" alt="카카오 로고" />
+          <LoginForm onLoginSuccess={handleLoginSuccess} />
+          <ToastContainer
+            position="bottom-center"
+            autoClose={3_000}
+            hideProgressBar={false}
+            pauseOnHover
+            closeOnClick
+          />
+        </Container>
+      </AsyncBoundary>
     </PageContainer>
   );
 };

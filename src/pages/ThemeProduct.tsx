@@ -9,8 +9,9 @@ import { Spinner } from "@/components/common/Spinner";
 import { fetchThemeInfo, fetchThemeProducts } from "@/api/theme";
 import { PATH } from "@/constants/path";
 import { useIntersect } from "@/hooks/useIntersect";
-import { useRequireNavigate } from "@/hooks/useRequireNavigate"; 
+import { useRequireNavigate } from "@/hooks/useRequireNavigate";
 import type { ProductSummary } from "@/api/product";
+import AsyncBoundary from "@/components/common/AsyncBoundary";
 
 interface ThemeInfo {
   themeId: number;
@@ -23,7 +24,7 @@ interface ThemeInfo {
 const ThemeProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const goTo = useRequireNavigate(); 
+  const goTo = useRequireNavigate();
 
   const [theme, setTheme] = useState<ThemeInfo | null>(null);
   const [products, setProducts] = useState<ProductSummary[]>([]);
@@ -77,7 +78,13 @@ const ThemeProduct = () => {
 
   const observerRef = useIntersect<HTMLDivElement>(loadProducts, hasMore);
 
-  if (loading) return <Spinner size={48} withWrapper />;
+  if (loading) {
+    return (
+      <AsyncBoundary fallback={<Spinner withWrapper />}>
+        <div />
+      </AsyncBoundary>
+    );
+  }
 
   return (
     <PageLayout>
