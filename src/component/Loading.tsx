@@ -6,7 +6,7 @@ const Loading = ({ loading = true }: { loading?: boolean }) => {
             <Spinner />
         </SpinnerWrapper>
     )
-    return <></>
+    return null
 }
 
 export default Loading

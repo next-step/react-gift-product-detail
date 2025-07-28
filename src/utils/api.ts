@@ -1,10 +1,10 @@
-import { BaseUrl } from '@/constant/api';
+import { baseUrl } from '@/constant/api';
 import axios from 'axios';
 
 const AUTH_KEY = 'login_user';
 
 const api = axios.create({
-  baseURL: BaseUrl, 
+  baseURL: baseUrl, 
 });
 
 api.interceptors.request.use(

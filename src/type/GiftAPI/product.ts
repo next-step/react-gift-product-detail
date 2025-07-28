@@ -45,19 +45,3 @@ export const defaultProductItemSummary = {
   price: 0,
   imageURL: ''
 }
-
-export interface ThemeInfo {
-  themeId: number;
-  name: string;
-  title: string;
-  description: string;
-  backgroundColor: string;
-}
-
-export const defaultThemeInfo = {
-  themeId: 0,
-  name: '',
-  title: '',
-  description: '',
-  backgroundColor: '',
-}

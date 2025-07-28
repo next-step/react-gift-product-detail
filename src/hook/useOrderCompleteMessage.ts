@@ -1,13 +1,13 @@
-import { BaseUrl } from "@/constant/api";
+import { baseUrl } from "@/constant/api";
 import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import useFetchFromUrlT from "./useFetchFromUrlT";
-import { defaultProductItemSummary, type ProductItemSummary } from "@/type/GiftAPI/product";
+import { type ApiResponse, type ProductItemSummary } from "@/type/GiftAPI/product";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { orderAPI } from "@/utils/orderApi";
+import { useQuery } from "@tanstack/react-query";
 
 
 function useOrderCompleteMessage() {
@@ -21,8 +21,12 @@ function useOrderCompleteMessage() {
   const idParam = query.get('id');
   const id = idParam !== null ? Number(idParam) : null;
 
-  const productUrl = `${BaseUrl}/api/products/${id}/summary`;
-  const { item, error } = useFetchFromUrlT<ProductItemSummary>(productUrl, getFromUrl, defaultProductItemSummary);
+  const productUrl = `${baseUrl}/api/products/${id}/summary`;
+  const { data, error } = useQuery<ProductItemSummary>({
+    queryKey : ['productData'],
+    queryFn : () => getFromUrl(productUrl)
+  })
+  //const { item, error } = useFetchFromUrlT<ProductItemSummary>(productUrl, getFromUrl, defaultProductItemSummary);
 
 
   useEffect(() => {
@@ -32,10 +36,10 @@ function useOrderCompleteMessage() {
     }
   }, [error, navigate]);
 
-  const price = item?.price;
-  const imageUrl = item?.imageURL;
-  const name = item?.name;
-  const brandName = item?.brandName;
+  const price = data?.price;
+  const imageUrl = data?.imageURL;
+  const name = data?.name;
+  const brandName = data?.brandName;
 
 
   const handleOrder = async () => {

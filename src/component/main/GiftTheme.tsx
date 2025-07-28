@@ -4,17 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import { themeUrl } from '@/constant/api';
 import { getFromUrl } from '@/utils/getFromUrl';
+import { useQuery } from '@tanstack/react-query';
+import type { ApiResponse } from '@/type/GiftAPI/product';
+import type { theme } from '@/type/GiftAPI/theme';
 
 
 
 
 const GiftThemeList = () => {
-  const { item, loading, error } = useFetchFromUrlT<[]>(themeUrl, getFromUrl, []);
+  const { data, error, isLoading  } = useQuery<[]>({
+    queryKey : ['themeLogoData'],
+    queryFn : () => getFromUrl(themeUrl)
+  });
+
   const navigate = useNavigate();
 
   if (error) return null
 
-  if (loading) return (
+  if (isLoading) return (
     <SpinnerWrapper>
       <Spinner />
     </SpinnerWrapper>
@@ -22,7 +29,7 @@ const GiftThemeList = () => {
 
   return (
     <ThemeGrid>
-      {item.map(({ themeId, name, image }) => (
+      {data?.map(({ themeId, name, image }) => (
 
         <ThemeItem key={themeId} onClick={() => navigate(`Themes/${themeId}`)}>
           <ThemeImage src={image} alt={name} />
