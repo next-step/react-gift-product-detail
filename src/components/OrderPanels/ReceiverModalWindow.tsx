@@ -139,7 +139,7 @@ const ModalWindowWrapper = styled.div`
   border-radius: 10px;
 `;
 
-const AddButton = styled.button<{ props: { disabled: boolean } }>`
+const AddButton = styled.button<{ disabled: boolean }>`
   margin: 10px;
   height: 35px;
   width: 70px;
