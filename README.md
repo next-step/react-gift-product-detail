@@ -53,9 +53,9 @@
 ### 요구사항
 
 - [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
-- [ ] 기능 단위로 나누어 커밋을 해주세요.
-- [ ] 상품 상세 페이지
-  - [ ] [참고 URL](https://kakaotech-mission4-api-advanced.pages.dev/) 을 참고하여 상품 상세 페이지를 구현해주세요.
+- [x] 기능 단위로 나누어 커밋을 해주세요.
+- [x] 상품 상세 페이지
+  - [x] [참고 URL](https://kakaotech-mission4-api-advanced.pages.dev/) 을 참고하여 상품 상세 페이지를 구현해주세요.
     - [x] ProductDetailPage.tsx를 만들어 상품 상세 정보 페이지를 위한 틀을 생성해두었습니다.
     - [x] 로그인이 되어있지 않으면 로그인 후에 상품 상세 정보 페이지에 접근할 수 있도록 App.tsx에서 PrivateRoute 안에 ProductDetailPage로 이동하는 Route를 추가해주었습니다.
     - [x] routes.ts에 url 관련 변수를 상수로 추가해주었습니다.

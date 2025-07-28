@@ -67,7 +67,7 @@ const ProductActionBar = () => {
       </WishButton>
       <Button
         backgroundColor={theme.color.semantic.kakaoYellow}
-        height="56px"
+        height="60px"
         borderRadius="0"
         onClick={handleOrderClick}
       >
@@ -87,9 +87,7 @@ const BarWrapper = styled.div`
   right: 0;
   z-index: 100;
   display: flex;
-  padding: ${({ theme }) => theme.spacing[2]};
   background-color: ${({ theme }) => theme.color.semantic.background.default};
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
 `;
 
 const WishButton = styled.button`
@@ -97,15 +95,13 @@ const WishButton = styled.button`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 ${({ theme }) => theme.spacing[1]};
-  color: ${({ theme }) => theme.color.semantic.text.default};
   background: none;
   border: none;
+  margin: 0 ${({ theme }) => theme.spacing[2]};
   cursor: pointer;
 `;
 
 const WishCount = styled.p`
-  font-size: 0.625rem;
   ${({ theme }) => theme.typography.label.label2Regular};
 `;
 

@@ -77,7 +77,6 @@ const ProductDetailInfo = () => {
         {selectedTab === '선물후기' &&
           (review.reviews.length > 0 ? (
             <>
-              <ReviewCount>총 리뷰 수: {review.totalCount}</ReviewCount>
               <ReviewList>
                 {review.reviews.map(({ id, authorName, content }) => (
                   <li key={id}>
@@ -114,19 +113,20 @@ export default ProductDetailInfo;
 const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[5]};
+  gap: ${({ theme }) => theme.spacing[3]};
 `;
 
 const Image = styled.img`
   width: 100%;
-  border-radius: 8px;
   object-fit: cover;
+  margin-bottom: ${({ theme }) => theme.spacing[1]};
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing[2]};
+  gap: ${({ theme }) => theme.spacing[1]};
+  margin: 0 ${({ theme }) => theme.spacing[2]};
 `;
 
 const Title = styled.h3`
@@ -141,6 +141,9 @@ const Brand = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing[2]};
+  padding: ${({ theme }) => `${theme.spacing[2]} 0`};
+  border-top: 1px solid ${({ theme }) => theme.color.gray[100]};
+  border-bottom: 1px solid ${({ theme }) => theme.color.gray[100]};
 `;
 
 const BrandLogo = styled.img`
@@ -155,14 +158,16 @@ const BrandName = styled.p`
 
 const TabList = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing[3]};
   border-bottom: 1px solid ${({ theme }) => theme.color.gray[200]};
 `;
 
 const TabButton = styled.button<{ isSelected: boolean }>`
+  flex: 1;
   background: none;
   border: none;
   padding: ${({ theme }) => theme.spacing[2]} 0;
+  text-align: center;
+  ${({ theme }) => theme.typography.title.title2Bold};
   color: ${({ theme, isSelected }) =>
     isSelected
       ? theme.color.semantic.text.default
@@ -191,12 +196,6 @@ const Description = styled.div`
   }
 `;
 
-const ReviewCount = styled.p`
-  ${({ theme }) => theme.typography.label.label2Regular};
-  color: ${({ theme }) => theme.color.semantic.text.default};
-  margin-bottom: ${({ theme }) => theme.spacing[1]};
-`;
-
 const ReviewList = styled.ul`
   display: flex;
   flex-direction: column;
@@ -209,14 +208,14 @@ const ReviewList = styled.ul`
 `;
 
 const Reviewer = styled.p`
-  ${({ theme }) => theme.typography.label.label2Regular};
+  ${({ theme }) => theme.typography.label.label1Bold};
   color: ${({ theme }) => theme.color.semantic.text.default};
   margin-bottom: ${({ theme }) => theme.spacing[1]};
 `;
 
 const ReviewContent = styled.p`
-  ${({ theme }) => theme.typography.body.body2Regular};
-  color: ${({ theme }) => theme.color.semantic.text.sub};
+  ${({ theme }) => theme.typography.body.body1Regular};
+  color: ${({ theme }) => theme.color.semantic.text.default};
   white-space: pre-wrap;
 `;
 
@@ -228,13 +227,13 @@ const InfoList = styled.ul`
 `;
 
 const InfoTitle = styled.p`
-  ${({ theme }) => theme.typography.label.label2Regular};
+  ${({ theme }) => theme.typography.label.label1Bold};
   color: ${({ theme }) => theme.color.semantic.text.default};
 `;
 
 const InfoContent = styled.p`
-  ${({ theme }) => theme.typography.body.body2Regular};
-  color: ${({ theme }) => theme.color.semantic.text.sub};
+  ${({ theme }) => theme.typography.body.body1Regular};
+  color: ${({ theme }) => theme.color.semantic.text.default};
   white-space: pre-wrap;
   margin-top: ${({ theme }) => theme.spacing[1]};
 `;
