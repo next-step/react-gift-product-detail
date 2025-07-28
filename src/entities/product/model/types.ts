@@ -40,5 +40,10 @@ export interface ProductHighlightReview {
     }>;
 }
 
+export interface ProductWish {
+    wishCount: number;
+    isWished: boolean;
+}
+
 export type TargetType = 'ALL' | 'FEMALE' | 'MALE' | 'TEEN';
 export type RankType = 'MANY_WISH' | 'MANY_RECEIVE' | 'MANY_WISH_RECEIVE';

@@ -1,5 +1,5 @@
 import { api } from "@/shared/lib/api";
-import type { RankType, TargetType, RankingProduct, ProductSummary, ProductDetail, ProductHighlightReview } from "../model/types";
+import type { RankType, TargetType, RankingProduct, ProductSummary, ProductDetail, ProductHighlightReview, ProductWish } from "../model/types";
 
 export const getRankingProducts = async (targetType: TargetType = 'ALL', rankType: RankType = 'MANY_WISH'): Promise<RankingProduct[]> => {
     const response = await api.get<{data: RankingProduct[]}>("/products/ranking", {
@@ -28,5 +28,10 @@ export const getProductDetail = async (productId: number): Promise<ProductDetail
 
 export const getProductHighlightReview = async (productId: number): Promise<ProductHighlightReview> => {
     const response = await api.get<{data: ProductHighlightReview}>(`/products/${productId}/highlight-review`);
+    return response.data.data;
+}
+
+export const getProductWish = async (productId: number): Promise<ProductWish> => {
+    const response = await api.get<{data: ProductWish}>(`/products/${productId}/wish`);
     return response.data.data;
 }
