@@ -1,7 +1,4 @@
-import type {
-  RankingRankType,
-  RankingTargetType,
-} from "@/api/product/get-ranking-products";
+import type { RankingTargetType, RankingRankType } from "@/api/product/types";
 import {
   HotGiftRankingGrid,
   HotGiftRankingTab,
@@ -64,26 +61,28 @@ export const HotGiftRanking = () => {
   );
 
   return (
-    <HotGiftRankingSectionContainer>
-      <HotGiftRankingSectionTitle>
-        실시간 급상승 선물랭킹
-      </HotGiftRankingSectionTitle>
-      <HotGiftRankingSectionTagContainer>
-        {TAGS.map(tag => (
-          <HotGiftRankingTag
-            key={tag.id}
-            isSelected={selectedTag === tag.id}
-            onClick={() => handleParamChange("targetType", tag.id)}
-            tagEmoji={tag.emoji}
-            tagText={tag.text}
-          />
-        ))}
-      </HotGiftRankingSectionTagContainer>
-      <HotGiftRankingTab
-        selectedTab={selectedTab}
-        onTabChange={tabId => handleParamChange("rankType", tabId)}
-      />
-      <HotGiftRankingGrid />
-    </HotGiftRankingSectionContainer>
+    <>
+      <HotGiftRankingSectionContainer>
+        <HotGiftRankingSectionTitle>
+          실시간 급상승 선물랭킹
+        </HotGiftRankingSectionTitle>
+        <HotGiftRankingSectionTagContainer>
+          {TAGS.map(tag => (
+            <HotGiftRankingTag
+              key={tag.id}
+              isSelected={selectedTag === tag.id}
+              onClick={() => handleParamChange("targetType", tag.id)}
+              tagEmoji={tag.emoji}
+              tagText={tag.text}
+            />
+          ))}
+        </HotGiftRankingSectionTagContainer>
+        <HotGiftRankingTab
+          selectedTab={selectedTab}
+          onTabChange={tabId => handleParamChange("rankType", tabId)}
+        />
+        <HotGiftRankingGrid />
+      </HotGiftRankingSectionContainer>
+    </>
   );
 };
