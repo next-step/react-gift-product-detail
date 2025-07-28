@@ -1,10 +1,8 @@
 import { css } from '@emotion/react'
-import { useEffect } from 'react';
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
 import { useProductRankingQuery } from '../hooks/useProductQuery';
-import type { Product } from '../types/product';
 import { usePersistentState } from '../hooks/usePersistentState';
 
 const peopleTab = [
@@ -61,21 +59,14 @@ const wantedTabStyle = css({
   ...typography.body2Regular,
 });
 
-interface RankingTabsProps {
-  onDataChange: (products: Product[]) => void;
-}
+// ...기존 코드...
 
-const RankingTabs = ({ onDataChange }: RankingTabsProps) => {
+import ProductGrid from './ProductGrid';
+
+const RankingTabs = () => {
   const [selected, setSelected] = usePersistentState('rankingTab', 'FEMALE');
   const [selectedWantedTab, setSelectedWantedTab] = usePersistentState('wantedTab', 'MANY_WISH');
-
-  // 리액트 쿼리 훅 사용
-  const { data: products } = useProductRankingQuery(selected, selectedWantedTab);
-  // 데이터 변경 시 부모에 전달
-  useEffect(() => {
-    if (products) onDataChange(products);
-    else onDataChange([]);
-  }, [products, onDataChange]);
+  const { data: products, isLoading } = useProductRankingQuery(selected, selectedWantedTab);
 
   const handleTargetTabChange = (value: string) => {
     setSelected(value);
@@ -89,7 +80,7 @@ const RankingTabs = ({ onDataChange }: RankingTabsProps) => {
     <>
       <h3 style={{
         ...typography.body1Bold,
-        color: colors.gray900, 
+        color: colors.gray900,
         margin: 0,
         marginBottom: spacing.spacing4,
       }}>실시간 급상승 선물랭킹</h3>
@@ -107,17 +98,18 @@ const RankingTabs = ({ onDataChange }: RankingTabsProps) => {
       </div>
       <div css={wantedTabStyle}>
         {wantedTab.map(tab => (
-            <button
-              key={tab.value}
-              css={tabButtonStyle(selectedWantedTab === tab.value)}
-              onClick={() => handleRankTabChange(tab.value)}
-            >
-              {tab.label}
-            </button>
+          <button
+            key={tab.value}
+            css={tabButtonStyle(selectedWantedTab === tab.value)}
+            onClick={() => handleRankTabChange(tab.value)}
+          >
+            {tab.label}
+          </button>
         ))}
       </div>
+      <ProductGrid products={products ?? []} loading={isLoading} />
     </>
-  )
+  );
 }
 
 export default RankingTabs
