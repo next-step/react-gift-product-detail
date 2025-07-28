@@ -6,10 +6,13 @@ import { getProductWishInfo } from '@/apis/product';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 
 function useProductDetail() {
   const { productId } = useParams();
   const navigate = useNavigate();
+  const { userInfo } = useContext(LoginInfoContext);
   const [activeTab, setActiveTab] = useState<'description' | 'review' | 'detail'>('description');
 
   const { data: productBasicInfo } = useQuery({
@@ -52,6 +55,14 @@ function useProductDetail() {
     return navigate(`/order/${productId}`);
   }
 
+  function handleItemClick(itemId: number) {
+    if (userInfo.email === '') {
+      navigate('/login');
+    } else {
+      navigate(`/product/${itemId}`);
+    }
+  }
+
   return {
     activeTab,
     likeCount,
@@ -64,6 +75,7 @@ function useProductDetail() {
     productWish,
     handleLikeClick,
     handleOrderClick,
+    handleItemClick,
   };
 }
 

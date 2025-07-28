@@ -14,13 +14,13 @@ import {
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
-import { LoginInfoContext } from '@/contexts/LoginInfoContext';
+import useProductDetail from '@/hooks/useProductDetail';
 
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
-  const { userInfo } = useContext(LoginInfoContext);
+  const { handleItemClick } = useProductDetail();
+
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
   const {
@@ -40,14 +40,6 @@ function ThemeDetail() {
 
   if (isLoading) {
     return <div>로딩중...</div>;
-  }
-
-  function handleItemClick(itemId: number) {
-    if (userInfo.email === '') {
-      navigate('/login');
-    } else {
-      navigate(`/product/${itemId}`);
-    }
   }
 
   return (
