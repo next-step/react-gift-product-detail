@@ -16,7 +16,31 @@ import useInfiniteScroll from "./hooks/useInfiniteScroll";
 import { OBSERVER_OPTIONS } from "./constants/observer";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
+
+export function ThemeProductPage() {
+  return (
+    <Layout>
+      <ErrorBoundary fallback={<Navigate to={ROUTES.HOME} replace />}>
+        <Suspense fallback={<Loading />}>
+          <ThemeProductQueryContent />
+        </Suspense>
+      </ErrorBoundary>
+    </Layout>
+  );
+}
+
+function ThemeProductQueryContent() {
+  const { themeId } = useParams();
+
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.THEME_INFO(themeId),
+    queryFn: () => getThemeInfo(Number(themeId)),
+    retry: false,
+  });
+
+  return <ThemeProductsContent themeInfo={data!} />;
+}
 
 function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
   const loader = useRef<HTMLDivElement>(null);
@@ -51,32 +75,6 @@ function ThemeProductsContent({ themeInfo }: { themeInfo: ThemeInfo }) {
         isLoaderRef={loader as React.RefObject<HTMLDivElement>}
       />
     </>
-  );
-}
-
-function ThemeProductFetcher() {
-  const { themeId } = useParams();
-
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.THEME_INFO(themeId),
-    queryFn: () => getThemeInfo(Number(themeId)),
-    retry: false,
-  });
-
-  return <ThemeProductsContent themeInfo={data!} />;
-}
-
-export function ThemeProductPage() {
-  return (
-    <Layout>
-      <ErrorBoundary
-        FallbackComponent={() => <Navigate to={ROUTES.HOME} replace />}
-      >
-        <Suspense fallback={<Loading />}>
-          <ThemeProductFetcher />
-        </Suspense>
-      </ErrorBoundary>
-    </Layout>
   );
 }
 

@@ -5,4 +5,5 @@ export const ROUTES = {
   ORDER: "/order/:id",
   NOT_FOUND: "*",
   THEME_PRODUCTS: "/themes/:themeId",
+  PRODUCT_DETAIL: "/products/:id",
 } as const;

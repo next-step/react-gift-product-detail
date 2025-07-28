@@ -7,8 +7,6 @@ import {
   MainTabButton,
   TabIconContainer,
   TabLabel,
-  ErrorContainer,
-  ErrorMessage,
 } from "./TrendingGifts.styles";
 import { LocalStorageProvider } from "@/pages/HomePage/context/TabStorageContext";
 import { useMainTab, useSubTab } from "@/pages/HomePage/hooks/useTabStorage";
@@ -22,19 +20,27 @@ import { getTrendingGifts } from "@/data/api";
 import TrendingGiftsProductsGrid from "./TrendingGiftsProductsGrid";
 import TabContentWrapper from "./TabContentWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { Suspense } from "react";
 import { QUERY_KEY } from "@/constants/queryKey";
+import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
+
+function TrendingGifts() {
+  return (
+    <LocalStorageProvider>
+      <TrendingGiftsSection>
+        <TitleWarpper>
+          <SectionTitle>{TRENDING_GIFTS_LABELS.SECTION_TITLE}</SectionTitle>
+        </TitleWarpper>
+        <TrendingGiftsContent />
+      </TrendingGiftsSection>
+    </LocalStorageProvider>
+  );
+}
 
 function TrendingGiftsContent() {
   const [mainTabIdx, setMainTabIdx] = useMainTab();
   const [subTabIdx, setSubTabIdx] = useSubTab();
-
-  const { data } = useSuspenseQuery<TrendingGiftsType[]>({
-    queryKey: QUERY_KEY.TRENDING_GIFTS(mainTabIdx, subTabIdx),
-    queryFn: () =>
-      getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
-  });
 
   return (
     <>
@@ -51,15 +57,16 @@ function TrendingGiftsContent() {
       <TabContentWrapper subTabIdx={subTabIdx} onClick={setSubTabIdx}>
         <ErrorBoundary
           fallback={
-            <ErrorContainer>
-              <ErrorMessage>
-                {TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
-              </ErrorMessage>
-            </ErrorContainer>
+            <FallbackMessage
+              message={TRENDING_GIFTS_ERROR_MESSAGES.FETCH_ERROR}
+            />
           }
         >
           <Suspense fallback={<Loading />}>
-            <TrendingGiftsProductsGrid products={data} />
+            <TrendingGiftsQueryContent
+              mainTabIdx={mainTabIdx}
+              subTabIdx={subTabIdx}
+            />
           </Suspense>
         </ErrorBoundary>
       </TabContentWrapper>
@@ -67,17 +74,20 @@ function TrendingGiftsContent() {
   );
 }
 
-function TrendingGifts() {
-  return (
-    <LocalStorageProvider>
-      <TrendingGiftsSection>
-        <TitleWarpper>
-          <SectionTitle>{TRENDING_GIFTS_LABELS.SECTION_TITLE}</SectionTitle>
-        </TitleWarpper>
-        <TrendingGiftsContent />
-      </TrendingGiftsSection>
-    </LocalStorageProvider>
-  );
+function TrendingGiftsQueryContent({
+  mainTabIdx,
+  subTabIdx,
+}: {
+  mainTabIdx: number;
+  subTabIdx: number;
+}) {
+  const { data } = useSuspenseQuery<TrendingGiftsType[]>({
+    queryKey: QUERY_KEY.TRENDING_GIFTS(mainTabIdx, subTabIdx),
+    queryFn: () =>
+      getTrendingGifts(TARGET_TYPE[mainTabIdx], RANK_TYPE[subTabIdx]),
+  });
+
+  return <TrendingGiftsProductsGrid products={data} />;
 }
 
 export default TrendingGifts;
