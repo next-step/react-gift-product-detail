@@ -1,6 +1,5 @@
 import { ApiError } from "@/api/custom-error";
 import { getThemeInfo } from "@/api/themes/get-theme-info";
-
 import { useRouter } from "@/hooks/common/useRouter";
 import { queryKeys } from "@/lib/query-keys";
 import { useQuery } from "@tanstack/react-query";
