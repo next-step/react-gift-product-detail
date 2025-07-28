@@ -47,7 +47,7 @@ export interface ProductSummary {
 // * 상품 상세 정보
 export interface ProductDetail {
   description: string
-  announcement: AnnouncementItem[]
+  announcements: AnnouncementItem[]
 }
 
 // * 공지사항 아이템

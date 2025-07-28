@@ -13,6 +13,7 @@ import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { ROUTE_PATH } from '@/shared/constants'
 import { Heart } from 'lucide-react'
+import { ProductTabs } from '@/features/product/components/ProductTabs'
 
 // * 상품 상세 페이지
 export const Product = () => {
@@ -80,6 +81,10 @@ export const ProductContent = () => {
     navigate(`${ROUTE_PATH.ORDER}/${productId}`)
   }
 
+  // * 디버깅용 데이터 로그
+  console.log('Product Detail:', productDetail)
+  console.log('Reviews:', reviews)
+
   return (
     <ProductPageContainer>
       {/* 상품 정보 섹션 */}
@@ -103,7 +108,9 @@ export const ProductContent = () => {
       </ProductHeaderSection>
 
       {/* 상품 상세 정보 섹션 */}
-      <ProductDetailSection></ProductDetailSection>
+      <ProductDetailSection>
+        <ProductTabs productDetail={productDetail} reviews={reviews} />
+      </ProductDetailSection>
 
       {/* 하단 버튼 섹션 */}
       <ProductBtnSection>
@@ -123,6 +130,10 @@ export const ProductContent = () => {
 const ProductPageContainer = styled(PageContainer)`
   position: relative;
   justify-content: start;
+
+  background-color: ${({ theme }) => theme.semanticColors.background.fill};
+
+  gap: ${({ theme }) => theme.spacing.spacing3};
 `
 
 // * 로딩 컨테이너
@@ -140,6 +151,8 @@ const ProductImage = styled.img`
 
 // * 상품 헤더 섹션
 const ProductHeaderSection = styled.section`
+  background-color: ${({ theme }) => theme.semanticColors.background.default};
+
   display: flex;
   flex-direction: column;
 `
@@ -154,7 +167,7 @@ const ProductInfoContainer = styled.div`
 const ProductMainInfo = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
 
-  border-bottom: 1px solid ${({ theme }) => theme.semanticColors.border.disabled};
+  border-bottom: 2px solid ${({ theme }) => theme.semanticColors.background.fill};
 
   display: flex;
   flex-direction: column;
@@ -190,7 +203,12 @@ const ProductBrandImage = styled.img`
 `
 
 // * 상품 상세 정보 섹션
-const ProductDetailSection = styled.section``
+const ProductDetailSection = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3.125rem;
+`
 
 // * 상품 상세 정보 페이지 하단 버튼 섹션
 const ProductBtnSection = styled.section`
