@@ -8,7 +8,7 @@ import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
 
 import { useQuery } from "@tanstack/react-query";
 
-export interface GetTHemeInfoResponseBody {
+export interface GetThemeInfoResponseBody {
     themeId: number;
     name: string;
     title: string;
@@ -17,7 +17,7 @@ export interface GetTHemeInfoResponseBody {
 }
 
 export async function getGiftThemeInfo(themeId?: number) {
-    const { data: response } = await api<BaseResponse<GetTHemeInfoResponseBody>>(
+    const { data: response } = await api<BaseResponse<GetThemeInfoResponseBody>>(
         `/themes/${themeId}/info`,
     );
     return response.data;
