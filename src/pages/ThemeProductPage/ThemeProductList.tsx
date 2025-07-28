@@ -5,12 +5,14 @@ import { css } from '@emotion/react';
 import ProductCard from '../Home/components/Shared/RankingCard';
 import theme from '../../styles/theme';
 import { useThemeProducts } from '../../apis/product';
+import { UserManagement } from '../Login/contexts/UserManagement';
 
 const LIMIT = 10;
 
 const ThemeProductList = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
+  const { user } = UserManagement();
 
   const numericThemeId = Number(themeId);
 
@@ -57,13 +59,21 @@ const ThemeProductList = () => {
     return <div css={emptyStyle}>상품이 없습니다.</div>;
   }
 
+  const handleCardClick = (productId: number) => {
+    if (user) {
+      navigate(`/detail/${productId}`);
+    } else {
+      navigate(`/login?redirect=/detail/${productId}`);
+    }
+  };
+
   return (
     <>
       <div css={gridStyle}>
         {allProducts.map((item) => (
           <div
             key={item.id}
-            onClick={() => navigate(`/detail/${item.id}`)}
+            onClick={() => handleCardClick(item.id)}
             css={{ cursor: 'pointer' }}
           >
             <ProductCard
