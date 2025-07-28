@@ -33,5 +33,6 @@ export interface ProductHighlightReview {
 }
 
 export interface ProductWish {
-  isWished: boolean;
+  wishCount: number;
+  isWished: false;
 }

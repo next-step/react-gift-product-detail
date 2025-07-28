@@ -10,6 +10,7 @@ import BaseButton from '@/common/BaseButton';
 import ProductDescriptionTab from '@/components/productDetail/productDetailTabs/ProductDescriptionTab';
 import ProductReviewsTab from '@/components/productDetail/productDetailTabs/ProductReviewsTab';
 import ProductDetailInfoTab from '@/components/productDetail/productDetailTabs/ProductDetailInfoTab';
+import WishBtn from '@/components/productDetail/WishBtn';
 
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -75,11 +76,17 @@ const ProductDetail = () => {
           )}
         </TabContent>
 
-        <BaseButton onClick={handleOrderClick} backgroundColor="#FEE500">
-          <Text size="title2" weight="bold">
-            주문하기
-          </Text>
-        </BaseButton>
+        <ButtonRow>
+          <WishBtn
+            isWished={wish?.isWished ?? false}
+            wishCount={wish?.wishCount}
+          />
+          <BaseButton onClick={handleOrderClick} backgroundColor="#FEE500">
+            <Text size="title2" weight="bold">
+              주문하기
+            </Text>
+          </BaseButton>
+        </ButtonRow>
       </Content>
     </Layout>
   );
@@ -90,6 +97,7 @@ export default ProductDetail;
 const Layout = styled.div`
   display: flex;
   justify-content: center;
+  padding: 1rem;
 `;
 
 const Content = styled.div`
@@ -125,4 +133,12 @@ const TabButton = styled.button<TabButtonProps>`
 
 const TabContent = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing6};
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing.spacing2};
+  margin-top: ${({ theme }) => theme.spacing.spacing6};
 `;
