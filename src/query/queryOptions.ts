@@ -4,6 +4,7 @@ import {
   fetchProdcutInfo,
   fetchProductDetail,
 } from '../api/productInfo';
+import { fetchProductReview } from '../api/productReview';
 import { fetchThemeInfo } from '../api/themeInfo';
 import { queryKeys } from '../constants/queryKeys';
 import { fetchGiftProductById } from '../hooks/useGiftProductById';
@@ -53,5 +54,11 @@ export const ProductDescriptionQueryOptions = (
 ) => ({
   queryKey: queryKeys.productDescription(productId),
   queryFn: () => fetchProductDetail(productId),
+  enabled: !!productId,
+});
+
+export const ProductReviewQueryOptions = (productId: number) => ({
+  queryKey: queryKeys.productReview(productId),
+  queryFn: () => fetchProductReview(productId),
   enabled: !!productId,
 });

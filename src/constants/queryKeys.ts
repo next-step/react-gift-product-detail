@@ -8,4 +8,6 @@ export const queryKeys = {
     ['productInfo', productId] as const,
   productDescription: (productId: number) =>
     ['productDescription', productId] as const,
+  productReview: (productId: number) =>
+    ['productReview', productId] as const,
 };

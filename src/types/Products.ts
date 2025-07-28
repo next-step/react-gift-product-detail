@@ -19,7 +19,7 @@ export interface ProductReview {
     id: string;
     authorName: string;
     content: string;
-  };
+  }[];
 }
 
 export interface ProductWish {

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProductDetail } from '../../hooks/useProductDetail';
-import ProductReview from './ProductReview';
+import { useProductReview } from '../../hooks/useProductReview';
 
 const TabHeader = styled.div`
   display: flex;
@@ -86,6 +86,7 @@ const ProductTabs = () => {
   const id = Number(productId);
 
   const { data: product } = useProductDetail(id);
+  const { data: review } = useProductReview(id);
 
   if (!product) return null;
 
@@ -104,7 +105,16 @@ const ProductTabs = () => {
           </ProductDescriptionContainer>
         );
       case '선물후기':
-        return <ProductReview></ProductReview>;
+        return (
+          <DetailInfoContainer>
+            {review?.reviews.map(({ id, authorName, content }) => (
+              <InfoRow key={id}>
+                <InfoTitle>{authorName}</InfoTitle>
+                <InfoValue>{content}</InfoValue>
+              </InfoRow>
+            ))}
+          </DetailInfoContainer>
+        );
       case '상세정보':
         return (
           <DetailInfoContainer>
