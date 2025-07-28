@@ -10,7 +10,7 @@ import {
 } from "@/features/order/contexts/ReceiverContext";
 import { useOrder } from "@/features/order/hooks/useOrder";
 import { useCreateOrder } from "@/features/order/services/createOrder";
-import { useProductSummaryByProductId } from "@/features/order/services/getProductSummaryByProductId";
+import { useProductSummaryByProductId } from "@/entities/gift/services/getProductSummaryByProductId";
 import { LetterCard } from "@/features/order/ui/LetterCard";
 import { ProductInfo } from "@/features/order/ui/ProductInfo";
 import { ReceiverList } from "@/features/order/ui/ReceiverList";

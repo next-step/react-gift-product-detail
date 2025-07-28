@@ -1,10 +1,9 @@
 import { FriendSelectButton } from "@/entities/friends/ui/FriendSelectButton";
 import { FriendSelection } from "@/entities/friends/ui/FriendSelection";
 import { TargetGroupSelector } from "@/entities/gift/ui";
+import { GiftThemes } from "@/entities/gift/ui/GiftThemes";
 import { RankTypeSelector } from "@/entities/gift/ui/RankTypeSelector";
-
-import { RankingGifts } from "@/features/ranking/ui/RankingGifts";
-import { GiftThemes } from "@/features/theme/ui/GiftThemes";
+import { RankingGifts } from "@/entities/gift/ui/RankingGifts";
 
 import { Banner } from "@/widgets/banner/Banner";
 import { VerticalSpacing } from "@/widgets/layouts/Spacing.styled";

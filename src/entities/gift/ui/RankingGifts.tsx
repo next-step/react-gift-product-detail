@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { GiftCard, GiftCardGrid } from "@/entities/gift/ui";
 
-import { useRankingGifts } from "@/features/ranking/services/getRankingGifts";
+import { useRankingGifts } from "@/entities/gift/services/getRankingGifts";
 
 import { Button } from "@/shared/ui";
 import { Spinner } from "@/shared/ui/Spinner.styled";
