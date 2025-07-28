@@ -47,6 +47,6 @@ const LikeNum = styled.p`
   font-weight: 400;
   line-height: 1rem;
   color: ${({ theme }) => theme.colors.gray[900]};
-  margin: 0pxs;
+  margin: 0px;
   text-align: left;
 `;
