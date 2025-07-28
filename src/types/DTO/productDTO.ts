@@ -18,7 +18,7 @@ export interface RankingQuery {
   rankType?: RankType;
 }
 
-export type RankItemType = {
+export type ProductBasicInfo = {
   id: number;
   name: string;
   imageURL: string;
@@ -35,7 +35,7 @@ export type RankItemType = {
 };
 
 export interface ProductDetailResponseDto {
-  data: RankItemType[];
+  data: ProductBasicInfo[];
 }
 export interface ProductSummaryRequestDTO {
   productId: number;
@@ -49,4 +49,47 @@ export type ProductSummary = {
 };
 export interface ProductSummaryResponseDTO {
   data: ProductSummary;
+}
+
+export interface ProductBasicInfoResponseDTO {
+  data: ProductBasicInfo;
+}
+
+export interface ProductAnnouncement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
+export interface ProductDetailInfo {
+  description: string;
+  announcement: ProductAnnouncement[];
+}
+
+export interface ProductDetailInfoResponseDTO {
+  data: ProductDetailInfo;
+}
+
+export interface ProductWishInfo {
+  wishCount: number;
+  isWished: boolean;
+}
+
+export interface ProductWishInfoResponseDTO {
+  data: ProductWishInfo;
+}
+
+export interface ProductReview {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface ProductHighlightReview {
+  totalCount: number;
+  reviews: ProductReview[];
+}
+
+export interface ProductHighlightReviewResponseDTO {
+  data: ProductHighlightReview;
 }

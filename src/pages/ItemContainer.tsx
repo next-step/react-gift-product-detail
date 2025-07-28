@@ -2,10 +2,10 @@ import Item from '@/components/Item';
 import ItemBtn from '@/components/ItemBtn';
 import { useState } from 'react';
 import { ItemContainerStyle, ItemlistContainer } from '@/styles/Item/ItemlistContainer.styles';
-import type { RankItemType } from '@/types/DTO/productDTO';
+import type { ProductBasicInfo } from '@/types/DTO/productDTO';
 
 type ItemContainerProps = {
-  itemList: RankItemType[];
+  itemList: ProductBasicInfo[];
 };
 function ItemContainer({ itemList }: ItemContainerProps) {
   const [isExpanded, setIsExpanded] = useState(false);

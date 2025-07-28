@@ -25,6 +25,7 @@ function Item({ index, itemData }: ItemProps) {
       navigate('/login');
     } else {
       navigate(`/order/${itemId}`, { state: { item: itemData } });
+      // navigate(`/product/${itemId}`, { state: { item: itemData } });
     }
   }
 
