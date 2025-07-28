@@ -11,7 +11,7 @@ const ReceiverInfoModal = ({
   isOpen: boolean;
   closeModal: () => void;
 }) => {
-  const { control, getValues, trigger, setValue, formState } = useFormContext();
+  const { control, getValues, trigger, setValue } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,

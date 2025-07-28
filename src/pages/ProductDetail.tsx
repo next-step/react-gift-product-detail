@@ -2,7 +2,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import Text from '@/common/Text';
-import LoadingSpinner from '@/common/LoadingSpinner';
 import useProductDetail from '@/hooks/useProductDetail';
 import NavigationBar from '@/common/NavigationBar';
 import ProductOverview from '@/components/productDetail/ProductOverview';
@@ -20,17 +19,12 @@ const ProductDetail = () => {
     description,
     highlightReview,
     wish,
-    isLoading,
-    isError,
-    error,
   } = useProductDetail(Number(productId));
 
   const [activeTab, setActiveTab] = useState<
     'description' | 'reviews' | 'detail'
   >('description');
 
-  if (isLoading) return <LoadingSpinner />;
-  if (isError) return <Text>{(error as Error)?.message}</Text>;
   if (!product) return <Text>상품 정보를 찾을 수 없습니다.</Text>;
 
   const handleOrderClick = () => {

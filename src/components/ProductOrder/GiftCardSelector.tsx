@@ -15,7 +15,8 @@ const GiftCardSelector = ({
   messageCardId,
   onChangeMessageCardId,
 }: GiftCardSelectorProps) => {
-  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  const initialIndex = orderData.findIndex(card => card.id === messageCardId);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(initialIndex !== -1 ? initialIndex : 0);
   const selectedCard = orderData[selectedCardIndex];
 
   useEffect(() => {

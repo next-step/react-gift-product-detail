@@ -1,18 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchThemes, type Category } from '@/api/themes';
 
 const useGiftThemes = () => {
   const {
     data: categories,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<Category[], Error>({
+  } = useSuspenseQuery<Category[], Error>({
     queryKey: ['themes'],
     queryFn: fetchThemes,
   });
 
-  return { categories: categories || [], isLoading, isError, error };
+  return { categories: categories || [] };
 };
 
 export default useGiftThemes;

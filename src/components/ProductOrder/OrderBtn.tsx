@@ -3,12 +3,13 @@ import styled from '@emotion/styled';
 type OrderBtnProps = {
   price: number;
   onClick: () => void;
+  disabled?: boolean;
 };
 
-const OrderBtn = ({ price, onClick }: OrderBtnProps) => {
+const OrderBtn = ({ price, onClick, disabled }: OrderBtnProps) => {
   return (
     <StickyWrapper>
-      <Button onClick={onClick}>{price.toLocaleString()}원 주문하기</Button>
+      <Button onClick={onClick} disabled={disabled}>{price.toLocaleString()}원 주문하기</Button>
     </StickyWrapper>
   );
 };
