@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import ProductDetailInfo from './ProductDetailInfo';
-import ProductReview from './ProductReview';
 import { useParams } from 'react-router-dom';
 import { useProductDetail } from '../../hooks/useProductDetail';
+import ProductReview from './ProductReview';
 
 const TabHeader = styled.div`
   display: flex;
@@ -48,8 +47,37 @@ const ProductDescription = styled.div`
   }
 `;
 
+const DetailInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 14px;
+  color: #333;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const InfoTitle = styled.div`
+  font-weight: bold;
+  margin-bottom: 4px;
+`;
+
+const InfoValue = styled.div`
+  white-space: pre-wrap;
+  line-height: 1.5;
+`;
+
 const tabList = ['상품설명', '선물후기', '상세정보'] as const;
 type Tab = (typeof tabList)[number];
+
+interface Announcement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
 
 const ProductTabs = () => {
   const [activeTab, setActiveTab] = useState<Tab>('상품설명');
@@ -59,7 +87,10 @@ const ProductTabs = () => {
 
   const { data: product } = useProductDetail(id);
 
-  console.log('test', product?.description);
+  if (!product) return null;
+
+  const announcemetns = product.announcements as Announcement[];
+
   const renderContent = () => {
     switch (activeTab) {
       case '상품설명':
@@ -75,7 +106,18 @@ const ProductTabs = () => {
       case '선물후기':
         return <ProductReview></ProductReview>;
       case '상세정보':
-        return <ProductDetailInfo></ProductDetailInfo>;
+        return (
+          <DetailInfoContainer>
+            {announcemetns
+              .sort((a, b) => a.displayOrder - b.displayOrder)
+              .map(({ name, value }) => (
+                <InfoRow key={name}>
+                  <InfoTitle>{name}</InfoTitle>
+                  <InfoValue>{value}</InfoValue>
+                </InfoRow>
+              ))}
+          </DetailInfoContainer>
+        );
     }
   };
 

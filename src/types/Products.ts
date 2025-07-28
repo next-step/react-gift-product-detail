@@ -10,7 +10,7 @@ export interface ProductDetail {
     name: string;
     value: string;
     displayOrder: number;
-  };
+  }[];
 }
 
 export interface ProductReview {
