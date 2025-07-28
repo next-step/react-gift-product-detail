@@ -4,3 +4,4 @@ export { NotFoundPage } from "@/pages/NotFoundPage";
 export { MyPage } from "@/pages/MyPage";
 export { OrderPage } from "@/pages/OrderPage";
 export { ThemeProductPage } from "@/pages/ThemeProductPage";
+export { ProductDetailPage } from "@/pages/ProductDetailPage";
