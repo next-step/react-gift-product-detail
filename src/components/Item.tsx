@@ -24,8 +24,8 @@ function Item({ index, itemData }: ItemProps) {
     if (userInfo.email === '') {
       navigate('/login');
     } else {
-      navigate(`/order/${itemId}`, { state: { item: itemData } });
-      // navigate(`/product/${itemId}`, { state: { item: itemData } });
+      // navigate(`/order/${itemId}`, { state: { item: itemData } });
+      navigate(`/product/${itemId}`, { state: { item: itemData } });
     }
   }
 

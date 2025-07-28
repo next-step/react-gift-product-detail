@@ -1,16 +1,16 @@
-import { useParams } from 'react-router-dom';
+import type { ProductDetailInfo } from '@/types/DTO/productDTO';
+import parse from 'html-react-parser';
+import { ProductDetailContainer } from '@/styles/Product/ProductDetail.styles';
+interface ProductDetailProps {
+  productDetailInfo: ProductDetailInfo | undefined;
+}
 
-import { getProductBasicInfo } from '@/apis/product';
-import { useQuery } from '@tanstack/react-query';
+function ProductDetail({ productDetailInfo }: ProductDetailProps) {
+  if (!productDetailInfo) {
+    return <div>Loading...</div>;
+  }
 
-function ProductDetail() {
-  const { productId } = useParams();
-  const { data: productBasicInfo } = useQuery({
-    queryKey: ['productBasicInfo', productId],
-    queryFn: () => getProductBasicInfo(Number(productId)),
-  });
-  console.log(productBasicInfo);
-  return <div>ProductDetail</div>;
+  return <ProductDetailContainer>{parse(productDetailInfo.description)}</ProductDetailContainer>;
 }
 
 export default ProductDetail;

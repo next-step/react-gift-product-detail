@@ -63,7 +63,7 @@ export interface ProductAnnouncement {
 
 export interface ProductDetailInfo {
   description: string;
-  announcement: ProductAnnouncement[];
+  announcements: ProductAnnouncement[];
 }
 
 export interface ProductDetailInfoResponseDTO {

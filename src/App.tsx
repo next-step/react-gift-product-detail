@@ -14,7 +14,7 @@ import { useContext } from 'react';
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import ThemeDetail from '@/pages/ThemeDetail';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ProductDetail from '@/pages/ProductDetail/ProductDetail';
+import Product from '@/pages/ProductDetail/Product';
 
 const queryClient = new QueryClient();
 
@@ -50,7 +50,7 @@ function App() {
             <Route path="/login" element={<Login onLogin={handleBackClick} />} />
             <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
             <Route path="/order/:orderId" element={<Order />} />
-            <Route path="/product/:productId" element={<ProductDetail />} />
+            <Route path="/product/:productId" element={<Product />} />
             <Route path="/themes/:themeId" element={<ThemeDetail />} />
           </Route>
           <Route path="*" element={<NotFound />} />
