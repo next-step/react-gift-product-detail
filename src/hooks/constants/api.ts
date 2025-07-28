@@ -33,3 +33,9 @@ export const getProductInfoPath = (productId: string | number): string =>
 
 export const getProductInfoUrl = (productId: string | number): string =>
   `${BASE_URL}${getProductInfoPath(productId)}`;
+
+export const getProductDetailPath = (productId: string | number): string =>
+  `/api/products/${productId}/detail`;
+
+export const getProductDetailUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductDetailPath(productId)}`;
