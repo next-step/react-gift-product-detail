@@ -1,22 +1,15 @@
-import { QUERY_KEY } from "@/constants/queryKey";
-import { getProductHighlightReview } from "@/data/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ListContainer,
   TabContentContainer,
   TabContentContent,
   TabContentTitle,
 } from "./TabListContents.styles";
+import type { ProductHighlightReview } from "@/types/HighlighReview";
 
-function Review({ productId }: { productId: string }) {
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_HIGHLIGHT_REVIEW(productId),
-    queryFn: () => getProductHighlightReview(productId),
-  });
-
+function Review({ product }: { product: ProductHighlightReview }) {
   return (
     <ListContainer>
-      {data.reviews.map((el) => (
+      {product.reviews.map((el) => (
         <TabContentContainer>
           <TabContentTitle>{el.authorName}</TabContentTitle>
           <TabContentContent>{el.content}</TabContentContent>

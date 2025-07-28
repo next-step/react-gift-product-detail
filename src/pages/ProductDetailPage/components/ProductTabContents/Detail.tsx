@@ -1,22 +1,15 @@
-import { QUERY_KEY } from "@/constants/queryKey";
-import { getProductDetailInfo } from "@/data/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ListContainer,
   TabContentContainer,
   TabContentContent,
   TabContentTitle,
 } from "./TabListContents.styles";
+import type { ProductDetailInfo } from "@/types/ProductDetail";
 
-function Detail({ productId }: { productId: string }) {
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL_INFO(productId),
-    queryFn: () => getProductDetailInfo(productId),
-  });
-
+function Detail({ product }: { product: ProductDetailInfo }) {
   return (
     <ListContainer>
-      {data.announcements.map((el) => {
+      {product.announcements.map((el) => {
         return (
           <TabContentContainer>
             <TabContentTitle>{el.name}</TabContentTitle>

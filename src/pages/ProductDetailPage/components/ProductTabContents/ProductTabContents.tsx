@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import {
   ProductInfoTabContainer,
   TabContentLayout,
@@ -10,6 +10,17 @@ import { TAB_LABELS } from "../../constants/tab";
 import Info from "./Info";
 import Review from "./Reivew";
 import Detail from "./Detail";
+import {
+  getProductDetail,
+  getProductDetailInfo,
+  getProductHighlightReview,
+} from "@/data/api";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { QUERY_KEY } from "@/constants/queryKey";
+import { Loading } from "@/components/Loading/Loading";
+import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
+import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
+import { PRODUCT_DETAIL_LABELS } from "../../constants/labels";
 
 const TAB_CONTENT = {
   TAB_INFO: "info",
@@ -18,44 +29,6 @@ const TAB_CONTENT = {
 } as const;
 
 type Tab = (typeof TAB_CONTENT)[keyof typeof TAB_CONTENT];
-
-function TabContent({
-  currentTab,
-  productId,
-}: {
-  currentTab: Tab;
-  productId: string;
-}) {
-  if (currentTab === TAB_CONTENT.TAB_INFO) {
-    return <Info productId={productId} />;
-  }
-  if (currentTab === TAB_CONTENT.TAB_REVIEW) {
-    return <Review productId={productId} />;
-  }
-
-  return <Detail productId={productId} />;
-}
-
-function TabSwitcher({
-  label,
-  tab,
-  isActive,
-  setCurrentTab,
-}: {
-  label: string;
-  tab: Tab;
-  isActive: boolean;
-  setCurrentTab: (tab: Tab) => void;
-}) {
-  return (
-    <TabSwitcherContainer
-      isActive={isActive}
-      onClick={() => setCurrentTab(tab)}
-    >
-      <TabSwitcherLabel isActive={isActive}>{label}</TabSwitcherLabel>
-    </TabSwitcherContainer>
-  );
-}
 
 function ProductTabContents({ productId }: { productId: string }) {
   const [currentTab, setCurrentTab] = useState<Tab>(TAB_CONTENT.TAB_INFO);
@@ -83,10 +56,73 @@ function ProductTabContents({ productId }: { productId: string }) {
         />
       </TabSwitcherRow>
       <TabContentLayout>
-        <TabContent currentTab={currentTab} productId={productId} />
+        <ErrorBoundary
+          fallback={
+            <FallbackMessage
+              message={PRODUCT_DETAIL_LABELS.NO_PRODUCT_DETAIL}
+            />
+          }
+        >
+          <Suspense fallback={<Loading />}>
+            <TabContent currentTab={currentTab} productId={productId} />
+          </Suspense>
+        </ErrorBoundary>
       </TabContentLayout>
     </ProductInfoTabContainer>
   );
+}
+
+function TabSwitcher({
+  label,
+  tab,
+  isActive,
+  setCurrentTab,
+}: {
+  label: string;
+  tab: Tab;
+  isActive: boolean;
+  setCurrentTab: (tab: Tab) => void;
+}) {
+  return (
+    <TabSwitcherContainer
+      isActive={isActive}
+      onClick={() => setCurrentTab(tab)}
+    >
+      <TabSwitcherLabel isActive={isActive}>{label}</TabSwitcherLabel>
+    </TabSwitcherContainer>
+  );
+}
+
+function TabContent({
+  currentTab,
+  productId,
+}: {
+  currentTab: Tab;
+  productId: string;
+}) {
+  const { data: infoData } = useSuspenseQuery({
+    queryKey: QUERY_KEY.PRODUCT_DETAIL(productId),
+    queryFn: () => getProductDetail(productId),
+  });
+
+  const { data: reviewData } = useSuspenseQuery({
+    queryKey: QUERY_KEY.PRODUCT_HIGHLIGHT_REVIEW(productId),
+    queryFn: () => getProductHighlightReview(productId),
+  });
+
+  const { data: detailData } = useSuspenseQuery({
+    queryKey: QUERY_KEY.PRODUCT_DETAIL_INFO(productId),
+    queryFn: () => getProductDetailInfo(productId),
+  });
+
+  if (currentTab === TAB_CONTENT.TAB_INFO) {
+    return <Info product={infoData} />;
+  }
+  if (currentTab === TAB_CONTENT.TAB_REVIEW) {
+    return <Review product={reviewData} />;
+  }
+
+  return <Detail product={detailData} />;
 }
 
 export default ProductTabContents;

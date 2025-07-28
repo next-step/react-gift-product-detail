@@ -1,16 +1,10 @@
-import { QUERY_KEY } from "@/constants/queryKey";
-import { getProductDetail } from "@/data/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { ProductImage } from "../ProductHeader/ProductHeader.styles";
+import type { ThemeProduct } from "@/types/ThemeProducts";
 
-function Info({ productId }: { productId: string }) {
+function Info({ product }: { product: ThemeProduct }) {
   // api 에 이미지 리소스가 없음, 기존 이미지로 대체
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL(productId),
-    queryFn: () => getProductDetail(productId),
-  });
 
-  return <ProductImage src={data.imageURL} />;
+  return <ProductImage src={product.imageURL} />;
 }
 
 export default Info;
