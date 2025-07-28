@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { Product } from '@/types/product';
-import { getProductInfoUrl } from './constants/api';
+import { getProductInfoUrl } from '@/hooks/constants/api';
 
 export const useProductInfo = (productId: string | undefined) => {
   return useQuery<Product>({
