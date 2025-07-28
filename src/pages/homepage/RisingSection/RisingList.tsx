@@ -14,7 +14,7 @@ export default function RisingList() {
   const { data } = useProducts();
 
   const navigateToOrder = (item: Product & { id: number }) => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
 
   if (!data || data.length === 0) {

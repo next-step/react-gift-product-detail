@@ -11,8 +11,8 @@ export default function ThemeProductsList() {
     themeId: themeId!,
   });
 
-  const handleItemClick = (id: number) => {
-    navigate(`/order/${id}`);
+  const navigateToOrder = (id: number) => {
+    navigate(`/product/${id}`);
   };
 
   if (products.length === 0 && !loading)
@@ -22,7 +22,7 @@ export default function ThemeProductsList() {
     <>
       <List>
         {products.map((product) => (
-          <Card key={product.id} onClick={() => handleItemClick(product.id)}>
+          <Card key={product.id} onClick={() => navigateToOrder(product.id)}>
             <Image src={product.imageURL} alt={product.name} />
             <Name>{product.name}</Name>
             <Brand>{product.brandInfo.name}</Brand>

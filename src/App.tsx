@@ -14,6 +14,7 @@ import MyPage from "@/pages/mypage/MyPage";
 import OrderPage from "@/pages/orderpage/OrderPage";
 import PrivateRoute from "@/routes/PrivateRoute";
 import ThemeProductsPage from "@/pages/themeproductspage/ThemeProductsPage";
+import ProductDetailPage from "@/pages/productdetailpage/ProductDetailPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense } from "react";
@@ -75,6 +76,14 @@ function App() {
             element={
               <Suspense fallback={<LoadingSpinner />}>
                 <ThemeProductsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/product/:productId"
+            element={
+              <Suspense fallback={<LoadingSpinner />}>
+                <ProductDetailPage />
               </Suspense>
             }
           />
