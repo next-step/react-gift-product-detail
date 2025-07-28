@@ -1,3 +1,5 @@
+import type { ProductBasicInfo } from 'src/types/product';
+
 export const Target_MAP = {
   전체: 'ALL',
   여성이: 'FEMALE',
@@ -18,23 +20,7 @@ export type RankType = keyof typeof Rank_MAP;
 export const TargetS = Object.keys(Target_MAP) as TargetType[];
 export const RankS = Object.keys(Rank_MAP) as RankType[];
 
-export interface Product {
-  id: number;
-  name: string;
-  imageURL: string;
-  price: {
-    basicPrice: number;
-    discountRate: number;
-    sellingPrice: number;
-  };
-  brandInfo: {
-    id: number;
-    name: string;
-    imageURL: string;
-  };
-}
-
-export interface RankedProduct extends Product {
+export interface RankedProduct extends ProductBasicInfo {
   ranking: number;
 }
 
