@@ -24,7 +24,7 @@ export interface ProductSummary {
 
 export interface ProductDetail {
     description: string;
-    announcement: Array<{
+    announcements: Array<{
         name: string;
         value: string;
         displayOrder: number;

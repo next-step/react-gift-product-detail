@@ -12,7 +12,7 @@ import { ProductOverview, ProductTabs } from '@/entities/product/ui';
 // 2. 필터링 - 쿼리 파람 아님 (done)    
 // 3. /api/products/:productId/detail {description} : 상품설명 (done)
 // 4. /api/products/:productId/highlight-review : 선물후기
-// 5. /api/products/:productId/detail {announcements} : 상세정보
+// 5. /api/products/:productId/detail {announcements} : 상세정보 (done)
 // 6. /api/products/:productId/wish : 찜하기(낙관적 업데이트 처리), 주문하기 버튼 디자인
 
 const Product = () => {

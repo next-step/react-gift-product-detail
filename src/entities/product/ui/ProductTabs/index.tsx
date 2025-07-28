@@ -39,6 +39,19 @@ const ProductTabs = () => {
             </S.DescriptionContent>
           </S.TabContent>
         );
+      case 'detail':
+        return (
+          <S.TabContent>
+            <S.DetailContent>
+              {data.announcements?.map((item, index) => (
+                <S.DetailItem key={index}>
+                  <S.DetailName>{item.name}</S.DetailName>
+                  <S.DetailValue>{item.value}</S.DetailValue>
+                </S.DetailItem>
+              ))}
+            </S.DetailContent>
+          </S.TabContent>
+        );
       default:
         return null;
     }

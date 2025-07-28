@@ -61,3 +61,20 @@ export const DescriptionContent = styled.div`
     color: ${({ theme }) => theme.colors.gray[900]};
   }
 `;
+
+export const DetailContent = styled.div`
+  width: 100%;
+`;
+
+export const DetailItem = styled.div`
+  padding: ${({ theme }) => theme.spacing.spacing4} 0;
+`;
+
+export const DetailName = styled.h3`
+  ${({ theme }) => theme.typography.body1Bold};
+  margin-bottom: ${({ theme }) => theme.spacing.spacing2};
+`;
+
+export const DetailValue = styled.p`
+  ${({ theme }) => theme.typography.body1Regular};
+`;
