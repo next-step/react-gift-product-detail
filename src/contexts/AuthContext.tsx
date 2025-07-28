@@ -51,26 +51,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     }
   }, []);
-      
-  // 로그인 처리 (react-query mutation 활용)
+
+  // 로그인 처리 (mutation 호출 시 옵션 전달)
   const login = useCallback(async (email: string, password: string) => {
     setError(null);
-    try {
-      const response = await loginMutation.mutateAsync({ email, password });
-      const newUser: User = {
-        email: response.data.email,
-        name: response.data.name,
-        authToken: response.data.authToken,
-      };
-      setUser(newUser);
-      localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(newUser));
-      toast.success('로그인이 완료되었습니다!');
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '로그인에 실패했습니다.';
-      setError(errorMessage);
-      toast.error(errorMessage);
-      throw err;
-    }
+    await loginMutation.mutateAsync(
+      { email, password },
+      {
+        onSuccess: (response: any) => {
+          const newUser: User = {
+            email: response.data.email,
+            name: response.data.name,
+            authToken: response.data.authToken,
+          };
+          setUser(newUser);
+          localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(newUser));
+          toast.success('로그인이 완료되었습니다!');
+        },
+        onError: (err: any) => {
+          const errorMessage = err instanceof Error ? err.message : '로그인에 실패했습니다.';
+          setError(errorMessage);
+          toast.error(errorMessage);
+        }
+      }
+    );
   }, [loginMutation]);
 
   // 로그아웃 처리 (useCallback으로 메모이제이션)
@@ -78,7 +82,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     // 사용자 정보 초기화
     setUser(null);
     setError(null);
-    
     // localStorage에서 사용자 정보 삭제
     localStorage.removeItem(STORAGE_KEYS.USER_INFO);
   }, []);
