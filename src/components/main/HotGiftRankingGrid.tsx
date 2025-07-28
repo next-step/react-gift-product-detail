@@ -86,7 +86,7 @@ const INITIAL_SHOW_COUNT = 6;
 export const HotGiftRankingGrid = () => {
   const [showMore, setShowMore] = useState(false);
   const { products, loading, isEmpty } = useRankingProducts();
-  const { goOrderPage } = useRouter();
+  const { goProductDetail } = useRouter();
 
   useEffect(() => {
     setShowMore(false);
@@ -112,7 +112,7 @@ export const HotGiftRankingGrid = () => {
         {displayedItems.map((item, index) => (
           <HotGiftRankingGridItem
             key={item.id}
-            onClick={() => goOrderPage(item.id)}
+            onClick={() => goProductDetail(item.id)}
           >
             <HotGiftRankingImageContainer src={item.imageURL} alt={item.name} />
             <RankBadge rank={index + RANK_CORRECTION_NUMBER}>
