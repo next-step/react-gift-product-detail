@@ -68,7 +68,9 @@
       - [x] useProductDetail.ts를 만들어 해당 api에 대한 요청을 처리하는 로직을 작성했습니다.
       - [x] api.ts에 api 경로와 관련된 변수를 상수 처리해주었습니다.
     - [ ] 상품 주요 리뷰 API: **`/api/products/:productId/highlight-review`**
-    - [ ] 상품 관심 등록 수 API: **`/api/products/:productId/wish`**
+    - [x] 상품 관심 등록 수 API: **`/api/products/:productId/wish`**
+      - [x] useProductWish.ts를 만들어 해당 api에 대한 요청을 처리하는 로직을 작성했습니다.
+      - [x] api.ts에 api 경로와 관련된 변수를 상수 처리해주었습니다.
   - [ ] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경해보세요. (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상이에요.)
 - [ ] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
 - [ ] npm run build 성공하기

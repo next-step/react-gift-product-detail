@@ -30,3 +30,8 @@ export interface ProductDetail {
     displayOrder: number;
   }[];
 }
+
+export interface ProductWish {
+  wishCount: number;
+  isWished: boolean;
+}

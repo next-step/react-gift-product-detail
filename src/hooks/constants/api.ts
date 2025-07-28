@@ -39,3 +39,9 @@ export const getProductDetailPath = (productId: string | number): string =>
 
 export const getProductDetailUrl = (productId: string | number): string =>
   `${BASE_URL}${getProductDetailPath(productId)}`;
+
+export const getProductWishPath = (productId: string | number): string =>
+  `/api/products/${productId}/wish`;
+
+export const getProductWishUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductWishPath(productId)}`;

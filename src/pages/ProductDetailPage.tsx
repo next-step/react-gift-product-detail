@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useProductInfo } from '@/hooks/useProductInfo';
 import { useProductDetail } from '@/hooks/useProductDetail';
+import { useProductWish } from '@/hooks/useProductWish';
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -17,8 +18,15 @@ const ProductDetailPage = () => {
     isError: isDetailError,
   } = useProductDetail(productId);
 
-  if (isProductPending || isDetailPending) return <p>로딩 중...</p>;
-  if (isProductError || isDetailError) return <p>에러 발생</p>;
+  const {
+    data: wishData,
+    isPending: isWishPending,
+    isError: isWishError,
+  } = useProductWish(productId);
+
+  if (isProductPending || isDetailPending || isWishPending)
+    return <p>로딩 중...</p>;
+  if (isProductError || isDetailError || isWishError) return <p>에러 발생</p>;
 
   if (!product || !detail) return <p>데이터 없음</p>;
 
@@ -29,6 +37,9 @@ const ProductDetailPage = () => {
       <p>상품명: {product.name}</p>
       <p>가격: {product.price.sellingPrice.toLocaleString()}원</p>
       <p>브랜드: {product.brandInfo.name}</p>
+
+      <hr />
+      <p>찜 수: {wishData?.wishCount}</p>
 
       <hr />
       <h3>상품 설명</h3>
