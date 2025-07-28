@@ -32,13 +32,13 @@ export const fetchProductSummary = async (productId: number): Promise<ProductSum
   return res.data.data
 }
 
-// * 상품 상세 정보 조회
+// * 상품 기본 정보 조회
 export const fetchProductInfo = async (productId: number): Promise<Product> => {
   const res = await apiClient.get<{ data: Product }>(API_ENDPOINTS.PRODUCTS.INFO(productId))
   return res.data.data
 }
 
-// * 상품 상세 정보 조회 (ProductDetail 타입)
+// * 상품 상세 정보 조회
 export const fetchProductDetail = async (productId: number): Promise<ProductDetail> => {
   const res = await apiClient.get<{ data: ProductDetail }>(API_ENDPOINTS.PRODUCTS.DETAIL(productId))
   return res.data.data

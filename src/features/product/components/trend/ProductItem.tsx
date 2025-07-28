@@ -14,7 +14,7 @@ export const ProductItem = ({ product, index }: { product: Product; index?: numb
 
   // * 상품 클릭시 핸들러
   const handleProductClick = () => {
-    navigate(`${ROUTE_PATH.ORDER}/${product.id}`)
+    navigate(`${ROUTE_PATH.PRODUCT}/${product.id}`)
   }
 
   return (
