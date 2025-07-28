@@ -77,9 +77,7 @@ export const fetchWishInfo = async (_productId: string) => {
   };
 };
 
-export const fetchAddWishSuccess = async (
-  newWish: boolean
-): Promise<boolean> => {
+export const fetchAddWishSuccess = async (newWish: boolean) => {
   await sleep(300);
   return newWish;
 };
