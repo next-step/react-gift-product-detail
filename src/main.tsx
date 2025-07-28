@@ -1,10 +1,22 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { ThemeProvider } from '@emotion/react'
+import GlobalStyle from '@/styles/GlobalStyle'
+import { RouterProvider } from 'react-router-dom'
+import router from '@/router'
+import { theme } from '@/theme'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-  </StrictMode>
-);
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <AuthProvider>
+        <RouterProvider router={router} />
+                <ToastContainer position="top-center" hideProgressBar />
+      </AuthProvider>
+    </ThemeProvider>
+  </StrictMode>,
+)
