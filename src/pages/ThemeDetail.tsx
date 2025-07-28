@@ -14,11 +14,13 @@ import {
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
-
+import { useContext } from 'react';
+import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
+  const { userInfo } = useContext(LoginInfoContext);
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
   const {
@@ -40,6 +42,14 @@ function ThemeDetail() {
     return <div>로딩중...</div>;
   }
 
+  function handleItemClick(itemId: number) {
+    if (userInfo.email === '') {
+      navigate('/login');
+    } else {
+      navigate(`/product/${itemId}`);
+    }
+  }
+
   return (
     <ThemeContainerWrapper>
       {themeInfo ? (
@@ -55,7 +65,7 @@ function ThemeDetail() {
       <ProductList>
         {products.length === 0 && !loading && <div>상품이 없습니다.</div>}
         {products.map((item, idx) => (
-          <ProductCard key={`${item.id}-${idx}`}>
+          <ProductCard onClick={() => handleItemClick(item.id)} key={`${item.id}-${idx}`}>
             <ProductImg src={item.imageURL} alt={item.name} />
             <ProductName>{item.name}</ProductName>
             <ProductBrand>{item.brandInfo.name}</ProductBrand>
