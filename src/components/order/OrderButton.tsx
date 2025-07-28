@@ -7,15 +7,15 @@ interface OrderButtonProps {
   productPrice?: number;
 }
 
-const OrderButtonContainer = styled.div({
+const OrderButtonContainer = styled.div(({ theme }) => ({
   position: "fixed",
   bottom: 0,
   width: "100%",
   maxWidth: "720px",
   left: "50%",
   transform: "translateX(-50%)",
-  zIndex: 100,
-});
+  zIndex: theme.zIndex.orderButton,
+}));
 
 const OrderButtonText = styled.span(({ theme }) => ({
   fontSize: theme.typography.body1Bold.fontSize,
