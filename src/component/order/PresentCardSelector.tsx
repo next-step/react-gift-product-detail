@@ -1,5 +1,5 @@
 import { CardTemplete } from '@/mock/CardTemplete';
-import { CentorAlignDiv, DefaultComponentDiv, EmptyDiv40h, EmptyDiv8h, LowSlideDiv, SideBlankDiv } from '@/styles/CommomStyle/Common.styled';
+import { CentorAlignDiv, DefaultComponentDiv, Gap, LowSlideDiv, SideBlankDiv } from '@/styles/CommomStyle/Common.styled';
 import { useState } from 'react'
 import { CardBiGImg, CardBiGImgDiv, CardMessage, CardMiniImg } from './PresentCardSelector.styled';
 import { useOrder } from '@/context/OrderContext';
@@ -15,7 +15,7 @@ const PresentCardSelector= () => {
       <LowSlideDiv>
         {CardTemplete.map((card, i) => (
           <CardMiniImg
-            key={i}
+            key={card.id}
             src={card.thumbUrl}
             alt={card.defaultTextMessage}
             onClick={() => {
@@ -29,7 +29,7 @@ const PresentCardSelector= () => {
         ))}
       </LowSlideDiv>
 
-      <EmptyDiv8h/>
+      <Gap height={8} />
 
       <CentorAlignDiv>
       <CardBiGImgDiv>
@@ -40,7 +40,7 @@ const PresentCardSelector= () => {
       </CardBiGImgDiv>
       </CentorAlignDiv>
 
-      <EmptyDiv40h/>
+      <Gap height={40} />
 
       <SideBlankDiv style={{ marginTop: '16px' }}>
         <CardMessage
@@ -50,7 +50,7 @@ const PresentCardSelector= () => {
         />
       </SideBlankDiv>
 
-      <EmptyDiv40h/>
+      <Gap height={40} />
 
     </DefaultComponentDiv>
   );

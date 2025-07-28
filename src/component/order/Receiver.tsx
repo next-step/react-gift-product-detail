@@ -1,9 +1,7 @@
 import {
   DefaultComponentDiv,
-  EmptyDiv12h,
-  EmptyDiv24h,
-  EmptyDiv8h,
   FlatLowField,
+  Gap,
   ListBody,
   ListTop,
   ReceiverEmpty,
@@ -22,13 +20,13 @@ const Receiver = () => {
   const { receivers } = useReceiver();
   return (
     <DefaultComponentDiv>
-      <EmptyDiv8h />
+      <Gap height={8}  />
       <SideBlankDiv>
         <FlatLowField>
           <SubTitle>받는 사람</SubTitle>
           <SimpleButton onClick={() => setIsOpen(true)}>추가</SimpleButton>
         </FlatLowField>
-        <EmptyDiv12h />
+        <Gap height={12}  />
 
         {receivers.length == 0 ? (
           <ReceiverEmpty>
@@ -55,10 +53,10 @@ const Receiver = () => {
           </ReceiverList>
         )}
 
-        <ReceiverModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-        <EmptyDiv8h />
+        <ReceiverModal isOpen={isOpen} closeModal={() => setIsOpen(false)} />
+        <Gap height={8}  />
       </SideBlankDiv>
-      <EmptyDiv24h />
+      <Gap height={24}  />
     </DefaultComponentDiv>
   );
 };

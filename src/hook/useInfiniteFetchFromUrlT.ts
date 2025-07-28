@@ -1,29 +1,38 @@
-import { getFromUrl } from "@/utils/getFromUrl";
+import type { ApiResponse } from "@/type/GiftAPI/product";
 import { useEffect, useState } from "react";
 
-function useFetchFromUrlT<T>(url: string, defaultT : T) {
+function useInfiniteFetchFromUrlT<T>( url: string, fetchFn : (url : string) => Promise<ApiResponse<T>>, defaultT: T) {
     const [item, setItem] = useState<T>(defaultT);
-    const [loding, setLoding] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
 
     useEffect(() => {
-        const fetchTheme = async () => {
+        let isMounted = true;
+        const fetchData = async () => {
             try {
-                const Ranking = await getFromUrl(url);
-                setItem(Ranking.data);
-            }catch (error){
+                const newItem = await fetchFn(url);
+
+
+                if (!isMounted) return;
+
+                setItem(newItem.data);
+
+            } catch (error) {
                 setError(error as Error);
-                throw new Error(`${url} 데이터 Fetch 실패,  ${(error as Error).message}`);
             } finally {
-                setLoding(false);
+                setLoading(false);
             }
             
+
         };
 
-        fetchTheme();
+        fetchData();
+        return () => {
+            isMounted =false;
+        }
     }, [url])
-    return {item,loding,error}
+    return { item, loading, error }
 }
 
-export default useFetchFromUrlT
+export default useInfiniteFetchFromUrlT

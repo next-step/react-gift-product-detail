@@ -1,74 +1,21 @@
 import {
 } from '@/component/main/GiftRanking.styled';
-import { useAuth } from '@/context/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
-import { defaultProductItemFromTheme, type ProductItem, type ProductItemFromTheme } from '@/type/GiftAPI/product';
 import { CentorAlignDiv240,} from '@/styles/CommomStyle/Common.styled';
-
 import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
-import { useEffect, useState } from 'react';
 import Loading from '../Loading';
-import { BaseUrl } from '@/constant/api';
+import useProductList from '@/hook/useProductList';
 
 
 const ProductList = () => {
-  const { themeId } = useParams<{ themeId: string }>();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const [cursor, setCursor] = useState(0);
-  const [productList,serProductList] = useState<ProductItem[]>([]);
-  const [loaderRef, setLoaderRef] = useState<HTMLDivElement | null>(null);
-  const [extraLoading, setExtraLoading] = useState(false);
-
-  const productsUrl = `${BaseUrl}/api/themes/${themeId}/products?cursor=${cursor}`
-  const { item, loading, error } = useFetchFromUrlT<ProductItemFromTheme>(productsUrl, defaultProductItemFromTheme,true);
-
-
-  useEffect(() => {
-    if (item?.list) {
-      serProductList(prev => [...prev, ...item.list]);
-      setExtraLoading(false);
-    }
-  },[item]);
-
-  useEffect(() =>{
-    if(!loaderRef) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setCursor(prev => prev + 10);
-        setExtraLoading(true);
-      }
-  }, 
-  {
-    root: null,
-    rootMargin: '100px',
-    threshold: 0.1,
-  });
-
-  observer.observe(loaderRef);
-
-  return () => observer.disconnect();
-}, [loaderRef]);
-
-
-  const handleClickProduct = (product: ProductItem) => {
-    if (!user) {
-      navigate(`/login?redirect=/order?id=${product.id}`);
-    } else {
-      navigate(`/order?id=${product.id}`);
-    }
-  };
-
+   const {data, isLoading, error, productList,extraLoading,handleClickProduct,setLoaderRef} = useProductList();
 
   if (error) return null
 
-  if (loading) return (
+  if (isLoading) return (
     <Loading/>
   );
   
-  if (!loading && productList.length === 0 && item?.list?.length === 0) return (
+  if (!isLoading && productList.length === 0 && data?.list?.length === 0) return (
     <CentorAlignDiv240>
       <p>상품이 없습니다</p>
     </CentorAlignDiv240>

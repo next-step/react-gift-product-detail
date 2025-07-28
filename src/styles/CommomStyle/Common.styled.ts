@@ -41,59 +41,12 @@ export const SimplePadding20 = styled.div`
 `;
 
 
-export const EmptyDiv4h = styled.div`
+export const Gap = styled.div<{ height?: number }>`
   width: 100%;
-  height: 4px;
+  height: ${({ height }) => (height ? `${height}px` : '4px')};;
   background-color: transparent;
 `;
 
-export const EmptyDiv8h = styled.div`
-  width: 100%;
-  height: 8px;
-  background-color: transparent;
-`;
-
-export const EmptyDiv12h = styled.div`
-  width: 100%;
-  height: 12px;
-  background-color: transparent;
-`;
-
-export const EmptyDiv16h = styled.div`
-  width: 100%;
-  height: 16px;
-  background-color: transparent;
-`;
-
-
-export const EmptyDiv20h = styled.div`
-  width: 100%;
-  height: 20px;
-  background-color: transparent;
-`;
-export const EmptyDiv24h = styled.div`
-  width: 100%;
-  height: 24px;
-  background-color: transparent;
-`;
-
-export const EmptyDiv32h = styled.div`
-  width: 100%;
-  height: 32px;
-  background-color: transparent;
-`;
-
-export const EmptyDiv40h = styled.div`
-  width: 100%;
-  height: 40px;
-  background-color: transparent;
-`;
-
-export const EmptyDiv48h = styled.div`
-  width: 100%;
-  height: 48px;
-  background-color: transparent;
-`;
 
 export const EmptyDivGray8h = styled.div`
   width: 100%;

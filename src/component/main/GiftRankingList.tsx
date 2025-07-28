@@ -7,11 +7,12 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import type { ProductItem } from '@/type/GiftAPI/product';
 import type { RankType, TargetType } from '@/type/giftRanking';
-import { CentorAlignDiv240, EmptyDiv16h } from '@/styles/CommomStyle/Common.styled';
+import { CentorAlignDiv240, Gap } from '@/styles/CommomStyle/Common.styled';
 import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import Loading from '../Loading';
 import { baseRankingUrl } from '@/constant/api';
+import { getFromUrl } from '@/utils/getFromUrl';
+import { useQuery } from '@tanstack/react-query';
 
 
 
@@ -27,12 +28,15 @@ const GIFTLENGTH = 6;
 const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
     const RankingUrl = `${baseRankingUrl}?targetType=${targetType}&rankType=${rankType}`
     const [isExpanded, setIsExpanded] = useState(false);
-    const { item, loading, error } = useFetchFromUrlT<[]>(RankingUrl, []);
+    const { data, error, isLoading } = useQuery<[]>({
+        queryKey: ['rankingData', RankingUrl],
+        queryFn: () => getFromUrl(RankingUrl)
+    });
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    const visibleCount = isExpanded ? item?.length : GIFTLENGTH;
-    const shownProducts = (item as ProductItem[]).slice(0, visibleCount);
+    const visibleCount = isExpanded ? data?.length : GIFTLENGTH;
+    const shownProducts = data ? (data as ProductItem[]).slice(0, visibleCount) : [];
 
     const handleClickProduct = (item: ProductItem) => {
         if (!user) {
@@ -45,14 +49,15 @@ const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
 
     if (error) return null
 
-    if (item === null || loading) return (
-        <Loading/>
+    if (data === null || isLoading) return (
+        <Loading />
     )
-    if (item?.length === 0) return (
+    if (data?.length === 0) return (
         <CentorAlignDiv240>
             <p>상품이 없습니다</p>
         </CentorAlignDiv240>
     )
+
     return (
         <>
             <ProductGrid>
@@ -71,9 +76,9 @@ const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
                     </ProductCard>
                 ))}
             </ProductGrid>
-            <EmptyDiv16h />
+            <Gap height={16} />
             <LoadMoreButtonDiv>
-                {item.length > GIFTLENGTH && (
+                {data?.length !== undefined && data?.length > GIFTLENGTH && (
                     <LoadMoreButton onClick={() => setIsExpanded((prev) => !prev)}>
                         <p>
                             {isExpanded ? '접기' : '더보기'}
@@ -82,7 +87,7 @@ const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
                 )}
             </LoadMoreButtonDiv>
 
-            <EmptyDiv16h />
+            <Gap height={16} />
         </>
     )
 };
