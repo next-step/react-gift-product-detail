@@ -1,0 +1,133 @@
+/** @jsxImportSource @emotion/react */
+import { useState } from "react";
+import styled from "@emotion/styled";
+import { useProductDetail } from "@/hooks/queries/useProductDetail";
+
+interface Props {
+  productId: number;
+}
+
+const TABS = ["상품설명", "선물후기", "상세정보"] as const;
+
+export const DetailTab = ({ productId }: Props) => {
+  const [selected, setSelected] = useState<(typeof TABS)[number]>("상품설명");
+  const { data: detail } = useProductDetail(productId);
+
+  return (
+    <Wrapper>
+      <TabHeader>
+        {TABS.map(tab => (
+          <TabButton
+            key={tab}
+            isActive={selected === tab}
+            onClick={() => setSelected(tab)}
+          >
+            {tab}
+          </TabButton>
+        ))}
+      </TabHeader>
+
+      <TabContent>
+        {selected === "상품설명" && (
+          <Description
+            dangerouslySetInnerHTML={{
+              __html: detail?.description ?? "상품 설명이 없습니다.",
+            }}
+          />
+        )}
+
+        {selected === "선물후기" && (
+          <Placeholder>후기 기능은 곧 제공될 예정입니다.</Placeholder>
+        )}
+
+        {selected === "상세정보" && (
+          <AnnouncementList>
+            {Array.isArray(detail?.announcements) && detail.announcements.length > 0 ? (
+              detail.announcements.map(info => (
+                <li key={info.name}>
+                  <strong>{info.name}</strong>
+                  <div>{info.value}</div>
+                </li>
+              ))
+            ) : (
+              <li>상세 정보가 없습니다.</li>
+            )}
+          </AnnouncementList>
+        )}
+      </TabContent>
+    </Wrapper>
+  );
+};
+
+
+const Wrapper = styled.section`
+  margin-top: ${({ theme }) => theme.spacing.spacing6};
+`;
+
+const TabHeader = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderDefault};
+`;
+
+const TabButton = styled.button<{ isActive: boolean }>`
+  flex: 1;
+  padding: ${({ theme }) => theme.spacing.spacing3};
+  background: none;
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  font-weight: ${({ isActive, theme }) =>
+    isActive ? theme.typography.body1Bold.fontWeight : theme.typography.body1Regular.fontWeight};
+  color: ${({ isActive, theme }) =>
+    isActive ? theme.colors.textDefault : theme.colors.textSub};
+  border-bottom: 2px solid
+    ${({ isActive, theme }) => (isActive ? theme.colors.textDefault : "transparent")};
+  cursor: pointer;
+`;
+
+const TabContent = styled.div`
+  padding: ${({ theme }) => theme.spacing.spacing4}; 
+  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
+`;
+
+const Description = styled.div`
+  line-height: 1.6;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  p {
+    margin-bottom: ${({ theme }) => theme.spacing.spacing3};
+    word-break: break-word;
+  }
+`;
+
+
+const Placeholder = styled.div`
+  color: ${({ theme }) => theme.colors.textSub};
+`;
+
+const AnnouncementList = styled.ul`
+  list-style: none;
+  padding: 0;
+  line-height: 1.8;
+
+  li {
+    margin-bottom: ${({ theme }) => theme.spacing.spacing3}; 
+  }
+
+  strong {
+    display: block;
+    margin-bottom: ${({ theme }) => theme.spacing.spacing1};
+    color: ${({ theme }) => theme.colors.textDefault};
+    font-size: ${({ theme }) => theme.typography.subtitle2Bold.fontSize};
+    font-weight: ${({ theme }) => theme.typography.subtitle2Bold.fontWeight};
+  }
+
+  div {
+    color: ${({ theme }) => theme.colors.textDefault};
+    font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
+  }
+`;

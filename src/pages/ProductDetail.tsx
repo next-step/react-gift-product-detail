@@ -1,19 +1,18 @@
 /** @jsxImportSource @emotion/react */
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useProductSummary } from "@/hooks/queries/useProductSummary";
-import { PATH } from "@/constants/path";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { Navigation } from "@/components/header/Navigation";
-
+import { DetailTab } from "@/components/product/DetailTab";
+import { useRequireNavigate } from "@/hooks/useRequireNavigate";
 import styled from "@emotion/styled";
 
 const ProductDetail = () => {
   const { productId } = useParams();
-  const navigate = useNavigate();
   const id = Number(productId);
-
   const { data: product } = useProductSummary(id);
+  const goTo = useRequireNavigate(); 
 
   if (!product) return null;
 
@@ -28,9 +27,10 @@ const ProductDetail = () => {
             <Name>{product.name}</Name>
             <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
           </Info>
+          <DetailTab productId={product.id} />
 
           <StickyFooter>
-            <OrderButton onClick={() => navigate(PATH.ORDER(product.id))}>
+            <OrderButton onClick={() => goTo(`/order/${product.id}`)}>
               주문하기
             </OrderButton>
           </StickyFooter>
@@ -41,6 +41,7 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
+
 const Wrapper = styled.div`
   padding-bottom: 90px;
 `;

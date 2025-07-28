@@ -2,7 +2,7 @@ import { client } from "./client";
 
 export interface ProductDetail {
   description: string;
-  announcement: {
+  announcements: {
     name: string;
     value: string;
     displayOrder: number;
