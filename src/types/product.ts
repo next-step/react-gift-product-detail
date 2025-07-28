@@ -22,13 +22,15 @@ export interface ProductSummary {
   imageURL: string;
 }
 
+export interface Announcement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
 export interface ProductDetail {
   description: string;
-  announcements?: {
-    name: string;
-    value: string;
-    displayOrder: number;
-  }[];
+  announcements?: Announcement[];
 }
 
 export interface ProductWish {
