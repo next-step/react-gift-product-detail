@@ -1,25 +1,30 @@
 import styled from '@emotion/styled';
+import { useParams } from 'react-router-dom';
+import { useProductInfo } from '@/hooks/useProductInfo';
+import { loading } from '@/components/common/Loading';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
-interface Props {
-  imageURL: string;
-  name: string;
-  price: number;
-  brand: {
-    name: string;
-    imageURL: string;
-  };
-}
+const ProductHeader = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const { data: product, isLoading, isError } = useProductInfo(productId);
 
-const ProductHeader = ({ imageURL, name, price, brand }: Props) => {
+  if (isLoading) return loading;
+  if (isError || !product) {
+    return <ErrorText>{ERROR_MESSAGES.LOAD_PRODUCT_FAIL}</ErrorText>;
+  }
+
   return (
     <>
-      <Image src={imageURL} alt={name} />
+      <Image src={product.imageURL} alt={product.name} />
       <Content>
-        <Title>{name}</Title>
-        <Price>{price.toLocaleString()}원</Price>
+        <Title>{product.name}</Title>
+        <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
         <Brand>
-          <BrandLogo src={brand.imageURL} alt={brand.name} />
-          <BrandName>{brand.name}</BrandName>
+          <BrandLogo
+            src={product.brandInfo.imageURL}
+            alt={product.brandInfo.name}
+          />
+          <BrandName>{product.brandInfo.name}</BrandName>
         </Brand>
       </Content>
     </>
@@ -66,4 +71,11 @@ const BrandLogo = styled.img`
 
 const BrandName = styled.p`
   ${({ theme }) => theme.typography.label.label2Regular};
+`;
+
+const ErrorText = styled.p`
+  text-align: center;
+  color: ${({ theme }) => theme.color.semantic.text.default};
+  padding: ${({ theme }) => theme.spacing[6]};
+  ${({ theme }) => theme.typography.body.body2Regular};
 `;
