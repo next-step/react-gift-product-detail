@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import{ useRequireNavigate } from "@/hooks/useRequireNavigate";
+import {useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import type { ThemeType } from "@/styles/theme/theme";
+import { PATH } from "@/constants/path";
 
 interface RankingItemCardProps {
   id: number;
@@ -21,10 +23,17 @@ export const RankingCard = ({
   price,
 }: RankingItemCardProps) => {
   const theme = useTheme();
-  const goTo = useRequireNavigate();
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const handleClick = () => {
-    goTo(`/product/${id}`);
+    if (isLoggedIn) {
+      navigate(`/product/${id}`);
+    } else {
+      navigate(PATH.LOGIN, {
+        state: { from: { pathname: `/product/${id}` } },
+      });
+    }
   };
 
   return (

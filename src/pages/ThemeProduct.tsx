@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as S from "@/styles/ThemeProductStyles";
@@ -9,9 +10,9 @@ import { Spinner } from "@/components/common/Spinner";
 import { fetchThemeInfo, fetchThemeProducts } from "@/api/theme";
 import { PATH } from "@/constants/path";
 import { useIntersect } from "@/hooks/useIntersect";
-import { useRequireNavigate } from "@/hooks/useRequireNavigate";
-import type { ProductSummary } from "@/api/product";
+import { useAuth } from "@/contexts/AuthContext";
 import AsyncBoundary from "@/components/common/AsyncBoundary";
+import type { ProductSummary } from "@/api/product";
 
 interface ThemeInfo {
   themeId: number;
@@ -24,7 +25,7 @@ interface ThemeInfo {
 const ThemeProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const goTo = useRequireNavigate();
+  const { isLoggedIn } = useAuth();
 
   const [theme, setTheme] = useState<ThemeInfo | null>(null);
   const [products, setProducts] = useState<ProductSummary[]>([]);
@@ -78,6 +79,16 @@ const ThemeProduct = () => {
 
   const observerRef = useIntersect<HTMLDivElement>(loadProducts, hasMore);
 
+  const handleCardClick = (productId: number) => {
+    if (isLoggedIn) {
+      navigate(`/product/${productId}`);
+    } else {
+      navigate(PATH.LOGIN, {
+        state: { from: { pathname: `/product/${productId}` } },
+      });
+    }
+  };
+
   if (loading) {
     return (
       <AsyncBoundary fallback={<Spinner withWrapper />}>
@@ -110,7 +121,7 @@ const ThemeProduct = () => {
                 return (
                   <S.ProductCard
                     key={item.id}
-                    onClick={() => goTo(`/product/${item.id}`)}
+                    onClick={() => handleCardClick(item.id)}
                   >
                     {isLast ? (
                       <div ref={observerRef}>
