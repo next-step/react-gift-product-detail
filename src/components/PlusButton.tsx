@@ -18,8 +18,8 @@ const PlusButton = styled.img<PlusButtonStyle>`
     active,
   }) => {
     return `
-    width: 30px;
-    height: 30px;
+    width: 1.7rem;
+    height: 1.7rem;
     padding: ${theme.space[padding]};
     background-color: ${
       active ? theme.colors[activeColor] : theme.colors[backGroundColor]

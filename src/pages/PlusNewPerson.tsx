@@ -55,8 +55,9 @@ const PlusNewPerson = () => {
           margin="spacing2"
           padding="spacing2"
           marginTop="spacing1"
+          marginLeft="spacing0"
         >
-          {Cookie.getUsernameFromCookie()}님! 선물할 친구를 선택해 주세요.
+          {localStorage.getItem("name")}님! 선물할 친구를 선택해 주세요.
         </Text>
       </PresentWho>
     </PresentWhoBackGround>
