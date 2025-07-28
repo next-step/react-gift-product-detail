@@ -1,15 +1,12 @@
 import { css } from '@emotion/react';
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { colors } from '@/styles/colors';
 import { spacing } from '@/styles/spacing';
 import { typography } from '@/styles/typography';
 import GlobalStyle from '@/styles/GlobalStyle';
 import Header from '@/components/Header';
-import { fetchThemeInfo, fetchThemeProducts } from '@/api/categoryApi';
+import { useThemeInfoQuery } from '@/hooks/useCategoryQuery';
 import ThemeProductGrid from '@/components/ThemeProductGrid';
-import type { ThemeInfo } from '@/types/category';
-import { type Product } from '@/types/product';
 import { spinnerStyle } from '@/styles/common';
 
 const heroStyle = (backgroundColor: string) => css({
@@ -42,83 +39,16 @@ const loadingStyle = css({
   gap: spacing.spacing2,
 });
 
+
+// ...existing code...
+
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
-  const [themeInfo, setThemeInfo] = useState<ThemeInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // 쿼리 훅 사용
+  const { data: themeInfo, isLoading: loading, error } = useThemeInfoQuery(Number(themeId));
 
-  // 상품 목록 상태
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productLoading, setProductLoading] = useState(true);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
-
-  // 테마 정보 로딩
-  useEffect(() => {
-    const loadThemeInfo = async () => {
-      if (!themeId) {
-        setError('잘못된 접근입니다.');
-        return;
-      }
-      try {
-        setLoading(true);
-        const data = await fetchThemeInfo(Number(themeId));
-        setThemeInfo(data);
-      } catch (err: any) {
-        console.error('테마 정보 로드 실패:', err);
-        if (err.message === 'THEME_NOT_FOUND') {
-          setError('존재하지 않는 테마입니다.');
-          return;
-        }
-        setError('테마 정보를 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadThemeInfo();
-  }, [themeId, navigate]);
-
-  // 상품 목록 로딩
-  useEffect(() => {
-    if (!themeId) return;
-    const loadProducts = async () => {
-      setProductLoading(true);
-      try {
-        const result = await fetchThemeProducts(Number(themeId), 0, 10);
-        setProducts(result.list);
-        setCursor(result.cursor);
-        setHasMore(result.hasMoreList);
-      } catch (err) {
-        setProducts([]);
-        setHasMore(false);
-      } finally {
-        setProductLoading(false);
-      }
-    };
-    loadProducts();
-  }, [themeId]);
-
-  // 더보기 핸들러
-  const handleLoadMore = async () => {
-    if (!themeId || !hasMore) return;
-    setProductLoading(true);
-    try {
-      const result = await fetchThemeProducts(Number(themeId), cursor, 10);
-      setProducts(prev => {
-        const ids = new Set(prev.map(p => p.id));
-        const newList = result.list.filter(p => !ids.has(p.id));
-        return [...prev, ...newList];
-      });
-      setCursor(result.cursor);
-      setHasMore(result.hasMoreList);
-    } catch (err) {
-      setHasMore(false);
-    } finally {
-      setProductLoading(false);
-    }
-  };
+  // ...existing code...
 
   if (loading) {
     return (
@@ -169,12 +99,7 @@ const ThemeProductsPage = () => {
         <p css={heroDescriptionStyle}>{themeInfo.description}</p>
       </section>
       {/* 상품 목록 영역 */}
-      <ThemeProductGrid
-        products={products}
-        loading={productLoading && products.length === 0}
-        hasMore={hasMore}
-        onLoadMore={handleLoadMore}
-      />
+      <ThemeProductGrid themeId={Number(themeId)} />
     </div>
   );
 };

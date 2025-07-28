@@ -9,9 +9,8 @@ import { spacing } from '@/styles/spacing';
 import { typography } from '@/styles/typography';
 import GlobalStyle from '@/styles/GlobalStyle';
 import { useAuth } from '@/contexts/AuthContext';
-import { fetchProductSummary } from '@/api/productApi';
-import { createOrder } from '@/api/orderApi';
-import type { ProductSummary } from '@/types/product';
+import { useProductSummaryQuery } from '@/hooks/useProductQuery';
+import { useCreateOrderMutation } from '@/hooks/useOrderQuery';
 import type { OrderRequest } from '@/types/order';
 import orderCardsData from '@/data/orderCard';
 import ReceiverModal from './ReceiverModal';
@@ -231,11 +230,10 @@ const OrderPage = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
 
-  // 제품 정보 상태 추가
-  const [productData, setProductData] = useState<ProductSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  // 제품 정보 쿼리 훅 사용
+  const { data: productData, isLoading: loading, error: productError } = useProductSummaryQuery(Number(productId));
 
-  // react-hook-form 적용
+  // 모든 훅을 최상단에 선언
   const { register, handleSubmit, formState: { errors }, setValue } = useForm({
     mode: 'onSubmit',
     defaultValues: {
@@ -243,36 +241,17 @@ const OrderPage = () => {
       senderName: user?.name || '',
     },
   });
-
-  // 제품 정보 가져오기
-  useEffect(() => {
-    const loadProductData = async () => {
-      try {      
-        setLoading(true);
-        const data = await fetchProductSummary(Number(productId));
-        setProductData(data);
-      } catch (error) {
-        // 에러 토스트 표시 후 홈으로 리다이렉트
-        const errorMessage = error instanceof Error ? error.message : '상품 정보를 불러오는데 실패했습니다.';
-        toast.error(errorMessage);
-        navigate('/');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProductData();
-  }, [productId, navigate]);
-  
-  // 가져온 orderCard.ts 데이터 사용
   const [selectedCard, setSelectedCard] = useState<OrderCard>(orderCardsData[0]);
-  
-
-  // 모달 열기/닫기 상태
   const [receiverModalOpen, setReceiverModalOpen] = useState(false);
-
-  // 받는 사람 리스트 상태 추가
   const [receivers, setReceivers] = useState<Receiver[]>([]);
+  const createOrderMutation = useCreateOrderMutation();
+
+  // 에러 발생 시 홈으로 이동
+  if (productError) {
+    toast.error(productError.message);
+    navigate('/');
+    return null;
+  }
 
   // 카드 선택 핸들러
   const handleCardSelect = (card: OrderCard) => {
@@ -280,51 +259,46 @@ const OrderPage = () => {
     // 카드 선택 시 해당 카드의 기본 메시지로 변경
     setValue('message', card.defaultTextMessage);
   };
-  
+
   // 주문하기 핸들러 (react-hook-form)
-  const onSubmit = async (data: { message: string; senderName: string }) => {
+  const onSubmit = (data: { message: string; senderName: string }) => {
     if (!productData || !user?.authToken) return;
-    
-    // 받는 사람이 없으면 경고
+
     if (receivers.length === 0) {
       toast.error('받는 사람을 추가해주세요');
       return;
     }
 
-    try {
-      // 주문 요청 데이터 생성
-      const orderData: OrderRequest = {
-        productId: productData.id,
-        message: data.message,
-        messageCardId: selectedCard.id.toString(),
-        ordererName: data.senderName,
-        receivers: receivers.map(receiver => ({
-          name: receiver.receiverName,
-          phoneNumber: receiver.phoneNumber,
-          quantity: receiver.quantity
-        }))
-      };
+    const orderData: OrderRequest = {
+      productId: productData.id,
+      message: data.message,
+      messageCardId: selectedCard.id.toString(),
+      ordererName: data.senderName,
+      receivers: receivers.map(receiver => ({
+        name: receiver.receiverName,
+        phoneNumber: receiver.phoneNumber,
+        quantity: receiver.quantity
+      }))
+    };
 
-      // 주문 API 호출
-      await createOrder(orderData, user.authToken);
-      
-      // 주문 성공 토스트
-      toast.success('주문이 성공적으로 완료되었습니다!');
-      
-      // 성공 시 홈으로 이동
-      navigate('/');
-    } catch (error) {
-      if (error instanceof Error && error.message === 'UNAUTHORIZED') {
-        // 401 에러의 경우 로그인 페이지로 이동
-        navigate('/login', { state: { from: `/order/${productId}` } });
-      } else {
-        // 기타 에러의 경우 에러 토스트 표시
-        const errorMessage = error instanceof Error ? error.message : '주문 처리 중 오류가 발생했습니다.';
-        toast.error(errorMessage);
+    createOrderMutation.mutate(
+      { orderData, authToken: user.authToken },
+      {
+        onSuccess: () => {
+          toast.success('주문이 성공적으로 완료되었습니다!');
+          navigate('/');
+        },
+        onError: (error: any) => {
+          if (error instanceof Error && error.message === 'UNAUTHORIZED') {
+            navigate('/login', { state: { from: `/order/${productId}` } });
+          } else {
+            const errorMessage = error instanceof Error ? error.message : '주문 처리 중 오류가 발생했습니다.';
+            toast.error(errorMessage);
+          }
+        }
       }
-    }
+    );
   };
-  
 
   // 로그인 체크
   useEffect(() => {
@@ -332,7 +306,6 @@ const OrderPage = () => {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }
   }, [isAuthenticated, navigate, productId]);
-  
 
   // 받는 사람 전체 수량 합계 계산
   const totalQuantity = receivers.reduce((sum, r) => sum + (r.quantity || 0), 0);
@@ -350,7 +323,7 @@ const OrderPage = () => {
       </>
     );
   }
-  
+
   return (
     <>
       <GlobalStyle />
