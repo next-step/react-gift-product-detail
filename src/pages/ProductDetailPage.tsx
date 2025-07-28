@@ -1,13 +1,16 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
 import { useNavigate, useParams } from "react-router-dom";
+import { Suspense } from "react";
 import ProductCard from "@/components/productDetail/ProductCard";
 import DetailCard from "@/components/productDetail/DetailCard";
 import WishButton from "@/components/productDetail/WishButton";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { getUserFromSession } from "@/utils/getUserFromStorage";
 import { PATH } from "@/paths";
 
-export default function ProductDetailPage() {
+function ProductDetailContent() {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
@@ -23,17 +26,42 @@ export default function ProductDetailPage() {
   return (
     <Container>
       <Wrapper>
-        <ProductCard productId={productId ?? ""} />
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner message="상품 정보를 불러오는 중..." />}>
+            <ProductCard productId={productId ?? ""} />
+          </Suspense>
+        </ErrorBoundary>
+        
         <Spacing height="8px" />
-        <DetailCard productId={productId ?? ""} />
+        
+        <ErrorBoundary>
+          <Suspense fallback={<LoadingSpinner message="상세 정보를 불러오는 중..." />}>
+            <DetailCard productId={productId ?? ""} />
+          </Suspense>
+        </ErrorBoundary>
+        
         <OrderWrapper>
-          <WishButton productId={productId ?? ""} />
+          <ErrorBoundary>
+            <Suspense fallback={<LoadingSpinner size="small" />}>
+              <WishButton productId={productId ?? ""} />
+            </Suspense>
+          </ErrorBoundary>
           <OrderButton onClick={() => goToOrder(productId ?? "")}>
             <Order>주문하기</Order>
           </OrderButton>
         </OrderWrapper>
       </Wrapper>
     </Container>
+  );
+}
+
+export default function ProductDetailPage() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<LoadingSpinner message="페이지를 불러오는 중..." />}>
+        <ProductDetailContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

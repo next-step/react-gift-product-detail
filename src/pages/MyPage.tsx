@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import Spacing from "@/components/Spacing";
 import { STORAGE_KEY } from "@/constants/storage";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-export default function MyPage() {
+function MyPageContent() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -42,6 +43,14 @@ export default function MyPage() {
         </MainBox>
       </Wrapper>
     </>
+  );
+}
+
+export default function MyPage() {
+  return (
+    <ErrorBoundary>
+      <MyPageContent />
+    </ErrorBoundary>
   );
 }
 

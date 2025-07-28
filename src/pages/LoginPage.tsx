@@ -9,8 +9,9 @@ import { REGEX } from "@/constants/regex";
 import { ERROR_MESSAGE } from "@/constants/messages";
 import axios from "axios";
 import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: string })?.from || "/";
@@ -92,12 +93,21 @@ export default function LoginPage() {
   );
 }
 
+export default function LoginPage() {
+  return (
+    <ErrorBoundary>
+      <LoginPageContent />
+    </ErrorBoundary>
+  );
+}
+
 const Wrapper = styled.div`
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
   min-height: calc(100vh - 56px);
   display: flex;
+  align-items: center;
   justify-content: center;
   align-items: center;
   padding: 0 16px;
@@ -174,3 +184,4 @@ const LoginButton = styled.button<{ disabled: boolean }>`
 
   ${({ disabled }) => (disabled ? disabledStyles : enabledStyles)}
 `;
+
