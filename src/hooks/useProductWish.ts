@@ -19,5 +19,6 @@ export const useProductWish = (productId: string | undefined) => {
       return wish;
     },
     enabled: !!productId,
+    staleTime: 1000 * 60 * 10,
   });
 };

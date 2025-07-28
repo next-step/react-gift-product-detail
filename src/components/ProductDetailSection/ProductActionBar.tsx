@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
-import { Heart, HeartOff } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useProductWish } from '@/hooks/useProductWish';
 import { loading } from '@/components/common/Loading';
 import { ERROR_MESSAGES } from '@/constants/validation';
@@ -12,7 +14,19 @@ const ProductActionBar = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
+  const queryClient = useQueryClient();
+
   const { data, isLoading, isError } = useProductWish(productId);
+
+  const [wishCount, setWishCount] = useState(0);
+  const [isWished, setIsWished] = useState(false);
+
+  useEffect(() => {
+    if (data) {
+      setWishCount(data.wishCount);
+      setIsWished(data.isWished);
+    }
+  }, [data]);
 
   if (isLoading) return loading;
 
@@ -20,29 +34,35 @@ const ProductActionBar = () => {
     return <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>;
   }
 
-  const { wishCount, isWished } = data;
-
   const handleWishClick = () => {
-    console.log('찜 토글 요청');
+    const newIsWished = !isWished;
+    const newCount = newIsWished ? wishCount + 1 : Math.max(0, wishCount - 1);
+
+    setIsWished(newIsWished);
+    setWishCount(newCount);
+
+    queryClient.setQueryData(['productWish', productId], {
+      wishCount: newCount,
+      isWished: newIsWished,
+    });
   };
 
   const handleOrderClick = () => {
-    if (!productId) return null;
+    if (!productId) return;
     navigate(ROUTES.ORDER(productId));
   };
 
   return (
     <BarWrapper>
       <WishButton onClick={handleWishClick}>
-        {isWished ? (
-          <Heart
-            fill={theme.color.semantic.text.default}
-            size={20}
-            strokeWidth={1.5}
-          />
-        ) : (
-          <HeartOff size={20} strokeWidth={1.5} />
-        )}
+        <Heart
+          size={20}
+          strokeWidth={1.5}
+          fill={isWished ? theme.color.red[500] : 'none'}
+          color={
+            isWished ? theme.color.red[500] : theme.color.semantic.text.default
+          }
+        />
         <WishCount>{wishCount}</WishCount>
       </WishButton>
       <Button
