@@ -1,3 +1,4 @@
+import type { ProductRankingItem } from '@/services/product';
 import { api } from './api';
 import type { ProductSummary } from '@/types/types';
 
@@ -19,4 +20,14 @@ export interface ThemeListItem {
 export const getThemeList = async (): Promise<ThemeListItem[]> => {
   const { data } = await api.get<{ data: ThemeListItem[] }>('/api/themes');
   return data.data;
+};
+
+export const getProductRanking = async (
+  targetType: 'ALL' | 'FEMALE' | 'MALE' | 'TEEN',
+  rankType: 'MANY_WISH' | 'MANY_RECEIVE' | 'MANY_WISH_RECEIVE'
+): Promise<{ data: ProductRankingItem[] }> => {
+  const res = await api.get('/api/products/ranking', {
+    params: { targetType, rankType },
+  });
+  return res.data;
 };

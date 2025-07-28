@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { getProductRanking, type ProductRankingItem } from '@/services/product';
 import LoadingSpinner from './common/LoadingSpinner';
+import { useQuery } from '@tanstack/react-query';
 
 const Wrapper = styled.section`
   padding: 0px 16px;
@@ -259,13 +260,6 @@ const PresentRanking: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedType, setSelectedType] = useState<'all' | 'female' | 'male' | 'teen'>('all');
   const [selectedPresentType, setSelectedPresentType] = useState<number>(0);
-  const [products, setProducts] = useState<ProductRankingItem[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  const navigate = useNavigate();
-  const { user } = useAuth();
-
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
     female: 'FEMALE',
@@ -274,41 +268,20 @@ const PresentRanking: React.FC = () => {
   };
 
   const apiRankTypeMap = ['MANY_WISH', 'MANY_RECEIVE', 'MANY_WISH_RECEIVE'] as const;
+  const targetType = apiTargetTypeMap[selectedType];
+  const rankType = apiRankTypeMap[selectedPresentType];
 
-  useEffect(() => {
-    const savedType = localStorage.getItem('selectedType') as
-      | 'all'
-      | 'female'
-      | 'male'
-      | 'teen'
-      | null;
-    const savedPresentType = localStorage.getItem('selectedPresentType');
+  const {
+    data: products = [],
+    isLoading: isLoadingProducts,
+    isError,
+  } = useQuery({
+    queryKey: ['productRanking', targetType, rankType],
+    queryFn: () => getProductRanking(targetType, rankType).then((res) => res.data.data),
+  });
 
-    if (savedType) setSelectedType(savedType);
-    if (savedPresentType !== null) setSelectedPresentType(Number(savedPresentType));
-  }, []);
-
-  useEffect(() => {
-    const fetchRanking = async () => {
-      setIsLoadingProducts(true);
-      setErrorMsg(null);
-
-      try {
-        const targetType = apiTargetTypeMap[selectedType];
-        const rankType = apiRankTypeMap[selectedPresentType];
-
-        const response = await getProductRanking(targetType, rankType);
-        setProducts(response.data.data);
-      } catch (error) {
-        console.error('랭킹 조회 실패', error);
-        setErrorMsg('실시간 랭킹을 불러오지 못했습니다.');
-      } finally {
-        setIsLoadingProducts(false);
-      }
-    };
-
-    fetchRanking();
-  }, [selectedType, selectedPresentType]);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleTypeSelect = (type: typeof selectedType) => {
     setShowAll(false);
@@ -390,7 +363,7 @@ const PresentRanking: React.FC = () => {
             <LoadingContainer>
               <LoadingSpinner />
             </LoadingContainer>
-          ) : errorMsg ? null : products.length === 0 ? (
+          ) : isError ? null : products.length === 0 ? (
             <NoDataContainer>
               <NoDataText>상품이 없습니다.</NoDataText>
             </NoDataContainer>
