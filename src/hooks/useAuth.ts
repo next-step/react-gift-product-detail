@@ -4,5 +4,6 @@ import { loginRequest } from '@/api/auth';
 export const useLoginMutation = () => {
   return useMutation({
     mutationFn: loginRequest,
+    retry: 0,
   });
 };

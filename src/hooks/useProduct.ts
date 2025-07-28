@@ -5,7 +5,6 @@ export const useProductRanking = (targetType: string, rankType: string) => {
   return useQuery({
     queryKey: ['productRanking', targetType, rankType],
     queryFn: () => fetchProductRanking(targetType, rankType),
-    staleTime: 1000 * 60 * 3,
   });
 };
 
@@ -14,7 +13,6 @@ export const useProductSummary = (productId: number) => {
     queryKey: ['productSummary', productId],
     queryFn: () => fetchProductSummary(productId),
     enabled: !!productId,
-    staleTime: 1000 * 60 * 3,
   });
 };
 
@@ -25,6 +23,5 @@ export const useThemeProductsInfinite = (themeId: number, limit = 20) => {
     initialPageParam: 0,
     getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
     enabled: !!themeId,
-    staleTime: 1000 * 60 * 3,
   });
 };
