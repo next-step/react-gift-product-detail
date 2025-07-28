@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import PageContainer from '@/components/PageContainer';
 import ThemeHeroSection from '@/sections/ThemeSection/ThemeHeroSection';
 import ThemeProductSection from '@/sections/ThemeSection/ThemeProductSection';
-import { useThemeInfoQuery } from '@/hooks/queries/useThemesQuery';
+import { useThemeInfoQuery } from '@/queries/useThemesQuery';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';

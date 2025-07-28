@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import ProductCard from '@/components/ProductCard';
 import { useSearchParams } from 'react-router';
-import { useGiftRankingQuery } from '@/hooks/queries/useGiftRankingQuery';
+import { useGiftRankingQuery } from '@/queries/useGiftRankingQuery';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';

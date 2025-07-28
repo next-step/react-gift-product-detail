@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import PageContainer from '@/components/PageContainer';
-import { useAuth } from '@/hooks/service/authHooks';
+import { useAuth } from '@/hooks/useAuthHooks';
 import { useNavigate } from 'react-router';
 import { withAuth } from '@/hoc/withAuth';
 

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import CategoryCard from '@/components/CategoryCard';
-import { useThemesQuery } from '@/hooks/queries/useThemesQuery';
+import { useThemesQuery } from '@/queries/useThemesQuery';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { QueryErrorResetBoundary } from '@tanstack/react-query';

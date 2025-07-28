@@ -3,13 +3,13 @@ import styled from '@emotion/styled';
 import KakaoLogo from '@/assets/kakaologo.svg';
 import PageContainer from '@/components/PageContainer';
 import Input from '@/components/Input';
-import { useInput } from '@/hooks/service/useInput';
-import { useValidate } from '@/hooks/service/useValidate';
+import { useInput } from '@/hooks/useInput';
+import { useValidate } from '@/hooks/useValidate';
 import { validateEmail, validatePassword } from '@/utils/validate';
-import { useAuth } from '@/hooks/service/authHooks';
+import { useAuth } from '@/hooks/useAuthHooks';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { useLoginMutation } from '@/hooks/service/authHooks';
+import { useLoginMutation } from '@/hooks/useAuthHooks';
 
 const LogoImage = styled.img`
   width: 88px;
