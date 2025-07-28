@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
-import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/theme/theme';
-import { useEffect, useState } from 'react';
-
-import { api } from '@/Api/api';
 import LoadingSpinner from './common/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getThemeList } from '@/Api/product';
 
 const Container = styled.section`
   padding: 8px;
@@ -74,61 +71,42 @@ interface ThemeItem {
   image: string;
 }
 
-interface ThemeResponse {
-  data: ThemeItem[];
-}
-
 const PresentTheme = () => {
   const navigate = useNavigate();
-  const [themeList, setThemeList] = useState<ThemeItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    const fetchThemes = async () => {
-      try {
-        const res = await api.get<ThemeResponse>('/api/themes');
-        setThemeList(res.data.data);
-      } catch (error) {
-        console.error('테마 불러오기 실패', error);
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchThemes();
-  }, []);
+  const {
+    data: themeList,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['themeList'],
+    queryFn: getThemeList,
+  });
 
-  if (!isLoading && (hasError || themeList.length === 0)) {
-    return null;
+  if (isLoading) {
+    return (
+      <LoadingContainer>
+        <LoadingSpinner />
+      </LoadingContainer>
+    );
   }
 
-  const handleClick = (id: number) => {
-    navigate(`/themes/${id}/products`);
-  };
+  if (isError || !themeList) return null;
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <TitleContainer>
-          <Title>선물 테마</Title>
-        </TitleContainer>
-        {isLoading ? (
-          <LoadingContainer>
-            <LoadingSpinner />
-          </LoadingContainer>
-        ) : (
-          <CategoryContainer>
-            {themeList.map((t) => (
-              <Category key={t.themeId} onClick={() => handleClick(t.themeId)}>
-                <PresentImage src={t.image} alt={t.name} />
-                <PresentName>{t.name}</PresentName>
-              </Category>
-            ))}
-          </CategoryContainer>
-        )}
-      </Container>
-    </ThemeProvider>
+    <Container>
+      <TitleContainer>
+        <Title>선물 테마</Title>
+      </TitleContainer>
+      <CategoryContainer>
+        {themeList.map((theme) => (
+          <Category key={theme.themeId} onClick={() => navigate(`/theme/${theme.themeId}`)}>
+            <PresentImage src={theme.image} alt={theme.name} />
+            <PresentName>{theme.name}</PresentName>
+          </Category>
+        ))}
+      </CategoryContainer>
+    </Container>
   );
 };
 
