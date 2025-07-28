@@ -92,3 +92,18 @@ export const getProductHighlightReview = async (
   );
   return response.data;
 };
+
+/**
+ * 상품 찜을 토글합니다.
+ * @param productId - 상품 ID
+ */
+export const toggleWish = async (
+  productId: string | number
+): Promise<{ success: boolean }> => {
+  // 실제 API가 없으므로 시뮬레이션
+  // 실제로는 POST/PUT 요청을 보내야 함
+  console.log(`상품 ${productId} 찜 토글 요청`);
+  await new Promise((resolve) => setTimeout(resolve, 100)); // 0.1초 지연 시뮬레이션
+
+  return { success: true };
+};

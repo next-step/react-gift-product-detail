@@ -52,12 +52,6 @@ const ProductDetailPage = () => {
     isLoadingBasic || isLoadingDetail || isLoadingWish || isLoadingReview;
   const hasError = errorBasic || errorDetail || errorWish || errorReview;
 
-  // 찜 버튼 클릭 핸들러 (임시 - 실제로는 mutation 필요)
-  const handleWishClick = () => {
-    console.log('찜 버튼 클릭');
-    // TODO: 찜 mutation 구현
-  };
-
   if (isLoading) {
     return (
       <Container>
@@ -96,12 +90,7 @@ const ProductDetailPage = () => {
       {/* 고정된 하단 버튼을 위한 여백 */}
       <div style={{ height: '80px' }} />
 
-      <ProductDetailActions
-        productId={productId}
-        productWish={productWish}
-        onWishClick={handleWishClick}
-        isWishLoading={isLoadingWish}
-      />
+      <ProductDetailActions productId={productId} productWish={productWish} />
     </>
   );
 };

@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTE_ORDER } from '@/constants';
 import type { ProductWishResponse } from '@/api/types';
 import { Container } from '@/components/layout';
+import { useWishMutation } from '@/api/product/mutations';
 
 interface ProductDetailActionsProps {
   productId: string;
   productWish: ProductWishResponse | null | undefined;
-  onWishClick: () => void;
-  isWishLoading: boolean;
 }
 
 const ActionsContainer = styled.div`
@@ -29,24 +28,24 @@ const ActionsContent = styled.div`
   padding: 0 16px;
 `;
 
-const WishButton = styled.button<{ isWished: boolean }>`
+const WishButton = styled.button<{ isWished: boolean; isLoading: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   background: none;
   border: none;
-  cursor: pointer;
+  cursor: ${(props) => (props.isLoading ? 'not-allowed' : 'pointer')};
   padding: 8px;
   min-width: 60px;
   color: ${(props) => (props.isWished ? '#fa342c' : '#868b94')};
   transition: color 0.2s ease;
+  opacity: ${(props) => (props.isLoading ? 0.6 : 1)};
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: ${(props) => (props.isWished ? '#fa342c' : '#555d6d')};
   }
 
   &:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
   }
 `;
@@ -86,26 +85,32 @@ const OrderButton = styled.button`
 const ProductDetailActions = ({
   productId,
   productWish,
-  onWishClick,
-  isWishLoading,
 }: ProductDetailActionsProps) => {
   const navigate = useNavigate();
+  const wishMutation = useWishMutation();
 
   const handleOrderClick = () => {
     navigate(`${ROUTE_ORDER}/${productId}`);
   };
 
+  const handleWishClick = () => {
+    if (wishMutation.isPending) return; // 중복 클릭 방지
+    wishMutation.mutate(productId);
+  };
+
   const wishCount = productWish?.data.wishCount || 0;
   const isWished = productWish?.data.isWished || false;
+  const isLoading = wishMutation.isPending;
 
   return (
     <ActionsContainer>
       <Container>
         <ActionsContent>
           <WishButton
-            onClick={onWishClick}
-            disabled={isWishLoading}
+            onClick={handleWishClick}
+            disabled={isLoading}
             isWished={isWished}
+            isLoading={isLoading}
           >
             <WishIcon>♥</WishIcon>
             <WishCount>{wishCount}</WishCount>
