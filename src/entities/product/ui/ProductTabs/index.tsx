@@ -1,10 +1,18 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import parse from 'html-react-parser';
+import { getProductDetail } from '@/entities/product/api/productApi';
+import type { ProductDetail } from '@/entities/product/model/types';
 import * as S from './styles';
 
 type TabType = 'description' | 'review' | 'detail';
 
 const ProductTabs = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const numericProductId = productId ? parseInt(productId, 10) : undefined;
   const [activeTab, setActiveTab] = useState<TabType>('description');
+  
   // TODO: 탭 라벨 상수 분리 필요
   const tabs = [
     { id: 'description' as TabType, label: '상품설명' },
@@ -16,24 +24,47 @@ const ProductTabs = () => {
     setActiveTab(tabId);
   };
 
+  const { data } = useSuspenseQuery<ProductDetail>({
+    queryKey: ['productDetail', numericProductId],
+    queryFn: () => getProductDetail(numericProductId!),
+  });
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'description':
+        return (
+          <S.TabContent>
+            <S.DescriptionContent> {/* description은 응답이 json이 아닌 html코드를 문자열로 담은 형식 */}
+              {data.description ? parse(data.description) : ''}
+            </S.DescriptionContent>
+          </S.TabContent>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <S.TabContainer>
-      {tabs.map((tab) => (
-        <S.TabButton
-          key={tab.id}
-          role="tab"
-          aria-selected={activeTab === tab.id}
-          tabIndex={0}
-          onClick={() => handleTabClick(tab.id)}
-          isActive={activeTab === tab.id}
-        >
-          <S.TabText isActive={activeTab === tab.id}>
-            {tab.label}
-          </S.TabText>
-          {activeTab === tab.id && <S.ActiveIndicator />}
-        </S.TabButton>
-      ))}
-    </S.TabContainer>
+    <>
+      <S.TabContainer>
+        {tabs.map((tab) => (
+          <S.TabButton
+            key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            tabIndex={0}
+            onClick={() => handleTabClick(tab.id)}
+            isActive={activeTab === tab.id}
+          >
+            <S.TabText isActive={activeTab === tab.id}>
+              {tab.label}
+            </S.TabText>
+            {activeTab === tab.id && <S.ActiveIndicator />}
+          </S.TabButton>
+        ))}
+      </S.TabContainer>
+      {renderTabContent()}
+    </>
   );
 };
 

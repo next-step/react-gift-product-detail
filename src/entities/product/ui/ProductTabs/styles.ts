@@ -39,4 +39,25 @@ export const ActiveIndicator = styled.div`
   right: 0;
   height: 2px;
   background-color: ${({ theme }) => theme.colors.gray[900]};
-`; 
+`;
+
+export const TabContent = styled.div`
+  padding: ${({ theme }) => theme.spacing.spacing4};
+  background-color: ${({ theme }) => theme.semantic.background.default};
+`;
+
+export const DescriptionContent = styled.div`
+  width: 100%;
+  
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  p {
+    margin: ${({ theme }) => theme.spacing.spacing3} 0;
+    ${({ theme }) => theme.typography.body1Regular};
+    color: ${({ theme }) => theme.colors.gray[900]};
+  }
+`;
