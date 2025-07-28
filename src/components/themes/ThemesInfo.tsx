@@ -1,22 +1,12 @@
-import { fetchThemesInfo } from "@/api/themesInfo";
 import styled from "@emotion/styled";
-import type { ThemeInfo } from "@/types/theme";
-import { useQuery } from "@tanstack/react-query";
+import useThemesInfo from "@/hooks/useThemesInfo";
 
 type ThemesInfoProps = {
   id: string | undefined;
 };
 
 const ThemesInfo = ({ id }: ThemesInfoProps) => {
-  const {
-    data: themeInfoData,
-    isPending,
-    isError,
-  } = useQuery<ThemeInfo>({
-    queryKey: ["themeInfo", id],
-    queryFn: () => fetchThemesInfo({ themeId: Number(id) }),
-    enabled: !!id,
-  });
+  const { themeInfoData, isPending, isError } = useThemesInfo({ id });
 
   if (!themeInfoData && isPending && !isError) {
     return null;

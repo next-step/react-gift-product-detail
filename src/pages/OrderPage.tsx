@@ -13,11 +13,10 @@ import { useUserInfo } from "@/contexts/UserInfoContext";
 import { FormProvider, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import type { OrderFormValue } from "@/types/order";
-import { fetchProductsSummary } from "@/api/productSummary";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
-import { useQuery } from "@tanstack/react-query";
 import withUser from "@/hoc/withUser";
+import useProductsSummary from "@/hooks/useProductsSummary";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -39,15 +38,7 @@ const OrderPage = () => {
   }, [selectedCard, methods]);
 
   const { id } = useParams<{ id: string }>();
-  const {
-    data: gift,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["gift", id],
-    queryFn: () => fetchProductsSummary({ productId: Number(id) }),
-    enabled: !!id,
-  });
+  const { gift, isPending, isError } = useProductsSummary({ id });
 
   useEffect(() => {
     if (!gift && !isPending && isError) {

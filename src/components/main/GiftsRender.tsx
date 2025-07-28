@@ -1,9 +1,8 @@
 import GiftsList from "./GiftsList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import BoxMessage from "@/components/common/BoxMessage";
-import { fetchProductsRanking } from "@/api/products";
 import type { TargetType, RankType } from "@/types/gift";
-import { useQuery } from "@tanstack/react-query";
+import useProductsRanking from "@/hooks/useProductsRanking";
 
 type GiftsRenderProps = {
   targetType: TargetType;
@@ -11,14 +10,9 @@ type GiftsRenderProps = {
 };
 
 const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
-  const {
-    data: gifts,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["gifts", targetType, rankType],
-    queryFn: () => fetchProductsRanking({ targetType, rankType }),
-    refetchOnWindowFocus: false,
+  const { gifts, isPending, isError } = useProductsRanking({
+    targetType,
+    rankType,
   });
 
   if (isPending) {
