@@ -1,9 +1,8 @@
 import { useMemo } from "react";
-import { useOrderForm } from "@/hooks/order/useOrderForm";
+import { useOrderForm } from "@/hooks/order";
 
-export const useOrderCalculation = () => {
+export const useOrderCalculation = (productPrice?: number) => {
   const { watch } = useOrderForm();
-  const product = watch("product");
   const receivers = watch("receivers");
 
   const totalQuantity = useMemo(() => {
@@ -17,14 +16,12 @@ export const useOrderCalculation = () => {
   }, [receivers]);
 
   const totalPrice = useMemo(() => {
-    if (!product || !receivers || receivers.length === 0) {
+    if (!productPrice || !receivers || receivers.length === 0) {
       return 0;
     }
 
-    const productPrice = product.price.sellingPrice || 0;
-
     return productPrice * totalQuantity;
-  }, [product, totalQuantity, receivers]);
+  }, [productPrice, totalQuantity, receivers]);
 
   return {
     totalPrice,

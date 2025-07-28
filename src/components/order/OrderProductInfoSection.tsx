@@ -1,4 +1,4 @@
-import type { ProductType } from "@/types";
+import type { ProductSummaryResponseBody } from "@/api/product/types";
 import styled from "@emotion/styled";
 
 const OrderProductInfoContainer = styled.div(({ theme }) => ({
@@ -63,7 +63,7 @@ const OrderProductPrice = styled.p(({ theme }) => ({
 export const OrderProductInfoSection = ({
   product,
 }: {
-  product: ProductType | null;
+  product: ProductSummaryResponseBody | undefined;
 }) => {
   if (!product) {
     return null;
@@ -76,12 +76,10 @@ export const OrderProductInfoSection = ({
         <OrderProductImage src={product.imageURL} />
         <OrderProductDescription>
           <OrderProductTitle>{product.name}</OrderProductTitle>
-          <OrderProductBrandName>
-            {product.brandInfo.name}
-          </OrderProductBrandName>
+          <OrderProductBrandName>{product.brandName}</OrderProductBrandName>
           <OrderProductPrice>
             <span>상품가</span>
-            {product.price.basicPrice}원
+            {product.price}원
           </OrderProductPrice>
         </OrderProductDescription>
       </OrderProductInfoCard>

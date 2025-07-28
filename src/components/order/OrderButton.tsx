@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 
 interface OrderButtonProps {
   onClick: () => void;
+  productPrice?: number;
 }
 
 const OrderButtonContainer = styled.div({
@@ -22,8 +23,8 @@ const OrderButtonText = styled.span(({ theme }) => ({
   lineHeight: theme.typography.body1Bold.lineHeight,
   color: theme.color.gray[900],
 }));
-export const OrderButton = ({ onClick }: OrderButtonProps) => {
-  const { totalPrice } = useOrderCalculation();
+export const OrderButton = ({ onClick, productPrice }: OrderButtonProps) => {
+  const { totalPrice } = useOrderCalculation(productPrice);
 
   return (
     <OrderButtonContainer>

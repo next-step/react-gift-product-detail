@@ -1,12 +1,6 @@
 import { z } from "zod";
 import { ORDER_ERROR_MESSAGE, PHONE_REGEX } from "@/constants";
-import type { CardTemplateType, ProductType } from "@/types";
-
-const productSchema = z.nullable(
-  z.custom<ProductType>(val => val !== null, {
-    message: ORDER_ERROR_MESSAGE.PRODUCT.REQUIRED,
-  }),
-);
+import type { CardTemplateType } from "@/types";
 
 const cardTemplateSchema = z.nullable(
   z.custom<CardTemplateType>(val => val !== null, {
@@ -57,7 +51,6 @@ const receiversSchema = z
   .optional();
 
 export const orderSchema = z.object({
-  product: productSchema,
   cardTemplate: cardTemplateSchema,
   message: z.string().min(1, ORDER_ERROR_MESSAGE.MESSAGE.REQUIRED),
   senderName: z.string().min(1, ORDER_ERROR_MESSAGE.SENDER.REQUIRED),
@@ -66,10 +59,7 @@ export const orderSchema = z.object({
 
 export const isOrderComplete = (order: Partial<OrderFormData>): boolean => {
   const hasBasicInfo = Boolean(
-    order.product &&
-      order.cardTemplate &&
-      order.senderName &&
-      order.message?.trim(),
+    order.cardTemplate && order.senderName && order.message?.trim(),
   );
 
   const hasReceivers = Boolean(

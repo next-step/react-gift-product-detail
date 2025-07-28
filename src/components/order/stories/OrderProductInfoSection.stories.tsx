@@ -18,8 +18,8 @@ export const Default: Story = {
     product: {
       id: mockProduct.id,
       name: mockProduct.name,
-      price: mockProduct.price,
-      brandInfo: mockProduct.brandInfo,
+      price: mockProduct.price.basicPrice,
+      brandName: mockProduct.brandInfo.name,
       imageURL: mockProduct.imageURL,
     },
   },
