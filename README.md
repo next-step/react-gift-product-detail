@@ -56,8 +56,15 @@
 - [ ] 기능 단위로 나누어 커밋을 해주세요.
 - [ ] 상품 상세 페이지
   - [ ] [참고 URL](https://kakaotech-mission4-api-advanced.pages.dev/) 을 참고하여 상품 상세 페이지를 구현해주세요.
+    - [x] ProductDetailPage.tsx를 만들어 상품 상세 정보 페이지를 위한 틀을 생성해두었습니다.
+    - [x] 로그인이 되어있지 않으면 로그인 후에 상품 상세 정보 페이지에 접근할 수 있도록 App.tsx에서 PrivateRoute 안에 ProductDetailPage로 이동하는 Route를 추가해주었습니다.
+    - [x] routes.ts에 url 관련 변수를 상수로 추가해주었습니다.
   - [ ] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능을 구현하세요.
   - [ ] 아래 참고 API를 모두 사용해야 해요.
+    - [ ] 상품 정보 API: **`/api/products/:productId`**
+    - [ ] 상품 세부 정보 API: **`/api/products/:productId/detail`**
+    - [ ] 상품 주요 리뷰 API: **`/api/products/:productId/highlight-review`**
+    - [ ] 상품 관심 등록 수 API: **`/api/products/:productId/wish`**
   - [ ] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경해보세요. (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상이에요.)
 - [ ] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
 - [ ] npm run build 성공하기
