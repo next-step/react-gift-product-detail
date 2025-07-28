@@ -27,8 +27,7 @@ export const ProductActionGroup = () => {
       return nextWished;
     },
     onMutate: async (nextWished: boolean) => {
-      await queryClient.cancelQueries({ queryKey: ['productWish', numericProductId] });
-      const previous = queryClient.getQueryData<ProductWish>(['productWish', numericProductId]);
+      const previous = queryClient.getQueryData<ProductWish>(['productWish', numericProductId]);    
       queryClient.setQueryData<ProductWish>(['productWish', numericProductId], (prev) => {
         if (!prev) return prev;
         return {
@@ -45,7 +44,6 @@ export const ProductActionGroup = () => {
         queryClient.setQueryData(['productWish', numericProductId], context.previous);
       }
     },
-    onSettled: () => {},
   });
 
   const toggleWish = () => {
