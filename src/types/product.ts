@@ -35,3 +35,14 @@ export interface ProductWish {
   wishCount: number;
   isWished: boolean;
 }
+
+export interface Review {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface HighlightReview {
+  totalCount: number;
+  reviews: Review[];
+}

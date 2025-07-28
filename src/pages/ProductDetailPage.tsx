@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useProductInfo } from '@/hooks/useProductInfo';
 import { useProductDetail } from '@/hooks/useProductDetail';
 import { useProductWish } from '@/hooks/useProductWish';
+import { useHighlightReview } from '@/hooks/useHighlightReview';
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -19,14 +20,21 @@ const ProductDetailPage = () => {
   } = useProductDetail(productId);
 
   const {
-    data: wishData,
+    data: wish,
     isPending: isWishPending,
     isError: isWishError,
   } = useProductWish(productId);
 
-  if (isProductPending || isDetailPending || isWishPending)
+  const {
+    data: review,
+    isPending: isReviewPending,
+    isError: isReviewError,
+  } = useHighlightReview(productId);
+
+  if (isProductPending || isDetailPending || isWishPending || isReviewPending)
     return <p>로딩 중...</p>;
-  if (isProductError || isDetailError || isWishError) return <p>에러 발생</p>;
+  if (isProductError || isDetailError || isWishError || isReviewError)
+    return <p>에러 발생</p>;
 
   if (!product || !detail) return <p>데이터 없음</p>;
 
@@ -39,7 +47,7 @@ const ProductDetailPage = () => {
       <p>브랜드: {product.brandInfo.name}</p>
 
       <hr />
-      <p>찜 수: {wishData?.wishCount}</p>
+      <p>찜 수: {wish?.wishCount}</p>
 
       <hr />
       <h3>상품 설명</h3>
@@ -52,6 +60,20 @@ const ProductDetailPage = () => {
             <strong>{item.name}</strong>
             <div style={{ whiteSpace: 'pre-line', marginTop: '0.25rem' }}>
               {item.value}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <hr />
+      <h4>리뷰</h4>
+      <p>총 리뷰 수: {review.totalCount}</p>
+      <ul>
+        {(review.reviews ?? []).map((item, idx) => (
+          <li key={idx} style={{ marginBottom: '1rem' }}>
+            <strong>{item.authorName}</strong>
+            <div style={{ whiteSpace: 'pre-line', marginTop: '0.25rem' }}>
+              {item.content}
             </div>
           </li>
         ))}

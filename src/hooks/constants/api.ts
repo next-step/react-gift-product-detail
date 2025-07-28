@@ -45,3 +45,9 @@ export const getProductWishPath = (productId: string | number): string =>
 
 export const getProductWishUrl = (productId: string | number): string =>
   `${BASE_URL}${getProductWishPath(productId)}`;
+
+export const getHighlightReviewPath = (productId: string | number): string =>
+  `/api/products/${productId}/highlight-review`;
+
+export const getHighlightReviewUrl = (productId: string | number): string =>
+  `${BASE_URL}${getHighlightReviewPath(productId)}`;
