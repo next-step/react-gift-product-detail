@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -7,7 +8,11 @@ import {
 } from 'react-router-dom';
 import { MobileLayout } from '@/components/layout';
 import { NavigationBar } from '@/components/navigation';
-import { PrivateRoute } from '@/components/common';
+import {
+  PrivateRoute,
+  ErrorBoundary,
+  LoadingSkeleton,
+} from '@/components/common';
 import {
   HomePage,
   LoginPage,
@@ -84,47 +89,57 @@ function App() {
   };
 
   return (
-    <MobileLayout>
-      {!location.pathname.startsWith(ROUTE_ORDER) &&
-        !location.pathname.startsWith('/products') && (
-          <NavigationBar
-            title={navConfig.title}
-            showBackButton={navConfig.showBackButton}
-            showProfileButton={navConfig.showProfileButton}
-            onBackClick={handleBackClick}
-            onProfileClick={handleProfileClick}
-          />
-        )}
+    <ErrorBoundary>
+      <MobileLayout>
+        {!location.pathname.startsWith(ROUTE_ORDER) &&
+          !location.pathname.startsWith('/products') && (
+            <NavigationBar
+              title={navConfig.title}
+              showBackButton={navConfig.showBackButton}
+              showProfileButton={navConfig.showProfileButton}
+              onBackClick={handleBackClick}
+              onProfileClick={handleProfileClick}
+            />
+          )}
 
-      <Routes>
-        <Route path={ROUTE_HOME} element={<HomePage />} />
-        <Route path={ROUTE_LOGIN} element={<LoginPage />} />
-        <Route
-          path={ROUTE_MY}
-          element={
-            <PrivateRoute>
-              <MyPage />
-            </PrivateRoute>
-          }
-        />
-        <Route path={ROUTE_ORDER} element={<OrderLayout />}>
-          <Route
-            path=":productId"
-            element={
-              <PrivateRoute>
-                <OrderPage />
-              </PrivateRoute>
-            }
-          />
-        </Route>
-        <Route path={ROUTE_PRODUCT_DETAIL} element={<ProductDetailLayout />}>
-          <Route index element={<ProductDetailPage />} />
-        </Route>
-        <Route path={ROUTE_THEME_PRODUCTS} element={<ThemeProductListPage />} />
-        <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
-      </Routes>
-      <ToastContainer />
-    </MobileLayout>
+        <Suspense fallback={<LoadingSkeleton type="card" />}>
+          <Routes>
+            <Route path={ROUTE_HOME} element={<HomePage />} />
+            <Route path={ROUTE_LOGIN} element={<LoginPage />} />
+            <Route
+              path={ROUTE_MY}
+              element={
+                <PrivateRoute>
+                  <MyPage />
+                </PrivateRoute>
+              }
+            />
+            <Route path={ROUTE_ORDER} element={<OrderLayout />}>
+              <Route
+                path=":productId"
+                element={
+                  <PrivateRoute>
+                    <OrderPage />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route
+              path={ROUTE_PRODUCT_DETAIL}
+              element={<ProductDetailLayout />}
+            >
+              <Route index element={<ProductDetailPage />} />
+            </Route>
+            <Route
+              path={ROUTE_THEME_PRODUCTS}
+              element={<ThemeProductListPage />}
+            />
+            <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+        <ToastContainer />
+      </MobileLayout>
+    </ErrorBoundary>
   );
 }
 

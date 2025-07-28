@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container } from '@/components/layout';
+import { ErrorBoundary, LoadingSkeleton } from '@/components/common';
 import { ROUTE_HOME } from '@/constants';
 import {
   useProductBasic,
@@ -55,9 +56,7 @@ const ProductDetailPage = () => {
   if (isLoading) {
     return (
       <Container>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h1>상품 정보를 불러오는 중...</h1>
-        </div>
+        <LoadingSkeleton type="card" />
       </Container>
     );
   }
@@ -74,24 +73,29 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <>
-      <ProductDetailHeader product={productBasic} isLoading={isLoadingBasic} />
+    <ErrorBoundary>
+      <>
+        <ProductDetailHeader
+          product={productBasic}
+          isLoading={isLoadingBasic}
+        />
 
-      <ProductDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        <ProductDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <ProductDetailContent
-        activeTab={activeTab}
-        productDetail={productDetail}
-        productReview={productReview}
-        isLoadingDetail={isLoadingDetail}
-        isLoadingReview={isLoadingReview}
-      />
+        <ProductDetailContent
+          activeTab={activeTab}
+          productDetail={productDetail}
+          productReview={productReview}
+          isLoadingDetail={isLoadingDetail}
+          isLoadingReview={isLoadingReview}
+        />
 
-      {/* 고정된 하단 버튼을 위한 여백 */}
-      <div style={{ height: '80px' }} />
+        {/* 고정된 하단 버튼을 위한 여백 */}
+        <div style={{ height: '80px' }} />
 
-      <ProductDetailActions productId={productId} productWish={productWish} />
-    </>
+        <ProductDetailActions productId={productId} productWish={productWish} />
+      </>
+    </ErrorBoundary>
   );
 };
 
