@@ -5,6 +5,7 @@ import { ROUTES } from '@/shared/config';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { getProductWish } from '@/entities/product/api/productApi';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 import type { ProductWish } from '@/entities/product/model/types';
 
 export const ProductActionGroup = () => {
@@ -18,7 +19,7 @@ export const ProductActionGroup = () => {
   }
 
   const { data: wishData } = useSuspenseQuery<ProductWish>({
-    queryKey: ['productWish', numericProductId],
+    queryKey: QUERY_KEYS.PRODUCT_WISH(numericProductId),
     queryFn: () => getProductWish(numericProductId),
   });
 
@@ -27,8 +28,9 @@ export const ProductActionGroup = () => {
       return nextWished;
     },
     onMutate: async (nextWished: boolean) => {
-      const previous = queryClient.getQueryData<ProductWish>(['productWish', numericProductId]);    
-      queryClient.setQueryData<ProductWish>(['productWish', numericProductId], (prev) => {
+      const previous = queryClient.getQueryData<ProductWish>(QUERY_KEYS.PRODUCT_WISH(numericProductId));
+      
+      queryClient.setQueryData<ProductWish>(QUERY_KEYS.PRODUCT_WISH(numericProductId), (prev) => {
         if (!prev) return prev;
         return {
           ...prev,
@@ -41,7 +43,7 @@ export const ProductActionGroup = () => {
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(['productWish', numericProductId], context.previous);
+        queryClient.setQueryData(QUERY_KEYS.PRODUCT_WISH(numericProductId), context.previous);
       }
     },
   });

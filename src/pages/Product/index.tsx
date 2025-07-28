@@ -4,6 +4,7 @@ import { ErrorBoundary, Loading, RedirectOnError } from '@/shared/ui';
 import { ROUTES } from '@/shared/config';
 import { getProductById } from '@/entities/product/api/productApi';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
 import type { RankingProduct } from '@/entities/product/model/types';
 import { ProductOverview, ProductTabs } from '@/entities/product/ui';
 import { ProductActionGroup } from '@/entities/product/ui/ProductActionGroup';
@@ -17,7 +18,7 @@ const Product = () => {
     }
 
     const { data } = useSuspenseQuery<RankingProduct>({
-        queryKey: ['product', numericProductId],
+        queryKey: QUERY_KEYS.PRODUCT(numericProductId),
         queryFn: () => getProductById(numericProductId),
     });
 

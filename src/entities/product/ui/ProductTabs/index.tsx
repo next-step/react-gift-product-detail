@@ -3,21 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import parse from 'html-react-parser';
 import { getProductDetail, getProductHighlightReview } from '@/entities/product/api/productApi';
-import type { ProductDetail, ProductHighlightReview } from '@/entities/product/model/types';
+import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import type { ProductDetail, ProductHighlightReview, TabType } from '@/entities/product/model/types';
 import * as S from './styles';
+import { TAB_LABELS } from '@/entities/product/model/constants';
 
-type TabType = 'description' | 'review' | 'detail';
-
-const ProductTabs = () => {
+export const ProductTabs = () => {
   const { productId } = useParams<{ productId: string }>();
   const numericProductId = productId ? parseInt(productId, 10) : undefined;
   const [activeTab, setActiveTab] = useState<TabType>('description');
   
-  // TODO: 탭 라벨 상수 분리 필요
   const tabs = [
-    { id: 'description' as TabType, label: '상품설명' },
-    { id: 'review' as TabType, label: '선물후기' },
-    { id: 'detail' as TabType, label: '상세정보' },
+    { id: 'description' as TabType, label: TAB_LABELS.description },
+    { id: 'review' as TabType, label: TAB_LABELS.review },
+    { id: 'detail' as TabType, label: TAB_LABELS.detail },
   ];
 
   const handleTabClick = (tabId: TabType) => {
@@ -25,12 +24,12 @@ const ProductTabs = () => {
   };
 
   const { data } = useSuspenseQuery<ProductDetail>({
-    queryKey: ['productDetail', numericProductId],
+    queryKey: QUERY_KEYS.PRODUCT_DETAIL(numericProductId!),
     queryFn: () => getProductDetail(numericProductId!),
   });
 
   const { data: reviewData } = useSuspenseQuery<ProductHighlightReview>({
-    queryKey: ['productHighlightReview', numericProductId],
+    queryKey: QUERY_KEYS.PRODUCT_HIGHLIGHT_REVIEW(numericProductId!),
     queryFn: () => getProductHighlightReview(numericProductId!),
   });
 
