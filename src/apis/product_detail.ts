@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
-//1. 상품 기본 정보
+// 1. 상품 기본 정보
 export interface ProductInfo {
   id: number;
   name: string;
@@ -60,17 +60,33 @@ export const useProductDetail = (productId: string) =>
     queryFn: () => fetchProductDetail(productId),
   });
 
-// 3. 찜 정보
+// 3. 찜 정보 (mock API로 교체)
 export interface WishInfo {
   wishCount: number;
   isWished: boolean;
 }
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-export const fetchWishInfo = async (productId: string): Promise<WishInfo> => {
-  const res = await axios.get<{ data: WishInfo }>(
-    `/api/products/${productId}/wish`
-  );
-  return res.data.data;
+export const fetchWishInfo = async (_productId: string): Promise<WishInfo> => {
+  await sleep(300);
+
+  return {
+    wishCount: 1234,
+    isWished: false,
+  };
+};
+
+export const fetchAddWishSuccess = async (
+  newWish: boolean
+): Promise<boolean> => {
+  await sleep(300);
+  return newWish;
+};
+
+export const fetchAddWishError = async (_newWish: boolean): Promise<void> => {
+  await sleep(300);
+  throw new axios.AxiosError('mock error', 'mock_code');
 };
 
 export const useWishInfo = (productId: string) =>

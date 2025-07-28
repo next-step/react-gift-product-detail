@@ -2,7 +2,7 @@
 import { css, type Theme as ThemeType } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useWishInfo } from '../../apis/product_detail';
+import { useWishInfo, fetchAddWishSuccess } from '../../apis/product_detail';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FixedBottomBar = () => {
@@ -14,39 +14,41 @@ const FixedBottomBar = () => {
 
   const { data: wish } = useWishInfo(productId || '');
 
-  const mutation = useMutation({
-    mutationFn: async (newWish: boolean) => {
-      // 실제 API 호출은 없으므로 아무 작업도 안 함
-      return newWish;
-    },
-    onMutate: async (newWish: boolean) => {
-      if (!productId) return;
+  const mutation = useMutation<boolean, Error, boolean, { previousWish?: any }>(
+    {
+      mutationFn: fetchAddWishSuccess,
+      onMutate: async (newWish: boolean) => {
+        if (!productId) return;
 
-      const previousWish = queryClient.getQueryData(['wishInfo', productId]);
+        const previousWish = queryClient.getQueryData(['wishInfo', productId]);
 
-      // 낙관적 업데이트
-      queryClient.setQueryData(['wishInfo', productId], (old: any) => {
-        if (!old) return;
-        return {
-          ...old,
-          isWished: newWish,
-          wishCount: old.wishCount + (newWish ? 1 : -1),
-        };
-      });
+        // 낙관적 업데이트
+        queryClient.setQueryData(['wishInfo', productId], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            isWished: newWish,
+            wishCount: old.wishCount + (newWish ? 1 : -1),
+          };
+        });
 
-      return { previousWish };
-    },
-    onError: (_err, _newWish, context) => {
-      if (context?.previousWish && productId) {
-        queryClient.setQueryData(['wishInfo', productId], context.previousWish);
-      }
-    },
-    onSettled: () => {
-      if (productId) {
-        queryClient.invalidateQueries({ queryKey: ['wishInfo', productId] });
-      }
-    },
-  });
+        return { previousWish };
+      },
+      onError: (_err, _newWish, context) => {
+        if (context?.previousWish && productId) {
+          queryClient.setQueryData(
+            ['wishInfo', productId],
+            context.previousWish
+          );
+        }
+      },
+      onSettled: () => {
+        if (productId) {
+          queryClient.invalidateQueries({ queryKey: ['wishInfo', productId] });
+        }
+      },
+    }
+  );
 
   if (!productId || !wish) return null;
 
