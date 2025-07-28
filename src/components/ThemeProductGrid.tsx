@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { useCallback } from 'react';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../styles/colors';
@@ -52,18 +51,15 @@ interface ThemeProductGridProps {
   onLoadMore?: () => void;
 }
 
-const ThemeProductGrid = ({ products, loading = false, hasMore = false, onLoadMore }: ThemeProductGridProps) => {
+const ThemeProductGrid = ({ products, loading = false, hasMore = false, onLoadMore = () => {} }: ThemeProductGridProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   // useInfiniteScroll 훅 사용
-  const onLoadMoreCallback = useCallback(() => {
-    if (onLoadMore) onLoadMore();
-  }, [onLoadMore]);
-  const observerRef = useInfiniteScroll<HTMLDivElement>({
+  const setObserverRef = useInfiniteScroll<HTMLDivElement>({
     loading,
     hasMore,
-    onLoadMore: onLoadMoreCallback,
+    onLoadMore,
   });
 
   // 상품 클릭 핸들러
@@ -105,7 +101,7 @@ const ThemeProductGrid = ({ products, loading = false, hasMore = false, onLoadMo
               key={product.id}
               css={cardStyle}
               onClick={() => handleProductClick(product.id)}
-              ref={isLast && hasMore ? observerRef : undefined}
+              ref={isLast && hasMore ? setObserverRef : undefined}
             >
               <img
                 src={product.imageURL}

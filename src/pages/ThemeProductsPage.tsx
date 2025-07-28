@@ -40,19 +40,45 @@ const loadingStyle = css({
   gap: spacing.spacing2,
 });
 
+
+import { useState, useEffect } from 'react';
+
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
   // 쿼리 훅 사용
   const { data: themeInfo, isLoading: loading, error } = useThemeInfoQuery(Number(themeId));
+
+  // 페이지네이션 및 상품 누적 관리
+  const [page, setPage] = useState(0);
+  const [products, setProducts] = useState<any[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [productLoading, setProductLoading] = useState(false);
+
+  // 상품 불러오기 쿼리
   const {
     data: productData,
-    isLoading: productLoading,
-  } = useThemeProductsQuery(Number(themeId), 0, 10) as { data?: ThemeProductList; isLoading: boolean };
+  } = useThemeProductsQuery(Number(themeId), page, 10) as { data?: ThemeProductList; isLoading: boolean };
 
-  // ...existing code...
+  useEffect(() => {
+    if (productData) {
+      setProducts(prev => {
+        const newList = productData.list.filter(
+          item => !prev.some(p => p.id === item.id)
+        );
+        return page === 0 ? productData.list : [...prev, ...newList];
+      });
+      setHasMore(productData.hasMoreList);
+      setProductLoading(false);
+    }
+  }, [productData, page]);
 
-  // 더보기 핸들러 등은 필요시 useInfiniteQuery로 리팩터링 가능
+  const handleLoadMore = () => {
+    if (!productLoading && hasMore) {
+      setProductLoading(true);
+      setPage(prev => prev + 1);
+    }
+  };
 
   if (loading) {
     return (
@@ -104,10 +130,10 @@ const ThemeProductsPage = () => {
       </section>
       {/* 상품 목록 영역 */}
       <ThemeProductGrid
-        products={productData?.list ?? []}
-        loading={productLoading && (!productData?.list || productData.list.length === 0)}
-        hasMore={productData?.hasMoreList ?? false}
-        onLoadMore={() => {}}
+        products={products}
+        loading={productLoading && (products.length === 0)}
+        hasMore={hasMore}
+        onLoadMore={handleLoadMore}
       />
     </div>
   );
