@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useSearchParams, useNavigate, generatePath } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Section } from '@/components/layout';
 import FilterButtonGroup from './FilterButtonGroup';
 import ProductGrid from './ProductGrid';
 import MoreButton from './MoreButton';
 import { getValidValue, getValidValues } from '@/utils';
-import { targetOptions, rankOptions, ROUTE_ORDER } from '@/constants';
+import { targetOptions, rankOptions } from '@/constants';
 import { useRankingProducts } from '@/api/product';
 import type { Product, TargetType, RankType } from '@/api/types';
 import RankingSkeleton from './RankingSkeleton';
@@ -45,16 +45,12 @@ const RankingSection = () => {
     });
   };
 
-  // 상품 클릭 시 주문 페이지로 이동
+  // 상품 클릭 시 상품 상세 페이지로 이동
   const handleProductClick = (product: Product) => {
     console.log('상품 클릭:', product.id, product.name);
 
-    // 실제 상품 ID를 사용
-    navigate(
-      generatePath(`${ROUTE_ORDER}/:productId`, {
-        productId: String(product.id),
-      })
-    );
+    // 상품 상세 페이지로 이동
+    navigate(`/products/${product.id}`);
   };
 
   const renderContent = () => {

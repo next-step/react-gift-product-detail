@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, generatePath } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { getThemeInfo } from '@/api/theme';
 import type { Theme } from '@/api/types';
-import { ROUTE_HOME, ROUTE_ORDER } from '@/constants';
+import { ROUTE_HOME } from '@/constants';
 import ProductGrid from '@/components/ranking/ProductGrid';
 import { getThemeProducts } from '@/api/theme';
 import type { Product } from '@/api/types';
@@ -88,11 +88,8 @@ const ThemeProductListPage: React.FC = () => {
   }, [themeId, navigate]);
 
   const handleProductClick = (product: Product) => {
-    navigate(
-      generatePath(`${ROUTE_ORDER}/:productId`, {
-        productId: String(product.id),
-      })
-    );
+    // 상품 상세 페이지로 이동
+    navigate(`/products/${product.id}`);
   };
 
   // 추가 상품 로드 함수

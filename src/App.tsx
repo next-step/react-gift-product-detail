@@ -15,6 +15,7 @@ import {
   OrderPage,
   NotFoundPage,
   ThemeProductListPage,
+  ProductDetailPage,
 } from '@/pages';
 import {
   ROUTE_HOME,
@@ -23,6 +24,7 @@ import {
   ROUTE_ORDER,
   ROUTE_NOT_FOUND,
   ROUTE_THEME_PRODUCTS,
+  ROUTE_PRODUCT_DETAIL,
 } from '@/constants';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,6 +39,22 @@ function OrderLayout() {
         showBackButton={true}
         showProfileButton={false}
         onBackClick={() => navigate(ROUTE_HOME)}
+      />
+      <Outlet />
+    </>
+  );
+}
+
+// ProductDetailLayout 컴포넌트 추가
+function ProductDetailLayout() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <NavigationBar
+        title="선물하기"
+        showBackButton={true}
+        showProfileButton={false}
+        onBackClick={() => navigate(-1)}
       />
       <Outlet />
     </>
@@ -67,15 +85,16 @@ function App() {
 
   return (
     <MobileLayout>
-      {!location.pathname.startsWith(ROUTE_ORDER) && (
-        <NavigationBar
-          title={navConfig.title}
-          showBackButton={navConfig.showBackButton}
-          showProfileButton={navConfig.showProfileButton}
-          onBackClick={handleBackClick}
-          onProfileClick={handleProfileClick}
-        />
-      )}
+      {!location.pathname.startsWith(ROUTE_ORDER) &&
+        !location.pathname.startsWith('/products') && (
+          <NavigationBar
+            title={navConfig.title}
+            showBackButton={navConfig.showBackButton}
+            showProfileButton={navConfig.showProfileButton}
+            onBackClick={handleBackClick}
+            onProfileClick={handleProfileClick}
+          />
+        )}
 
       <Routes>
         <Route path={ROUTE_HOME} element={<HomePage />} />
@@ -97,6 +116,9 @@ function App() {
               </PrivateRoute>
             }
           />
+        </Route>
+        <Route path={ROUTE_PRODUCT_DETAIL} element={<ProductDetailLayout />}>
+          <Route index element={<ProductDetailPage />} />
         </Route>
         <Route path={ROUTE_THEME_PRODUCTS} element={<ThemeProductListPage />} />
         <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
