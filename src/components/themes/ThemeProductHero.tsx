@@ -1,4 +1,4 @@
-import { useGetThemeDetail } from "@/hooks/themes/useGetThemeDetail";
+import { useGetThemeDetail } from "@/hooks/themes";
 import styled from "@emotion/styled";
 
 const ThemeProductContainer = styled.div<{ backgroundColor?: string }>(

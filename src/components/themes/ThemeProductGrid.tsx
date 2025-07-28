@@ -1,6 +1,6 @@
 import { LoadingSpinner } from "@/components/common";
 import { useRouter } from "@/hooks/common/useRouter";
-import { useGetThemeProducts } from "@/hooks/themes/useGetThemeProducts";
+import { useGetThemeProducts } from "@/hooks/themes";
 import styled from "@emotion/styled";
 
 const ThemeProductGridContainer = styled.div(({ theme }) => ({
@@ -69,7 +69,7 @@ interface ThemeProductGridProps {
 
 export const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
   const { products, loading, hasMore, ref } = useGetThemeProducts(themeId);
-  const { goOrderPage } = useRouter();
+  const { goProductDetail } = useRouter();
 
   if (loading && products.length === 0) {
     return <LoadingSpinner />;
@@ -83,7 +83,7 @@ export const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
       {products.map(product => (
         <ThemeProductGridItem
           key={product.id}
-          onClick={() => goOrderPage(product.id)}
+          onClick={() => goProductDetail(product.id)}
         >
           <ThemeProductImageContainer
             src={product.imageURL}
