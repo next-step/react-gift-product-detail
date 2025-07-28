@@ -19,9 +19,17 @@ export const apiClient = axios.create({
   },
 });
 
+apiClient.interceptors.response.use(
+  (response) => {
+    return response.data.data;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 const getThemes = async (): Promise<GiftThemeType[]> => {
-  const response = await apiClient.get(END_POINTS.THEMES);
-  return response.data.data;
+  return await apiClient.get(END_POINTS.THEMES);
 };
 
 export const getValidThemes = async (): Promise<GiftThemeType[]> => {
@@ -38,94 +46,82 @@ export const getTrendingGifts = async (
   targetType: string,
   rankType: string
 ): Promise<TrendingGiftsType[]> => {
-  const response = await apiClient.get(END_POINTS.RANKING, {
+  return await apiClient.get(END_POINTS.RANKING, {
     params: {
       targetType,
       rankType,
     },
   });
-  return response.data.data;
 };
 
 export const getUserInfo = async (
   email: string,
   password: string
 ): Promise<User> => {
-  const response = await apiClient.post(END_POINTS.LOGIN, {
+  return await apiClient.post(END_POINTS.LOGIN, {
     email,
     password,
   });
-  return response.data.data;
 };
 
 export const getProductInfo = async (
   id: string
 ): Promise<ProductInfoSummary> => {
-  const response = await apiClient.get(
-    END_POINTS.PRODUCT_INFO.replace(":id", id)
-  );
-  return response.data.data;
+  return await apiClient.get(END_POINTS.PRODUCT_INFO.replace(":id", id));
 };
 
 export const createOrder = async (authToken: string, order: Order) => {
-  const response = await apiClient.post(END_POINTS.ORDER, order, {
+  return await apiClient.post(END_POINTS.ORDER, order, {
     headers: {
       Authorization: authToken,
     },
   });
-  return response.data.data;
 };
 
 export const getThemeInfo = async (themeId: number): Promise<ThemeInfo> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.THEME_INFO.replace(":themeId", themeId.toString())
   );
-  return response.data.data;
 };
 
 export const getThemeProducts = async (
   themeId: number,
   cursor: number
 ): Promise<ThemeProducts> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.THEME_PRODUCTS.replace(":themeId", themeId.toString()).replace(
       ":cursor",
       cursor.toString()
     )
   );
-  return response.data.data;
 };
 
 export const getProductDetail = async (
   productId: string
 ): Promise<ThemeProduct> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.PRODUCT_DETAIL.replace(":productId", productId)
   );
-  return response.data.data;
 };
 
 export const getProductWish = async (productId: string): Promise<Wish> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.PRODUCT_WISH.replace(":productId", productId)
   );
-  return response.data.data;
 };
 
 export const getProductHighlightReview = async (
   productId: string
 ): Promise<ProductHighlightReview> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.PRODUCT_HIGHLIGHT_REVIEW.replace(":productId", productId)
   );
-  return response.data.data;
 };
 
 export const getProductDetailInfo = async (
   productId: string
 ): Promise<ProductDetailInfo> => {
-  const response = await apiClient.get(
+  return await apiClient.get(
     END_POINTS.PRODUCT_DETAIL_INFO.replace(":productId", productId)
   );
-  return response.data.data;
 };
