@@ -29,7 +29,7 @@ const login = http.post(BE.API.LOGIN.BASE, async ({ request }) => {
   }
 
   return HttpResponse.json({
-    data: { email, name: email.split("@")[0], token: "dummy-token" }
+    data: { email, name: email.split("@")[0], authToken: "dummy-token" }
   });
 });
 
