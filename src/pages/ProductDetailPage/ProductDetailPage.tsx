@@ -52,10 +52,14 @@ function ProductDetailQueryContent() {
     queryFn: () => getProductDetail(id!),
   });
 
+  if (!id) {
+    throw new Error(PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE);
+  }
+
   return (
-    <BottomNavigationWrapper productId={id!}>
+    <BottomNavigationWrapper productId={id}>
       <ProductHeader data={data} />
-      <ProductTabContents productId={id!} />
+      <ProductTabContents productId={id} />
     </BottomNavigationWrapper>
   );
 }
