@@ -40,6 +40,7 @@ const LikeButton = styled.button`
   align-items: center;
   flex-direction: column;
   border: none;
+  cursor: pointer;
 `;
 
 const LikeNum = styled.p`
