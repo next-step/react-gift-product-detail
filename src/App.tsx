@@ -43,7 +43,7 @@ function OrderLayout() {
         title="선물하기"
         showBackButton={true}
         showProfileButton={false}
-        onBackClick={() => navigate(ROUTE_HOME)}
+        onBackClick={() => navigate(-1)}
       />
       <Outlet />
     </>
