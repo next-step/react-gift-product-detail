@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
@@ -6,6 +6,7 @@ import Spinner from '@/components/Spinner';
 import { useThemeDetail } from '@/hooks/useTheme';
 import { useThemeProductsInfinite } from '@/hooks/useProduct';
 import { toast } from 'react-toastify';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 const Hero = styled.section<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -76,7 +77,6 @@ const EmptyMessage = styled.div`
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
 
-  const observerRef = useRef<HTMLDivElement | null>(null);
   const hasShownThemeError = useRef(false);
   const hasShownProductError = useRef(false);
 
@@ -95,28 +95,11 @@ const ThemeProductsPage = () => {
     isError: isProductError,
   } = useThemeProductsInfinite(Number(themeId));
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    const current = observerRef.current;
-    if (current) {
-      observer.observe(current);
-    }
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const observerRef = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
 
   if (isThemeError) {
     if (!hasShownThemeError.current) {
