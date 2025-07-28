@@ -9,6 +9,9 @@ import type {
   TargetType,
   RankType,
   ProductResponse,
+  ProductDetailResponse,
+  ProductWishResponse,
+  ProductHighlightReviewResponse,
 } from '../types';
 import axios from 'axios';
 
@@ -50,3 +53,42 @@ export async function getProductSummary(productId: string) {
   );
   return response.data.data;
 }
+
+/**
+ * 상품 상세 정보를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductDetail = async (
+  productId: string | number
+): Promise<ProductDetailResponse> => {
+  const response = await apiClient.get<ProductDetailResponse>(
+    `/api/products/${productId}/detail`
+  );
+  return response.data;
+};
+
+/**
+ * 상품 찜 정보를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductWish = async (
+  productId: string | number
+): Promise<ProductWishResponse> => {
+  const response = await apiClient.get<ProductWishResponse>(
+    `/api/products/${productId}/wish`
+  );
+  return response.data;
+};
+
+/**
+ * 상품 하이라이트 리뷰를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductHighlightReview = async (
+  productId: string | number
+): Promise<ProductHighlightReviewResponse> => {
+  const response = await apiClient.get<ProductHighlightReviewResponse>(
+    `/api/products/${productId}/highlight-review`
+  );
+  return response.data;
+};
