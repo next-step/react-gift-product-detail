@@ -2,6 +2,7 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { useProductDetail } from "@/hooks/queries/useProductDetail";
+import { useProductReview } from "@/hooks/queries/useProductReview";
 
 interface Props {
   productId: number;
@@ -11,12 +12,14 @@ const TABS = ["상품설명", "선물후기", "상세정보"] as const;
 
 export const DetailTab = ({ productId }: Props) => {
   const [selected, setSelected] = useState<(typeof TABS)[number]>("상품설명");
+
   const { data: detail } = useProductDetail(productId);
+  const { data: reviewData } = useProductReview(productId);
 
   return (
     <Wrapper>
       <TabHeader>
-        {TABS.map(tab => (
+        {TABS.map((tab) => (
           <TabButton
             key={tab}
             isActive={selected === tab}
@@ -37,29 +40,40 @@ export const DetailTab = ({ productId }: Props) => {
         )}
 
         {selected === "선물후기" && (
-          <Placeholder>후기 기능은 곧 제공될 예정입니다.</Placeholder>
+          reviewData?.reviews?.length ? (
+            <InfoList>
+              {reviewData.reviews.map((review) => (
+                <li key={review.id}>
+                  <strong>{review.authorName}</strong>
+                  <div>{review.content}</div>
+                </li>
+              ))}
+            </InfoList>
+          ) : (
+            <Placeholder>아직 등록된 후기가 없습니다.</Placeholder>
+          )
         )}
 
         {selected === "상세정보" && (
-          <AnnouncementList>
-            {Array.isArray(detail?.announcements) && detail.announcements.length > 0 ? (
-              detail.announcements.map(info => (
+          Array.isArray(detail?.announcements) && detail.announcements.length > 0 ? (
+            <InfoList>
+              {detail.announcements.map((info) => (
                 <li key={info.name}>
                   <strong>{info.name}</strong>
                   <div>{info.value}</div>
                 </li>
-              ))
-            ) : (
-              <li>상세 정보가 없습니다.</li>
-            )}
-          </AnnouncementList>
+              ))}
+            </InfoList>
+          ) : (
+            <Placeholder>상세 정보가 없습니다.</Placeholder>
+          )
         )}
       </TabContent>
     </Wrapper>
   );
 };
 
-
+// --- 스타일 ---
 const Wrapper = styled.section`
   margin-top: ${({ theme }) => theme.spacing.spacing6};
 `;
@@ -84,7 +98,7 @@ const TabButton = styled.button<{ isActive: boolean }>`
 `;
 
 const TabContent = styled.div`
-  padding: ${({ theme }) => theme.spacing.spacing4}; 
+  padding: ${({ theme }) => theme.spacing.spacing4};
   font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
 `;
 
@@ -104,18 +118,13 @@ const Description = styled.div`
   }
 `;
 
-
-const Placeholder = styled.div`
-  color: ${({ theme }) => theme.colors.textSub};
-`;
-
-const AnnouncementList = styled.ul`
+const InfoList = styled.ul`
   list-style: none;
   padding: 0;
   line-height: 1.8;
 
   li {
-    margin-bottom: ${({ theme }) => theme.spacing.spacing3}; 
+    margin-bottom: ${({ theme }) => theme.spacing.spacing3};
   }
 
   strong {
@@ -129,5 +138,11 @@ const AnnouncementList = styled.ul`
   div {
     color: ${({ theme }) => theme.colors.textDefault};
     font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
+    white-space: pre-line;
   }
+`;
+
+const Placeholder = styled.div`
+  color: ${({ theme }) => theme.colors.textSub};
+  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
 `;
