@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { css, ThemeProvider } from '@emotion/react';
 import { theme } from '@/theme/theme';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { getProductRanking, type ProductRankingItem } from '@/services/product';
+import { getProductRanking } from '@/services/product';
 import LoadingSpinner from './common/LoadingSpinner';
 import { useQuery } from '@tanstack/react-query';
 

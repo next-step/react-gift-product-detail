@@ -1,6 +1,6 @@
 import { api } from './api';
 
-interface OrderBody {
+export interface OrderBody {
   productId: number;
   message: string;
   messageCardId: string;
@@ -12,6 +12,7 @@ interface OrderBody {
   }[];
 }
 
-export const postOrder = (body: OrderBody) => {
-  return api.post('/api/orders', body).then((res) => res.data);
+export const postOrder = async (body: OrderBody): Promise<any> => {
+  const res = await api.post('/api/order', body);
+  return res.data;
 };

@@ -65,12 +65,6 @@ const LoadingContainer = styled(CategoryContainer)`
   min-height: 250px;
 `;
 
-interface ThemeItem {
-  themeId: number;
-  name: string;
-  image: string;
-}
-
 const PresentTheme = () => {
   const navigate = useNavigate();
 
