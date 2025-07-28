@@ -31,5 +31,14 @@ export interface ProductDetail {
     }>;
 }
 
+export interface ProductHighlightReview {
+    totalCount: number;
+    reviews: Array<{
+        id: string;
+        authorName: string;
+        content: string;
+    }>;
+}
+
 export type TargetType = 'ALL' | 'FEMALE' | 'MALE' | 'TEEN';
 export type RankType = 'MANY_WISH' | 'MANY_RECEIVE' | 'MANY_WISH_RECEIVE';
