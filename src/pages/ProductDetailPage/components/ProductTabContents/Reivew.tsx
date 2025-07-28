@@ -10,7 +10,7 @@ function Review({ product }: { product: ProductHighlightReview }) {
   return (
     <ListContainer>
       {product.reviews.map((el) => (
-        <TabContentContainer>
+        <TabContentContainer key={el.id}>
           <TabContentTitle>{el.authorName}</TabContentTitle>
           <TabContentContent>{el.content}</TabContentContent>
         </TabContentContainer>
