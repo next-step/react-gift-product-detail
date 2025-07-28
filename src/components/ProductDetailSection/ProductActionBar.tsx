@@ -1,14 +1,16 @@
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 import { Heart, HeartOff } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProductWish } from '@/hooks/useProductWish';
 import { loading } from '@/components/common/Loading';
 import { ERROR_MESSAGES } from '@/constants/validation';
 import Button from '@/components/common/Button';
+import { ROUTES } from '@/constants/routes';
 
 const ProductActionBar = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
   const { data, isLoading, isError } = useProductWish(productId);
 
@@ -25,7 +27,8 @@ const ProductActionBar = () => {
   };
 
   const handleOrderClick = () => {
-    console.log('주문하기 이동');
+    if (!productId) return null;
+    navigate(ROUTES.ORDER(productId));
   };
 
   return (
