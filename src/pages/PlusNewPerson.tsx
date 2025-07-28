@@ -4,7 +4,6 @@ import PresentWhoBackGround from "@/components/PresentWhoBackGround"
 import Text from "@/components/Text"
 import PresentWho from "@/components/PresentWho"
 import { useAuth } from "@/context/AuthContext"
-import { Cookie } from "@/utils/cookie"
 
 const PlusNewPerson = () => {
   const { isLoggedIn } = useAuth()
