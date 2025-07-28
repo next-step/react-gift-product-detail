@@ -1,44 +1,9 @@
-import { useForm } from "react-hook-form";
+import { loginSchema, type LoginFormData } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "react-router-dom";
-import { setUserInfo } from "@/utils/storage";
-import { useRouter } from "@/hooks/common/useRouter";
-import { loginSchema, showToast, type LoginFormData } from "@/utils";
-import { signin } from "@/api/login/signin";
-import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 
 export const useLoginForm = () => {
-  const { navigate, location } = useRouter();
-  const [searchParams] = useSearchParams();
-
-  const {
-    mutate: login,
-    isPending: isLoading,
-    error: loginError,
-  } = useMutation({
-    mutationFn: signin,
-    onSuccess: response => {
-      setUserInfo({
-        email: response.email,
-        name: response.name,
-        authToken: response.authToken,
-      });
-      const previousPage = location.state?.from;
-      const redirectPath = previousPage || searchParams.get("redirect") || "/";
-      navigate(redirectPath);
-    },
-    onError: error => {
-      showToast.error(error.message);
-      console.error("로그인 처리 중 오류 발생:", error);
-    },
-  });
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<LoginFormData>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -48,6 +13,7 @@ export const useLoginForm = () => {
     },
   });
 
+  const { watch } = form;
   const watchedValues = watch();
 
   const isFormValid = (() => {
@@ -59,19 +25,8 @@ export const useLoginForm = () => {
     }
   })();
 
-  const onSubmit = async (values: LoginFormData) => {
-    login({
-      email: values.id,
-      password: values.password,
-    });
-  };
-
   return {
-    register,
-    handleSubmit: handleSubmit(onSubmit),
-    errors,
-    isFormValid: isFormValid,
-    isLoading,
-    loginError,
+    ...form,
+    isFormValid,
   };
 };

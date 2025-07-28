@@ -1,7 +1,7 @@
 import { ErrorMessage, Input } from "@/components/common";
 import { LoginButton } from "@/components/login";
 import { NON_BREAKING_SPACE } from "@/constants";
-import { useLoginForm } from "@/hooks/login/useLoginForm";
+import { useLogin } from "@/hooks/login";
 import styled from "@emotion/styled";
 
 const LoginFormContainer = styled.section(({ theme }) => ({
@@ -20,7 +20,7 @@ const LoginInputWrapper = styled.div(({ theme }) => ({
 }));
 
 export const LoginForm = () => {
-  const { isFormValid, handleSubmit, register, errors } = useLoginForm();
+  const { isFormValid, handleSubmit, register, errors } = useLogin();
 
   return (
     <LoginFormContainer as="form" onSubmit={handleSubmit}>
