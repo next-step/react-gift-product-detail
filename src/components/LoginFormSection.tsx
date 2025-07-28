@@ -5,7 +5,7 @@ import { colors } from '@/theme/color'
 import { typography } from '@/theme/typography'
 import { spacing } from '@/theme/spacing'
 import { useAuth } from '@/contexts/AuthContext'
-import { postLogin } from '@/api/auth'
+import { useLoginMutation } from '@/api/auth'
 import { toast } from 'react-toastify'
 import { ErrorMessage, YellowButton } from '@/components/common'
 import type { UserInfo } from '@/utils/storage'
@@ -52,14 +52,14 @@ export default function LoginFormSection({ onSuccess }: LoginFormSectionProps) {
     isValid,
   } = useLoginForm()
   const { login } = useAuth()
+  const { mutateAsync, isPending } = useLoginMutation()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!isValid) return
 
-    try {
-      const info = await postLogin(email, password)
-      login(info)
+    try
+      const info = await mutateAsync({ email, password })      login(info)
       onSuccess?.(info)
     } catch (err: any) {
       const code = err?.statusCode ?? 0
@@ -91,8 +91,7 @@ export default function LoginFormSection({ onSuccess }: LoginFormSectionProps) {
                 required
             />
             {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
-            <Button type="submit" disabled={!isValid}>
-                로그인
+            <Button type="submit" disabled={!isValid || isPending}>                로그인
             </Button>
         </Form>
     )

@@ -1,6 +1,6 @@
 ﻿// src/components/RankingList.tsx
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import styled from '@emotion/styled'
@@ -8,38 +8,27 @@ import { spacing } from '@/theme/spacing'
 import LoadMoreButton from './LoadMoreButton'
 import RankingItem from './RankingItem'
 import RankingSkeleton from './RankingSkeleton'
-import { fetchProductRanking } from '@/api/product'
-import type { Product } from '@/type'
+import { useProductRankingQuery } from '@/api/product'
 import { targetMap, rankMap } from '@/constants/ranking'
 
 
 //— RankingList 컴포넌트
 const RankingList: React.FC = () => {
   const [searchParams] = useSearchParams()
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const [expanded, setExpanded] = useState(false)
-
   const gender = searchParams.get('gender') ?? 'all'
   const sort = searchParams.get('sort') ?? 'wanted'
 
-  useEffect(() => {
-    const targetType = targetMap[gender] ?? 'ALL'
-    const rankType = rankMap[sort] ?? 'MANY_WISH'
-    setLoading(true)
-    setError(false)
-    fetchProductRanking(targetType, rankType)
-      .then(setProducts)
-      .catch(() => {
-        setError(true)
-        setProducts([])
-      })
-      .finally(() => setLoading(false))
-  }, [gender, sort])
+  const [expanded, setExpanded] = useState(false)
+  const targetType = targetMap[gender] ?? 'ALL'
+  const rankType = rankMap[sort] ?? 'MANY_WISH'
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useProductRankingQuery(targetType, rankType)
   const visibleItems = expanded ? products : products.slice(0, 6)
   
-    if (loading) {
+  if (isLoading) {
     return (
       <Wrapper>
         <RankingSkeleton />
@@ -47,7 +36,7 @@ const RankingList: React.FC = () => {
     )
   }
 
-  if (error || products.length === 0) {
+  if (isError || products.length === 0) {
     return <Wrapper>상품 목록이 없습니다.</Wrapper>
 
   }
