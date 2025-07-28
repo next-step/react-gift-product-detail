@@ -47,14 +47,14 @@ function ProductDetailPage() {
 function ProductDetailQueryContent() {
   const { id } = useParams();
 
-  const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL(id),
-    queryFn: () => getProductDetail(id!),
-  });
-
   if (!id) {
     throw new Error(PRODUCT_DETAIL_LABELS.NO_PRODUCT_MESSAGE);
   }
+
+  const { data } = useSuspenseQuery({
+    queryKey: QUERY_KEY.PRODUCT_DETAIL(id),
+    queryFn: () => getProductDetail(id),
+  });
 
   return (
     <BottomNavigationWrapper productId={id}>
