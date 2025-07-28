@@ -1,5 +1,5 @@
 import TheHeader from "@/components/layout/TheHeader";
-import { useParams, useLocation, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { ROUTE_PATH } from "@/routes/paths";
 import { cards } from "@/data/card";
@@ -17,9 +17,9 @@ import { fetchProductsSummary } from "@/api/productSummary";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
 import { useQuery } from "@tanstack/react-query";
+import withUser from "@/hoc/withUser";
 
 const OrderPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [selectedCard, setSelectedCard] = useState<Card>(cards[0]);
   const userInfo = useUserInfo();
@@ -37,14 +37,6 @@ const OrderPage = () => {
   useEffect(() => {
     methods.setValue("message", selectedCard.defaultTextMessage);
   }, [selectedCard, methods]);
-
-  useEffect(() => {
-    if (!userInfo?.email) {
-      navigate(`${ROUTE_PATH.LOGIN}?redirect=${location.pathname}`, {
-        replace: true,
-      });
-    }
-  }, [location.pathname, navigate, userInfo]);
 
   const { id } = useParams<{ id: string }>();
   const {
@@ -128,7 +120,7 @@ const OrderPage = () => {
   );
 };
 
-export default OrderPage;
+export default withUser(OrderPage);
 
 const Main = styled.main`
   display: flex;

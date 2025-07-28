@@ -1,22 +1,10 @@
 import TheHeader from "@/components/layout/TheHeader";
 import { useUserInfo } from "@/contexts/UserInfoContext";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
+import withUser from "@/hoc/withUser";
 import styled from "@emotion/styled";
-import { ROUTE_PATH } from "@/routes/paths";
 
 const MyPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const user = useUserInfo();
-
-  useEffect(() => {
-    if (!user?.email) {
-      navigate(`${ROUTE_PATH.LOGIN}?redirect=${location.pathname}`, {
-        replace: true,
-      });
-    }
-  }, [user, location.pathname, navigate]);
 
   if (!user?.email) return null;
 
@@ -39,7 +27,7 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default withUser(MyPage);
 
 const Main = styled.main`
   display: block;
