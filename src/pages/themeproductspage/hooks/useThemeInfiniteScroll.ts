@@ -19,8 +19,8 @@ export function useThemeInfiniteScroll({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [cursor, setCursor] = useState<number | null>(initialCursor);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [moreAvailable, setMoreAvailable] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
 
   const { data: initialData } = useSuspenseApiQuery<ThemeProductResponse>({
@@ -42,44 +42,47 @@ export function useThemeInfiniteScroll({
     if (initialData) {
       setProducts(initialData.list);
       setCursor(initialData.cursor ?? null);
-      setHasMore(
+      setMoreAvailable(
         initialData.hasMoreList !== false && !!initialData.list.length
       );
     }
   }, [initialData]);
 
-  const fetchNext = useCallback(async () => {
-    if (!hasMore || isLoading) return;
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await refetch();
-      const res = result.data as ThemeProductResponse;
-      setProducts((prev) => {
-        const existingIds = new Set(prev.map((item) => item.id));
-        const filtered = res.list.filter((item) => !existingIds.has(item.id));
-        return [...prev, ...filtered];
-      });
-      setCursor(res.cursor ?? null);
-      setHasMore(res.hasMoreList !== false && !!res.list.length);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [refetch, hasMore, isLoading]);
+  const fetchNext = useCallback(
+    async (entries: IntersectionObserverEntry[]) => {
+      if (!moreAvailable || loading) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const result = await refetch();
+        const res = result.data as ThemeProductResponse;
+        setProducts((prev) => {
+          const existingIds = new Set(prev.map((item) => item.id));
+          const filtered = res.list.filter((item) => !existingIds.has(item.id));
+          return [...prev, ...filtered];
+        });
+        setCursor(res.cursor ?? null);
+        setMoreAvailable(res.hasMoreList !== false && !!res.list.length);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [refetch, moreAvailable, loading]
+  );
 
   useIntersectionObserver({
     targetRef: observerRef,
     onIntersect: fetchNext,
-    enabled: hasMore && !isLoading && products.length > 0,
+    enabled: moreAvailable && !loading && products.length > 0,
     threshold,
   });
 
   return {
     products,
-    isLoading: isLoading || queryLoading,
-    hasMore,
+    loading: loading || queryLoading,
+    moreAvailable,
     error: error || queryError,
     observerRef,
     fetchNext,

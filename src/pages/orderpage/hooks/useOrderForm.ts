@@ -35,23 +35,19 @@ export function useOrderForm(productData: any, userInfo: any) {
     }
     if (!productData) return;
 
-    try {
-      const result = await orderMutation.mutateAsync({
-        productId: productData.id,
-        message: data.message,
-        messageCardId: data.messageCardId,
-        ordererName: data.sender,
-        receivers: data.receivers,
-      });
+    const result = await orderMutation.mutateAsync({
+      productId: productData.id,
+      message: data.message,
+      messageCardId: data.messageCardId,
+      ordererName: data.sender,
+      receivers: data.receivers,
+    });
 
-      if (result?.success) {
-        alert(
-          `주문이 완료되었습니다.\n상품명: ${productData.name}\n구매 수량: ${data.receivers.reduce((acc, cur) => acc + cur.quantity, 0)}\n발신자 이름: ${data.sender}\n메시지: ${data.message}`
-        );
-        navigate("/", { replace: true });
-      }
-    } catch (error: any) {
-      throw error;
+    if (result?.success) {
+      alert(
+        `주문이 완료되었습니다.\n상품명: ${productData.name}\n구매 수량: ${data.receivers.reduce((acc, cur) => acc + cur.quantity, 0)}\n발신자 이름: ${data.sender}\n메시지: ${data.message}`
+      );
+      navigate("/", { replace: true });
     }
   };
 

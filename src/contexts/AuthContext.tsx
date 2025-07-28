@@ -1,5 +1,5 @@
 import { getUserNameFromEmail } from "@/utils/getUserNameFromEmail";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useCallback } from "react";
 import { useStorageState } from "@/contexts/hooks/useStorageState";
 
 type UserInfo = {
@@ -34,5 +34,10 @@ export const useAuth = () => {
   const { userInfo, setUserInfo } = context;
   const userName = getUserNameFromEmail(userInfo?.email ?? null);
   const loggedIn = !!userInfo?.isLoggedIn;
-  return { userInfo, userName, loggedIn, setUserInfo };
+
+  const logout = useCallback(() => {
+    setUserInfo(undefined);
+  }, [setUserInfo]);
+
+  return { userInfo, userName, loggedIn, setUserInfo, logout };
 };

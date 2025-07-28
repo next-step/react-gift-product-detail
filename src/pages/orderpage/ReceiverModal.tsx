@@ -8,14 +8,14 @@ import { useEffect } from "react";
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
+  handleClose: () => void;
   onSubmit: (data: ReceiverArrayFormValues) => void;
   initialReceivers: ReceiverArrayFormValues["receivers"];
 };
 
 const ReceiverModal = ({
   isOpen,
-  onClose,
+  handleClose,
   onSubmit,
   initialReceivers,
 }: Props) => {
@@ -81,7 +81,7 @@ const ReceiverModal = ({
               onClick={methods.handleSubmit(
                 (data) => {
                   onSubmit(data);
-                  onClose();
+                  handleClose();
                 },
                 (errors) => {
                   console.log("유효성 검사 실패", errors);
@@ -90,7 +90,7 @@ const ReceiverModal = ({
             >
               완료
             </CompleteButton>
-            <CancelButton type="button" onClick={onClose}>
+            <CancelButton type="button" onClick={handleClose}>
               취소
             </CancelButton>
           </ModalFooter>

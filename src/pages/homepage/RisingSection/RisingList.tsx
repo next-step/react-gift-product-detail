@@ -2,28 +2,19 @@
 import type { Product } from "@/types/api_types";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useSuspenseApiQuery } from "@/hooks/useSuspenseApiQuery";
+import { useNavigate } from "react-router-dom";
+import { useProducts } from "@/pages/homepage/hooks/useProducts";
 import RisingItem from "@/pages/homepage/RisingSection/RisingItem";
-import { API_ENDPOINTS } from "@/utils/API_ENDPOINTS";
 
 const INITIAL_VISIBLE_COUNT = 6;
 
 export default function RisingList() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const targetType = searchParams.get("targetType") ?? "ALL";
-  const rankType = searchParams.get("rankType") ?? "MANY_WISH";
+  const { data } = useProducts();
 
-  const { data } = useSuspenseApiQuery<Product[]>({
-    queryKey: [API_ENDPOINTS.RANKING, targetType, rankType],
-    url: API_ENDPOINTS.RANKING,
-    params: { targetType, rankType },
-  });
-
-  const handleItemClick = (item: Product & { id: number }) => {
-    navigate(`/order/${item.id}`);
+  const navigateToOrder = (item: Product & { id: number }) => {
+    navigate(`/product/${item.id}`);
   };
 
   if (!data || data.length === 0) {
@@ -38,7 +29,7 @@ export default function RisingList() {
     <Wrapper>
       <Grid>
         {data.slice(0, visibleCount).map((item: Product, index: number) => (
-          <CardWrapper key={item.id} onClick={() => handleItemClick(item)}>
+          <CardWrapper key={item.id} onClick={() => navigateToOrder(item)}>
             <RankBadge>{index + 1}</RankBadge>
             <RisingItem product={item} />
           </CardWrapper>

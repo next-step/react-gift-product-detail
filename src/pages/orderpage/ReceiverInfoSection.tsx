@@ -68,7 +68,7 @@ const ReceiverInfoSection = () => {
       {isModalOpen && (
         <ReceiverModal
           isOpen={isModalOpen}
-          onClose={handleCloseModal}
+          handleClose={handleCloseModal}
           onSubmit={handleSubmitReceiverData}
           initialReceivers={initialReceivers}
         />

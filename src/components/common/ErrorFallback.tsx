@@ -1,11 +1,13 @@
 import { useApiErrorHandler } from "@/hooks/useApiErrorHandler";
 import styled from "@emotion/styled";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function ErrorFallback({ error }: { error: any }) {
   const handleApiError = useApiErrorHandler({
     fallbackMessage: "알 수 없는 오류가 발생했습니다.",
   });
+  const navigate = useNavigate();
 
   const isApiError = error?.response?.status;
 
@@ -15,6 +17,10 @@ export function ErrorFallback({ error }: { error: any }) {
     }
   }, [isApiError, error, handleApiError]);
 
+  const handleGoHome = () => {
+    navigate("/");
+  };
+
   return (
     <Wrapper>
       <Title>에러가 발생했습니다</Title>
@@ -23,7 +29,7 @@ export function ErrorFallback({ error }: { error: any }) {
           ? error?.response?.data?.data?.message || error?.message
           : error?.message}
       </Message>
-      <Button onClick={() => window.location.reload()}>새로고침</Button>
+      <Button onClick={handleGoHome}>홈으로 이동</Button>
     </Wrapper>
   );
 }

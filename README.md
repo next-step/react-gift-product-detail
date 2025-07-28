@@ -1,3 +1,23 @@
+## step2 구현 내용
+
+- 상품 카드를 클릭하면 상품상세페이지로 이동하도록 로직을 변경했습니다.
+- 상품 상세 페이지에 진입 시 useProductDetail 훅을 통해 필요한 정보를 api요청을 통해 받아옵니다.
+- ProductDetailPage.tsx에서 필요한 정보를 prop으로 각 section에 전달합니다.
+- 상품 상세 페이지에서 하단의 상품설명, 선물후기, 상세정보 탭을 통해 각 정보를 출력하도록 합니다.
+- 하단의 좋아요 버튼을 클릭하면 낙관적 업데이트를 통해 wishcount수를 변경하고, UI를 업데이트합니다.
+- 하단의 주문하기 버튼을 클릭하면 OrderPage로 이동합니다.
+- HomePage.tsx를 만들어 페이지 컴포넌트간의 일관성을 높였습니다.
+- ErrorBoundary를 통한 에러 핸들링 로직을 새로고침을 하는것에서 홈 화면으로 이동하는것으로 변경했습니다.
+
+## step1 피드백 반영 내용
+
+- 각종 함수 이름 기능에 맞게 바꾸고, 변수 이름을 일관성있게 통일했습니다.
+- 최상위 레이어에 있던 필요없는 suspense 제거했습니다.
+- RisingItem.tsx에서 prop으로 product를 받아 바로 요소를 분해하여 사용하는 방식으로 변경했습니다.
+- RisingList.tsx에서 바로 사용하던 useSuspenseApiQuery를 useProducts 훅으로 한단계 추상화 했습니다.
+- useOrderForm.ts에서 잘못사용되고 있던 try/catch 를 제거했습니다.
+- IntersectionObserver에서 onIntersect에 entries를 넘기도록 변경했습니다.
+
 ## step1 구현 내용
 
 - useApiRequest.ts를 useApiQuery.ts, useApiMutation.ts, useSuspenseApiQuery.ts 세개의 커스텀훅으로 분리하여 react-query방식으로 api를 다룰 수 있게 했습니다.

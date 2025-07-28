@@ -15,7 +15,7 @@ export default function CategorySection() {
 
   if (!data || data.length === 0) return null;
 
-  const handleClick = (themeId: number) => {
+  const navigateToTheme = (themeId: number) => {
     navigate(`/themes/${themeId}`);
   };
 
@@ -26,7 +26,7 @@ export default function CategorySection() {
         {data.map((theme: Theme) => (
           <div
             key={theme.themeId}
-            onClick={() => handleClick(theme.themeId)}
+            onClick={() => navigateToTheme(theme.themeId)}
             style={{ cursor: "pointer" }}
           >
             <CategoryItem name={theme.name} image={theme.image} />

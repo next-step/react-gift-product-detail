@@ -7,22 +7,22 @@ export default function ThemeProductsList() {
   const { themeId } = useParams<{ themeId?: string }>();
   const navigate = useNavigate();
 
-  const { products, isLoading, observerRef } = useThemeInfiniteScroll({
+  const { products, loading, observerRef } = useThemeInfiniteScroll({
     themeId: themeId!,
   });
 
-  const handleItemClick = (id: number) => {
-    navigate(`/order/${id}`);
+  const navigateToOrder = (id: number) => {
+    navigate(`/product/${id}`);
   };
 
-  if (products.length === 0 && !isLoading)
+  if (products.length === 0 && !loading)
     return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
 
   return (
     <>
       <List>
         {products.map((product) => (
-          <Card key={product.id} onClick={() => handleItemClick(product.id)}>
+          <Card key={product.id} onClick={() => navigateToOrder(product.id)}>
             <Image src={product.imageURL} alt={product.name} />
             <Name>{product.name}</Name>
             <Brand>{product.brandInfo.name}</Brand>
@@ -31,7 +31,7 @@ export default function ThemeProductsList() {
         ))}
       </List>
       <ObserverTarget ref={observerRef} />
-      {isLoading && <LoadingSpinner />}
+      {loading && <LoadingSpinner />}
     </>
   );
 }
