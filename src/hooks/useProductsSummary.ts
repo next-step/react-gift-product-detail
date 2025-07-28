@@ -12,7 +12,7 @@ const useProductsSummary = ({ id }: ProductsSummaryParams) => {
     isError,
   } = useQuery({
     queryKey: ["gift", id],
-    queryFn: () => fetchProductsSummary({ productId: Number(id) }),
+    queryFn: () => fetchProductsSummary({ id: Number(id) }),
     enabled: !!id,
   });
 

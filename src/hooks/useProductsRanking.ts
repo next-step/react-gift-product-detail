@@ -1,4 +1,4 @@
-import { fetchProductsRanking } from "@/api/products";
+import { fetchProductsRanking } from "@/api/productsRanking";
 import type { RankType, TargetType } from "@/types/gift";
 import { useQuery } from "@tanstack/react-query";
 

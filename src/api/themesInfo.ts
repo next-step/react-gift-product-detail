@@ -11,5 +11,5 @@ type FetchThemesInfoResult = ThemeInfo;
 export const fetchThemesInfo = async (
   params: FetchThemesInfoParams,
 ): Promise<FetchThemesInfoResult> => {
-  return await axiosInstance.get(API_PATHS.THEMES_INFO(params.themeId));
+  return await axiosInstance.get(API_PATHS.THEMES.INFO(params.themeId));
 };

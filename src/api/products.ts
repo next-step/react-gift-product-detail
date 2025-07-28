@@ -1,16 +1,15 @@
 import { API_PATHS } from "./apiPaths";
 import axiosInstance from "./axiosInstance";
-import type { TargetType, RankType, Gift } from "@/types/gift";
+import type { Gift } from "@/types/gift";
 
-type FetchProductsRankingParams = {
-  targetType: TargetType;
-  rankType: RankType;
+type FetchProductsParams = {
+  id: number;
 };
 
-type FetchProductsRankingResult = Gift[];
+type FetchProductsResult = Gift;
 
-export const fetchProductsRanking = async (
-  params: FetchProductsRankingParams,
-): Promise<FetchProductsRankingResult> => {
-  return await axiosInstance.get(API_PATHS.PRODUCTS_RANKING, { params });
+export const fetchProducts = async (
+  params: FetchProductsParams,
+): Promise<FetchProductsResult> => {
+  return await axiosInstance.get(API_PATHS.PRODUCTS.ITEM(params.id));
 };

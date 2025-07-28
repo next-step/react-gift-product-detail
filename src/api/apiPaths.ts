@@ -1,11 +1,19 @@
 export const API_PATHS = {
-  PRODUCTS_RANKING: "/api/products/ranking",
-  THEMES: "/api/themes",
   LOGIN: "/api/login",
-  PRODUCT_SUMMARY: (productId: string | number) =>
-    `/api/products/${productId}/summary`,
-  THEMES_INFO: (themeId: string | number) => `/api/themes/${themeId}/info`,
-  THEMES_PRODUCTS: (themeId: string | number) =>
-    `/api/themes/${themeId}/products`,
+  THEMES: {
+    LIST: "/api/themes",
+    INFO: (themeId: string | number) => `/api/themes/${themeId}/info`,
+    PRODUCTS: (themeId: string | number) => `/api/themes/${themeId}/products`,
+  },
+  PRODUCTS: {
+    ITEM: (productId: string | number) => `/api/products/${productId}`,
+    DETAIL: (productId: string | number) => `/api/products/${productId}/detail`,
+    WISH: (productId: string | number) => `/api/products/${productId}/wish`,
+    REVIEW: (productId: string | number) =>
+      `/api/products/${productId}/highlight-review`,
+    SUMMARY: (productId: string | number) =>
+      `/api/products/${productId}/summary`,
+    RANKING: "/api/products/ranking",
+  },
   ORDER: "/api/order",
 };
