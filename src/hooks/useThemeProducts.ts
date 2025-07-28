@@ -24,8 +24,8 @@ export const useThemeProducts = (themeId: number) => {
       setCursor(data.cursor);
       setHasMore(data.hasMoreList);
       setInitialized(true);
-    } catch (err: any) {
-      setError(err);
+    } catch (err: unknown) {
+      setError(err as AppError);
       setInitialized(true);
     } finally {
       setLoading(false);

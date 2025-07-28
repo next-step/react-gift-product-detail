@@ -11,7 +11,7 @@ export const useInfiniteScroll = (
   onLoadMore: () => void,
   hasMore: boolean,
   loading: boolean,
-  error?: any,
+  error?: unknown,
   options: UseInfiniteScrollOptions = {}
 ) => {
   const { enabled = true, rootMargin = '100px', threshold = 0.1 } = options;

@@ -18,13 +18,16 @@ export const useProductSummary = (productId: number) => {
       .then((data) => {
         setProduct(data);
       })
-      .catch((err: any) => {
+      .catch((err: unknown) => {
         const errorMessage =
-          err.message || "제품 정보를 불러오는데 실패했습니다.";
+          err instanceof Error ? err.message : "제품 정보를 불러오는데 실패했습니다.";
         setError(errorMessage);
 
         // 4XX 에러 시 Toast로 에러 메시지 표시하고 홈으로 리다이렉트
-        if (err.status && err.status >= 400 && err.status < 500) {
+        if (err && typeof err === 'object' && 'status' in err && 
+            typeof (err as { status: unknown }).status === 'number' &&
+            (err as { status: number }).status >= 400 && 
+            (err as { status: number }).status < 500) {
           toast.error(errorMessage);
           navigate("/", { replace: true });
         } else {

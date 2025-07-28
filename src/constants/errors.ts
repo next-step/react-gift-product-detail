@@ -58,7 +58,7 @@ export const createThemeNotFoundError = (): AppError =>
 
 export const createApiError = (status: number, originalError?: Error): AppError => {
   let message: string = ERROR_MESSAGES.API_ERROR;
-  let code = status;
+  const code = status;
 
   switch (status) {
     case 401:

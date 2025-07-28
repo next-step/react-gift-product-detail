@@ -1,6 +1,4 @@
 import {
-  createContext,
-  useContext,
   useState,
   useEffect,
   useMemo,
@@ -8,29 +6,8 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 import type { UserInfo } from "../types/auth";
-
-interface LoginContextType {
-  user: UserInfo | null;
-  isLoggedIn: boolean;
-  login: (userInfo: UserInfo) => void;
-  logout: () => void;
-}
-
-const LoginContext = createContext<LoginContextType | undefined>(undefined);
-
-// 데이터 유효성 검증 함수
-const isValidUserInfo = (data: unknown): data is UserInfo => {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "authToken" in data &&
-    "email" in data &&
-    "name" in data &&
-    typeof (data as any).authToken === "string" &&
-    typeof (data as any).email === "string" &&
-    typeof (data as any).name === "string"
-  );
-};
+import { isValidUserInfo } from "../utils/userValidation";
+import { LoginContext } from "./LoginContextValue";
 
 export function LoginProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfo | null>(null);
@@ -87,14 +64,4 @@ export function LoginProvider({ children }: { children: ReactNode }) {
       {children}
     </LoginContext.Provider>
   );
-}
-
-export function useLoginContext() {
-  const context = useContext(LoginContext);
-  if (!context) {
-    throw new Error(
-      "useLoginContext는 LoginProvider 안에서만 사용해야 합니다.",
-    );
-  }
-  return context;
 }

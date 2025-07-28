@@ -1,4 +1,4 @@
-import { useLoginContext } from "@/contexts/LoginContext";
+import { useLoginContext } from "@/hooks/useLoginContext";
 import { Navigate } from "react-router-dom";
 
 interface Props {

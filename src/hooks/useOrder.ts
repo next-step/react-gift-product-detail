@@ -21,16 +21,23 @@ export const useOrder = () => {
 
       toast.success("주문이 성공적으로 완료되었습니다!");
       return response;
-    } catch (err: any) {
-      const errorMessage = err.message || "주문에 실패했습니다.";
+    } catch (err: unknown) {
+      const errorMessage = 
+        err instanceof Error ? err.message : "주문에 실패했습니다.";
       setError(errorMessage);
 
       // 401 에러 시 로그인 페이지로 리다이렉트
-      if (err.status === 401) {
-        toast.error("로그인이 필요합니다.");
-        navigate("/login", { replace: true });
-      } else if (err.status && err.status >= 400 && err.status < 500) {
-        toast.error(errorMessage);
+      if (err && typeof err === 'object' && 'status' in err && 
+          typeof (err as { status: unknown }).status === 'number') {
+        const status = (err as { status: number }).status;
+        if (status === 401) {
+          toast.error("로그인이 필요합니다.");
+          navigate("/login", { replace: true });
+        } else if (status >= 400 && status < 500) {
+          toast.error(errorMessage);
+        } else {
+          toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+        }
       } else {
         toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
       }

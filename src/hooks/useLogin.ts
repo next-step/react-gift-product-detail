@@ -27,12 +27,16 @@ export const useLogin = () => {
 
       toast.success("로그인에 성공했습니다!");
       return userInfo;
-    } catch (err: any) {
-      const errorMessage = err.message || "로그인에 실패했습니다.";
+    } catch (err: unknown) {
+      const errorMessage = 
+        err instanceof Error ? err.message : "로그인에 실패했습니다.";
       setError(errorMessage);
 
       // 4XX 에러 시 Toast로 에러 메시지 표시
-      if (err.status && err.status >= 400 && err.status < 500) {
+      if (err && typeof err === 'object' && 'status' in err && 
+          typeof (err as { status: unknown }).status === 'number' &&
+          (err as { status: number }).status >= 400 && 
+          (err as { status: number }).status < 500) {
         toast.error(errorMessage);
       } else {
         toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
