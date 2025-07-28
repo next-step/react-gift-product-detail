@@ -19,6 +19,7 @@ import {
 } from '@tanstack/react-query';
 import ProductDetailInfoPage from './pages/ProductDetailInfoPage';
 
+
 const containerStyle = css`
   max-width: 720px;
   margin: 0 auto;
@@ -58,6 +59,7 @@ const App = () => {
                   path={ROUTES.PRODUCT()}
                   element={<ProductDetailInfoPage />}
                 />
+
               </Routes>
             </BrowserRouter>
           </AuthProvider>

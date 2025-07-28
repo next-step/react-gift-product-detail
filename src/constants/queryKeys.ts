@@ -12,4 +12,5 @@ export const queryKeys = {
     ['productReview', productId] as const,
   productWish: (productId: number) =>
     ['productWish', productId] as const,
+
 };
