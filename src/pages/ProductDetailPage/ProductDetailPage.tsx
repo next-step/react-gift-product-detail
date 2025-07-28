@@ -78,16 +78,27 @@ function BottomNavigationWrapper({
 
   const wishMutation = useMutation({
     mutationFn: () => {
-      try {
-        // post api 없음, console.log 로 대체
-        console.log("post api 요청, wish.isWished", !data?.isWished);
-        return Promise.resolve();
-      } catch (error) {
-        console.error(error);
-        return Promise.reject(error);
-      }
+      console.log("api post wish.isWished", !data?.isWished);
+      return Promise.resolve();
+      // const current = queryClient.getQueryData<Wish>(
+      //   QUERY_KEY.PRODUCT_WISH(productId)
+      // );
+      // if (!current) throw new Error("좋아요 정보가 없습니다.");
+
+      // const nextIsWished = !current.isWished;
+      // const nextWishCount = current.wishCount + (nextIsWished ? 1 : -1);
+
+      // return new Promise<Wish>((resolve) => {
+      //   setTimeout(() => {
+      //     resolve({
+      //       isWished: nextIsWished,
+      //       wishCount: nextWishCount,
+      //     });
+      //   }, 500);
+      // });
     },
     onMutate: async () => {
+      // 캐시만 업데이트
       await queryClient.cancelQueries({
         queryKey: QUERY_KEY.PRODUCT_WISH(productId),
       });
@@ -108,6 +119,7 @@ function BottomNavigationWrapper({
       return { previousData };
     },
     onSettled: () => {
+      // 캐시 리페치
       // queryClient.invalidateQueries({
       //   queryKey: QUERY_KEY.PRODUCT_WISH(productId),
       // });
