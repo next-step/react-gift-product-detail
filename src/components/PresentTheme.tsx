@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@/theme/theme';
-import { useEffect, useState } from 'react';
-
-import { api } from '@/Api/api';
 import LoadingSpinner from './common/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import { useThemeList } from '@/queries/useThemeList';
 
 const Container = styled.section`
   padding: 8px;
@@ -68,38 +66,12 @@ const LoadingContainer = styled(CategoryContainer)`
   min-height: 250px;
 `;
 
-interface ThemeItem {
-  themeId: number;
-  name: string;
-  image: string;
-}
-
-interface ThemeResponse {
-  data: ThemeItem[];
-}
-
 const PresentTheme = () => {
   const navigate = useNavigate();
-  const [themeList, setThemeList] = useState<ThemeItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
-  useEffect(() => {
-    const fetchThemes = async () => {
-      try {
-        const res = await api.get<ThemeResponse>('/api/themes');
-        setThemeList(res.data.data);
-      } catch (error) {
-        console.error('테마 불러오기 실패', error);
-        setHasError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchThemes();
-  }, []);
+  const { data: themes, isLoading, isError } = useThemeList();
 
-  if (!isLoading && (hasError || themeList.length === 0)) {
+  if (!isLoading && (isError || (themes?.length ?? 0) === 0)) {
     return null;
   }
 
@@ -119,7 +91,7 @@ const PresentTheme = () => {
           </LoadingContainer>
         ) : (
           <CategoryContainer>
-            {themeList.map((t) => (
+            {(themes ?? []).map((t) => (
               <Category key={t.themeId} onClick={() => handleClick(t.themeId)}>
                 <PresentImage src={t.image} alt={t.name} />
                 <PresentName>{t.name}</PresentName>
