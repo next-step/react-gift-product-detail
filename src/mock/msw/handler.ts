@@ -10,6 +10,9 @@ type LoginBody = {
   email: string;
 };
 
+export const PRODUCT_SUMMARY_ID = "11712379";
+export const PRODUCT_SUMMARY_NAME = "부드러운 고구마 라떼 케이크";
+
 export const handlers = [
   http.get(BE.API.PRODUCT.RANKING, () => {
     return HttpResponse.json({ data: [productMockData] });
@@ -35,6 +38,18 @@ export const handlers = [
 
     return HttpResponse.json({
       data: { email, name: email.split("@")[0], token: "dummy-token" }
+    });
+  }),
+  http.get(BE.API.PRODUCT.SUMMARY(PRODUCT_SUMMARY_ID), () => {
+    return HttpResponse.json({
+      data: {
+        id: PRODUCT_SUMMARY_ID,
+        name: PRODUCT_SUMMARY_NAME,
+        brandName: "뚜레쥬르",
+        price: 26350,
+        imageURL:
+          "https://st.kakaocdn.net/product/gift/product/20250218142602_030fce0196af42189694554c03a54fbb.jpg"
+      }
     });
   })
 ];
