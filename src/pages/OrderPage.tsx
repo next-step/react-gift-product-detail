@@ -233,7 +233,7 @@ const OrderPage = () => {
   // 제품 정보 쿼리 훅 사용
   const { data: productData, isLoading: loading, error: productError } = useProductSummaryQuery(Number(productId));
 
-  // react-hook-form 적용
+  // 모든 훅을 최상단에 선언
   const { register, handleSubmit, formState: { errors }, setValue } = useForm({
     mode: 'onSubmit',
     defaultValues: {
@@ -241,6 +241,10 @@ const OrderPage = () => {
       senderName: user?.name || '',
     },
   });
+  const [selectedCard, setSelectedCard] = useState<OrderCard>(orderCardsData[0]);
+  const [receiverModalOpen, setReceiverModalOpen] = useState(false);
+  const [receivers, setReceivers] = useState<Receiver[]>([]);
+  const createOrderMutation = useCreateOrderMutation();
 
   // 에러 발생 시 홈으로 이동
   if (productError) {
@@ -248,16 +252,6 @@ const OrderPage = () => {
     navigate('/');
     return null;
   }
-  
-  // 가져온 orderCard.ts 데이터 사용
-  const [selectedCard, setSelectedCard] = useState<OrderCard>(orderCardsData[0]);
-  
-
-  // 모달 열기/닫기 상태
-  const [receiverModalOpen, setReceiverModalOpen] = useState(false);
-
-  // 받는 사람 리스트 상태 추가
-  const [receivers, setReceivers] = useState<Receiver[]>([]);
 
   // 카드 선택 핸들러
   const handleCardSelect = (card: OrderCard) => {
@@ -265,9 +259,6 @@ const OrderPage = () => {
     // 카드 선택 시 해당 카드의 기본 메시지로 변경
     setValue('message', card.defaultTextMessage);
   };
-      
-  // 주문 쿼리 훅 사용
-  const createOrderMutation = useCreateOrderMutation();
 
   // 주문하기 핸들러 (react-hook-form)
   const onSubmit = (data: { message: string; senderName: string }) => {
@@ -308,7 +299,6 @@ const OrderPage = () => {
       }
     );
   };
-  
 
   // 로그인 체크
   useEffect(() => {
@@ -316,7 +306,6 @@ const OrderPage = () => {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }
   }, [isAuthenticated, navigate, productId]);
-  
 
   // 받는 사람 전체 수량 합계 계산
   const totalQuantity = receivers.reduce((sum, r) => sum + (r.quantity || 0), 0);
@@ -334,7 +323,7 @@ const OrderPage = () => {
       </>
     );
   }
-  
+
   return (
     <>
       <GlobalStyle />
