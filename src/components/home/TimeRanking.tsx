@@ -81,12 +81,7 @@ export default function TimeRanking() {
   };
 
   const goToOrder = (itemId: number) => {
-    const userInfo = sessionStorage.getItem("userInfo");
-    if (userInfo) navigate(`/order/${itemId}`);
-    else
-      navigate("/login", {
-        state: { from: `/order/${itemId}` },
-      });
+    navigate(`/products/${itemId}`);
   };
 
   const itemsToShow = showAll ? rankings : rankings.slice(0, 6);
