@@ -14,6 +14,8 @@ function ProductDetailContent() {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
+  window.scrollTo({ top: 0, behavior: "instant" }); 
+  
   const goToOrder = (itemId: string) => {
     const userInfo = getUserFromSession();
     if (userInfo) navigate(PATH.toORDER(itemId));
