@@ -26,4 +26,6 @@ export const ERROR_MESSAGES = {
   NO_THEMES_AVAILABLE: '테마가 없습니다.',
   FAILED_TO_LOAD_PRODUCTS: '상품을 불러오지 못했어요.',
   NO_PRODUCTS_AVAILABLE: '상품이 없습니다.',
+  FAILED_TO_LOAD_PRODUCT_WISH: '상품 찜 정보를 불러오지 못했어요.',
+  FAILED_TO_LOAD_HIGHLIGHT_REVIEW: '상품 주요 리뷰를 불러오지 못했어요.',
 } as const;

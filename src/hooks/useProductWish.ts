@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { ProductWish } from '@/types/product';
 import { getProductWishUrl } from '@/hooks/constants/api';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 export const useProductWish = (productId: string | undefined) => {
   return useQuery<ProductWish>({
@@ -10,15 +11,15 @@ export const useProductWish = (productId: string | undefined) => {
       const res = await axios.get<{ data: ProductWish }>(
         getProductWishUrl(productId!)
       );
-      const wish = res.data?.data;
+      const wish = res.data.data;
 
       if (!wish) {
-        throw new Error('상품 찜 정보를 불러올 수 없습니다.');
+        throw new Error(ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCT_WISH);
       }
 
       return wish;
     },
     enabled: !!productId,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1_000 * 60 * 10,
   });
 };

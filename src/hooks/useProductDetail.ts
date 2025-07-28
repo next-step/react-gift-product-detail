@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { ProductDetail } from '@/types/product';
 import { getProductDetailUrl } from '@/hooks/constants/api';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 export const useProductDetail = (productId: string | undefined) => {
   return useQuery<ProductDetail>({
@@ -10,10 +11,10 @@ export const useProductDetail = (productId: string | undefined) => {
       const res = await axios.get<{ data: ProductDetail }>(
         getProductDetailUrl(productId!)
       );
-      const detail = res.data?.data;
+      const detail = res.data.data;
 
       if (!detail) {
-        throw new Error('상품 상세 정보를 불러올 수 없습니다.');
+        throw new Error(ERROR_MESSAGES.LOAD_PRODUCT_FAIL);
       }
 
       return detail;

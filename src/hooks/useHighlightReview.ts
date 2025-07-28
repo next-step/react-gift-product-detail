@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import type { HighlightReview } from '@/types/product';
 import { getHighlightReviewUrl } from '@/hooks/constants/api';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 export const useHighlightReview = (productId: string | undefined) => {
   return useQuery<HighlightReview>({
@@ -10,13 +11,13 @@ export const useHighlightReview = (productId: string | undefined) => {
       const res = await axios.get<{ data: HighlightReview }>(
         getHighlightReviewUrl(productId!)
       );
-      const result = res.data?.data;
+      const highlightReview = res.data.data;
 
-      if (!result) {
-        throw new Error('리뷰 정보를 불러올 수 없습니다.');
+      if (!highlightReview) {
+        throw new Error(ERROR_MESSAGES.FAILED_TO_LOAD_HIGHLIGHT_REVIEW);
       }
 
-      return result;
+      return highlightReview;
     },
     enabled: !!productId,
   });
