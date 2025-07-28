@@ -1,3 +1,5 @@
+import type { QueryFunctionContext } from '@tanstack/react-query'
+
 export interface FetchApiOptions {
   method?: string
   params?: Record<string, string>
@@ -42,4 +44,11 @@ export async function fetchApi<T>(
     throw error  }
 
   return json.data as T
+}
+
+export async function fetcher<T>(
+  context: QueryFunctionContext<[string, FetchApiOptions?]>,
+): Promise<T> {
+  const [url, options] = context.queryKey
+  return fetchApi<T>(url, options)  
 }
