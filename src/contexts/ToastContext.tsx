@@ -1,9 +1,5 @@
-import type { StateHook } from "@src/hooks/stateHookType";
+import type { ToastContextType } from "@src/types/ToastContextType";
 import { createContext } from "react";
-
-type ToastContextType = {
-  message: StateHook<string | null>;
-} | null;
 
 const ToastContext = createContext<ToastContextType>(null);
 

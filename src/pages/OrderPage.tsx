@@ -6,14 +6,6 @@ import ToastContext from "@src/contexts/ToastContext";
 import OrderPanel from "@src/components/OrderPanels/OrderPanel";
 import ErrorBoundary from "@src/components/shared/ErrorBoundary";
 
-export type ProductData = {
-  imageURL: string;
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-};
-
 function OrderPage() {
   const toastContext = useContext(ToastContext);
   const navigate = useNavigate();

@@ -5,22 +5,7 @@ import Card from "./Card";
 import styled from "@emotion/styled";
 import PendingSpinner from "../shared/PendingSpinner";
 import { useMutation } from "@tanstack/react-query";
-
-export type ThemeProductData = {
-  brandInfo: {
-    id: number;
-    imageURL: string;
-    name: string;
-  };
-  id: number;
-  imageURL: string;
-  name: string;
-  price: {
-    basicPrice: number;
-    discountRate: number;
-    sellingPrice: number;
-  };
-};
+import type { ThemeProductData } from "@src/types/ThemeTypes";
 
 function ThemePanel() {
   const themeId = useParams().id ?? "";

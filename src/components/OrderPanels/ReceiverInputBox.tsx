@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import AdvancedInput from "@src/components/shared/AdvancedInput";
-import type { FormType, Receiver } from "@src/pages/OrderPage";
+import type { FormType, Receiver } from "@src/types/OrderFormTypes";
 import { useEffect } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 

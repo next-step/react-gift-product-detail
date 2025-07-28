@@ -5,7 +5,7 @@ import {
   fetchProductHighLightReview,
   fetchProductWish
 } from "@src/apis/BackEnd/apiList";
-import type { ProductInfoType } from "./ProductInfoType";
+import type { ProductInfoType } from "@src/types/ProductInfoType";
 
 export function useProductInfo(productId: string): ProductInfoType {
   const productInfo = useSuspenseQuery({

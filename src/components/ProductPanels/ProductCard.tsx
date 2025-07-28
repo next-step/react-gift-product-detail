@@ -2,14 +2,6 @@ import { useParams } from "react-router-dom";
 import { useProductInfo } from "@src/hooks/useProductInfo";
 import styled from "@emotion/styled";
 
-export type ProductData = {
-  imageURL: string;
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-};
-
 function ProductCard() {
   const productId = useParams().id ?? "";
   const productInfo = useProductInfo(productId);

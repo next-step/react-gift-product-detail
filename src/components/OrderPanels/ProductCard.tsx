@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import theme from "@src/styles/kakaoTheme";
-import { type ProductData } from "@src/pages/OrderPage";
+import type { ProductData } from "@src/types/ProductDataType";
 
 function ProductCard({ productData }: { productData: ProductData }) {
   return (

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import theme from "@src/styles/kakaoTheme";
 import type { StateHook } from "@src/hooks/stateHookType";
 import ReceiverInputBox from "./ReceiverInputBox";
-import type { FormType, Receiver } from "@src/pages/OrderPage";
+import type { FormType, Receiver } from "@src/types/OrderFormTypes";
 import {
   FormProvider,
   useFieldArray,

@@ -6,7 +6,7 @@ import InputGroup from "@src/components/shared/InputGroup";
 import UserContext from "@src/contexts/UserContext";
 import { PATH } from "@src/router/Router";
 import theme from "@src/styles/kakaoTheme";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BatchReceiverInput from "@src/components/OrderPanels/BatchReceiverInput";
 import { useForm, Controller, FormProvider, useWatch } from "react-hook-form";
@@ -17,23 +17,10 @@ import {
   type OrderBody
 } from "@src/apis/BackEnd/apiList";
 import { ToastContainer, toast } from "react-toastify";
-import type { ProductData } from "@src/pages/OrderPage";
 import { useMutation } from "@tanstack/react-query";
 import { useLoginRedirection } from "@src/hooks/useLoginRedirection";
-
-export type Receiver = {
-  id: string;
-  name: string;
-  phoneNumber: string;
-  quantity: string;
-};
-
-export type FormType = {
-  cardId: string;
-  message: string;
-  sender: string;
-  receivers: Receiver[];
-};
+import type { Receiver } from "@src/types/OrderFormTypes";
+import type { ProductData } from "@src/types/ProductDataType";
 
 function OrderForm({ productData }: { productData: ProductData }) {
   const navigate = useNavigate();
