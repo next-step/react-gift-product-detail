@@ -1,14 +1,9 @@
-import { beforeAll, afterEach, afterAll, expect, describe, it } from "vitest";
-import { mockBE } from "@src/mock/msw/server";
+import { expect, describe, it } from "vitest";
 import { BE } from "@src/apis/BackEnd/apiEndPoints";
 import { productMockData } from "@src/mock/productMockData";
 import { render, screen } from "@testing-library/react";
 import RealTimeRankPanel from "@src/components/RealTimeRankPanel/RealTimeRankPanel";
 import MockApp from "../MockApp";
-
-beforeAll(() => mockBE.listen());
-afterEach(() => mockBE.resetHandlers());
-afterAll(() => mockBE.close());
 
 describe("MSW 테스트", () => {
   it("MSW가 API를 잘 MOCKING 합니다.", async () => {

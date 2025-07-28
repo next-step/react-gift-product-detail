@@ -1,28 +1,15 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  describe,
-  expect,
-  it,
-  vi
-} from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import LoginPage from "@src/pages/LoginPage";
 import MockApp from "../MockApp";
 import { toast } from "react-toastify";
 import { LOGIN_INVALID_EMAIL_MESSAGE } from "@src/mock/msw/handler";
-import { mockBE } from "@src/mock/msw/server";
 
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),
   ToastContainer: () => <div>Toast</div>
 }));
-
-beforeAll(() => mockBE.listen());
-afterEach(() => mockBE.resetHandlers());
-afterAll(() => mockBE.close());
 
 const renderLoginPage = () => {
   render(<MockApp children={<LoginPage />} userContext={false} />);
