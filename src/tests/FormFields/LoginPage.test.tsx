@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import LoginPage from "@src/pages/LoginPage";
 import MockApp from "../MockApp";
 import { toast } from "react-toastify";
-import { LOGIN_INVALID_EMAIL_MESSAGE } from "@src/mock/msw/handler";
+import { LOGIN_INVALID_EMAIL_MESSAGE } from "@src/mock/msw/entries/login";
 
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),

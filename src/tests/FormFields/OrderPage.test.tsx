@@ -7,7 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import {
   PRODUCT_SUMMARY_ID,
   PRODUCT_SUMMARY_NAME
-} from "@src/mock/msw/handler";
+} from "@src/mock/msw/entries/productSummary";
 
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),
