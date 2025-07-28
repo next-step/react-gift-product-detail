@@ -1,6 +1,9 @@
 import { fetchGiftRanking } from '../api/giftRanking';
 import { fetchGiftThemes } from '../api/giftTheme';
-import { fetchProdcutInfo } from '../api/productInfo';
+import {
+  fetchProdcutInfo,
+  fetchProductDetail,
+} from '../api/productInfo';
 import { fetchThemeInfo } from '../api/themeInfo';
 import { queryKeys } from '../constants/queryKeys';
 import { fetchGiftProductById } from '../hooks/useGiftProductById';
@@ -43,4 +46,12 @@ export const ProductDetailQueryOptions = (productId: number) => ({
     const res = await fetchProdcutInfo(productId);
     return res;
   },
+});
+
+export const ProductDescriptionQueryOptions = (
+  productId: number
+) => ({
+  queryKey: queryKeys.productDescription(productId),
+  queryFn: () => fetchProductDetail(productId),
+  enabled: !!productId,
 });

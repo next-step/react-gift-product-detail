@@ -17,7 +17,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import ProductDetailInfo from './pages/ProductDetailInfo';
+import ProductDetailInfoPage from './pages/ProductDetailInfoPage';
 
 const containerStyle = css`
   max-width: 720px;
@@ -56,7 +56,7 @@ const App = () => {
                 />
                 <Route
                   path={ROUTES.PRODUCT()}
-                  element={<ProductDetailInfo />}
+                  element={<ProductDetailInfoPage />}
                 />
               </Routes>
             </BrowserRouter>

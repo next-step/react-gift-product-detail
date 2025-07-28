@@ -6,4 +6,6 @@ export const queryKeys = {
   themeInfo: (themeId: number) => ['themeInfo', themeId] as const,
   productInfo: (productId: number) =>
     ['productInfo', productId] as const,
+  productDescription: (productId: number) =>
+    ['productDescription', productId] as const,
 };

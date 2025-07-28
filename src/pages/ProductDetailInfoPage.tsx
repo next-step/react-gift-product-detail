@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../components/common/Header';
 import styled from '@emotion/styled';
 import MainContent from '../components/product/MainContent';
+import ProductTabs from '../components/product/ProductTabs';
 
 const BottomOrderButton = styled.div`
   position: fixed;
@@ -19,7 +20,7 @@ const BottomOrderButton = styled.div`
   cursor: pointer;
 `;
 
-const ProductDetailInfo = () => {
+const ProductDetailInfoPage = () => {
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
   const id = Number(productId);
@@ -32,7 +33,7 @@ const ProductDetailInfo = () => {
     <>
       <Header />
       <MainContent></MainContent>
-
+      <ProductTabs></ProductTabs>
       <BottomOrderButton onClick={() => moveToOrder()}>
         주문하기
       </BottomOrderButton>
@@ -40,4 +41,4 @@ const ProductDetailInfo = () => {
   );
 };
 
-export default ProductDetailInfo;
+export default ProductDetailInfoPage;

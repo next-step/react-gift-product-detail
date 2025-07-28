@@ -116,7 +116,6 @@ export const RankingGrid = ({
   if (products.length === 0)
     return <Container>표시할 상품이 없습니다.</Container>;
 
-  console.log(products);
   return (
     <Container>
       <Grid>
