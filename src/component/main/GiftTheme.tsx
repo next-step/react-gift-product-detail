@@ -1,12 +1,10 @@
 import { GiftThemeSection, ThemeGrid, ThemeImage, ThemeItem, ThemeLabel } from './GiftTheme.styled';
 import { Gap, Spinner, SpinnerWrapper, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
 import { useNavigate } from 'react-router-dom';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import { themeUrl } from '@/constant/api';
 import { getFromUrl } from '@/utils/getFromUrl';
 import { useQuery } from '@tanstack/react-query';
-import type { ApiResponse } from '@/type/GiftAPI/product';
-import type { theme } from '@/type/GiftAPI/theme';
+
 
 
 

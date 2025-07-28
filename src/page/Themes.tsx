@@ -3,10 +3,8 @@ import {
 } from '@/component/main/GiftRanking.styled';
 import ProductList from '@/component/theme/ProductList';
 import { baseUrl } from '@/constant/api';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import { DefaultDiv, Gap } from '@/styles/CommomStyle/Common.styled';
 import { ThemeDescription, ThemeName, ThemeTitle, ThemeTop } from '@/styles/CommomStyle/themes.styled';
-import { type ApiResponse } from '@/type/GiftAPI/product';
 import type { ThemeInfo } from '@/type/GiftAPI/theme';
 import { getFromUrl } from '@/utils/getFromUrl';
 import { useQuery } from '@tanstack/react-query';

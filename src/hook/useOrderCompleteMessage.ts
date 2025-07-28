@@ -2,7 +2,7 @@ import { baseUrl } from "@/constant/api";
 import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { type ApiResponse, type ProductItemSummary } from "@/type/GiftAPI/product";
+import {type ProductItemSummary } from "@/type/GiftAPI/product";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useEffect } from "react";
 import { toast } from "react-toastify";

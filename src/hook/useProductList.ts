@@ -1,9 +1,8 @@
 import { baseUrl } from "@/constant/api";
 import { useAuth } from "@/context/AuthContext";
-import { defaultProductItemFromTheme, type ProductItem, type ProductItemFromTheme } from "@/type/GiftAPI/product";
+import { type ProductItem, type ProductItemFromTheme } from "@/type/GiftAPI/product";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useInfiniteFetchFromUrlT from "./useInfiniteFetchFromUrlT";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";
 

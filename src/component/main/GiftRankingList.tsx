@@ -9,7 +9,6 @@ import type { ProductItem } from '@/type/GiftAPI/product';
 import type { RankType, TargetType } from '@/type/giftRanking';
 import { CentorAlignDiv240, Gap } from '@/styles/CommomStyle/Common.styled';
 import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
-import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
 import Loading from '../Loading';
 import { baseRankingUrl } from '@/constant/api';
 import { getFromUrl } from '@/utils/getFromUrl';
