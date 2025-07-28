@@ -10,7 +10,7 @@ import { PATH } from "@/paths";
 export default function ProductDetailPage() {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
-  
+
   const goToOrder = (itemId: string) => {
     const userInfo = getUserFromSession();
     if (userInfo) navigate(PATH.toORDER(itemId));

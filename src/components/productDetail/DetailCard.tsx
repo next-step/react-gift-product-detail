@@ -6,7 +6,7 @@ import { useProductReview } from "@/hooks/useProductReview";
 
 export default function DetailCard({ productId }: { productId: string }) {
   const [selectedTab, setSelectedTab] = useState<"desc" | "review" | "info">(
-    "desc"
+    "desc",
   );
   const { data: reviews } = useProductReview(productId);
   const { data: detail } = useProductDetailContent(productId);
