@@ -2,8 +2,13 @@ import { Loading } from "@/components/Loading/Loading";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { getProductDetail, getProductWish } from "@/data/api";
 import Layout from "@/layout";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense, useEffect, useState } from "react";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { Suspense } from "react";
 import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { useNavigate, useParams } from "react-router-dom";
 import LikeIconImage from "./assets/heart.png";
@@ -21,6 +26,7 @@ import ProductHeader from "./components/ProductHeader/ProductHeader";
 import { PRODUCT_DETAIL_LABELS } from "./constants/labels";
 import ProductTabContents from "./components/ProductTabContents/ProductTabContents";
 import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
+import type { Wish } from "@/types/Wish";
 
 function ProductDetailPage() {
   return (
@@ -63,41 +69,60 @@ function BottomNavigationWrapper({
 }) {
   const navigate = useNavigate();
 
-  const [isLiked, setIsLiked] = useState(false);
-  const [wishCount, setWishCount] = useState(0);
+  const queryClient = useQueryClient();
 
-  // 낙관적 업데이트 - data 에 유저의 좋아요 유무 정보(isLiked)가 포함되어 있다고 가정
   const { data } = useQuery({
     queryKey: QUERY_KEY.PRODUCT_WISH(productId),
     queryFn: () => getProductWish(productId),
   });
 
-  useEffect(() => {
-    if (data) {
-      // setIsLiked(data.isLiked); 실제론 api 에 포함되어 있지 않음
-      setWishCount(data.wishCount);
-    }
-  }, [data]);
+  const wishMutation = useMutation({
+    mutationFn: () => {
+      try {
+        // post api 없음, console.log 로 대체
+        console.log("post api 요청, wish.isWished", !data?.isWished);
+        return Promise.resolve();
+      } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+      }
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: QUERY_KEY.PRODUCT_WISH(productId),
+      });
 
-  // 낙관적 업데이트 처리
+      const previousData = queryClient.getQueryData(
+        QUERY_KEY.PRODUCT_WISH(productId)
+      );
+      queryClient.setQueryData(
+        QUERY_KEY.PRODUCT_WISH(productId),
+        (old: Wish) => {
+          return {
+            isWished: !old.isWished,
+            wishCount: old.wishCount + (old.isWished ? -1 : 1),
+          };
+        }
+      );
+
+      return { previousData };
+    },
+    onSettled: () => {
+      // queryClient.invalidateQueries({
+      //   queryKey: QUERY_KEY.PRODUCT_WISH(productId),
+      // });
+    },
+    onError: (error, _, context) => {
+      console.log("wish mutation error", error);
+      queryClient.setQueryData(
+        QUERY_KEY.PRODUCT_WISH(productId),
+        context?.previousData
+      );
+    },
+  });
+
   const handleLikeToggle = async () => {
-    const prevLike = isLiked;
-    const prevWishCount = wishCount;
-
-    setIsLiked(!prevLike);
-    setWishCount(prevWishCount + (prevLike ? -1 : 1));
-
-    try {
-      // if (!prevLike) {
-      //   await likeProduct(productId);
-      // } else {
-      //   await unlikeProduct(productId);
-      // }
-    } catch (error) {
-      setIsLiked(prevLike);
-      setWishCount(prevWishCount);
-      console.error(error);
-    }
+    wishMutation.mutate();
   };
 
   const handleOrderButtonClick = () => {
@@ -109,8 +134,11 @@ function BottomNavigationWrapper({
       <ProductDetailContentLayout>{children}</ProductDetailContentLayout>
       <OrderButtonContainer>
         <LikeIconContainer onClick={handleLikeToggle}>
-          <LikeIcon src={isLiked ? LikeIconImageFill : LikeIconImage} alt="" />
-          <LikeCount>{wishCount}</LikeCount>
+          <LikeIcon
+            src={data?.isWished ? LikeIconImageFill : LikeIconImage}
+            alt=""
+          />
+          <LikeCount>{data?.wishCount}</LikeCount>
         </LikeIconContainer>
         <OrderButton onClick={handleOrderButtonClick}>
           {PRODUCT_DETAIL_LABELS.ORDER_BUTTON}
