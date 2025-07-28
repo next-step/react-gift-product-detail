@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import { useNavigate } from "react-router-dom";
+import{ useRequireNavigate } from "@/hooks/useRequireNavigate";
 import type { ThemeType } from "@/styles/theme/theme";
 
 interface RankingItemCardProps {
@@ -21,20 +21,10 @@ export const RankingCard = ({
   price,
 }: RankingItemCardProps) => {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const goTo = useRequireNavigate();
 
   const handleClick = () => {
-    navigate(`/order/${id}`, {
-  state: {
-    product: {
-      id,
-      imageURL,
-      name: productName,
-      brandInfo: { name: brandName },        
-      price: { sellingPrice: price },      
-    },
-  },
-});
+    goTo(`/product/${id}`);
   };
 
   return (

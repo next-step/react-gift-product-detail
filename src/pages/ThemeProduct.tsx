@@ -9,6 +9,7 @@ import { Spinner } from "@/components/common/Spinner";
 import { fetchThemeInfo, fetchThemeProducts } from "@/api/theme";
 import { PATH } from "@/constants/path";
 import { useIntersect } from "@/hooks/useIntersect";
+import { useRequireNavigate } from "@/hooks/useRequireNavigate"; 
 import type { ProductSummary } from "@/api/product";
 
 interface ThemeInfo {
@@ -22,6 +23,7 @@ interface ThemeInfo {
 const ThemeProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const goTo = useRequireNavigate(); 
 
   const [theme, setTheme] = useState<ThemeInfo | null>(null);
   const [products, setProducts] = useState<ProductSummary[]>([]);
@@ -97,8 +99,12 @@ const ThemeProduct = () => {
             <S.ProductList>
               {products.map((item, index) => {
                 const isLast = index === products.length - 1;
+
                 return (
-                  <S.ProductCard key={item.id}>
+                  <S.ProductCard
+                    key={item.id}
+                    onClick={() => goTo(`/product/${item.id}`)}
+                  >
                     {isLast ? (
                       <div ref={observerRef}>
                         <S.ProductImage src={item.imageURL} alt={item.name} />
