@@ -68,7 +68,7 @@ export interface WishInfo {
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-export const fetchWishInfo = async (_productId: string): Promise<WishInfo> => {
+export const fetchWishInfo = async (_productId: string) => {
   await sleep(300);
 
   return {
@@ -84,7 +84,7 @@ export const fetchAddWishSuccess = async (
   return newWish;
 };
 
-export const fetchAddWishError = async (_newWish: boolean): Promise<void> => {
+export const fetchAddWishError = async (_newWish: boolean) => {
   await sleep(300);
   throw new axios.AxiosError('mock error', 'mock_code');
 };

@@ -29,7 +29,7 @@ import { cardTemplates } from '../../data/cardTemplates';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserManagement } from '../Login/contexts/UserManagement';
 
-import { useProductSummaryQuery } from '../../apis/product_summary';
+import { useProductSummaryQuery } from '../../apis/summary';
 import { postOrder } from '../../apis/orders';
 import axios from 'axios';
 
