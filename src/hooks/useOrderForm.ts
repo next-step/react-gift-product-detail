@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import toast from 'react-hot-toast';
 import { postOrder } from '@/api/order';
 import { useMutation } from '@tanstack/react-query';
+import { TOAST_MESSAGES } from '@/constants/messages';
 
 export interface OrderFormInputs {
   senderName: string;
@@ -30,16 +31,16 @@ export const useOrderForm = (productId: number) => {
   const mutation = useMutation({
     mutationFn: (orderData: any) => postOrder(orderData, token || ''),
     onSuccess: () => {
-      toast.success('주문이 완료되었습니다!');
+      toast.success(TOAST_MESSAGES.ORDER_SUCCESS);
       navigate('/');
     },
     onError: (error: any) => {
       if (error.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
+        toast.error(TOAST_MESSAGES.LOGIN_REQUIRED);
         navigate('/login');
       } else {
         toast.error(
-          error.response?.data?.message || '주문 중 오류가 발생했습니다.'
+          error.response?.data?.message || TOAST_MESSAGES.ORDER_ERROR
         );
       }
     },
@@ -55,12 +56,12 @@ export const useOrderForm = (productId: number) => {
     const values = methods.getValues();
 
     if (!message || !messageCardId) {
-      toast.error('메시지 또는 카드가 선택되지 않았습니다.');
+      toast.error(TOAST_MESSAGES.NO_MESSAGE_OR_CARD);
       return;
     }
 
     if (values.recipients.length === 0) {
-      toast.error('받는 사람을 한 명 이상 추가해주세요.');
+      toast.error(TOAST_MESSAGES.ADD_RECIPIENT);
       return;
     }
 

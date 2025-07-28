@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast';
 import apiClient from '@/api/apiClient';
 import { useMutation } from '@tanstack/react-query';
+import { TOAST_MESSAGES } from '@/constants/messages';
 
 interface User {
   name: string;
@@ -65,7 +66,7 @@ export const useLogin = () => {
       const stored = sessionStorage.getItem('userInfo');
 
       if (error.response?.status === 401 && stored) {
-        toast.error('세션이 만료되었습니다. 다시 로그인해주세요.');
+        toast.error(TOAST_MESSAGES.SESSION_EXPIRED);
         sessionStorage.removeItem('userInfo');
       } else {
         toast.error(errorMessage);

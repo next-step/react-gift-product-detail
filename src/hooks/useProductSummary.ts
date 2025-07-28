@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getProductSummary } from '@/api/product';
 import type { ProductSummary } from '@/api/product';
 import toast from 'react-hot-toast';
+import { TOAST_MESSAGES } from '@/constants/messages';
 
 export const useProductSummary = (productId?: number) => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export const useProductSummary = (productId?: number) => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(error.message);
+      toast.error(error.message || TOAST_MESSAGES.ORDER_ERROR);
       navigate('/');
     }
   }, [isError, error, navigate]);
