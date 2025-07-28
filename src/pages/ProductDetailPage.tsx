@@ -1,12 +1,24 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProductCard from "@/components/productDetail/ProductCard";
 import DetailCard from "@/components/productDetail/DetailCard";
 import WishButton from "@/components/productDetail/WishButton";
+import { getUserFromSession } from "@/utils/getUserFromStorage";
+import { PATH } from "@/paths";
 
 export default function ProductDetailPage() {
   const { productId } = useParams<{ productId: string }>();
+  const navigate = useNavigate();
+  
+  const goToOrder = (itemId: string) => {
+    const userInfo = getUserFromSession();
+    if (userInfo) navigate(PATH.toORDER(itemId));
+    else
+      navigate(PATH.LOGIN, {
+        state: { from: `/order/${itemId}` },
+      });
+  };
 
   return (
     <Container>
@@ -16,7 +28,7 @@ export default function ProductDetailPage() {
         <DetailCard productId={productId ?? ""} />
         <OrderWrapper>
           <WishButton productId={productId ?? ""} />
-          <OrderButton>
+          <OrderButton onClick={() => goToOrder(productId ?? "")}>
             <Order>주문하기</Order>
           </OrderButton>
         </OrderWrapper>
@@ -64,10 +76,11 @@ const OrderButton = styled.button`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.kakao.yellow.default};
   border: none;
+  cursor: pointer;
 `;
 
 const Order = styled.p`
-  ${({ theme }) => theme.typography.title1Bold};
+  ${({ theme }) => theme.typography.subtitle1Bold};
   color: ${({ theme }) => theme.colors.gray[900]};
   margin: 0px;
   text-align: left;
