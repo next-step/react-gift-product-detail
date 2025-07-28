@@ -61,7 +61,9 @@
     - [x] routes.ts에 url 관련 변수를 상수로 추가해주었습니다.
   - [ ] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능을 구현하세요.
   - [ ] 아래 참고 API를 모두 사용해야 해요.
-    - [ ] 상품 정보 API: **`/api/products/:productId`**
+    - [x] 상품 정보 API: **`/api/products/:productId`**
+      - [x] useProductInfo.ts를 만들어 해당 api에 대항 요청을 처리하는 로직을 작성했습니다.
+      - [x] api.ts에 api 경로와 관련된 변수를 상수 처리해주었습니다.
     - [ ] 상품 세부 정보 API: **`/api/products/:productId/detail`**
     - [ ] 상품 주요 리뷰 API: **`/api/products/:productId/highlight-review`**
     - [ ] 상품 관심 등록 수 API: **`/api/products/:productId/wish`**

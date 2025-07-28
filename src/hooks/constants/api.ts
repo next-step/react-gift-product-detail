@@ -27,3 +27,9 @@ export const getThemeProductsPath = (themeId: string | number): string =>
 
 export const getThemeProductsUrl = (themeId: string | number): string =>
   `${BASE_URL}${getThemeProductsPath(themeId)}`;
+
+export const getProductInfoPath = (productId: string | number): string =>
+  `/api/products/${productId}`;
+
+export const getProductInfoUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductInfoPath(productId)}`;
