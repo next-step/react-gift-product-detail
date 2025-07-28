@@ -1,14 +1,28 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi
+} from "vitest";
 import userEvent from "@testing-library/user-event";
 import LoginPage from "@src/pages/LoginPage";
 import MockApp from "../MockApp";
+import { toast } from "react-toastify";
+import { LOGIN_INVALID_EMAIL_MESSAGE } from "@src/mock/msw/handler";
+import { mockBE } from "@src/mock/msw/server";
 
-// mock toast
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),
   ToastContainer: () => <div>Toast</div>
 }));
+
+beforeAll(() => mockBE.listen());
+afterEach(() => mockBE.resetHandlers());
+afterAll(() => mockBE.close());
 
 const renderLoginPage = () => {
   render(<MockApp children={<LoginPage />} userContext={false} />);
@@ -52,5 +66,26 @@ describe("LoginPage.tsx 페이지 테스트", () => {
     await userEvent.type(emailInput, "test@kakao.com");
     await userEvent.type(passwordInput, "12345678");
     expect(loginButton).toBeEnabled();
+  });
+
+  it("@kakao.com 형식이 아니면 toast error를 띄웁니다.", async () => {
+    renderLoginPage();
+    const emailInput = screen.getByPlaceholderText("이메일");
+    const passwordInput = screen.getByPlaceholderText("비밀번호");
+    const loginButton = screen.getByRole("button", { name: "로그인" });
+
+    await userEvent.clear(emailInput);
+    await userEvent.clear(passwordInput);
+    await userEvent.type(emailInput, "test@notkakao.com");
+    await userEvent.type(passwordInput, "12345678");
+
+    expect(loginButton).toBeEnabled();
+    await userEvent.click(loginButton);
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(
+        expect.stringContaining(LOGIN_INVALID_EMAIL_MESSAGE),
+        expect.anything()
+      );
+    });
   });
 });
