@@ -32,13 +32,13 @@ authClient.interceptors.response.use(
     const status = error.response?.status
     const message = error.response?.data?.data?.message
 
-    // ! 401 에러가 발생하면 로그인 페이지로 연결
+    toast.error(message)
     if (status === 401) {
-      toast.error(message)
-      // * 로그인 페이지로 리다이렉트
+      // ! 401 에러가 발생하면 로그인 페이지로 연결
       window.location.href = ROUTE_PATH.LOGIN
-    } else if (status && status >= 400 && status < 500) {
-      toast.error(message)
+    } else if (status === 404) {
+      // ! 404 에러 시 홈으로 리다이렉트
+      window.location.href = ROUTE_PATH.HOME
     }
 
     return Promise.reject(error)

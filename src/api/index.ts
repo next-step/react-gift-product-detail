@@ -1,3 +1,4 @@
+import { ROUTE_PATH } from '@/shared/constants'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -17,12 +18,11 @@ apiClient.interceptors.response.use(
     const status = error.response?.status
     const message = error.response?.data?.data?.message
 
-    if (status === 401) {
-      toast.error(message)
-    } else if (status && status >= 400 && status < 500) {
-      toast.error(message)
+    toast.error(message)
+    if (status === 404) {
+      // ! 404 에러 시 홈으로 리다이렉트
+      window.location.href = ROUTE_PATH.HOME
     }
-
     return Promise.reject(error)
   },
 )

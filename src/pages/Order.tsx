@@ -10,8 +10,11 @@ import { createOrder, fetchProductSummary } from '@/api/services'
 import { STORAGES } from '@/api/constants'
 import { toast } from 'react-toastify'
 import { useTheme } from '@emotion/react'
-import { useFetch } from '@/shared/hooks'
+import { useMutation } from '@tanstack/react-query'
 import { decodeUserInfo, getCookie } from '@/shared/utils'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import ErrorBoundary from '@/shared/components/ErrorBoundary'
+import { Suspense } from 'react'
 
 // * 주문하기 페이지 (주문하기 폼 Provider 포함)
 export const Order = () => {
@@ -21,7 +24,17 @@ export const Order = () => {
   return (
     // * Context API를 통해 전역적으로 관리되는 주문하기 폼 적용
     <OrderFormProvider defaultSender={userInfo?.name}>
-      <OrderContent />
+      <ErrorBoundary fallback={null}>
+        <Suspense
+          fallback={
+            <LoadingContainer>
+              <Loading />
+            </LoadingContainer>
+          }
+        >
+          <OrderContent />
+        </Suspense>
+      </ErrorBoundary>
     </OrderFormProvider>
   )
 }
@@ -32,12 +45,11 @@ export const OrderContent = () => {
   const navigate = useNavigate()
   // * URL 파라미터로 부터 상품 id 값 가져오기
   const { id } = useParams<{ id: string }>()
-  const {
-    data: productInfo,
-    isError,
-    isLoading,
-  } = useFetch<ProductSummary>(() => fetchProductSummary(Number(id)), [id])
-
+  // * 상품 정보 fetch (useSuspenseQuery)
+  const { data: productInfo } = useSuspenseQuery<ProductSummary>({
+    queryKey: ['productSummary', id],
+    queryFn: () => fetchProductSummary(Number(id)),
+  })
   // * 카드 리스트
   const cardList: CardData[] = orderCardMock
 
@@ -57,10 +69,23 @@ export const OrderContent = () => {
   const watchedData = watch()
   const { selectedCard } = watchedData
 
+  // * React Query의 useMutation으로 주문하기 요청 관리
+  const mutation = useMutation({
+    // 주문하기 API 함수 (axios 기반)
+    mutationFn: createOrder,
+    // 주문하기 성공 시: 토스트 메시지 및 홈으로 리다이렉트
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success('주문이 완료되었습니다!')
+        navigate(ROUTE_PATH.HOME)
+      }
+    },
+  })
+  // * productInfo가 없을 때는 렌더링만 중단
+  if (!productInfo) return null
   // * 폼 제출 핸들러
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit((data) => {
     if (!productInfo) return
-
     if (data.receivers.length === 0) {
       toast.warning('받는 사람이 최소 1명 필요합니다.')
       return
@@ -79,35 +104,11 @@ export const OrderContent = () => {
       })),
     }
 
-    // * 주문하기 API 요청
-    const result = await createOrder(orderRequest)
-
-    // * 성공시 홈으로 이동
-    if (result.success) {
-      toast.success('주문이 완료되었습니다!')
-      navigate(ROUTE_PATH.HOME)
-    }
+    mutation.mutate(orderRequest)
   })
 
   // * 주문 총액 계산
   const totalPrice = productInfo ? getTotalPrice(productInfo.price) : 0
-
-  // * 로딩 중 화면
-  if (isLoading) {
-    return (
-      <LoadingContainer>
-        <Loading />
-      </LoadingContainer>
-    )
-  }
-
-  if (isError) {
-    // * 에러 발생 시 홈으로 이동
-    navigate(ROUTE_PATH.HOME)
-    return null
-  }
-
-  // * 상품 정보가 있을 경우
   return (
     <OrderContainer>
       {/* 주문하기 카드 섹션 */}
@@ -157,7 +158,7 @@ export const OrderContent = () => {
 
       {/* 주문하기 버튼 */}
       <OrderButtonSection>
-        <OrderButton variant="kakao" size="large" onClick={onSubmit}>
+        <OrderButton variant="kakao" size="large" onClick={onSubmit} disabled={mutation.isPending}>
           {totalPrice.toLocaleString()}원 주문하기
         </OrderButton>
       </OrderButtonSection>
