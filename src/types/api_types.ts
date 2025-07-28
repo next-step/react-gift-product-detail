@@ -40,3 +40,26 @@ export type ThemeProductResponse = {
   cursor: number;
   hasMoreList: boolean;
 };
+
+export type ProductDetail = {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
+};
+
+export type ProductHighlightReview = {
+  totalCount: number;
+  reviews: {
+    id: string;
+    authorName: string;
+    content: string;
+  }[];
+};
+
+export type ProductWish = {
+  wishCount: number;
+  isWished: boolean;
+};

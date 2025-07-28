@@ -1,49 +1,49 @@
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import styled from "@emotion/styled";
-import BaseButton from "@/components/common/BaseButton";
+import { useProductData } from "@/pages/productdetailpage/hooks/useProductData";
+import ProductInfoSection from "@/pages/productdetailpage/ProductInfoSection";
+import ProductExplanationSection from "@/pages/productdetailpage/ProductExplanationSection";
+import ReviewSection from "@/pages/productdetailpage/ReviewSection";
+import ProductDetailSection from "@/pages/productdetailpage/ProductDetailSection";
+import ProductActionsBar from "@/pages/productdetailpage/ProductActionsBar";
+import ProductDetailTabs from "@/pages/productdetailpage/ProductDetailTabs";
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
-  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<
+    "description" | "reviews" | "details"
+  >("description");
 
-  const navigateToOrder = () => {
-    navigate(`/order/${productId}`);
-  };
+  const { productInfo, productDetail, highlightReview, wishCount } =
+    useProductData(productId || "");
+
+  if (!productInfo || !productDetail) {
+    return <Container>상품 정보를 불러오는 중...</Container>;
+  }
 
   return (
     <Container>
-      <Title>상품 상세 페이지</Title>
-      <ProductIdText>상품 ID: {productId}</ProductIdText>
-      <OrderButton
-        onClick={navigateToOrder}
-        color="yellow"
-        label="주문하기"
-        size="large"
-      />
-      {/* 여기에 상품 정보를 불러오고 렌더링하는 로직을 추가합니다. */}
+      <ProductInfoSection productInfo={productInfo} />
+      <ProductDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      {activeTab === "description" && (
+        <ProductExplanationSection productDetail={productDetail} />
+      )}
+      {activeTab === "reviews" && highlightReview && (
+        <ReviewSection highlightReview={highlightReview} />
+      )}
+      {activeTab === "details" && (
+        <ProductDetailSection productDetail={productDetail} />
+      )}
+      <ProductActionsBar productId={productId || ""} wishCount={wishCount} />
     </Container>
   );
 };
 
 const Container = styled.div`
-  padding: 20px;
+  padding-bottom: 70px;
   text-align: center;
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-`;
-
-const ProductIdText = styled.p`
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 20px;
-`;
-
-const OrderButton = styled(BaseButton)`
-  margin-top: 20px;
+  max-width: 700px;
 `;
 
 export default ProductDetailPage;
