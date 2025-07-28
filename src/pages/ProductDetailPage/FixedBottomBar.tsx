@@ -2,7 +2,7 @@
 import { css, type Theme as ThemeType } from '@emotion/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useWishInfo, fetchAddWishSuccess } from '../../apis/product_detail';
+import { useWishInfo, fetchAddWishSuccess } from '../../apis/detail';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FixedBottomBar = () => {

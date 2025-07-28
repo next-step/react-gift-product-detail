@@ -6,7 +6,7 @@ import {
   useProductDetail,
   useHighlightReview,
   useWishInfo,
-} from '../../apis/product_detail';
+} from '../../apis/detail';
 import {
   containerStyle,
   loadingStyle,
