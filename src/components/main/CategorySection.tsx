@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { ROUTE } from '@/constants/routes';
 import { useNavigate } from 'react-router-dom';
 import { useThemes } from '@/hooks/useTheme';

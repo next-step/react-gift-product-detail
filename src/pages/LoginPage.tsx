@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { emailValidator, passwordValidator } from '@/utils/validator';
 import { useUser } from '@/contexts/UserContext';
-import ErrorMessage from '@/components/ErrorMessage';
+import ErrorMessage from '@/components/common/ErrorMessage';
 import { ROUTE } from '@/constants/routes';
 import { useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';

@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useThemeDetail } from '@/hooks/useTheme';
 import { useThemeProductsInfinite } from '@/hooks/useProduct';
 import { toast } from 'react-toastify';

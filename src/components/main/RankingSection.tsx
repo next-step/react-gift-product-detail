@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/constants/routes';
 import { useUser } from '@/contexts/UserContext';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useProductRanking } from '@/hooks/useProduct';
 
 const genderTabs = ['전체', '여성이', '남성이', '청소년이'] as const;

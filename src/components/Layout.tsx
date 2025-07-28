@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Header from './Header';
+import Header from './common/Header';
 import { Outlet } from 'react-router-dom';
 
 const Main = styled.main`
