@@ -122,6 +122,9 @@ function BottomNavigationWrapper({
   });
 
   const handleLikeToggle = async () => {
+    if (wishMutation.isPending) {
+      return;
+    }
     wishMutation.mutate();
   };
 
