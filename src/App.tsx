@@ -21,6 +21,7 @@ import { Suspense } from "react";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "@/components/common/ErrorFallback";
+import HomePage from "./pages/homepage/HomePage";
 
 function App() {
   return (
@@ -33,22 +34,21 @@ function App() {
           <Route
             path="/"
             element={
-              <>
-                <AddFriend />
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Suspense fallback={<LoadingSpinner />}>
-                  <CategorySection />
+                  <HomePage />
                 </Suspense>
-                <Fighting />
-                <RisingSection />
-              </>
+              </ErrorBoundary>
             }
           />
           <Route
             path="/login"
             element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <LoginPage />
-              </Suspense>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <LoginPage />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
           <Route
@@ -74,17 +74,21 @@ function App() {
           <Route
             path="/themes/:themeId"
             element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <ThemeProductsPage />
-              </Suspense>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <ThemeProductsPage />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
           <Route
             path="/product/:productId"
             element={
-              <Suspense fallback={<LoadingSpinner />}>
-                <ProductDetailPage />
-              </Suspense>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <ProductDetailPage />
+                </Suspense>
+              </ErrorBoundary>
             }
           />
           <Route path="/notfound" element={<NotFoundPage />} />
