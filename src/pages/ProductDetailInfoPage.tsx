@@ -4,6 +4,10 @@ import styled from '@emotion/styled';
 import MainContent from '../components/product/MainContent';
 import ProductTabs from '../components/product/ProductTabs';
 
+const PageContainer = styled.div`
+  padding-bottom: 40px;
+`;
+
 const BottomOrderButton = styled.div`
   position: fixed;
   bottom: 0;
@@ -32,11 +36,13 @@ const ProductDetailInfoPage = () => {
   return (
     <>
       <Header />
-      <MainContent></MainContent>
-      <ProductTabs></ProductTabs>
-      <BottomOrderButton onClick={() => moveToOrder()}>
-        주문하기
-      </BottomOrderButton>
+      <PageContainer>
+        <MainContent></MainContent>
+        <ProductTabs></ProductTabs>
+        <BottomOrderButton onClick={() => moveToOrder()}>
+          주문하기
+        </BottomOrderButton>
+      </PageContainer>
     </>
   );
 };

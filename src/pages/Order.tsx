@@ -202,6 +202,10 @@ const ReceiverSection = styled.div`
   text-align: center;
 `;
 
+const PageContainer = styled.div`
+  padding-bottom: 40px;
+`;
+
 const Order = () => {
   const { id } = useParams<{ id: string }>();
   const productId = Number(id);
@@ -301,113 +305,117 @@ const Order = () => {
   return (
     <>
       <Header />
-      <MessaageWrapper>
-        <SectionBox>
-          <MessageCard
-            selected={selected}
-            onCardSelect={setSelected}
-          />
-          <MainWrapper>
-            <MainImg src={selectedCard?.imageUrl} />
-
-            <MessageInput
-              placeholder="메시지를 입력해주세요."
-              value={message}
-              onChange={e => setMessage(e.target.value)}
+      <PageContainer>
+        <MessaageWrapper>
+          <SectionBox>
+            <MessageCard
+              selected={selected}
+              onCardSelect={setSelected}
             />
-          </MainWrapper>
-        </SectionBox>
-      </MessaageWrapper>
+            <MainWrapper>
+              <MainImg src={selectedCard?.imageUrl} />
 
-      <OrderInfoWrapper>
-        <Section>
-          <Label>보내는 사람</Label>
-          <Input
-            type="text"
-            placeholder="이름을 입력하세요."
-            onChange={e => sendorNameInput.setValue(e.target.value)}
-            onBlur={sendorNameInput.handleBlur}
-            defaultValue={sendorNameInput.value}
-          />
-          {!sendorNameInput.isValid && (
-            <ErrorText>{sendorNameInput.error}</ErrorText>
-          )}
-          <Description>
-            * 실제 선물 발송 시 발신자이름으로 반영되는 정보입니다.
-          </Description>
-        </Section>
+              <MessageInput
+                placeholder="메시지를 입력해주세요."
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+              />
+            </MainWrapper>
+          </SectionBox>
+        </MessaageWrapper>
 
-        <Section>
-          <Row>
-            <Label>받는 사람</Label>
-            <ReceiverAddButton onClick={() => setModalOpen(true)}>
-              추가
-            </ReceiverAddButton>
-          </Row>
-          {receiverList.length === 0 ? (
-            <ReceiverSection>
-              받는 사람이 없습니다. <br />
-              받는 사람을 추가해주세요.
-            </ReceiverSection>
-          ) : (
-            <ul>
-              <ReceiverTable>
-                <TableHead>
-                  <TableRow>
-                    <TableHeader>이름</TableHeader>
-                    <TableHeader>전화번호</TableHeader>
-                    <TableHeader>수량</TableHeader>
-                  </TableRow>
-                </TableHead>
-                <tbody>
-                  {receiverList.map(r => (
-                    <TableRow key={r.id}>
-                      <TableCell>{r.name}</TableCell>
-                      <TableCell>{r.phoneNumber}</TableCell>
-                      <QuantityCell>{r.quantity}</QuantityCell>
+        <OrderInfoWrapper>
+          <Section>
+            <Label>보내는 사람</Label>
+            <Input
+              type="text"
+              placeholder="이름을 입력하세요."
+              onChange={e => sendorNameInput.setValue(e.target.value)}
+              onBlur={sendorNameInput.handleBlur}
+              defaultValue={sendorNameInput.value}
+            />
+            {!sendorNameInput.isValid && (
+              <ErrorText>{sendorNameInput.error}</ErrorText>
+            )}
+            <Description>
+              * 실제 선물 발송 시 발신자이름으로 반영되는 정보입니다.
+            </Description>
+          </Section>
+
+          <Section>
+            <Row>
+              <Label>받는 사람</Label>
+              <ReceiverAddButton onClick={() => setModalOpen(true)}>
+                추가
+              </ReceiverAddButton>
+            </Row>
+            {receiverList.length === 0 ? (
+              <ReceiverSection>
+                받는 사람이 없습니다. <br />
+                받는 사람을 추가해주세요.
+              </ReceiverSection>
+            ) : (
+              <ul>
+                <ReceiverTable>
+                  <TableHead>
+                    <TableRow>
+                      <TableHeader>이름</TableHeader>
+                      <TableHeader>전화번호</TableHeader>
+                      <TableHeader>수량</TableHeader>
                     </TableRow>
-                  ))}
-                </tbody>
-              </ReceiverTable>
-            </ul>
-          )}
+                  </TableHead>
+                  <tbody>
+                    {receiverList.map(r => (
+                      <TableRow key={r.id}>
+                        <TableCell>{r.name}</TableCell>
+                        <TableCell>{r.phoneNumber}</TableCell>
+                        <QuantityCell>{r.quantity}</QuantityCell>
+                      </TableRow>
+                    ))}
+                  </tbody>
+                </ReceiverTable>
+              </ul>
+            )}
 
-          <ReceiverModal
-            isOpen={modalOpen}
-            onClose={() => setModalOpen(false)}
-            onComplete={data => setReceiverList(data)}
-          />
-          <Label>상품 정보</Label>
-          <ProductInfo>
-            <img
-              src={product.imageURL}
-              alt={product.name}
-              width={80}
+            <ReceiverModal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              onComplete={data => setReceiverList(data)}
             />
-            <div>
-              <div style={{ fontWeight: 'bold' }}>{product.name}</div>
-              <div style={{ color: '#888' }}>
-                {product.brandInfo.name}
-              </div>
+            <Label>상품 정보</Label>
+            <ProductInfo>
+              <img
+                src={product.imageURL}
+                alt={product.name}
+                width={80}
+              />
               <div>
-                상품가{' '}
-                <strong>
-                  {product?.price.sellingPrice !== undefined
-                    ? product.price.sellingPrice.toLocaleString()
-                    : '0'}
-                  원
-                </strong>
+                <div style={{ fontWeight: 'bold' }}>
+                  {product.name}
+                </div>
+                <div style={{ color: '#888' }}>
+                  {product.brandInfo.name}
+                </div>
+                <div>
+                  상품가{' '}
+                  <strong>
+                    {product?.price.sellingPrice !== undefined
+                      ? product.price.sellingPrice.toLocaleString()
+                      : '0'}
+                    원
+                  </strong>
+                </div>
               </div>
-            </div>
-          </ProductInfo>
-        </Section>
-      </OrderInfoWrapper>
-      <BottomOrderButton
-        disabled={!sendorNameInput.isValid}
-        onClick={handleOrder}
-      >
-        {(priceSum ?? 0).toLocaleString()}원 주문하기
-      </BottomOrderButton>
+            </ProductInfo>
+          </Section>
+        </OrderInfoWrapper>
+        <BottomOrderButton
+          disabled={!sendorNameInput.isValid}
+          onClick={handleOrder}
+        >
+          {(priceSum ?? 0).toLocaleString()}원 주문하기
+        </BottomOrderButton>
+      </PageContainer>
     </>
   );
 };
