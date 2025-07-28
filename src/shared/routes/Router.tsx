@@ -9,6 +9,7 @@ import LoginGuard from './LoginGuard';
 import Home from '@features/Home/Home';
 import GiftOrderPage from '@features/GiftOrderPage/GiftOrderPage';
 import ThemeProductList from '@features/ThemeProductList/ThemeProductList';
+import ProductDetail from '@features/ProductDetail/ProductDetail';
 
 const Router = () => {
   return (
@@ -34,6 +35,7 @@ const Router = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="/product/:id" element={<ProductDetail />} />
             <Route
               path="/order/:id"
               element={

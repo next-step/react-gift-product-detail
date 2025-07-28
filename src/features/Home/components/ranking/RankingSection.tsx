@@ -59,7 +59,7 @@ const RankingSection = () => {
   // 상품 클릭시 해당 상품의 order page로 이동
   const navigate = useNavigate();
   const handleClick = (item: RankedProduct) => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
 
   return (

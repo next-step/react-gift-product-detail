@@ -5,7 +5,7 @@ import type { ThemeProduct } from '../themeProductType';
 const ProductCard = (productInfo: ThemeProduct) => {
   const navigate = useNavigate();
   return (
-    <Card onClick={() => navigate(`/order/${productInfo.id}`)}>
+    <Card onClick={() => navigate(`/product/${productInfo.id}`)}>
       <ProductImage src={productInfo.imageURL} alt="사진" />
       <Brand>{productInfo.brandInfo.name}</Brand>
       <ProductName>{productInfo.name}</ProductName>
