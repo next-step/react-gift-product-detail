@@ -71,7 +71,7 @@ export const DetailItem = styled.div`
 `;
 
 export const DetailName = styled.h3`
-  ${({ theme }) => theme.typography.body1Bold};
+  ${({ theme }) => theme.typography.subtitle2Bold};
   margin-bottom: ${({ theme }) => theme.spacing.spacing2};
 `;
 

@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import parse from 'html-react-parser';
-import { getProductDetail } from '@/entities/product/api/productApi';
-import type { ProductDetail } from '@/entities/product/model/types';
+import { getProductDetail, getProductHighlightReview } from '@/entities/product/api/productApi';
+import type { ProductDetail, ProductHighlightReview } from '@/entities/product/model/types';
 import * as S from './styles';
 
 type TabType = 'description' | 'review' | 'detail';
@@ -29,6 +29,11 @@ const ProductTabs = () => {
     queryFn: () => getProductDetail(numericProductId!),
   });
 
+  const { data: reviewData } = useSuspenseQuery<ProductHighlightReview>({
+    queryKey: ['productHighlightReview', numericProductId],
+    queryFn: () => getProductHighlightReview(numericProductId!),
+  });
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'description':
@@ -37,6 +42,19 @@ const ProductTabs = () => {
             <S.DescriptionContent> {/* description은 응답이 json이 아닌 html코드를 문자열로 담은 형식 */}
               {data.description ? parse(data.description) : ''}
             </S.DescriptionContent>
+          </S.TabContent>
+        );
+      case 'review':
+        return (
+          <S.TabContent>
+            <S.DetailContent>
+              {reviewData?.reviews?.map((review) => (
+                <S.DetailItem key={review.id}>
+                  <S.DetailName>{review.authorName}</S.DetailName>
+                  <S.DetailValue>{review.content}</S.DetailValue>
+                </S.DetailItem>
+              ))}
+            </S.DetailContent>
           </S.TabContent>
         );
       case 'detail':
