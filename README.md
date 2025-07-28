@@ -47,3 +47,18 @@
     - [x] 관련 타입 정의 → types/auth.ts로 분리
   - [x] lint 관련 에러 해결
 - [x] npm run build, npm run lint 성공적 동작 확인
+
+## ✅4번째 미션 2단계
+
+### 요구사항
+
+- [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
+- [ ] 기능 단위로 나누어 커밋을 해주세요.
+- [ ] 상품 상세 페이지
+  - [ ] [참고 URL](https://kakaotech-mission4-api-advanced.pages.dev/) 을 참고하여 상품 상세 페이지를 구현해주세요.
+  - [ ] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능을 구현하세요.
+  - [ ] 아래 참고 API를 모두 사용해야 해요.
+  - [ ] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경해보세요. (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상이에요.)
+- [ ] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
+- [ ] npm run build 성공하기
+- [ ] npm run lint 성공하기
