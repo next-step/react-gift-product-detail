@@ -13,7 +13,7 @@ const ProductCard = ({ rank, ...product }: ProductCardProps) => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const targetPath = ROUTES.ORDER(product.id);
+  const targetPath = ROUTES.PRODUCT_DETAIL(product.id);
 
   const handleClick = () => {
     if (user) {
