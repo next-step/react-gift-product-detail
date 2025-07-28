@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
 import Spinner from '@/components/Spinner';
@@ -75,7 +75,10 @@ const EmptyMessage = styled.div`
 
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const navigate = useNavigate();
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+  const hasShownThemeError = useRef(false);
+  const hasShownProductError = useRef(false);
 
   const {
     data: theme,
@@ -91,21 +94,6 @@ const ThemeProductsPage = () => {
     isLoading: isProductLoading,
     isError: isProductError,
   } = useThemeProductsInfinite(Number(themeId));
-
-  useEffect(() => {
-    if (isThemeError) {
-      toast.error('테마 정보를 불러오지 못했습니다.');
-      navigate(ROUTE.MAIN);
-    }
-  }, [isThemeError, navigate]);
-
-  useEffect(() => {
-    if (isProductError) {
-      toast.error('상품 정보를 불러오지 못했습니다.');
-    }
-  }, [isProductError]);
-
-  const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -129,6 +117,22 @@ const ThemeProductsPage = () => {
       if (current) observer.unobserve(current);
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isThemeError) {
+    if (!hasShownThemeError.current) {
+      toast.error('테마 정보를 불러오지 못했습니다.');
+      hasShownThemeError.current = true;
+    }
+    return <Navigate to={ROUTE.MAIN} replace />;
+  }
+
+  if (isProductError) {
+    if (!hasShownProductError.current) {
+      toast.error('상품 정보를 불러오지 못했습니다.');
+      hasShownProductError.current = true;
+    }
+    return <Navigate to={ROUTE.MAIN} replace />;
+  }
 
   if (!themeId || isThemeLoading || isProductLoading) {
     return <Spinner />;

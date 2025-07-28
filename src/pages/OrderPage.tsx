@@ -1,6 +1,6 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { messageCardMockData } from '@/mocks/messageCards';
 import { messageRequiredValidator, nameRequiredValidator } from '@/utils/validator';
 import OrderField from '@/components/OrderField';
@@ -159,6 +159,8 @@ const OrderPage = () => {
   const [recipients, setRecipients] = useState<Recipient[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const hasShownError = useRef(false);
+
   const {
     data: product,
     isLoading: isProductLoading,
@@ -182,17 +184,18 @@ const OrderPage = () => {
   });
 
   useEffect(() => {
-    if (isProductError) {
-      toast.error('상품 정보를 불러올 수 없습니다.');
-      navigate(ROUTE.MAIN);
-    }
-  }, [isProductError, navigate]);
-
-  useEffect(() => {
     if (user?.name) {
       setValue('sender', user.name);
     }
   }, [user, setValue]);
+
+  if (isProductError) {
+    if (!hasShownError.current) {
+      toast.error('상품 정보를 불러올 수 없습니다.');
+      hasShownError.current = true;
+    }
+    return <Navigate to={ROUTE.MAIN} replace />;
+  }
 
   const onSubmit = async (form: FormValues) => {
     if (!product) {
