@@ -11,7 +11,8 @@
     "start:be": "cd react-gift-mock-server && npm run start",
     "dev:all": "concurrently \"npm run dev\" \"npm run start:be\"",
     "postinstall": "if [ \"$CI\" != \"true\" ]; then cd react-gift-mock-server && npm install; fi",
-    "test": "vitest"
+    "test": "vitest",
+    "dev:mock": "cross-env VITE_MSW_MOCK=true vite"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -40,6 +41,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.4.1",
     "concurrently": "^9.2.0",
+    "cross-env": "^10.0.0",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
@@ -50,5 +52,10 @@
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
     "vitest": "^3.2.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
