@@ -16,6 +16,6 @@ export default function useThemeProducts(themeId: number) {
       return lastPage.hasMoreList ? lastPage.cursor : undefined;
     },
     initialPageParam: 0,
-    enabled: !!themeId,
+    enabled: themeId != null,
   });
 }

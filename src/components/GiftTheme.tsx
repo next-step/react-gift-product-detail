@@ -30,7 +30,7 @@ const Loading = styled.p`
 `;
 
 export default function GiftTheme() {
-  const { themes, loading, error } = useGiftTheme();
+  const { data: themes = [], isLoading: loading, isError: error } = useGiftTheme();
 
   if (loading) {
     return (
