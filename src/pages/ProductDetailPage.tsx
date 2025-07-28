@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container } from '@/components/layout';
 import { ROUTE_HOME } from '@/constants';
@@ -7,17 +8,25 @@ import {
   useProductWish,
   useProductHighlightReview,
 } from '@/api/product/query';
+import {
+  ProductDetailHeader,
+  ProductDetailTabs,
+  ProductDetailContent,
+  ProductDetailActions,
+} from '@/components/product-detail';
+import type { TabType } from '@/components/product-detail/ProductDetailTabs';
 
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<TabType>('description');
 
   if (!productId) {
     navigate(ROUTE_HOME);
     return null;
   }
 
-  // API 테스트
+  // API 호출
   const {
     data: productBasic,
     isLoading: isLoadingBasic,
@@ -43,6 +52,12 @@ const ProductDetailPage = () => {
     isLoadingBasic || isLoadingDetail || isLoadingWish || isLoadingReview;
   const hasError = errorBasic || errorDetail || errorWish || errorReview;
 
+  // 찜 버튼 클릭 핸들러 (임시 - 실제로는 mutation 필요)
+  const handleWishClick = () => {
+    console.log('찜 버튼 클릭');
+    // TODO: 찜 mutation 구현
+  };
+
   if (isLoading) {
     return (
       <Container>
@@ -53,7 +68,7 @@ const ProductDetailPage = () => {
     );
   }
 
-  if (hasError) {
+  if (hasError || !productBasic) {
     return (
       <Container>
         <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -65,118 +80,29 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <Container>
-      <div style={{ padding: '20px' }}>
-        <h1>상품 상세 페이지</h1>
-        <p>상품 ID: {productId}</p>
+    <>
+      <ProductDetailHeader product={productBasic} isLoading={isLoadingBasic} />
 
-        {/* 상품 기본 정보 */}
-        {productBasic && (
-          <div
-            style={{
-              marginBottom: '20px',
-              padding: '15px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-            }}
-          >
-            <h2>상품 기본 정보</h2>
-            <p>
-              <strong>상품명:</strong> {productBasic.data.name}
-            </p>
-            <p>
-              <strong>브랜드:</strong> {productBasic.data.brandInfo.name}
-            </p>
-            <p>
-              <strong>가격:</strong>{' '}
-              {productBasic.data.price.sellingPrice.toLocaleString()}원
-            </p>
-          </div>
-        )}
+      <ProductDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-        {/* 상품 상세 정보 */}
-        {productDetail && (
-          <div
-            style={{
-              marginBottom: '20px',
-              padding: '15px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-            }}
-          >
-            <h2>상품 상세 정보</h2>
-            <p>
-              <strong>설명:</strong> {productDetail.data.description}
-            </p>
-            <h3>공지사항:</h3>
-            <ul>
-              {productDetail.data.announcements.map((announcement, index) => (
-                <li key={index}>
-                  <strong>{announcement.name}:</strong> {announcement.value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <ProductDetailContent
+        activeTab={activeTab}
+        productDetail={productDetail}
+        productReview={productReview}
+        isLoadingDetail={isLoadingDetail}
+        isLoadingReview={isLoadingReview}
+      />
 
-        {/* 찜 정보 */}
-        {productWish && (
-          <div
-            style={{
-              marginBottom: '20px',
-              padding: '15px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-            }}
-          >
-            <h2>찜 정보</h2>
-            <p>
-              <strong>찜 수:</strong> {productWish.data.wishCount}개
-            </p>
-            <p>
-              <strong>내가 찜했는지:</strong>{' '}
-              {productWish.data.isWished ? '예' : '아니오'}
-            </p>
-          </div>
-        )}
+      {/* 고정된 하단 버튼을 위한 여백 */}
+      <div style={{ height: '80px' }} />
 
-        {/* 리뷰 정보 */}
-        {productReview && (
-          <div
-            style={{
-              marginBottom: '20px',
-              padding: '15px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-            }}
-          >
-            <h2>리뷰 정보</h2>
-            <p>
-              <strong>총 리뷰 수:</strong> {productReview.data.totalCount}개
-            </p>
-            <h3>하이라이트 리뷰:</h3>
-            {productReview.data.reviews.map((review) => (
-              <div
-                key={review.id}
-                style={{
-                  marginBottom: '10px',
-                  padding: '10px',
-                  backgroundColor: '#f9f9f9',
-                  borderRadius: '4px',
-                }}
-              >
-                <p>
-                  <strong>{review.authorName}:</strong>
-                </p>
-                <p>{review.content}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <p style={{ color: '#666', marginTop: '20px' }}>구현 예정...</p>
-      </div>
-    </Container>
+      <ProductDetailActions
+        productId={productId}
+        productWish={productWish}
+        onWishClick={handleWishClick}
+        isWishLoading={isLoadingWish}
+      />
+    </>
   );
 };
 
