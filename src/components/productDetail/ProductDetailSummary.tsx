@@ -1,4 +1,4 @@
-import { parseHTMLContent } from "@/utils/parse-html";
+import { htmlParser } from "@/utils";
 import styled from "@emotion/styled";
 import { useMemo } from "react";
 
@@ -34,7 +34,7 @@ export const ProductDetailSummary = ({
   const parsedContent = useMemo(() => {
     if (!description?.trim()) return null;
 
-    return parseHTMLContent(description).map(item =>
+    return htmlParser(description).map(item =>
       item.type === "image" ? (
         <ProductDetailImage key={item.key} src={item.content} alt="" />
       ) : (

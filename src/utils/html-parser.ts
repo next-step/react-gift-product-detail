@@ -4,7 +4,7 @@ export interface ParsedHTMLElement {
   key: string;
 }
 
-export const parseHTMLContent = (html: string): ParsedHTMLElement[] => {
+export const htmlParser = (html: string): ParsedHTMLElement[] => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, "text/html");
   const elements: ParsedHTMLElement[] = [];
