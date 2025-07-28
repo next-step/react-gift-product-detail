@@ -1,5 +1,10 @@
 ﻿import type { Product } from '../type'
 import { fetchApi } from './client'
+import {
+  useQuery,
+  type UseQueryOptions,
+  type UseQueryResult,
+} from '@tanstack/react-query'
 
 export interface ProductSummary {
   id: number
@@ -40,4 +45,28 @@ export async function fetchProductSummary(
   }
 
   return data
+    }
+
+export function useProductRankingQuery(
+  targetType = 'ALL',
+  rankType = 'MANY_WISH',
+  options?: UseQueryOptions<Product[], Error>,
+): UseQueryResult<Product[], Error> {
+  return useQuery<Product[], Error>({
+    queryKey: ['products', 'ranking', targetType, rankType],
+    queryFn: () => fetchProductRanking(targetType, rankType),
+    ...options,
+  })
+}
+
+export function useProductSummaryQuery(
+  productId: number | undefined,
+  options?: UseQueryOptions<ProductSummary, Error>,
+): UseQueryResult<ProductSummary, Error> {
+  return useQuery<ProductSummary, Error>({
+    queryKey: ['products', productId, 'summary'],
+    queryFn: () => fetchProductSummary(productId!),
+    enabled: productId !== undefined,
+    ...options,
+  })
 }

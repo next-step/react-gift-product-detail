@@ -1,4 +1,11 @@
+import { useMutation, type UseMutationOptions, type UseMutationResult } from '@tanstack/react-query'
 import { fetchApi } from './client'
+import type { UserInfo } from '../utils/storage'
+
+export interface LoginParams {
+  email: string
+  password: string
+}
 
 export async function postLogin(
   email: string,
@@ -20,4 +27,13 @@ export async function postLogin(
   }
 
   return { email: userEmail, name, authToken }
+  }
+
+export function useLoginMutation(
+  options?: UseMutationOptions<UserInfo, Error, LoginParams>,
+): UseMutationResult<UserInfo, Error, LoginParams> {
+  return useMutation<UserInfo, Error, LoginParams>({
+    mutationFn: ({ email, password }) => postLogin(email, password),
+    ...options,
+  })
 }

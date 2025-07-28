@@ -1,4 +1,9 @@
 import { fetchApi } from './client'
+import {
+  useMutation,
+  type UseMutationOptions,
+  type UseMutationResult,
+} from '@tanstack/react-query'
 
 export interface OrderReceiver {
   name: string
@@ -34,4 +39,18 @@ export async function postOrder(
   }
 
   return data
+    }
+
+export interface OrderMutationVariables {
+  order: OrderRequest
+  token: string
+}
+
+export function useOrderMutation(
+  options?: UseMutationOptions<OrderResponse, Error, OrderMutationVariables>,
+): UseMutationResult<OrderResponse, Error, OrderMutationVariables> {
+  return useMutation<OrderResponse, Error, OrderMutationVariables>({
+    mutationFn: ({ order, token }) => postOrder(order, token),
+    ...options,
+  })
 }
