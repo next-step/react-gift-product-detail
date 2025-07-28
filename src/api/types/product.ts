@@ -44,6 +44,38 @@ export interface ProductSummary {
   imageURL: string
 }
 
+// * 상품 상세 정보
+export interface ProductDetail {
+  description: string
+  announcement: AnnouncementItem[]
+}
+
+// * 공지사항 아이템
+export interface AnnouncementItem {
+  name: string
+  value: string
+  displayOrder: number
+}
+
+// * 상품 찜 정보
+export interface ProductWish {
+  wishCount: number
+  isWished: boolean
+}
+
+// * 상품 하이라이트 리뷰 정보
+export interface ProductHighlightReview {
+  totalCount: number
+  reviews: ProductReview[]
+}
+
+// * 상품 리뷰 정보
+export interface ProductReview {
+  id: string
+  authorName: string
+  content: string
+}
+
 // * 유효성 검증 함수 (외부 입력 시 오류 방지)
 export function isValidTargetType(value: string): value is TargetType {
   return Object.values(TargetType).includes(value as TargetType)

@@ -1,6 +1,14 @@
 import apiClient from '@/api'
 import { API_ENDPOINTS } from '@/api/constants'
-import { RankType, TargetType, type Product, type ProductSummary } from '@/api/types'
+import {
+  RankType,
+  TargetType,
+  type Product,
+  type ProductSummary,
+  type ProductDetail,
+  type ProductHighlightReview,
+  type ProductWish,
+} from '@/api/types'
 
 // * 상품 랭킹 목록 조회하기
 export const fetchProductRankList = async (
@@ -21,5 +29,33 @@ export const fetchProductSummary = async (productId: number): Promise<ProductSum
   const res = await apiClient.get<{ data: ProductSummary }>(
     API_ENDPOINTS.PRODUCTS.SUMMARY(productId),
   )
+  return res.data.data
+}
+
+// * 상품 상세 정보 조회
+export const fetchProductInfo = async (productId: number): Promise<Product> => {
+  const res = await apiClient.get<{ data: Product }>(API_ENDPOINTS.PRODUCTS.INFO(productId))
+  return res.data.data
+}
+
+// * 상품 상세 정보 조회 (ProductDetail 타입)
+export const fetchProductDetail = async (productId: number): Promise<ProductDetail> => {
+  const res = await apiClient.get<{ data: ProductDetail }>(API_ENDPOINTS.PRODUCTS.DETAIL(productId))
+  return res.data.data
+}
+
+// * 상품 하이라이트 리뷰 조회
+export const fetchProductHighlightReview = async (
+  productId: number,
+): Promise<ProductHighlightReview> => {
+  const res = await apiClient.get<{ data: ProductHighlightReview }>(
+    API_ENDPOINTS.PRODUCTS.REVIEW(productId),
+  )
+  return res.data.data
+}
+
+// * 상품 찜 정보 조회
+export const fetchProductWish = async (productId: number): Promise<ProductWish> => {
+  const res = await apiClient.get<{ data: ProductWish }>(API_ENDPOINTS.PRODUCTS.WISH(productId))
   return res.data.data
 }
