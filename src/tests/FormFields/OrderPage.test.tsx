@@ -16,6 +16,7 @@ vi.mock("react-toastify", () => ({
 
 describe("OrderPage.tsx 페이지 테스트", () => {
   it("상품 id로 받아온 상품 정보가 렌더링 됩니다.", async () => {
+    // When
     render(
       <MockApp
         children={
@@ -27,6 +28,7 @@ describe("OrderPage.tsx 페이지 테스트", () => {
       />
     );
 
+    // Then
     await waitFor(() => {
       expect(screen.getByText(PRODUCT_SUMMARY_NAME)).toBeInTheDocument();
     });
