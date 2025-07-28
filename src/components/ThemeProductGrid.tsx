@@ -1,3 +1,4 @@
+import React from 'react';
 import { css } from '@emotion/react';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useNavigate } from 'react-router-dom';
@@ -44,22 +45,49 @@ const emptyStyle = css({
   gap: spacing.spacing2,
 });
 
+import { useThemeProductsQuery } from '@/hooks/useCategoryQuery';
+import type { ThemeProductList } from '@/types/category';
+
 interface ThemeProductGridProps {
-  products: Product[];
-  loading?: boolean;
-  hasMore?: boolean;
-  onLoadMore?: () => void;
+  themeId: number;
 }
 
-const ThemeProductGrid = ({ products, loading = false, hasMore = false, onLoadMore = () => {} }: ThemeProductGridProps) => {
+const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
+  // 페이지네이션 및 상품 누적 관리
+  const [page, setPage] = React.useState(0);
+  const [products, setProducts] = React.useState<Product[]>([]);
+  const [hasMore, setHasMore] = React.useState(true);
+  const [productLoading, setProductLoading] = React.useState(false);
+
+  // 상품 불러오기 쿼리
+  const { data: productData } = useThemeProductsQuery(themeId, page, 10) as { data?: ThemeProductList };
+
+  React.useEffect(() => {
+    if (productData) {
+      setProducts(prev => {
+        const newList = productData.list.filter(
+          item => !prev.some(p => p.id === item.id)
+        );
+        return page === 0 ? productData.list : [...prev, ...newList];
+      });
+      setHasMore(productData.hasMoreList);
+      setProductLoading(false);
+    }
+  }, [productData, page]);
+
   // useInfiniteScroll 훅 사용
   const setObserverRef = useInfiniteScroll<HTMLDivElement>({
-    loading,
+    loading: productLoading,
     hasMore,
-    onLoadMore,
+    onLoadMore: () => {
+      if (!productLoading && hasMore) {
+        setProductLoading(true);
+        setPage(prev => prev + 1);
+      }
+    },
   });
 
   // 상품 클릭 핸들러
@@ -71,8 +99,7 @@ const ThemeProductGrid = ({ products, loading = false, hasMore = false, onLoadMo
     }
   };
 
-
-  if (loading) {
+  if (productLoading && products.length === 0) {
     return (
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <div css={spinnerStyle}></div>

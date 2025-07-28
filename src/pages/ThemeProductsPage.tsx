@@ -5,8 +5,7 @@ import { spacing } from '@/styles/spacing';
 import { typography } from '@/styles/typography';
 import GlobalStyle from '@/styles/GlobalStyle';
 import Header from '@/components/Header';
-import { useThemeInfoQuery, useThemeProductsQuery } from '@/hooks/useCategoryQuery';
-import type { ThemeProductList } from '@/types/category';
+import { useThemeInfoQuery } from '@/hooks/useCategoryQuery';
 import ThemeProductGrid from '@/components/ThemeProductGrid';
 import { spinnerStyle } from '@/styles/common';
 
@@ -41,7 +40,7 @@ const loadingStyle = css({
 });
 
 
-import { useState, useEffect } from 'react';
+// ...existing code...
 
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
@@ -49,36 +48,7 @@ const ThemeProductsPage = () => {
   // 쿼리 훅 사용
   const { data: themeInfo, isLoading: loading, error } = useThemeInfoQuery(Number(themeId));
 
-  // 페이지네이션 및 상품 누적 관리
-  const [page, setPage] = useState(0);
-  const [products, setProducts] = useState<any[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [productLoading, setProductLoading] = useState(false);
-
-  // 상품 불러오기 쿼리
-  const {
-    data: productData,
-  } = useThemeProductsQuery(Number(themeId), page, 10) as { data?: ThemeProductList; isLoading: boolean };
-
-  useEffect(() => {
-    if (productData) {
-      setProducts(prev => {
-        const newList = productData.list.filter(
-          item => !prev.some(p => p.id === item.id)
-        );
-        return page === 0 ? productData.list : [...prev, ...newList];
-      });
-      setHasMore(productData.hasMoreList);
-      setProductLoading(false);
-    }
-  }, [productData, page]);
-
-  const handleLoadMore = () => {
-    if (!productLoading && hasMore) {
-      setProductLoading(true);
-      setPage(prev => prev + 1);
-    }
-  };
+  // ...existing code...
 
   if (loading) {
     return (
@@ -129,12 +99,7 @@ const ThemeProductsPage = () => {
         <p css={heroDescriptionStyle}>{themeInfo.description}</p>
       </section>
       {/* 상품 목록 영역 */}
-      <ThemeProductGrid
-        products={products}
-        loading={productLoading && (products.length === 0)}
-        hasMore={hasMore}
-        onLoadMore={handleLoadMore}
-      />
+      <ThemeProductGrid themeId={Number(themeId)} />
     </div>
   );
 };
