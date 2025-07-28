@@ -27,7 +27,7 @@ const mockData: ProductBasicInfo = {
   },
 };
 
-type ProductDetailTab = 'description' | 'review' | 'detailInfo';
+export type ProductDetailTab = 'description' | 'review' | 'detailInfo';
 const ProductDetail = () => {
   const { id } = useParams();
   console.log(id);
@@ -38,7 +38,7 @@ const ProductDetail = () => {
       <div>
         <ProductInfo product={mockData} />
         <Divider />
-        <TabMenu />
+        <TabMenu activeTab={activeTab} setActiveTab={setActiveTab} />
         <div>
           {activeTab == 'description' && <Description />}
           {activeTab == 'review' && <Review />}
