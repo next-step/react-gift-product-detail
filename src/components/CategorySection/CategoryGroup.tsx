@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
+import { Suspense } from 'react';
 import CategoryContent from '@/components/CategorySection/CategoryContent';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 const CategoryGroup = () => {
   return (
@@ -7,7 +10,13 @@ const CategoryGroup = () => {
       <TitleWrapper>
         <Title>선물 테마</Title>
       </TitleWrapper>
-      <CategoryContent />
+      <ErrorBoundary
+        fallback={<EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>}
+      >
+        <Suspense fallback={<EmptyText>로딩 중입니다...</EmptyText>}>
+          <CategoryContent />
+        </Suspense>
+      </ErrorBoundary>
     </Section>
   );
 };
@@ -26,4 +35,11 @@ const TitleWrapper = styled.div`
 
 const Title = styled.h3`
   ${({ theme }) => theme.typography.title.title1Bold};
+`;
+
+const EmptyText = styled.p`
+  ${({ theme }) => theme.typography.body.body2Regular};
+  color: ${({ theme }) => theme.color.gray[500]};
+  text-align: center;
+  padding: ${({ theme }) => theme.spacing[6]};
 `;
