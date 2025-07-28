@@ -6,6 +6,7 @@ import { getProductById } from '@/entities/product/api/productApi';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { RankingProduct } from '@/entities/product/model/types';
 import { ProductOverview, ProductTabs } from '@/entities/product/ui';
+import { ProductActionGroup } from '@/entities/product/ui/ProductActionGroup';
 
 // TODO: 상품 상세 페이지 구현
 // 1. getProductById : 최상단 꽉, [이미지,이름,가격, devider, 브랜드사진과 이름] (done)
@@ -18,7 +19,6 @@ import { ProductOverview, ProductTabs } from '@/entities/product/ui';
 const Product = () => {
     const { productId } = useParams<{ productId: string }>();
     const numericProductId = productId ? parseInt(productId, 10) : undefined;
-    // const navigate = useNavigate();
 
     if (!numericProductId) {
         return null;
@@ -34,7 +34,7 @@ const Product = () => {
             <Suspense fallback={<Loading height="100vh" />}>
                 <ProductOverview data={data} />
                 <ProductTabs />
-                {/* <button onClick={() => navigate(`/${ROUTES.ORDER}/${numericProductId}`)}>Order</button> */}
+                <ProductActionGroup />
             </Suspense>
         </ErrorBoundary>
     );
