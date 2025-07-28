@@ -65,7 +65,7 @@ const Theme = () => {
             {products.map((product, index) => {
               const goToCard = () => {
                 if (isLoggedIn) {
-                  navigate(`/order/${product.id}`);
+                  navigate(`/products/${product.id}`);
                 } else {
                   navigate('/login');
                 }
