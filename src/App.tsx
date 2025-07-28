@@ -10,6 +10,7 @@ import MyPage from "@/pages/MyPage";
 import NotFoundPage from "@/pages/NotfoundPage";
 import OrderPage from "@/pages/OrderPage";
 import ThemePage from "@/pages/ThemePage";
+import ProductDetailPage from "@/pages/ProductDetailPage";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: PATH.MY, element: <MyPage /> },
       { path: PATH.ORDER, element: <OrderPage /> },
       { path: PATH.THEME, element: <ThemePage /> },
+      { path: PATH.PRODUCT_DETAIL, element: <ProductDetailPage /> },
       { path: PATH.NOTFOUND, element: <NotFoundPage /> },
     ],
   },

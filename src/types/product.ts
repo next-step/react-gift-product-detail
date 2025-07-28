@@ -16,8 +16,19 @@ export type ProductInfo = {
   };
   imageURL: string;
   brandInfo: {
+    id: number;
     name: string;
+    imageURL: string;
   };
+};
+
+export type ProductDetail = {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
 };
 
 export type ProductPage = {
