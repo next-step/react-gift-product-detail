@@ -9,11 +9,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Routes';
 import { useForm, FormProvider, Controller, useWatch } from 'react-hook-form';
 import { useContext, useEffect, useState } from 'react';
+import { getProductSummary, postOrder } from '@/Api/api';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@/contexts/AuthContext';
-import { useMutation } from '@tanstack/react-query';
-import { postOrder, type OrderBody } from '@/Api/order';
-import { getProductSummary } from '@/Api/product';
 
 const Wrapper = styled.section(({ theme }) => ({
   width: '100%',
@@ -89,30 +87,6 @@ const OrderForm = () => {
 
   const { setValue } = methods;
 
-  const orderMutation = useMutation<void, unknown, OrderBody>({
-    mutationFn: postOrder,
-    onSuccess: (_, variables) => {
-      const totalQty = variables.receivers.reduce((s, r) => s + r.quantity, 0);
-
-      alert(
-        `주문 완료!\n` +
-          `상품명: ${selectedProduct?.name}\n` +
-          `구매 수량: ${totalQty}\n` +
-          `발신자 이름: ${user?.name}\n` +
-          `메시지: ${messageCardId}`
-      );
-      navigate(ROUTE_PATH.HOME);
-    },
-    onError: (e: any) => {
-      if (e.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
-        navigate('/login');
-      } else {
-        toast.error(e.response?.data?.message ?? '주문 요청 실패');
-      }
-    },
-  });
-
   useEffect(() => {
     if (user?.name) {
       setValue('sender', user.name, { shouldDirty: false });
@@ -136,17 +110,36 @@ const OrderForm = () => {
     }
     const totalQty = data.recipients.reduce((s, r) => s + r.quantity, 0);
 
-    orderMutation.mutate({
-      productId,
-      message: data.message,
-      messageCardId,
-      ordererName: data.sender,
-      receivers: data.recipients.map((r) => ({
-        name: r.name,
-        phoneNumber: r.phone,
-        quantity: r.quantity,
-      })),
-    });
+    // navigate(ROUTE_PATH.HOME);
+
+    try {
+      await postOrder({
+        productId,
+        message: data.message,
+        messageCardId,
+        ordererName: data.sender,
+        receivers: data.recipients.map((r) => ({
+          name: r.name,
+          phoneNumber: r.phone,
+          quantity: r.quantity,
+        })),
+      });
+      alert(
+        `주문 완료!\n` +
+          `상품명: ${selectedProduct.name}\n` +
+          `구매 수량: ${totalQty}\n` +
+          `발신자 이름: ${user?.name}\n` +
+          `메시지: ${messageCardId}`
+      );
+      navigate(ROUTE_PATH.HOME);
+    } catch (e: any) {
+      if (e.response?.status === 401) {
+        toast.error('로그인이 필요합니다.');
+        navigate('/login');
+        return;
+      }
+      toast.error(e.response?.data?.message ?? '주문 요청 실패');
+    }
   };
 
   const recipients = useWatch({ control: methods.control, name: 'recipients' });

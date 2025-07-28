@@ -5,10 +5,9 @@ import NavigationBar from '@components/NavigationBar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLoginForm } from '@/hooks/useLoginForm';
 import { useAuth } from '@/hooks/useAuth';
+import { postLogin } from '@/Api/api';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useMutation } from '@tanstack/react-query';
-import { postLogin } from '@/Api/auth';
 
 const Wrapper = styled.div(({ theme }) => ({
   width: '100%',
@@ -148,14 +147,13 @@ const Login: React.FC = () => {
 
   const { login } = useAuth();
 
-  const loginMutation = useMutation({
-    mutationFn: () => postLogin(id, pw),
-    onSuccess: (res) => {
-      const { email, name, authToken } = res;
+  const handleClick = async () => {
+    try {
+      const res = await postLogin(id, pw);
+      const { email, name, authToken } = res.data.data;
       login({ email, name }, authToken);
       navigate(redirectTo, { replace: true });
-    },
-    onError: (err: any) => {
+    } catch (err: any) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
         const raw = err.response.data;
         const msg: string =
@@ -171,11 +169,7 @@ const Login: React.FC = () => {
       } else {
         toast.error('예상치 못한 오류가 발생했습니다.');
       }
-    },
-  });
-
-  const handleClick = () => {
-    loginMutation.mutate();
+    }
   };
 
   return (
