@@ -128,7 +128,7 @@ const OrderPage = () => {
         <Navigation />
 
         <AsyncBoundary fallback={<Spinner withWrapper />}>
-          {!product ? null : (
+          {!product && (
             <FormProvider {...methods}>
               <S.Form onSubmit={handleSubmit(onValid)}>
                 <S.Container>
