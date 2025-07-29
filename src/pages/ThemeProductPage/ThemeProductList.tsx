@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { Suspense, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { css } from '@emotion/react';
 import ProductCard from '../Home/components/Shared/RankingCard';
 import theme from '../../styles/theme';
 import { useThemeProducts } from '../../apis/product';
 import { UserManagement } from '../Login/contexts/UserManagement';
+import { ErrorBoundary } from '../../ErrorBoundary';
 
 const LIMIT = 10;
 
-const ThemeProductList = () => {
+const ThemeProductListContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
   const { user } = UserManagement();
@@ -22,14 +23,16 @@ const ThemeProductList = () => {
     }
   }, [numericThemeId, navigate]);
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
-    useThemeProducts(numericThemeId, LIMIT);
+  const { data, fetchNextPage, hasNextPage } = useThemeProducts(
+    numericThemeId,
+    LIMIT
+  );
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observerTarget = observerRef.current;
-    if (!observerTarget || !hasNextPage || isLoading) return;
+    if (!observerTarget || !hasNextPage) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -46,16 +49,11 @@ const ThemeProductList = () => {
     observer.observe(observerTarget);
 
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isLoading]);
-
-  if (isError) {
-    console.error('상품 로딩 실패:', error);
-    return <Navigate to={''} />;
-  }
+  }, [fetchNextPage, hasNextPage]);
 
   const allProducts = data?.pages.flatMap((page) => page.products) ?? [];
 
-  if (!isLoading && allProducts.length === 0) {
+  if (allProducts.length === 0) {
     return <div css={emptyStyle}>상품이 없습니다.</div>;
   }
 
@@ -93,8 +91,19 @@ const ThemeProductList = () => {
           margin-top: ${theme.spacing[10]};
         `}
       />
-      {isLoading && <div css={loadingStyle}>로딩 중...</div>}
     </>
+  );
+};
+
+const ThemeProductList = () => {
+  return (
+    <ErrorBoundary
+      fallback={<div css={errorStyle}>상품 로딩 중 오류가 발생했습니다.</div>}
+    >
+      <Suspense fallback={<div css={loadingStyle}>로딩 중...</div>}>
+        <ThemeProductListContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
@@ -117,4 +126,11 @@ const emptyStyle = css`
   margin-top: ${theme.spacing[12]};
   text-align: center;
   color: ${theme.color.gray.gray700};
+`;
+
+const errorStyle = css`
+  padding: ${theme.spacing[8]};
+  margin-top: ${theme.spacing[12]};
+  text-align: center;
+  color: red;
 `;
