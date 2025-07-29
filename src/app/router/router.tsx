@@ -3,6 +3,8 @@ import Layout from '../layout';
 import ProtectedRoute from './ProtectedRoute';
 import { Home, Login, MyPage, Order, NotFound, Theme, Product } from '@/pages';
 import { ROUTES } from '@/shared/config';
+import { Suspense } from 'react';
+import { Loading } from '@/shared/ui';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +27,9 @@ const router = createBrowserRouter([
         path: `${ROUTES.PRODUCT}/:productId`,
         element: (
           <ProtectedRoute>
-            <Product />
+            <Suspense fallback={<Loading />}>
+              <Product />
+            </Suspense>
           </ProtectedRoute>
         ),
       },
