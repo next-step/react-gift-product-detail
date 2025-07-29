@@ -1,5 +1,4 @@
 import { useUserInfo } from "@/contexts/UserInfoContext";
-import { ROUTE_PATH } from "@/routes/paths";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 
@@ -29,9 +28,6 @@ const useHandleLoginSuccess = ({
         name,
         authToken,
       });
-
-      const redirectPath = new URLSearchParams(location.search).get("redirect");
-      navigate(redirectPath || ROUTE_PATH.HOME);
     }
   }, [
     email,
