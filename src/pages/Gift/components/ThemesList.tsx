@@ -45,6 +45,7 @@ const Img = styled.img`
   max-width: 3.125rem;
   max-height: 3.125rem;
   width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 18px;
   object-fit: cover;
   overflow: hidden;
