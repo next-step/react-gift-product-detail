@@ -5,11 +5,9 @@ import {
   StyledLoginKakoLogo,
 } from '@src/components/Login/StyledLoginFormContainer';
 import { useLoginForm } from '../../hooks/useLoginForm';
-import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from './handleLoginLogic';
+import { useLoginQuery } from './useLoginQuery';
 
 const LoginForm = () => {
-  const navigate = useNavigate();
   const {
     id,
     idError,
@@ -21,7 +19,7 @@ const LoginForm = () => {
     handlePwChange,
     isLoginButtonEnabled,
   } = useLoginForm();
-  const loginMutation = useLoginMutation(navigate);
+  const loginMutation = useLoginQuery();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

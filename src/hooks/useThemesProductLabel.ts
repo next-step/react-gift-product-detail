@@ -1,6 +1,6 @@
 // hooks/usePresentThemeLabel.ts
 import { useParams } from 'react-router-dom';
-import { useApiQuery } from '@src/hooks/useApiQuery';
+import { useApiQuery } from '@src/api/useApiQuery';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 
 type ThemeLabel = {
