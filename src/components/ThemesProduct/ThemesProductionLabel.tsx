@@ -1,8 +1,8 @@
 import { StyledThemesProductLabelItem } from './StyledThemesProductItem';
-import { usePresentThemeFetch } from './useThemesProductLabel';
+import { usePresentThemeLabel } from '@src/hooks/useThemesProductLabel';
 
 export const ThemesProductionLabel = () => {
-  const { label, labelError, isLabelLoading } = usePresentThemeFetch();
+  const { label, labelError, isLabelLoading } = usePresentThemeLabel();
 
   if (isLabelLoading) {
     return <div>로딩 중</div>;

@@ -1,8 +1,8 @@
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import type { Good } from '@src/types/Goods';
-import { useApiQuery } from '@src/api/useApiQuery';
+import { useApiQuery } from '@src/hooks/useApiQuery';
 
-export const useRankingItemFetch = ({
+export const useRankingItem = ({
   targetType,
   rankType,
 }: {
