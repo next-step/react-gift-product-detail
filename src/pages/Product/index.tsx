@@ -57,10 +57,10 @@ const Product = () => {
     <ErrorBoundary fallback={<RedirectOnError to={ROUTES.HOME} />}>
       <Suspense fallback={<Loading height="100vh" />}>
         <ProductOverview data={productData} />
-        <ProductTabs />
         <Suspense fallback={<Loading height="60px" />}>
-          <ProductActionGroup wishData={wishData} />
+          <ProductTabs />
         </Suspense>
+        <ProductActionGroup wishData={wishData} />
       </Suspense>
     </ErrorBoundary>
   );
