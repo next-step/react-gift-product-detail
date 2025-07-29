@@ -1,4 +1,4 @@
-import { Button, LoadingSpinner } from "@/components/common";
+import { Button } from "@/components/common";
 import { useRouter } from "@/hooks/common/useRouter";
 import { useRankingProducts } from "@/hooks/products/useRankingProducts";
 import styled from "@emotion/styled";
@@ -85,7 +85,7 @@ const INITIAL_SHOW_COUNT = 6;
 
 export const HotGiftRankingGrid = () => {
   const [showMore, setShowMore] = useState(false);
-  const { products, loading, isEmpty } = useRankingProducts();
+  const { products, isEmpty } = useRankingProducts();
   const { goProductDetail } = useRouter();
 
   useEffect(() => {
@@ -96,13 +96,6 @@ export const HotGiftRankingGrid = () => {
     ? products
     : products.slice(0, INITIAL_SHOW_COUNT);
 
-  if (loading) {
-    return (
-      <EmptyContainer>
-        <LoadingSpinner />
-      </EmptyContainer>
-    );
-  }
   if (isEmpty) {
     return <EmptyContainer>상품이 없습니다.</EmptyContainer>;
   }
