@@ -1,3 +1,5 @@
+export interface Product extends GiftItem {}
+
 export interface Category {
   themeId: number;
   name: string;
@@ -62,4 +64,23 @@ export interface OrderPayload {
     phoneNumber: string;
     quantity: number;
   }[];
+}
+
+export interface ProductDetail {
+  description: string;
+  announcement: {
+    name: string;
+    value: string;
+  }[];
+}
+
+export interface ProductReview {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface ProductWish {
+  wishCount: number;
+  isWished: boolean;
 }
