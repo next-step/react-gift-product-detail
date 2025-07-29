@@ -23,23 +23,27 @@ const LoginPage = () => {
   };
 
   return (
-    <PageContainer>
-      <Navigation />
-      <AsyncBoundary fallback={<Spinner withWrapper />}>
-        <Container>
-          <Logo src="/assets/kakao_logo.svg" alt="카카오 로고" />
-          <LoginForm onLoginSuccess={handleLoginSuccess} />
-          <ToastContainer
-            position="bottom-center"
-            autoClose={3_000}
-            hideProgressBar={false}
-            pauseOnHover
-            closeOnClick
-          />
-        </Container>
-      </AsyncBoundary>
-    </PageContainer>
-  );
+  <PageContainer>
+    <Navigation />
+    <AsyncBoundary
+      fallback={<Spinner withWrapper />}
+      useErrorBoundary={false}
+    >
+      <Container>
+        <Logo src="/assets/kakao_logo.svg" alt="카카오 로고" />
+        <LoginForm onLoginSuccess={handleLoginSuccess} />
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3_000}
+          hideProgressBar={false}
+          pauseOnHover
+          closeOnClick
+        />
+      </Container>
+    </AsyncBoundary>
+  </PageContainer>
+);
+
 };
 
 export default LoginPage;

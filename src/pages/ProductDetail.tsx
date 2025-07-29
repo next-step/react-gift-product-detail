@@ -49,9 +49,11 @@ const ProductDetail = () => {
               />
               <span>{product.brandInfo.name}</span>
             </S.BrandInfo>
+
             <AsyncBoundary
               fallback={<div>상세 정보를 불러오는 중입니다...</div>}
               errorFallback={<div>상세 정보 로딩에 실패했어요.</div>}
+              useErrorBoundary={false}
             >
               <DetailTab productId={product.id} />
             </AsyncBoundary>
