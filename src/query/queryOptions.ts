@@ -6,6 +6,7 @@ import {
 } from '../api/productInfo';
 import { fetchProductReview } from '../api/productReview';
 import { fetchProductWish } from '../api/productWish';
+
 import { fetchThemeInfo } from '../api/themeInfo';
 import { queryKeys } from '../constants/queryKeys';
 import { fetchGiftProductById } from '../hooks/useGiftProductById';
@@ -69,3 +70,4 @@ export const ProductWishQueryOptions = (productId: number) => ({
   queryFn: () => fetchProductWish(productId),
   enabled: !!productId,
 });
+
