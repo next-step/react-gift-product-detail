@@ -78,7 +78,7 @@ const WishAndOrderBar = () => {
         <HeartIcon filled={data.isWished} size={24} />
         <WishCount>{data.wishCount.toLocaleString()}</WishCount>
       </WishBox>
-      <OrderButton onClick={() => navigate('/order')}>
+      <OrderButton onClick={() => navigate('/order', { state: { id: productId } })}>
         <OrderText>주문하기</OrderText>
       </OrderButton>
     </Wrapper>
