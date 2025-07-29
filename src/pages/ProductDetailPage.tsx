@@ -72,7 +72,7 @@ function ProductDetailContent() {
           )}
           {activeTab === 'review' && (
             <ul>
-              {reviews.reviews.map((r: any) => (
+              {reviews.reviews.map((r) => (
                 <li key={r.id}>
                   <strong>{r.authorName}</strong>
                   <br />
@@ -83,7 +83,7 @@ function ProductDetailContent() {
           )}
           {activeTab === 'detail' && (
             <ul>
-              {detail.announcements.map((a: any) => (
+              {detail.announcements.map((a) => (
                 <li key={a.displayOrder}>
                   <strong>{a.name}</strong>
                   <br />

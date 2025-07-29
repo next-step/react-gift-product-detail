@@ -1,4 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
+import type {
+  Product,
+  ProductDetail,
+  WishInfo,
+  HighlightReviewResponse,
+} from '@/types/product'
 
 import {
   fetchProduct,
@@ -8,22 +14,22 @@ import {
 } from '@/apis/product'
 
 export function useProductDetail(productId: string) {
-  const { data: product } = useSuspenseQuery({
+  const { data: product } = useSuspenseQuery<Product>({
     queryKey: ['product', productId],
     queryFn: () => fetchProduct(productId),
   })
 
-  const { data: detail } = useSuspenseQuery({
+  const { data: detail } = useSuspenseQuery<ProductDetail>({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(productId),
   })
 
-  const { data: wishInfo } = useSuspenseQuery({
+  const { data: wishInfo } = useSuspenseQuery<WishInfo>({
     queryKey: ['wish', productId],
     queryFn: () => fetchWishInfo(productId),
   })
 
-  const { data: reviews } = useSuspenseQuery({
+  const { data: reviews } = useSuspenseQuery<HighlightReviewResponse>({
     queryKey: ['highlightReview', productId],
     queryFn: () => fetchHighlightReview(productId),
   })

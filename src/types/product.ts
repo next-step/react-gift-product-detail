@@ -14,3 +14,30 @@ export interface Product {
   }
   rank: number
 }
+
+export interface ProductAnnouncement {
+  name: string
+  value: string
+  displayOrder: number
+}
+
+export interface ProductDetail {
+  description: string
+  announcements: ProductAnnouncement[]
+}
+
+export interface WishInfo {
+  wishCount: number
+  isWished: boolean
+}
+
+export interface HighlightReview {
+  id: string
+  authorName: string
+  content: string
+}
+
+export interface HighlightReviewResponse {
+  totalCount: number
+  reviews: HighlightReview[]
+}

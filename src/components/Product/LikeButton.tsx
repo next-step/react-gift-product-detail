@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styled from '@emotion/styled'
+import type { WishInfo } from '@/types/product'
 
 interface LikeButtonProps {
   productId: string
@@ -13,17 +14,23 @@ export function LikeButton({ productId, wishCount }: LikeButtonProps) {
     mutationFn: () => Promise.resolve(),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['wish', productId] })
-      const prev = queryClient.getQueryData(['wish', productId])
-      queryClient.setQueryData(['wish', productId], (old: any) => ({
-        ...old,
-        isWished: !old.isWished,
-        wishCount: old.isWished ? old.wishCount - 1 : old.wishCount + 1,
-      }))
+      const prev = queryClient.getQueryData<WishInfo>(['wish', productId])
+
+      if (prev) {
+        const updated: WishInfo = {
+          ...prev,
+          isWished: !prev.isWished,
+          wishCount: prev.isWished ? prev.wishCount - 1 : prev.wishCount + 1,
+        }
+
+        queryClient.setQueryData<WishInfo>(['wish', productId], updated)
+      }
+
       return { prev }
     },
     onError: (_err, _variables, context) => {
       if (context?.prev) {
-        queryClient.setQueryData(['wish', productId], context.prev)
+        queryClient.setQueryData<WishInfo>(['wish', productId], context.prev)
       }
     },
   })
