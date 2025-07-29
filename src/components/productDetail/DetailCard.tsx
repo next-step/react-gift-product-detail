@@ -3,11 +3,16 @@ import styled from "@emotion/styled";
 import { useProductDetailContent } from "@/hooks/useProductDetailContent";
 import { useState } from "react";
 import { useProductReview } from "@/hooks/useProductReview";
+import { DETAIL_TABS, type DetailTab } from "@/constants/detailTab";
+
+const TAB_LABELS: Record<DetailTab, string> = {
+  desc: "상품설명",
+  review: "선물후기",
+  info: "상세정보",
+};
 
 export default function DetailCard({ productId }: { productId: string }) {
-  const [selectedTab, setSelectedTab] = useState<"desc" | "review" | "info">(
-    "desc",
-  );
+  const [selectedTab, setSelectedTab] = useState<DetailTab>("desc");
   const { data: reviews } = useProductReview(productId);
   const { data: detail } = useProductDetailContent(productId);
 
@@ -17,33 +22,18 @@ export default function DetailCard({ productId }: { productId: string }) {
     <DetailWrapper>
       <Detail>
         <DetailCategory>
-          <DetailButton
-            onClick={() => setSelectedTab("desc")}
-            isActive={selectedTab === "desc"}
-          >
-            <CategoryName isActive={selectedTab === "desc"}>
-              상품설명
-            </CategoryName>
-            {selectedTab === "desc" && <CategoryUnderbar />}
-          </DetailButton>
-          <DetailButton
-            onClick={() => setSelectedTab("review")}
-            isActive={selectedTab === "review"}
-          >
-            <CategoryName isActive={selectedTab === "review"}>
-              선물후기
-            </CategoryName>
-            {selectedTab === "review" && <CategoryUnderbar />}
-          </DetailButton>
-          <DetailButton
-            onClick={() => setSelectedTab("info")}
-            isActive={selectedTab === "info"}
-          >
-            <CategoryName isActive={selectedTab === "info"}>
-              상세정보
-            </CategoryName>
-            {selectedTab === "info" && <CategoryUnderbar />}
-          </DetailButton>
+          {DETAIL_TABS.map((tab) => (
+            <DetailButton
+              key={tab}
+              onClick={() => setSelectedTab(tab)}
+              isActive={selectedTab === tab}
+            >
+              <CategoryName isActive={selectedTab === tab}>
+                {TAB_LABELS[tab]}
+              </CategoryName>
+              {selectedTab === tab && <CategoryUnderbar />}
+            </DetailButton>
+          ))}
         </DetailCategory>
         <DetailContainer>
           <DetailContent>
