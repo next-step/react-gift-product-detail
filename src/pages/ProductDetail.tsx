@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
-import { useProductInfo, useProductDetail } from '@/api/productDetail';
+import { useProductInfo, useProductDetail, useProductHighlightReview } from '@/api/productDetail';
 
 const ProductContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
@@ -192,6 +192,127 @@ const DetailDescription = styled.div`
   white-space: pre-line;
 `;
 
+// 리뷰 섹션 스타일
+const ReviewSection = styled.section`
+  margin-top: ${({ theme }) => theme.spacing.xxl};
+  padding-top: ${({ theme }) => theme.spacing.lg};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
+`;
+
+const ReviewHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const ReviewSummary = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+const AverageRating = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+`;
+
+const TotalReviews = styled.div`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.gray.gray600};
+`;
+
+const StarRating = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+`;
+
+const Star = styled.span<{ filled: boolean }>`
+  color: ${({ theme, filled }) => 
+    filled ? theme.colors.yellow.yellow600 : theme.colors.gray.gray400
+  };
+  font-size: 1.2rem;
+`;
+
+const ReviewList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.lg};
+`;
+
+const ReviewItem = styled.div`
+  background: ${({ theme }) => theme.colors.gray.gray100};
+  padding: ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+`;
+
+const ReviewHeaderItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const ReviewerInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+const ReviewerName = styled.div`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+`;
+
+const ReviewDate = styled.div`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.gray.gray600};
+`;
+
+const ReviewRating = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+`;
+
+const ReviewStar = styled.span<{ filled: boolean }>`
+  color: ${({ theme, filled }) => 
+    filled ? theme.colors.yellow.yellow600 : theme.colors.gray.gray400
+  };
+  font-size: 0.9rem;
+`;
+
+const ReviewContent = styled.div`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.gray.gray800};
+  line-height: 1.5;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const ReviewImages = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.sm};
+  flex-wrap: wrap;
+`;
+
+const ReviewImage = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+  background: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+const NoReviews = styled.div`
+  text-align: center;
+  padding: ${({ theme }) => theme.spacing.xxl};
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  font-size: 1rem;
+`;
+
 const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -209,8 +330,14 @@ const ProductDetail = () => {
     error: detailError
   } = useProductDetail(id);
 
-  const isLoading = productLoading || detailLoading;
-  const hasError = productError || detailError;
+  const {
+    data: reviewData,
+    isLoading: reviewLoading,
+    error: reviewError
+  } = useProductHighlightReview(id);
+
+  const isLoading = productLoading || detailLoading || reviewLoading;
+  const hasError = productError || detailError || reviewError;
 
   if (isLoading) {
     return (
@@ -240,6 +367,31 @@ const ProductDetail = () => {
 
   const hasDiscount = product.price.discountRate > 0;
   const hasBasicPrice = product.price.basicPrice > product.price.sellingPrice;
+
+  // 별점 렌더링 헬퍼 함수
+  const renderStars = (rating: number, size: 'large' | 'small' = 'large') => {
+    const stars = [];
+    const StarComponent = size === 'large' ? Star : ReviewStar;
+    
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <StarComponent key={i} filled={i <= rating}>
+          ★
+        </StarComponent>
+      );
+    }
+    return stars;
+  };
+
+  // 날짜 포맷팅 헬퍼 함수
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
     <Layout>
@@ -349,6 +501,61 @@ const ProductDetail = () => {
               </>
             )}
           </DetailSection>
+        )}
+
+        {/* 리뷰 섹션 */}
+        {reviewData && (
+          <ReviewSection>
+            <SectionTitle>리뷰</SectionTitle>
+            
+            <ReviewHeader>
+              <ReviewSummary>
+                <AverageRating>{reviewData.averageRating.toFixed(1)}</AverageRating>
+                <StarRating>
+                  {renderStars(Math.round(reviewData.averageRating))}
+                </StarRating>
+              </ReviewSummary>
+              <TotalReviews>
+                총 {reviewData.totalReviews}개의 리뷰
+              </TotalReviews>
+            </ReviewHeader>
+
+            {reviewData.reviews.length > 0 ? (
+              <ReviewList>
+                {reviewData.reviews.map((review) => (
+                  <ReviewItem key={review.id}>
+                    <ReviewHeaderItem>
+                      <ReviewerInfo>
+                        <ReviewerName>{review.userName}</ReviewerName>
+                        <ReviewDate>{formatDate(review.createdAt)}</ReviewDate>
+                      </ReviewerInfo>
+                      <ReviewRating>
+                        {renderStars(review.rating, 'small')}
+                      </ReviewRating>
+                    </ReviewHeaderItem>
+                    
+                    <ReviewContent>{review.content}</ReviewContent>
+                    
+                    {review.images && review.images.length > 0 && (
+                      <ReviewImages>
+                        {review.images.map((image, index) => (
+                          <ReviewImage 
+                            key={index} 
+                            src={image} 
+                            alt={`리뷰 이미지 ${index + 1}`} 
+                          />
+                        ))}
+                      </ReviewImages>
+                    )}
+                  </ReviewItem>
+                ))}
+              </ReviewList>
+            ) : (
+              <NoReviews>
+                아직 리뷰가 없습니다.
+              </NoReviews>
+            )}
+          </ReviewSection>
         )}
       </ProductContainer>
     </Layout>
