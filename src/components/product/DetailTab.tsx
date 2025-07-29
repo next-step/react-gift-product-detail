@@ -11,10 +11,12 @@ interface Props {
 const TABS = ["상품설명", "선물후기", "상세정보"] as const;
 
 export const DetailTab = ({ productId }: Props) => {
-  const [selected, setSelected] = useState<(typeof TABS)[number]>("상품설명");
+  const [selectedTab, setSelectedTab] = useState<(typeof TABS)[number]>("상품설명");
 
   const { data: detail } = useProductDetail(productId);
   const { data: reviewData } = useProductReview(productId);
+
+  if (!detail) return null;
 
   return (
     <Wrapper>
@@ -22,8 +24,8 @@ export const DetailTab = ({ productId }: Props) => {
         {TABS.map((tab) => (
           <TabButton
             key={tab}
-            isActive={selected === tab}
-            onClick={() => setSelected(tab)}
+            isActive={selectedTab === tab}
+            onClick={() => setSelectedTab(tab)}
           >
             {tab}
           </TabButton>
@@ -31,15 +33,17 @@ export const DetailTab = ({ productId }: Props) => {
       </TabHeader>
 
       <TabContent>
-        {selected === "상품설명" && (
+        {selectedTab === "상품설명" && (
+          // HTML 형태로 전달되는 상품 설명을 그대로 렌더링하고
+          // 서버에서 내려온 콘텐츠는 신뢰된 데이터로 간주!!
           <Description
             dangerouslySetInnerHTML={{
-              __html: detail?.description ?? "상품 설명이 없습니다.",
+              __html: detail.description ?? "상품 설명이 없습니다.",
             }}
           />
         )}
 
-        {selected === "선물후기" && (
+        {selectedTab === "선물후기" && (
           reviewData?.reviews?.length ? (
             <InfoList>
               {reviewData.reviews.map((review) => (
@@ -54,8 +58,8 @@ export const DetailTab = ({ productId }: Props) => {
           )
         )}
 
-        {selected === "상세정보" && (
-          Array.isArray(detail?.announcements) && detail.announcements.length > 0 ? (
+        {selectedTab === "상세정보" && (
+          detail.announcements.length > 0 ? (
             <InfoList>
               {detail.announcements.map((info) => (
                 <li key={info.name}>
