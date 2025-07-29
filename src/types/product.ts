@@ -15,6 +15,23 @@ export interface ProductSummary {
   };
 }
 
+// 상품 정보
+export interface ProductInfo {
+  id: number;
+  name: string;
+  price: {
+    basicPrice: number;
+    sellingPrice: number;
+    discountRate: number;
+  };
+  imageURL: string;
+  brandInfo: {
+    id: number;
+    name: string;
+    imageURL: string;
+  };
+}
+
 // 상세 정보
 export interface ProductDetail {
   description: string;

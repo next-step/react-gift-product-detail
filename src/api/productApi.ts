@@ -1,5 +1,5 @@
 import API from './axiosInstance';
-import type { ProductSummary, ProductDetail, WishResponse, HighlightReviewResponse } from '@/types/product';
+import type { ProductSummary, ProductInfo, ProductDetail, WishResponse, HighlightReviewResponse } from '@/types/product';
 
 //상품 요약 정보
 export const fetchProductSummary = async (id: number): Promise<ProductSummary> => {
@@ -8,8 +8,8 @@ export const fetchProductSummary = async (id: number): Promise<ProductSummary> =
 };
 
 //상품 기본 정보 조회
-export const fetchProductInfo = async (id: number): Promise<ProductSummary> => {
-  const res = await API.get(`/api/products/${id}`);
+export const fetchProductInfo = async (productId: number): Promise<ProductInfo> => {
+  const res = await API.get(`/api/products/${productId}`);
   return res.data.data;
 };
 

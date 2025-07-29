@@ -8,7 +8,7 @@ import My from '@/pages/My';
 import NotFound from '@/pages/NotFound';
 import Order from '@/pages/Order';
 import Theme from '@/pages/Theme';
-import ProductDetail from '@/pages/ProductDetail';
+import ProductDetail from '@/pages/Product';
 import { AuthProvider } from '@/context/AuthContext';
 
 export const Router = () => {
@@ -20,7 +20,7 @@ export const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/my" element={<My />} />
           <Route path="/order" element={<Order />} />
-          <Route path="/productDetail" element={<ProductDetail />} />
+          <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/theme/:themeId" element={<Theme />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

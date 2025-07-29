@@ -1,0 +1,35 @@
+import { useParams } from 'react-router-dom';
+import { useProductInfo } from '@/hooks/useProductInfo';
+
+import {
+  ProductImage,
+  ProductName,
+  ProductPrice,
+  BrandWrapper,
+  BrandImage,
+  BrandName,
+} from '@/components/product/ProductInfoContent.style';
+import Gap from '@/components/common/Gap.style';
+
+const ProductInfoContent = () => {
+  const { productId } = useParams();
+  const id = Number(productId);
+  const { data } = useProductInfo(id);
+
+  return (
+    <>
+      <ProductImage src={data.imageURL} alt={data.name} />
+      <Gap height={20} />
+      <ProductName>{data.name}</ProductName>
+      <Gap height={8} />
+      <ProductPrice>{data.price.sellingPrice.toLocaleString()}원</ProductPrice>
+      <Gap height={16} />
+      <BrandWrapper>
+        <BrandImage src={data.brandInfo.imageURL} alt={data.name} />
+        <BrandName>{data.brandInfo.name}</BrandName>
+      </BrandWrapper>
+    </>
+  );
+};
+
+export default ProductInfoContent;
