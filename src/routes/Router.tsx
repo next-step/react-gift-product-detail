@@ -15,7 +15,6 @@ export const ROUTE_PATH = {
   ORDER: "/order/:productId",
   THEME: "/themes/:themeId",
   PRODUCT:"/product/:productId"
-
 };
 const router = createBrowserRouter([
   { path: ROUTE_PATH.HOME, element: <Main /> },

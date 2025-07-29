@@ -49,7 +49,6 @@ const Theme = () => {
   const { themeId } = useParams();
   const themeIdNumber = Number(themeId);
   const navigate = useNavigate();
-
   const { ref, inView } = useInView({
     threshold: 0.5,
   });

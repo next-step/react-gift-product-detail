@@ -12,7 +12,6 @@ import OrderBtn from '@/components/order/OrderBtn';
 import CardSelector from '@/components/order/CardSelector';
 import ReceiverModal from '@/components/order/receivermodal/ReceiverModal';
 import ReceiverList from '@/components/order/receiverlist/ReceiverList';
-
 import { useAuth } from '@/contexts/AuthContext';
 import type { OrderFormData } from '@/components/order/receiverlist/types';
 import { ROUTE_PATH } from '@/routes/Router';
@@ -61,6 +60,7 @@ const Order = () => {
     isLoading,
     error,
   } = useQuery({
+
     queryFn: () => fetchProductSummary(product_id),
     queryKey: ['productSummary', productId],
   });
@@ -106,6 +106,7 @@ const Order = () => {
       setValue('cardMessage', selectedCard.message);
     }
   }, [selectedCard, setValue]);
+
   const handleClickOrderBtn = handleSubmit((formData) => {
     const body = {
       productId: product_id,
@@ -120,6 +121,7 @@ const Order = () => {
   if (isOrderPosting || !summaryData || !user?.name) return <div>로딩중.....</div>;
 
   const productPrice = summaryData.price;
+
   const receiversTotalQuantity = receivers.reduce((sum, r) => sum + r.quantity, 0);
   const totalPrice = productPrice * receiversTotalQuantity;
 

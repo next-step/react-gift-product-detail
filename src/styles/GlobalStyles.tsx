@@ -42,13 +42,10 @@ button{
   padding: 0;
   cursor: pointer;
 
-
 }
 img{
   width:100%;
 }
-
-
         /* 폰트 적용 */
         * {
           font-family:

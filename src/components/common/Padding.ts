@@ -21,6 +21,7 @@ export const Padding5 = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.spacing.spacing5};
 `;
+
 export const PaddingMd = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.spacing.spacing8};
