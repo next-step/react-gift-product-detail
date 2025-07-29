@@ -1,5 +1,6 @@
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import TheHeader from "@/components/layout/TheHeader";
+import ProductsInfoSection from "@/components/products/ProductsInfoSection";
 import withUser from "@/hoc/withUser";
 import useProductsQueries from "@/hooks/useProductsQueries";
 import styled from "@emotion/styled";
@@ -24,7 +25,15 @@ const ProductPage = () => {
   return (
     <>
       <TheHeader />
-      <Main></Main>
+      <Main>
+        <ProductsInfoSection
+          name={products.name}
+          imageURL={products.imageURL}
+          price={products.price.sellingPrice}
+          brandName={products.brandInfo.name}
+          brandImageURL={products.brandInfo.imageURL}
+        />
+      </Main>
     </>
   );
 };
