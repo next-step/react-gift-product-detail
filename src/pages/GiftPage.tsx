@@ -15,8 +15,8 @@ import type { GiftItem } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getThemes, getRanking } from '@/api/services';
-import { useFetch } from '@/hooks/useFetch';
 import { RankingGridSkeleton } from '@/components/RankingGridSkeleton';
+import { useQuery } from '@tanstack/react-query';
 
 export const GiftPage = () => {
   const [gender, setGender] = useState<GenderFilter>('ALL');
@@ -24,19 +24,21 @@ export const GiftPage = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const { data: categories, isLoading: isCategoriesLoading, error: categoriesError } = useFetch(getThemes);
-
-  const { data: rankingList, isLoading: isRankingLoading, error: rankingError } = useFetch(
-    () => getRanking(gender, sort),
-    [gender, sort]
-  );
+  const { data: categories, isLoading: isCategoriesLoading, error: categoriesError } = useQuery({
+    queryKey: ['themes'],
+    queryFn: getThemes,
+  });
+  const { data: rankingList, isLoading: isRankingLoading, error: rankingError } = useQuery({
+    queryKey: ['ranking', gender, sort],
+    queryFn: () => getRanking(gender, sort),
+  });
 
   const handleCardClick = (item: GiftItem) => {
     if (!isLoggedIn) {
       alert('로그인이 필요해요.');
       navigate('/login');
     } else {
-      navigate(`/order/${item.id}`);
+      navigate(`/product/${item.id}`);
     }
   };
 

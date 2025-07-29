@@ -8,10 +8,9 @@ import { RankingGrid } from '@/components/RankingGrid';
 import { RankingGridSkeleton } from '@/components/RankingGridSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { getThemeInfo, getThemeProducts } from '@/api/services';
+import { getThemeProducts } from '@/api/services';
 import type { GiftItem } from '@/types';
 import { css } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
 import { useThemeInfoQuery } from '@/hooks/queries/useThemeInfoQuery';
 
 const centeredMessage = css`
@@ -56,7 +55,7 @@ const ThemePage = () => {
   }, [themeInfoError, navigate]);
 
   const handleCardClick = (item: GiftItem) => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
 
   if (isThemeInfoLoading) {
