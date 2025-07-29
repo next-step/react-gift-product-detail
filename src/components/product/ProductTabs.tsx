@@ -113,7 +113,7 @@ const ProductTabs = () => {
       case '상세정보':
         return (
           <DetailInfoContainer>
-            {announcements
+            {[...announcements]
               .sort((a, b) => a.displayOrder - b.displayOrder)
               .map(({ name, value }) => (
                 <InfoRow key={name}>
