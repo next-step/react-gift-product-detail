@@ -30,18 +30,18 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
     queryFn: () => getProductsRanking({ targetType, rankType }),
   });
 
-  if (data?.length === 0) {
+  if (data.length === 0) {
     return <RankingListEmpty />;
   }
 
   return (
     <Container>
       <Content>
-        {data?.slice(0, viewCount).map((item, index) => (
+        {data.slice(0, viewCount).map((item, index) => (
           <Item key={item.id} to={generatePath(ROUTE_PATH.PRODUCT, { productId: String(item.id) })}>
             <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
             <ItemContent>
-              <ItemContentImg src={item.imageURL} />
+              <ItemContentImg src={item.imageURL} alt={item.name} />
               <ItemContentBrand>{item.brandInfo.name}</ItemContentBrand>
               <ItemContentTitle>{item.name}</ItemContentTitle>
               <ItemContentPrice>
