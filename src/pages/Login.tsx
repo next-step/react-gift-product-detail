@@ -11,7 +11,7 @@ const LoginWrapper = styled.div`
   justify-content: center;
   min-height: 0;
   width: 100%;
-  padding: 32px 0 24px 0;
+  padding: ${({ theme }) => theme.spacing.xxxl} 0 ${({ theme }) => theme.spacing.xxl} 0;
   box-sizing: border-box;
 `;
 
@@ -21,6 +21,7 @@ const Logo = styled.h1`
   margin-bottom: 48px;
   letter-spacing: 1px;
   text-align: center;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
 `;
 
 const Form = styled.form`
@@ -28,10 +29,10 @@ const Form = styled.form`
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: ${({ theme }) => theme.spacing.xxl};
   @media (min-width: 720px) {
     max-width: 400px;
-    gap: 32px;
+    gap: ${({ theme }) => theme.spacing.xxxl};
   }
 `;
 
@@ -40,42 +41,42 @@ const Input = styled.input`
   font-size: 1.2rem;
   padding: 18px 0 8px 0;
   border: none;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray.gray400};
   outline: none;
-  color: #222;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
   background: transparent;
   &::placeholder {
-    color: #b0b3ba;
+    color: ${({ theme }) => theme.colors.semantic.textPlaceholder};
     font-size: 1.2rem;
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #e74c3c;
+  color: ${({ theme }) => theme.colors.red.red700};
   font-size: 1.6rem;
   margin-top: -24px;
-  margin-bottom: 8px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
   min-height: 24px;
 `;
 
 const LoginButton = styled.button`
   width: 100%;
-  background: #f7e244;
-  color: #222;
+  background: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
   font-size: 1.2rem;
   font-weight: 500;
   border: none;
   border-radius: 10px;
   padding: 18px 0;
-  margin-top: 24px;
+  margin-top: ${({ theme }) => theme.spacing.xxl};
   cursor: pointer;
   transition: background 0.2s;
   &:hover {
-    background: #ffe14a;
+    background: ${({ theme }) => theme.colors.semantic.kakaoYellowHover};
   }
   &:disabled {
-    background: #f0f0f0;
-    color: #b0b3ba;
+    background: ${({ theme }) => theme.colors.semantic.backgroundDisabled};
+    color: ${({ theme }) => theme.colors.semantic.textDisabled};
     cursor: not-allowed;
   }
 `;

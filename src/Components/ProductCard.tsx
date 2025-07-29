@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 
 const Card = styled.div`
-  background: #fff;
-  border-radius: 12px;
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
-  padding: 12px;
+  padding: ${({ theme }) => theme.spacing.card.padding};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -13,8 +13,8 @@ const Card = styled.div`
   transition: transform 0.2s, box-shadow 0.2s;
   
   @media (min-width: 480px) {
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+    padding: ${({ theme }) => theme.spacing.card.paddingLarge};
   }
   
   @media (min-width: 768px) {
@@ -30,46 +30,46 @@ const Card = styled.div`
 const ProductImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1;
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
   object-fit: cover;
-  background: #eee;
-  margin-bottom: 12px;
+  background: ${({ theme }) => theme.colors.gray.gray300};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
   
   @media (min-width: 480px) {
-    border-radius: 12px;
+    border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
     margin-bottom: 14px;
   }
 `;
 
 const RankBadge = styled.span`
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #e74c3c;
-  color: #fff;
+  top: ${({ theme }) => theme.spacing.md};
+  left: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.red.red700};
+  color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
   font-weight: 700;
   font-size: 1.1rem;
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
   padding: 2px 10px;
   z-index: 2;
 `;
 
 const BrandName = styled.div`
   font-size: 0.8rem;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   margin-bottom: 6px;
   font-weight: 500;
   
   @media (min-width: 480px) {
     font-size: 0.9rem;
-    margin-bottom: 8px;
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
   }
 `;
 
 const ProductName = styled.div`
   font-size: 1rem;
   font-weight: 600;
-  color: #222;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
   margin-bottom: 10px;
   line-height: 1.4;
   display: -webkit-box;
@@ -79,21 +79,21 @@ const ProductName = styled.div`
   
   @media (min-width: 480px) {
     font-size: 1.1rem;
-    margin-bottom: 12px;
+    margin-bottom: ${({ theme }) => theme.spacing.md};
   }
 `;
 
 const PriceSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing.sm};
   margin-top: auto;
 `;
 
 const SellingPrice = styled.div`
   font-size: 1.1rem;
   font-weight: 700;
-  color: #222;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
   
   @media (min-width: 480px) {
     font-size: 1.2rem;
@@ -102,7 +102,7 @@ const SellingPrice = styled.div`
 
 const BasicPrice = styled.div`
   font-size: 0.9rem;
-  color: #999;
+  color: ${({ theme }) => theme.colors.gray.gray600};
   text-decoration: line-through;
   
   @media (min-width: 480px) {
@@ -112,7 +112,7 @@ const BasicPrice = styled.div`
 
 const DiscountRate = styled.div`
   font-size: 0.8rem;
-  color: #e74c3c;
+  color: ${({ theme }) => theme.colors.red.red700};
   font-weight: 600;
   
   @media (min-width: 480px) {

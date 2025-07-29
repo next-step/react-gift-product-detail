@@ -11,32 +11,32 @@ import { ERROR_CODES } from '@/constants/errors';
 const HeroSection = styled.div<{ backgroundColor?: string }>`
   width: 100%;
   min-height: 300px;
-  background-color: ${({ backgroundColor }) => backgroundColor || '#f7f7fa'};
+  background-color: ${({ backgroundColor, theme }) => backgroundColor || theme.colors.gray.gray100};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 60px 20px;
+  padding: 60px ${({ theme }) => theme.spacing.layout.containerPadding};
   text-align: left;
 `;
 
 const ThemeCategory = styled.div`
   font-size: 1rem;
-  color: #666;
-  margin-bottom: 8px;
+  color: ${({ theme }) => theme.colors.gray.gray700};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
   font-weight: 500;
 `;
 
 const ThemeTitle = styled.h1`
   font-size: 2.5rem;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 16px;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 const ThemeDescription = styled.p`
   font-size: 1.2rem;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   max-width: 600px;
   line-height: 1.6;
 `;
@@ -47,7 +47,7 @@ const LoadingMessage = styled.div`
   align-items: center;
   min-height: 300px;
   font-size: 1.2rem;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
 const ErrorMessage = styled.div`
@@ -56,27 +56,27 @@ const ErrorMessage = styled.div`
   align-items: center;
   min-height: 300px;
   font-size: 1.2rem;
-  color: #e74c3c;
+  color: ${({ theme }) => theme.colors.red.red700};
 `;
 
 const ProductsSection = styled.div`
-  padding: 40px 20px;
+  padding: 40px ${({ theme }) => theme.spacing.layout.containerPadding};
 `;
 
 const ProductsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.grid.gap};
   margin-bottom: 40px;
   
   @media (min-width: 480px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: ${({ theme }) => theme.spacing.grid.gapLarge};
   }
   
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: ${({ theme }) => theme.spacing.xxl};
   }
 `;
 
@@ -86,7 +86,7 @@ const LoadingIndicator = styled.div`
   align-items: center;
   padding: 40px;
   font-size: 1.1rem;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
 const EmptyMessage = styled.div`
@@ -95,7 +95,7 @@ const EmptyMessage = styled.div`
   align-items: center;
   min-height: 300px;
   font-size: 1.2rem;
-  color: #666;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   text-align: center;
 `;
 

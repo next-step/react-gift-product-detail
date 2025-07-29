@@ -1,9 +1,11 @@
 import { colors } from "./Color";
 import { typography } from "./Typography";
+import { spacing } from "./Spacing";
 
 export const theme = {
   colors,
   typography,
+  spacing,
 };
 
 export type AppTheme = typeof theme;
