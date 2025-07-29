@@ -1,53 +1,43 @@
-import useFetch from "@/hooks/useFetch"
-import { ThemeProductListResponse } from "@/interfaces/ThemeProductListResponse"
-import { useEffect } from "react"
-import { useState } from "react"
-import { Product } from "@/interfaces/Product"
-import { useCallback } from "react"
-import { fetchThemeProducts } from "@/functions/fetchThemeProduct"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import type { ThemeProductListResponse } from "@/interfaces/ThemeProductListResponse"
+import type { Product } from "@/interfaces/Product"
+import useFetch from "./useFetch"
 
-export default function useThemeProduct(themeId: string, limit = 12) {
-  const [products, setProducts] = useState<Product[]>([])
-  const [cursor, setCursor] = useState<number | null>(null)
-  const [hasMore, setHasMore] = useState(true)
-  const [isFetching, setIsFetching] = useState(false)
-
+function useThemeProduct(themeId: string, limit = 12) {
   const baseUrl = import.meta.env.VITE_BASE_URL
-  const url = new URL(`/api/themes/${themeId}/products`, baseUrl)
-  url.searchParams.append("limit", String(limit))
 
-  const { data, loading, error } = useFetch<ThemeProductListResponse>(
-    url.toString(),
-    {
-      dependencies: [themeId],
-    }
-  )
-  useEffect(() => {
-    if (!loading && data?.data) {
-      setProducts(data.data.list)
-      setCursor(data.data.cursor ?? null)
-      setHasMore(data.data.hasMoreList)
-    }
-  }, [loading, data])
+  const {
+    data,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    error,
+  } = useInfiniteQuery<ThemeProductListResponse>({
+    queryKey: ["themeProducts", themeId],
+    enabled: !!themeId,
+    initialPageParam: null,
+    getNextPageParam: (last) =>
+      last.data.hasMoreList ? last.data.cursor : undefined,
+    queryFn: async ({ pageParam = null }) => {
+      const url = new URL(`/api/themes/${themeId}/products`, baseUrl)
+      url.searchParams.append("limit", String(limit))
+      if (pageParam !== null)
+        url.searchParams.append("cursor", String(pageParam))
+      return useFetch<ThemeProductListResponse>(url.toString())
+    },
+  })
 
-  const fetchMore = useCallback(async () => {
-    if (!hasMore || isFetching) return
-    setIsFetching(true)
-    try {
-      const res = await fetchThemeProducts(themeId, cursor)
-      setProducts((prev) => [...prev, ...res.list])
-      setCursor(res.cursor)
-      setHasMore(res.hasMoreList)
-    } finally {
-      setIsFetching(false)
-    }
-  }, [themeId, cursor, hasMore])
+  const products: Product[] = data?.pages.flatMap((p) => p.data.list) ?? []
+
   return {
-      products,
-       hasMore,
-       loadingInitial: loading,      
-       error,
-       isFetching,                      
-       fetchMore,
-     }
+    products,
+    loadingInitial: isLoading,
+    isFetching: isFetchingNextPage,
+    hasMore: !!hasNextPage,
+    fetchMore: fetchNextPage,
+    error,
+  }
 }
+
+export default useThemeProduct

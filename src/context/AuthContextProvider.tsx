@@ -1,16 +1,14 @@
-import { useState } from "react"
-import { AuthContext, type AuthContextType } from "@/context/AuthContext"
+import React, { useCallback } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
-
-type AuthContextProviderProps = {
-  children: React.ReactNode
-}
+import { AuthContext, AuthContextType } from "./AuthContext"
 
 const STORAGE_KEYS = {
   token: "authToken",
   email: "email",
   name: "name",
 } as const
+
 interface LoginResponse {
   code: number
   data: {
@@ -20,73 +18,77 @@ interface LoginResponse {
   }
   error?: string
 }
-export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [authToken, setAuthToken] = useState<string | null>(
-    localStorage.getItem(STORAGE_KEYS.token)
-  )
-  const [email, setEmail] = useState<string>(
-    localStorage.getItem(STORAGE_KEYS.email) ?? ""
-  )
-  const [name, setName] = useState<string>(
-    localStorage.getItem(STORAGE_KEYS.name) ?? ""
-  )
-  const isLoggedIn = !!authToken
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    try {
-      if (!email || !password) return false
+interface AuthContextProviderProps {
+  children: React.ReactNode
+}
 
+export function AuthContextProvider({ children }: AuthContextProviderProps) {
+  const qc = useQueryClient()
+
+  const loginMutation = useMutation<
+    LoginResponse["data"],
+    Error,
+    { email: string; password: string }
+  >({
+    mutationFn: async ({ email, password }) => {
       const baseUrl = import.meta.env.VITE_BASE_URL
       const loginUrl = new URL("/api/login", baseUrl).toString()
-
-      const response = await axios.post<LoginResponse>(loginUrl, {
+      const { data } = await axios.post<LoginResponse>(loginUrl, {
         email,
         password,
       })
+      return data.data
+    },
+    onSuccess: (data) => {
+      qc.setQueryData(["auth"], data)
 
-      console.log("response", response)
-      if (response.status === 200 || response.status === 201) {
-        const { authToken, email, name } = response.data.data
+      localStorage.setItem(STORAGE_KEYS.token, data.authToken)
+      localStorage.setItem(STORAGE_KEYS.email, data.email)
+      localStorage.setItem(STORAGE_KEYS.name, data.name)
+    },
+  })
 
-        setAuthToken(authToken)
-        setEmail(email)
-        setName(name)
-
-        localStorage.setItem(STORAGE_KEYS.token, authToken)
-        localStorage.setItem(STORAGE_KEYS.email, email)
-        localStorage.setItem(STORAGE_KEYS.name, name)
-
+  const login = useCallback(
+    async (email: string, password: string) => {
+      if (!email || !password) return false
+      try {
+        await loginMutation.mutateAsync({ email, password })
         console.log("로그인 성공")
         return true
-      } else {
-        console.log("다른 응답입니다.")
+      } catch (e) {
+        console.error("로그인 실패", e)
         return false
       }
-    } catch (error) {
-      console.log("@kakao.com 이메일 주소만 가능합니다.")
-      return false
-    }
-  }
+    },
+    [loginMutation]
+  )
 
-  const logout = () => {
-    setAuthToken(null)
-    setEmail("")
-    setName("")
+  const logout = useCallback(() => {
+    qc.removeQueries({ queryKey: ["auth"] })
 
     localStorage.removeItem(STORAGE_KEYS.token)
     localStorage.removeItem(STORAGE_KEYS.email)
     localStorage.removeItem(STORAGE_KEYS.name)
 
     console.log("logout 완료")
-  }
+  }, [qc])
 
+  const cached = (qc.getQueryData<LoginResponse["data"]>([
+    "auth",
+  ]) as LoginResponse["data"]) ?? {
+    authToken: localStorage.getItem(STORAGE_KEYS.token),
+    email: localStorage.getItem(STORAGE_KEYS.email) ?? "",
+    name: localStorage.getItem(STORAGE_KEYS.name) ?? "",
+  }
   const value: AuthContextType = {
-    isLoggedIn,
-    email,
-    authToken,
-    name,
+    isLoggedIn: !!cached.authToken,
+    authToken: cached.authToken,
+    email: cached.email,
+    name: cached.name,
     login,
     logout,
+    isLoggingIn: loginMutation.isPending,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

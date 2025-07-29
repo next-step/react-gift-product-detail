@@ -12,8 +12,10 @@ import { ROUTES } from "@/constants/routes"
 import getRoute from "@/functions/getRoute"
 import useQueryState from "@/hooks/useQueryState"
 import Loading from "./PresentTheme/Loading"
-import useFetch from "@/hooks/useFetch"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
 import ProductsResponse from "@/interfaces/ProductResponse"
+
 const VISIBLE_COUNT = 6
 
 const ProductGrid = () => {
@@ -41,23 +43,16 @@ const ProductGrid = () => {
   )
 
   const rankingUrlObj = new URL("/api/products/ranking", baseUrl)
-
   rankingUrlObj.searchParams.set("targetType", targetType)
   rankingUrlObj.searchParams.set("rankType", rankType)
-
   const rankingUrl = rankingUrlObj.toString()
-  const { data: productsData, loading } = useFetch<ProductsResponse>(
-    rankingUrl,
-    {
-      dependencies: [rankType, targetType],
-      onSuccess: (data) => {
-        console.log("Products fetched:", data)
-      },
-      onError: (error) => {
-        console.log("Error fetching products:", error)
-      },
-    }
-  )
+
+  const { data: productsData, isLoading: loading } = useQuery<ProductsResponse>({
+    queryKey: ["products", "ranking", rankType, targetType],
+    queryFn: () => axios.get<ProductsResponse>(rankingUrl).then((res) => res.data),
+    enabled: !!rankType && !!targetType,
+  })
+
   const products = productsData?.data || []
   const visibleProducts = useMemo(() => {
     const count = showAll ? products.length : VISIBLE_COUNT

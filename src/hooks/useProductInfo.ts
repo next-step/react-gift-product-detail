@@ -1,18 +1,26 @@
-import useFetch from "@/hooks/useFetch"
-
+import { useQuery } from "@tanstack/react-query"
 import ProductsResponseSingle from "@/interfaces/ProductResponseSingle"
-
-export default function useProductInfo(productId?: string) {
+import { AxiosError } from "axios"
+import useFetch from "./useFetch"
+function useProductInfo(productId?: string) {
   const baseUrl = import.meta.env.VITE_BASE_URL
-  const url = new URL(`/api/products/${productId}/summary`, baseUrl).toString()
+  const url = productId
+    ? new URL(`/api/products/${productId}/summary`, baseUrl).toString()
+    : ""
 
-  const { data, loading, error } = useFetch<ProductsResponseSingle>(url, {
-    dependencies: [productId],
+  const { data, isLoading, error } = useQuery<
+    ProductsResponseSingle,
+    AxiosError
+  >({
+    queryKey: ["productInfo", productId],
+    queryFn: () => useFetch<ProductsResponseSingle>(url),
+    enabled: !!productId,
   })
 
   return {
     product: data?.data,
-    loading,
+    loading: isLoading,
     error,
   }
 }
+export default useProductInfo
