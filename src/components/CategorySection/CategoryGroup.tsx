@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import CategoryContent from '@/components/CategorySection/CategoryContent';
+import WithSuspenseBoundary from '@/components/common/WithSuspenseBoundary';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 const CategoryGroup = () => {
   return (
@@ -7,7 +9,11 @@ const CategoryGroup = () => {
       <TitleWrapper>
         <Title>선물 테마</Title>
       </TitleWrapper>
-      <CategoryContent />
+      <WithSuspenseBoundary
+        fallbackMessage={ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}
+      >
+        <CategoryContent />
+      </WithSuspenseBoundary>
     </Section>
   );
 };

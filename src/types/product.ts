@@ -21,3 +21,30 @@ export interface ProductSummary {
   price: number;
   imageURL: string;
 }
+
+export interface Announcement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
+export interface ProductDetail {
+  description: string;
+  announcements?: Announcement[];
+}
+
+export interface ProductWish {
+  wishCount: number;
+  isWished: boolean;
+}
+
+export interface Review {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface HighlightReview {
+  totalCount: number;
+  reviews: Review[];
+}

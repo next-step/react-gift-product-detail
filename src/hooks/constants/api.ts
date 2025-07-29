@@ -27,3 +27,27 @@ export const getThemeProductsPath = (themeId: string | number): string =>
 
 export const getThemeProductsUrl = (themeId: string | number): string =>
   `${BASE_URL}${getThemeProductsPath(themeId)}`;
+
+export const getProductInfoPath = (productId: string | number): string =>
+  `/api/products/${productId}`;
+
+export const getProductInfoUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductInfoPath(productId)}`;
+
+export const getProductDetailPath = (productId: string | number): string =>
+  `/api/products/${productId}/detail`;
+
+export const getProductDetailUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductDetailPath(productId)}`;
+
+export const getProductWishPath = (productId: string | number): string =>
+  `/api/products/${productId}/wish`;
+
+export const getProductWishUrl = (productId: string | number): string =>
+  `${BASE_URL}${getProductWishPath(productId)}`;
+
+export const getHighlightReviewPath = (productId: string | number): string =>
+  `/api/products/${productId}/highlight-review`;
+
+export const getHighlightReviewUrl = (productId: string | number): string =>
+  `${BASE_URL}${getHighlightReviewPath(productId)}`;

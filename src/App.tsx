@@ -7,6 +7,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import MyPage from '@/pages/Mypage';
 import OrderPage from '@/pages/OrderPage';
 import PrivateRoute from '@/routes/PrivateRoute';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 import { ROUTES } from '@/constants/routes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,6 +23,10 @@ function App() {
           <Route path={ROUTES.THEME_PATH} element={<ThemePage />} />
           <Route element={<PrivateRoute />}>
             <Route path={ROUTES.MY} element={<MyPage />} />
+            <Route
+              path={ROUTES.PRODUCT_DETAIL_PATH}
+              element={<ProductDetailPage />}
+            />
             <Route path={ROUTES.ORDER_PATH} element={<OrderPage />} />
           </Route>
           <Route path={ROUTES.NOT_FOUND} element={<NotFoundPage />} />

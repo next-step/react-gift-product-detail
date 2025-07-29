@@ -1,39 +1,29 @@
 import styled from '@emotion/styled';
-import { ERROR_MESSAGES } from '@/constants/validation';
-import { useCategoryThemes } from '@/hooks/useCategoryThemes';
 import { useNavigate } from 'react-router-dom';
+import { useCategoryThemes } from '@/hooks/useCategoryThemes';
 import { ROUTES } from '@/constants/routes';
-import { loading } from '@/components/common/Loading';
-import WithApiUi from '@/components/common/WithApiUi';
+import { ERROR_MESSAGES } from '@/constants/validation';
 
 const CategoryContent = () => {
-  const { data: themes, isError } = useCategoryThemes();
+  const { data: themes } = useCategoryThemes();
   const navigate = useNavigate();
 
+  if (themes.length === 0) {
+    return <EmptyText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</EmptyText>;
+  }
+
   return (
-    <WithApiUi
-      data={themes ?? null}
-      error={isError}
-      loading={loading}
-      errorFallback={
-        <EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>
-      }
-      emptyFallback={
-        <EmptyText>{ERROR_MESSAGES.NO_THEMES_AVAILABLE}</EmptyText>
-      }
-    >
-      <Grid>
-        {themes?.map(theme => (
-          <Item
-            key={theme.themeId}
-            onClick={() => navigate(ROUTES.THEME(theme.themeId))}
-          >
-            <CategoryImage src={theme.image} alt={theme.name} />
-            <CategoryText>{theme.name}</CategoryText>
-          </Item>
-        ))}
-      </Grid>
-    </WithApiUi>
+    <Grid>
+      {themes.map(theme => (
+        <Item
+          key={theme.themeId}
+          onClick={() => navigate(ROUTES.THEME(theme.themeId))}
+        >
+          <CategoryImage src={theme.image} alt={theme.name} />
+          <CategoryText>{theme.name}</CategoryText>
+        </Item>
+      ))}
+    </Grid>
   );
 };
 
