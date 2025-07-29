@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
-import { useProductInfo, useProductDetail, useProductHighlightReview } from '@/api/productDetail';
+import { useProductInfo, useProductDetail, useProductHighlightReview, useProductWish, useToggleWish } from '@/api/productDetail';
 
 const ProductContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
@@ -313,6 +313,70 @@ const NoReviews = styled.div`
   font-size: 1rem;
 `;
 
+// 관심 등록 버튼 스타일
+const WishButton = styled.button<{ isWished: boolean }>`
+  position: fixed;
+  bottom: ${({ theme }) => theme.spacing.lg};
+  right: ${({ theme }) => theme.spacing.lg};
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: ${({ theme, isWished }) => 
+    isWished ? theme.colors.red.red700 : theme.colors.semantic.backgroundDefault
+  };
+  color: ${({ theme, isWished }) => 
+    isWished ? theme.colors.semantic.backgroundDefault : theme.colors.gray.gray700
+  };
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  z-index: 1000;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  @media (min-width: 768px) {
+    bottom: ${({ theme }) => theme.spacing.xl};
+    right: ${({ theme }) => theme.spacing.xl};
+  }
+`;
+
+const WishCount = styled.div`
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: ${({ theme }) => theme.colors.red.red700};
+  color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+  line-height: 1;
+`;
+
+const WishButtonContainer = styled.div`
+  position: relative;
+`;
+
 const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -336,8 +400,16 @@ const ProductDetail = () => {
     error: reviewError
   } = useProductHighlightReview(id);
 
-  const isLoading = productLoading || detailLoading || reviewLoading;
-  const hasError = productError || detailError || reviewError;
+  const {
+    data: wishData,
+    isLoading: wishLoading,
+    error: wishError
+  } = useProductWish(id);
+
+  const toggleWishMutation = useToggleWish(id);
+
+  const isLoading = productLoading || detailLoading || reviewLoading || wishLoading;
+  const hasError = productError || detailError || reviewError || wishError;
 
   if (isLoading) {
     return (
@@ -393,9 +465,34 @@ const ProductDetail = () => {
     });
   };
 
+  // 관심 등록 토글 핸들러
+  const handleToggleWish = async () => {
+    try {
+      await toggleWishMutation.mutateAsync();
+    } catch (error) {
+      console.error('관심 등록 토글 실패:', error);
+    }
+  };
+
   return (
     <Layout>
       <ProductContainer>
+        {/* 관심 등록 버튼 */}
+        {wishData && (
+          <WishButtonContainer>
+            <WishButton
+              isWished={wishData.isWished}
+              onClick={handleToggleWish}
+              disabled={toggleWishMutation.isPending}
+              aria-label={wishData.isWished ? '관심 해제' : '관심 등록'}
+            >
+              {wishData.isWished ? '❤️' : '🤍'}
+            </WishButton>
+            {wishData.wishCount > 0 && (
+              <WishCount>{wishData.wishCount}</WishCount>
+            )}
+          </WishButtonContainer>
+        )}
         <ProductImage src={product.imageURL} alt={product.name} />
         
         <BrandName>{product.brandInfo.name}</BrandName>
@@ -416,6 +513,25 @@ const ProductDetail = () => {
             </>
           )}
         </PriceSection>
+
+        {/* 관심 등록 정보 */}
+        {wishData && (
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            marginBottom: '16px',
+            fontSize: '0.9rem',
+            color: '#666'
+          }}>
+            <span>❤️ {wishData.wishCount}명이 관심 등록</span>
+            {wishData.isWished && (
+              <span style={{ color: '#e74c3c', fontWeight: '600' }}>
+                (내가 관심 등록함)
+              </span>
+            )}
+          </div>
+        )}
 
         <Description>{product.description}</Description>
         
