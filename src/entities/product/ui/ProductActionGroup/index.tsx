@@ -3,12 +3,15 @@ import { Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config';
 import { useParams } from 'react-router-dom';
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { getProductWish } from '@/entities/product/api/productApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { productQueryKeys } from '@/entities/product/api/queryKeys';
 import type { ProductWish } from '@/entities/product/model/types';
 
-export const ProductActionGroup = () => {
+interface ProductActionGroupProps {
+  wishData: ProductWish;
+}
+
+export const ProductActionGroup = ({ wishData }: ProductActionGroupProps) => {
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
   const numericProductId = productId ? Number(productId) : undefined;
@@ -17,11 +20,6 @@ export const ProductActionGroup = () => {
   if (!numericProductId) {
     return null;
   }
-
-  const { data: wishData } = useSuspenseQuery<ProductWish>({
-    queryKey: productQueryKeys.wish(numericProductId),
-    queryFn: () => getProductWish(numericProductId),
-  });
 
   const wishMutation = useMutation({
     mutationFn: async (nextWished: boolean) => {

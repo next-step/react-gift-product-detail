@@ -43,8 +43,6 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DescriptionContent>
-              {' '}
-              {/* description은 응답이 json이 아닌 html코드를 문자열로 담은 형식 */}
               {data.description ? parse(data.description) : ''}
             </S.DescriptionContent>
           </S.TabContent>
@@ -53,7 +51,7 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DetailContent>
-              {reviewData?.reviews?.map(review => (
+              {reviewData.reviews?.map(review => (
                 <S.DetailItem key={review.id}>
                   <S.DetailName>{review.authorName}</S.DetailName>
                   <S.DetailValue>{review.content}</S.DetailValue>
