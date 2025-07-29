@@ -108,6 +108,7 @@ const ItemContent = styled.div`
 `;
 const ItemContentImg = styled.img`
   width: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center center;
   border-radius: 4px;
