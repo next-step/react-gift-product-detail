@@ -9,6 +9,7 @@ import {
   StyledPresentRankingNumContainer,
 } from '@src/components/Home/PresentRanking/Item/StyledPresentRankingItem';
 import type { Good } from '@src/types/Goods';
+import { Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 interface Props {
   goods: Good[] | null;
@@ -24,7 +25,6 @@ const PresentProductList = ({
   goods,
   isVisible = false,
   showRankingNumber = false,
-  isLoading = true,
   isError = false,
 }: Props) => {
   const navigate = useNavigate();
@@ -38,14 +38,11 @@ const PresentProductList = ({
       navigate(`${URLS.order}/${item.id}`);
     }
   };
-  if (isLoading) {
-    return <div>Loading</div>;
-  } else if (isError || !goods) {
+  if (isError || !goods) {
     return <StyledPresentRankingItemDiv>상품 없음</StyledPresentRankingItemDiv>;
-  }
-  if (goods && showRankingNumber) {
+  } else if (goods && showRankingNumber) {
     return (
-      <>
+      <Suspense fallback={<div>Loading</div>}>
         {goods &&
           goods.slice(0, repeatCnt).map((item: Good, index: number) => (
             <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
@@ -66,11 +63,11 @@ const PresentProductList = ({
               </StyledPresentRankingItemDiv>
             </div>
           ))}
-      </>
+      </Suspense>
     );
   } else {
     return (
-      <>
+      <Suspense fallback={<div>Loading</div>}>
         {goods.map((item, index) => (
           <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
             <StyledPresentRankingItemDiv>
@@ -90,7 +87,7 @@ const PresentProductList = ({
             </StyledPresentRankingItemDiv>
           </div>
         ))}
-      </>
+      </Suspense>
     );
   }
 };

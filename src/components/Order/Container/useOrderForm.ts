@@ -16,11 +16,7 @@ export const useOrderForm = () => {
 
   const { productId } = useParams<{ productId: string }>();
 
-  const {
-    goodSummary: selectedProduct,
-    isError: isProductError,
-    isLoading: isLoadingProduct,
-  } = useGetOrderForm(productId);
+  const { goodSummary: selectedProduct, isError: isProductError } = useGetOrderForm(productId);
 
   useEffect(() => {
     if (isProductError) {
@@ -84,7 +80,6 @@ export const useOrderForm = () => {
 
   return {
     selectedProduct,
-    isLoadingProduct,
     isProductError,
     isOrderError,
     orderErrorMessage: orderError?.message,
