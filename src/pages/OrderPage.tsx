@@ -246,6 +246,13 @@ const OrderPage = () => {
   const [receivers, setReceivers] = useState<Receiver[]>([]);
   const createOrderMutation = useCreateOrderMutation();
 
+  // 로그인 체크
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: `/order/${productId}` } });
+    }
+  }, [isAuthenticated, navigate, productId]);
+
   // 에러 발생 시 홈으로 이동
   if (productError) {
     toast.error(productError.message);
@@ -299,13 +306,6 @@ const OrderPage = () => {
       }
     );
   };
-
-  // 로그인 체크
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login', { state: { from: `/order/${productId}` } });
-    }
-  }, [isAuthenticated, navigate, productId]);
 
   // 받는 사람 전체 수량 합계 계산
   const totalQuantity = receivers.reduce((sum, r) => sum + (r.quantity || 0), 0);
