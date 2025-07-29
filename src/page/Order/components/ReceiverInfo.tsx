@@ -1,7 +1,7 @@
 import { phoneNumberRegex } from '@/page/Login/utils/validateLogin';
+import type { OrderInfoValues } from '@/types';
 import styled from '@emotion/styled';
 import { type UseFieldArrayReturn, type UseFormReturn } from 'react-hook-form';
-import type { OrderInfoValues } from '..';
 
 const DeleteIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" stroke="black">

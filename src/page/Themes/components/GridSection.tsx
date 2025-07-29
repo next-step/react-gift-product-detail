@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import type { ItemData } from '..';
+import type { ItemData } from '@/types';
 import ProductBox from './Item';
 import useThemeItems from '../hooks/useThemeItems';
 
 const GridSection = () => {
-  const { items, hasMore, loader } = useThemeItems();
+  const { items, hasMore, observerRef } = useThemeItems();
 
   if (!hasMore && !items.length) {
     return <Container>상품이 없습니다.</Container>;
@@ -16,7 +16,7 @@ const GridSection = () => {
         {items.map((item: ItemData) => (
           <ProductBox key={item.id} item={item} />
         ))}
-        <div ref={loader} />
+        <div ref={observerRef} />
       </GridContainer>
     </Container>
   );

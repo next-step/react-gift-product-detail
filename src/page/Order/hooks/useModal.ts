@@ -1,5 +1,5 @@
+import type { OrderInfoValues } from '@/types';
 import { useFieldArray, useForm } from 'react-hook-form';
-import type { OrderInfoValues } from '..';
 
 interface UseModalProps {
   receiverInfos: OrderInfoValues['receiverInfos'];

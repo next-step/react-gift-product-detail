@@ -1,15 +1,8 @@
 import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
+import type { ProductSummaryData } from '@/types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-export interface ProductSummaryData {
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-  imageURL: string;
-}
 
 const useRanking = (id: string) => {
   const navigate = useNavigate();

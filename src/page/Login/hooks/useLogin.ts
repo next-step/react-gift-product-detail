@@ -1,17 +1,7 @@
 import { requests } from '@/api/requests';
 import { useUserInfo } from '@/contexts/UserInfoContext';
+import type { UserInfoProps } from '@/types';
 import { toast } from 'react-toastify';
-
-export interface UserInfoProps {
-  username: { value: string };
-  password: { value: string };
-}
-
-export interface UserInfoData {
-  name: string;
-  email: string;
-  authToken: string;
-}
 
 const useLogin = () => {
   const { setLoginSession } = useUserInfo();
@@ -22,7 +12,12 @@ const useLogin = () => {
       setLoginSession(userInfoData);
       toast(userInfoData.email);
       return true;
-    } catch {
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('알 수 없는 오류가 발생했습니다.');
+      }
       return false;
     }
   };

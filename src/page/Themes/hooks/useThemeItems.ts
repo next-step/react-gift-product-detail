@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ItemData } from '..';
+import type { ItemData } from '@/types';
 import { requests } from '@/api/requests';
-import useObserver from './useObserver';
+import useIntersectionObserver from './useIntersectionObserver';
 
 const useThemeItems = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,9 +28,9 @@ const useThemeItems = () => {
       console.error('Error fetching more items:', error);
     }
   };
-  const { loader } = useObserver({ items, hasMore, loadMore });
+  const observerRef = useIntersectionObserver({ onIntersect: loadMore, enable: hasMore });
 
-  return { items, hasMore, loader };
+  return { items, hasMore, observerRef };
 };
 
 export default useThemeItems;

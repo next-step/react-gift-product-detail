@@ -1,4 +1,4 @@
-import type { UserInfoData } from '@/page/Login/hooks/useLogin';
+import type { UserInfoData } from '@/types';
 import parseUserFromSessionStorage from '@/utils/parseUserFromSessionStorage';
 import { createContext, useContext, useState, type PropsWithChildren } from 'react';
 

@@ -1,7 +1,7 @@
 import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
+import type { OrderInfoValues } from '@/types';
 import axios from 'axios';
-import type { OrderInfoValues } from '..';
 
 export interface postOrderInfoProps {
   orderData: OrderInfoValues;

@@ -1,12 +1,17 @@
-import type { UserInfoData, UserInfoProps } from '@/page/Login/hooks/useLogin';
+import type {
+  UserInfoData,
+  UserInfoProps,
+  GiftRankingItem,
+  RankingApiProps,
+  OrderInfoValues,
+  ProductSummaryData,
+  ThemeInfo,
+  ThemeIdInfoData,
+  ThemeIdItemsData,
+} from '@/types';
 import { apiClient } from './apiClient';
-import type { GiftRankingItem, RankingApiProps } from '@/page/Home/hooks/useRanking';
-import type { OrderInfoValues } from '@/page/Order';
-import type { ProductSummaryData } from '@/page/Order/hooks/useRnaking';
-import type { ThemeInfo } from '@/page/Home/hooks/useTheme';
-import type { ThemeIdInfoData, ThemeIdItemsData } from '@/page/Themes';
 
-export interface FetchOrderProps {
+interface FetchOrderProps {
   orderData: OrderInfoValues;
   id: string;
 }

@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import useRanking from './useRnaking';
 import { useUserInfo } from '@/contexts/UserInfoContext';
-import type { OrderInfoValues } from '..';
 import { toast } from 'react-toastify';
 import postOrderInfo from '../utils/postOrderInfo';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { useForm } from 'react-hook-form';
+import type { OrderInfoValues } from '@/types';
 
 const useOrderForm = () => {
   const { id } = useParams<{ id: string }>();

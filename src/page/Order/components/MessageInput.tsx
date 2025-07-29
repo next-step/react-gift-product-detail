@@ -1,5 +1,5 @@
+import type { OrderInfoValues } from '@/types';
 import styled from '@emotion/styled';
-import type { OrderInfoValues } from '..';
 import { useFormContext } from 'react-hook-form';
 
 const MessageInput = () => {

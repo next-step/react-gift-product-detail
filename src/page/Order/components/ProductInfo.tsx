@@ -1,5 +1,5 @@
+import type { ProductSummaryData } from '@/types';
 import styled from '@emotion/styled';
-import type { ProductSummaryData } from '../hooks/useRnaking';
 
 const ProductInfo = ({ productSummaryData }: { productSummaryData: ProductSummaryData }) => {
   const { name, brandName, price, imageURL } = productSummaryData;

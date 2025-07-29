@@ -1,31 +1,6 @@
 import { requests } from '@/api/requests';
-import type { FilterId, GenerationId } from '@/data/categoryDatas';
+import type { GiftRankingItem, RankingApiProps } from '@/types';
 import { useEffect, useState } from 'react';
-
-interface BrandInfo {
-  id: number;
-  name: string;
-  imageURL: string;
-}
-
-interface PriceInfo {
-  basicPrice: number;
-  sellingPrice: number;
-  discountRate: number;
-}
-
-export interface GiftRankingItem {
-  id: number;
-  name: string;
-  price: PriceInfo;
-  imageURL: string;
-  brandInfo: BrandInfo;
-}
-
-export interface RankingApiProps {
-  activeGenerationButton: GenerationId;
-  activeFilterButton: FilterId;
-}
 
 const useRanking = ({ activeGenerationButton, activeFilterButton }: RankingApiProps) => {
   const [rankingDatas, setRankingDatas] = useState<GiftRankingItem[]>([]);

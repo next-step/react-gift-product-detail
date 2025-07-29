@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { ThemeIdInfoData } from '..';
+import type { ThemeIdInfoData } from '@/types';
 import axios from 'axios';
 import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
