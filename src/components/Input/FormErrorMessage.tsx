@@ -1,10 +1,21 @@
-import styled from "@emotion/styled";
+import { Typography } from "@/components/Typography/Typography";
 
-export const ErrorMessage = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.red[700]};
-  margin-left: ${({ theme }) => theme.spacing[1]};
-  margin-top: 2px;
-`;
+interface ErrorMessageProps {
+  children: React.ReactNode;
+}
+
+export const ErrorMessage = ({ children }: ErrorMessageProps) => {
+  return (
+    <Typography
+      variant="label2Regular"
+      as="p"
+      color="critical"
+      style={{
+        marginLeft: "0.25rem",
+        marginTop: "2px",
+      }}
+    >
+      {children}
+    </Typography>
+  );
+};

@@ -3,27 +3,11 @@ import Layout from "@/layout";
 import { getUserName } from "@/utils/auth";
 import styled from "@emotion/styled";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Typography } from "@/components/Typography/Typography";
 
 const MyPageContainer = styled.div`
   padding: ${({ theme }) => theme.spacing[4]} 0 0
     ${({ theme }) => theme.spacing[4]};
-`;
-
-const Title = styled.h2`
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  margin-bottom: ${({ theme }) => theme.spacing[4]};
-`;
-
-const Greeting = styled.div`
-  font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
-  font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
-  margin-bottom: ${({ theme }) => theme.spacing[1]};
-`;
-
-const Email = styled.div`
-  font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
-  margin-bottom: ${({ theme }) => theme.spacing[7]};
 `;
 
 const LogoutButton = styled.button`
@@ -55,9 +39,19 @@ function MyPage() {
   return (
     <Layout>
       <MyPageContainer>
-        <Title>마이 페이지</Title>
-        <Greeting>{userName}님 안녕하세요!</Greeting>
-        <Email>이메일 주소는 {user?.email}입니다.</Email>
+        <Typography
+          variant="title2Bold"
+          as="h2"
+          style={{ marginBottom: "1rem" }}
+        >
+          마이 페이지
+        </Typography>
+        <Typography variant="body1Regular" style={{ marginBottom: "0.25rem" }}>
+          {userName}님 안녕하세요!
+        </Typography>
+        <Typography variant="body1Regular" style={{ marginBottom: "1.75rem" }}>
+          이메일 주소는 {user?.email}입니다.
+        </Typography>
         <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
       </MyPageContainer>
     </Layout>

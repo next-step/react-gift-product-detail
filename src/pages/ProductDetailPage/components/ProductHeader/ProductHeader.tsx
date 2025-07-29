@@ -3,33 +3,37 @@ import {
   ProductDetailContainer,
   ProductImage,
   ProductInfoContainer,
-  ProductName,
   ProductPrice,
-  ProductPriceUnit,
   Divider,
   BrandInfoContainer,
   BrandImage,
-  BrandName,
 } from "./ProductHeader.styles";
 import type { ThemeProduct } from "@/types/ThemeProducts";
+import { Typography } from "@/components/Typography/Typography";
 
 function ProductHeader({ data }: { data: ThemeProduct }) {
   return (
     <ProductDetailContainer>
       <ProductImage src={data.imageURL} alt={data.name} />
       <ProductInfoContainer>
-        <ProductName>{data.name}</ProductName>
+        <Typography variant="title1Bold" as="h1" color="default">
+          {data.name}
+        </Typography>
         <ProductPrice>
-          {data.price.sellingPrice}
-          <ProductPriceUnit>
+          <Typography variant="title1Bold" as="span" color="default">
+            {data.price.sellingPrice}
+          </Typography>
+          <Typography variant="title1Regular" as="span" color="default">
             {PRODUCT_DETAIL_LABELS.PRICE_UNIT}
-          </ProductPriceUnit>
+          </Typography>
         </ProductPrice>
       </ProductInfoContainer>
       <Divider />
       <BrandInfoContainer>
         <BrandImage src={data.brandInfo.imageURL} alt={data.brandInfo.name} />
-        <BrandName>{data.brandInfo.name}</BrandName>
+        <Typography variant="body1Regular" as="p" color="default">
+          {data.brandInfo.name}
+        </Typography>
       </BrandInfoContainer>
     </ProductDetailContainer>
   );

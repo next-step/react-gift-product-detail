@@ -2,13 +2,13 @@ import {
   AddIcon,
   AddIconWrapper,
   BannerCard,
-  BannerMessage,
   GiftBannerSection,
 } from "./GiftBanner.styles";
 import PlusIconSvg from "./icons/plus.svg";
 import { GIFT_BANNER_LABELS } from "./constants/labels";
 import { useAuth } from "@/contexts/AuthContext";
 import { getUserName } from "@/utils/auth";
+import { Typography } from "@/components/Typography/Typography";
 
 function GiftBanner() {
   const { user, isLoggedIn } = useAuth();
@@ -23,7 +23,9 @@ function GiftBanner() {
         <AddIconWrapper>
           <AddIcon src={PlusIconSvg} />
         </AddIconWrapper>
-        <BannerMessage>{bannerMessage}</BannerMessage>
+        <Typography variant="title2Bold" as="p">
+          {bannerMessage}
+        </Typography>
       </BannerCard>
     </GiftBannerSection>
   );

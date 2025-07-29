@@ -22,15 +22,3 @@ export const BannerCard = styled.div`
   background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
   border-radius: ${({ theme }) => theme.borderRadius.md};
 `;
-
-export const SectionTitle = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.label.label1Bold.fontWeight};
-`;
-
-export const SectionSubTitle = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.gray[700]};
-`;

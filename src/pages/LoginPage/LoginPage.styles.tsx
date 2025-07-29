@@ -9,14 +9,6 @@ export const LoginContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background.default};
 `;
 
-export const KakaoLogo = styled.h1`
-  font-size: 2.5rem;
-  font-weight: ${({ theme }) =>
-    theme.typography.title.title1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-  margin-bottom: 3rem;
-`;
-
 export const LoginForm = styled.form`
   display: flex;
   flex-direction: column;

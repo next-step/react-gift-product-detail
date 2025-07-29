@@ -34,12 +34,6 @@ export const ModalHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing[4]};
 `;
 
-export const ModalTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
 export const ModalBody = styled.div`
   flex: 1;
 `;
@@ -48,13 +42,6 @@ export const InfoTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing[1]};
-`;
-
-export const InfoText = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.gray[800]};
 `;
 
 export const AddSection = styled.div`

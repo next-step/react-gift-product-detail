@@ -5,9 +5,10 @@ import {
   TRENDING_GIFTS_LABELS,
 } from "./constants/labels";
 import ProductCard from "@/components/ProductCard/ProductCard";
-import { MoreInfo, MoreInfoWrapper } from "./TrendingGifts.styles";
+import { MoreInfoWrapper } from "./TrendingGifts.styles";
 import { PRODUCT_GRID_TYPES } from "@/components/ProductCard/types/productGridTypes";
 import EmptyProductContainer from "@/components/ProductCard/EmptyProductContainer";
+import { Typography } from "@/components/Typography/Typography";
 
 const ProductGridContainer = styled.div`
   width: 95%;
@@ -44,7 +45,9 @@ function TrendingGiftsProductsGrid({ products }: ProductsGridPropsType) {
         ))}
       </ProductGridContainer>
       <MoreInfoWrapper>
-        <MoreInfo>{TRENDING_GIFTS_LABELS.MORE_INFO}</MoreInfo>
+        <Typography variant="label1Regular" as="p">
+          {TRENDING_GIFTS_LABELS.MORE_INFO}
+        </Typography>
       </MoreInfoWrapper>
     </>
   );

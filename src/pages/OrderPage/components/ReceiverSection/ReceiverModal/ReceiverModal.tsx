@@ -12,10 +12,8 @@ import {
   ModalContent,
   ModalOverlay,
   ModalHeader,
-  ModalTitle,
   ModalBody,
   InfoTextContainer,
-  InfoText,
   AddSection,
   AddSectionButton,
   ModalFooter,
@@ -24,6 +22,7 @@ import {
   ReceiverList,
 } from "./ReceiverModal.styles";
 import type { Receiver } from "@/types/Receiver";
+import { Typography } from "@/components/Typography/Typography";
 
 interface FormData {
   receivers: Receiver[];
@@ -76,14 +75,18 @@ function ReceiverModal({
     <ModalOverlay>
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>{RECEIVER_MODAL_CONSTANTS.MODAL_TITLE}</ModalTitle>
+          <Typography variant="title1Bold" as="h2" color="default">
+            {RECEIVER_MODAL_CONSTANTS.MODAL_TITLE}
+          </Typography>
         </ModalHeader>
         <ModalBody>
           <InfoTextContainer>
-            <InfoText>
+            <Typography variant="label2Regular" as="p" color="sub">
               {RECEIVER_MODAL_CONSTANTS.INFO_TEXT_MAX_COUNT(MAX_RECEIVERS)}
-            </InfoText>
-            <InfoText>{RECEIVER_MODAL_CONSTANTS.INFO_TEXT_DUPLICATE}</InfoText>
+            </Typography>
+            <Typography variant="label2Regular" as="p" color="sub">
+              {RECEIVER_MODAL_CONSTANTS.INFO_TEXT_DUPLICATE}
+            </Typography>
           </InfoTextContainer>
 
           <AddSection>

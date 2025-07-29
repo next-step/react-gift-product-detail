@@ -43,20 +43,6 @@ export const ProductInfo = styled.div`
   gap: ${({ theme }) => theme.spacing[1]};
 `;
 
-export const BrandName = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-  color: ${({ theme }) => theme.colors.gray[600]};
-`;
-
-export const ProductName = styled.h4`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-`;
-
 export const ProductPrice = styled.p`
   font-size: ${({ theme }) => theme.typography.subtitle.subtitle1Bold.fontSize};
-`;
-
-export const PriceAmount = styled.span`
-  font-weight: ${({ theme }) =>
-    theme.typography.subtitle.subtitle1Bold.fontWeight};
 `;

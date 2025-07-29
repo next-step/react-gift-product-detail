@@ -1,15 +1,16 @@
 import { RECEIVER_SECTION_CONSTANTS } from "../../../constants/receiverSection";
-import { NoReceiversContent, NoReceiversLabel } from "./NoReceiver.styles.tsx";
+import { NoReceiversContent } from "./NoReceiver.styles.tsx";
+import { Typography } from "@/components/Typography/Typography";
 
 function NoReceiver() {
   return (
     <NoReceiversContent>
-      <NoReceiversLabel>
+      <Typography variant="label1Regular" as="p" color="sub">
         {RECEIVER_SECTION_CONSTANTS.NO_RECEIVERS_MESSAGE}
-      </NoReceiversLabel>
-      <NoReceiversLabel>
+      </Typography>
+      <Typography variant="label1Regular" as="p" color="sub">
         {RECEIVER_SECTION_CONSTANTS.ADD_RECEIVER_GUIDE}
-      </NoReceiversLabel>
+      </Typography>
     </NoReceiversContent>
   );
 }

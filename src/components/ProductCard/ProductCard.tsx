@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import {
-  BrandName,
-  PriceAmount,
   ProductCardContainer,
   ProductImage,
   ProductInfo,
-  ProductName,
   ProductPrice,
   RankBadge,
 } from "./ProductCard.styles";
@@ -15,6 +12,7 @@ import {
   PRODUCT_GRID_TYPES,
   type ProductGridType,
 } from "./types/productGridTypes";
+import { Typography } from "@/components/Typography/Typography";
 
 export interface ProductCardPropsType {
   id: number;
@@ -55,11 +53,18 @@ function ProductCard({
       )}
       <ProductImage src={imageURL} alt={name} />
       <ProductInfo>
-        <BrandName>{brandName}</BrandName>
-        <ProductName>{name}</ProductName>
+        <Typography variant="label1Regular" as="p" color="sub">
+          {brandName}
+        </Typography>
+        <Typography variant="label1Regular" as="h4">
+          {name}
+        </Typography>
       </ProductInfo>
       <ProductPrice>
-        <PriceAmount>{sellingPrice.toLocaleString()}</PriceAmount> 원
+        <Typography variant="subtitle1Bold" as="span">
+          {sellingPrice.toLocaleString()}
+        </Typography>{" "}
+        원
       </ProductPrice>
     </ProductCardContainer>
   );

@@ -2,11 +2,9 @@ import type { TrendingGiftsType } from "@/types/TrendingGiftsType";
 import {
   TrendingGiftsSection,
   TitleWarpper,
-  SectionTitle,
   TabsWrapper,
   MainTabButton,
   TabIconContainer,
-  TabLabel,
 } from "./TrendingGifts.styles";
 import { LocalStorageProvider } from "@/pages/HomePage/context/TabStorageContext";
 import { useMainTab, useSubTab } from "@/pages/HomePage/hooks/useTabStorage";
@@ -24,13 +22,16 @@ import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
 import { Suspense } from "react";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { FallbackMessage } from "@/components/Error/FallbackMessage/FallbackMessage";
+import { Typography } from "@/components/Typography/Typography";
 
 function TrendingGifts() {
   return (
     <LocalStorageProvider>
       <TrendingGiftsSection>
         <TitleWarpper>
-          <SectionTitle>{TRENDING_GIFTS_LABELS.SECTION_TITLE}</SectionTitle>
+          <Typography variant="title1Bold" as="h2">
+            {TRENDING_GIFTS_LABELS.SECTION_TITLE}
+          </Typography>
         </TitleWarpper>
         <TrendingGiftsContent />
       </TrendingGiftsSection>
@@ -50,7 +51,13 @@ function TrendingGiftsContent() {
             <TabIconContainer isSelected={idx === mainTabIdx}>
               {el.ICON}
             </TabIconContainer>
-            <TabLabel isSelected={idx === mainTabIdx}>{el.NAME}</TabLabel>
+            <Typography
+              variant={idx === mainTabIdx ? "label1Bold" : "label1Regular"}
+              as="p"
+              color={idx === mainTabIdx ? "info" : "sub"}
+            >
+              {el.NAME}
+            </Typography>
           </MainTabButton>
         ))}
       </TabsWrapper>

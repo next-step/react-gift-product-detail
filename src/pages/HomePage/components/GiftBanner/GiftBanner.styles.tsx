@@ -44,8 +44,3 @@ export const AddIcon = styled.img`
   width: 20px;
   height: 20px;
 `;
-
-export const BannerMessage = styled.p`
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
-`;

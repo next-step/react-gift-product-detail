@@ -9,12 +9,6 @@ export const ProductSection = styled.section`
   padding-bottom: 4.7rem;
 `;
 
-export const SectionTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
 export const ProductContainer = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing[3]};
@@ -39,35 +33,10 @@ export const ProductDetails = styled.div`
   gap: ${({ theme }) => theme.spacing[1]};
 `;
 
-export const ProductName = styled.h3`
-  font-size: ${({ theme }) => theme.typography.body.body2Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body.body2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-  line-height: 1.4;
-`;
-
-export const BrandName = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.gray[700]};
-`;
-
 export const PriceContainer = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing[1]};
   margin-top: ${({ theme }) => theme.spacing[2]};
-`;
-
-export const PriceLabel = styled.span`
-  font-size: ${({ theme }) => theme.typography.body.body2Regular.fontSize};
-  color: ${({ theme }) => theme.colors.gray[700]};
-`;
-
-export const Price = styled.span`
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
 `;
 
 export const OrderButtonContainer = styled.div`
