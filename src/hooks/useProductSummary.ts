@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { fetchProductSummary } from "../api/product";
 import type { ProductSummary } from "../types/product";
+import { isErrorWithStatus, isClientError } from "../utils/errorHandling";
 
 export const useProductSummary = (productId: number) => {
   const [product, setProduct] = useState<ProductSummary | null>(null);
@@ -18,13 +19,13 @@ export const useProductSummary = (productId: number) => {
       .then((data) => {
         setProduct(data);
       })
-      .catch((err: any) => {
+      .catch((err: unknown) => {
         const errorMessage =
-          err.message || "제품 정보를 불러오는데 실패했습니다.";
+          err instanceof Error ? err.message : "제품 정보를 불러오는데 실패했습니다.";
         setError(errorMessage);
 
         // 4XX 에러 시 Toast로 에러 메시지 표시하고 홈으로 리다이렉트
-        if (err.status && err.status >= 400 && err.status < 500) {
+        if (isErrorWithStatus(err) && isClientError(err.status)) {
           toast.error(errorMessage);
           navigate("/", { replace: true });
         } else {

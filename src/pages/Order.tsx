@@ -5,10 +5,11 @@ import { Layout } from "@/Components/layout/Layout";
 import styled from "@emotion/styled";
 import { cardTemplates } from "@/Components/cardTemplates";
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProductSummary } from "@/hooks/useProductSummary";
 import { useOrder } from "@/hooks/useOrder";
 import { getUserInfo } from "@/utils/storage";
+import { useLoginContext } from "@/hooks/useLoginContext";
 
 // ===== 타입 정의 및 Zod 스키마 =====
 const receiverSchema = z.object({
@@ -338,8 +339,9 @@ const Order = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const productId = id ? parseInt(id) : 0;
+  const { isLoggedIn } = useLoginContext();
 
-  // Custom Hooks 사용
+  // 모든 hooks를 early return 이전에 호출
   const {
     product,
     loading: productLoading,
@@ -392,6 +394,26 @@ const Order = () => {
     name: "receivers",
   });
 
+  // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login", {
+        state: { redirect: `/order/${productId}` },
+      });
+    }
+  }, [isLoggedIn, navigate, productId]);
+
+  // 로그인이 안 되어 있으면 로딩 상태 표시
+  if (!isLoggedIn) {
+    return (
+      <Layout>
+        <div style={{ textAlign: "center", padding: "50px" }}>
+          로그인 페이지로 이동 중...
+        </div>
+      </Layout>
+    );
+  }
+
   // 모달 열기: 기존 데이터 복사
   const openReceiverModal = () => {
     modalReset({ receivers: watch("receivers") });
@@ -418,14 +440,6 @@ const Order = () => {
 
   // 주문 제출 핸들러
   const onSubmit = async (data: OrderFormValues) => {
-    // 로그인 체크 - 주문 시에만 확인
-    if (!userInfo?.authToken) {
-      navigate("/login", {
-        state: { redirect: `/order/${productId}` },
-      });
-      return;
-    }
-
     // 주문 데이터 준비
     const orderData = {
       productId: productId,
@@ -439,7 +453,7 @@ const Order = () => {
       })),
     };
 
-    const result = await order(orderData, userInfo.authToken);
+    const result = await order(orderData, userInfo!.authToken);
     if (result) {
       // 주문 성공 시 처리 (예: 주문 완료 페이지로 이동)
       console.log("주문 성공:", result);

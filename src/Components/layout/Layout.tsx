@@ -9,7 +9,7 @@ interface LayoutProps {
 const Wrapper = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
   display: flex;
   flex-direction: column;
 
@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 const Content = styled.div`
   flex: 1;
   width: 100%;
-  padding: 0 16px;
+  padding: 0 ${({ theme }) => theme.spacing.layout.containerPadding};
   box-sizing: border-box;
   @media (min-width: 720px) {
     padding: 0 32px;

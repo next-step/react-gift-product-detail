@@ -39,17 +39,18 @@ export const useIntersectionObserver = (
   useEffect(() => {
     if (!enabled || !ref.current) return;
 
+    const currentRef = ref.current;
     const observer = new IntersectionObserver(handleIntersection, {
       root,
       rootMargin,
       threshold,
     });
 
-    observer.observe(ref.current);
+    observer.observe(currentRef);
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [handleIntersection, root, rootMargin, threshold, enabled]);

@@ -11,7 +11,8 @@ export function useInput<T = string>(
     const newValue = e.target.value as T;
     setValue(newValue);
 
-    if (error && validator) {
+    // 실시간 검증 (에러가 있거나 값이 변경될 때)
+    if (validator) {
       const validationError = validator(newValue);
       setError(validationError);
     }

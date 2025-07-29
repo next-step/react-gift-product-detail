@@ -1,4 +1,4 @@
-import { useLoginContext } from "@/contexts/LoginContext";
+import { useLoginContext } from "@/hooks/useLoginContext";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Layout } from "@/Components/layout/Layout";
