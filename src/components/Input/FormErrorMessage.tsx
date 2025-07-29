@@ -9,7 +9,7 @@ export const ErrorMessage = ({ children }: ErrorMessageProps) => {
     <Typography
       variant="label2Regular"
       as="p"
-      color="critical"
+      color="status-critical"
       style={{
         marginLeft: "0.25rem",
         marginTop: "2px",

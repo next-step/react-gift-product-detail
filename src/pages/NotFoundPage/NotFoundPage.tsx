@@ -24,7 +24,7 @@ function NotFoundPage() {
         <Typography
           variant="title1Bold"
           as="h1"
-          color="default"
+          color="text-default"
           textAlign="center"
           style={{ marginBottom: "0.75rem" }}
         >
@@ -34,7 +34,7 @@ function NotFoundPage() {
         <Typography
           variant="body1Regular"
           as="p"
-          color="sub"
+          color="text-sub"
           textAlign="center"
           style={{ marginBottom: "3.5rem" }}
         >

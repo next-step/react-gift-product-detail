@@ -19,28 +19,32 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
 
   border: 1px solid
     ${({ theme, hasError }) =>
-      hasError ? theme.colors.status.critical : theme.colors.border.default};
+      hasError
+        ? theme.colors.status["status-critical"]
+        : theme.colors.border["border-default"]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
 
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 
   &:focus {
     outline: none;
     border-color: ${({ theme, hasError }) =>
       hasError
-        ? theme.colors.status.critical
+        ? theme.colors.status["status-critical"]
         : theme.components.form.focusBorderColor};
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors.text.sub};
+    color: ${({ theme }) => theme.colors.text["text-sub"]};
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.colors.background.disabled};
-    color: ${({ theme }) => theme.colors.text.disabled};
+    background-color: ${({ theme }) =>
+      theme.colors.background["background-disabled"]};
+    color: ${({ theme }) => theme.colors.text["text-disabled"]};
     cursor: not-allowed;
   }
 `;

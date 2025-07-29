@@ -8,7 +8,8 @@ export const Divider = styled.div`
 export const ProductDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const ProductImage = styled.img`
@@ -26,7 +27,7 @@ export const ProductInfoContainer = styled.div`
 export const ProductPrice = styled.p`
   font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
 
 export const BrandInfoContainer = styled.div`

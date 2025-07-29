@@ -54,7 +54,7 @@ function TrendingGiftsContent() {
             <Typography
               variant={idx === mainTabIdx ? "label1Bold" : "label1Regular"}
               as="p"
-              color={idx === mainTabIdx ? "info" : "sub"}
+              color={idx === mainTabIdx ? "status-info" : "text-sub"}
             >
               {el.NAME}
             </Typography>

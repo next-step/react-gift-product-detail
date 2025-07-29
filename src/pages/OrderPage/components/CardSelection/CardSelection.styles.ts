@@ -6,7 +6,8 @@ export const CardSelectorContainer = styled.div`
   padding-top: ${({ theme }) => theme.spacing[3]};
   padding-bottom: ${({ theme }) => theme.spacing[1]};
 
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
   overflow-x: scroll;
   white-space: nowrap;
 
@@ -50,7 +51,8 @@ export const CardPreviewContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${({ theme }) => theme.spacing[10]};
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 
   padding-top: ${({ theme }) => theme.spacing[4]};
 
@@ -72,7 +74,9 @@ export const MessageTextArea = styled.textarea<{ hasError: boolean }>`
 
   border: 1px solid
     ${({ hasError, theme }) =>
-      hasError ? theme.colors.status.critical : theme.colors.gray[400]};
+      hasError
+        ? theme.colors.status["status-critical"]
+        : theme.colors.gray[400]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   resize: none;
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
@@ -82,7 +86,7 @@ export const MessageTextArea = styled.textarea<{ hasError: boolean }>`
     outline: none;
     border-color: ${({ hasError, theme }) =>
       hasError
-        ? theme.colors.status.critical
+        ? theme.colors.status["status-critical"]
         : theme.components.form.focusBorderColor};
   }
 `;

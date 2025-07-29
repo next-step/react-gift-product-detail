@@ -53,7 +53,7 @@ function ProductCard({
       )}
       <ProductImage src={imageURL} alt={name} />
       <ProductInfo>
-        <Typography variant="label1Regular" as="p" color="sub">
+        <Typography variant="label1Regular" as="p" color="text-sub">
           {brandName}
         </Typography>
         <Typography variant="label1Regular" as="h4">

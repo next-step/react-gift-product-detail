@@ -10,7 +10,8 @@ export const NotFoundContainer = styled.div`
   );
   padding-top: ${({ theme }) => theme.spacing[16]};
 
-  background-color: ${({ theme }) => theme.colors.background.disabled};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-disabled"]};
 `;
 
 export const CharacterImage = styled.img`
@@ -26,8 +27,8 @@ export const HomeButton = styled.button`
   height: 48px;
 
   border: none;
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
-  color: ${({ theme }) => theme.colors.text.default};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 
   font-size: ${({ theme }) =>
     theme.typography.subtitle.subtitle1Regular.fontSize};
@@ -36,10 +37,12 @@ export const HomeButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.brand.kakaoYellowHover};
+    background-color: ${({ theme }) =>
+      theme.colors.brand["brand-kakaoYellowHover"]};
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.colors.brand.kakaoYellowPressed};
+    background-color: ${({ theme }) =>
+      theme.colors.brand["brand-kakaoYellowPressed"]};
   }
 `;

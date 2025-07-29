@@ -44,7 +44,7 @@ function LoginPage() {
         <Typography
           variant="title1Regular"
           as="h1"
-          color="default"
+          color="text-default"
           style={{
             fontSize: "2.5rem",
             marginBottom: "3rem",

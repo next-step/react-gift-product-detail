@@ -19,6 +19,6 @@ export const BannerCard = styled.div`
   padding: ${({ theme }) => theme.spacing[4]};
   gap: 5px;
 
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
   border-radius: ${({ theme }) => theme.borderRadius.md};
 `;

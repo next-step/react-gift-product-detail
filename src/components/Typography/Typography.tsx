@@ -15,7 +15,7 @@ type Props = {
 export const Typography = ({
   children,
   variant = "body1Regular",
-  color = "default",
+  color = "text-default",
   as = "p",
   width,
   textAlign,
@@ -57,7 +57,8 @@ type VariantKeys =
 type ColorKeys =
   | keyof typeof theme.colors.text
   | keyof typeof theme.colors.brand
-  | keyof typeof theme.colors.status;
+  | keyof typeof theme.colors.status
+  | keyof typeof theme.colors.border;
 
 type HTMLTags =
   | "h1"
@@ -106,5 +107,9 @@ const getColor = (colorKey: ColorKeys, theme: Theme) => {
     return theme.colors.status[colorKey as keyof typeof theme.colors.status];
   }
 
-  return theme.colors.text.default;
+  if (colorKey in theme.colors.border) {
+    return theme.colors.border[colorKey as keyof typeof theme.colors.border];
+  }
+
+  return theme.colors.text["text-default"];
 };
