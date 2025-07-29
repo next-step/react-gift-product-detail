@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Header from '@/components/Header';
 import ErrorBoundary from '@/components/ErrorBoundary';
+
 import {
   fetchProductBasic,
   fetchProductDetail,
