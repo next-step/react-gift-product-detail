@@ -4,8 +4,9 @@ import styled from '@emotion/styled';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber';
-import authClient from '@/api/clients/authClient';
 import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+import { orderService } from '@/api/services/orderService';
 
 const Container = styled.button`
   all: unset;
@@ -49,17 +50,9 @@ export const OrderButton = () => {
     totalAmount = totalAmount + Number(recipientForm.amount);
   });
   totalPrice = price * totalAmount;
-
-  const order = async () => {
-    try {
-      const response = await authClient.post('/api/order', {
-        productId: id,
-        message: message,
-        messageCardId: messageCardId,
-        ordererName: senderName,
-        receivers: receivers,
-      });
-      console.log('주문 성공: ', response.data);
+  const mutation = useMutation({
+    mutationFn: orderService,
+    onSuccess: () => {
       alert(`
             주문이 완료되었습니다.
             상품명: ${name}
@@ -68,20 +61,28 @@ export const OrderButton = () => {
             메시지: ${message}
           `);
       navigate('/');
-    } catch (error) {
-      console.log('주문 실패: ', error);
+    },
+    onError: (error) => {
+      console.error('주문 실패: ', error);
       toast.warn('⚠️ 주문 요청 처리 중 오류가 발생했습니다.', {
         style: {
           width: '25rem',
         },
       });
-    }
-  };
+    },
+  });
 
   return (
     <Container
       onClick={() => {
-        if (isValid) order();
+        if (isValid)
+          mutation.mutate({
+            productId: id,
+            message: message,
+            messageCardId: messageCardId,
+            ordererName: senderName,
+            receivers: receivers,
+          });
       }}
     >
       <Text>{totalPrice}원 주문하기</Text>
