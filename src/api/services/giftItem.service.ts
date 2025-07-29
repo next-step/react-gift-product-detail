@@ -3,8 +3,6 @@ import type { QueryFunctionContext } from '@tanstack/react-query';
 import type {
   CategoryCardData,
   GiftItemData,
-  GiftItemDetailParams,
-  GiftItemsParams,
   PageParam,
   QueryKey,
   ThemedGiftItemsPage,
@@ -17,11 +15,7 @@ export const getCategories = async (): Promise<CategoryCardData[]> => {
   return categories;
 };
 
-interface GetThemeInfo {
-  queryKey: [string, { id: number }];
-}
-
-export const getThemeInfo = async ({ queryKey }: GetThemeInfo): Promise<ThemeInfo> => {
+export const getThemeInfo = async ({ queryKey }: { queryKey: QueryKey }): Promise<ThemeInfo> => {
   const { id } = queryKey[1];
   const response = await publicClient.get(`/api/themes/${id}/info`);
   const { data } = response.data;
@@ -39,11 +33,11 @@ export const getThemedGiftItems = async (
   return data;
 };
 
-interface GetGiftItems {
-  queryKey: [string, GiftItemsParams];
-}
-
-export const getGiftItems = async ({ queryKey }: GetGiftItems): Promise<GiftItemData[]> => {
+export const getGiftItems = async ({
+  queryKey,
+}: {
+  queryKey: QueryKey;
+}): Promise<GiftItemData[]> => {
   const { targetType, rankType } = queryKey[1];
   const response = await publicClient.get(
     `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
@@ -52,11 +46,11 @@ export const getGiftItems = async ({ queryKey }: GetGiftItems): Promise<GiftItem
   return data;
 };
 
-interface GetGiftItemDetail {
-  queryKey: [string, GiftItemDetailParams];
-}
-
-export const getGiftItemDetail = async ({ queryKey }: GetGiftItemDetail): Promise<GiftItemData> => {
+export const getGiftItemDetail = async ({
+  queryKey,
+}: {
+  queryKey: QueryKey;
+}): Promise<GiftItemData> => {
   const { id } = queryKey[1];
   const response = await publicClient.get(`/api/products/${id}`);
   const { data } = response.data;

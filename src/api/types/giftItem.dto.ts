@@ -27,25 +27,18 @@ export type ThemeInfo = {
   backgroundColor: string;
 };
 
-export type QueryKey = [string, ThemedGiftItemsPageParams];
-
-export type PageParam = number;
-
 export type ThemedGiftItemsPage = {
   list: GiftItemData[];
   cursor: number;
   hasMoreList: boolean;
 };
 
-export type ThemedGiftItemsPageParams = {
-  id: number;
+export type PageParam = number;
+
+type Params = {
+  id?: number;
+  targetType?: string;
+  rankType?: string;
 };
 
-export type GiftItemsParams = {
-  targetType: string;
-  rankType: string;
-};
-
-export type GiftItemDetailParams = {
-  id: number;
-};
+export type QueryKey = [string, Params];

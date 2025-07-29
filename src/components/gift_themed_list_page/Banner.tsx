@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getThemeInfo } from '@/api/services/giftItem.service';
+import type { QueryKey, ThemeInfo } from '@/api/types/giftItem.dto';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
@@ -40,19 +41,6 @@ const ErrorText = styled.div`
   font-size: 1rem;
   font-weight: 500;
 `;
-
-type ThemeInfo = {
-  name: string;
-  title: string;
-  description: string;
-  backgroundColor: string;
-};
-
-type Params = {
-  id: number;
-};
-
-type QueryKey = [string, Params];
 
 export const Banner = () => {
   const { id } = useParams();

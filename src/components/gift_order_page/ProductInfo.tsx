@@ -2,7 +2,7 @@ import useProductInfo from '@/hooks/useProductInfo';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { GiftItemData } from '@/api/types/giftItem.dto';
+import type { GiftItemData, QueryKey } from '@/api/types/giftItem.dto';
 import { useQuery } from '@tanstack/react-query';
 import { getGiftItemDetail } from '@/api/services/giftItem.service';
 
@@ -80,15 +80,11 @@ const PriceValue = styled.div`
   margin-left: 0.3rem;
 `;
 
-type Params = {
-  id: number;
-};
-
 export const ProductInfo = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isLoading } = useQuery<GiftItemData, Error, GiftItemData, [string, Params]>({
+  const { data, isLoading } = useQuery<GiftItemData, Error, GiftItemData, QueryKey>({
     queryKey: ['giftItemDetail', { id: parsedId }],
     queryFn: getGiftItemDetail,
   });

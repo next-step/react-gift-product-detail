@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { GiftItemCard } from '../shared/GiftItemCard';
 import { useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
-import type { GiftItemData } from '@/api/types/giftItem.dto';
+import type { PageParam, QueryKey, ThemedGiftItemsPage } from '@/api/types/giftItem.dto';
 import { useParams } from 'react-router-dom';
 import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
 import { getThemedGiftItems } from '@/api/services/giftItem.service';
@@ -55,20 +55,6 @@ const IntersectionTrigger = styled.div`
   width: 100%;
   height: 1rem;
 `;
-
-type ThemedGiftItemsPage = {
-  list: GiftItemData[];
-  cursor: number;
-  hasMoreList: boolean;
-};
-
-type Params = {
-  id: number;
-};
-
-type QueryKey = [string, Params];
-
-type PageParam = number;
 
 export const GiftList = () => {
   const intersectionTriggerRef = useRef<HTMLDivElement | null>(null);
