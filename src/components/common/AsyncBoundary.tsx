@@ -13,12 +13,22 @@ const AsyncBoundary = ({
   children,
   fallback = <Spinner withWrapper />,
   errorFallback,
-}: AsyncBoundaryProps) => {
-  return (
+  useErrorBoundary = true,
+}: AsyncBoundaryProps & { useErrorBoundary?: boolean }) => {
+  const content = (
+    <Suspense fallback={fallback}>
+      {children}
+    </Suspense>
+  );
+
+  return useErrorBoundary ? (
     <ErrorBoundary fallback={errorFallback}>
-      <Suspense fallback={fallback}>{children}</Suspense>
+      {content}
     </ErrorBoundary>
+  ) : (
+    content
   );
 };
+
 
 export default AsyncBoundary;
