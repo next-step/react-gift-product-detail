@@ -8,6 +8,7 @@ import {
   fetchProductWish,
   fetchProductReviews,
 } from '@/api/product';
+import type { Product } from '@/types/product';
 
 export const useProductRanking = (targetType: string, rankType: string) => {
   return useQuery({
@@ -35,7 +36,7 @@ export const useThemeProductsInfinite = (themeId: number, limit = 20) => {
 };
 
 export const useProduct = (productId: number) => {
-  return useQuery({
+  return useQuery<Product, Error>({
     queryKey: ['product', productId],
     queryFn: () => fetchProduct(productId),
     enabled: !!productId,

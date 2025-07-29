@@ -4,5 +4,7 @@ export const defaultQueryOptions = {
     cacheTime: 1000 * 60 * 5,
     refetchOnWindowFocus: false,
     retry: 1,
+    suspense: true,
+    useErrorBoundary: true,
   },
 };
