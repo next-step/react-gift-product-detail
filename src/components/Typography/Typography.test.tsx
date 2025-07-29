@@ -4,6 +4,10 @@ import { ThemeProvider } from "@emotion/react";
 import { Typography, type Props } from "./Typography";
 import { theme } from "@/styles/theme";
 
+const renderWithTheme = (children: React.ReactNode) => {
+  return render(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
+};
+
 describe("Typography 컴포넌트", () => {
   it("모든 주요 속성이 적용된 Typography가 정상적으로 렌더링된다", () => {
     // given
@@ -20,11 +24,7 @@ describe("Typography 컴포넌트", () => {
     const expectedColor = theme.colors.brand["brand-kakaoYellow"];
 
     // when
-    render(
-      <ThemeProvider theme={theme}>
-        <Typography {...props}>{props.children}</Typography>
-      </ThemeProvider>
-    );
+    renderWithTheme(<Typography {...props}>{props.children}</Typography>);
     const el = screen.getByText(props.children as string);
 
     // then
@@ -45,11 +45,7 @@ describe("Typography 컴포넌트", () => {
       const expected = theme.typography.body.body1Regular;
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography>Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography>Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -61,11 +57,7 @@ describe("Typography 컴포넌트", () => {
       const expected = theme.typography.title.title1Bold;
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography variant="title1Bold">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography variant="title1Bold">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -77,11 +69,7 @@ describe("Typography 컴포넌트", () => {
       const expected = theme.typography.subtitle.subtitle1Bold;
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography variant="subtitle1Bold">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography variant="subtitle1Bold">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -93,11 +81,7 @@ describe("Typography 컴포넌트", () => {
       const expected = theme.typography.body.body1Bold;
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography variant="body1Bold">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography variant="body1Bold">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -109,11 +93,7 @@ describe("Typography 컴포넌트", () => {
       const expected = theme.typography.label.label1Bold;
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography variant="label1Bold">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography variant="label1Bold">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -127,11 +107,7 @@ describe("Typography 컴포넌트", () => {
       const color = theme.colors.text["text-default"];
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography>Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography>Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -143,11 +119,7 @@ describe("Typography 컴포넌트", () => {
       const color = theme.colors.brand["brand-kakaoYellow"];
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography color="brand-kakaoYellow">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography color="brand-kakaoYellow">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -159,11 +131,7 @@ describe("Typography 컴포넌트", () => {
       const color = theme.colors.text["text-default"];
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography color="text-default">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography color="text-default">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -175,11 +143,7 @@ describe("Typography 컴포넌트", () => {
       const color = theme.colors.status["status-critical"];
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography color="status-critical">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography color="status-critical">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
@@ -191,11 +155,7 @@ describe("Typography 컴포넌트", () => {
       const color = theme.colors.border["border-default"];
 
       // when
-      render(
-        <ThemeProvider theme={theme}>
-          <Typography color="border-default">Test</Typography>
-        </ThemeProvider>
-      );
+      renderWithTheme(<Typography color="border-default">Test</Typography>);
       const el = screen.getByText("Test");
 
       // then
