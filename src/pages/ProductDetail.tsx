@@ -3,70 +3,74 @@ import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
 import { useProductInfo, useProductDetail, useProductHighlightReview, useProductWish, useToggleWish } from '@/api/productDetail';
 import ErrorBoundary from '@/Components/ErrorBoundary';
-import SuspenseWrapper from '@/Components/SuspenseWrapper';
+import LoadingSpinner from '@/Components/LoadingSpinner';
 
 const ProductContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
 `;
 
 const ProductImage = styled.img`
   width: 100%;
-  aspect-ratio: 1/1;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  max-width: 500px;
+  height: 400px;
   object-fit: cover;
-  background: ${({ theme }) => theme.colors.gray.gray300};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 const BrandName = styled.div`
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
 const ProductName = styled.h1`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  line-height: 1.4;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  line-height: 1.3;
 `;
 
 const PriceSection = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
-const SellingPrice = styled.div`
-  font-size: 1.5rem;
+const SellingPrice = styled.span`
+  font-size: 2rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
 `;
 
-const BasicPrice = styled.div`
-  font-size: 1.1rem;
+const BasicPrice = styled.span`
+  font-size: 1.2rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
   text-decoration: line-through;
 `;
 
-const DiscountRate = styled.div`
+const DiscountRate = styled.span`
+  background: ${({ theme }) => theme.colors.red.red500};
+  color: white;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.spacing.sm};
   font-size: 1rem;
-  color: ${({ theme }) => theme.colors.red.red700};
   font-weight: 600;
 `;
 
 const Description = styled.p`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.gray.gray800};
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   line-height: 1.6;
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 const Category = styled.div`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
@@ -75,52 +79,47 @@ const Tags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 const Tag = styled.span`
   background: ${({ theme }) => theme.colors.gray.gray100};
   color: ${({ theme }) => theme.colors.gray.gray700};
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.spacing.sm};
+  font-size: 0.9rem;
 `;
 
 const LoadingMessage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
+  text-align: center;
+  padding: ${({ theme }) => theme.spacing.xxl};
+  color: ${({ theme }) => theme.colors.gray.gray600};
   font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
 const ErrorMessage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
+  text-align: center;
+  padding: ${({ theme }) => theme.spacing.xxl};
+  color: ${({ theme }) => theme.colors.red.red600};
   font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.red.red700};
 `;
 
-// 상품 세부 정보 섹션 스타일
-const DetailSection = styled.section`
+const DetailSection = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxl};
   padding-top: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 const SpecificationsGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
@@ -132,15 +131,14 @@ const SpecItem = styled.div`
 `;
 
 const SpecLabel = styled.span`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
   font-weight: 500;
 `;
 
 const SpecValue = styled.span`
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-  font-weight: 500;
 `;
 
 const DeliveryInfo = styled.div`
@@ -153,7 +151,6 @@ const DeliveryInfo = styled.div`
 const DeliveryItem = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   
   &:last-child {
@@ -162,40 +159,38 @@ const DeliveryItem = styled.div`
 `;
 
 const DeliveryLabel = styled.span`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 const DeliveryValue = styled.span`
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
   font-weight: 500;
 `;
 
 const ProductImages = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: ${({ theme }) => theme.spacing.md};
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: ${({ theme }) => theme.spacing.lg};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
 const ProductImageItem = styled.img`
   width: 100%;
-  aspect-ratio: 1/1;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  height: 200px;
   object-fit: cover;
-  background: ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
 `;
 
 const DetailDescription = styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.gray.gray800};
+  font-size: 1.1rem;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   line-height: 1.6;
   white-space: pre-line;
 `;
 
-// 리뷰 섹션 스타일
-const ReviewSection = styled.section`
+const ReviewSection = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxl};
   padding-top: ${({ theme }) => theme.spacing.lg};
   border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
@@ -214,27 +209,24 @@ const ReviewSummary = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const AverageRating = styled.div`
+const AverageRating = styled.span`
   font-size: 1.5rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
 `;
 
-const TotalReviews = styled.div`
-  font-size: 0.9rem;
+const TotalReviews = styled.span`
+  font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 const StarRating = styled.div`
   display: flex;
-  align-items: center;
   gap: 2px;
 `;
 
 const Star = styled.span<{ filled: boolean }>`
-  color: ${({ theme, filled }) => 
-    filled ? theme.colors.yellow.yellow600 : theme.colors.gray.gray400
-  };
+  color: ${({ filled, theme }) => filled ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray300};
   font-size: 1.2rem;
 `;
 
@@ -245,51 +237,49 @@ const ReviewList = styled.div`
 `;
 
 const ReviewItem = styled.div`
-  background: ${({ theme }) => theme.colors.gray.gray100};
   padding: ${({ theme }) => theme.spacing.lg};
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray200};
   border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
 `;
 
 const ReviewHeaderItem = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 const ReviewerInfo = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const ReviewerName = styled.div`
-  font-size: 0.9rem;
+const ReviewerName = styled.span`
+  font-size: 1rem;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
 `;
 
-const ReviewDate = styled.div`
-  font-size: 0.8rem;
+const ReviewDate = styled.span`
+  font-size: 0.9rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 const ReviewRating = styled.div`
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 const ReviewStar = styled.span<{ filled: boolean }>`
-  color: ${({ theme, filled }) => 
-    filled ? theme.colors.yellow.yellow600 : theme.colors.gray.gray400
-  };
-  font-size: 0.9rem;
+  color: ${({ filled, theme }) => filled ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray300};
+  font-size: 1rem;
 `;
 
-const ReviewContent = styled.div`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray800};
+const ReviewContent = styled.p`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.gray.gray700};
   line-height: 1.5;
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
@@ -297,86 +287,75 @@ const ReviewContent = styled.div`
 const ReviewImages = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.sm};
-  flex-wrap: wrap;
 `;
 
 const ReviewImage = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 4px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  background: ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.sm};
 `;
 
 const NoReviews = styled.div`
   text-align: center;
   padding: ${({ theme }) => theme.spacing.xxl};
   color: ${({ theme }) => theme.colors.gray.gray600};
-  font-size: 1rem;
+  font-size: 1.1rem;
 `;
 
-// 관심 등록 버튼 스타일
 const WishButton = styled.button<{ isWished: boolean }>`
-  position: fixed;
-  bottom: ${({ theme }) => theme.spacing.lg};
-  right: ${({ theme }) => theme.spacing.lg};
-  width: 56px;
-  height: 56px;
+  background: ${({ isWished, theme }) => isWished ? theme.colors.red.red500 : 'white'};
+  color: ${({ isWished, theme }) => isWished ? 'white' : theme.colors.gray.gray600};
+  border: 1px solid ${({ isWished, theme }) => isWished ? theme.colors.red.red500 : theme.colors.gray.gray300};
   border-radius: 50%;
-  border: none;
-  background: ${({ theme, isWished }) => 
-    isWished ? theme.colors.red.red700 : theme.colors.semantic.backgroundDefault
-  };
-  color: ${({ theme, isWished }) => 
-    isWished ? theme.colors.semantic.backgroundDefault : theme.colors.gray.gray700
-  };
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  transition: all 0.2s ease;
-  z-index: 1000;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.2rem;
 
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: scale(0.95);
+    background: ${({ isWished, theme }) => isWished ? theme.colors.red.red600 : theme.colors.gray.gray100};
   }
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
-  }
-
-  @media (min-width: 768px) {
-    bottom: ${({ theme }) => theme.spacing.xl};
-    right: ${({ theme }) => theme.spacing.xl};
   }
 `;
 
-const WishCount = styled.div`
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: ${({ theme }) => theme.colors.red.red700};
-  color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 10px;
-  min-width: 20px;
-  text-align: center;
-  line-height: 1;
+const WishCount = styled.span`
+  font-size: 0.9rem;
+  margin-left: ${({ theme }) => theme.spacing.sm};
 `;
 
 const WishButtonContainer = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const OrderButton = styled.button`
+  background: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  border: none;
+  padding: ${({ theme }) => theme.spacing.button.paddingLarge};
+  border-radius: ${({ theme }) => theme.spacing.button.borderRadiusLarge};
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  max-width: 300px;
+  margin-top: ${({ theme }) => theme.spacing.xxl};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.semantic.kakaoYellowHover};
+  }
 `;
 
 // 실제 상품 상세 내용을 렌더링하는 컴포넌트
@@ -430,47 +409,71 @@ const ProductDetailContent = () => {
     throw new Error('상품을 찾을 수 없습니다.');
   }
 
-  const hasDiscount = product.price.discountRate > 0;
-  const hasBasicPrice = product.price.basicPrice > product.price.sellingPrice;
-
-  // 별점 렌더링 헬퍼 함수
-  const renderStars = (rating: number, size: 'large' | 'small' = 'large') => {
-    const stars = [];
-    const StarComponent = size === 'large' ? Star : ReviewStar;
-    
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <StarComponent key={i} filled={i <= rating}>
-          ★
-        </StarComponent>
-      );
-    }
-    return stars;
-  };
-
-  // 날짜 포맷팅 헬퍼 함수
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  // 관심 등록 토글 핸들러
   const handleToggleWish = async () => {
     try {
       await toggleWishMutation.mutateAsync();
     } catch (error) {
-      console.error('관심 등록 토글 실패:', error);
+      console.error('관심 등록 실패:', error);
     }
   };
+
+  const handleOrderClick = () => {
+    navigate(`/order/${productId}`);
+  };
+
+  const renderStars = (rating: number, size: 'large' | 'small' = 'large') => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <Star key={i} filled={i <= rating}>
+          ★
+        </Star>
+      );
+    }
+    return <StarRating>{stars}</StarRating>;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('ko-KR');
+  };
+
+  const discountRate = product.price?.discountRate || 0;
+  const hasDiscount = typeof discountRate === 'number' && discountRate > 0;
 
   return (
     <Layout>
       <ProductContainer>
-        {/* 관심 등록 버튼 */}
+        <ProductImage src={product.imageURL} alt={product.name} />
+        
+        <BrandName>{product.brandInfo.name}</BrandName>
+        <ProductName>{product.name}</ProductName>
+        
+        <PriceSection>
+          <SellingPrice>
+            {product.price?.sellingPrice?.toLocaleString()}원
+          </SellingPrice>
+          {hasDiscount && (
+            <>
+              <BasicPrice>
+                {product.price?.basicPrice?.toLocaleString()}원
+              </BasicPrice>
+              <DiscountRate>{discountRate}%</DiscountRate>
+            </>
+          )}
+        </PriceSection>
+
+        <Description>{product.description}</Description>
+        
+        <Category>카테고리: {product.category}</Category>
+        
+        {product.tags && product.tags.length > 0 && (
+          <Tags>
+            {product.tags.map((tag, index) => (
+              <Tag key={index}>{tag}</Tag>
+            ))}
+          </Tags>
+        )}
+
         {wishData && (
           <WishButtonContainer>
             <WishButton
@@ -479,71 +482,19 @@ const ProductDetailContent = () => {
               disabled={toggleWishMutation.isPending}
               aria-label={wishData.isWished ? '관심 해제' : '관심 등록'}
             >
-              {wishData.isWished ? '❤️' : '🤍'}
+              ❤️
             </WishButton>
-            {wishData.wishCount > 0 && (
-              <WishCount>{wishData.wishCount}</WishCount>
-            )}
+            <span style={{ fontSize: '1rem', color: '#666' }}>
+              {wishData.wishCount}명이 관심 등록
+              {wishData.isWished && ' (내가 관심 등록함)'}
+            </span>
           </WishButtonContainer>
         )}
-        <ProductImage src={product.imageURL} alt={product.name} />
-        
-        <BrandName>{product.brandInfo.name}</BrandName>
-        <ProductName>{product.name}</ProductName>
-        
-        <PriceSection>
-          <SellingPrice>
-            {product.price.sellingPrice.toLocaleString()}원
-          </SellingPrice>
-          {hasDiscount && hasBasicPrice && (
-            <>
-              <BasicPrice>
-                {product.price.basicPrice.toLocaleString()}원
-              </BasicPrice>
-              <DiscountRate>
-                {product.price.discountRate}%
-              </DiscountRate>
-            </>
-          )}
-        </PriceSection>
 
-        {/* 관심 등록 정보 */}
-        {wishData && (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '8px', 
-            marginBottom: '16px',
-            fontSize: '0.9rem',
-            color: '#666'
-          }}>
-            <span>❤️ {wishData.wishCount}명이 관심 등록</span>
-            {wishData.isWished && (
-              <span style={{ color: '#e74c3c', fontWeight: '600' }}>
-                (내가 관심 등록함)
-              </span>
-            )}
-          </div>
-        )}
-
-        <Description>{product.description}</Description>
-        
-        <Category>카테고리: {product.category}</Category>
-        
-        {product.tags.length > 0 && (
-          <Tags>
-            {product.tags.map((tag, index) => (
-              <Tag key={index}>{tag}</Tag>
-            ))}
-          </Tags>
-        )}
-
-        {/* 상품 세부 정보 섹션 */}
         {productDetail && (
           <DetailSection>
             <SectionTitle>상품 상세 정보</SectionTitle>
             
-            {/* 상품 사양 */}
             <SpecificationsGrid>
               <SpecItem>
                 <SpecLabel>무게</SpecLabel>
@@ -563,22 +514,14 @@ const ProductDetailContent = () => {
               </SpecItem>
             </SpecificationsGrid>
 
-            {/* 배송 정보 */}
             <DeliveryInfo>
               <DeliveryItem>
                 <DeliveryLabel>배송비</DeliveryLabel>
-                <DeliveryValue>
-                  {productDetail.delivery.shippingFee === 0 
-                    ? '무료' 
-                    : `${productDetail.delivery.shippingFee.toLocaleString()}원`
-                  }
-                </DeliveryValue>
+                <DeliveryValue>{productDetail.delivery.shippingFee.toLocaleString()}원</DeliveryValue>
               </DeliveryItem>
               <DeliveryItem>
                 <DeliveryLabel>무료배송 기준</DeliveryLabel>
-                <DeliveryValue>
-                  {productDetail.delivery.freeShippingThreshold.toLocaleString()}원 이상
-                </DeliveryValue>
+                <DeliveryValue>{productDetail.delivery.freeShippingThreshold.toLocaleString()}원 이상</DeliveryValue>
               </DeliveryItem>
               <DeliveryItem>
                 <DeliveryLabel>배송 예정일</DeliveryLabel>
@@ -586,53 +529,33 @@ const ProductDetailContent = () => {
               </DeliveryItem>
             </DeliveryInfo>
 
-            {/* 상품 이미지들 */}
-            {productDetail.images.length > 0 && (
-              <>
-                <SectionTitle>상품 이미지</SectionTitle>
-                <ProductImages>
-                  {productDetail.images.map((image, index) => (
-                    <ProductImageItem 
-                      key={index} 
-                      src={image} 
-                      alt={`${product.name} 이미지 ${index + 1}`} 
-                    />
-                  ))}
-                </ProductImages>
-              </>
+            {productDetail.images && productDetail.images.length > 0 && (
+              <ProductImages>
+                {productDetail.images.map((image, index) => (
+                  <ProductImageItem key={index} src={image} alt={`상품 이미지 ${index + 1}`} />
+                ))}
+              </ProductImages>
             )}
 
-            {/* 상세 설명 */}
-            {productDetail.description && (
-              <>
-                <SectionTitle>상세 설명</SectionTitle>
-                <DetailDescription>{productDetail.description}</DetailDescription>
-              </>
-            )}
+            <DetailDescription>{productDetail.description}</DetailDescription>
           </DetailSection>
         )}
 
-        {/* 리뷰 섹션 */}
         {reviewData && (
           <ReviewSection>
-            <SectionTitle>리뷰</SectionTitle>
-            
             <ReviewHeader>
+              <SectionTitle>리뷰</SectionTitle>
               <ReviewSummary>
                 <AverageRating>{reviewData.averageRating.toFixed(1)}</AverageRating>
-                <StarRating>
-                  {renderStars(Math.round(reviewData.averageRating))}
-                </StarRating>
+                <TotalReviews>({reviewData.totalReviews}개)</TotalReviews>
+                {renderStars(reviewData.averageRating)}
               </ReviewSummary>
-              <TotalReviews>
-                총 {reviewData.totalReviews}개의 리뷰
-              </TotalReviews>
             </ReviewHeader>
 
-            {reviewData.reviews.length > 0 ? (
+            {reviewData.reviews && reviewData.reviews.length > 0 ? (
               <ReviewList>
-                {reviewData.reviews.map((review) => (
-                  <ReviewItem key={review.id}>
+                {reviewData.reviews.map((review, index) => (
+                  <ReviewItem key={index}>
                     <ReviewHeaderItem>
                       <ReviewerInfo>
                         <ReviewerName>{review.userName}</ReviewerName>
@@ -642,17 +565,11 @@ const ProductDetailContent = () => {
                         {renderStars(review.rating, 'small')}
                       </ReviewRating>
                     </ReviewHeaderItem>
-                    
                     <ReviewContent>{review.content}</ReviewContent>
-                    
                     {review.images && review.images.length > 0 && (
                       <ReviewImages>
-                        {review.images.map((image, index) => (
-                          <ReviewImage 
-                            key={index} 
-                            src={image} 
-                            alt={`리뷰 이미지 ${index + 1}`} 
-                          />
+                        {review.images.map((image, imgIndex) => (
+                          <ReviewImage key={imgIndex} src={image} alt={`리뷰 이미지 ${imgIndex + 1}`} />
                         ))}
                       </ReviewImages>
                     )}
@@ -660,24 +577,24 @@ const ProductDetailContent = () => {
                 ))}
               </ReviewList>
             ) : (
-              <NoReviews>
-                아직 리뷰가 없습니다.
-              </NoReviews>
+              <NoReviews>아직 리뷰가 없습니다.</NoReviews>
             )}
           </ReviewSection>
         )}
+
+        <OrderButton onClick={handleOrderClick}>
+          주문하기
+        </OrderButton>
       </ProductContainer>
     </Layout>
   );
 };
 
-// 메인 ProductDetail 컴포넌트 (ErrorBoundary와 Suspense로 감싸기)
+// 메인 ProductDetail 컴포넌트 (ErrorBoundary로 감싸기)
 const ProductDetail = () => {
   return (
     <ErrorBoundary>
-      <SuspenseWrapper message="상품 정보를 불러오는 중...">
-        <ProductDetailContent />
-      </SuspenseWrapper>
+      <ProductDetailContent />
     </ErrorBoundary>
   );
 };

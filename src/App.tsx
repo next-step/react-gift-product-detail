@@ -48,7 +48,14 @@ function App() {
               />
               <Route path="/order" element={<Navigate to="/" replace />} />
               <Route path="/themes/:themeId" element={<ThemeProducts />} />
-              <Route path="/product/:productId" element={<ProductDetail />} />
+              <Route
+                path="/product/:productId"
+                element={
+                  <ProtectedRoute>
+                    <ProductDetail />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ToastContainer

@@ -112,6 +112,7 @@ const IntersectionTarget = styled.div`
 const ThemeProducts = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
+  
   const { themeDetail, loading: themeLoading, error: themeError } = useThemeDetail(Number(themeId));
   const { 
     data: productsData, 
@@ -143,7 +144,7 @@ const ThemeProducts = () => {
   }, [themeError, productsError, navigate]);
 
   const handleProductClick = (productId: number) => {
-    navigate(`/order/${productId}`);
+    navigate(`/product/${productId}`);
   };
 
   if (themeLoading) {
