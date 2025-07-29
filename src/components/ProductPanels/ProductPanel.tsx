@@ -5,14 +5,6 @@ import { useLoginRedirection } from "@src/hooks/useLoginRedirection";
 import ProductCard from "./ProductCard";
 import ProductDetail from "./ProductDetail";
 
-export type ProductData = {
-  imageURL: string;
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-};
-
 function ProductPanel() {
   const productId = useParams().id ?? "";
 

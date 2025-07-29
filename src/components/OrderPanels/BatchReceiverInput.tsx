@@ -3,7 +3,7 @@ import theme from "@src/styles/kakaoTheme";
 import { useState } from "react";
 import Modal from "@src/components/shared/Modal";
 import ReceiverModalWindow from "./ReceiverModalWindow";
-import type { FormType, Receiver } from "@src/pages/OrderPage";
+import type { FormType, Receiver } from "@src/types/OrderFormTypes";
 import { useFormContext, useWatch } from "react-hook-form";
 
 function BatchReceiverInput() {

@@ -2,6 +2,7 @@ import CheerUpPanel from "@src/components/CheerUpPanel";
 import GiftThemePanel from "@src/components/GiftThemePanel";
 import RealTimeRankPanel from "@src/components/RealTimeRankPanel/RealTimeRankPanel";
 import RecipientSelector from "@src/components/RecipientSelector";
+import ErrorBoundary from "@src/components/shared/ErrorBoundary";
 import PendingSpinner from "@src/components/shared/PendingSpinner";
 import ToastContext from "@src/contexts/ToastContext";
 import { Suspense, useContext, useEffect } from "react";
@@ -23,9 +24,11 @@ function Mainpage() {
   return (
     <>
       <RecipientSelector />
-      <Suspense fallback={<PendingSpinner />}>
-        <GiftThemePanel />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<PendingSpinner />}>
+          <GiftThemePanel />
+        </Suspense>
+      </ErrorBoundary>
       <CheerUpPanel />
       <RealTimeRankPanel />
       <ToastContainer />

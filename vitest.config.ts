@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -9,8 +9,10 @@ export default defineConfig({
       "@src": path.resolve(__dirname, "src")
     }
   },
-  server: {
-    host: "0.0.0.0",
-    port: 5173
+  test: {
+    globals: true,
+    environment: "jsdom",
+    exclude: ["dist", "node_modules", "react-gift-mock-server"],
+    setupFiles: ["./src/tests/setup.ts"]
   }
 });

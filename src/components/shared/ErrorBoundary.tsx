@@ -2,7 +2,7 @@ import React from "react";
 
 type Props = {
   children: React.ReactNode;
-  fallbackRender: () => React.ReactNode;
+  fallbackRender?: () => React.ReactNode;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 };
 
@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallbackRender();
+      return this.props.fallbackRender ? this.props.fallbackRender() : <></>;
     }
 
     return this.props.children;

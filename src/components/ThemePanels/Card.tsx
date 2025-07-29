@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { PATH } from "@src/router/Router";
 import theme from "@src/styles/kakaoTheme";
+import type { ThemeProductData } from "@src/types/ThemeTypes";
 import { useNavigate } from "react-router-dom";
-import type { ThemeProductData } from "./ThemePanel";
 
 function Card({ product }: { product: ThemeProductData }) {
   const navigate = useNavigate();

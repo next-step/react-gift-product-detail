@@ -2,14 +2,7 @@ import { useParams } from "react-router-dom";
 import { fetchProductSummary } from "@src/apis/BackEnd/apiList";
 import OrderForm from "@src/components/OrderPanels/OrderForm";
 import { useSuspenseQuery } from "@tanstack/react-query";
-
-export type ProductData = {
-  imageURL: string;
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-};
+import type { ProductData } from "@src/types/ProductDataType";
 
 function OrderPanel() {
   const productId = useParams().id ?? "";

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import type { ThemeInfo } from "./ThemeContents";
+import type { ThemeInfo } from "@src/types/ThemeTypes";
 
 function HeroPanel({ themeInfo }: { themeInfo: ThemeInfo }) {
   return (
