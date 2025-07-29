@@ -18,8 +18,7 @@ const PresentRankingContainer = () => {
   const params = new URLSearchParams(search);
   const rankType = params.get(PARAMS.rankType);
   const targetType = params.get(PARAMS.targetType);
-  const typeUrls = `?targetType=${targetType}&rankType=${rankType}`;
-  const { notNulldata, isLoading, isError } = useRankingItemFetch(typeUrls);
+  const { notNulldata, isLoading, isError } = useRankingItemFetch({ targetType, rankType });
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
