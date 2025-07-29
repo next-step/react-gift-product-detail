@@ -5,7 +5,7 @@ import { QUERY_KEYS } from "@/constants/queryKeys";
 
 export const useProductSummary = (productId: number) => {
   return useQuery<ProductSummary, Error>({
-    queryKey: QUERY_KEYS.productSummary(productId),
+    queryKey: QUERY_KEYS.product(productId),
     queryFn: () => getProductSummary(productId),
   });
 };

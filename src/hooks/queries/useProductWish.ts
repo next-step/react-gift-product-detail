@@ -9,12 +9,11 @@ interface ProductWishResponse {
 
 export const useProductWish = (productId?: number) => {
   return useQuery({
-    queryKey: QUERY_KEYS.wish(productId!),
+    queryKey: QUERY_KEYS.productWish(productId!), 
     queryFn: async (): Promise<ProductWishResponse> => {
       const { data } = await client.get(`/api/products/${productId}/wish`);
       return data.data;
     },
-    enabled: !!productId,
+    enabled: !!productId, 
   });
 };
-

@@ -15,7 +15,7 @@ interface ReviewResponse {
 
 export const useProductReview = (productId: number) => {
   return useQuery({
-    queryKey: QUERY_KEYS.review(productId),
+    queryKey: QUERY_KEYS.productReviews(productId),
     queryFn: async (): Promise<ReviewResponse> => {
       const { data } = await client.get(
         `/api/products/${productId}/highlight-review`,

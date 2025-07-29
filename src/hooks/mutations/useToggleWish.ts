@@ -13,33 +13,26 @@ export const useToggleWish = () => {
     mutationFn: async () => Promise.resolve(),
 
     onMutate: async ({ productId, isWished }: ToggleWishParams) => {
-      await queryClient.cancelQueries({
-        queryKey: QUERY_KEYS.wish(productId),
+      const queryKey = QUERY_KEYS.productWish(productId);
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previous = queryClient.getQueryData<{
+        wishCount: number;
+        isWished: boolean;
+      }>(queryKey);
+
+      queryClient.setQueryData(queryKey, {
+        wishCount: previous ? previous.wishCount + (isWished ? -1 : 1) : 1,
+        isWished: !isWished,
       });
 
-      const previous = queryClient.getQueryData<{ wishCount: number; isWished: boolean }>(
-        QUERY_KEYS.wish(productId)
-      );
-
-      queryClient.setQueryData(
-        QUERY_KEYS.wish(productId),
-        {
-          wishCount: previous
-            ? previous.wishCount + (isWished ? -1 : 1)
-            : 1,
-          isWished: !isWished,
-        }
-      );
-
-      return { previous };
+      return { previous, queryKey };
     },
 
-    onError: (_err, { productId }, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(
-          QUERY_KEYS.wish(productId),
-          context.previous
-        );
+        queryClient.setQueryData(context.queryKey, context.previous);
       }
     },
   });
