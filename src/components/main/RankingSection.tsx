@@ -230,7 +230,13 @@ const RankingSection = () => {
             {productList.slice(0, visibleCount).map((item, idx) => (
               <ProductCard
                 key={item.id}
-                onClick={() => (user ? navigate(ROUTE.ORDER(item.id)) : navigate(ROUTE.LOGIN))}
+                onClick={() => {
+                  if (user) {
+                    navigate(ROUTE.PRODUCT(item.id));
+                  } else {
+                    navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(item.id) } });
+                  }
+                }}
               >
                 <Badge isTop3={idx < 3}>{idx + 1}</Badge>
                 <img src={item.imageURL} alt={item.name} />

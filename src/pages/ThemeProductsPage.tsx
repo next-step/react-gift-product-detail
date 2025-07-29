@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
 import Spinner from '@/components/common/Spinner';
@@ -7,6 +7,7 @@ import { useThemeDetail } from '@/hooks/useTheme';
 import { useThemeProductsInfinite } from '@/hooks/useProduct';
 import { toast } from 'react-toastify';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useUser } from '@/contexts/UserContext';
 
 const Hero = styled.section<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -76,6 +77,8 @@ const EmptyMessage = styled.div`
 
 const ThemeProductsPage = () => {
   const { themeId } = useParams<{ themeId: string }>();
+  const navigate = useNavigate();
+  const { user } = useUser();
 
   const hasShownThemeError = useRef(false);
   const hasShownProductError = useRef(false);
@@ -141,7 +144,16 @@ const ThemeProductsPage = () => {
         <>
           <ProductGrid>
             {products.map((item) => (
-              <ProductCard key={item.id}>
+              <ProductCard
+                key={item.id}
+                onClick={() => {
+                  if (user) {
+                    navigate(ROUTE.PRODUCT(item.id));
+                  } else {
+                    navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(item.id) } });
+                  }
+                }}
+              >
                 <img src={item.imageURL} alt={item.name} />
                 <div className="brand">{item.brandInfo.name}</div>
                 <div className="name">{item.name}</div>
