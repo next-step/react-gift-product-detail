@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchProductDetail, fetchProductInfo, fetchHighlightReview } from '@/api/productApi';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
-import type { ProductInfo, ProductDetail ,HighlightReviewResponse} from '@/types/product';
+import type { ProductInfo, ProductDetail ,HighlightReviewResponse,} from '@/types/product';
 
 export const useProductInfo = (productId: number) => {
   return useSuspenseQuery<ProductInfo>({
