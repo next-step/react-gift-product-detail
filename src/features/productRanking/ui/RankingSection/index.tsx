@@ -6,7 +6,7 @@ import { genderItems, actionItems } from '../../model/constants';
 import { RankingItemCard } from '@/entities/product/ui';
 import * as S from './styles';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { productQueryKeys } from '@/entities/product/api/queryKeys';
 import { ROUTES } from '@/shared/config';
 
 const RankingSection = () => {
@@ -18,7 +18,7 @@ const RankingSection = () => {
   const selectedAction = searchParams.get('action') || 'MANY_WISH';
 
   const { data } = useSuspenseQuery<RankingProduct[]>({
-    queryKey: QUERY_KEYS.RANKING_PRODUCTS(selectedGender, selectedAction),
+    queryKey: productQueryKeys.ranking(selectedGender, selectedAction),
     queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
   });
 

@@ -2,7 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getThemeInfo } from '@/entities/theme/api/themeApi';
 import type { ThemeInfo } from '@/entities/theme/model/types';
 import * as S from './styles';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { themeQueryKeys } from '@/entities/theme/api/queryKeys';
 
 interface ThemeHeroSectionProps {
   themeId?: number;
@@ -14,7 +14,7 @@ const ThemeHeroSection = ({ themeId }: ThemeHeroSectionProps) => {
   }
 
   const { data } = useSuspenseQuery<ThemeInfo>({
-    queryKey: QUERY_KEYS.THEME_INFO(themeId),
+    queryKey: themeQueryKeys.info(themeId),
     queryFn: () => getThemeInfo(themeId),
     retry: false,
   });

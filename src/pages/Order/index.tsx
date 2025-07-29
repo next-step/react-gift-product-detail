@@ -7,7 +7,7 @@ import { useOrderForm } from '@/features/orderCreation/model/useOrderForm';
 import { ErrorBoundary, Loading, RedirectOnError } from '@/shared/ui';
 import OrderTemplate from '@/widgets/orderForm/ui/OrderTemplate';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { productQueryKeys } from '@/entities/product/api/queryKeys';
 import { ROUTES } from '@/shared/config';
 
 const OrderContent = () => {
@@ -19,7 +19,7 @@ const OrderContent = () => {
   }
 
   const { data } = useSuspenseQuery<ProductSummary>({
-    queryKey: QUERY_KEYS.PRODUCT_SUMMARY(numericProductId),
+    queryKey: productQueryKeys.summary(numericProductId),
     queryFn: () => getProductSummary(numericProductId),
   });
 

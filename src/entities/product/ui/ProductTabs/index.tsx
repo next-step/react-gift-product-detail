@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import parse from 'html-react-parser';
 import { getProductDetail, getProductHighlightReview } from '@/entities/product/api/productApi';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { productQueryKeys } from '@/entities/product/api/queryKeys';
 import type { ProductDetail, ProductHighlightReview, TabType } from '@/entities/product/model/types';
 import * as S from './styles';
 import { TAB_LABELS } from '@/entities/product/model/constants';
@@ -24,12 +24,12 @@ export const ProductTabs = () => {
   };
 
   const { data } = useSuspenseQuery<ProductDetail>({
-    queryKey: QUERY_KEYS.PRODUCT_DETAIL(numericProductId!),
+    queryKey: productQueryKeys.detail(numericProductId!),
     queryFn: () => getProductDetail(numericProductId!),
   });
 
   const { data: reviewData } = useSuspenseQuery<ProductHighlightReview>({
-    queryKey: QUERY_KEYS.PRODUCT_HIGHLIGHT_REVIEW(numericProductId!),
+    queryKey: productQueryKeys.highlightReview(numericProductId!),
     queryFn: () => getProductHighlightReview(numericProductId!),
   });
 

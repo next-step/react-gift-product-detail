@@ -2,11 +2,11 @@ import ThemeItemCard  from '@/entities/theme/ui/ThemeItemCard';
 import * as S from './styles';
 import { getThemes } from '@/entities/theme/api/themeApi';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { themeQueryKeys } from '@/entities/theme/api/queryKeys';
 
 const ThemeField = () => {
   const { data } = useSuspenseQuery({
-    queryKey: QUERY_KEYS.THEMES,
+    queryKey: themeQueryKeys.all,
     queryFn: getThemes,
   });
 
