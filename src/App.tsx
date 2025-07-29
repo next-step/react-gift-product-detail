@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound";
 import MyPage from "./pages/MyPage";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { LoginProvider } from "./contexts/LoginContext";
+import { LoginProvider } from "./contexts/LoginProvider";
 import Order from "./pages/Order";
 import ThemeProducts from "./pages/ThemeProducts";
 import { ToastContainer } from "react-toastify";
