@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import {
   useProductInfo,
   useProductDetail,
@@ -23,7 +23,10 @@ import {
   activeTabStyle,
   tabContent,
   reviewAuthorStyle,
+  reviewContentStyle,
 } from './styles';
+
+import { ErrorBoundary } from '../../ErrorBoundary';
 
 const TAB = {
   DESCRIPTION: '상품설명',
@@ -33,7 +36,7 @@ const TAB = {
 
 type TabKey = keyof typeof TAB;
 
-const ProductDetailPage = () => {
+const ProductDetailContent = () => {
   const { productId } = useParams<{ productId: string }>();
   const [activeTab, setActiveTab] = useState<TabKey>('DESCRIPTION');
 
@@ -41,30 +44,10 @@ const ProductDetailPage = () => {
     return <div css={errorStyle}>상품 정보를 불러올 수 없습니다.</div>;
   }
 
-  const {
-    data: product,
-    isLoading: isLoadingProduct,
-    isError: isErrorProduct,
-  } = useProductInfo(productId);
-
-  const {
-    data: detail,
-    isLoading: isLoadingDetail,
-    isError: isErrorDetail,
-  } = useProductDetail(productId);
-
-  const { data: review, isLoading: isLoadingReview } =
-    useHighlightReview(productId);
-
+  const { data: product } = useProductInfo(productId);
+  const { data: detail } = useProductDetail(productId);
+  const { data: review } = useHighlightReview(productId);
   useWishInfo(productId);
-
-  if (isLoadingProduct || isLoadingDetail || isLoadingReview) {
-    return <div css={loadingStyle}>불러오는 중...</div>;
-  }
-
-  if (isErrorProduct || isErrorDetail || !product || !detail) {
-    return <div css={errorStyle}>상품 정보를 불러오는 데 실패했습니다.</div>;
-  }
 
   return (
     <main css={containerStyle}>
@@ -106,7 +89,7 @@ const ProductDetailPage = () => {
                 <p>
                   <strong css={reviewAuthorStyle}>{r.authorName}</strong>
                 </p>
-                <p>{r.content}</p>
+                <p css={reviewContentStyle}>{r.content}</p>
               </li>
             ))}
           </ul>
@@ -127,5 +110,13 @@ const ProductDetailPage = () => {
     </main>
   );
 };
+
+const ProductDetailPage = () => (
+  <ErrorBoundary>
+    <Suspense fallback={<div css={loadingStyle}>불러오는 중...</div>}>
+      <ProductDetailContent />
+    </Suspense>
+  </ErrorBoundary>
+);
 
 export default ProductDetailPage;

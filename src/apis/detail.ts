@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 // 1. 상품 기본 정보
 export interface ProductInfo {
@@ -28,7 +28,7 @@ export const fetchProductInfo = async (
 };
 
 export const useProductInfo = (productId: string) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['productInfo', productId],
     queryFn: () => fetchProductInfo(productId),
   });
@@ -55,7 +55,7 @@ export const fetchProductDetail = async (
 };
 
 export const useProductDetail = (productId: string) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(productId),
   });
@@ -68,15 +68,6 @@ export interface WishInfo {
 const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-export const fetchWishInfo = async (_productId: string) => {
-  await sleep(300);
-
-  return {
-    wishCount: 1234,
-    isWished: false,
-  };
-};
-
 export const fetchAddWishSuccess = async (newWish: boolean) => {
   await sleep(300);
   return newWish;
@@ -87,8 +78,13 @@ export const fetchAddWishError = async (_newWish: boolean) => {
   throw new axios.AxiosError('mock error', 'mock_code');
 };
 
+export const fetchWishInfo = async (_productId: string) => {
+  await new Promise((r) => setTimeout(r, 300));
+  return { wishCount: 1234, isWished: false };
+};
+
 export const useWishInfo = (productId: string) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['wishInfo', productId],
     queryFn: () => fetchWishInfo(productId),
   });
@@ -115,7 +111,7 @@ export const fetchHighlightReview = async (
 };
 
 export const useHighlightReview = (productId: string) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['highlightReview', productId],
     queryFn: () => fetchHighlightReview(productId),
   });

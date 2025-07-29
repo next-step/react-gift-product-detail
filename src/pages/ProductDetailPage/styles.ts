@@ -23,6 +23,18 @@ export const errorStyle = (theme: ThemeType) => css`
 export const reviewAuthorStyle = (theme: ThemeType) => css`
   ${theme.typography.label1Bold}
   color: ${theme.color.semantic.textDefault};
+  max-width: 720px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+`;
+
+export const reviewContentStyle = (theme: ThemeType) => css`
+  max-width: 750px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  margin: ${theme.spacing[1]};
 `;
 
 export const productImage = (theme: ThemeType) => css`
