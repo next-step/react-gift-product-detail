@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
-import { useEffect} from "react"
+import { useEffect } from "react"
 import PresentGiverForm from "@/components/PresentForm/PresentGiverForm"
 import CardThumbnail from "./CardThumbnail"
 import OrderLayout from "@/components/OrderLayout"
@@ -49,10 +49,10 @@ const OrderPage = () => {
     }
   }, [error, navigate])
 
-  const { createOrder } = useOrder()
+  const { mutate: createOrder, isPending: orderLoading, isSuccess } = useOrder()
   const { authToken } = useAuth()
 
-  const { handleSubmit,reset, watch } = methods
+  const { handleSubmit, reset, watch } = methods
 
   const receivers = watch("receivers")
 
@@ -63,7 +63,6 @@ const OrderPage = () => {
 
   const handleOrder = async (data: FormData) => {
     try {
-      
       if (!authToken) {
         toast.error("로그인이 필요합니다.")
         navigate("/login")
@@ -72,8 +71,8 @@ const OrderPage = () => {
 
       if (!product) return
 
-      await createOrder(
-        {
+      await createOrder({
+        order: {
           productId: product.id,
           message: data.message ?? "",
           messageCardId: data.messageCardId ?? "",
@@ -84,8 +83,8 @@ const OrderPage = () => {
             quantity: Number(r.quantity),
           })),
         },
-        authToken 
-      )
+        token: authToken,
+      })
       alert(
         `주문이 완료되었습니다.\n` +
           `상품명: ${product.name}\n` +
@@ -93,11 +92,10 @@ const OrderPage = () => {
           `발신자 이름: ${data.senderName}\n` +
           `메시지: ${data.message}`
       )
-
-    } catch (e:any) {
+    } catch (e: any) {
       if (e?.name === 401) {
         toast.error("인증이 만료되었습니다. 다시 로그인해주세요.")
-        localStorage.removeItem("authToken") 
+        localStorage.removeItem("authToken")
         navigate("/login")
         return
       }
@@ -111,10 +109,10 @@ const OrderPage = () => {
 
   const totalPrice = totalQuantity * product.price
 
-const onSubmit = (data: FormData) => {
-  
-  handleOrder(data);
-  reset(); }
+  const onSubmit = (data: FormData) => {
+    handleOrder(data)
+    reset()
+  }
   return (
     <FormProvider {...methods}>
       <OrderLayout

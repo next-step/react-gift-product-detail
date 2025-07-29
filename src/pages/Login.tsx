@@ -32,7 +32,7 @@ const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || "/my"
-  const { login } = useAuth()
+  const { login, isLoggingIn } = useAuth()
 
   const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target
@@ -57,7 +57,7 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    if (!isEmailValid || !isPasswordValid) return
+    if (!isEmailValid || !isPasswordValid || isLoggingIn) return
 
     try {
       const success = await login(data.email, data.password)
@@ -105,7 +105,7 @@ const Login = () => {
         <MoreButton
           background="kakaoYellow"
           borderRadius="spacing0"
-          disabled={!isEmailValid || !isPasswordValid}
+          disabled={!isEmailValid || !isPasswordValid || isLoggingIn}
         >
           로그인
         </MoreButton>

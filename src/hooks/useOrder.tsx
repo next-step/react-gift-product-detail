@@ -1,6 +1,7 @@
-import { useState } from "react"
 import axios from "axios"
-
+import type { AxiosError } from "axios"
+import { useNavigate } from "react-router-dom"
+import { useMutation } from "@tanstack/react-query"
 export interface OrderRequest {
   productId: number
   message: string
@@ -14,39 +15,29 @@ export interface OrderRequest {
 }
 
 export function useOrder() {
-  const [orderLoading, setLoading] = useState(false)
-  const [orderError, setError] = useState<null | string>(null)
-  const [success, setSuccess] = useState(false)
   const baseUrl = import.meta.env.VITE_BASE_URL
-  const orderUrl = new URL(`/api/order`, baseUrl).toString()
+  const orderUrl = new URL("/api/order", baseUrl).toString()
+  const navigate = useNavigate()
 
-  const createOrder = async (order: OrderRequest, token: string) => {
-    setLoading(true)
-    setError(null)
-    setSuccess(false)
-    try {
-      const res = await axios.post(orderUrl, order, {
+  return useMutation<
+    unknown,
+    AxiosError,
+    { order: OrderRequest; token: string }
+  >({
+    mutationFn: async ({ order, token }) => {
+      const { data } = await axios.post(orderUrl, order, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
       })
-      setSuccess(true)
-      return res.data
-    } catch (err: any) {
-      const errorMessage = err?.response?.data?.message || "주문 실패"
-      setError(errorMessage)
-      
-      if (err?.response?.status === 401) {
-        const error401 = new Error(errorMessage)
-        error401.name = "401"
-        throw error401
-      }
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
+      return data
+    },
 
-  return { createOrder, orderLoading, orderError, success }
+    onError: (err) => {
+      if (err.response?.status === 401) {
+        navigate("/login")
+      }
+    },
+  })
 }

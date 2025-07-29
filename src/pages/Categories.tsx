@@ -7,13 +7,14 @@ import Layout from "@/components/Layout"
 import Blank from "@/components/Blank"
 import Column from "@/components/Column"
 import Trending from "../components/Trending"
-import useFetch from "@/hooks/useFetch"
 import Loading from "@/components/PresentTheme/Loading"
 import ThemeNotFound from "@/components/PresentTheme/ThemeNotFound"
 import { useNavigate } from "react-router-dom"
 import { useCallback } from "react"
 import { ROUTES } from "@/constants/routes"
 import getRoute from "@/functions/getRoute"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
 
 interface PresentItem {
   themeId: number
@@ -53,13 +54,9 @@ const PresentList = () => {
   const baseUrl = import.meta.env.VITE_BASE_URL
   const url = new URL("/api/themes", baseUrl).toString()
 
-  const { data: themesData, loading } = useFetch<ThemesResponse>(url, {
-    onSuccess: (data) => {
-      console.log("Themes fetched:", data)
-    },
-    onError: (error) => {
-      console.log("Error fetching themes:", error)
-    },
+  const { data: themesData, isLoading: loading } = useQuery<ThemesResponse>({
+    queryKey: ["themes"],
+    queryFn: () => axios.get<ThemesResponse>(url).then((res) => res.data),
   })
 
   const presents = themesData?.data || []
