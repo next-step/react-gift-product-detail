@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Layout from '@/Layout'
 import { cardTemplates, type CardTemplate } from '@/data/cardTemplates'
-import { fetchProductSummary, type ProductSummary } from '@/api/product'
-import { postOrder } from '@/api/order'
+import { useProductSummaryQuery, type ProductSummary } from '@/api/product'
+import { useOrderMutation } from '@/api/order'
 import useOrderForm, { type OrderFormValues } from '@/hooks/useOrderForm'
 import RecipientModal from '@/components/RecipientModal'
 import { toast } from 'react-toastify'
@@ -30,9 +30,9 @@ import {
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [product, setProduct] = useState<ProductSummary | null>(null)
+  const { data: product } = useProductSummaryQuery(id ? Number(id) : undefined)  
   const { userInfo } = useAuth()
-
+  const { mutateAsync: orderMutate } = useOrderMutation()
   const [selected, setSelected] = useState<CardTemplate>(cardTemplates[0])
   const [modalOpen, setModalOpen] = useState(false)
   const {
@@ -46,27 +46,6 @@ export default function OrderPage() {
     remove,
     watch,
   } = useOrderForm(cardTemplates[0].defaultTextMessage)
-
-  useEffect(() => {
-    if (!id) return
-
-    async function load() {
-      try {
-        const data = await fetchProductSummary(Number(id))
-        setProduct(data)
-      } catch (err: any) {
-        const code = err?.statusCode ?? 0
-        if (code >= 400 && code < 500) {
-          toast.error(err.message)
-          navigate('/', { replace: true })
-        } else {
-          toast.error('상품 정보를 불러오지 못했습니다.')
-        }
-      }
-    }
-
-    load()
-  }, [id, navigate])
 
   useEffect(() => {
     if (userInfo) {
@@ -86,8 +65,8 @@ export default function OrderPage() {
     if (!id || !userInfo) return
 
     try {
-      await postOrder(
-        {
+      await orderMutate({
+        order: {
           productId: Number(id),
           message: data.message,
           messageCardId: String(selected.id),
@@ -98,8 +77,8 @@ export default function OrderPage() {
             quantity: r.qty,
           })),
         },
-        userInfo.authToken,
-      )
+        token: userInfo.authToken,
+      })
       alert('주문이 완료되었습니다.')
       navigate('/')
     } catch (err: any) {

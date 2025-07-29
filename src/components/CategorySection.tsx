@@ -1,12 +1,10 @@
 ﻿import styled from '@emotion/styled'
-import useAsync from '@/hooks/useAsync'
+import { useThemesQuery } from '@/api/themes'
 import CategoryCard from './CategoryCard'
 import CategorySkeleton from './CategorySkeleton'
 import { colors } from '@/theme/color'
 import { typography } from '@/theme/typography'
 import { spacing } from '@/theme/spacing'
-import { fetchThemes } from '@/api/themes'
-import type { Theme } from '@/api/themes'
 
 const Section = styled.section`
   margin-top: ${spacing.spacing6};
@@ -26,10 +24,9 @@ const Grid = styled.div`
   gap: ${spacing.spacing4};
 `
 export default function CategorySection() {
-  const { data, loading, error } = useAsync<Theme[]>(fetchThemes, [])
-  const themes = data ?? []
+  const { data: themes = [], isLoading, isError } = useThemesQuery()
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Section>
         <Title>선물 테마</Title>
@@ -38,7 +35,7 @@ export default function CategorySection() {
     )
   }
 
-  if (error || themes.length === 0) {
+  if (isError || themes.length === 0) {
     return null
   }
 

@@ -1,7 +1,15 @@
-## 0단계 - 기본 코드 준비 및 미션 3 피드백 반영
+## 1단계 - 기본 코드 준비 및 미션 3 피드백 반영
 
-# src/api/themes.ts
-- API 관련 부분은 언제든지 수정 될 수 있으니 가급적이면 type 분리 이후에 적용
+# 목표
+- **React Query**를 사용하여 API 사용 방식과 사용자 경험을 고도화 해요.
 
-# src/pages/ThemeProductsPage.tsx
-- load 함수와 useEffect 내부 로직이 동일한 흐름이므로 이 부분을 훅으로 처리
+# 과제 진행 요구사항
+- 본인만의 기준으로 일관된 코드를 작성해주세요.
+- 기능 단위로 나누어 커밋을 해주세요.
+- 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
+
+- [ ] auth.ts 를 React Query를 이용하여 리팩터링
+- [ ] client.ts 를 React Query를 이용하여 리팩터링
+- [ ] order.ts 를 React Query를 이용하여 리팩터링
+- [ ] product.ts 를 React Query를 이용하여 리팩터링
+- [ ] themes.ts 를 React Query를 이용하여 리팩터링

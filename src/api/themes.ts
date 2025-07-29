@@ -10,6 +10,11 @@ export interface ThemeProductsResponse {
   hasMoreList: boolean
 }
 import { fetchApi } from './client'
+import {
+  useQuery,
+  type UseQueryOptions,
+  type UseQueryResult,
+} from '@tanstack/react-query'
 
 export interface FetchThemeProductsParams {
   cursor?: number
@@ -38,4 +43,27 @@ export async function fetchThemeProducts(
   }
 
   return data
+   }
+
+export function useThemesQuery(
+  options?: UseQueryOptions<Theme[], Error>,
+): UseQueryResult<Theme[], Error> {
+  return useQuery<Theme[], Error>({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
+    ...options,
+  })
+}
+
+export function useThemeProductsQuery(
+  themeId: number | undefined,
+  params?: FetchThemeProductsParams,
+  options?: UseQueryOptions<ThemeProductsResponse, Error>,
+): UseQueryResult<ThemeProductsResponse, Error> {
+  return useQuery<ThemeProductsResponse, Error>({
+    queryKey: ['themes', themeId, 'products', params],
+    queryFn: () => fetchThemeProducts(themeId!, params),
+    enabled: themeId !== undefined,
+    ...options,
+  })
 }
