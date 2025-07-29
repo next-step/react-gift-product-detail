@@ -134,7 +134,7 @@ const ProductCard = ({
       <ProductName>{product.name}</ProductName>
       <PriceSection>
         <SellingPrice>
-          {product.price?.sellingPrice 
+          {product.price?.sellingPrice && product.price.sellingPrice > 0
             ? `${product.price.sellingPrice.toLocaleString()}원`
             : "가격 정보 없음"
           }

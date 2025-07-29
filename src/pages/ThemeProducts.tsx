@@ -15,9 +15,16 @@ const HeroSection = styled.div<{ backgroundColor?: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 60px 20px;
-  text-align: center;
+  text-align: left;
+`;
+
+const ThemeCategory = styled.div`
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: 500;
 `;
 
 const ThemeTitle = styled.h1`
@@ -58,9 +65,17 @@ const ProductsSection = styled.div`
 
 const ProductsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-bottom: 40px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const LoadingIndicator = styled.div`
@@ -133,6 +148,7 @@ const ThemeProducts = () => {
   return (
     <Layout>
       <HeroSection backgroundColor={themeDetail.backgroundColor}>
+        <ThemeCategory>생일</ThemeCategory>
         <ThemeTitle>{themeDetail.title}</ThemeTitle>
         <ThemeDescription>{themeDetail.description}</ThemeDescription>
       </HeroSection>
