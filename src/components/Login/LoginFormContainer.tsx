@@ -6,7 +6,7 @@ import {
 } from '@src/components/Login/StyledLoginFormContainer';
 import { useLoginForm } from '../../hooks/useLoginForm';
 import { useNavigate } from 'react-router-dom';
-import { handleLoginLogic } from './handleLoginLogic';
+import { useLoginMutation } from './handleLoginLogic';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -21,9 +21,14 @@ const LoginForm = () => {
     handlePwChange,
     isLoginButtonEnabled,
   } = useLoginForm();
+  const loginMutation = useLoginMutation(navigate);
 
-  const handleLogin = () => {
-    handleLoginLogic(id, pw, navigate);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = id;
+    const password = pw;
+
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -49,7 +54,7 @@ const LoginForm = () => {
         placeholder='비밀번호'
       />
       {pwError && <p>{pwError}</p>}
-      <StyledLoginButton onClick={handleLogin} disabled={!isLoginButtonEnabled}>
+      <StyledLoginButton onClick={handleSubmit} disabled={!isLoginButtonEnabled}>
         로그인
       </StyledLoginButton>
     </StyledLoginComponentDiv>
