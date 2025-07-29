@@ -44,7 +44,7 @@ export default function MyPage() {
       {/* ...마이페이지 본문... */}
         <Typography as="h1" color="default">
         {user?.name}님, 안녕하세요!<br />
-        이메일주소는 {user?.id} 입니다.
+        이메일주소는 {user?.email} 입니다.
       </Typography>
       <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
     </Container>
