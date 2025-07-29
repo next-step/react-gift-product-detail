@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
 import { useProductInfo, useProductDetail, useProductHighlightReview, useProductWish, useToggleWish } from '@/api/productDetail';
+import ErrorBoundary from '@/Components/ErrorBoundary';
+import SuspenseWrapper from '@/Components/SuspenseWrapper';
 
 const ProductContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
@@ -377,7 +379,8 @@ const WishButtonContainer = styled.div`
   position: relative;
 `;
 
-const ProductDetail = () => {
+// 실제 상품 상세 내용을 렌더링하는 컴포넌트
+const ProductDetailContent = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const id = productId ? parseInt(productId) : 0;
@@ -420,21 +423,11 @@ const ProductDetail = () => {
   }
 
   if (hasError) {
-    return (
-      <Layout>
-        <ErrorMessage>
-          상품 정보를 불러오는데 실패했습니다.
-        </ErrorMessage>
-      </Layout>
-    );
+    throw new Error('상품 정보를 불러오는데 실패했습니다.');
   }
 
   if (!product) {
-    return (
-      <Layout>
-        <ErrorMessage>상품을 찾을 수 없습니다.</ErrorMessage>
-      </Layout>
-    );
+    throw new Error('상품을 찾을 수 없습니다.');
   }
 
   const hasDiscount = product.price.discountRate > 0;
@@ -675,6 +668,17 @@ const ProductDetail = () => {
         )}
       </ProductContainer>
     </Layout>
+  );
+};
+
+// 메인 ProductDetail 컴포넌트 (ErrorBoundary와 Suspense로 감싸기)
+const ProductDetail = () => {
+  return (
+    <ErrorBoundary>
+      <SuspenseWrapper message="상품 정보를 불러오는 중...">
+        <ProductDetailContent />
+      </SuspenseWrapper>
+    </ErrorBoundary>
   );
 };
 
