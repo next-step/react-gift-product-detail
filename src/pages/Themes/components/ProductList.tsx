@@ -13,14 +13,13 @@ const ProductList = () => {
     themeId ?? "",
     PRODUCT_LIST_LIMIT,
     0.5,
-    "상품 목록을 불러오는데 실패했습니다.",
   );
 
   return (
     <Container>
       <Content>
         {items.map((item) => (
-          <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
+          <Item key={item.id} to={generatePath(ROUTE_PATH.PRODUCT, { productId: String(item.id) })}>
             <ItemContent>
               <ItemContentImg src={item.imageURL} alt={item.name} />
               <ItemContentBrand>{item.brandInfo.name}</ItemContentBrand>

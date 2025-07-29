@@ -1,26 +1,19 @@
 import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
-import RecipientFieldModalInputForm from "./RecipientFieldModalInputForm";
+import RecipientFieldModalInputForm from "./ReceiverFieldModalInputForm";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import type { OrderFormType, RecipientType } from "@/pages/Order/components/Order";
+import type { OrderFormType, ReceiverType } from "@/pages/Order/components/Order";
 import { useEffect, useRef, type ComponentPropsWithoutRef } from "react";
 import ErrorMsg from "./ErrorMsg";
 
-interface RecipientFieldModalProps {
+interface ReceiverFieldModalProps {
   closeModal: () => void;
-  initialRecipients: RecipientType[];
+  initialRecipients: ReceiverType[];
 }
 
-const RecipientFieldModal = ({ closeModal, initialRecipients: initialRecipientsProp }: RecipientFieldModalProps) => {
-  const {
-    control,
-    trigger,
-    setValue,
-    getValues,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext<OrderFormType>();
-  const { fields, append, remove } = useFieldArray({ control, name: "recipients" });
+const ReceiverFieldModal = ({ closeModal, initialRecipients: initialRecipientsProp }: ReceiverFieldModalProps) => {
+  const { control, trigger, setValue, getValues, clearErrors, formState: { errors } } = useFormContext<OrderFormType>();
+  const { fields, append, remove } = useFieldArray({ control, name: "receivers" });
   const initialRecipients = useRef(initialRecipientsProp);
 
   useEffect(() => {
@@ -31,15 +24,15 @@ const RecipientFieldModal = ({ closeModal, initialRecipients: initialRecipientsP
   }, []);
 
   const confirmRecipients = async () => {
-    const isValid = await trigger("recipients");
+    const isValid = await trigger("receivers");
     if (isValid) {
-      setValue("recipients", getValues("recipients"));
+      setValue("receivers", getValues("receivers"));
       closeModal();
     }
   };
   const cancelRecipients = () => {
-    setValue("recipients", initialRecipients.current);
-    clearErrors("recipients");
+    setValue("receivers", initialRecipients.current);
+    clearErrors("receivers");
     closeModal();
   };
   const isValidAddBtn = fields.length < 10;
@@ -51,7 +44,7 @@ const RecipientFieldModal = ({ closeModal, initialRecipients: initialRecipientsP
           <Divider spacing="0.25rem" />
           <HelpMsg>* 최대 10명까지 추가할 수 있어요.</HelpMsg>
           <HelpMsg>* 받는 사람의 전화번호를 중복으로 입력할 수 없어요.</HelpMsg>
-          {errors.recipients && <ErrorMsg>{errors.recipients.message}</ErrorMsg>}
+          {errors.receivers && <ErrorMsg>{errors.receivers.message}</ErrorMsg>}
           <Divider spacing="0.5rem" />
           <AddBtn
             type="button"
@@ -79,7 +72,7 @@ const RecipientFieldModal = ({ closeModal, initialRecipients: initialRecipientsP
   );
 };
 
-export default RecipientFieldModal;
+export default ReceiverFieldModal;
 
 const Container = styled.div`
   width: 100%;
@@ -128,7 +121,7 @@ const AddBtn = styled.button<ComponentPropsWithoutRef<"button">>`
 const FieldWrapper = styled.div`
   flex: 1 1 0%;
   overflow: auto;
-  & > div:not(:first-to-type) {
+  & > div:not(:first-of-type) {
     border-top: 1px solid ${({ theme }) => theme.color.gray500};
     padding-top: ${({ theme }) => theme.spacing.spacing2};
     margin-top: ${({ theme }) => theme.spacing.spacing4};

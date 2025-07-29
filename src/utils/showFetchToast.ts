@@ -1,3 +1,5 @@
+import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
+import axios from "axios";
 import { toast, type ToastOptions } from "react-toastify";
 
 const defaultToastOptions: ToastOptions = {
@@ -13,20 +15,28 @@ const defaultToastOptions: ToastOptions = {
   },
 };
 
-export const showFetchErrorToast = (errorStatusCode: number, message: string, onClose?: () => void) => {
-  if (errorStatusCode >= 400 && errorStatusCode < 500) {
-    toast.error(message, {
-      ...defaultToastOptions,
-      onClose: onClose,
-    });
-  } else if (errorStatusCode >= 500) {
-    toast.error(`잠시 후 다시 시도해주세요.\n${message}`, {
-      ...defaultToastOptions,
-    });
+export const showFetchErrorToast = (error: Error, onOpen?: () => void) => {
+  if (axios.isAxiosError<ApiErrorResponse>(error)) {
+    const statusCode = error.response?.data.data.statusCode as number;
+    const message = error.response?.data.data.message as string;
+    if (statusCode >= 400 && statusCode < 500) {
+      toast.error(message, {
+        ...defaultToastOptions,
+        onOpen: onOpen,
+      });
+    } else if (statusCode >= 500) {
+      toast.error(`잠시 후 다시 시도해주세요.\n${message}`, {
+        ...defaultToastOptions,
+      });
+    }
+  } else {
+    if (onOpen) {
+      onOpen();
+    }
   }
 };
 
-export const showFetchSuccessToast = (message: string, onClose?: () => void) => {
+export const showFetchSuccessToast = (message: string, onOpen?: () => void) => {
   toast.success(message, {
     position: "top-center",
     autoClose: 3000,
@@ -35,6 +45,6 @@ export const showFetchSuccessToast = (message: string, onClose?: () => void) => 
     draggable: true,
     progress: undefined,
     theme: "colored",
-    onClose: onClose,
+    onOpen: onOpen,
   });
 };

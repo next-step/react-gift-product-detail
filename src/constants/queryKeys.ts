@@ -5,4 +5,9 @@ export const QUERY_KEYS = {
   THEMES: ["themes"] as const,
   THEME_INFO: (themeId: string) => ["themeInfo", themeId] as const,
   THEME_PRODUCTS: (themeId: string) => ["themeProducts", themeId] as const,
+
+  PRODUCT: (productId: string) => ["product", productId] as const,
+  PRODUCT_DETAIL: (productId: string) => ["productDetail", productId] as const,
+  PRODUCT_HIGHLIGHT_REVIEW: (productId: string) => ["productHighlightReview", productId] as const,
+  PRODUCT_WISH: (productId: string) => ["productWish", productId] as const,
 } as const;

@@ -8,20 +8,20 @@ interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
+  fullHeight?: boolean;
+  round?: boolean;
 }
 
-const Button = ({ variant, size, fullWidth, children, ...props }: ButtonProps) => {
-  return (
-    <Style variant={variant} size={size} fullWidth={fullWidth} {...props}>
-      {children}
-    </Style>
-  );
+const Button = ({ children, ...props }: ButtonProps) => {
+  return <Style {...props}>{children}</Style>;
 };
 
 const Style = styled.button<{
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
+  fullHeight?: boolean;
+  round?: boolean;
 }>`
   display: flex;
   justify-content: center;
@@ -29,25 +29,25 @@ const Style = styled.button<{
   font-family: "Pretendard", sans-serif;
   cursor: ${({ disabled = false }) => (disabled ? "not-allowed" : "pointer")};
   border: none;
+  border-radius: ${({ round = false }) => (round ? "4px" : "0")};
+  ${({ disabled = false }) => disabled && "opacity: 0.5;"}
+  transition: 0.2s;
 
   ${({ size = "medium", theme }) => {
     switch (size) {
       case "small":
         return `
             min-height: 1.875rem;
-            font: ${theme.typography.body2Regular};
             padding: ${theme.spacing.spacing2};
         `;
       case "medium":
         return `
             min-height: 2.75rem;
-            font: ${theme.typography.body1Regular};
             padding: ${theme.spacing.spacing3};
         `;
       case "large":
         return `
             min-height: 3.625rem;
-            font: ${theme.typography.title2Regular};
             padding: ${theme.spacing.spacing4};
         `;
     }
@@ -57,12 +57,10 @@ const Style = styled.button<{
     switch (variant) {
       case "primary":
         return `
-                min-height: 2.75rem;
                 width: 25rem;
                 background-color: ${theme.color.kakaoYellow};
                 color: ${theme.color.gray800};
                 font: ${theme.typography.body1Regular};
-                border-radius: 4px;
 
                 &:hover:not(:disabled) {
                     background-color: ${theme.color.kakaoYellowHover};
@@ -73,13 +71,11 @@ const Style = styled.button<{
             `;
       case "secondary":
         return `
-                min-height: 2.75rem;
                 width: 25rem;
                 background-color: ${theme.color.backgroundColor.default};
                 color: ${theme.color.gray800};
                 font: ${theme.typography.body1Regular};
                 border: 1px solid ${theme.color.gray400};
-                border-radius: 4px;
 
                 &:hover:not(:disabled) {
                     background-color: ${theme.color.gray100};
@@ -96,7 +92,8 @@ const Style = styled.button<{
     }
   }};
 
-  ${({ fullWidth = false }) => fullWidth && "width: 100%"}
+  ${({ fullWidth = false }) => fullWidth && "width: 100%;"}
+  ${({ fullHeight = false }) => fullHeight && "height: 100%;"}
 `;
 
 export default Button;

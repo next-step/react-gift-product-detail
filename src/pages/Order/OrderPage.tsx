@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import Container from "@/components/common/Container";
 import Divider from "@/components/common/Divider";
-import Order from "@/pages/Order/components/Order";
+import Order, { type OrderFormType } from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,9 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import type { PostOrderParams } from "@/apis/order/postOrder";
 import postOrder from "@/apis/order/postOrder";
+import Loading from "@/components/common/Loading";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
+import NotFoundPage from "@/pages/NotFound/NotFoundPage";
 
 const OrderPage = () => {
   return (
@@ -24,7 +27,7 @@ const OrderPage = () => {
 
 const OrderPageContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit: createSubmitHandler, getValues } = useFormContext();
+  const { handleSubmit: createSubmitHandler, getValues } = useFormContext<OrderFormType>();
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -35,12 +38,10 @@ const OrderPageContent = () => {
     },
     onError: (error) => {
       if (axios.isAxiosError<ApiErrorResponse>(error)) {
-        const statusCode = error.response?.data.data.statusCode as number;
-        const message = error.response?.data.data.message as string;
-        if (statusCode === 401) {
-          showFetchErrorToast(statusCode, "유효하지 않은 계정입니다.", goLogin);
+        if (error.response?.data.data.statusCode === 401) {
+          showFetchErrorToast(error, goLogin);
         } else {
-          showFetchErrorToast(statusCode, message);
+          showFetchErrorToast(error);
         }
       }
     },
@@ -54,33 +55,40 @@ const OrderPageContent = () => {
     navigate(ROUTE_PATH.LOGIN);
   }, [logout, navigate]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: OrderFormType) => {
     const body: PostOrderParams = {
       productId: data.productId,
       message: data.message,
-      messageCardId: `card${data.cardId}`,
-      ordererName: data.sender,
-      receivers: data.recipients,
+      messageCardId: `card${data.messageCardId}`,
+      ordererName: data.ordererName,
+      receivers: data.receivers,
     };
     mutate(body);
   };
   return (
-    <Container>
-      <Content onSubmit={createSubmitHandler(onSubmit)}>
-        <Order.Card />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Sender />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Recipient openModal={openModal} />
-        <Divider spacing="0.5rem" fill={false} />
-        <Order.Product />
-        <Divider spacing="3.125rem" />
-        <Order.Btn />
-      </Content>
-      {isModalOpen && (
-        <Order.Modal closeModal={closeModal} initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))} />
-      )}
-    </Container>
+    <ErrorBoundary fallback={<NotFoundPage />} onError={(error) => showFetchErrorToast(error, goHome)}>
+      <Suspense fallback={<Loading height="100vh" />}>
+        <Container>
+          <Content onSubmit={createSubmitHandler(onSubmit)}>
+            <Order.Card />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Orderer />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Receiver openModal={openModal} />
+            <Divider spacing="0.5rem" fill={false} />
+            <Order.Product />
+            <Divider spacing="3.125rem" />
+            <Order.Btn />
+          </Content>
+          {isModalOpen && (
+            <Order.Modal
+              closeModal={closeModal}
+              initialRecipients={JSON.parse(JSON.stringify(getValues("receivers")))}
+            />
+          )}
+        </Container>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 

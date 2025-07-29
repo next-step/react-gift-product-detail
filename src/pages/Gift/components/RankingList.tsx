@@ -1,15 +1,14 @@
-import { rankingItemMock } from "@/assets/rankingItemMock";
 import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
 import { useState } from "react";
 import Button from "@/components/common/Button";
-import Loading from "@/components/common/Loading";
 import { ROUTE_PATH } from "@/components/routes/routePath";
 import { generatePath, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import getProductsRanking from "@/apis/products/getProductsRanking";
 import type { ProductRankingFilterOption } from "@/types/ProductType";
 import { QUERY_KEYS } from "@/constants/queryKeys";
+import RankingListEmpty from "./RankingListEmpty";
 
 interface RankingListProps {
   targetType: ProductRankingFilterOption["targetType"];
@@ -22,34 +21,27 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   const [viewCount, setViewCount] = useState(RANKING_LIST_ITEM_VIEW_COUNT);
   const isCollapsed = viewCount === RANKING_LIST_ITEM_VIEW_COUNT;
   const toggleView = () => {
-    const nextViewCount = isCollapsed ? rankingItemMock.length : RANKING_LIST_ITEM_VIEW_COUNT;
+    const nextViewCount = isCollapsed ? data.length : RANKING_LIST_ITEM_VIEW_COUNT;
     setViewCount(nextViewCount);
   };
 
-  const { data, isPending, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: QUERY_KEYS.PRODUCTS_RANKING(targetType, rankType),
     queryFn: () => getProductsRanking({ targetType, rankType }),
-    select: (data) => data.data.data,
   });
 
-  if (isPending) {
-    return <Loading height="625px" />;
+  if (data.length === 0) {
+    return <RankingListEmpty />;
   }
-  if (isError || data?.length === 0) {
-    return (
-      <Empty>
-        <Msg>상품이 없습니다.</Msg>
-      </Empty>
-    );
-  }
+
   return (
     <Container>
       <Content>
-        {data?.slice(0, viewCount).map((item, index) => (
-          <Item key={item.id} to={generatePath(ROUTE_PATH.ORDER, { productId: String(item.id) })}>
+        {data.slice(0, viewCount).map((item, index) => (
+          <Item key={item.id} to={generatePath(ROUTE_PATH.PRODUCT, { productId: String(item.id) })}>
             <ItemRank ranking={index + 1}>{index + 1}</ItemRank>
             <ItemContent>
-              <ItemContentImg src={item.imageURL} />
+              <ItemContentImg src={item.imageURL} alt={item.name} />
               <ItemContentBrand>{item.brandInfo.name}</ItemContentBrand>
               <ItemContentTitle>{item.name}</ItemContentTitle>
               <ItemContentPrice>
@@ -62,7 +54,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
       </Content>
       <Divider />
       <ItemContent>
-        <Button variant="secondary" onClick={toggleView}>
+        <Button variant="secondary" round onClick={toggleView}>
           {isCollapsed ? "더보기" : "접기"}
         </Button>
       </ItemContent>
@@ -71,18 +63,6 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   );
 };
 
-const Empty = styled.div`
-  width: 100%;
-  display: flex;
-  height: 240px;
-  justify-content: center;
-  align-items: center;
-`;
-const Msg = styled.p`
-  width: 100%;
-  font: ${({ theme }) => theme.typography.label1Regular};
-  text-align: center;
-`;
 const Container = styled.div`
   width: 100%;
 `;
@@ -128,6 +108,7 @@ const ItemContent = styled.div`
 `;
 const ItemContentImg = styled.img`
   width: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center center;
   border-radius: 4px;

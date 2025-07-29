@@ -1,45 +1,16 @@
-import Loading from "@/components/common/Loading";
-import { ROUTE_PATH } from "@/components/routes/routePath";
 import getThemeInfo from "@/apis/themes/getThemeInfo";
-import { showFetchErrorToast } from "@/utils/showFetchToast";
 import styled from "@emotion/styled";
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import type { ApiErrorResponse } from "@/types/ApiErrorResponse";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const HeroSection = () => {
-  const navigate = useNavigate();
-  const goHome = useCallback(() => navigate(ROUTE_PATH.HOME), [navigate]);
   const { themeId } = useParams();
 
-  const { data, isPending, error, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: QUERY_KEYS.THEME_INFO(themeId ?? ""),
     queryFn: () => getThemeInfo({ themeId: themeId ?? "" }),
-    select: (data) => data.data.data,
   });
-
-  useEffect(() => {
-    if (isError && axios.isAxiosError<ApiErrorResponse>(error)) {
-      const statusCode = error.response?.data.data.statusCode as number;
-      const message = error.response?.data.data.message as string;
-      if (statusCode === 404) {
-        showFetchErrorToast(statusCode, message, goHome);
-      } else {
-        showFetchErrorToast(statusCode, "잠시 후 다시 시도해주세요.", goHome);
-      }
-    }
-  }, [isError, error, goHome]);
-
-  if (isPending) {
-    return <Loading height="127.2px" />;
-  }
-
-  if (isError || !data) {
-    return null;
-  }
 
   return (
     <Container $backgroundColor={data.backgroundColor}>

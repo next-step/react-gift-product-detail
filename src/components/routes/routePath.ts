@@ -6,6 +6,7 @@ export const ROUTE_PATH = {
   PROFILE: "/my",
   ORDER: "/order/:productId",
   THEMES: "/themes/:themeId",
+  PRODUCT: "/product/:productId",
   NOT_FOUND: "*",
 } as const;
 

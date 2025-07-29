@@ -5,7 +5,7 @@ import Close from "@/components/icons/Close";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
 
-interface RecipientFieldModalInputFormProps {
+interface ReceiverFieldModalInputFormProps {
   index: number;
   remove: (index: number) => void;
 }
@@ -31,15 +31,11 @@ const RECIPIENT_INPUT_CONFIG = [
   },
 ] as const;
 
-const RecipientFieldModalInputForm = ({ index, remove }: RecipientFieldModalInputFormProps) => {
-  const {
-    register,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext<OrderFormType>();
+const ReceiverFieldModalInputForm = ({ index, remove }: ReceiverFieldModalInputFormProps) => {
+  const { register, clearErrors, formState: { errors } } = useFormContext<OrderFormType>();
 
   const removeRecipient = (index: number) => {
-    clearErrors(`recipients.${index}`);
+    clearErrors(`receivers.${index}`);
     remove(index);
   };
 
@@ -57,9 +53,12 @@ const RecipientFieldModalInputForm = ({ index, remove }: RecipientFieldModalInpu
             <InputTitle>{config.title}</InputTitle>
             <InputWrapper>
               <Input
-                {...register(`recipients.${index}.${config.key}` as const)}
+                {...register(`receivers.${index}.${config.key}` as const, {
+                  valueAsNumber: config.key === "quantity",
+                })}
                 placeholder={config.placeholder}
-                errorMsg={errors.recipients?.[index]?.[config.key]?.message}
+                errorMsg={errors.receivers?.[index]?.[config.key]?.message}
+                type={config.type}
               />
             </InputWrapper>
           </InputWrapper>
@@ -70,7 +69,7 @@ const RecipientFieldModalInputForm = ({ index, remove }: RecipientFieldModalInpu
   );
 };
 
-export default RecipientFieldModalInputForm;
+export default ReceiverFieldModalInputForm;
 
 const TitleWrapper = styled.div`
   display: flex;

@@ -23,6 +23,15 @@ const initInstance = (config: CreateAxiosDefaults): AxiosInstance => {
     return config;
   });
 
+  instance.interceptors.response.use(
+    (response) => {
+      return response.data;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+
   return instance;
 };
 
