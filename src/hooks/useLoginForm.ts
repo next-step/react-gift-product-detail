@@ -1,5 +1,5 @@
 import { useInput } from "./useInput";
-import { useLoginContext } from "../contexts/LoginContext";
+import { useLoginContext } from "./useLoginContext";
 import { useLogin } from "./useLogin";
 
 interface UseLoginFormOptions {

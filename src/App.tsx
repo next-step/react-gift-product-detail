@@ -37,7 +37,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/order/:id" element={<Order />} />
+              <Route
+                path="/order/:id"
+                element={
+                  <ProtectedRoute>
+                    <Order />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/order" element={<Navigate to="/" replace />} />
               <Route path="/themes/:themeId" element={<ThemeProducts />} />
               <Route path="*" element={<NotFound />} />
