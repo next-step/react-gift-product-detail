@@ -1,4 +1,6 @@
-import { BlankSpace } from "@/components/common";
+import { BlankSpace, LoadingSpinner } from "@/components/common";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { MainPageErrorFallback } from "@/components/error/MainPageErrorFallback";
 import {
   ProductDetailDescription,
   ProductDetailInfo,
@@ -10,20 +12,20 @@ import {
 } from "@/components/productDetail";
 import { useRouter } from "@/hooks/common/useRouter";
 import { useFakeWish, useProductDetail } from "@/hooks/products";
-import { useState } from "react";
+import { queryClient } from "@/query-client";
+import { Suspense, useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const ProductDetailPage = () => {
-  const { id: productId } = useParams<{ id: string }>();
+const ProductDetailContent = ({ productId }: { productId: number }) => {
   const { goOrderPage } = useRouter();
   const { highlightReview, productDetail, productInfo, wishCount } =
-    useProductDetail(Number(productId));
+    useProductDetail(productId);
   const wishMutation = useFakeWish();
 
   const [activeTab, setActiveTab] = useState("description");
 
   const handleWishClick = () => {
-    wishMutation.mutate(Number(productId));
+    wishMutation.mutate(productId);
   };
 
   const handleTabChange = (tabId: string) => {
@@ -39,7 +41,7 @@ export const ProductDetailPage = () => {
   };
 
   return (
-    <ProductDetailPageLayout>
+    <>
       <ProductDetailInfo productInfo={productInfo} />
       <BlankSpace spacing="spacing2" />
       <ProductDetailTab activeTab={activeTab} onTabChange={handleTabChange} />
@@ -50,6 +52,32 @@ export const ProductDetailPage = () => {
         wishCount={wishCount.wishCount}
         isWished={wishCount.isWished}
       />
+    </>
+  );
+};
+
+export const ProductDetailPage = () => {
+  const { id: productId } = useParams<{ id: string }>();
+  const handleProductDetailRetry = () => {
+    queryClient.refetchQueries({ queryKey: ["product", Number(productId)] });
+  };
+  return (
+    <ProductDetailPageLayout>
+      <ErrorBoundary
+        fallback={reset => (
+          <MainPageErrorFallback
+            onRetry={() => {
+              handleProductDetailRetry();
+              reset();
+            }}
+            title="상품을 불러올 수 없습니다."
+          />
+        )}
+      >
+        <Suspense fallback={<LoadingSpinner />}>
+          <ProductDetailContent productId={Number(productId)} />
+        </Suspense>
+      </ErrorBoundary>
     </ProductDetailPageLayout>
   );
 };
