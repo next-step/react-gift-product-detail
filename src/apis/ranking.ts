@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export type Price = {
   basicPrice: number;
@@ -55,8 +55,8 @@ export const fetchRanking = async (
   return response.data.data;
 };
 
-export const useRanking = (gender: string, giftType: string) => {
-  return useQuery<RankingItem[], Error>({
+export const useSuspenseRanking = (gender: string, giftType: string) => {
+  return useSuspenseQuery<RankingItem[], Error>({
     queryKey: ['ranking', gender, giftType],
     queryFn: () => fetchRanking(gender, giftType),
     staleTime: 1000 * 60 * 5,
