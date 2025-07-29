@@ -1,13 +1,18 @@
-import { useParams } from 'react-router-dom';
 import { useHighlightReview } from '@/hooks/useProduct';
-
 import Gap from '@/components/common/Gap.style';
-import {ReviewWrapper, ReviewItem, AuthorName, Content} from '@/components/product/ProductReview.style';
+import {
+  ReviewWrapper,
+  ReviewItem,
+  AuthorName,
+  Content,
+} from '@/components/product/ProductReview.style';
 
-const ProductReview = () => {
-  const { productId } = useParams();
-  const id = Number(productId);
-  const { data } = useHighlightReview(id);
+interface ProductReviewProps {
+  productId: number;
+}
+
+const ProductReview = ({ productId }: ProductReviewProps) => {
+  const { data } = useHighlightReview(productId);
 
   return (
     <ReviewWrapper>

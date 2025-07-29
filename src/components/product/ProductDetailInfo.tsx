@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { useProductDetail } from '@/hooks/useProduct';
 
 import {
@@ -9,11 +8,12 @@ import {
 } from '@/components/product/ProductReview.style';
 import Gap from '@/components/common/Gap.style';
 
+interface ProductDetailInfoProps {
+  productId: number;
+}
 
-const ProductDetailInfo = () => {
-  const { productId } = useParams();
-  const id = Number(productId);
-  const { data } = useProductDetail(id);
+const ProductDetailInfo = ({ productId }: ProductDetailInfoProps) => {
+  const { data } = useProductDetail(productId);
 
   return (
     <ReviewWrapper>

@@ -1,13 +1,14 @@
-import { useParams } from 'react-router-dom';
 import { useProductDetail } from '@/hooks/useProduct';
 
 import Gap from '@/components/common/Gap.style';
-import {Image,Description} from '@/components/product/ProductDescription.style'
+import { Image, Description } from '@/components/product/ProductDescription.style';
 
-const ProductDescription = () => {
-  const { productId } = useParams();
-  const id = Number(productId);
-  const { data } = useProductDetail(id);
+interface ProductDescriptionProps {
+  productId: number;
+}
+
+const ProductDescription = ({ productId }: ProductDescriptionProps) => {
+  const { data } = useProductDetail(productId);
 
   const wrapper = document.createElement('div');
   wrapper.innerHTML = data.description;
