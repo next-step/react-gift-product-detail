@@ -89,3 +89,6 @@
   - [x] 이번에 새로 작업한 "상품 상세 정보 화면"에 관련한 hook, component들에도 suspense + ErrorBoundary 작업을 진행해주었습니다.
 - [x] npm run build 성공하기
 - [x] npm run lint 성공하기
+- [ ] 피드백 반영
+  - [x] validation.ts에 사용하지 않는 변수 제거 및 조금 더 적절한 에러 메시지 문구 추가했습니다.
+  - [x] ErrorBoundary + Suspense 구조를 TabPanel.tsx로 추출해 낸다음 기존에 ErrorBoundary + Suspense 구조를 활용하는 부분들을 TabPanel로 대체해주었습니다.
