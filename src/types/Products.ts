@@ -26,3 +26,9 @@ export interface ProductWish {
   wishCount: number;
   isWished: boolean;
 }
+
+export interface Announcement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}

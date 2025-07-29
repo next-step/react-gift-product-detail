@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProductDetail } from '../../hooks/useProductDetail';
 import { useProductReview } from '../../hooks/useProductReview';
+import type { Announcement } from '../../types/Products';
 
 const TabHeader = styled.div`
   display: flex;
@@ -72,12 +73,6 @@ const InfoValue = styled.div`
 
 const tabList = ['상품설명', '선물후기', '상세정보'] as const;
 type Tab = (typeof tabList)[number];
-
-interface Announcement {
-  name: string;
-  value: string;
-  displayOrder: number;
-}
 
 const ProductTabs = () => {
   const [activeTab, setActiveTab] = useState<Tab>('상품설명');
