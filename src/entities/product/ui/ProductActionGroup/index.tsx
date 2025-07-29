@@ -11,7 +11,7 @@ import type { ProductWish } from '@/entities/product/model/types';
 export const ProductActionGroup = () => {
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
-  const numericProductId = productId ? parseInt(productId, 10) : undefined;
+  const numericProductId = productId ? Number(productId) : undefined;
   const queryClient = useQueryClient();
 
   if (!numericProductId) {
@@ -28,9 +28,11 @@ export const ProductActionGroup = () => {
       return nextWished;
     },
     onMutate: async (nextWished: boolean) => {
-      const previous = queryClient.getQueryData<ProductWish>(productQueryKeys.wish(numericProductId));
-      
-      queryClient.setQueryData<ProductWish>(productQueryKeys.wish(numericProductId), (prev) => {
+      const previous = queryClient.getQueryData<ProductWish>(
+        productQueryKeys.wish(numericProductId)
+      );
+
+      queryClient.setQueryData<ProductWish>(productQueryKeys.wish(numericProductId), prev => {
         if (!prev) return prev;
         return {
           ...prev,
@@ -55,13 +57,10 @@ export const ProductActionGroup = () => {
 
   return (
     <S.Container>
-      <S.WishButton 
-        isWished={wishData?.isWished || false}
-        onClick={toggleWish}
-      >
-        <Heart 
-          fill={wishData?.isWished ? "#ff0000" : "none"} 
-          color={wishData?.isWished ? "#ff0000" : "#2a3038"}
+      <S.WishButton isWished={wishData?.isWished || false} onClick={toggleWish}>
+        <Heart
+          fill={wishData?.isWished ? '#ff0000' : 'none'}
+          color={wishData?.isWished ? '#ff0000' : '#2a3038'}
         />
         <p>{wishData?.wishCount || 0}</p>
       </S.WishButton>

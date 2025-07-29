@@ -4,15 +4,19 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import parse from 'html-react-parser';
 import { getProductDetail, getProductHighlightReview } from '@/entities/product/api/productApi';
 import { productQueryKeys } from '@/entities/product/api/queryKeys';
-import type { ProductDetail, ProductHighlightReview, TabType } from '@/entities/product/model/types';
+import type {
+  ProductDetail,
+  ProductHighlightReview,
+  TabType,
+} from '@/entities/product/model/types';
 import * as S from './styles';
 import { TAB_LABELS } from '@/entities/product/model/constants';
 
 export const ProductTabs = () => {
   const { productId } = useParams<{ productId: string }>();
-  const numericProductId = productId ? parseInt(productId, 10) : undefined;
+  const numericProductId = productId ? Number(productId) : undefined;
   const [activeTab, setActiveTab] = useState<TabType>('description');
-  
+
   const tabs = [
     { id: 'description' as TabType, label: TAB_LABELS.description },
     { id: 'review' as TabType, label: TAB_LABELS.review },
@@ -38,7 +42,9 @@ export const ProductTabs = () => {
       case 'description':
         return (
           <S.TabContent>
-            <S.DescriptionContent> {/* description은 응답이 json이 아닌 html코드를 문자열로 담은 형식 */}
+            <S.DescriptionContent>
+              {' '}
+              {/* description은 응답이 json이 아닌 html코드를 문자열로 담은 형식 */}
               {data.description ? parse(data.description) : ''}
             </S.DescriptionContent>
           </S.TabContent>
@@ -47,7 +53,7 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DetailContent>
-              {reviewData?.reviews?.map((review) => (
+              {reviewData?.reviews?.map(review => (
                 <S.DetailItem key={review.id}>
                   <S.DetailName>{review.authorName}</S.DetailName>
                   <S.DetailValue>{review.content}</S.DetailValue>
@@ -77,7 +83,7 @@ export const ProductTabs = () => {
   return (
     <>
       <S.TabContainer>
-        {tabs.map((tab) => (
+        {tabs.map(tab => (
           <S.TabButton
             key={tab.id}
             role="tab"
@@ -86,9 +92,7 @@ export const ProductTabs = () => {
             onClick={() => handleTabClick(tab.id)}
             isActive={activeTab === tab.id}
           >
-            <S.TabText isActive={activeTab === tab.id}>
-              {tab.label}
-            </S.TabText>
+            <S.TabText isActive={activeTab === tab.id}>{tab.label}</S.TabText>
             {activeTab === tab.id && <S.ActiveIndicator />}
           </S.TabButton>
         ))}
@@ -98,4 +102,4 @@ export const ProductTabs = () => {
   );
 };
 
-export default ProductTabs; 
+export default ProductTabs;

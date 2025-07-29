@@ -12,7 +12,7 @@ import { ROUTES } from '@/shared/config';
 
 const OrderContent = () => {
   const { productId } = useParams<{ productId: string }>();
-  const numericProductId = productId ? parseInt(productId, 10) : undefined;
+  const numericProductId = productId ? Number(productId) : undefined;
 
   if (!numericProductId) {
     return null;
@@ -51,7 +51,7 @@ const OrderContent = () => {
 const Order = () => {
   return (
     <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
-      <Suspense fallback={<Loading/>}>
+      <Suspense fallback={<Loading />}>
         <OrderContent />
       </Suspense>
     </ErrorBoundary>
