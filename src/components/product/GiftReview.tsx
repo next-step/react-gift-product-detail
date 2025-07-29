@@ -11,7 +11,6 @@ type Props = {
 };
 
 const GiftReview = ({ reviews }: Props) => {
-console.dir(reviews)
   return (
     <div>
       {reviews.map((review) => (

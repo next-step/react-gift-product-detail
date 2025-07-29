@@ -45,11 +45,10 @@ const Image = styled.img`
   background-color: rgb(243, 244, 245);
 `;
 
-
 const Theme = () => {
   const { themeId } = useParams();
   const themeIdNumber = Number(themeId);
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -57,44 +56,40 @@ const Theme = () => {
 
   const LIMIT = 10;
 
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['themeProducts', themeIdNumber],
-      queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeIdNumber, pageParam, LIMIT),
-      getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
-    });
-useEffect(()=>{
-  if (inView && hasNextPage && !isFetchingNextPage) {
-    fetchNextPage();
-  }}, [inView, hasNextPage, isFetchingNextPage])
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['themeProducts', themeIdNumber],
+    queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeIdNumber, pageParam, LIMIT),
+    getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+  });
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage]);
 
   const {
     data: themeData,
     isLoading,
     error,
   } = useQuery({
-    queryKey:['theme', themeIdNumber],
-    queryFn:()=>fetchthemeInfo(themeIdNumber)
-  
-  })
- 
-useEffect(()=>{
-  if(error){
-  if(axios.isAxiosError(error)){
-    const status= error.status
-    if(status===404){
-      toast.error("선물 테마 정보를 받아올 수 없어요.")
-      navigate(ROUTE_PATH.HOME)
+    queryKey: ['theme', themeIdNumber],
+    queryFn: () => fetchthemeInfo(themeIdNumber),
+  });
+
+  useEffect(() => {
+    if (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.status;
+        if (status === 404) {
+          toast.error('선물 테마 정보를 받아올 수 없어요.');
+          navigate(ROUTE_PATH.HOME);
+        }
+      }
     }
-  }
+  }, [error]);
 
-console.dir(error)}
-}, [error])
+  const products = data?.pages.flatMap((page) => page.list) ?? [];
 
-const products = data?.pages.flatMap((page) => page.list) ?? [];
-
-  console.dir(products);
   if (isLoading || !themeData) return <div>로딩중...</div>;
 
   return (

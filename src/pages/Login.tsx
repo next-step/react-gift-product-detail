@@ -71,7 +71,6 @@ const Login = () => {
   const loginMutation = useMutation({
     mutationFn: FetchLogin,
     onSuccess: (loginData) => {
-      console.dir(loginData)
       const { authToken, email: useremail, name } = loginData.data;
       const userInfo = {
         token: authToken,

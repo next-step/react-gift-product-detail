@@ -14,7 +14,7 @@ import { ROUTE_PATH } from '@/routes/Router';
 import { useQuery } from '@tanstack/react-query';
 
 const Category = () => {
-  const navigete = useNavigate();
+  const navigate = useNavigate();
   const {
     data: category=[],
     isLoading,
@@ -24,7 +24,7 @@ const Category = () => {
     queryFn: fetchCategories,
   });
   const handleClickCategory = (themeId: number) => {
-    navigete(ROUTE_PATH.THEME.replace(':themeId', String(themeId)));
+    navigate(ROUTE_PATH.THEME.replace(':themeId', String(themeId)));
   };
 
   if (isLoading) return <div>📢 카테고리가 로딩중입니다..</div>;

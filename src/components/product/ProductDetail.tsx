@@ -6,7 +6,6 @@ type Props= {
 announcements:Announcement[]
 }
 const ProductDetail = ({announcements}:Props) => {
-  console.dir(announcements)
   return ( <div>
     {announcements.map((item)=> <div
     key={item.displayOrder}>

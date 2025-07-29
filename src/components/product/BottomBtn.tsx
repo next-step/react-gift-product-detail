@@ -1,5 +1,6 @@
 import type { ProductWish } from '@/services/productApi';
-import styled  from '@emotion/styled';
+import styled from '@emotion/styled';
+import { useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const BtnWrapper = styled.div`
@@ -32,6 +33,7 @@ const LikeBtn = styled.button`
   -webkit-box-align: center;
   align-items: center;
   flex-direction: column;
+  color:red;
 `;
 const OrderBtn = styled.button`
   width: 100%;
@@ -44,21 +46,29 @@ const OrderBtn = styled.button`
   background-color: rgb(254, 229, 0);
 `;
 type Props = {
-  wishData:ProductWish
-}
-const BottomBtn = ({ wishData , handleOrderBtnClick}: Props) => {
- const {isWished, wishCount} = wishData
-  console.log(wishData.isWished)
+  wishData: ProductWish;
+  handleOrderBtnClick: () => void;
+};
+const BottomBtn = ({ wishData, handleOrderBtnClick }: Props) => {
+  const [isWished, setIsWished] = useState(wishData.isWished);
+  const [wishCount, setWishCount] = useState(wishData.wishCount);
+  const toggleWish = () => {
+    if (isWished) {
+      setWishCount((prev) => prev - 1);
+    } else {
+      setWishCount((prev) => prev + 1);
+    }
+    setIsWished((prev) => !prev);
+  };
   return (
-    <BtnWrapper >
+    <BtnWrapper>
       <BtnAlign>
-        <LikeBtn>
+        <LikeBtn onClick={toggleWish}>
           {isWished ? <FaHeart /> : <FaRegHeart />}
           <p>{wishCount}</p>
         </LikeBtn>
-        <OrderBtn onClick={handleOrderBtnClick
-        }>주문하기 </OrderBtn>
-      </BtnAlign>{' '}
+        <OrderBtn onClick={handleOrderBtnClick}>주문하기 </OrderBtn>
+      </BtnAlign>
     </BtnWrapper>
   );
 };

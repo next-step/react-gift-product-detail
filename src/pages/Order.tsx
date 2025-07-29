@@ -56,7 +56,11 @@ const Order = () => {
 
   const receivers = watch('receivers');
 
-  const { data:summaryData, isLoading, error } = useQuery({
+  const {
+    data: summaryData,
+    isLoading,
+    error,
+  } = useQuery({
     queryFn: () => fetchProductSummary(product_id),
     queryKey: ['productSummary', productId],
   });
@@ -74,17 +78,17 @@ const Order = () => {
     mutationFn: fetchOrder,
 
     onSuccess: (res) => {
-      console.dir(res)
       toast.success('주문이 완료되었습니다!');
-    navigate(ROUTE_PATH.HOME)},
+      navigate(ROUTE_PATH.HOME);
+    },
 
     onError: (e) => {
       if (e.response?.status === 401) {
-          toast.error('로그인이 필요합니다.');
-          navigate(ROUTE_PATH.LOGIN);
-        } else {
-          toast.error(e.message || '주문 중 오류가 발생했습니다.');
-        }
+        toast.error('로그인이 필요합니다.');
+        navigate(ROUTE_PATH.LOGIN);
+      } else {
+        toast.error(e.message || '주문 중 오류가 발생했습니다.');
+      }
     },
   });
 
@@ -111,12 +115,8 @@ const Order = () => {
       receivers: formData.receivers,
     };
 
-    orderMutate({body, token: user.token})
-      
-
-  })
-  ;
-  
+    orderMutate({ body, token: user.token });
+  });
   if (isOrderPosting || !summaryData || !user?.name) return <div>로딩중.....</div>;
 
   const productPrice = summaryData.price;

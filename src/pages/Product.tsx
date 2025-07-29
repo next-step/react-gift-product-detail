@@ -11,12 +11,12 @@ import {
   MainSection,
   ProductImage,
 } from './Product.styles';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import ProductDescription from '@/components/product/ProductDescription';
 import GiftReview, { type Review } from '@/components/product/GiftReview';
 import ProductDetail from '@/components/product/ProductDetail';
 import BottomBtn from '@/components/product/BottomBtn';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   fetchProductDetail,
@@ -27,61 +27,36 @@ import {
   type ProductWish,
 } from '@/services/productApi';
 import { ROUTE_PATH } from '@/routes/Router';
+import ErrorBoundary from './../components/common/ErrorBoundary';
 
-const Product = () => {
-  const navigate=useNavigate()
+const ProductContent = () => {
+  const navigate = useNavigate();
   const { productId } = useParams();
   const parsedId = Number(productId);
 
   const [activeTab, setActiveTab] = useState<'상품설명' | '선물후기' | '상세정보'>('상품설명');
-const handleOrderBtnClick =()=>{
-  if(productId) navigate(ROUTE_PATH.ORDER.replace(":productId", productId))
-}
-  const {
-    data: productData,
-    isLoading,
-    error,
-  } = useQuery({
+  const handleOrderBtnClick = () => {
+    if (productId) navigate(ROUTE_PATH.ORDER.replace(':productId', productId));
+  };
+  const { data: productData } = useSuspenseQuery({
     queryKey: ['product', productId],
     queryFn: () => fetchProductIntro(parsedId),
   });
 
-  const {
-    data: productDetailData,
-    isLoading: isDetailLoading,
-    error: detailError,
-  } = useQuery<ProductIntro>({
+  const { data: productDetailData } = useSuspenseQuery<ProductIntro>({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(parsedId),
   });
-  const {
-    data: ReviewData,
-    isLoading: isReviewLoading,
-    error: ReviewError,
-  } = useQuery<Review[]>({
+  const { data: ReviewData } = useSuspenseQuery<Review[]>({
     queryKey: ['productHighlightReview', parsedId],
     queryFn: () => fetchProductHighlightReview(parsedId),
   });
 
-  const {
-    data: wishData,
-    isLoading: wishDataLoading,
-    error: wishError,
-  } = useQuery<ProductWish>({
+  const { data: wishData } = useSuspenseQuery<ProductWish>({
     queryKey: ['productWish', productId],
     queryFn: () => fetchProductWish(parsedId),
   });
-  console.log(wishData?.isWished);
 
-  if (!productDetailData) return <div>상세정보 없음</div>;
-  if (isReviewLoading) return <div>로딩중입니다..</div>;
-  if (ReviewError) return <div>에러 발생: {String(error)}</div>;
-  console.dir(productDetailData);
-  console.log('타입은? ', typeof productDetailData);
-  if (isDetailLoading) return <div>상세로딩중입니다.</div>;
-  console.log(productData);
-  if (isLoading) return <div>로딩중입니다..</div>;
-  if (error) return <div>에러 발생: {String(error)}</div>;
   const renderTapContent = () => {
     switch (activeTab) {
       case '상품설명':
@@ -140,4 +115,13 @@ const handleOrderBtnClick =()=>{
   );
 };
 
+const Product = () => {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<div>서스펜스를 사용한 로딩 화면</div>}>
+        <ProductContent />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 export default Product;
