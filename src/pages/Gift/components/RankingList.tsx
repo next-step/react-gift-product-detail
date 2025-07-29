@@ -1,4 +1,3 @@
-import { rankingItemMock } from "@/assets/rankingItemMock";
 import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
 import { useState } from "react";
@@ -22,7 +21,7 @@ const RankingList = ({ targetType, rankType }: RankingListProps) => {
   const [viewCount, setViewCount] = useState(RANKING_LIST_ITEM_VIEW_COUNT);
   const isCollapsed = viewCount === RANKING_LIST_ITEM_VIEW_COUNT;
   const toggleView = () => {
-    const nextViewCount = isCollapsed ? rankingItemMock.length : RANKING_LIST_ITEM_VIEW_COUNT;
+    const nextViewCount = isCollapsed ? data.length : RANKING_LIST_ITEM_VIEW_COUNT;
     setViewCount(nextViewCount);
   };
 

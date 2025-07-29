@@ -7,7 +7,6 @@ import OrderBtn from "@/pages/Order/components/OrderBtn";
 import RecipientFieldModal from "@/pages/Order/components/RecipientFieldModal";
 import { FormProvider, useForm } from "react-hook-form";
 import { orderCardMock } from "@/assets/orderCardMock";
-import { rankingItemMock } from "@/assets/rankingItemMock";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { getCookieValue } from "@/utils/cookie";
@@ -57,7 +56,7 @@ const defaultValues: OrderFormType = {
   message: orderCardMock[0].defaultTextMessage,
   sender: getCookieValue(AUTH_COOKIE_KEY_NAME) || "",
   recipients: [],
-  productId: rankingItemMock[0].id,
+  productId: NaN,
 };
 
 const Order = ({ children }: OrderProps) => {
