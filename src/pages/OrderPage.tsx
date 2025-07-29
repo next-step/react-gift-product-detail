@@ -159,6 +159,7 @@ const OrderBtn = styled.button`
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
+  border: none;
   background-color: ${({ theme }) => theme.colors.kakao.yellow.default};
   color: ${({ theme }) => theme.colors.gray[900]};
   transition:
