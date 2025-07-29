@@ -1,4 +1,5 @@
-import { Component, type ErrorInfo, type ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+import ErrorMessage from '@/shared/ui/atoms/ErrorMessage';
 
 interface Props {
   children?: ReactNode;
@@ -11,7 +12,7 @@ interface State {
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(_: Error): State {
@@ -19,14 +20,13 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   public render() {
     if (this.state.hasError) {
-      return this.props.fallback !== undefined ? this.props.fallback : null;
+      return this.props.fallback || <ErrorMessage />;
     }
-
     return this.props.children;
   }
 }
