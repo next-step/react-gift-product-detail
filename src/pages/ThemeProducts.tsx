@@ -100,8 +100,13 @@ const EmptyMessage = styled.div`
 `;
 
 const IntersectionTarget = styled.div`
-  height: 20px;
+  height: 100px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.9rem;
 `;
 
 const ThemeProducts = () => {
@@ -195,7 +200,9 @@ const ThemeProducts = () => {
               <ErrorMessage>{productsError.message}</ErrorMessage>
             )}
             
-            <IntersectionTarget ref={intersectionRef} />
+            <IntersectionTarget ref={intersectionRef}>
+              {hasNextPage ? "더 많은 상품을 불러오는 중..." : "모든 상품을 불러왔습니다"}
+            </IntersectionTarget>
           </>
         )}
       </ProductsSection>

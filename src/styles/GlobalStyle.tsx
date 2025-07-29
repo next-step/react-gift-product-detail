@@ -37,12 +37,30 @@ const GlobalStyle = () => (
         font-family: inherit;
       }
 
+      /* 스크롤바 스타일링 (개발 환경에서만 표시) */
       ::-webkit-scrollbar {
-        display: none;
+        width: 8px;
+        height: 8px;
       }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+      }
+      
+      /* Firefox 스크롤바 */
       body {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        scrollbar-width: thin;
+        scrollbar-color: #c1c1c1 #f1f1f1;
       }
     `}
   />
