@@ -69,7 +69,7 @@ export default function ThemeProductSection({ themeId }: ThemeProductSectionProp
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsQuery(themeId);
 
   const handleClick = (id: number) => () => {
-    navigate(`/order/${id}`);
+    navigate(`/product/${id}`);
   };
 
   useEffect(() => {

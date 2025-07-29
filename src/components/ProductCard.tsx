@@ -60,7 +60,7 @@ export default function ProductCard({ item, rank }: ProductCardProps) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
   return (
     <Card onClick={handleClick}>
