@@ -2,7 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { getRankingProduct } from "@/api/product";
 import { TAB_DATA, TAGS } from "@/constants";
 import { parseUrlParam } from "@/utils";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 
 export const useRankingProducts = () => {
@@ -18,11 +18,7 @@ export const useRankingProducts = () => {
     "MANY_WISH",
   );
 
-  const {
-    data: products,
-    isLoading: loading,
-    error,
-  } = useQuery({
+  const { data: products } = useSuspenseQuery({
     queryKey: queryKeys.products.ranking(selectedTag, selectedTab),
     queryFn: () =>
       getRankingProduct({
@@ -33,8 +29,6 @@ export const useRankingProducts = () => {
 
   return {
     products: products || [],
-    loading,
-    error,
     isEmpty: products?.length === 0,
   };
 };
