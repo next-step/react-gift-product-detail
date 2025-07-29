@@ -40,7 +40,7 @@ const ThemesProducts = ({ id }: ThemesProductsProps) => {
         <ProductsGrid>
           {items.map(product => (
             <Link
-              to={ROUTE_PATH.ORDER.replace(":id", String(product.id))}
+              to={ROUTE_PATH.PRODUCT.replace(":id", String(product.id))}
               key={product.id}
             >
               <ThemesItem
