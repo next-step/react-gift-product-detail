@@ -14,6 +14,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LoginProvider } from "./contexts/LoginProvider";
 import Order from "./pages/Order";
 import ThemeProducts from "./pages/ThemeProducts";
+import ProductDetail from "./pages/ProductDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,6 +48,7 @@ function App() {
               />
               <Route path="/order" element={<Navigate to="/" replace />} />
               <Route path="/themes/:themeId" element={<ThemeProducts />} />
+              <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ToastContainer
