@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import FormErrorMessage from "@/pages/LoginPage/components/FormErrorMessage";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string;
 }
 

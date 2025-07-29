@@ -1,12 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { ThemeProvider } from "@emotion/react";
 import { Typography, type Props } from "./Typography";
 import { theme } from "@/styles/theme";
-
-const renderWithTheme = (children: React.ReactNode) => {
-  return render(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
-};
+import { renderWithTheme } from "@/setupTests";
 
 describe("Typography 컴포넌트", () => {
   it("모든 주요 속성이 적용된 Typography가 정상적으로 렌더링된다", () => {
