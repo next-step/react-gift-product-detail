@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import Heart from "@/assets/heart.svg?react";
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
+import useToggleWish from "@/hooks/api/useToggleWish";
 
 type ProductOrderSectionProps = {
   wishCount: number;
@@ -16,12 +16,12 @@ const ProductOrderSection = ({
   productId,
 }: ProductOrderSectionProps) => {
   const navigate = useNavigate();
-  const [wish, setWish] = useState(isWished);
-  const [count, setCount] = useState(wishCount);
+  const { toggle } = useToggleWish({
+    productId: Number(productId),
+  });
 
   const toggleWish = () => {
-    setWish(prev => !prev);
-    setCount(prev => (wish ? prev - 1 : prev + 1));
+    toggle(isWished);
   };
 
   const navigateToOrder = () => {
@@ -31,8 +31,11 @@ const ProductOrderSection = ({
   return (
     <Container>
       <WishButton type="button" onClick={toggleWish}>
-        <Heart fill={wish ? "red" : "none"} stroke={wish ? "red" : "#2a3038"} />
-        <Count>{count}</Count>
+        <Heart
+          fill={isWished ? "red" : "none"}
+          stroke={isWished ? "red" : "#2a3038"}
+        />
+        <Count>{wishCount}</Count>
       </WishButton>
       <OrderButton type="button" onClick={navigateToOrder}>
         주문하기
