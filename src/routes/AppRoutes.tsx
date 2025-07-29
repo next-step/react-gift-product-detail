@@ -8,6 +8,7 @@ import { OrderPage } from '@/pages/OrderPage/OrderPage'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ThemePage } from '@/pages/ThemePage'
+import { ProductDetailPage } from '@/pages/ProductDetailPage'
 
 export function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export function AppRoutes() {
         </Route>
         <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
         <Route path={ROUTE_PATH.THEMES} element={<ThemePage />} />
+        <Route path={ROUTE_PATH.DETAIL} element={<ProductDetailPage />} />
       </Routes>
       <ToastContainer position="bottom-center" hideProgressBar />
     </>
@@ -33,5 +35,6 @@ export const ROUTE_PATH = {
   MY: '/my',
   ORDER: '/order/:id',
   THEMES: '/themes/:themeId',
+  DETAIL: '/products/:productId',
   NOT_FOUND: '*',
 }
