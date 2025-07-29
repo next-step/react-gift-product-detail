@@ -9,9 +9,9 @@ import type { ProductDetailInfo } from "@/types/ProductDetail";
 function Detail({ product }: { product: ProductDetailInfo }) {
   return (
     <ListContainer>
-      {product.announcements.map((el) => {
+      {product.announcements.map((el, index) => {
         return (
-          <TabContentContainer>
+          <TabContentContainer key={`${index}-${el.name}`}>
             <TabContentTitle>{el.name}</TabContentTitle>
             <TabContentContent>{el.value}</TabContentContent>
           </TabContentContainer>
