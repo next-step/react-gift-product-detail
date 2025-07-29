@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 
 const Card = styled.div`
   background: #fff;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
-  padding: 18px 16px 16px 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -12,19 +12,33 @@ const Card = styled.div`
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
+  @media (min-width: 480px) {
+    border-radius: 16px;
+    padding: 16px;
+  }
+  
+  @media (min-width: 768px) {
+    padding: 18px 16px 16px 16px;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
+    }
   }
 `;
 
 const ProductImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1;
-  border-radius: 12px;
+  border-radius: 8px;
   object-fit: cover;
   background: #eee;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  
+  @media (min-width: 480px) {
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
 `;
 
 const RankBadge = styled.span`
@@ -41,22 +55,32 @@ const RankBadge = styled.span`
 `;
 
 const BrandName = styled.div`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #666;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: 500;
+  
+  @media (min-width: 480px) {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
 `;
 
 const ProductName = styled.div`
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #222;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  
+  @media (min-width: 480px) {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
 `;
 
 const PriceSection = styled.div`
@@ -67,21 +91,33 @@ const PriceSection = styled.div`
 `;
 
 const SellingPrice = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #222;
+  
+  @media (min-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const BasicPrice = styled.div`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #999;
   text-decoration: line-through;
+  
+  @media (min-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const DiscountRate = styled.div`
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #e74c3c;
   font-weight: 600;
+  
+  @media (min-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 // 범용 상품 타입 정의
@@ -119,8 +155,11 @@ const ProductCard = ({
     onClick?.(product.id);
   };
 
-  const hasDiscount = product.price?.discountRate && product.price.discountRate > 0;
+  // 할인율이 0보다 큰 경우에만 할인 정보 표시
+  const discountRate = product.price?.discountRate;
+  const hasDiscount = typeof discountRate === 'number' && discountRate > 0;
   const hasBasicPrice = product.price?.basicPrice && product.price.basicPrice > product.price.sellingPrice;
+  const shouldShowDiscount = hasDiscount && hasBasicPrice;
 
   return (
     <Card onClick={handleClick}>
@@ -139,16 +178,17 @@ const ProductCard = ({
             : "가격 정보 없음"
           }
         </SellingPrice>
-        {hasDiscount && hasBasicPrice && (
+        {shouldShowDiscount && (
           <>
             <BasicPrice>
               {product.price?.basicPrice?.toLocaleString()}원
             </BasicPrice>
             <DiscountRate>
-              {product.price?.discountRate}%
+              {discountRate}%
             </DiscountRate>
           </>
         )}
+
       </PriceSection>
     </Card>
   );

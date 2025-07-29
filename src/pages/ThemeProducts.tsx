@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
 import { useThemeDetail } from '@/hooks/useThemeDetail';
-import { useThemeProducts } from '@/hooks/useThemeProducts';
+import { useThemeProducts } from '@/api/themes';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import ProductCard from '@/Components/ProductCard';
 import { ERROR_CODES } from '@/constants/errors';
@@ -65,16 +65,18 @@ const ProductsSection = styled.div`
 
 const ProductsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 16px;
   margin-bottom: 40px;
   
-  @media (max-width: 768px) {
+  @media (min-width: 480px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
   
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 `;
 
@@ -106,13 +108,28 @@ const ThemeProducts = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
   const { themeDetail, loading: themeLoading, error: themeError } = useThemeDetail(Number(themeId));
-  const { products, loading: productsLoading, error: productsError, hasMore, loadMore } = useThemeProducts(Number(themeId));
+  const { 
+    data: productsData, 
+    isLoading: productsLoading, 
+    error: productsError, 
+    fetchNextPage, 
+    hasNextPage 
+  } = useThemeProducts(Number(themeId));
   
-  const { ref: intersectionRef } = useInfiniteScroll(loadMore, hasMore, productsLoading, productsError);
+  // 모든 페이지의 상품들을 하나의 배열로 합치기
+  const products = productsData?.pages.flatMap(page => page.list) || [];
+  
+  const { ref: intersectionRef } = useInfiniteScroll(
+    () => fetchNextPage(), 
+    hasNextPage || false, 
+    productsLoading, 
+    productsError
+  );
 
   // 404 에러 시 홈으로 리다이렉트
   useEffect(() => {
-    if (themeError?.code === ERROR_CODES.NOT_FOUND || productsError?.code === ERROR_CODES.NOT_FOUND) {
+    if (themeError?.code === ERROR_CODES.NOT_FOUND || 
+        (productsError && 'code' in productsError && productsError.code === ERROR_CODES.NOT_FOUND)) {
       navigate('/', { replace: true });
     }
   }, [themeError, productsError, navigate]);
@@ -174,7 +191,7 @@ const ThemeProducts = () => {
               <LoadingIndicator>상품을 불러오는 중...</LoadingIndicator>
             )}
             
-            {productsError && productsError.code !== ERROR_CODES.NOT_FOUND && (
+            {productsError && (!('code' in productsError) || productsError.code !== ERROR_CODES.NOT_FOUND) && (
               <ErrorMessage>{productsError.message}</ErrorMessage>
             )}
             
