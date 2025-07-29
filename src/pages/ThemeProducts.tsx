@@ -121,8 +121,11 @@ const ThemeProducts = () => {
     hasNextPage 
   } = useThemeProducts(Number(themeId));
   
-  // 모든 페이지의 상품들을 하나의 배열로 합치기
-  const products = productsData?.pages.flatMap(page => page.list) || [];
+  // 모든 페이지의 상품들을 하나의 배열로 합치고 중복 제거
+  const allProducts = productsData?.pages.flatMap(page => page.list) || [];
+  const products = Array.from(
+    new Map(allProducts.map(product => [product.id, product])).values()
+  );
   
   const { ref: intersectionRef } = useInfiniteScroll(
     () => fetchNextPage(), 
@@ -183,9 +186,9 @@ const ThemeProducts = () => {
         ) : (
           <>
             <ProductsGrid>
-              {products.map((product, index) => (
+              {products.map((product) => (
                 <ProductCard
-                  key={`${product.id}-${index}`}
+                  key={product.id}
                   product={product}
                   onClick={handleProductClick}
                 />
