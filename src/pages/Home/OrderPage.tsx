@@ -11,29 +11,19 @@ import type { ProductData } from "@/types/products"
 type Receiver = { name: string; phone: string; quantity: number }
 // Form 기본값
 type FormValues = { sender: string; receivers: Receiver[] }
+
 const MAX_RECEIVERS = 10
 const DEFAULT_RECEIVER: Receiver = { name: "", phone: "", quantity: 1 }
 
-
-// OrderPage 컴포넌트
 export default function OrderPage() {
+  // ── 1. 모든 Hooks 호출 (조건 없이)
   const params = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { user, token } = useContext(AuthContext)!
   const userName = user?.name || ""
 
-  // 로그인 체크
-  useEffect(() => {
-    if (!token) {
-      const redirectTo = `${location.pathname}${location.search}`
-      navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`, { replace: true })
-    }
-  }, [token, navigate])
-  if (!token || !user) return null
-
-  // React Hook Form 설정 (sender 기본값에 user.name 사용)
-
+  // React Hook Form 설정
   const {
     control,
     register,
@@ -45,7 +35,6 @@ export default function OrderPage() {
     defaultValues: { sender: userName, receivers: [DEFAULT_RECEIVER] },
     mode: "onChange",
   })
-
   const receivers = watch("receivers")
   const { fields, append, remove } = useFieldArray({ control, name: "receivers" })
 
@@ -60,9 +49,8 @@ export default function OrderPage() {
     setMessageText(selectedTemplate.defaultTextMessage)
   }, [selectedTemplateId])
 
-  // 상품 조회
-  const idParam = params.id
-  const productId = Number(idParam)
+  // 상품 조회 상태
+  const productId = Number(params.id)
   const [productSummary, setProductSummary] = useState<ProductData | null>(null)
   const [loadingProduct, setLoadingProduct] = useState(true)
   const [errorProduct, setErrorProduct] = useState(false)
@@ -71,9 +59,7 @@ export default function OrderPage() {
     setLoadingProduct(true)
     setErrorProduct(false)
     axios
-      .get<{ data: ProductData }>(
-        `http://127.0.0.1:3000/api/products/${productId}/summary`,
-      )
+      .get<{ data: ProductData }>(`http://127.0.0.1:3000/api/products/${productId}/summary`)
       .then((res: AxiosResponse<{ data: ProductData }>) => {
         setProductSummary(res.data.data)
         setLoadingProduct(false)
@@ -82,81 +68,70 @@ export default function OrderPage() {
         console.error("상품 조회 실패:", err)
         setErrorProduct(true)
         setLoadingProduct(false)
-        const errorMessage =
-          (err.response &&
-            typeof err.response.data === "object" &&
-            err.response.data &&
-            "data" in err.response.data &&
-            typeof (err.response.data as any).data === "object" &&
-            (err.response.data as any).data &&
-            "message" in (err.response.data as any).data)
+        const msg =
+          err.response?.data && typeof err.response.data === "object" && "data" in err.response.data
             ? (err.response.data as any).data.message
             : "제품 정보를 불러오지 못했습니다."
-        toast.error(errorMessage)
-       navigate("/", { replace: true })
+        toast.error(msg)
+        navigate("/", { replace: true })
       })
-  }, [productId])
+  }, [productId, navigate])
 
-  if (loadingProduct) {
-    return <div>상품 정보를 로딩 중…</div>
-  }
-  if (errorProduct || !productSummary) {
-    return <div>상품 정보를 가져올 수 없습니다. (ID: {productId})</div>
-  }
-
-// OrderPage.tsx (onSubmit 부분)
-const onSubmit = async (data: FormValues) => {
-  try {
-    await axios.post(
-      "http://127.0.0.1:3000/api/order",        // 1) URL 수정
-      {
-        productId: Number(params.id),           // 2) URL 파라미터나 state에서 가져오기
-        message: messageText,
-        messageCardId: String(selectedTemplateId),      // 3) templateId → messageCardId
-        ordererName: data.sender,               // 4) sender → ordererName
-        receivers: data.receivers.map(r => ({   // 5) phone → phoneNumber
-          name: r.name,
-          phoneNumber: r.phone,
-          quantity: r.quantity,
-        })),
-      },
-      {
-        headers: {
-          Authorization:token,
+  // 주문 제출 핸들러
+  const onSubmit = async (data: FormValues) => {
+    try {
+      await axios.post(
+        "http://127.0.0.1:3000/api/order",
+        {
+          productId,
+          message: messageText,
+          messageCardId: String(selectedTemplateId),
+          ordererName: data.sender,
+          receivers: data.receivers.map((r) => ({
+            name: r.name,
+            phoneNumber: r.phone,
+            quantity: r.quantity,
+          })),
         },
+        { headers: { Authorization: token } }
+      )
+      alert("주문이 완료되었습니다!")
+      navigate("/", { replace: true })
+    } catch (err: any) {
+      const status = err.response?.status
+      if (status === 401) {
+        const redirectTo = location.pathname + location.search
+        navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`, { replace: true })
+        return
       }
-    );
-
-    alert("주문이 완료되었습니다!");
-    navigate("/", { replace: true });
-  } catch (err: any) {
-   const status = err.response?.status;
-   if (status === 401) {
-     // 현재 URL 을 redirect 파라미터로 넘기기
-     const redirectTo = location.pathname + location.search;
-     navigate(
-       `/login?redirect=${encodeURIComponent(redirectTo)}`,
-       { replace: true }
-     );
-     return;
-   }
-   // 그 외 에러는 기존처럼 alert
-   console.error("주문 에러 응답:", err.response?.data);
-   alert(
-     err.response?.data?.message ||
-     `서버 에러: ${status}`
-   );
+      console.error("주문 에러 응답:", err.response?.data)
+      alert(err.response?.data?.message || `서버 에러: ${status}`)
+    }
   }
-};
 
+  // ── 2. Hooks 호출 이후에 조건부 return
+  // 로그인 전 상태
+  useEffect(() => {
+    if (!token) {
+      const redirectTo = location.pathname + location.search
+      navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`, { replace: true })
+    }
+  }, [token, navigate])
 
-  // 스타일 (간단하게 인라인 유지)
+  if (!token || !user) return null
+
+  // 상품 로딩/에러 상태
+  if (loadingProduct) return <div>상품 정보를 로딩 중…</div>
+  if (errorProduct || !productSummary)
+    return <div>상품 정보를 가져올 수 없습니다. (ID: {productId})</div>
+
+  // ── 3. 최종 렌더링
   const templateListStyle: React.CSSProperties = {
     display: "flex",
     overflowX: "auto",
     gap: 8,
     padding: "8px 0",
-  };
+  }
 
   return (
     <div style={{ padding: 20 }}>
@@ -173,14 +148,15 @@ const onSubmit = async (data: FormValues) => {
               height: 80,
               objectFit: "cover",
               cursor: "pointer",
-              border: selectedTemplateId === t.id ? "2px solid #467DE9" : "2px solid transparent",
+              border:
+                selectedTemplateId === t.id ? "2px solid #467DE9" : "2px solid transparent",
               borderRadius: 4,
             }}
           />
         ))}
       </div>
 
-      {/* 선택된 템플릿 미리보기 & 메시지 */}
+      {/* 선택된 템플릿 미리보기 */}
       <img
         src={selectedTemplate.imageUrl}
         alt="선택된 템플릿 메시지 카드 미리보기"
@@ -204,7 +180,9 @@ const onSubmit = async (data: FormValues) => {
             defaultValue={userName}
             className="w-full p-2 border rounded"
           />
-          {errors.sender && <p className="text-red-500 text-sm">{errors.sender.message}</p>}
+          {errors.sender && (
+            <p className="text-red-500 text-sm">{errors.sender.message}</p>
+          )}
         </div>
 
         {/* 받는 사람 리스트 */}
@@ -233,11 +211,7 @@ const onSubmit = async (data: FormValues) => {
           <div key={field.id} style={{ marginBottom: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h3>받는 사람 {idx + 1}</h3>
-              <button
-                type="button"
-                onClick={() => remove(idx)}
-                className="text-red-500"
-              >
+              <button type="button" onClick={() => remove(idx)} className="text-red-500">
                 ✕
               </button>
             </div>
@@ -300,10 +274,7 @@ const onSubmit = async (data: FormValues) => {
           </div>
         ))}
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-yellow-400 rounded w-full"
-        >
+        <button type="submit" className="px-4 py-2 bg-yellow-400 rounded w-full">
           {fields.length}명 완료
         </button>
       </form>
@@ -316,7 +287,7 @@ const onSubmit = async (data: FormValues) => {
           style={{ width: 80, borderRadius: 8 }}
         />
         <div>{productSummary.name}</div>
-        <p>₩{productSummary.price.sellingPrice?.toLocaleString()}</p>
+        <p>₩{productSummary.price.sellingPrice.toLocaleString()}</p>
       </div>
     </div>
   )
