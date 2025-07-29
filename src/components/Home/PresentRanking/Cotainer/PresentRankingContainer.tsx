@@ -18,7 +18,7 @@ const PresentRankingContainer = () => {
   const params = new URLSearchParams(search);
   const rankType = params.get(PARAMS.rankType);
   const targetType = params.get(PARAMS.targetType);
-  const { notNulldata, isLoading, isError } = useRankingItemFetch({ targetType, rankType });
+  const { nullNotData, isLoading, isError } = useRankingItemFetch({ targetType, rankType });
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -34,7 +34,7 @@ const PresentRankingContainer = () => {
       </div>
       <StyledPrsentRankingDiv>
         <PresentRankingItem
-          goods={notNulldata}
+          goods={nullNotData}
           isLoading={isLoading}
           isError={isError}
           isVisible={isVisible}
