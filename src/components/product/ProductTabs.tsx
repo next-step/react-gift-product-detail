@@ -85,7 +85,7 @@ const ProductTabs = () => {
 
   if (!product) return null;
 
-  const announcemetns = product.announcements as Announcement[];
+  const announcements = product.announcements as Announcement[];
 
   const renderContent = () => {
     switch (activeTab) {
@@ -113,7 +113,7 @@ const ProductTabs = () => {
       case '상세정보':
         return (
           <DetailInfoContainer>
-            {announcemetns
+            {announcements
               .sort((a, b) => a.displayOrder - b.displayOrder)
               .map(({ name, value }) => (
                 <InfoRow key={name}>
