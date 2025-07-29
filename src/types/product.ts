@@ -1,3 +1,4 @@
+//상품 요약 정보
 export interface ProductSummary {
   id: number;
   name: string;
@@ -12,4 +13,30 @@ export interface ProductSummary {
     sellingPrice: number;
     discountRate: number;
   };
+}
+
+// 상세 정보
+export interface ProductDetail {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
+}
+
+// 찜 정보
+export interface WishResponse {
+  wishCount: number;
+  isWished: boolean;
+}
+
+// 하이라이트 리뷰
+export interface HighlightReviewResponse {
+  totalCount: number;
+  reviews: {
+    id: string;
+    authorName: string;
+    content: string;
+  }[];
 }

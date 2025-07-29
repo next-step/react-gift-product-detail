@@ -61,8 +61,7 @@ const GiftGrid = ({ gender, category }: GiftGridProps) => {
                 navigate('/login');
                 return;
               }
-              navigate('/order', { state: { id: gift.id } });
-              navigate('/order', { state: { id: gift.id } });
+              navigate('/productDetail', { state: { id: gift.id } });
             }}
           />
         ))}
