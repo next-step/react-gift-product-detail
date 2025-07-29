@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useProductInfo } from '@/hooks/useProductInfo';
+import { useProductInfo } from '@/hooks/useProduct';
 
 import {
   ProductImage,
@@ -28,6 +28,7 @@ const ProductInfoContent = () => {
         <BrandImage src={data.brandInfo.imageURL} alt={data.name} />
         <BrandName>{data.brandInfo.name}</BrandName>
       </BrandWrapper>
+      <Gap height={24} />
     </>
   );
 };
