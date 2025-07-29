@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 import { useProductDetail } from '@/hooks/useProductDetail';
+import parse from 'html-react-parser';
 
 const ProductDescription = () => {
   const { productId } = useParams<{ productId: string }>();
   const { data: detail } = useProductDetail(productId!);
 
   return (
-    <Description dangerouslySetInnerHTML={{ __html: detail.description }} />
+    <Description>
+      {detail.description ? parse(detail.description) : ''}
+    </Description>
   );
 };
 
