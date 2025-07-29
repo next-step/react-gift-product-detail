@@ -1,6 +1,7 @@
 import { useInput } from "./useInput";
 import { useLoginContext } from "./useLoginContext";
 import { useLogin } from "./useLogin";
+import { z } from "zod";
 
 interface UseLoginFormOptions {
   onSuccess?: () => void;
@@ -10,17 +11,33 @@ export function useLoginForm(options?: UseLoginFormOptions) {
   const { login } = useLoginContext();
   const { login: loginApi, isLoading } = useLogin();
   
+  // Zod 스키마 정의
+  const emailSchema = z
+    .string()
+    .min(1, "ID를 입력해주세요.")
+    .email("올바른 이메일 형식이 아닙니다.")
+    .refine((email) => email.endsWith("@kakao.com"), {
+      message: "kakao.com 이메일만 사용 가능합니다."
+    });
+
+  const passwordSchema = z
+    .string()
+    .min(1, "PW를 입력해주세요.")
+    .min(8, "PW는 최소 8글자 이상이어야 합니다.");
+
+  const loginSchema = z.object({
+    email: emailSchema,
+    password: passwordSchema,
+  });
+  
   const validateEmail = (value: string) => {
-    if (!value) return "ID를 입력해주세요.";
-    const emailRegex = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
-    if (!emailRegex.test(value)) return "ID는 이메일 형식으로 입력해주세요.";
-    return "";
+    const result = emailSchema.safeParse(value);
+    return result.success ? "" : result.error.errors[0].message;
   };
 
   const validatePassword = (value: string) => {
-    if (!value) return "PW를 입력해주세요.";
-    if (value.length < 8) return "PW는 최소 8글자 이상이어야 합니다.";
-    return "";
+    const result = passwordSchema.safeParse(value);
+    return result.success ? "" : result.error.errors[0].message;
   };
 
   const emailInput = useInput("", validateEmail);
@@ -33,27 +50,41 @@ export function useLoginForm(options?: UseLoginFormOptions) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isFormValid) {
-      try {
-        // 1. API 요청으로 로그인
-        const userInfo = await loginApi({ 
-          email: emailInput.value, 
-          password: passwordInput.value 
-        });
-        
-        if (userInfo) {
-          // 2. Context에 로그인 정보 저장 (스토리지도 함께 저장됨)
-          login(userInfo);
-          
-          // 3. 성공 시 onSuccess 실행
-          if (options && options.onSuccess) {
-            options.onSuccess();
-          }
-        }
-      } catch (error) {
-        // 에러는 useLogin에서 이미 토스트로 처리됨
-        console.error("로그인 실패:", error);
+    // Zod 스키마로 전체 폼 검증
+    const formData = {
+      email: emailInput.value,
+      password: passwordInput.value,
+    };
+
+    const validationResult = loginSchema.safeParse(formData);
+    
+    if (!validationResult.success) {
+      // 검증 실패 시 첫 번째 에러 메시지를 이메일 필드에 표시
+      const firstError = validationResult.error.errors[0];
+      if (firstError.path.includes('email')) {
+        emailInput.setError(firstError.message);
+      } else if (firstError.path.includes('password')) {
+        passwordInput.setError(firstError.message);
       }
+      return;
+    }
+
+    try {
+      // 1. API 요청으로 로그인
+      const userInfo = await loginApi(formData);
+      
+      if (userInfo) {
+        // 2. Context에 로그인 정보 저장 (스토리지도 함께 저장됨)
+        login(userInfo);
+        
+        // 3. 성공 시 onSuccess 실행
+        if (options && options.onSuccess) {
+          options.onSuccess();
+        }
+      }
+    } catch (error) {
+      // 에러는 useLogin에서 이미 토스트로 처리됨
+      console.error("로그인 실패:", error);
     }
   };
 
