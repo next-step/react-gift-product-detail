@@ -3,7 +3,7 @@ import type { ReactNode, ElementType } from "react";
 import type { Theme } from "@emotion/react";
 import { theme } from "@/styles/theme";
 
-type Props = {
+export type Props = {
   children: ReactNode;
   variant?: VariantKeys;
   color?: ColorKeys;
