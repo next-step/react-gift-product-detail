@@ -3,7 +3,5 @@ import { ProductReviewQueryOptions } from '../query/queryOptions';
 import type { ProductReview } from '../types/Products';
 
 export const useProductReview = (productId: number) => {
-  return useQuery<ProductReview, Error>(
-    ProductReviewQueryOptions(productId)
-  );
+  return useQuery(ProductReviewQueryOptions(productId));
 };

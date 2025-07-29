@@ -26,9 +26,7 @@ export const fetchGiftProductById = async (
 export const useGiftProductById = (id: number) => {
   const navigate = useNavigate();
 
-  const query = useQuery<GiftItem, Error>(
-    giftProductQueryOptions(id)
-  );
+  const query = useQuery(giftProductQueryOptions(id));
 
   useEffect(() => {
     if (query.isError) {
