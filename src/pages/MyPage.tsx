@@ -1,4 +1,3 @@
-import TheHeader from "@/components/layout/TheHeader";
 import { useUserInfo } from "@/contexts/UserInfoContext";
 import withUser from "@/hoc/withUser";
 import styled from "@emotion/styled";
@@ -15,15 +14,12 @@ const MyPage = () => {
   };
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <Title>마이 페이지</Title>
-        <Content>{name}님 안녕하세요!</Content>
-        <Content>이메일 주소는 {email}입니다.</Content>
-        <Button onClick={handleLogout}>로그아웃</Button>
-      </Main>
-    </>
+    <Main>
+      <Title>마이 페이지</Title>
+      <Content>{name}님 안녕하세요!</Content>
+      <Content>이메일 주소는 {email}입니다.</Content>
+      <Button onClick={handleLogout}>로그아웃</Button>
+    </Main>
   );
 };
 

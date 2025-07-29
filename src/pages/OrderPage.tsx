@@ -1,4 +1,3 @@
-import TheHeader from "@/components/layout/TheHeader";
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { ROUTE_PATH } from "@/routes/paths";
@@ -16,7 +15,7 @@ import type { OrderFormValue } from "@/types/order";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
 import withUser from "@/hoc/withUser";
-import useProductsSummary from "@/hooks/useProductsSummary";
+import useProductsSummary from "@/hooks/api/useProductsSummary";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -87,27 +86,24 @@ const OrderPage = () => {
   };
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit(onValid)}>
-            <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
-            <SenderSection />
-            <ReceiverSection />
-            <GiftInformationSection {...gift} />
-            <Button type="submit">
-              {gift.price *
-                watchedReceiver.reduce(
-                  (total, receiver) => total + Number(receiver.quantity || 0),
-                  0,
-                )}
-              원 주문하기
-            </Button>
-          </Form>
-        </FormProvider>
-      </Main>
-    </>
+    <Main>
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit(onValid)}>
+          <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
+          <SenderSection />
+          <ReceiverSection />
+          <GiftInformationSection {...gift} />
+          <Button type="submit">
+            {gift.price *
+              watchedReceiver.reduce(
+                (total, receiver) => total + Number(receiver.quantity || 0),
+                0,
+              )}
+            원 주문하기
+          </Button>
+        </Form>
+      </FormProvider>
+    </Main>
   );
 };
 

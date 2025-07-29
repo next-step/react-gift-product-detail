@@ -1,9 +1,13 @@
 import styled from "@emotion/styled";
+import TheHeader from "./TheHeader";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <Background>
-      <Container>{children}</Container>
+      <Container>
+        <TheHeader />
+        {children}
+      </Container>
     </Background>
   );
 }

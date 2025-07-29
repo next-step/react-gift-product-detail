@@ -1,18 +1,14 @@
 import styled from "@emotion/styled";
-import TheHeader from "@/components/layout/TheHeader";
 import LoginForm from "@/components/login/LoginForm";
 import KakaoLogo from "@/components/image/KakaoLogo";
 import withoutUser from "@/hoc/withoutUser";
 
 const LoginPage = () => {
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <KakaoLogo size={"88px"} />
-        <LoginForm />
-      </Main>
-    </>
+    <Main>
+      <KakaoLogo size={"88px"} />
+      <LoginForm />
+    </Main>
   );
 };
 
