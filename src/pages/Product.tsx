@@ -7,6 +7,7 @@ import ProductDescription from '@/components/product/ProductDescription';
 import ProductReview from '@/components/product/ProductReview';
 import ProductDetailInfo from '@/components/product/ProductDetailInfo';
 import {TabContainer,Tab,TabName} from '@/components/product/product.style';
+import WishAndOrderBar from '@/components/product/WishAndOrderBar';
 
 const Product = () => {
   const { productId } = useParams();
@@ -17,9 +18,10 @@ const Product = () => {
   return (
     <Layout>
       <NavigationBar />
+      
       <Suspense fallback={<div>로딩 중...</div>}>
         <ProductInfoContent productId={id} />
-
+        <WishAndOrderBar/>
         <TabContainer>
           <Tab active={selectedTab === 'description'} onClick={() => setSelectedTab('description')}>
             <TabName>상품설명</TabName>

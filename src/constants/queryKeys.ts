@@ -9,7 +9,9 @@ export const QUERY_KEYS = {
 
   productInfo: (productId: number) => ['productInfo', productId],
   productDetail: (productId: number) => ['productDetail', productId],
-  productWish: (productId: number) => ['productWish', productId],
+
+  wishCount: (productId: number) => ['product', productId, 'wish'] as const,
+  
   productHighlightReview: (productId: number) => ['productHighlightReview', productId],
 
 };

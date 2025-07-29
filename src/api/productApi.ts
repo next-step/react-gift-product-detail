@@ -25,6 +25,10 @@ export const fetchWishCount = async (id: number): Promise<WishResponse> => {
   return res.data.data;
 };
 
+export const toggleWish = async (productId: number): Promise<void> => {
+  await API.post(`/api/products/${productId}/wish`);
+};
+
 //상품 하이라이트 리뷰 조회
 export const fetchHighlightReview = async (id: number): Promise<HighlightReviewResponse> => {
   const res = await API.get(`/api/products/${id}/highlight-review`);
