@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { client } from "@/api/client";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
@@ -14,9 +14,9 @@ interface ReviewResponse {
 }
 
 export const useProductReview = (productId: number) => {
-  return useQuery({
+  return useSuspenseQuery<ReviewResponse, Error>({
     queryKey: QUERY_KEYS.productReviews(productId),
-    queryFn: async (): Promise<ReviewResponse> => {
+    queryFn: async () => {
       const { data } = await client.get(
         `/api/products/${productId}/highlight-review`,
       );

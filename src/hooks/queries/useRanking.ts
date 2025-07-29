@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { fetchRanking } from "@/api/ranking";
 import type { RankType, TargetType, RankingItem } from "@/api/ranking";
 
@@ -8,7 +8,7 @@ interface UseRankingParams {
 }
 
 export const useRanking = ({ targetType, rankType }: UseRankingParams) => {
-  return useQuery<RankingItem[], Error>({
+  return useSuspenseQuery<RankingItem[], Error>({
     queryKey: ["ranking", targetType, rankType],
     queryFn: () => fetchRanking({ targetType, rankType }),
   });
