@@ -23,7 +23,7 @@ const Product = () => {
   });
 
   return (
-    <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
+    <ErrorBoundary fallback={<RedirectOnError to={ROUTES.HOME} />}>
       <Suspense fallback={<Loading height="100vh" />}>
         <ProductOverview data={data} />
         <ProductTabs />

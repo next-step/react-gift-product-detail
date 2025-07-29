@@ -17,7 +17,7 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   const { products, hasMore, fetchNextPage, isFetchingNextPage } = useThemeProducts(themeId);
 
   const handleProductClick = (product: RankingProduct) => {
-    navigate(`/${ROUTES.PRODUCT}/${product.id}`);
+    navigate(`${ROUTES.PRODUCT}/${product.id}`);
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   return (
     <S.Section>
       <S.Grid>
-        {products.map((product) => (
+        {products.map(product => (
           <RankingItemCard
             key={product.id}
             imageUrl={product.imageURL}
@@ -69,4 +69,4 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   );
 };
 
-export default ThemeProductSection; 
+export default ThemeProductSection;

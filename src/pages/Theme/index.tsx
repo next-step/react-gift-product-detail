@@ -15,7 +15,7 @@ const Theme = () => {
 
   return (
     <S.Container>
-      <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
+      <ErrorBoundary fallback={<RedirectOnError to={ROUTES.HOME} />}>
         <Suspense fallback={<Loading height="200px" />}>
           <ThemeHeroSection themeId={numericThemeId} />
           <ThemeProductSection themeId={numericThemeId} />

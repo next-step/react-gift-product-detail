@@ -1,4 +1,4 @@
-import { createBrowserRouter} from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../layout';
 import ProtectedRoute from './ProtectedRoute';
 import { Home, Login, MyPage, Order, NotFound, Theme, Product } from '@/pages';
@@ -6,7 +6,6 @@ import { ROUTES } from '@/shared/config';
 
 const router = createBrowserRouter([
   {
-    path: '/',
     element: <Layout />,
     errorElement: <NotFound />,
     children: [

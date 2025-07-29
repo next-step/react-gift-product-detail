@@ -27,7 +27,7 @@ export const handleApiError = (
       case 401:
         toast.error(message || '로그인이 필요합니다.');
         if (navigate) {
-          navigate(`/${ROUTES.LOGIN}`);
+          navigate(ROUTES.LOGIN);
         }
         break;
       case 400:

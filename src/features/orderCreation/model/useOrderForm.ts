@@ -5,14 +5,14 @@ import { useReceiver } from '@/entities/receiver/model/context';
 import { useAuth } from '@/entities/user/model/context';
 import { orders } from '@/entities/order/model/constants';
 import { createOrder } from '@/entities/order/api/orderApi';
-import { type OrderRequest} from '@/entities/order/model/types';
+import { type OrderRequest } from '@/entities/order/model/types';
 import { useMutation } from '@tanstack/react-query';
-import { 
-  DEFAULT_CARD_STATE, 
-  DEFAULT_FORM_DATA, 
-  ERROR_MESSAGES, 
-  SUCCESS_MESSAGES, 
-  ORDER_INFO_TEMPLATE 
+import {
+  DEFAULT_CARD_STATE,
+  DEFAULT_FORM_DATA,
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+  ORDER_INFO_TEMPLATE,
 } from './constants';
 import { createCardHandlers, validateOrderForm } from './orderutils';
 import type { CardState, FormData, UseOrderFormProps } from './types';
@@ -32,12 +32,12 @@ export const useOrderForm = ({ product }: UseOrderFormProps = {}) => {
   });
 
   const { mutate: createOrderMutation, isPending } = useMutation({
-    mutationFn: ({ orderData, token }: { orderData: OrderRequest; token: string }) => 
+    mutationFn: ({ orderData, token }: { orderData: OrderRequest; token: string }) =>
       createOrder(orderData, token),
     onSuccess: () => {
       const totalQuantity = receiverList.reduce((sum, receiver) => sum + receiver.quantity, 0);
       const receiverNames = receiverList.map(receiver => receiver.name).join(', ');
-      
+
       const orderInfo = `${SUCCESS_MESSAGES.ORDER_COMPLETED}
 ${ORDER_INFO_TEMPLATE.PRODUCT_NAME}: ${product?.name}
 ${ORDER_INFO_TEMPLATE.QUANTITY}: ${totalQuantity}개
@@ -46,18 +46,18 @@ ${ORDER_INFO_TEMPLATE.RECEIVERS}: ${receiverNames}
 ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
 
       alert(orderInfo);
-      navigate(`/${ROUTES.HOME}`);
+      navigate(ROUTES.HOME);
     },
     onError: mutationErrorHandler(ERROR_MESSAGES.ORDER_PROCESSING_ERROR),
   });
 
-  const selectedCard = useMemo(() => 
-    orders.find(order => order.id === cardState.selectedCardId),
+  const selectedCard = useMemo(
+    () => orders.find(order => order.id === cardState.selectedCardId),
     [cardState.selectedCardId]
   );
 
   const { handleCardClick, handleMessageChange } = createCardHandlers(setCardState);
-  const handleSenderNameChange: InputChangeHandler = (e) => {
+  const handleSenderNameChange: InputChangeHandler = e => {
     setFormData(prev => ({
       ...prev,
       senderName: e.target.value.trim(),
@@ -74,7 +74,7 @@ ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
 
     if (!userInfo?.authToken) {
       toast.error(ERROR_MESSAGES.LOGIN_REQUIRED);
-      navigate(`/${ROUTES.LOGIN}`);
+      navigate(ROUTES.LOGIN);
       return;
     }
 
@@ -86,8 +86,8 @@ ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
       receivers: receiverList.map(receiver => ({
         name: receiver.name,
         phoneNumber: receiver.phone,
-        quantity: receiver.quantity
-      }))
+        quantity: receiver.quantity,
+      })),
     };
 
     createOrderMutation({ orderData, token: userInfo.authToken });
@@ -103,4 +103,4 @@ ${ORDER_INFO_TEMPLATE.MESSAGE}: ${cardState.message}`;
     handleOrder,
     isPending,
   };
-}; 
+};

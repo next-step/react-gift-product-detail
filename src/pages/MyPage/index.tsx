@@ -9,7 +9,7 @@ const MyPage = () => {
 
   const handleLogout = () => {
     logout();
-    navigate(`/${ROUTES.LOGIN}`);
+    navigate(ROUTES.LOGIN);
   };
 
   return (
@@ -25,4 +25,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage; 
+export default MyPage;

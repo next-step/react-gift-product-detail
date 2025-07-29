@@ -50,7 +50,7 @@ const OrderContent = () => {
 
 const Order = () => {
   return (
-    <ErrorBoundary fallback={<RedirectOnError to={`/${ROUTES.HOME}`} />}>
+    <ErrorBoundary fallback={<RedirectOnError to={ROUTES.HOME} />}>
       <Suspense fallback={<Loading />}>
         <OrderContent />
       </Suspense>

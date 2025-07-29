@@ -64,7 +64,7 @@ export const ProductActionGroup = () => {
         />
         <p>{wishData?.wishCount || 0}</p>
       </S.WishButton>
-      <S.OrderButton onClick={() => navigate(`/${ROUTES.ORDER}/${numericProductId}`)}>
+      <S.OrderButton onClick={() => navigate(`${ROUTES.ORDER}/${numericProductId}`)}>
         주문하기
       </S.OrderButton>
     </S.Container>

@@ -39,13 +39,13 @@ const RankingSection = () => {
   };
 
   const handleItemCardClick = (productId: number) => {
-    navigate(`/${ROUTES.PRODUCT}/${productId}`);
+    navigate(`${ROUTES.PRODUCT}/${productId}`);
   };
 
   return (
     <S.Section>
       <S.Title>실시간 급상승 선물랭킹</S.Title>
-      
+
       <S.FilterContainer>
         <S.GenderFilterContainer>
           {genderItems.map(option => (
@@ -53,17 +53,15 @@ const RankingSection = () => {
               <S.GenderIconContainer isSelected={selectedGender === option.key}>
                 {option.icon}
               </S.GenderIconContainer>
-              <S.GenderText isSelected={selectedGender === option.key}>
-                {option.label}
-              </S.GenderText>
+              <S.GenderText isSelected={selectedGender === option.key}>{option.label}</S.GenderText>
             </S.GenderButton>
           ))}
         </S.GenderFilterContainer>
-        
+
         <S.ActionFilterContainer>
           {actionItems.map(action => (
-            <S.ActionButton 
-              key={action.key} 
+            <S.ActionButton
+              key={action.key}
               isSelected={selectedAction === action.key}
               onClick={() => handleActionChange(action.key)}
             >
@@ -72,29 +70,28 @@ const RankingSection = () => {
           ))}
         </S.ActionFilterContainer>
       </S.FilterContainer>
-      
-      
-        <>
-          <S.Grid>
-            {(isExpanded ? data : data.slice(0, 6)).map((item, index) => (
-              <RankingItemCard
-                key={item.id}
-                imageUrl={item.imageURL}
-                title={item.name}
-                subtitle={item.brandInfo.name}
-                price={item.price.sellingPrice}
-                rank={index + 1}
-                onClick={() => handleItemCardClick(item.id)}
-              />
-            ))}
-          </S.Grid>
 
-          <S.MoreButton onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? '접기' : '더보기'}
-          </S.MoreButton>
-        </>
+      <>
+        <S.Grid>
+          {(isExpanded ? data : data.slice(0, 6)).map((item, index) => (
+            <RankingItemCard
+              key={item.id}
+              imageUrl={item.imageURL}
+              title={item.name}
+              subtitle={item.brandInfo.name}
+              price={item.price.sellingPrice}
+              rank={index + 1}
+              onClick={() => handleItemCardClick(item.id)}
+            />
+          ))}
+        </S.Grid>
+
+        <S.MoreButton onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? '접기' : '더보기'}
+        </S.MoreButton>
+      </>
     </S.Section>
   );
 };
 
-export default RankingSection; 
+export default RankingSection;
