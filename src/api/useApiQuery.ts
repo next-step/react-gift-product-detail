@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -21,7 +21,7 @@ export const useApiQuery = <T = unknown>({
   params = {},
   select,
 }: ApiQueryParams<T>) => {
-  const { data, isError, isLoading } = useSuspenseQuery<T, AxiosError<ApiErrorResponse>>({
+  const { data, isError, isLoading } = useQuery<T, AxiosError<ApiErrorResponse>>({
     queryKey,
     queryFn: async ({ signal }) => {
       const response = await axios.get(BASE_URL + endpoint, {
