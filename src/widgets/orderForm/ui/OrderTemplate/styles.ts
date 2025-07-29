@@ -32,7 +32,7 @@ export const FixedBottomButton = styled.button`
   position: fixed;
   bottom: 0;
   width: 720px;
-  height: 60px;
+  height: 48px;
   background-color: ${({ theme }) => theme.semantic.brand.kakaoYellow};
   color: ${({ theme }) => theme.colors.gray[900]};
   border: none;
@@ -50,5 +50,5 @@ export const FixedBottomButton = styled.button`
 `;
 
 export const ContentWrapper = styled.div`
-  padding-bottom: 70px;
+  padding-bottom: 48px;
 `;

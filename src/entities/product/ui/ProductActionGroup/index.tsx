@@ -57,10 +57,11 @@ export const ProductActionGroup = ({ wishData }: ProductActionGroupProps) => {
     <S.Container>
       <S.WishButton isWished={wishData?.isWished || false} onClick={toggleWish}>
         <Heart
+          size={40}
           fill={wishData?.isWished ? '#ff0000' : 'none'}
           color={wishData?.isWished ? '#ff0000' : '#2a3038'}
         />
-        <p>{wishData?.wishCount || 0}</p>
+        <p style={{ fontSize: '10px', margin: 0 }}>{wishData?.wishCount || 0}</p>
       </S.WishButton>
       <S.OrderButton onClick={() => navigate(`${ROUTES.ORDER}/${numericProductId}`)}>
         주문하기

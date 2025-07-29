@@ -6,15 +6,21 @@ export const Container = styled.div`
   bottom: 0;
   display: flex;
   width: 720px;
-  height: 60px;
+  height: 48px;
   z-index: ${Z_INDEX.FIXED_BOTTOM};
 `;
 
 export const WishButton = styled.button<{ isWished: boolean }>`
   background-color: ${({ theme }) => theme.semantic.background.default};
-  padding: ${({ theme }) => theme.spacing.spacing4};
+  padding: ${({ theme }) => theme.spacing.spacing2};
   border: none;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 60px;
 `;
 
 export const OrderButton = styled.button`
