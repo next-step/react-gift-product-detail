@@ -2,7 +2,7 @@
 import Navigation from '@/components/Navigation';
 import ProductDetailInfo from '@/components/ProductDetailSection/ProductDetailInfo';
 import ProductActionBar from '@/components/ProductDetailSection/ProductActionBar';
-import TabPanel from '@/components/common/TabPanel';
+import TabPanel from '@/components/common/WithSuspenseBoundary';
 import { ERROR_MESSAGES } from '@/constants/validation';
 
 const ProductDetailPage = () => {

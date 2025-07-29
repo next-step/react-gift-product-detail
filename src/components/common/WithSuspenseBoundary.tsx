@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const TabPanel = ({ fallbackMessage, children }: Props) => {
+const WithSuspenseBoundary = ({ fallbackMessage, children }: Props) => {
   return (
     <ErrorBoundary fallback={<FallbackText>{fallbackMessage}</FallbackText>}>
       <Suspense fallback={loading}>{children}</Suspense>
@@ -16,7 +16,7 @@ const TabPanel = ({ fallbackMessage, children }: Props) => {
   );
 };
 
-export default TabPanel;
+export default WithSuspenseBoundary;
 
 const FallbackText = styled.p`
   text-align: center;

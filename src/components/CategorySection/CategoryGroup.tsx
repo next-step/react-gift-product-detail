@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import CategoryContent from '@/components/CategorySection/CategoryContent';
-import TabPanel from '@/components/common/TabPanel';
+import WithSuspenseBoundary from '@/components/common/WithSuspenseBoundary';
 import { ERROR_MESSAGES } from '@/constants/validation';
 
 const CategoryGroup = () => {
@@ -9,9 +9,11 @@ const CategoryGroup = () => {
       <TitleWrapper>
         <Title>선물 테마</Title>
       </TitleWrapper>
-      <TabPanel fallbackMessage={ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}>
+      <WithSuspenseBoundary
+        fallbackMessage={ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}
+      >
         <CategoryContent />
-      </TabPanel>
+      </WithSuspenseBoundary>
     </Section>
   );
 };

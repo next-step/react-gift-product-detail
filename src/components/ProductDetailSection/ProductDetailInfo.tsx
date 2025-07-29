@@ -5,7 +5,7 @@ import ProductTabSelector from '@/components/ProductDetailSection/ProductTabSele
 import ProductDescription from '@/components/ProductDetailSection/ProductDescription';
 import ProductReviews from '@/components/ProductDetailSection/ProductReviews';
 import ProductAnnouncements from '@/components/ProductDetailSection/ProductAnnouncements';
-import TabPanel from '@/components/common/TabPanel';
+import WithSuspenseBoundary from '@/components/common/WithSuspenseBoundary';
 import type { ProductDetailTab } from '@/constants/productDetail';
 import { ERROR_MESSAGES } from '@/constants/validation';
 
@@ -40,9 +40,9 @@ const ProductDetailInfo = () => {
         onSelectTab={setSelectedTab}
       />
       <TabContent>
-        <TabPanel fallbackMessage={errorMessage}>
+        <WithSuspenseBoundary fallbackMessage={errorMessage}>
           <Component />
-        </TabPanel>
+        </WithSuspenseBoundary>
       </TabContent>
     </Wrapper>
   );
