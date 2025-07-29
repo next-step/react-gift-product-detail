@@ -67,7 +67,7 @@ const Ranking = () => {
   const handleProductClick = (id: number) => {
     if (!user.isLoggedIn) navigator(ROUTE_PATH.LOGIN);
     else {
-      navigator(ROUTE_PATH.ORDER.replace(':productId', String(id)));
+      navigator(ROUTE_PATH.PRODUCT.replace(':productId', String(id)));
     }
   };
  
