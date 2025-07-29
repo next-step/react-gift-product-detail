@@ -10,6 +10,7 @@ import { ROUTE } from '@/constants/routes';
 import AuthRoute from '@/routes/AuthRoute';
 import PublicRoute from '@/routes/PublicRoute';
 import ThemeProductsPage from '@/pages/ThemeProductsPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 
 const App = () => {
   return (
@@ -46,6 +47,14 @@ const App = () => {
               element={
                 <AuthRoute>
                   <OrderPage />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path={ROUTE.PRODUCT()}
+              element={
+                <AuthRoute>
+                  <ProductDetailPage />
                 </AuthRoute>
               }
             />
