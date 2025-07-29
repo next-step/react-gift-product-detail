@@ -10,11 +10,14 @@ import Order from '@/pages/Order/Order';
 import NotFound from '@/NotFound';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useContext } from 'react';
+import { useContext, Suspense, lazy } from 'react';
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import ThemeDetail from '@/pages/ThemeDetail';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Product from '@/pages/ProductDetail/Product';
+// import Product from '@/pages/ProductDetail/Product';
+const Product = lazy(() => import('@/pages/ProductDetail/Product'));
+import ErrorBoundary from '@/components/ErrorBoundary';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const queryClient = new QueryClient();
 
@@ -37,24 +40,33 @@ function App() {
       <AppWrapper>
         <ToastContainer autoClose={2000} />
         <ResetStyles />
-        <Routes>
-          <Route
-            element={
-              <WithHeaderLayout
-                handleBackClick={handleBackClick}
-                handleLoginClick={HandleLoginClick}
+        <ErrorBoundary>
+          <Routes>
+            <Route
+              element={
+                <WithHeaderLayout
+                  handleBackClick={handleBackClick}
+                  handleLoginClick={HandleLoginClick}
+                />
+              }
+            >
+              <Route path="/" element={<MainLayout />} />
+              <Route path="/login" element={<Login onLogin={handleBackClick} />} />
+              <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
+              <Route path="/order/:orderId" element={<Order />} />
+              <Route
+                path="/product/:productId"
+                element={
+                  <Suspense fallback={<LoadingSpinner message="상품 정보를 불러오는 중..." />}>
+                    <Product />
+                  </Suspense>
+                }
               />
-            }
-          >
-            <Route path="/" element={<MainLayout />} />
-            <Route path="/login" element={<Login onLogin={handleBackClick} />} />
-            <Route path="/my" element={<Mypage onLogin={handleBackClick} />} />
-            <Route path="/order/:orderId" element={<Order />} />
-            <Route path="/product/:productId" element={<Product />} />
-            <Route path="/themes/:themeId" element={<ThemeDetail />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+              <Route path="/themes/:themeId" element={<ThemeDetail />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ErrorBoundary>
       </AppWrapper>
     </QueryClientProvider>
   );

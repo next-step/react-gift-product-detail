@@ -17,14 +17,8 @@ import {
 import useProductDetail from '@/hooks/useProductDetail';
 
 function Product() {
-  const {
-    activeTab,
-    setActiveTab,
-    productBasicInfo,
-    productDetailInfo,
-    isDetailLoading,
-    productReviewInfo,
-  } = useProductDetail();
+  const { activeTab, setActiveTab, productBasicInfo, productDetailInfo, productReviewInfo } =
+    useProductDetail();
 
   return (
     <ProductDetailContainerWrapper>
@@ -62,12 +56,7 @@ function Product() {
       </TabContainer>
       {activeTab === 'description' && <ProductDetail productDetailInfo={productDetailInfo} />}
       {activeTab === 'review' && <ProductReview productReviewInfo={productReviewInfo} />}
-      {activeTab === 'detail' &&
-        (isDetailLoading ? (
-          <div style={{ padding: '20px', textAlign: 'center' }}>로딩 중...</div>
-        ) : (
-          <Detail detailInfo={productDetailInfo?.announcements} />
-        ))}
+      {activeTab === 'detail' && <Detail detailInfo={productDetailInfo?.announcements} />}
       <ProductDetailFooter />
     </ProductDetailContainerWrapper>
   );
