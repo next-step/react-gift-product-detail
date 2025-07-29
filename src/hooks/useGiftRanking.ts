@@ -1,13 +1,14 @@
-import useApiRequest from './useApiRequest';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { fetchRanking } from '@/api/RankingApi';
-import type { Product } from '@/types/Product';
+
+const giftRankingQueryOptions = (gender: string, type: string) =>
+  queryOptions({
+    queryKey: ['ranking', gender, type],
+    queryFn: () => fetchRanking(gender, type),
+    staleTime: 1000 * 60,
+    enabled: !!gender && !!type,
+  });
 
 export default function useGiftRanking(gender: string, type: string) {
-  const {
-    data: products,
-    loading,
-    error,
-  } = useApiRequest<Product[], [string, string]>(fetchRanking, [gender, type]);
-
-  return { products, loading, error };
+  return useQuery(giftRankingQueryOptions(gender, type));
 }

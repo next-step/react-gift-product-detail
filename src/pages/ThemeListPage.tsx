@@ -20,15 +20,14 @@ export default function ThemeListPage() {
   const parsedId = Number(themeId);
   const goToHome = useGoToHome();
 
-  const { data: themeInfo, loading, error } = useThemeInfo(parsedId);
+  const { data: themeInfo, isLoading, isError } = useThemeInfo(parsedId);
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
       goToHome();
     }
-  }, [error, goToHome]);
-
-  if (loading) return <p>loading</p>;
+  }, [isError, goToHome]);
+  if (isLoading) return <p>loading</p>;
   if (!themeInfo) return null;
 
   return (

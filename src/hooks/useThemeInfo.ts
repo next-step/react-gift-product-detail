@@ -1,6 +1,10 @@
-import useApiRequest from './useApiRequest';
+import { useQuery } from '@tanstack/react-query';
 import { fetchThemeInfo } from '@/api/ThemeListApi';
 
 export default function useThemeInfo(themeId: number) {
-  return useApiRequest(fetchThemeInfo, [themeId]);
+  return useQuery({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
+    enabled: !!themeId,
+  });
 }

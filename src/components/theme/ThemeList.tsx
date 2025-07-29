@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchThemeProducts } from '@/api/ThemeListApi';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import useThemeProducts from '@/hooks/useThemeProducts';
 import ThemeProductCard from './ProductCard';
 import type { Product } from '@/types/Product';
 
@@ -25,28 +24,39 @@ export default function ThemeList() {
   const { themeId } = useParams();
   const parsedId = Number(themeId);
 
-  const { items, loading, initialLoading, fetchMore, hasMore } = useInfiniteScroll<Product>(
-    (cursor) => fetchThemeProducts(parsedId, cursor),
-  );
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useThemeProducts(parsedId);
 
-  const { ref } = useIntersectionObserver({
-    onIntersection: fetchMore,
-    disconnectCondition: !hasMore,
-  });
+  const ref = useRef<HTMLDivElement | null>(null);
 
-  if (!initialLoading && items.length === 0) {
+  useEffect(() => {
+    if (!ref.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextPage) {
+        fetchNextPage();
+      }
+    });
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage]);
+
+  const products = data?.pages.flatMap((page) => page.list) ?? [];
+
+  if (!isLoading && products.length === 0) {
     return <EmptyState>상품이 없습니다.</EmptyState>;
   }
 
   return (
     <>
       <ProductGrid>
-        {items.map((product) => (
+        {products.map((product: Product) => (
           <ThemeProductCard key={product.id} product={product} />
         ))}
       </ProductGrid>
       <div ref={ref} style={{ height: 20 }} />
-      {loading && <p>로딩 중...</p>}
+      {isFetchingNextPage && <p>로딩 중...</p>}
     </>
   );
 }
