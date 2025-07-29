@@ -11,7 +11,6 @@ import { fetchThemeInfo, fetchThemeProducts } from "@/api/theme";
 import { PATH } from "@/constants/path";
 import { useIntersect } from "@/hooks/useIntersect";
 import { useAuth } from "@/contexts/AuthContext";
-import AsyncBoundary from "@/components/common/AsyncBoundary";
 import type { ProductSummary } from "@/api/product";
 
 interface ThemeInfo {
@@ -90,12 +89,9 @@ const ThemeProduct = () => {
   };
 
   if (loading) {
-    return (
-      <AsyncBoundary fallback={<Spinner withWrapper />}>
-        <div />
-      </AsyncBoundary>
-    );
-  }
+  return <Spinner withWrapper />;
+}
+
 
   return (
     <PageLayout>
