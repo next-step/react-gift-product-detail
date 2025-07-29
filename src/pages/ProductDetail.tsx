@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
-import { useProductInfo } from '@/api/productDetail';
+import { useProductInfo, useProductDetail } from '@/api/productDetail';
 
 const ProductContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
@@ -102,6 +102,96 @@ const ErrorMessage = styled.div`
   color: ${({ theme }) => theme.colors.red.red700};
 `;
 
+// 상품 세부 정보 섹션 스타일
+const DetailSection = styled.section`
+  margin-top: ${({ theme }) => theme.spacing.xxl};
+  padding-top: ${({ theme }) => theme.spacing.lg};
+  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const SpecificationsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const SpecItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+const SpecLabel = styled.span`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  font-weight: 500;
+`;
+
+const SpecValue = styled.span`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  font-weight: 500;
+`;
+
+const DeliveryInfo = styled.div`
+  background: ${({ theme }) => theme.colors.gray.gray100};
+  padding: ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const DeliveryItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const DeliveryLabel = styled.span`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.gray.gray700};
+`;
+
+const DeliveryValue = styled.span`
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  font-weight: 500;
+`;
+
+const ProductImages = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const ProductImageItem = styled.img`
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  object-fit: cover;
+  background: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+const DetailDescription = styled.div`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.gray.gray800};
+  line-height: 1.6;
+  white-space: pre-line;
+`;
+
 const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -109,9 +199,18 @@ const ProductDetail = () => {
 
   const { 
     data: product, 
-    isLoading, 
-    error 
+    isLoading: productLoading, 
+    error: productError 
   } = useProductInfo(id);
+
+  const {
+    data: productDetail,
+    isLoading: detailLoading,
+    error: detailError
+  } = useProductDetail(id);
+
+  const isLoading = productLoading || detailLoading;
+  const hasError = productError || detailError;
 
   if (isLoading) {
     return (
@@ -121,7 +220,7 @@ const ProductDetail = () => {
     );
   }
 
-  if (error) {
+  if (hasError) {
     return (
       <Layout>
         <ErrorMessage>
@@ -176,6 +275,80 @@ const ProductDetail = () => {
               <Tag key={index}>{tag}</Tag>
             ))}
           </Tags>
+        )}
+
+        {/* 상품 세부 정보 섹션 */}
+        {productDetail && (
+          <DetailSection>
+            <SectionTitle>상품 상세 정보</SectionTitle>
+            
+            {/* 상품 사양 */}
+            <SpecificationsGrid>
+              <SpecItem>
+                <SpecLabel>무게</SpecLabel>
+                <SpecValue>{productDetail.specifications.weight}</SpecValue>
+              </SpecItem>
+              <SpecItem>
+                <SpecLabel>크기</SpecLabel>
+                <SpecValue>{productDetail.specifications.size}</SpecValue>
+              </SpecItem>
+              <SpecItem>
+                <SpecLabel>재질</SpecLabel>
+                <SpecValue>{productDetail.specifications.material}</SpecValue>
+              </SpecItem>
+              <SpecItem>
+                <SpecLabel>원산지</SpecLabel>
+                <SpecValue>{productDetail.specifications.origin}</SpecValue>
+              </SpecItem>
+            </SpecificationsGrid>
+
+            {/* 배송 정보 */}
+            <DeliveryInfo>
+              <DeliveryItem>
+                <DeliveryLabel>배송비</DeliveryLabel>
+                <DeliveryValue>
+                  {productDetail.delivery.shippingFee === 0 
+                    ? '무료' 
+                    : `${productDetail.delivery.shippingFee.toLocaleString()}원`
+                  }
+                </DeliveryValue>
+              </DeliveryItem>
+              <DeliveryItem>
+                <DeliveryLabel>무료배송 기준</DeliveryLabel>
+                <DeliveryValue>
+                  {productDetail.delivery.freeShippingThreshold.toLocaleString()}원 이상
+                </DeliveryValue>
+              </DeliveryItem>
+              <DeliveryItem>
+                <DeliveryLabel>배송 예정일</DeliveryLabel>
+                <DeliveryValue>{productDetail.delivery.estimatedDays}</DeliveryValue>
+              </DeliveryItem>
+            </DeliveryInfo>
+
+            {/* 상품 이미지들 */}
+            {productDetail.images.length > 0 && (
+              <>
+                <SectionTitle>상품 이미지</SectionTitle>
+                <ProductImages>
+                  {productDetail.images.map((image, index) => (
+                    <ProductImageItem 
+                      key={index} 
+                      src={image} 
+                      alt={`${product.name} 이미지 ${index + 1}`} 
+                    />
+                  ))}
+                </ProductImages>
+              </>
+            )}
+
+            {/* 상세 설명 */}
+            {productDetail.description && (
+              <>
+                <SectionTitle>상세 설명</SectionTitle>
+                <DetailDescription>{productDetail.description}</DetailDescription>
+              </>
+            )}
+          </DetailSection>
         )}
       </ProductContainer>
     </Layout>
