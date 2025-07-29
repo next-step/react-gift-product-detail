@@ -24,6 +24,7 @@ const PresentThemeItem = () => {
             data?.data.map((item: Theme) => (
               <a href={'/themes/' + item.themeId} key={item.themeId}>
                 <StyledPresentThemeItemDiv key={item.themeId} className='border'>
+
                   <StyledImage src={item.image} alt={item.name} />
                   <StyledPresentThemeItemP>{item.name}</StyledPresentThemeItemP>
                 </StyledPresentThemeItemDiv>
