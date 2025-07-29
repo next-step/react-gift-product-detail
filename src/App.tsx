@@ -19,6 +19,7 @@ const Product = lazy(() => import('@/pages/ProductDetail/Product'));
 import ErrorBoundary from '@/components/ErrorBoundary';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
+
 const queryClient = new QueryClient();
 
 function App() {

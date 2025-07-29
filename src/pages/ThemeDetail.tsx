@@ -20,7 +20,6 @@ function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
   const { handleItemClick } = useProductDetail();
-
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
   const {
