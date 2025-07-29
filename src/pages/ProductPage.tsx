@@ -3,6 +3,7 @@ import TheHeader from "@/components/layout/TheHeader";
 import ProductDescriptionSection from "@/components/products/ProductDescriptionSection";
 import ProductDetailSection from "@/components/products/ProductDetailSection";
 import ProductInfoSection from "@/components/products/ProductInfoSection";
+import ProductOrderSection from "@/components/products/ProductOrderSection";
 import ProductReviewSection from "@/components/products/ProductReviewSection";
 import withUser from "@/hoc/withUser";
 import useProductsQueries from "@/hooks/useProductsQueries";
@@ -71,6 +72,7 @@ const ProductPage = () => {
           <ProductDetailSection announcements={productsDetail.announcements} />
         )}
       </Main>
+      <ProductOrderSection {...productsWish} productId={id} />
     </>
   );
 };
