@@ -22,8 +22,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
-    // ------------------------------
+    },
+    "noEmit": true
+
   },
   "include": ["src"],       // src 폴더 전체를 컴파일 대상에 포함
   "exclude": ["node_modules", "dist"]
