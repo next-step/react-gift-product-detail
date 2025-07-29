@@ -10,16 +10,22 @@ import {
   StyledOrderButton,
 } from '@src/components/Order/Container/StyledOrderContainer';
 import { useOrderForm } from './useOrderForm';
-import { useGetOrderForm } from './useGetOrderForm';
-import { useParams } from 'react-router-dom';
 
 const OrderContainer = () => {
-  const { productId } = useParams<{ productId: string }>();
-  console.log(productId);
-  const { goodSummary, isError, isLoading } = useGetOrderForm(productId);
-
-  const { methods, handleSubmit, control, errors, onSubmit, currentRecipients, totalPrice } =
-    useOrderForm();
+  const {
+    methods,
+    handleSubmit,
+    control,
+    errors,
+    onSubmit,
+    currentRecipients,
+    totalPrice,
+    selectedProduct, // useOrderForm에서 반환하는 selectedProduct
+    isLoadingProduct, // 상품 정보 로딩 상태
+    isProductError, // 상품 정보 에러 상태
+    // productErrorMessage, // 상품 정보 에러 메시지
+    // isOrderMutating, // 주문 전송 로딩 상태
+  } = useOrderForm();
   return (
     <FormProvider {...methods}>
       <StyledTopestDiv>
@@ -31,33 +37,34 @@ const OrderContainer = () => {
             errors={errors}
             currentRecipients={currentRecipients}
           />
-
           <StyledItemInfoContainer className='item-info background-default'>
             <p className='title2Bold basic-label'>상품 정보</p>
-            {goodSummary ? (
+            {isLoadingProduct ? <div>Loading</div> : <></>}
+            {selectedProduct ? (
               <div className='item-info-text'>
                 <img
-                  src={goodSummary.imageURL}
-                  alt={goodSummary.name}
+                  src={selectedProduct.imageURL}
+                  alt={selectedProduct.name}
                   className='item-info-img'
                   loading='lazy'
                 />
                 <div>
-                  <p className='body1Regular'>{goodSummary.name}</p>
-                  <p className='label2Regular'>{goodSummary.brandName}</p>
+                  <p className='body1Regular'>{selectedProduct.name}</p>
+                  <p className='label2Regular'>{selectedProduct.brandName}</p>
 
                   <p className='item-price body2Bold basic-label'>
-                    <span className='label1Regular'>상품가 {goodSummary.price}원</span>
+                    <span className='label1Regular'>상품가 {selectedProduct.price}원</span>
                   </p>
                 </div>
               </div>
             ) : (
               <p>선택된 상품이 없습니다.</p>
             )}
+            {isProductError ? <div>에러 발생</div> : <></>}
           </StyledItemInfoContainer>
 
           <StyledOrderButton type='submit' className='order body1Bold'>
-            {goodSummary ? `${totalPrice}원 주문하기` : '상품을 선택해주세요'}
+            {selectedProduct ? `${totalPrice}원 주문하기` : '상품을 선택해주세요'}
           </StyledOrderButton>
           <Spacer />
         </form>
