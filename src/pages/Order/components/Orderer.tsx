@@ -3,12 +3,21 @@ import styled from "@emotion/styled";
 import Input from "@/pages/Order/components/Input";
 import { useFormContext } from "react-hook-form";
 import type { OrderFormType } from "@/pages/Order/components/Order";
+import { useEffect } from "react";
+import { getCookieValue } from "@/utils/cookie";
+import { AUTH_COOKIE_KEY_NAME } from "@/contexts/authContext";
 
 const Sender = () => {
   const {
     register,
+    setValue,
     formState: { errors },
   } = useFormContext<OrderFormType>();
+
+  useEffect(() => {
+    setValue("ordererName", getCookieValue(AUTH_COOKIE_KEY_NAME) || "");
+  }, [setValue]);
+
   return (
     <Content>
       <Divider spacing="1rem" />
