@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createOrder } from "../api/order";
 import type { OrderRequest, OrderResponse } from "../types/product";
+import { isErrorWithStatus, isClientError } from "../utils/errorHandling";
 
 export const useOrder = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +28,12 @@ export const useOrder = () => {
       setError(errorMessage);
 
       // 401 에러 시 로그인 페이지로 리다이렉트
-      if (err && typeof err === 'object' && 'status' in err && 
-          typeof (err as { status: unknown }).status === 'number') {
-        const status = (err as { status: number }).status;
+      if (isErrorWithStatus(err)) {
+        const status = err.status;
         if (status === 401) {
           toast.error("로그인이 필요합니다.");
           navigate("/login", { replace: true });
-        } else if (status >= 400 && status < 500) {
+        } else if (isClientError(status)) {
           toast.error(errorMessage);
         } else {
           toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
