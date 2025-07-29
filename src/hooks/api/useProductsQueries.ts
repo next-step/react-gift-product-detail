@@ -2,7 +2,7 @@ import { fetchProductsDetail } from "@/api/productDetail";
 import { fetchProducts } from "@/api/products";
 import { fetchProductsReview } from "@/api/productsReview";
 import { fetchProductsWish } from "@/api/productsWish";
-import { useQueries } from "@tanstack/react-query";
+import { useSuspenseQueries } from "@tanstack/react-query";
 
 type useProductsQueriesParams = {
   id: string;
@@ -10,34 +10,32 @@ type useProductsQueriesParams = {
 
 const useProductsQueries = ({ id }: useProductsQueriesParams) => {
   const numberId = Number(id);
-  const results = useQueries({
+  const results = useSuspenseQueries({
     queries: [
       {
-        queryKey: ["products", id],
+        queryKey: ["products", numberId],
         queryFn: () => fetchProducts({ id: numberId }),
       },
       {
-        queryKey: ["productsWish", id],
+        queryKey: ["productsWish", numberId],
         queryFn: () => fetchProductsWish({ id: numberId }),
       },
       {
-        queryKey: ["productsDetail", id],
+        queryKey: ["productsDetail", numberId],
         queryFn: () => fetchProductsDetail({ id: numberId }),
       },
       {
-        queryKey: ["productsReview", id],
+        queryKey: ["productsReview", numberId],
         queryFn: () => fetchProductsReview({ id: numberId }),
       },
     ],
   });
-  const isPending = results.some(result => result.isPending);
 
   return {
     products: results[0].data,
     productsWish: results[1].data,
     productsDetail: results[2].data,
     productsReview: results[3].data,
-    isPending,
   };
 };
 

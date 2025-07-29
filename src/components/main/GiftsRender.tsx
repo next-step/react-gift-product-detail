@@ -2,7 +2,8 @@ import GiftsList from "./GiftsList";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import BoxMessage from "@/components/common/BoxMessage";
 import type { TargetType, RankType } from "@/types/gift";
-import useProductsRanking from "@/hooks/useProductsRanking";
+import useProductsRanking from "@/hooks/api/useProductsRanking";
+import { Suspense } from "react";
 
 type GiftsRenderProps = {
   targetType: TargetType;
@@ -10,14 +11,11 @@ type GiftsRenderProps = {
 };
 
 const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
-  const { gifts, isPending, isError } = useProductsRanking({
+  const { gifts, isError } = useProductsRanking({
     targetType,
     rankType,
   });
 
-  if (isPending) {
-    return <LoadingSpinner height="266px" />;
-  }
   if (isError) {
     return (
       <BoxMessage
@@ -29,7 +27,11 @@ const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
   if (!gifts || gifts.length === 0) {
     return <BoxMessage message="상품이 없습니다." height="266px" />;
   }
-  return <GiftsList items={gifts} />;
+  return (
+    <Suspense fallback={<LoadingSpinner height="266px" />}>
+      <GiftsList items={gifts} />
+    </Suspense>
+  );
 };
 
 export default GiftsRender;

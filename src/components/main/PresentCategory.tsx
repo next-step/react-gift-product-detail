@@ -3,7 +3,7 @@ import PresentTheme from "./PresentTheme";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
-import useThemes from "@/hooks/useThemes";
+import useThemes from "@/hooks/api/useThemes";
 
 const PresentCategory = () => {
   const navigate = useNavigate();

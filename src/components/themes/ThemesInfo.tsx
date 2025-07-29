@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import useThemesInfo from "@/hooks/useThemesInfo";
+import useThemesInfo from "@/hooks/api/useThemesInfo";
 
 type ThemesInfoProps = {
   id: string | undefined;

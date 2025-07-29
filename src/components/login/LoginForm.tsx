@@ -4,7 +4,7 @@ import ErrorMessage from "../common/ErrorMessage";
 import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { LoginFormValues } from "@/types/user";
-import useLogin from "@/hooks/useLogin";
+import useLogin from "@/hooks/api/useLogin";
 
 const LoginForm = () => {
   const method = useForm<LoginFormValues>({

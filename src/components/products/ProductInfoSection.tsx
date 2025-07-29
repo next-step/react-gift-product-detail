@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-type ProductInfoSectionProps = {
+type ProductsInfoSectionProps = {
   name: string | undefined;
   imageURL: string | undefined;
   price: number | undefined;
@@ -8,13 +8,13 @@ type ProductInfoSectionProps = {
   brandImageURL: string | undefined;
 };
 
-const ProductInfoSection = ({
+const ProductsInfoSection = ({
   name,
   imageURL,
   price,
   brandName,
   brandImageURL,
-}: ProductInfoSectionProps) => {
+}: ProductsInfoSectionProps) => {
   return (
     <Section>
       <Img src={imageURL} alt={name} />
@@ -34,7 +34,7 @@ const ProductInfoSection = ({
   );
 };
 
-export default ProductInfoSection;
+export default ProductsInfoSection;
 
 const Section = styled.section`
   display: flex;

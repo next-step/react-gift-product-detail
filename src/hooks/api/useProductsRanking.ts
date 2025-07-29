@@ -1,6 +1,6 @@
 import { fetchProductsRanking } from "@/api/productsRanking";
 import type { RankType, TargetType } from "@/types/gift";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 type GiftsRenderParams = {
   targetType: TargetType;
@@ -8,17 +8,13 @@ type GiftsRenderParams = {
 };
 
 const useProductsRanking = ({ targetType, rankType }: GiftsRenderParams) => {
-  const {
-    data: gifts,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data: gifts, isError } = useSuspenseQuery({
     queryKey: ["gifts", targetType, rankType],
     queryFn: () => fetchProductsRanking({ targetType, rankType }),
     refetchOnWindowFocus: false,
   });
 
-  return { gifts, isPending, isError };
+  return { gifts, isError };
 };
 
 export default useProductsRanking;

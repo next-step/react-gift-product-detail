@@ -6,7 +6,7 @@ import { ROUTE_PATH } from "@/routes/paths";
 import BoxMessage from "../common/BoxMessage";
 import type { ThemeProduct } from "@/types/theme";
 import LoadingSpinner from "../common/LoadingSpinner";
-import useInfiniteQuery from "@/hooks/useInfiniteQuery";
+import useInfiniteQuery from "@/hooks/api/useInfiniteQuery";
 import type {
   fetchThemesProductsParams,
   FetchThemesProductsResult,
