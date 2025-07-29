@@ -69,27 +69,6 @@ const Description = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
-const Category = styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const Tags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-const Tag = styled.span`
-  background: ${({ theme }) => theme.colors.gray.gray100};
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border-radius: ${({ theme }) => theme.spacing.sm};
-  font-size: 0.9rem;
-`;
-
 const LoadingMessage = styled.div`
   text-align: center;
   padding: ${({ theme }) => theme.spacing.xxl};
@@ -117,71 +96,7 @@ const SectionTitle = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
-const SpecificationsGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
 
-const SpecItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const SpecLabel = styled.span`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  font-weight: 500;
-`;
-
-const SpecValue = styled.span`
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-`;
-
-const DeliveryInfo = styled.div`
-  background: ${({ theme }) => theme.colors.gray.gray100};
-  padding: ${({ theme }) => theme.spacing.lg};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const DeliveryItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const DeliveryLabel = styled.span`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-`;
-
-const DeliveryValue = styled.span`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  font-weight: 500;
-`;
-
-const ProductImages = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const ProductImageItem = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-`;
 
 const DetailDescription = styled.div`
   font-size: 1.1rem;
@@ -284,17 +199,7 @@ const ReviewContent = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
-const ReviewImages = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.sm};
-`;
 
-const ReviewImage = styled.img`
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: ${({ theme }) => theme.spacing.sm};
-`;
 
 const NoReviews = styled.div`
   text-align: center;
@@ -421,21 +326,7 @@ const ProductDetailContent = () => {
     navigate(`/order/${productId}`);
   };
 
-  const renderStars = (rating: number, size: 'large' | 'small' = 'large') => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Star key={i} filled={i <= rating}>
-          ★
-        </Star>
-      );
-    }
-    return <StarRating>{stars}</StarRating>;
-  };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR');
-  };
 
   const discountRate = product.price?.discountRate || 0;
   const hasDiscount = typeof discountRate === 'number' && discountRate > 0;
@@ -462,17 +353,7 @@ const ProductDetailContent = () => {
           )}
         </PriceSection>
 
-        <Description>{product.description}</Description>
-        
-        <Category>카테고리: {product.category}</Category>
-        
-        {product.tags && product.tags.length > 0 && (
-          <Tags>
-            {product.tags.map((tag, index) => (
-              <Tag key={index}>{tag}</Tag>
-            ))}
-          </Tags>
-        )}
+        {/* 상품 설명은 ProductDetail API에서 가져옴 */}
 
         {wishData && (
           <WishButtonContainer>
@@ -495,84 +376,50 @@ const ProductDetailContent = () => {
           <DetailSection>
             <SectionTitle>상품 상세 정보</SectionTitle>
             
-            <SpecificationsGrid>
-              <SpecItem>
-                <SpecLabel>무게</SpecLabel>
-                <SpecValue>{productDetail.specifications.weight}</SpecValue>
-              </SpecItem>
-              <SpecItem>
-                <SpecLabel>크기</SpecLabel>
-                <SpecValue>{productDetail.specifications.size}</SpecValue>
-              </SpecItem>
-              <SpecItem>
-                <SpecLabel>재질</SpecLabel>
-                <SpecValue>{productDetail.specifications.material}</SpecValue>
-              </SpecItem>
-              <SpecItem>
-                <SpecLabel>원산지</SpecLabel>
-                <SpecValue>{productDetail.specifications.origin}</SpecValue>
-              </SpecItem>
-            </SpecificationsGrid>
-
-            <DeliveryInfo>
-              <DeliveryItem>
-                <DeliveryLabel>배송비</DeliveryLabel>
-                <DeliveryValue>{productDetail.delivery.shippingFee.toLocaleString()}원</DeliveryValue>
-              </DeliveryItem>
-              <DeliveryItem>
-                <DeliveryLabel>무료배송 기준</DeliveryLabel>
-                <DeliveryValue>{productDetail.delivery.freeShippingThreshold.toLocaleString()}원 이상</DeliveryValue>
-              </DeliveryItem>
-              <DeliveryItem>
-                <DeliveryLabel>배송 예정일</DeliveryLabel>
-                <DeliveryValue>{productDetail.delivery.estimatedDays}</DeliveryValue>
-              </DeliveryItem>
-            </DeliveryInfo>
-
-            {productDetail.images && productDetail.images.length > 0 && (
-              <ProductImages>
-                {productDetail.images.map((image, index) => (
-                  <ProductImageItem key={index} src={image} alt={`상품 이미지 ${index + 1}`} />
-                ))}
-              </ProductImages>
-            )}
-
             <DetailDescription>{productDetail.description}</DetailDescription>
+
+            {productDetail.announcement && productDetail.announcement.length > 0 && (
+              <div style={{ marginTop: '24px' }}>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '16px' }}>
+                  공지사항
+                </h3>
+                {productDetail.announcement
+                  .sort((a, b) => a.displayOrder - b.displayOrder)
+                  .map((item, index) => (
+                    <div key={index} style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      padding: '12px 0',
+                      borderBottom: index < productDetail.announcement.length - 1 ? '1px solid #eee' : 'none'
+                    }}>
+                      <span style={{ fontWeight: 500, color: '#666' }}>{item.name}</span>
+                      <span>{item.value}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
           </DetailSection>
         )}
 
         {reviewData && (
           <ReviewSection>
             <ReviewHeader>
-              <SectionTitle>리뷰</SectionTitle>
+              <SectionTitle>하이라이트 리뷰</SectionTitle>
               <ReviewSummary>
-                <AverageRating>{reviewData.averageRating.toFixed(1)}</AverageRating>
-                <TotalReviews>({reviewData.totalReviews}개)</TotalReviews>
-                {renderStars(reviewData.averageRating)}
+                <TotalReviews>총 {reviewData.totalCount}개의 리뷰</TotalReviews>
               </ReviewSummary>
             </ReviewHeader>
 
             {reviewData.reviews && reviewData.reviews.length > 0 ? (
               <ReviewList>
                 {reviewData.reviews.map((review, index) => (
-                  <ReviewItem key={index}>
+                  <ReviewItem key={review.id}>
                     <ReviewHeaderItem>
                       <ReviewerInfo>
-                        <ReviewerName>{review.userName}</ReviewerName>
-                        <ReviewDate>{formatDate(review.createdAt)}</ReviewDate>
+                        <ReviewerName>{review.authorName}</ReviewerName>
                       </ReviewerInfo>
-                      <ReviewRating>
-                        {renderStars(review.rating, 'small')}
-                      </ReviewRating>
                     </ReviewHeaderItem>
                     <ReviewContent>{review.content}</ReviewContent>
-                    {review.images && review.images.length > 0 && (
-                      <ReviewImages>
-                        {review.images.map((image, imgIndex) => (
-                          <ReviewImage key={imgIndex} src={image} alt={`리뷰 이미지 ${imgIndex + 1}`} />
-                        ))}
-                      </ReviewImages>
-                    )}
                   </ReviewItem>
                 ))}
               </ReviewList>

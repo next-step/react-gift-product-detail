@@ -2,54 +2,40 @@
 export interface ProductInfo {
   id: number;
   name: string;
+  price: {
+    basicPrice: number;
+    sellingPrice: number;
+    discountRate: number;
+  };
   imageURL: string;
   brandInfo: {
     id: number;
     name: string;
     imageURL: string;
   };
-  price: {
-    basicPrice: number;
-    sellingPrice: number;
-    discountRate: number;
-  };
-  description: string;
-  category: string;
-  tags: string[];
 }
 
 // 상품 세부 정보 API 응답 타입
+export interface AnnouncementItem {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
 export interface ProductDetail {
-  id: number;
-  specifications: {
-    weight: string;
-    size: string;
-    material: string;
-    origin: string;
-  };
-  delivery: {
-    shippingFee: number;
-    freeShippingThreshold: number;
-    estimatedDays: string;
-  };
-  images: string[];
   description: string;
+  announcement: AnnouncementItem[];
 }
 
 // 상품 주요 리뷰 API 응답 타입
 export interface ProductReview {
-  id: number;
-  userId: number;
-  userName: string;
-  rating: number;
+  id: string;
+  authorName: string;
   content: string;
-  createdAt: string;
-  images?: string[];
 }
 
 export interface ProductHighlightReview {
-  averageRating: number;
-  totalReviews: number;
+  totalCount: number;
   reviews: ProductReview[];
 }
 
