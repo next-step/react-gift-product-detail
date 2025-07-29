@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Z_INDEX } from '@/shared/styles/zIndex';
 
 export const Container = styled.div`
   position: fixed;
@@ -6,7 +7,7 @@ export const Container = styled.div`
   display: flex;
   width: 720px;
   height: 60px;
-  z-index: 1000;
+  z-index: ${Z_INDEX.FIXED_BOTTOM};
 `;
 
 export const WishButton = styled.button<{ isWished: boolean }>`

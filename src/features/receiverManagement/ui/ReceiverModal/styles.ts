@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Z_INDEX } from '@/shared/styles/zIndex';
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -10,7 +11,7 @@ export const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1001;
+  z-index: ${Z_INDEX.MODAL_OVERLAY};
 `;
 
 export const ModalContent = styled.div`
@@ -24,6 +25,7 @@ export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   margin: ${({ theme }) => theme.spacing.spacing4};
+  z-index: ${Z_INDEX.MODAL};
 `;
 
 export const Header = styled.div`
@@ -48,7 +50,7 @@ export const Description = styled.p`
 
 export const AddButton = styled.button`
   ${({ theme }) => theme.typography.label2Regular};
-  border : none;
+  border: none;
   border-radius: ${({ theme }) => theme.spacing.spacing2};
   padding: ${({ theme }) => theme.spacing.spacing2} ${({ theme }) => theme.spacing.spacing3};
   cursor: pointer;

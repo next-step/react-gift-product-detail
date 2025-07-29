@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Z_INDEX } from '@/shared/styles/zIndex';
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.semantic.background.fill};
@@ -37,12 +38,12 @@ export const FixedBottomButton = styled.button`
   border: none;
   ${({ theme }) => theme.typography.body1Bold};
   cursor: pointer;
-  z-index: 1000;
-  
+  z-index: ${Z_INDEX.FIXED_BOTTOM};
+
   &:hover {
     background-color: ${({ theme }) => theme.semantic.brand.kakaoYellowHover};
   }
-  
+
   &:active {
     background-color: ${({ theme }) => theme.semantic.brand.kakaoYellowActive};
   }
