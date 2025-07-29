@@ -19,28 +19,23 @@ export const useOrderForm = () => {
   const [searchParams] = useSearchParams();
   const [selectedProduct, setSelectedProduct] = useState<GoodSummary | null>(null);
   const navigate = useNavigate();
-  const { productId } = useParams<{ productId: string }>();
 
-  //url를 통해 받은 상품 id를 가지고 상품 container를 생성해 렌더링
-  useEffect(() => {
-    const fetchAndSetProduct = async () => {
-      try {
-        const fetchData = useGetOrderForm(productId);
-        if (fetchData && fetchData.statusCode < 500) {
-          toast(fetchData.message);
-          navigate(URLS.home);
-        } else {
-          setSelectedProduct(fetchData);
-        }
-      } catch (error) {
-        console.error('상품 조회 중 에러 발생:', error);
-        toast('상품 정보를 불러올 수 없습니다.');
-        navigate(URLS.home);
-      }
-    };
-
-    fetchAndSetProduct();
-  }, [searchParams, navigate]);
+  // //url를 통해 받은 상품 id를 가지고 상품 container를 생성해 렌더링
+  // useEffect(() => {
+  //   try {
+  //     const fetchData = useGetOrderForm(productId);
+  //     if (fetchData && fetchData.statusCode < 500) {
+  //       toast(fetchData.message);
+  //       navigate(URLS.home);
+  //     } else {
+  //       setSelectedProduct(fetchData);
+  //     }
+  //   } catch (error) {
+  //     console.error('상품 조회 중 에러 발생:', error);
+  //     toast('상품 정보를 불러올 수 없습니다.');
+  //     navigate(URLS.home);
+  //   }
+  // }, [searchParams, navigate]);
   const methods = useForm<OrderFormValue>({
     resolver: zodResolver(orderSchema),
     defaultValues: {

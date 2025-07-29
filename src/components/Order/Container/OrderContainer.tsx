@@ -10,18 +10,16 @@ import {
   StyledOrderButton,
 } from '@src/components/Order/Container/StyledOrderContainer';
 import { useOrderForm } from './useOrderForm';
+import { useGetOrderForm } from './useGetOrderForm';
+import { useParams } from 'react-router-dom';
 
 const OrderContainer = () => {
-  const {
-    selectedProduct,
-    methods,
-    handleSubmit,
-    control,
-    errors,
-    onSubmit,
-    currentRecipients,
-    totalPrice,
-  } = useOrderForm();
+  const { productId } = useParams<{ productId: string }>();
+  console.log(productId);
+  const { goodSummary, isError, isLoading } = useGetOrderForm(productId);
+
+  const { methods, handleSubmit, control, errors, onSubmit, currentRecipients, totalPrice } =
+    useOrderForm();
   return (
     <FormProvider {...methods}>
       <StyledTopestDiv>
@@ -36,20 +34,20 @@ const OrderContainer = () => {
 
           <StyledItemInfoContainer className='item-info background-default'>
             <p className='title2Bold basic-label'>상품 정보</p>
-            {selectedProduct ? (
+            {goodSummary ? (
               <div className='item-info-text'>
                 <img
-                  src={selectedProduct.imageURL}
-                  alt={selectedProduct.name}
+                  src={goodSummary.imageURL}
+                  alt={goodSummary.name}
                   className='item-info-img'
                   loading='lazy'
                 />
                 <div>
-                  <p className='body1Regular'>{selectedProduct.name}</p>
-                  <p className='label2Regular'>{selectedProduct.brandName}</p>
+                  <p className='body1Regular'>{goodSummary.name}</p>
+                  <p className='label2Regular'>{goodSummary.brandName}</p>
 
                   <p className='item-price body2Bold basic-label'>
-                    <span className='label1Regular'>상품가 {selectedProduct.price}원</span>
+                    <span className='label1Regular'>상품가 {goodSummary.price}원</span>
                   </p>
                 </div>
               </div>
@@ -59,7 +57,7 @@ const OrderContainer = () => {
           </StyledItemInfoContainer>
 
           <StyledOrderButton type='submit' className='order body1Bold'>
-            {selectedProduct ? `${totalPrice}원 주문하기` : '상품을 선택해주세요'}
+            {goodSummary ? `${totalPrice}원 주문하기` : '상품을 선택해주세요'}
           </StyledOrderButton>
           <Spacer />
         </form>

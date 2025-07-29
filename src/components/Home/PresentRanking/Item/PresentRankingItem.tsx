@@ -35,7 +35,7 @@ const PresentProductList = ({
       sessionStorage.setItem('redirectProductId', String(item.id));
       navigate(URLS.login);
     } else {
-      navigate(`${URLS.order}?productId=${item.id}`);
+      navigate(`${URLS.order}/${item.id}`);
     }
   };
   if (isLoading) {

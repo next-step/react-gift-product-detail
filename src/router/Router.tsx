@@ -23,7 +23,7 @@ const Router = createBrowserRouter([
     path: `${URLS.themes}/:themeId`,
     Component: ThemesProduct,
   },
-  { path: URLS.order, Component: Order },
+  { path: `${URLS.order}/:productId`, Component: Order },
   {
     path: '*',
     Component: NotFound,
