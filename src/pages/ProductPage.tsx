@@ -3,6 +3,8 @@ import ProductDetailSection from "@/components/products/ProductDetailSection";
 import ProductInfoSection from "@/components/products/ProductInfoSection";
 import ProductOrderSection from "@/components/products/ProductOrderSection";
 import ProductReviewSection from "@/components/products/ProductReviewSection";
+import { TABS } from "@/constants/productTab";
+import type { Tab } from "@/constants/productTab";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import withUser from "@/hoc/withUser";
 import useProductsQueries from "@/hooks/api/useProductsQueries";
@@ -15,8 +17,8 @@ const ProductPage = () => {
   const { products, productsWish, productsDetail, productsReview } =
     useProductsQueries({ id: id ?? "" });
 
-  const [tab, setTab] = useState("상품설명");
-  const selectTab = (tabName: string) => {
+  const [tab, setTab] = useState<Tab>(TABS[0]);
+  const selectTab = (tabName: Tab) => {
     setTab(tabName);
   };
 
@@ -30,24 +32,15 @@ const ProductPage = () => {
         brandImageURL={products.brandInfo.imageURL}
       />
       <Tab>
-        <TabButton
-          onClick={() => selectTab("상품설명")}
-          selected={tab === "상품설명"}
-        >
-          상품설명
-        </TabButton>
-        <TabButton
-          onClick={() => selectTab("상품후기")}
-          selected={tab === "상품후기"}
-        >
-          상품후기
-        </TabButton>
-        <TabButton
-          onClick={() => selectTab("상세정보")}
-          selected={tab === "상세정보"}
-        >
-          상세정보
-        </TabButton>
+        {TABS.map(tabItem => (
+          <TabButton
+            key={tabItem}
+            onClick={() => selectTab(tabItem)}
+            selected={tab === tabItem}
+          >
+            {tabItem}
+          </TabButton>
+        ))}
       </Tab>
       {tab === "상품설명" && (
         <ProductDescriptionSection description={productsDetail.description} />
