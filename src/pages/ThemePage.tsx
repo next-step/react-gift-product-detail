@@ -4,9 +4,8 @@ import ThemeHeroSection from '@/sections/ThemeSection/ThemeHeroSection';
 import ThemeProductSection from '@/sections/ThemeSection/ThemeProductSection';
 import { useThemeInfoQuery } from '@/queries/useThemesQuery';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import Spinner from '@/components/Spinner';
+import CustomErrorBoundary from '@/components/CustomErrorBoundary';
 
 function ThemeInfoSection({ themeId }: { themeId: string }) {
   const { data } = useThemeInfoQuery(themeId);
@@ -20,24 +19,16 @@ export default function ThemePage() {
 
   return (
     <PageContainer>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} fallbackRender={() => null}>
-            <Suspense fallback={<Spinner />}>
-              <ThemeInfoSection themeId={themeId} />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} fallbackRender={() => null}>
-            <Suspense fallback={<Spinner />}>
-              <ThemeProductSection themeId={themeId} />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
+      <CustomErrorBoundary fallback={null}>
+        <Suspense fallback={<Spinner />}>
+          <ThemeInfoSection themeId={themeId} />
+        </Suspense>
+      </CustomErrorBoundary>
+      <CustomErrorBoundary fallback={<p>상품 목록을 불러오지 못했습니다.</p>}>
+        <Suspense fallback={<Spinner />}>
+          <ThemeProductSection themeId={themeId} />
+        </Suspense>
+      </CustomErrorBoundary>
     </PageContainer>
   );
 }

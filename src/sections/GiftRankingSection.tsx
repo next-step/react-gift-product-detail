@@ -4,9 +4,8 @@ import ProductCard from '@/components/ProductCard';
 import { useSearchParams } from 'react-router';
 import { useGiftRankingQuery } from '@/queries/useGiftRankingQuery';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import Spinner from '@/components/Spinner';
+import CustomErrorBoundary from '@/components/CustomErrorBoundary';
 
 const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5};
@@ -202,23 +201,16 @@ export default function GiftRankingSection() {
         ))}
       </TabWrapper>
 
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary
-            onReset={reset}
-            fallbackRender={() => <Message>상품을 불러오는데 실패했어요.</Message>}
-          >
-            <Suspense fallback={<Spinner />}>
-              <GiftRankingContent
-                selectedFilter={selectedFilter}
-                selectedTab={selectedTab}
-                showAll={showAll}
-                toggleShowAll={() => setShowAll(prev => !prev)}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
+      <CustomErrorBoundary fallback={<Message>상품을 불러오는데 실패했어요.</Message>}>
+        <Suspense fallback={<Spinner />}>
+          <GiftRankingContent
+            selectedFilter={selectedFilter}
+            selectedTab={selectedTab}
+            showAll={showAll}
+            toggleShowAll={() => setShowAll(prev => !prev)}
+          />
+        </Suspense>
+      </CustomErrorBoundary>
     </Wrapper>
   );
 }

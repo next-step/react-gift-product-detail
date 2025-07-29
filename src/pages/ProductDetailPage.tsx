@@ -6,15 +6,18 @@ import ProductBottomBar from '@/sections/ProductDetailSection/ProductBottomBar';
 import PageContainer from '@/components/PageContainer';
 import Spinner from '@/components/Spinner';
 import { withAuth } from '@/hoc/withAuth';
+import CustomErrorBoundary from '@/components/CustomErrorBoundary';
 
 function ProductDetail({ productId }: { productId: number }) {
   return (
     <PageContainer>
-      <Suspense fallback={<Spinner />}>
-        <ProductHeroSection productId={productId} />
-        <ProductTabSection productId={productId} />
-        <ProductBottomBar productId={productId} />
-      </Suspense>
+      <CustomErrorBoundary fallback={<p>상품 정보를 불러오는데 실패했습니다.</p>}>
+        <Suspense fallback={<Spinner />}>
+          <ProductHeroSection productId={productId} />
+          <ProductTabSection productId={productId} />
+          <ProductBottomBar productId={productId} />
+        </Suspense>
+      </CustomErrorBoundary>
     </PageContainer>
   );
 }
