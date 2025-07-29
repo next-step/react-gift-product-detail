@@ -64,7 +64,9 @@ const ProductPage = () => {
         {tab === "상품설명" && (
           <ProductDescriptionSection description={productsDetail.description} />
         )}
-        {tab === "상품후기" && <ProductReviewSection />}
+        {tab === "상품후기" && (
+          <ProductReviewSection reviews={productsReview.reviews} />
+        )}
         {tab === "상세정보" && <ProductDetailSection />}
       </Main>
     </>
