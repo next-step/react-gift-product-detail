@@ -4,9 +4,9 @@ import ProductBox from './Item';
 import useThemeItems from '../hooks/useThemeItems';
 
 const GridSection = () => {
-  const { items, hasMore, observerRef } = useThemeItems();
+  const { items, observerRef, hasNextPage } = useThemeItems();
 
-  if (!hasMore && !items.length) {
+  if (!hasNextPage && !items.length) {
     return <Container>상품이 없습니다.</Container>;
   }
 

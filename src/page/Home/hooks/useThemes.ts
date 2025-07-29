@@ -1,28 +1,14 @@
 import { requests } from '@/api/requests';
 import type { ThemeInfo } from '@/types';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const useThemes = () => {
-  const [themes, setThemes] = useState<ThemeInfo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { data, error, isLoading } = useQuery<ThemeInfo[]>({
+    queryKey: ['themeDatas'],
+    queryFn: requests.fetchTheme,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await requests.fetchTheme();
-        setThemes(data);
-      } catch (error) {
-        setError(true);
-        console.error('Error fetching themes:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  return { themes, loading, error };
+  return { themes: data, isLoading, error };
 };
 
 export default useThemes;

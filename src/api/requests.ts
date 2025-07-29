@@ -8,6 +8,7 @@ import type {
   ThemeInfo,
   ThemeIdInfoData,
   ThemeIdItemsData,
+  OrderResponseData,
 } from '@/types';
 import { apiClient } from './apiClient';
 
@@ -18,20 +19,13 @@ interface FetchOrderProps {
 interface fetchThemeIdItemsProps {
   index: number;
   currentCursor: number;
-  currentPage: number;
-}
-interface OrderResponseData {
-  success: boolean;
-}
-interface OrderResponseData {
-  success: boolean;
 }
 
 export const requests = {
   fetchUserInfos: ({ username, password }: UserInfoProps): Promise<UserInfoData> => {
     const data = {
-      email: `${username.value}`,
-      password: `${password.value}`,
+      email: username.value,
+      password: password.value,
     };
     return apiClient.post('/api/login', data);
   },
@@ -63,7 +57,6 @@ export const requests = {
   fetchThemeIdItems: ({
     index,
     currentCursor,
-    currentPage,
   }: fetchThemeIdItemsProps): Promise<ThemeIdItemsData> =>
-    apiClient.get(`/api/themes/${index}/products?cursor=${currentCursor}?page=${currentPage}`),
+    apiClient.get(`/api/themes/${index}/products?cursor=${currentCursor}`),
 };

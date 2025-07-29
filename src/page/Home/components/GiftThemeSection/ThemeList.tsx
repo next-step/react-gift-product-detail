@@ -5,15 +5,15 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import useThemes from '../../hooks/useThemes';
 
 const ThemeList = () => {
-  const { themes, loading, error } = useThemes();
+  const { themes, isLoading, error } = useThemes();
   const navigate = useNavigate();
 
   const handleClick = (id: number) => {
     navigate(generatePath(ROUTE_PATH.THEMES, { id: String(id) }));
   };
 
-  if (error) return null;
-  if (loading) return <Loading />;
+  if (error || !themes) return null;
+  if (isLoading) return <Loading />;
   return (
     <Container>
       {themes.map(theme => (

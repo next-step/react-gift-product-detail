@@ -1,26 +1,14 @@
 import { requests } from '@/api/requests';
 import type { GiftRankingItem, RankingApiProps } from '@/types';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const useRanking = ({ activeGenerationButton, activeFilterButton }: RankingApiProps) => {
-  const [rankingDatas, setRankingDatas] = useState<GiftRankingItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useQuery<GiftRankingItem[]>({
+    queryKey: ['rankDatas', activeGenerationButton, activeFilterButton],
+    queryFn: () => requests.fetchRanking({ activeGenerationButton, activeFilterButton }),
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await requests.fetchRanking({ activeGenerationButton, activeFilterButton });
-        setRankingDatas(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [activeGenerationButton, activeFilterButton]);
-
-  return { rankingDatas, loading };
+  return { rankingDatas: data, isLoading };
 };
 
 export default useRanking;

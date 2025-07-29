@@ -8,15 +8,18 @@ import useRanking from '../../hooks/useRanking';
 import type { RankingApiProps } from '@/types';
 
 const RankList = ({ activeGenerationButton, activeFilterButton }: RankingApiProps) => {
-  const { rankingDatas, loading } = useRanking({ activeGenerationButton, activeFilterButton });
-  const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(rankingDatas.length);
+  const { rankingDatas, isLoading } = useRanking({ activeGenerationButton, activeFilterButton });
+  const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(
+    rankingDatas?.length || 0
+  );
 
   const navigate = useNavigate();
   const moveToOrder = (id: number) => {
     navigate(generatePath(ROUTE_PATH.ORDER, { id: String(id) }));
   };
 
-  if (loading) return <Loading />;
+  if (!rankingDatas) return;
+  if (isLoading) return <Loading />;
   if (rankingDatas.length === 0) {
     return <NoDataMessage>상품이 없습니다.</NoDataMessage>;
   }

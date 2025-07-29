@@ -1,36 +1,26 @@
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { ItemData } from '@/types';
 import { requests } from '@/api/requests';
 import useIntersectionObserver from './useIntersectionObserver';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 const useThemeItems = () => {
   const { id } = useParams<{ id: string }>();
   const index = Number(id);
 
-  const [items, setItems] = useState<ItemData[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [currentCursor, setCurrentCursor] = useState<number>(0);
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ['themeIdItems', index],
+    initialPageParam: 0,
+    queryFn: ({ pageParam = 0 }) => requests.fetchThemeIdItems({ index, currentCursor: pageParam }),
+    getNextPageParam: lastPage => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+  });
+  const observerRef = useIntersectionObserver({
+    onIntersect: fetchNextPage,
+    enable: hasNextPage,
+  });
 
-  const loadMore = async () => {
-    try {
-      const data = await requests.fetchThemeIdItems({ index, currentCursor, currentPage });
-      const { list, cursor, hasMoreList } = data;
+  const items = data?.pages.flatMap(page => page.list) || [];
 
-      setItems(prev => [...prev, ...list]);
-      setCurrentPage(prev => prev + 1);
-      setCurrentCursor(cursor);
-      if (hasMoreList === false) {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error('Error fetching more items:', error);
-    }
-  };
-  const observerRef = useIntersectionObserver({ onIntersect: loadMore, enable: hasMore });
-
-  return { items, hasMore, observerRef };
+  return { items, observerRef, hasNextPage };
 };
 
 export default useThemeItems;
