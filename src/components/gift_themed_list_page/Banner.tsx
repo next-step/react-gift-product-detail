@@ -52,11 +52,13 @@ type Params = {
   id: number;
 };
 
+type QueryKey = [string, Params];
+
 export const Banner = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isError } = useQuery<ThemeInfo, Error, ThemeInfo, [string, Params]>({
+  const { data, isError } = useQuery<ThemeInfo, Error, ThemeInfo, QueryKey>({
     queryKey: ['ThemeInfo', { id: parsedId }],
     queryFn: getThemeInfo,
   });

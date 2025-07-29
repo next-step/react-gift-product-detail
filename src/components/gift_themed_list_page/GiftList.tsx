@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
 import { GiftItemCard } from '../shared/GiftItemCard';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
 import type { GiftItemData } from '@/types/giftItemData';
 import { useParams } from 'react-router-dom';
-import publicClient from '@/api/clients/publicClient';
+import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
+import { getThemedGiftItems } from '@/api/services/getThemedGiftItems';
 
 const Container = styled.div`
   flex: 1;
@@ -55,47 +56,48 @@ const IntersectionTrigger = styled.div`
   height: 1rem;
 `;
 
+type ThemedGiftItemsPage = {
+  list: GiftItemData[];
+  cursor: number;
+  hasMoreList: boolean;
+};
+
+type Params = {
+  id: number;
+};
+
+type QueryKey = [string, Params];
+
+type PageParam = number;
+
 export const GiftList = () => {
   const intersectionTriggerRef = useRef<HTMLDivElement | null>(null);
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [cursor, setCursor] = useState(0);
-  const [giftItemList, setGiftItemList] = useState<GiftItemData[] | null>(null);
+  if (!id) throw new Error('id가 없습니다');
+  const parsedId = parseInt(id!);
+  const { data, isLoading, isError, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
+    ThemedGiftItemsPage,
+    Error,
+    InfiniteData<ThemedGiftItemsPage>,
+    QueryKey,
+    PageParam
+  >({
+    queryKey: ['themedGiftItems', { id: parsedId }],
+    queryFn: getThemedGiftItems,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+  });
 
-  const getData = useCallback(async () => {
-    try {
-      const response = await publicClient.get(
-        `/api/themes/${id}/products?cursor=${cursor}&limit=10`
-      );
-      console.log(response.data.data);
-
-      if (giftItemList !== null && !response.data.data.hasMoreList) {
-        setHasMore(false);
-        return;
-      }
-
-      const prevList = giftItemList || [];
-      setGiftItemList([...prevList, ...response.data.data.list]);
-      setCursor(cursor + 10);
-    } catch (error) {
-      setIsError(true);
-      setLoading(false);
-      console.log('⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요. ', error);
-    }
-  }, [cursor, id, giftItemList]);
+  console.log('data', data);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (!data) return;
 
-  useEffect(() => {
     const targetElement = intersectionTriggerRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasMore) {
-          getData();
+        if (entry.isIntersecting && data.pages[data.pages.length - 1].hasMoreList) {
+          fetchNextPage();
         }
       },
       {
@@ -109,38 +111,38 @@ export const GiftList = () => {
     return () => {
       if (targetElement) observer.unobserve(targetElement);
     };
-  }, [getData, hasMore]);
-
-  useEffect(() => {
-    if (giftItemList === null) return;
-
-    setLoading(false);
-  }, [giftItemList]);
+  }, [data, fetchNextPage]);
 
   return (
     <Container>
-      {loading && <Spinner />}
-      {!loading && (
+      {isLoading && <Spinner />}
+      {!isLoading && (
         <List>
-          {giftItemList?.map((item) => {
-            return (
-              <GiftItemCard
-                key={`GIFT_THEMED_LIST_${item.id}`}
-                id={item.id}
-                name={item.name}
-                image={item.imageURL}
-                brandName={item.brandInfo.name}
-                price={item.price.basicPrice}
-              />
-            );
-          })}
+          {data?.pages.map((item) =>
+            item.list.map((item) => {
+              return (
+                <GiftItemCard
+                  key={`GIFT_THEMED_LIST_${item.id}`}
+                  id={item.id}
+                  name={item.name}
+                  image={item.imageURL}
+                  brandName={item.brandInfo.name}
+                  price={item.price.basicPrice}
+                />
+              );
+            })
+          )}
         </List>
       )}
       {isError && (
         <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
       )}
-      {!loading && giftItemList?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
-      {hasMore && <IntersectionTrigger ref={intersectionTriggerRef} />}
+      {!isLoading && data?.pages.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
+      {data?.pages[data.pages.length - 1].hasMoreList && (
+        <IntersectionTrigger ref={intersectionTriggerRef}>
+          {isFetchingNextPage && <Spinner />}
+        </IntersectionTrigger>
+      )}
     </Container>
   );
 };
