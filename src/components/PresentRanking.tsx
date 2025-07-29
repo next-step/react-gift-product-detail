@@ -4,7 +4,9 @@ import { theme } from '@/theme/theme';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { getProductRanking, type ProductRankingItem } from '@/services/product';
+import { getProductRanking } from '@/Api/api';
+import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/queries/queryKeys';
 import LoadingSpinner from './common/LoadingSpinner';
 
 const Wrapper = styled.section`
@@ -259,22 +261,20 @@ const PresentRanking: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedType, setSelectedType] = useState<'all' | 'female' | 'male' | 'teen'>('all');
   const [selectedPresentType, setSelectedPresentType] = useState<number>(0);
-  const [products, setProducts] = useState<ProductRankingItem[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  /* ───── 파라미터 매핑 ───── */
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
     female: 'FEMALE',
     male: 'MALE',
     teen: 'TEEN',
   };
-
   const apiRankTypeMap = ['MANY_WISH', 'MANY_RECEIVE', 'MANY_WISH_RECEIVE'] as const;
 
+  /* ───── Preferences 복원 ───── */
   useEffect(() => {
     const savedType = localStorage.getItem('selectedType') as
       | 'all'
@@ -283,33 +283,23 @@ const PresentRanking: React.FC = () => {
       | 'teen'
       | null;
     const savedPresentType = localStorage.getItem('selectedPresentType');
-
     if (savedType) setSelectedType(savedType);
     if (savedPresentType !== null) setSelectedPresentType(Number(savedPresentType));
   }, []);
 
-  useEffect(() => {
-    const fetchRanking = async () => {
-      setIsLoadingProducts(true);
-      setErrorMsg(null);
+  /* ───── React Query: 랭킹 데이터 ───── */
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: queryKeys.productRanking(selectedType, String(selectedPresentType)),
+    queryFn: () =>
+      getProductRanking(apiTargetTypeMap[selectedType], apiRankTypeMap[selectedPresentType]),
+    staleTime: 5 * 60 * 1000,
+  });
 
-      try {
-        const targetType = apiTargetTypeMap[selectedType];
-        const rankType = apiRankTypeMap[selectedPresentType];
-
-        const response = await getProductRanking(targetType, rankType);
-        setProducts(response.data.data);
-      } catch (error) {
-        console.error('랭킹 조회 실패', error);
-        setErrorMsg('실시간 랭킹을 불러오지 못했습니다.');
-      } finally {
-        setIsLoadingProducts(false);
-      }
-    };
-
-    fetchRanking();
-  }, [selectedType, selectedPresentType]);
-
+  /* ───── 핸들러 ───── */
   const handleTypeSelect = (type: typeof selectedType) => {
     setShowAll(false);
     setSelectedType(type);
@@ -318,16 +308,6 @@ const PresentRanking: React.FC = () => {
 
   const handlePresentTypeSelect = (index: number) => {
     setShowAll(false);
-    const savedType = localStorage.getItem('selectedType') as
-      | 'all'
-      | 'female'
-      | 'male'
-      | 'teen'
-      | null;
-    const savedPresentType = localStorage.getItem('selectedPresentType');
-
-    if (savedType) setSelectedType(savedType);
-    if (savedPresentType) setSelectedPresentType(Number(savedPresentType));
     setSelectedPresentType(index);
     localStorage.setItem('selectedPresentType', index.toString());
   };
@@ -345,23 +325,16 @@ const PresentRanking: React.FC = () => {
 
   const goOrder = (productId: number) => {
     const to = `/Order?productId=${productId}`;
-
-    if (user) {
-      navigate(to);
-    } else {
-      navigate('/login', { state: { from: to } });
-    }
+    if (user) navigate(to);
+    else navigate('/login', { state: { from: to } });
   };
-
-  const handleProductClick = (productId: number) => {
-    goOrder(productId);
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Wrapper>
         <Title>실시간 급상승 선물랭킹</Title>
         <MarginBox1 />
+
+        {/* 수신자 유형 선택 */}
         <SelectionBanner>
           <ReceiverType>
             {typeOptions.map((type) => (
@@ -372,7 +345,10 @@ const PresentRanking: React.FC = () => {
             ))}
           </ReceiverType>
         </SelectionBanner>
+
         <MarginBox2 />
+
+        {/* 랭킹 기준 선택 */}
         <PresentType>
           {presentTypes.map((text, index) => (
             <PresentTypeButton
@@ -384,20 +360,23 @@ const PresentRanking: React.FC = () => {
             </PresentTypeButton>
           ))}
         </PresentType>
+
         <MarginBox2 />
+
+        {/* 랭킹 리스트 */}
         <PresentDisplayContainer>
-          {isLoadingProducts ? (
+          {isLoading ? (
             <LoadingContainer>
               <LoadingSpinner />
             </LoadingContainer>
-          ) : errorMsg ? null : products.length === 0 ? (
+          ) : isError ? null : products.length === 0 ? (
             <NoDataContainer>
               <NoDataText>상품이 없습니다.</NoDataText>
             </NoDataContainer>
           ) : (
             <PresentDisplay>
               {products.slice(0, productsToShow).map((p, index) => (
-                <ProductBox key={p.id} onClick={() => handleProductClick(p.id)}>
+                <ProductBox key={p.id} onClick={() => goOrder(p.id)}>
                   <NumberLogo
                     css={css`
                       background-color: ${index <= 2 ? 'rgb(252, 106, 102)' : 'rgb(176, 179, 186)'};
@@ -406,52 +385,44 @@ const PresentRanking: React.FC = () => {
                     {index + 1}
                   </NumberLogo>
                   <ProductInfo>
-                    <ProductImage src={p.imageURL} alt={p.name}></ProductImage>
+                    <ProductImage src={p.imageURL} alt={p.name} />
                     <div
                       css={css`
                         width: 100%;
                         height: 12px;
-                        background-color: transparent;
                       `}
-                    ></div>
+                    />
                     <SubProductName>{p.brandInfo.name}</SubProductName>
-                    <ProdudctName>{p.brandInfo.name}</ProdudctName>
+                    <ProdudctName>{p.name}</ProdudctName>
                     <div
                       css={css`
                         width: 100%;
                         height: 4px;
-                        background-color: transparent;
                       `}
-                    ></div>
-                    <ProductPrice>
-                      {p.price.sellingPrice}
-                      <span
-                        css={css`
-                          font-weight: 400;
-                        `}
-                      >
-                        원
-                      </span>
-                    </ProductPrice>
+                    />
+                    <ProductPrice>{p.price.sellingPrice.toLocaleString()}원</ProductPrice>
                   </ProductInfo>
                 </ProductBox>
               ))}
             </PresentDisplay>
           )}
         </PresentDisplayContainer>
-        <div
-          css={css`
-            width: 100%;
-            height: 32px;
-            background-color: transparent;
-          `}
-        ></div>
+
+        {/* 더보기 / 접기 */}
         {products.length > 6 && (
-          <MoreButtonContainer>
-            <MoreButton onClick={() => setShowAll(!showAll)}>
-              <MoreButtonFont>{showAll ? '접기' : '더보기'}</MoreButtonFont>
-            </MoreButton>
-          </MoreButtonContainer>
+          <>
+            <div
+              css={css`
+                width: 100%;
+                height: 32px;
+              `}
+            />
+            <MoreButtonContainer>
+              <MoreButton onClick={() => setShowAll(!showAll)}>
+                <MoreButtonFont>{showAll ? '접기' : '더보기'}</MoreButtonFont>
+              </MoreButton>
+            </MoreButtonContainer>
+          </>
         )}
       </Wrapper>
     </ThemeProvider>

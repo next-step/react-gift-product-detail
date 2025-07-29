@@ -96,5 +96,24 @@ export const getThemeProducts = async (themeId: number, cursor = 0, limit = 10) 
   const { data } = await api.get<ThemeProductResponse>(`/api/themes/${themeId}/products`, {
     params: { cursor, limit },
   });
-  return data.data; // { list, cursor, hasMoreList }
+  return data.data;
 };
+
+/* ---------- 상품 랭킹 ---------- */
+interface ProductRankingResponse {
+  data: ProductItem[];
+}
+
+/**
+ * @param targetType  ALL | FEMALE | MALE | TEEN
+ * @param rankType    MANY_WISH | MANY_RECEIVE | MANY_WISH_RECEIVE
+ */
+
+export const getProductRanking = async (targetType = 'ALL', rankType = 'MANY_WISH') => {
+  const { data } = await api.get<ProductRankingResponse>('/api/products/ranking', {
+    params: { targetType, rankType },
+  });
+  return data.data; // 배열
+};
+
+export type ProductRankingItem = ProductItem;

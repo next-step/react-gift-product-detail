@@ -8,7 +8,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { postLogin } from '@/Api/api';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
 
+/* --------------------------- styled components -------------------------- */
 const Wrapper = styled.div(({ theme }) => ({
   width: '100%',
   minHeight: '100vh',
@@ -49,10 +51,7 @@ const InputSection = styled.section`
   padding: 16px;
 `;
 
-type StyleProps = {
-  hasError?: boolean;
-  disabled?: boolean;
-};
+type StyleProps = { hasError?: boolean; disabled?: boolean };
 
 const InputBox = styled.input<StyleProps>(({ theme, hasError }) => ({
   width: '100%',
@@ -67,12 +66,10 @@ const InputBox = styled.input<StyleProps>(({ theme, hasError }) => ({
   padding: '8px 0px',
   borderWidth: '0px 0px 1px',
   borderColor: hasError ? theme.semanticColors.state.critical : theme.semanticColors.border.default,
-
   '&:focus': {
     outline: 'none',
     borderColor: theme.colorScale.gray700,
   },
-
   '::placeholder': {
     color: theme.semanticColors.text.placeholder,
   },
@@ -98,7 +95,6 @@ const LoginButton = styled.button<StyleProps>(({ disabled, theme }) => ({
   cursor: disabled ? 'not-allowed' : 'pointer',
   opacity: disabled ? '0.5' : '1',
   transition: 'background-color 200ms',
-
   ...(disabled
     ? {}
     : {
@@ -125,7 +121,9 @@ const HoriziontalSpacing2 = styled.div(({ theme }) => ({
 
 type LocationState = { from?: string };
 
+/* --------------------------- component --------------------------- */
 const Login: React.FC = () => {
+  /* 기본 라우팅 / 훅 */
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -133,6 +131,7 @@ const Login: React.FC = () => {
   const redirectTo =
     searchParams.get('redirect') || (location.state as LocationState | null)?.from || '/';
 
+  /* 커스텀 훅: 입력 상태 */
   const {
     id,
     idError,
@@ -145,15 +144,19 @@ const Login: React.FC = () => {
     isFormValid,
   } = useLoginForm();
 
+  /* 인증 컨텍스트 */
   const { login } = useAuth();
 
-  const handleClick = async () => {
-    try {
-      const res = await postLogin(id, pw);
-      const { email, name, authToken } = res.data.data;
+  /* React Query mutation */
+  const loginMutation = useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      postLogin(email, password).then((r) => r.data.data),
+    onSuccess: (data) => {
+      const { email, name, authToken } = data;
       login({ email, name }, authToken);
       navigate(redirectTo, { replace: true });
-    } catch (err: any) {
+    },
+    onError: (err: any) => {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
         const raw = err.response.data;
         const msg: string =
@@ -169,7 +172,13 @@ const Login: React.FC = () => {
       } else {
         toast.error('예상치 못한 오류가 발생했습니다.');
       }
-    }
+    },
+  });
+
+  /* 버튼 클릭 → mutate */
+  const handleClick = () => {
+    if (!isFormValid() || loginMutation.isPending) return;
+    loginMutation.mutate({ email: id, password: pw });
   };
 
   return (
@@ -179,7 +188,7 @@ const Login: React.FC = () => {
         <NavigationBar />
         <LoginPage>
           <Container>
-            <Logo src={KakaoIconUrl} alt="카카오 로고"></Logo>
+            <Logo src={KakaoIconUrl} alt="카카오 로고" />
             <InputSection>
               <div>
                 <InputBox
@@ -204,8 +213,11 @@ const Login: React.FC = () => {
                 {pwError && <ErrorMessage>{pwError}</ErrorMessage>}
               </div>
               <HoriziontalSpacing2 />
-              <LoginButton onClick={handleClick} disabled={!isFormValid()}>
-                로그인
+              <LoginButton
+                onClick={handleClick}
+                disabled={!isFormValid() || loginMutation.isPending}
+              >
+                {loginMutation.isPending ? '로그인 중...' : '로그인'}
               </LoginButton>
             </InputSection>
           </Container>

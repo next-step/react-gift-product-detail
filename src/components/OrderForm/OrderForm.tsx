@@ -9,9 +9,15 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Routes';
 import { useForm, FormProvider, Controller, useWatch } from 'react-hook-form';
 import { useContext, useEffect, useState } from 'react';
-import { getProductSummary, postOrder } from '@/Api/api';
+import { useProductSummary } from '@/queries/useProductSummary';
+import { postOrder } from '@/Api/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/queries/queryKeys';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@/contexts/AuthContext';
+
+/* ---------------------------- styled components --------------------------- */
 
 const Wrapper = styled.section(({ theme }) => ({
   width: '100%',
@@ -25,7 +31,8 @@ const Margin = styled.div<{ height: string }>(({ theme, height }) => ({
   backgroundColor: theme.semanticColors.background.fill,
 }));
 
-// 폼 전체 값 타입
+/* --------------------------------- types --------------------------------- */
+
 interface RecipientItem {
   name: string;
   phone: string;
@@ -37,45 +44,39 @@ export interface OrderFormValues {
   recipients: RecipientItem[];
 }
 
+/* -------------------------------- component ------------------------------ */
+
 const OrderForm = () => {
+  /* ------------ 기본 설정 ------------ */
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const productId = Number(searchParams.get('productId'));
-  const [selectedProduct, setSelectedProduct] = useState<{
-    imageURL: string;
-    name: string;
-    price: { sellingPrice: number };
-    brandInfo: { name: string };
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [messageCardId, setMessageCardId] = useState<string>(String(MOCK_CARDFORM_LIST[0].id));
+  const [messageCardId, setMessageCardId] = useState(String(MOCK_CARDFORM_LIST[0].id));
 
+  /* ------------ 상품 요약 (React Query) ------------ */
+  const { data: summary, isError, error } = useProductSummary(productId);
+
+  /** 기존 구조에 맞춰 가벼운 매핑 */
+  const selectedProduct = summary
+    ? {
+        imageURL: summary.imageURL,
+        name: summary.name,
+        price: { sellingPrice: summary.price },
+        brandInfo: { name: summary.brandName },
+      }
+    : null;
+
+  /* 404 → 홈 리다이렉트 */
   useEffect(() => {
-    if (!productId) {
-      setSelectedProduct(null);
-      setLoading(false);
-      return;
+    if (isError && axios.isAxiosError(error) && error.response?.status === 404) {
+      toast.error('상품 정보를 불러오지 못했어요.');
+      navigate(ROUTE_PATH.HOME, { replace: true });
     }
+  }, [isError, error, navigate]);
 
-    setLoading(true);
-    getProductSummary(productId)
-      .then((d) => {
-        setSelectedProduct({
-          imageURL: d.imageURL,
-          name: d.name,
-          price: { sellingPrice: d.price },
-          brandInfo: { name: d.brandName },
-        });
-      })
-      .catch((err) => {
-        toast.error(err.response?.data?.message ?? '상품 정보를 불러오지 못했어요.');
-        navigate(ROUTE_PATH.HOME);
-      })
-      .finally(() => setLoading(false));
-  }, [productId, navigate]);
-
+  /* ------------ react-hook-form ------------ */
   const methods = useForm<OrderFormValues>({
     defaultValues: {
       message: MOCK_CARDFORM_LIST[0].defaultTextMessage || '',
@@ -87,6 +88,7 @@ const OrderForm = () => {
 
   const { setValue } = methods;
 
+  /* 로그인 후 사용자 이름 자동 입력 */
   useEffect(() => {
     if (user?.name) {
       setValue('sender', user.name, { shouldDirty: false });
@@ -99,7 +101,18 @@ const OrderForm = () => {
     formState: { errors },
   } = methods;
 
-  const onSubmit = async (data: OrderFormValues) => {
+  /* ------------ 주문 Mutation (컴포넌트 내부) ------------ */
+  const qc = useQueryClient();
+  const { mutate: submitOrder } = useMutation({
+    mutationFn: postOrder,
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: queryKeys.productSummary(productId),
+      });
+    },
+  });
+
+  const onSubmit = (data: OrderFormValues) => {
     if (data.recipients.length === 0) {
       toast.error('받는 사람을 한 명 이상 추가해 주세요.');
       return;
@@ -108,12 +121,11 @@ const OrderForm = () => {
       toast.error('상품 정보를 불러오지 못했습니다.');
       return;
     }
+
     const totalQty = data.recipients.reduce((s, r) => s + r.quantity, 0);
 
-    // navigate(ROUTE_PATH.HOME);
-
-    try {
-      await postOrder({
+    submitOrder(
+      {
         productId,
         message: data.message,
         messageCardId,
@@ -123,31 +135,41 @@ const OrderForm = () => {
           phoneNumber: r.phone,
           quantity: r.quantity,
         })),
-      });
-      alert(
-        `주문 완료!\n` +
-          `상품명: ${selectedProduct.name}\n` +
-          `구매 수량: ${totalQty}\n` +
-          `발신자 이름: ${user?.name}\n` +
-          `메시지: ${messageCardId}`
-      );
-      navigate(ROUTE_PATH.HOME);
-    } catch (e: any) {
-      if (e.response?.status === 401) {
-        toast.error('로그인이 필요합니다.');
-        navigate('/login');
-        return;
+      },
+      {
+        onSuccess: () => {
+          alert(
+            `주문 완료!\n` +
+              `상품명: ${selectedProduct.name}\n` +
+              `구매 수량: ${totalQty}\n` +
+              `발신자 이름: ${user?.name}\n` +
+              `메시지: ${messageCardId}`
+          );
+          navigate(ROUTE_PATH.HOME);
+        },
+        onError: (e: any) => {
+          if (e.response?.status === 401) {
+            toast.error('로그인이 필요합니다.');
+            navigate('/login');
+            return;
+          }
+          toast.error(e.response?.data?.message ?? '주문 요청 실패');
+        },
       }
-      toast.error(e.response?.data?.message ?? '주문 요청 실패');
-    }
+    );
   };
 
-  const recipients = useWatch({ control: methods.control, name: 'recipients' });
+  /* ------------ 가격 계산 ------------ */
+  const recipients = useWatch({
+    control: methods.control,
+    name: 'recipients',
+  });
   const totalQuantity = recipients.reduce((sum, r) => sum + (r.quantity ?? 0), 0);
   const totalPrice = selectedProduct?.price.sellingPrice
     ? selectedProduct.price.sellingPrice * totalQuantity
     : 0;
 
+  /* ------------ 렌더링 ------------ */
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -187,7 +209,11 @@ const OrderForm = () => {
           <Recipient />
 
           <Margin height="8px" />
+
+          {/* 상품 요약 */}
           <ProductInfo product={selectedProduct} />
+
+          {/* 최종 주문 버튼 */}
           <OrderButton type="submit" totalPrice={totalPrice} />
         </Wrapper>
       </form>
