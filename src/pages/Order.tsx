@@ -341,27 +341,7 @@ const Order = () => {
   const productId = id ? parseInt(id) : 0;
   const { isLoggedIn } = useLoginContext();
 
-  // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/login", {
-        state: { redirect: `/order/${productId}` },
-      });
-    }
-  }, [isLoggedIn, navigate, productId]);
-
-  // 로그인이 안 되어 있으면 로딩 상태 표시
-  if (!isLoggedIn) {
-    return (
-      <Layout>
-        <div style={{ textAlign: "center", padding: "50px" }}>
-          로그인 페이지로 이동 중...
-        </div>
-      </Layout>
-    );
-  }
-
-  // Custom Hooks 사용
+  // 모든 hooks를 early return 이전에 호출
   const {
     product,
     loading: productLoading,
@@ -413,6 +393,26 @@ const Order = () => {
     control: modalControl,
     name: "receivers",
   });
+
+  // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login", {
+        state: { redirect: `/order/${productId}` },
+      });
+    }
+  }, [isLoggedIn, navigate, productId]);
+
+  // 로그인이 안 되어 있으면 로딩 상태 표시
+  if (!isLoggedIn) {
+    return (
+      <Layout>
+        <div style={{ textAlign: "center", padding: "50px" }}>
+          로그인 페이지로 이동 중...
+        </div>
+      </Layout>
+    );
+  }
 
   // 모달 열기: 기존 데이터 복사
   const openReceiverModal = () => {
