@@ -1,4 +1,4 @@
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 import styled from '@emotion/styled';
 import type React from 'react';
 import { useFormContext, type FieldPath } from 'react-hook-form';
@@ -33,9 +33,9 @@ export const CompleteButton = ({
     <Container
       onClick={async () => {
         const keysToValidate: FieldPath<FormValues>[] = recipientInfo.flatMap((_, index) => [
-          `recipientInfo.${index}.recipientName`,
+          `recipientInfo.${index}.name`,
           `recipientInfo.${index}.phoneNumber`,
-          `recipientInfo.${index}.amount`,
+          `recipientInfo.${index}.quantity`,
         ]) as FieldPath<FormValues>[];
         const isValid = await trigger(keysToValidate);
         if (isValid) {

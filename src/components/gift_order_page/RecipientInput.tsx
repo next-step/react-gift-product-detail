@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Close from '@/assets/close.svg?react';
 import { useFormContext, type UseFieldArrayRemove } from 'react-hook-form';
 import { isMobilePhone } from 'validator';
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 
 interface RecipientInput {
   index: number;
@@ -171,11 +171,7 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
   );
 
   useEffect(() => {
-    handleInputFieldStyle(
-      'name',
-      selectedInput,
-      errors.recipientInfo?.[index]?.recipientName?.message
-    );
+    handleInputFieldStyle('name', selectedInput, errors.recipientInfo?.[index]?.name?.message);
   }, [handleInputFieldStyle, selectedInput, index, errors.recipientInfo]);
 
   useEffect(() => {
@@ -187,7 +183,11 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
   }, [handleInputFieldStyle, selectedInput, index, errors.recipientInfo]);
 
   useEffect(() => {
-    handleInputFieldStyle('amount', selectedInput, errors.recipientInfo?.[index]?.amount?.message);
+    handleInputFieldStyle(
+      'amount',
+      selectedInput,
+      errors.recipientInfo?.[index]?.quantity?.message
+    );
   }, [handleInputFieldStyle, selectedInput, index, errors.recipientInfo]);
 
   return (
@@ -207,16 +207,16 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
         <InputContainer>
           <InputField
             inputFieldStyle={nameInputFieldStyle}
-            {...register(`recipientInfo.${index}.recipientName`, {
+            {...register(`recipientInfo.${index}.name`, {
               required: '이름을 입력해주세요.',
-              onChange: async () => await trigger(`recipientInfo.${index}.recipientName`),
+              onChange: async () => await trigger(`recipientInfo.${index}.name`),
             })}
             placeholder={'이름을 입력하세요.'}
             onFocus={() => setSelectedInput('name')}
             onBlur={() => setSelectedInput('')}
           />
-          {errors.recipientInfo?.[index]?.recipientName?.message && (
-            <ErrorText>{errors.recipientInfo?.[index]?.recipientName?.message}</ErrorText>
+          {errors.recipientInfo?.[index]?.name?.message && (
+            <ErrorText>{errors.recipientInfo?.[index]?.name?.message}</ErrorText>
           )}
         </InputContainer>
       </FormField>
@@ -252,8 +252,8 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
           <InputNumberField
             type="number"
             inputFieldStyle={amountInputFieldStyle}
-            {...register(`recipientInfo.${index}.amount`, {
-              onChange: async () => await trigger(`recipientInfo.${index}.amount`),
+            {...register(`recipientInfo.${index}.quantity`, {
+              onChange: async () => await trigger(`recipientInfo.${index}.quantity`),
               min: {
                 value: 1,
                 message: '구매 수량은 1개 이상이어야 합니다.',
@@ -262,8 +262,8 @@ export const RecipientInput = ({ index, removeRecipient }: RecipientInput) => {
             onFocus={() => setSelectedInput('amount')}
             onBlur={() => setSelectedInput('')}
           />
-          {errors.recipientInfo?.[index]?.amount?.message && (
-            <ErrorText>{errors.recipientInfo?.[index]?.amount?.message}</ErrorText>
+          {errors.recipientInfo?.[index]?.quantity?.message && (
+            <ErrorText>{errors.recipientInfo?.[index]?.quantity?.message}</ErrorText>
           )}
         </InputContainer>
       </FormField>

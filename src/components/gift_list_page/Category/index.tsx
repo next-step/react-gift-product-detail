@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import type { CategoryCardData } from '@/types/categoryCardData';
+import type { CategoryCardData } from '@/api/types/giftItem.dto';
 import { CategoryCard } from '@/components/gift_list_page/Category/CategoryCard';
 import { keyframes } from '@emotion/react';
 import { useQuery } from '@tanstack/react-query';
-import { getCategories } from '@/api/services/getCategories';
+import { getCategories } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
   position: relative;

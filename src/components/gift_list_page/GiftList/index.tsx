@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import type { GiftItemData } from '@/types/giftItemData';
+import type { GiftItemData } from '@/api/types/giftItem.dto';
 import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
 import { keyframes } from '@emotion/react';
-import getGiftItems from '@/api/services/getGiftItems';
+import { getGiftItems } from '@/api/services/giftItem.service';
 import { useQuery } from '@tanstack/react-query';
 
 const Container = styled.div`

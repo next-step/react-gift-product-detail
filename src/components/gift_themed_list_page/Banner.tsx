@@ -1,7 +1,7 @@
-import { getThemeInfo } from '@/api/services/getThemeInfo';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { getThemeInfo } from '@/api/services/giftItem.service';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;

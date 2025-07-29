@@ -1,16 +1,5 @@
 import authClient from '../clients/authClient';
-
-interface OrderService {
-  productId: number;
-  message: string;
-  messageCardId: string;
-  ordererName: string;
-  receivers: {
-    name: string;
-    phoneNumber: string;
-    quantity: number;
-  }[];
-}
+import type { OrderForm } from '../types/order.dto';
 
 export const orderService = async ({
   productId,
@@ -18,7 +7,7 @@ export const orderService = async ({
   messageCardId,
   ordererName,
   receivers,
-}: OrderService) => {
+}: OrderForm) => {
   const response = await authClient.post('/api/order', {
     productId,
     message,

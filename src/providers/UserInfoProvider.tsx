@@ -1,8 +1,8 @@
 import { UserInfoContext } from '@/contexts/UserInfoContext';
 import { useEffect, useState, type ReactNode } from 'react';
 import { toast } from 'react-toastify';
-import { authService } from '@/api/services/authService';
-import type { UserInfo } from '@/types/userInfo';
+import { authService } from '@/api/services/auth.service';
+import type { UserInfo } from '@/api/types/auth.dto';
 
 export const UserInfoProvider = ({ children }: { children: ReactNode }) => {
   const storedUserInfo = sessionStorage.getItem('userInfo');

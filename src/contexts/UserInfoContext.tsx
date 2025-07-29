@@ -1,4 +1,4 @@
-import type { LoginPayload } from '@/types/loginPayload';
+import type { LoginPayload } from '@/api/types/auth.dto';
 import { createContext } from 'react';
 
 type UserInfoContext = {

@@ -2,9 +2,9 @@ import useProductInfo from '@/hooks/useProductInfo';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { GiftItemData } from '@/types/giftItemData';
+import type { GiftItemData } from '@/api/types/giftItem.dto';
 import { useQuery } from '@tanstack/react-query';
-import { getGiftItemDetail } from '@/api/services/getGiftItemDetail';
+import { getGiftItemDetail } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
   display: flex;

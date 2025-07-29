@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import { GiftItemCard } from '../shared/GiftItemCard';
 import { useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
-import type { GiftItemData } from '@/types/giftItemData';
+import type { GiftItemData } from '@/api/types/giftItem.dto';
 import { useParams } from 'react-router-dom';
 import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
-import { getThemedGiftItems } from '@/api/services/getThemedGiftItems';
+import { getThemedGiftItems } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
   flex: 1;

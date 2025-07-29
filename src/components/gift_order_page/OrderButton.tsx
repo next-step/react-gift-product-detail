@@ -1,12 +1,12 @@
 import useProductInfo from '@/hooks/useProductInfo';
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 import styled from '@emotion/styled';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
-import { orderService } from '@/api/services/orderService';
+import { orderService } from '@/api/services/order.service';
 
 const Container = styled.button`
   all: unset;
@@ -38,16 +38,16 @@ export const OrderButton = () => {
   const message = watch('message');
   const senderName = watch('senderName');
   const recipientInfo = useWatch({ control, name: 'recipientInfo' });
-  const receivers = recipientInfo?.map(({ recipientName, phoneNumber, amount }) => ({
-    name: recipientName,
+  const receivers = recipientInfo?.map(({ name, phoneNumber, quantity }) => ({
+    name: name,
     phoneNumber: formatPhoneNumber(phoneNumber),
-    quantity: Number(amount),
+    quantity: Number(quantity),
   }));
   let totalAmount = 0;
   let totalPrice = 0;
 
   recipientInfo?.forEach((recipientForm) => {
-    totalAmount = totalAmount + Number(recipientForm.amount);
+    totalAmount = totalAmount + Number(recipientForm.quantity);
   });
   totalPrice = price * totalAmount;
   const mutation = useMutation({
