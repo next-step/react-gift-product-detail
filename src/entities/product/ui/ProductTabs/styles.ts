@@ -28,8 +28,7 @@ export const TabButton = styled.button<{ isActive: boolean }>`
 
 export const TabText = styled.p<{ isActive: boolean }>`
   ${({ theme }) => theme.typography.body1Regular};
-  color: ${({ isActive, theme }) => 
-    isActive ? theme.colors.gray[900] : theme.colors.gray[600]};
+  color: ${({ isActive, theme }) => (isActive ? theme.colors.gray[900] : theme.colors.gray[600])};
 `;
 
 export const ActiveIndicator = styled.div`
@@ -48,13 +47,13 @@ export const TabContent = styled.div`
 
 export const DescriptionContent = styled.div`
   width: 100%;
-  
+
   img {
     width: 100%;
     height: auto;
     display: block;
   }
-  
+
   p {
     margin: ${({ theme }) => theme.spacing.spacing3} 0;
     ${({ theme }) => theme.typography.body1Regular};
@@ -77,4 +76,9 @@ export const DetailName = styled.h3`
 
 export const DetailValue = styled.p`
   ${({ theme }) => theme.typography.body1Regular};
+`;
+
+export const ContentPlaceholder = styled.div`
+  width: 100%;
+  height: 300px;
 `;

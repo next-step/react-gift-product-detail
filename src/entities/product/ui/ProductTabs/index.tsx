@@ -43,7 +43,7 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DescriptionContent>
-              {data.description ? parse(data.description) : ''}
+              {data?.description ? parse(data.description) : <S.ContentPlaceholder />}
             </S.DescriptionContent>
           </S.TabContent>
         );
@@ -51,12 +51,16 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DetailContent>
-              {reviewData.reviews?.map(review => (
-                <S.DetailItem key={review.id}>
-                  <S.DetailName>{review.authorName}</S.DetailName>
-                  <S.DetailValue>{review.content}</S.DetailValue>
-                </S.DetailItem>
-              ))}
+              {reviewData?.reviews?.length ? (
+                reviewData.reviews.map(review => (
+                  <S.DetailItem key={review.id}>
+                    <S.DetailName>{review.authorName}</S.DetailName>
+                    <S.DetailValue>{review.content}</S.DetailValue>
+                  </S.DetailItem>
+                ))
+              ) : (
+                <S.ContentPlaceholder />
+              )}
             </S.DetailContent>
           </S.TabContent>
         );
@@ -64,12 +68,16 @@ export const ProductTabs = () => {
         return (
           <S.TabContent>
             <S.DetailContent>
-              {data.announcements?.map((item, index) => (
-                <S.DetailItem key={index}>
-                  <S.DetailName>{item.name}</S.DetailName>
-                  <S.DetailValue>{item.value}</S.DetailValue>
-                </S.DetailItem>
-              ))}
+              {data?.announcements?.length ? (
+                data.announcements.map((item, index) => (
+                  <S.DetailItem key={index}>
+                    <S.DetailName>{item.name}</S.DetailName>
+                    <S.DetailValue>{item.value}</S.DetailValue>
+                  </S.DetailItem>
+                ))
+              ) : (
+                <S.ContentPlaceholder />
+              )}
             </S.DetailContent>
           </S.TabContent>
         );
