@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import CategoryContent from '@/components/CategorySection/CategoryContent';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { ERROR_MESSAGES } from '@/constants/validation';
+import { loading } from '../common/Loading';
 
 const CategoryGroup = () => {
   return (
@@ -13,7 +14,7 @@ const CategoryGroup = () => {
       <ErrorBoundary
         fallback={<EmptyText>{ERROR_MESSAGES.FAILED_TO_LOAD_THEMES}</EmptyText>}
       >
-        <Suspense fallback={<EmptyText>로딩 중입니다...</EmptyText>}>
+        <Suspense fallback={loading}>
           <CategoryContent />
         </Suspense>
       </ErrorBoundary>

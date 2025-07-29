@@ -5,8 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useProductWish } from '@/hooks/useProductWish';
-import { loading } from '@/components/common/Loading';
-import { ERROR_MESSAGES } from '@/constants/validation';
 import Button from '@/components/common/Button';
 import { ROUTES } from '@/constants/routes';
 
@@ -16,23 +14,14 @@ const ProductActionBar = () => {
   const { productId } = useParams<{ productId: string }>();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useProductWish(productId);
-
+  const { data } = useProductWish(productId!);
   const [wishCount, setWishCount] = useState(0);
   const [isWished, setIsWished] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setWishCount(data.wishCount);
-      setIsWished(data.isWished);
-    }
+    setWishCount(data.wishCount);
+    setIsWished(data.isWished);
   }, [data]);
-
-  if (isLoading) return loading;
-
-  if (isError || !data) {
-    return <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_PRODUCTS}</ErrorText>;
-  }
 
   const handleWishClick = () => {
     const newIsWished = !isWished;
@@ -103,11 +92,4 @@ const WishButton = styled.button`
 
 const WishCount = styled.p`
   ${({ theme }) => theme.typography.label.label2Regular};
-`;
-
-const ErrorText = styled.p`
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing[6]};
-  color: ${({ theme }) => theme.color.semantic.text.default};
-  ${({ theme }) => theme.typography.body.body2Regular};
 `;

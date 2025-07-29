@@ -83,7 +83,8 @@
   - [x] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경해보세요. (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상이에요.)
     - [x] handleWishClick를 통해서 "찜 버튼"을 누르면 하트가 채워지고 위시 수가 +1이 되는 로직을 다루도록 해주었습니다.
     - [x] useProductWish에 staleTime을 추가해주어서 일정 시간 동안은 서버에 post하지 않았더라도 isWished가 반영된 상태를 유지하도록 해주었습니다.
-- [ ] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
+- [x] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
   - [x] useSuspenseQuery를 사용해서 기존 isError, isPending으로 다루던 코드를 대체해주었습니다.
-- [ ] npm run build 성공하기
-- [ ] npm run lint 성공하기
+  - [x] 이번에 새로 작업한 "상품 상세 정보 화면"에 관련한 hook, component들에도 suspense + ErrorBoundary 작업을 진행해주었습니다.
+- [x] npm run build 성공하기
+- [x] npm run lint 성공하기

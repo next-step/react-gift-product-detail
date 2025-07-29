@@ -1,28 +1,15 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 import { useHighlightReview } from '@/hooks/useHighlightReview';
-import { loading } from '@/components/common/Loading';
 import { ERROR_MESSAGES } from '@/constants/validation';
 
 const ProductReviews = () => {
   const { productId } = useParams<{ productId: string }>();
-  const {
-    data: reviewData,
-    isLoading,
-    isError,
-  } = useHighlightReview(productId);
-
-  if (isLoading) return loading;
-  if (isError || !reviewData) {
-    return (
-      <ErrorText>{ERROR_MESSAGES.FAILED_TO_LOAD_HIGHLIGHT_REVIEW}</ErrorText>
-    );
-  }
-
+  const { data: reviewData } = useHighlightReview(productId!);
   const { reviews } = reviewData;
 
   if (reviews.length === 0) {
-    return <EmptyText>아직 등록된 선물 후기가 없습니다.</EmptyText>;
+    return <EmptyText>{ERROR_MESSAGES.NO_REVIEW}</EmptyText>;
   }
 
   return (
@@ -65,12 +52,5 @@ const ReviewContent = styled.p`
 const EmptyText = styled.p`
   text-align: center;
   color: ${({ theme }) => theme.color.gray[500]};
-  ${({ theme }) => theme.typography.body.body2Regular};
-`;
-
-const ErrorText = styled.p`
-  text-align: center;
-  color: ${({ theme }) => theme.color.semantic.text.default};
-  padding: ${({ theme }) => theme.spacing[6]};
   ${({ theme }) => theme.typography.body.body2Regular};
 `;
