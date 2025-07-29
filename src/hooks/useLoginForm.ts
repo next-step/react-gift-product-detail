@@ -1,6 +1,6 @@
 import { useInput } from "./useInput";
 import { useLoginContext } from "./useLoginContext";
-import { useLogin } from "./useLogin";
+import { useLogin } from "../api/auth";
 import { z } from "zod";
 
 interface UseLoginFormOptions {
@@ -71,9 +71,16 @@ export function useLoginForm(options?: UseLoginFormOptions) {
 
     try {
       // 1. API 요청으로 로그인
-      const userInfo = await loginApi(formData);
+      const response = await loginApi(formData);
       
-      if (userInfo) {
+      if (response) {
+        // LoginResponse를 UserInfo로 변환
+        const userInfo = {
+          authToken: response.data.authToken,
+          email: response.data.email,
+          name: response.data.name,
+        };
+        
         // 2. Context에 로그인 정보 저장 (스토리지도 함께 저장됨)
         login(userInfo);
         
