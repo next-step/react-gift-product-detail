@@ -2,6 +2,10 @@ import { css } from '@emotion/react';
 import type { Theme } from '@/styles/theme';
 
 export const baseStyle = (theme: Theme) => css`
+  html {
+    overflow-y: scroll;
+  }
+
   body {
     font-family: 'Pretendard', sans-serif;
     background-color: ${theme.color.semantic.background.default};
