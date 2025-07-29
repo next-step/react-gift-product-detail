@@ -1,4 +1,3 @@
-import styled from '@emotion/styled';
 import { useState, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -18,226 +17,15 @@ import type {
   ProductReview,
 } from '@/types/product';
 
-const Container = styled.div`
-  width: 720px;
-  margin: 0 auto;
-  background: #fff;
-  min-height: 100vh;
-  padding-bottom: 30px;
-`;
+// 스타일 임포트
+import { Container } from './ProductDetail/ProductDetail.styles';
 
-const ProductImage = styled.img`
-  width: 100%;
-  height: 685px;
-  padding-top: 10px;
-  background: #f5f6fa;
-`;
-
-const ProductInfo = styled.div`
-  padding: 20px 16px;
-`;
-
-const ProductName = styled.h1`
-  font-size: 20px;
-  font-weight: 700;
-  color: #222;
-  margin: 0 0 8px 0;
-`;
-
-const ProductPrice = styled.div`
-  font-size: 18px;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 12px;
-`;
-
-const BrandInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-`;
-
-const BrandLogo = styled.img`
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const BrandName = styled.span`
-  font-size: 14px;
-  color: #666;
-`;
-
-const TabNavigation = styled.div`
-  display: flex;
-  border-bottom: 1px solid #eee;
-  background: #fff;
-`;
-
-const TabButton = styled.button<{ active: boolean }>`
-  flex: 1;
-  padding: 16px;
-  border: none;
-  background: none;
-  font-size: 14px;
-  font-weight: ${({ active }) => (active ? '700' : '500')};
-  color: ${({ active }) => (active ? '#222' : '#666')};
-  border-bottom: 2px solid ${({ active }) => (active ? '#222' : 'transparent')};
-  cursor: pointer;
-`;
-
-const TabContent = styled.div`
-  padding: 20px 0;
-  min-height: 300px;
-  background: #fafbfc;
-`;
-
-const ProductDescription = styled.div`
-  font-size: 16px;
-  line-height: 1.6;
-  color: #222;
-  margin-bottom: 20px;
-  padding: 0 32px;
-
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
-`;
-
-const AnnouncementList = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 32px;
-`;
-
-const AnnouncementItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px 0;
-  border-bottom: 1px solid #eee;
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-`;
-
-const AnnouncementName = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  color: #222;
-`;
-
-const AnnouncementValue = styled.div`
-  font-size: 16px;
-  color: #666;
-  line-height: 1.6;
-`;
-
-const ReviewList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 16px;
-`;
-
-const ReviewItem = styled.div`
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-`;
-
-const ReviewAuthor = styled.div`
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 8px;
-`;
-
-const ReviewContent = styled.div`
-  font-size: 14px;
-  line-height: 1.5;
-  color: #444;
-  white-space: pre-line;
-`;
-
-const WishButton = styled.button<{ isWished: boolean }>`
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-360px);
-  width: 80px;
-  height: 56px;
-  background: #f5f6fa;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  z-index: 100;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 0 18px;
-`;
-
-const WishIcon = styled.div<{ isWished: boolean }>`
-  font-size: 20px;
-  color: ${({ isWished }) => (isWished ? '#ff3b30' : '#666')};
-  transition: all 0.2s;
-`;
-
-const WishCount = styled.div`
-  font-size: 12px;
-  color: #666;
-  font-weight: 500;
-`;
-
-const OrderButton = styled.button`
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-280px);
-  width: 640px;
-  height: 56px;
-  background: #ffe812;
-  color: #222;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 0 0 18px 0;
-  cursor: pointer;
-  z-index: 100;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const LoadingSpinner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  font-size: 16px;
-  color: #666;
-`;
-
-const ErrorMessage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  font-size: 16px;
-  color: #ff3b30;
-`;
+// 분리된 컴포넌트 임포트
+import ProductImageSection from './ProductDetail/ProductImageSection';
+import ProductBasicInfoSection from './ProductDetail/ProductBasicInfoSection';
+import TabNavigationSection from './ProductDetail/TabNavigationSection';
+import TabContentSection from './ProductDetail/TabContentSection';
+import ActionButtonsSection from './ProductDetail/ActionButtonsSection';
 
 type TabType = 'description' | 'reviews' | 'detail';
 
@@ -340,166 +128,82 @@ function ProductDetailPage() {
 
   if (isLoadingBasic) {
     return (
-      <>
+      <ErrorBoundary>
         <Header />
         <Container>
-          <LoadingSpinner>상품 정보를 불러오는 중...</LoadingSpinner>
+          <div style={{ textAlign: 'center', padding: '40px' }}>로딩 중...</div>
         </Container>
-      </>
+      </ErrorBoundary>
     );
   }
 
   if (errorBasic) {
     return (
-      <>
+      <ErrorBoundary>
         <Header />
         <Container>
-          <ErrorMessage>상품 정보를 불러올 수 없습니다.</ErrorMessage>
+          <div
+            style={{ textAlign: 'center', padding: '40px', color: '#ff3b30' }}
+          >
+            에러가 발생했습니다: {errorBasic.message}
+          </div>
         </Container>
-      </>
+      </ErrorBoundary>
     );
   }
 
   if (!productBasic) {
     return (
-      <>
+      <ErrorBoundary>
         <Header />
         <Container>
-          <ErrorMessage>상품을 찾을 수 없습니다.</ErrorMessage>
+          <div style={{ textAlign: 'center', padding: '40px' }}>
+            상품 정보를 찾을 수 없습니다.
+          </div>
         </Container>
-      </>
+      </ErrorBoundary>
     );
   }
 
   return (
     <ErrorBoundary>
-      <Suspense
-        fallback={<LoadingSpinner>페이지를 불러오는 중...</LoadingSpinner>}
-      >
+      <Suspense fallback={<div>페이지를 불러오는 중...</div>}>
         <Header />
         <Container>
-          <ProductImage src={productBasic.imageURL} alt={productBasic.name} />
+          <ProductImageSection
+            imageURL={productBasic.imageURL}
+            altText={productBasic.name}
+          />
 
-          <ProductInfo>
-            <ProductName>{productBasic.name}</ProductName>
-            <ProductPrice>
-              {productBasic.price.sellingPrice.toLocaleString()}원
-            </ProductPrice>
+          <ProductBasicInfoSection
+            name={productBasic.name}
+            sellingPrice={productBasic.price.sellingPrice}
+            brandImageURL={productBasic.brandInfo.imageURL}
+            brandName={productBasic.brandInfo.name}
+          />
 
-            <BrandInfo>
-              <BrandLogo
-                src={productBasic.brandInfo.imageURL}
-                alt={productBasic.brandInfo.name}
-              />
-              <BrandName>{productBasic.brandInfo.name}</BrandName>
-            </BrandInfo>
-          </ProductInfo>
+          <TabNavigationSection
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
 
-          <TabNavigation>
-            <TabButton
-              active={activeTab === 'description'}
-              onClick={() => setActiveTab('description')}
-            >
-              상품설명
-            </TabButton>
-            <TabButton
-              active={activeTab === 'reviews'}
-              onClick={() => setActiveTab('reviews')}
-            >
-              선물후기
-            </TabButton>
-            <TabButton
-              active={activeTab === 'detail'}
-              onClick={() => setActiveTab('detail')}
-            >
-              상세정보
-            </TabButton>
-          </TabNavigation>
+          <TabContentSection
+            activeTab={activeTab}
+            productDetail={productDetail}
+            productReviews={productReviews}
+            isLoadingReviews={isLoadingReviews}
+            errorReviews={errorReviews}
+            isLoadingDetail={isLoadingDetail}
+            errorDetail={errorDetail}
+          />
 
-          <TabContent>
-            {activeTab === 'description' && (
-              <ProductDescription>
-                {productDetail?.description ? (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: productDetail.description,
-                    }}
-                  />
-                ) : (
-                  '상품 설명을 불러오는 중...'
-                )}
-              </ProductDescription>
-            )}
-
-            {activeTab === 'reviews' && (
-              <ReviewList>
-                {isLoadingReviews ? (
-                  <LoadingSpinner>리뷰를 불러오는 중...</LoadingSpinner>
-                ) : errorReviews ? (
-                  <ErrorMessage>리뷰를 불러올 수 없습니다.</ErrorMessage>
-                ) : productReviews?.reviews &&
-                  productReviews.reviews.length > 0 ? (
-                  productReviews.reviews.map((review) => (
-                    <ReviewItem key={review.id}>
-                      <ReviewAuthor>{review.authorName}</ReviewAuthor>
-                      <ReviewContent>{review.content}</ReviewContent>
-                    </ReviewItem>
-                  ))
-                ) : (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      color: '#666',
-                      padding: '40px 0',
-                    }}
-                  >
-                    아직 리뷰가 없습니다.
-                  </div>
-                )}
-              </ReviewList>
-            )}
-
-            {activeTab === 'detail' && (
-              <AnnouncementList>
-                {isLoadingDetail ? (
-                  <LoadingSpinner>상세 정보를 불러오는 중...</LoadingSpinner>
-                ) : errorDetail ? (
-                  <ErrorMessage>상세 정보를 불러올 수 없습니다.</ErrorMessage>
-                ) : productDetail?.announcements &&
-                  productDetail.announcements.length > 0 ? (
-                  <>
-                    {productDetail.announcements.map((item, index) => (
-                      <AnnouncementItem key={index}>
-                        <AnnouncementName>{item.name}</AnnouncementName>
-                        <AnnouncementValue>{item.value}</AnnouncementValue>
-                      </AnnouncementItem>
-                    ))}
-                  </>
-                ) : (
-                  <div
-                    style={{
-                      textAlign: 'center',
-                      color: '#666',
-                      padding: '40px 0',
-                    }}
-                  >
-                    상세 정보가 없습니다.
-                  </div>
-                )}
-              </AnnouncementList>
-            )}
-          </TabContent>
+          <ActionButtonsSection
+            productWish={productWish}
+            onWishToggle={handleWishToggle}
+            onOrderClick={handleOrderClick}
+            isWishPending={wishMutation.isPending}
+          />
         </Container>
-
-        <WishButton
-          isWished={productWish?.isWished || false}
-          onClick={handleWishToggle}
-          disabled={wishMutation.isPending}
-        >
-          <WishIcon isWished={productWish?.isWished || false}>♥</WishIcon>
-          <WishCount>{productWish?.wishCount || 0}</WishCount>
-        </WishButton>
-        <OrderButton onClick={handleOrderClick}>주문하기</OrderButton>
       </Suspense>
     </ErrorBoundary>
   );
