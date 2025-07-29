@@ -96,5 +96,5 @@ export const getThemeProducts = async (themeId: number, cursor = 0, limit = 10) 
   const { data } = await api.get<ThemeProductResponse>(`/api/themes/${themeId}/products`, {
     params: { cursor, limit },
   });
-  return data.data; // { list, cursor, hasMoreList }
+  return data.data;
 };

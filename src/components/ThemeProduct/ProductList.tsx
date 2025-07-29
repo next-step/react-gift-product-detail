@@ -1,8 +1,8 @@
-import { getThemeProducts, type ProductItem } from '@/Api/api';
+import { useThemeProducts } from '@/queries/useThemeProducts';
 import { ROUTE_PATH } from '@/routes/Routes';
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import LoadingSpinner from '@components/common/LoadingSpinner';
@@ -18,15 +18,6 @@ const Main = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px 8px;
-`;
-
-const LoadMore = styled.button`
-  margin: 24px auto 0;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #e3e4e5;
-  cursor: pointer;
 `;
 
 const EmptyContainer = styled.div`
@@ -54,45 +45,10 @@ interface Props {
 
 const ProductList = ({ themeId }: Props) => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<ProductItem[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
+    useThemeProducts(themeId);
 
-  const fetchProducts = useCallback(
-    async (cur = cursor) => {
-      if (loading || !hasMore) return;
-      setLoading(true);
-      try {
-        const { list, cursor: next, hasMoreList } = await getThemeProducts(themeId, cur);
-        setProducts((prev) => {
-          const ids = new Set(prev.map((it) => it.id)); // 이미 있던 id 집합
-          const deduped = list.filter((it) => !ids.has(it.id));
-          return [...prev, ...deduped];
-        });
-        setCursor(next);
-        setHasMore(hasMoreList);
-      } catch (err) {
-        if (axios.isAxiosError(err) && err.response?.status === 404) {
-          navigate(ROUTE_PATH.HOME, { replace: true });
-        } else {
-          console.error(err);
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [themeId, cursor, hasMore, loading, navigate]
-  );
-
-  useEffect(() => {
-    setProducts([]);
-    setCursor(0);
-    setHasMore(true);
-    fetchProducts(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [themeId]);
-
+  const products = data?.pages.flatMap((p) => p.list) ?? [];
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -101,8 +57,8 @@ const ProductList = ({ themeId }: Props) => {
     const observer = new IntersectionObserver(
       (entries) => {
         const target = entries[0];
-        if (target.isIntersecting) {
-          fetchProducts(cursor);
+        if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
       },
       { threshold: 0.1 }
@@ -110,9 +66,15 @@ const ProductList = ({ themeId }: Props) => {
 
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [fetchProducts, cursor]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  if (!loading && products.length === 0) {
+  useEffect(() => {
+    if (isError && axios.isAxiosError(error) && error.response?.status === 404) {
+      navigate(ROUTE_PATH.HOME, { replace: true });
+    }
+  }, [isError, error, navigate]);
+
+  if (!isLoading && products.length === 0) {
     return (
       <EmptyContainer>
         <Empty>상품이 없습니다.</Empty>
@@ -142,7 +104,7 @@ const ProductList = ({ themeId }: Props) => {
         ))}
       </Main>
 
-      {loading && <LoadingSpinner />}
+      {(isLoading || isFetchingNextPage) && <LoadingSpinner />}
 
       <div ref={sentinelRef} style={{ height: 1 }} />
     </Container>
