@@ -14,8 +14,8 @@ const Sender = () => {
       <Divider spacing="1rem" />
       <Title>보내는 사람</Title>
       <Divider spacing="1rem" />
-      <Input {...register("sender")} placeholder="이름을 입력하세요." errorMsg={errors.sender?.message} />
-      {!errors.sender?.message && <Msg>* 실제 선물 발송 시 발신자이름으로 반영되는 정보입니다.</Msg>}
+      <Input {...register("ordererName")} placeholder="이름을 입력하세요." errorMsg={errors.ordererName?.message} />
+      {!errors.ordererName?.message && <Msg>* 실제 선물 발송 시 발신자이름으로 반영되는 정보입니다.</Msg>}
       <Divider spacing="1.5rem" />
     </Content>
   );

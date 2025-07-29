@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import Container from "@/components/common/Container";
 import Divider from "@/components/common/Divider";
-import Order from "@/pages/Order/components/Order";
+import Order, { type OrderFormType } from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
 import { Suspense, useCallback, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
@@ -27,7 +27,7 @@ const OrderPage = () => {
 
 const OrderPageContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { handleSubmit: createSubmitHandler, getValues } = useFormContext();
+  const { handleSubmit: createSubmitHandler, getValues } = useFormContext<OrderFormType>();
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -55,13 +55,13 @@ const OrderPageContent = () => {
     navigate(ROUTE_PATH.LOGIN);
   }, [logout, navigate]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: OrderFormType) => {
     const body: PostOrderParams = {
       productId: data.productId,
       message: data.message,
-      messageCardId: `card${data.cardId}`,
-      ordererName: data.sender,
-      receivers: data.recipients,
+      messageCardId: `card${data.messageCardId}`,
+      ordererName: data.ordererName,
+      receivers: data.receivers,
     };
     mutate(body);
   };
@@ -72,9 +72,9 @@ const OrderPageContent = () => {
           <Content onSubmit={createSubmitHandler(onSubmit)}>
             <Order.Card />
             <Divider spacing="0.5rem" fill={false} />
-            <Order.Sender />
+            <Order.Orderer />
             <Divider spacing="0.5rem" fill={false} />
-            <Order.Recipient openModal={openModal} />
+            <Order.Receiver openModal={openModal} />
             <Divider spacing="0.5rem" fill={false} />
             <Order.Product />
             <Divider spacing="3.125rem" />
@@ -83,7 +83,7 @@ const OrderPageContent = () => {
           {isModalOpen && (
             <Order.Modal
               closeModal={closeModal}
-              initialRecipients={JSON.parse(JSON.stringify(getValues("recipients")))}
+              initialRecipients={JSON.parse(JSON.stringify(getValues("receivers")))}
             />
           )}
         </Container>

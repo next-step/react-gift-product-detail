@@ -18,13 +18,14 @@ const Card = () => {
     formState: { errors },
   } = useFormContext<OrderFormType>();
 
-  const cardId = watch("cardId");
+  const cardId = watch("messageCardId");
+
   const selectedCard = orderCardMock.find((card) => card.id === cardId);
 
   const selectCard = (id: number) => {
     const newSelectedCard = orderCardMock.find((card) => card.id === id);
     if (newSelectedCard) {
-      setValue("cardId", id);
+      setValue("messageCardId", id);
       setValue("message", newSelectedCard.defaultTextMessage);
     }
   };

@@ -4,21 +4,21 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 const DEFAULT_MESSAGE = `받는 사람이 없습니다.\n받는 사람을 추가해주세요.`;
 
-interface RecipientFieldProps {
+interface ReceiverFieldProps {
   isEmpty: boolean;
 }
 interface MsgProps {
   isValid: boolean;
 }
 
-const RecipientFieldArray = () => {
+const ReceiverFieldArray = () => {
   const {
     control,
     formState: { errors },
   } = useFormContext<OrderFormType>();
-  const { fields } = useFieldArray({ control, name: "recipients" });
+  const { fields } = useFieldArray({ control, name: "receivers" });
   const isEmpty = fields.length === 0;
-  const isValidField = !errors.recipients;
+  const isValidField = !errors.receivers;
   return (
     <Container isEmpty={isEmpty}>
       {isEmpty ? (
@@ -43,9 +43,9 @@ const RecipientFieldArray = () => {
   );
 };
 
-export default RecipientFieldArray;
+export default ReceiverFieldArray;
 
-const Container = styled.div<RecipientFieldProps>`
+const Container = styled.div<ReceiverFieldProps>`
   width: 100%;
   display: flex;
   flex-direction: column;

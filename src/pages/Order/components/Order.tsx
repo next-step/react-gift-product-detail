@@ -1,10 +1,10 @@
 import type React from "react";
 import Card from "@/pages/Order/components/Card";
-import Sender from "@/pages/Order/components/Sender";
-import Recipient from "@/pages/Order/components/Recipient";
+import Orderer from "@/pages/Order/components/Orderer";
+import Receiver from "@/pages/Order/components/Receiver";
 import Product from "@/pages/Order/components/Product";
 import OrderBtn from "@/pages/Order/components/OrderBtn";
-import RecipientFieldModal from "@/pages/Order/components/RecipientFieldModal";
+import ReceiverFieldModal from "@/pages/Order/components/ReceiverFieldModal";
 import { FormProvider, useForm } from "react-hook-form";
 import { orderCardMock } from "@/assets/orderCardMock";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ interface OrderProps {
   children: React.ReactNode;
 }
 
-const RecipientSchema = z.object({
+const ReceiverSchema = z.object({
   name: z.string().min(1, "이름을 입력해주세요."),
   phoneNumber: z
     .string()
@@ -25,16 +25,16 @@ const RecipientSchema = z.object({
   quantity: z.number().min(1, "수량은 1개 이상이어야 합니다."),
 });
 const OrderFormSchema = z.object({
-  cardId: z.number(),
+  messageCardId: z.number(),
   message: z.string().min(1, "메세지를 입력해주세요."),
-  sender: z.string().min(1, "이름을 입력해주세요."),
-  recipients: z
-    .array(RecipientSchema)
+  ordererName: z.string().min(1, "이름을 입력해주세요."),
+  receivers: z
+    .array(ReceiverSchema)
     .min(1, "받는 사람을 한 명 이상 추가해주세요.")
     .check((ctx) => {
       const phoneNumbers = new Set<string>();
-      ctx.value.forEach((recipient, index) => {
-        if (phoneNumbers.has(recipient.phoneNumber)) {
+      ctx.value.forEach((receiver, index) => {
+        if (phoneNumbers.has(receiver.phoneNumber)) {
           ctx.issues.push({
             code: "custom",
             message: "중복된 전화번호가 있습니다.",
@@ -42,21 +42,21 @@ const OrderFormSchema = z.object({
             path: [index, "phoneNumber"],
           });
         }
-        phoneNumbers.add(recipient.phoneNumber);
+        phoneNumbers.add(receiver.phoneNumber);
       });
     }),
   productId: z.number(),
 });
 
 export type OrderFormType = z.infer<typeof OrderFormSchema>;
-export type RecipientType = z.infer<typeof RecipientSchema>;
+export type ReceiverType = z.infer<typeof ReceiverSchema>;
 
 const defaultValues: OrderFormType = {
-  cardId: orderCardMock[0].id,
+  messageCardId: orderCardMock[0].id,
   message: orderCardMock[0].defaultTextMessage,
-  sender: getCookieValue(AUTH_COOKIE_KEY_NAME) || "",
-  recipients: [],
-  productId: NaN,
+  ordererName: getCookieValue(AUTH_COOKIE_KEY_NAME) || "",
+  receivers: [],
+  productId: 0,
 };
 
 const Order = ({ children }: OrderProps) => {
@@ -67,8 +67,8 @@ const Order = ({ children }: OrderProps) => {
 export default Order;
 
 Order.Card = Card;
-Order.Sender = Sender;
-Order.Recipient = Recipient;
+Order.Orderer = Orderer;
+Order.Receiver = Receiver;
 Order.Product = Product;
 Order.Btn = OrderBtn;
-Order.Modal = RecipientFieldModal;
+Order.Modal = ReceiverFieldModal;

@@ -1,13 +1,13 @@
 import { apiInstance } from "@/apis/instance";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
-import type { RecipientType } from "@/pages/Order/components/Order";
+import type { ReceiverType } from "@/pages/Order/components/Order";
 
 export interface PostOrderParams {
   productId: number;
   message: string;
   messageCardId: string;
   ordererName: string;
-  receivers: RecipientType[];
+  receivers: ReceiverType[];
 }
 
 interface PostOrderResponse {

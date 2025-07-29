@@ -1,12 +1,12 @@
 import Divider from "@/components/common/Divider";
 import styled from "@emotion/styled";
-import RecipientFieldArray from "./RecipientFieldArray";
+import ReceiverFieldArray from "./ReceiverFieldArray";
 
-interface RecipientProps {
+interface ReceiverProps {
   openModal: () => void;
 }
 
-const Recipient = ({ openModal }: RecipientProps) => {
+const Receiver = ({ openModal }: ReceiverProps) => {
   return (
     <Content>
       <Divider spacing="1rem" />
@@ -17,13 +17,13 @@ const Recipient = ({ openModal }: RecipientProps) => {
         </ModalBtn>
       </Wrapper>
       <Divider spacing="1rem" />
-      <RecipientFieldArray />
+      <ReceiverFieldArray />
       <Divider spacing="1.5rem" />
     </Content>
   );
 };
 
-export default Recipient;
+export default Receiver;
 
 const Content = styled.div`
   width: 100%;

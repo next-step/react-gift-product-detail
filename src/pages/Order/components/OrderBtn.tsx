@@ -16,8 +16,8 @@ const OrderBtn = () => {
     queryFn: () => getProductSummary({ productId: productId ?? "" }),
   });
   const product = useMemo(() => data, [data]);
-  const recipients = watch("recipients");
-  const totalQuantity = recipients.reduce((accumulator, currentValue) => {
+  const receivers = watch("receivers");
+  const totalQuantity = receivers.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.quantity;
   }, 0);
   const totalPrice = product ? product.price * totalQuantity : 0;
