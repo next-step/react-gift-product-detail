@@ -1,13 +1,13 @@
 import styled from "@emotion/styled";
 import PresentTheme from "./PresentTheme";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
 import useThemes from "@/hooks/api/useThemes";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 
 const PresentCategory = () => {
   const navigate = useNavigate();
-  const { presentThemes, isPending, isError } = useThemes();
+  const { presentThemes, isError } = useThemes();
 
   if (isError) {
     return <></>;
@@ -20,7 +20,7 @@ const PresentCategory = () => {
   return (
     <Background>
       <CategoryTitle>선물 테마</CategoryTitle>
-      {presentThemes && !isPending ? (
+      {presentThemes && (
         <ThemeGrid>
           {presentThemes.map(theme => (
             <button
@@ -32,14 +32,12 @@ const PresentCategory = () => {
             </button>
           ))}
         </ThemeGrid>
-      ) : (
-        <LoadingSpinner height="266px" />
       )}
     </Background>
   );
 };
 
-export default PresentCategory;
+export default withSuspenseBoundary(PresentCategory);
 
 const Background = styled.div`
   width: 100%;

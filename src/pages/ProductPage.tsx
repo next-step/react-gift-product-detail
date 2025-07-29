@@ -3,6 +3,7 @@ import ProductDetailSection from "@/components/products/ProductDetailSection";
 import ProductInfoSection from "@/components/products/ProductInfoSection";
 import ProductOrderSection from "@/components/products/ProductOrderSection";
 import ProductReviewSection from "@/components/products/ProductReviewSection";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import withUser from "@/hoc/withUser";
 import useProductsQueries from "@/hooks/api/useProductsQueries";
 import styled from "@emotion/styled";
@@ -62,7 +63,7 @@ const ProductPage = () => {
   );
 };
 
-export default withUser(ProductPage);
+export default withUser(withSuspenseBoundary(ProductPage, true));
 
 const Main = styled.main`
   display: flex;

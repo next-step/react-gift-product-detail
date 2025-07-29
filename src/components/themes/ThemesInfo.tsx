@@ -1,14 +1,15 @@
 import styled from "@emotion/styled";
 import useThemesInfo from "@/hooks/api/useThemesInfo";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 
 type ThemesInfoProps = {
   id: string | undefined;
 };
 
 const ThemesInfo = ({ id }: ThemesInfoProps) => {
-  const { themeInfoData, isPending, isError } = useThemesInfo({ id });
+  const { themeInfoData, isError } = useThemesInfo({ id });
 
-  if (!themeInfoData && isPending && !isError) {
+  if (!themeInfoData && !isError) {
     return null;
   }
 
@@ -25,7 +26,7 @@ const ThemesInfo = ({ id }: ThemesInfoProps) => {
   );
 };
 
-export default ThemesInfo;
+export default withSuspenseBoundary(ThemesInfo, true);
 
 const InfoSection = styled.section<{ backgroundColor?: string }>`
   margin: 0px;

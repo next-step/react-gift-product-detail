@@ -18,6 +18,7 @@ const SpinnerDiv = styled.div<{ height: string }>`
   align-items: center;
   height: ${({ height }) => height};
   width: 100%;
+  background-color: ${({ theme }) => theme.colors.semantic.background.default};
 `;
 
 const Spinner = styled.div`

@@ -1,22 +1,17 @@
 import { fetchProductsSummary } from "@/api/productSummary";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 type ProductsSummaryParams = {
   id: string | undefined;
 };
 
 const useProductsSummary = ({ id }: ProductsSummaryParams) => {
-  const {
-    data: gift,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data: gift, isError } = useSuspenseQuery({
     queryKey: ["gift", id],
     queryFn: () => fetchProductsSummary({ id: Number(id) }),
-    enabled: !!id,
   });
 
-  return { gift, isPending, isError };
+  return { gift, isError };
 };
 
 export default useProductsSummary;

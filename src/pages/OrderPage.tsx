@@ -16,6 +16,7 @@ import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
 import withUser from "@/hoc/withUser";
 import useProductsSummary from "@/hooks/api/useProductsSummary";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -37,13 +38,13 @@ const OrderPage = () => {
   }, [selectedCard, methods]);
 
   const { id } = useParams<{ id: string }>();
-  const { gift, isPending, isError } = useProductsSummary({ id });
+  const { gift, isError } = useProductsSummary({ id });
 
   useEffect(() => {
-    if (!gift && !isPending && isError) {
+    if (!gift && isError) {
       navigate(ROUTE_PATH.HOME, { replace: true });
     }
-  }, [gift, isPending, isError, navigate]);
+  }, [gift, isError, navigate]);
 
   if (!gift) return null;
 
@@ -107,7 +108,7 @@ const OrderPage = () => {
   );
 };
 
-export default withUser(OrderPage);
+export default withUser(withSuspenseBoundary(OrderPage, true));
 
 const Main = styled.main`
   display: flex;
