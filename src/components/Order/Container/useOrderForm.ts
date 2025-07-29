@@ -11,34 +11,21 @@ import type { OrderFormValue } from '@src/types/OrderFormValues';
 import type { Recipient } from '@src/types/Recipient';
 import { useEffect, useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
-const getOrderFetchData = async (productId: string | null) => {
-  const apiRequestData = {
-    methods: 'GET' as HttpTypes,
-    requestName: BASIC_ENDPOINT.product + `/${productId}/summary`,
-    body: {},
-    params: '',
-    headers: null,
-  };
-
-  const fetchData = await apiClient(apiRequestData);
-  return fetchData.data;
-};
+import { useGetOrderForm } from './useGetOrderForm';
 
 export const useOrderForm = () => {
   const [searchParams] = useSearchParams();
   const [selectedProduct, setSelectedProduct] = useState<GoodSummary | null>(null);
   const navigate = useNavigate();
+  const { productId } = useParams<{ productId: string }>();
 
   //url를 통해 받은 상품 id를 가지고 상품 container를 생성해 렌더링
   useEffect(() => {
-    const productId = searchParams.get(PARAMS.productId);
-
     const fetchAndSetProduct = async () => {
       try {
-        const fetchData = await getOrderFetchData(productId);
+        const fetchData = useGetOrderForm(productId);
         if (fetchData && fetchData.statusCode < 500) {
           toast(fetchData.message);
           navigate(URLS.home);
