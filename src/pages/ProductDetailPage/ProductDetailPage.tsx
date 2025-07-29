@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { useState, Suspense } from 'react';
 import {
   useProductInfo,
@@ -27,6 +27,7 @@ import {
 } from './styles';
 
 import { ErrorBoundary } from '../../ErrorBoundary';
+import { UserManagement } from '../Login/contexts/UserManagement'; // 추가
 
 const TAB = {
   DESCRIPTION: '상품설명',
@@ -39,6 +40,18 @@ type TabKey = keyof typeof TAB;
 const ProductDetailContent = () => {
   const { productId } = useParams<{ productId: string }>();
   const [activeTab, setActiveTab] = useState<TabKey>('DESCRIPTION');
+
+  const { user } = UserManagement();
+  const location = useLocation();
+
+  if (!user) {
+    return (
+      <Navigate
+        to={`/login?redirect=${encodeURIComponent(location.pathname)}`}
+        replace
+      />
+    );
+  }
 
   if (!productId) {
     return <div css={errorStyle}>상품 정보를 불러올 수 없습니다.</div>;
