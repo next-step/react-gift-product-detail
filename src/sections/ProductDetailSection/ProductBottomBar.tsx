@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { useProductWishQuery } from '@/queries/useProductDetailQuery';
 import { useNavigate } from 'react-router';
+import { mockToggleWish } from '@/utils/mockToggleWish';
 
 const BottomBar = styled.div`
   position: sticky;
@@ -47,9 +48,20 @@ export default function ProductBottomBar({ productId }: Props) {
     navigate(`/order/${id}`);
   };
 
-  const handleToggleWish = () => {
-    setIsWished(prev => !prev);
-    setWishCount(prev => (isWished ? prev - 1 : prev + 1));
+  const handleToggleWish = async () => {
+    const prevWished = isWished;
+    const prevCount = wishCount;
+    const nextWished = !isWished;
+    setIsWished(nextWished);
+    setWishCount(prev => (nextWished ? prev + 1 : prev - 1));
+
+    try {
+      await mockToggleWish();
+    } catch {
+      setIsWished(prevWished);
+      setWishCount(prevCount);
+      alert('찜하기 요청 실패!');
+    }
   };
 
   return (
