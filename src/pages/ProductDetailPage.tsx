@@ -14,7 +14,17 @@ function ProductDetail({ productId }: { productId: number }) {
       <CustomErrorBoundary fallback={<p>상품 정보를 불러오는데 실패했습니다.</p>}>
         <Suspense fallback={<Spinner />}>
           <ProductHeroSection productId={productId} />
+        </Suspense>
+      </CustomErrorBoundary>
+
+      <CustomErrorBoundary fallback={<p>상품 상세 정보를 불러오는데 실패했습니다.</p>}>
+        <Suspense fallback={<Spinner />}>
           <ProductTabSection productId={productId} />
+        </Suspense>
+      </CustomErrorBoundary>
+
+      <CustomErrorBoundary fallback={<p>하단 주문 바를 불러오는데 실패했습니다.</p>}>
+        <Suspense fallback={<Spinner />}>
           <ProductBottomBar productId={productId} />
         </Suspense>
       </CustomErrorBoundary>
