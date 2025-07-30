@@ -9,8 +9,6 @@ interface ProductDetailContentProps {
   activeTab: TabType;
   productDetail: ProductDetailResponse | null | undefined;
   productReview: ProductHighlightReviewResponse | null | undefined;
-  isLoadingDetail: boolean;
-  isLoadingReview: boolean;
 }
 
 const ContentContainer = styled.div`
@@ -88,14 +86,8 @@ const ProductDetailContent = ({
   activeTab,
   productDetail,
   productReview,
-  isLoadingDetail,
-  isLoadingReview,
 }: ProductDetailContentProps) => {
   const renderDescription = () => {
-    if (isLoadingDetail) {
-      return <LoadingText>상품 설명을 불러오는 중...</LoadingText>;
-    }
-
     if (!productDetail) {
       return <LoadingText>상품 설명을 불러올 수 없습니다.</LoadingText>;
     }
@@ -110,10 +102,6 @@ const ProductDetailContent = ({
   };
 
   const renderReviews = () => {
-    if (isLoadingReview) {
-      return <LoadingText>리뷰를 불러오는 중...</LoadingText>;
-    }
-
     if (!productReview) {
       return <LoadingText>리뷰를 불러올 수 없습니다.</LoadingText>;
     }
@@ -133,10 +121,6 @@ const ProductDetailContent = ({
   };
 
   const renderDetails = () => {
-    if (isLoadingDetail) {
-      return <LoadingText>상세 정보를 불러오는 중...</LoadingText>;
-    }
-
     if (!productDetail) {
       return <LoadingText>상세 정보를 불러올 수 없습니다.</LoadingText>;
     }

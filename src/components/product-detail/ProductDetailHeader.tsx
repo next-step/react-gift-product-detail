@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 import type { ProductResponse } from '@/api/types';
 
 interface ProductDetailHeaderProps {
-  product: ProductResponse | null;
-  isLoading: boolean;
+  product: ProductResponse | null | undefined;
 }
 
 const HeaderContainer = styled.div`
@@ -44,28 +43,7 @@ const ProductBrand = styled.div`
   margin: 0;
 `;
 
-const LoadingSkeleton = styled.div`
-  width: 100%;
-  height: 300px;
-  background: #f7f8f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #868b94;
-`;
-
-const ProductDetailHeader = ({
-  product,
-  isLoading,
-}: ProductDetailHeaderProps) => {
-  if (isLoading) {
-    return (
-      <HeaderContainer>
-        <LoadingSkeleton>상품 정보를 불러오는 중...</LoadingSkeleton>
-      </HeaderContainer>
-    );
-  }
-
+const ProductDetailHeader = ({ product }: ProductDetailHeaderProps) => {
   if (!product) {
     return null;
   }
