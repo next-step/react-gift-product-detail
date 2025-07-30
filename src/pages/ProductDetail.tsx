@@ -3,7 +3,7 @@ import ThemeNotFound from "@/components/PresentTheme/ThemeNotFound"
 import Loading from "@/components/PresentTheme/Loading"
 import ProductImage from "@/components/ProductImage"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { ROUTES } from "@/constants/routes"
 import useProduct from "@/hooks/useProduct"
 import styled from "@emotion/styled"
@@ -17,6 +17,12 @@ import { useAuth } from "@/context/AuthContext"
 import MoreButton from "@/components/MoreButton"
 import { useCallback } from "react"
 import getRoute from "@/functions/getRoute"
+import useProductDetail from "@/hooks/useProductDetail"
+import { useProductReviews } from "@/hooks/useProductReviews"
+import TabButtonProduct from "@/components/TabButtonProduct"
+
+const TAB_LIST = ["description", "review", "announcement"] as const
+type Tab = (typeof TAB_LIST)[number]
 
 const BrandRow = styled.div`
   display: flex;
@@ -50,7 +56,7 @@ const ProductShortInfo = ({ name, price }: Product) => {
           padding="spacing0"
           marginTop="spacing2"
         >
-          {price.basicPrice}원
+          {price.sellingPrice}원
         </Text>
       </ProductShortInfoStyle>
     </Layout>
@@ -79,40 +85,52 @@ const ProductBrandInfo = ({ brandInfo }: Product) => {
     </Layout>
   )
 }
-const GetDetailButton = styled.button`
-  width: 100%;
-  padding: ${theme.space.spacing4} ${theme.space.spacing5};
-  border: none;
-  background-color: ${theme.colors.gray00};
+
+const ProductDescription = styled.div`
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  [class*="__cu_imgsize"] {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
 `
-const ProductDetailButton = () => {
-  return (
-    <Row padding="spacing0">
-      <GetDetailButton type="button">
-        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
-          상품설명
-        </Text>
-      </GetDetailButton>
-      <GetDetailButton type="button">
-        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
-          선물후기
-        </Text>
-      </GetDetailButton>
-      <GetDetailButton type="button">
-        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
-          상세정보
-        </Text>
-      </GetDetailButton>
-    </Row>
-  )
-}
 const ProductDetail = () => {
   const { isLoggedIn } = useAuth()
   const { productId } = useParams<{ productId: string }>()
   if (!productId) return <ThemeNotFound />
   const { product, loading, error } = useProduct(productId)
   console.log(product)
+
+  const [tab, setTab] = useState<Tab>("description")
+  const {
+    data: detailData,
+    isLoading: detailLoading,
+    error: detailError,
+  } = useProductDetail(
+    productId,
+    tab === "description" || tab === "announcement"
+  )
+  const {
+    data: reviewData,
+    isLoading: reviewLoading,
+    error: reviewError,
+    refetch: refetchReviews,
+  } = useProductReviews(productId, tab === "review")
+  const handleTab = (t: Tab) => {
+    setTab(t)
+
+    if (t === "review") refetchReviews()
+  }
+
   const navigate = useNavigate()
+  console.log(detailData?.announcements)
+  console.log(detailData?.description)
+
   useEffect(() => {
     if (error) {
       if (error.response?.status === 404) {
@@ -143,7 +161,82 @@ const ProductDetail = () => {
       <Blank height="1px" backGroundColor={theme.colors.gray300}></Blank>
       <ProductBrandInfo {...product} />
       <Blank height="8px" backGroundColor={theme.colors.gray300}></Blank>
-      <ProductDetailButton />
+      <Row padding="spacing0">
+        <TabButtonProduct
+          isActive={tab === "description"}
+          onClick={() => handleTab("description")}
+        >
+          상품설명
+        </TabButtonProduct>
+
+        <TabButtonProduct
+          isActive={tab === "review"}
+          onClick={() => handleTab("review")}
+        >
+          선물후기
+        </TabButtonProduct>
+
+        <TabButtonProduct
+          isActive={tab === "announcement"}
+          onClick={() => handleTab("announcement")}
+        >
+          상세정보
+        </TabButtonProduct>
+      </Row>
+      {tab === "description" &&
+        (detailLoading ? (
+          <Loading />
+        ) : (
+          <ProductDescription
+            dangerouslySetInnerHTML={{
+              __html: detailData?.description ?? "",
+            }}
+          />
+        ))}
+
+      {tab === "announcement" &&
+        (detailLoading ? (
+          <Loading />
+        ) : (
+          <div style={{ padding: "0 16px" }}>
+            {detailData?.announcements.map((a) => (
+              <div key={a.displayOrder} style={{ marginBottom: "16px" }}>
+                <Text variant="body2Bold" margin="spacing0" padding="spacing0">
+                  {a.name}
+                </Text>
+                <Text
+                  variant="body2Regular"
+                  margin="spacing0"
+                  padding="spacing0"
+                >
+                  {a.value}
+                </Text>
+              </div>
+            ))}
+          </div>
+        ))}
+
+      {tab === "review" &&
+        (reviewLoading ? (
+          <Loading />
+        ) : (
+          <div style={{ padding: "0 16px" }}>
+            {reviewData?.reviews.map((r) => (
+              <div key={r.id} style={{ marginBottom: "24px" }}>
+                <Text variant="body2Bold" margin="spacing0" padding="spacing0">
+                  {r.authorName}
+                </Text>
+                <Text
+                  variant="body2Regular"
+                  margin="spacing0"
+                  padding="spacing0"
+                >
+                  {r.content}
+                </Text>
+              </div>
+            ))}
+          </div>
+        ))}
       <MoreButton
         background="kakaoYellow"
         borderRadius="spacing0"
