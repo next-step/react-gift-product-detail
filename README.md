@@ -1,3 +1,5 @@
+## step3 과제 수행 내용
+
 ## step2 피드백 반영 내용
 
 - suspense와 errorboundary로 반복되던 코드를 hoc를 정의하여 리팩터링했습니다.
