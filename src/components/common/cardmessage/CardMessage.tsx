@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import type { UseFormRegister } from "react-hook-form";
-import type { OrderFormData } from "../../order/receiverlist/types";
+import styled from '@emotion/styled';
+import type { UseFormRegister } from 'react-hook-form';
+import type { OrderFormData } from '../../order/receiverlist/types';
 const CardMessageWrapper = styled.div`
   width: 100%;
   padding: 0px 1rem;
@@ -27,16 +27,11 @@ interface CardMessageFormProps {
   register: UseFormRegister<OrderFormData>;
   error?: string;
 }
-const CardMessage = ({  register, error }: CardMessageFormProps) => {
+const CardMessage = ({ register, error }: CardMessageFormProps) => {
   return (
     <CardMessageWrapper>
       <TextAreaDiv>
-        <TextArea
-          {...register("cardMessage")}
-          placeholder="축하해요."
-          name=""
-          id=""
-        ></TextArea>
+        <TextArea {...register('cardMessage')} placeholder="축하해요." name="" id=""></TextArea>
         {error && <p>{error}</p>}
       </TextAreaDiv>
     </CardMessageWrapper>

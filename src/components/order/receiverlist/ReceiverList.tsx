@@ -7,13 +7,11 @@ import { GrayNoticeSm } from './../../common/GrayNotice';
 import type { OrderFormData } from './types';
 
 interface ReceiverListProps {
-  fields, 
+  fields;
   setIsVisible: (visible: boolean) => void;
   receivers: OrderFormData['receivers'];
 }
 const ReceiverList = ({ fields, setIsVisible, receivers }: ReceiverListProps) => {
-
-
   return (
     <SidePadding>
       <Padding3 />

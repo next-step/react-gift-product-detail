@@ -3,7 +3,7 @@ import RankingItem from '../RankingItem';
 import { PaddingLg } from '../../common/Padding';
 import PersonCategory from '../PersonCategory';
 import BehaviorCategory from '../BehaviorCategory';
-import {useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   type BehaviorFilterLabels,
@@ -18,7 +18,6 @@ import { RankingProducts, RankingTitle, RankingWrapper, ShowMoreBtn } from './Ra
 import { fetchRankingData } from '@/services/rankingApi';
 import { useQuery } from '@tanstack/react-query';
 
-
 //필터 옵션
 const personFilterOptions: { label: PersonFilterLabels; emoji: string; param: PersonParam }[] = [
   { label: '전체', emoji: 'All', param: 'ALL' },
@@ -32,7 +31,6 @@ const behaviorOptions: { label: BehaviorFilterLabels; param: BehaviorParam }[] =
   { label: '많이 선물한', param: 'MANY_RECEIVE' },
   { label: '위시로 받은', param: 'MANY_WISH_RECEIVE' },
 ] as const;
-
 
 const Ranking = () => {
   const navigator = useNavigate();
@@ -68,15 +66,13 @@ const Ranking = () => {
   const handleProductClick = (id: number) => {
     if (!user.isLoggedIn) navigator(ROUTE_PATH.LOGIN);
     else {
-      navigator(ROUTE_PATH.ORDER.replace(':productId', String(id)));
+      navigator(ROUTE_PATH.PRODUCT.replace(':productId', String(id)));
     }
   };
- 
 
   const { data: products = [], isLoading: isProductLoading } = useQuery<ProductType[]>({
     queryFn: () => fetchRankingData(personParam, behaviorParam),
     queryKey: ['products', personParam, behaviorParam],
-
   });
 
   const visible = showAll ? products : products.slice(0, 6);

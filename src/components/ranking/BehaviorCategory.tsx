@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 import type { behaviorProps } from './types';
 
 const BehaviorCategoryWrapper = styled.div`
@@ -10,11 +10,12 @@ const BehaviorCategoryWrapper = styled.div`
   border-radius: 0.5rem;
   padding: ${({ theme }) => theme.spacing.spacing3} ${({ theme }) => theme.spacing.spacing4};
 `;
-const BehaviorTextButton = styled.button<{selected:boolean}>`
+const BehaviorTextButton = styled.button<{ selected: boolean }>`
   width: 100%;
 
   ${({ theme }) => theme.typography.subtitle2Bold};
-  color: ${({ selected, theme }) => selected?theme.colors.state.info:theme.colors.blue.blue400};
+  color: ${({ selected, theme }) =>
+    selected ? theme.colors.state.info : theme.colors.blue.blue400};
   display: flex;
   justify-content: center;
   transition:
@@ -26,12 +27,16 @@ const BehaviorCategory = ({ options, selected, onSelect }: behaviorProps) => {
   return (
     <BehaviorCategoryWrapper>
       {options.map((o) => (
-        <BehaviorTextButton key={o.label} onClick={()=>onSelect(o.param)} selected={selected===o.param}>{o.label}</BehaviorTextButton>
+        <BehaviorTextButton
+          key={o.label}
+          onClick={() => onSelect(o.param)}
+          selected={selected === o.param}
+        >
+          {o.label}
+        </BehaviorTextButton>
       ))}
-
     </BehaviorCategoryWrapper>
   );
 };
 
-export default BehaviorCategory
- 
+export default BehaviorCategory;

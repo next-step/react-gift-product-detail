@@ -12,6 +12,16 @@ export const Padding3 = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.spacing.spacing3};
 `;
+export const Padding4 = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.spacing.spacing4};
+`;
+
+export const Padding5 = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.spacing.spacing5};
+`;
+
 export const PaddingMd = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.spacing.spacing8};

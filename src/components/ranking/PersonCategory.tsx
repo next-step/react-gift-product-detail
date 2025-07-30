@@ -1,6 +1,5 @@
-import styled from "@emotion/styled";
-import type { personProps } from "./types";
-
+import styled from '@emotion/styled';
+import type { personProps } from './types';
 
 const PersonCategoryWrapper = styled.div`
   display: flex;
@@ -35,9 +34,7 @@ const PersonCategory = ({ options, selected, onSelect }: personProps) => {
     <PersonCategoryWrapper>
       {options.map((o) => (
         <PersonBtn key={o.label} onClick={() => onSelect(o.param)}>
-          <PersonImage selected={selected === o.param}>
-            {o.emoji}
-          </PersonImage>
+          <PersonImage selected={selected === o.param}>{o.emoji}</PersonImage>
           <p>{o.label}</p>
         </PersonBtn>
       ))}

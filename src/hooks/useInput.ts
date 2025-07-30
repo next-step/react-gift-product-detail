@@ -16,7 +16,7 @@ interface UseInputOptions {
 }
 
 export const useInput = (options: UseInputOptions = {}): UseInputReturn => {
-  const { initialValue = "", validator } = options;
+  const { initialValue = '', validator } = options;
   const [value, setValue] = useState(initialValue);
   const [isTouched, setIsTouched] = useState(false);
 

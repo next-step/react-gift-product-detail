@@ -12,20 +12,16 @@ import OrderBtn from '@/components/order/OrderBtn';
 import CardSelector from '@/components/order/CardSelector';
 import ReceiverModal from '@/components/order/receivermodal/ReceiverModal';
 import ReceiverList from '@/components/order/receiverlist/ReceiverList';
-
-
 import { useAuth } from '@/contexts/AuthContext';
 import type { OrderFormData } from '@/components/order/receiverlist/types';
 import { ROUTE_PATH } from '@/routes/Router';
 import { fetchOrder, fetchProductSummary } from '@/services/orderApi';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-
 type SelectedCard = {
   id: number;
   message: string;
 };
-
 
 const Order = () => {
   const navigate = useNavigate();
@@ -59,7 +55,11 @@ const Order = () => {
 
   const receivers = watch('receivers');
 
-  const { data:summaryData, isLoading, error } = useQuery({
+  const {
+    data: summaryData,
+    isLoading,
+    error,
+  } = useQuery({
     queryFn: () => fetchProductSummary(product_id),
     queryKey: ['productSummary', productId],
   });
@@ -77,20 +77,19 @@ const Order = () => {
     mutationFn: fetchOrder,
 
     onSuccess: (res) => {
-      console.dir(res)
       toast.success('주문이 완료되었습니다!');
-    navigate(ROUTE_PATH.HOME)},
+      navigate(ROUTE_PATH.HOME);
+    },
 
     onError: (e) => {
       if (e.response?.status === 401) {
-          toast.error('로그인이 필요합니다.');
-          navigate(ROUTE_PATH.LOGIN);
-        } else {
-          toast.error(e.message || '주문 중 오류가 발생했습니다.');
-        }
+        toast.error('로그인이 필요합니다.');
+        navigate(ROUTE_PATH.LOGIN);
+      } else {
+        toast.error(e.message || '주문 중 오류가 발생했습니다.');
+      }
     },
   });
-
 
   useEffect(() => {
     if (user?.name) {
@@ -116,12 +115,8 @@ const Order = () => {
       receivers: formData.receivers,
     };
 
-    orderMutate({body, token: user.token})
-      
-
-  })
-  ;
-  
+    orderMutate({ body, token: user.token });
+  });
   if (isOrderPosting || !summaryData || !user?.name) return <div>로딩중.....</div>;
 
   const productPrice = summaryData.price;
@@ -143,7 +138,6 @@ const Order = () => {
       <ReceiverList fields={fields} receivers={receivers} setIsVisible={setIsModalVisible} />
       <PaddingGraySm />
       <ProductInfo product={summaryData} />
-
       <OrderBtn totalPrice={totalPrice} onClick={handleClickOrderBtn} />
 
       {isModalVisible && (

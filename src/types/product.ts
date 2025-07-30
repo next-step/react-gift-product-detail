@@ -14,11 +14,10 @@ export type ProductType = {
   };
 };
 
-
- export type ProductSummaryType = {
-   id: number;
-   name: string;
-   price: number;
-   imageURL: string;
-   brandName: string;
- };
+export type ProductSummaryType = {
+  id: number;
+  name: string;
+  price: number;
+  imageURL: string;
+  brandName: string;
+};

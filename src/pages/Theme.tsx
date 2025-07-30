@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/Router';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-
 const Header = styled.section`
   width: 100%;
   padding: 1.625rem 1rem 1.375rem;
@@ -46,58 +45,50 @@ const Image = styled.img`
   background-color: rgb(243, 244, 245);
 `;
 
-
 const Theme = () => {
   const { themeId } = useParams();
   const themeIdNumber = Number(themeId);
-  const navigate =useNavigate()
-
+  const navigate = useNavigate();
   const { ref, inView } = useInView({
     threshold: 0.5,
   });
 
   const LIMIT = 10;
 
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['themeProducts', themeIdNumber],
-      queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeIdNumber, pageParam, LIMIT),
-      getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
-    });
-useEffect(()=>{
-  if (inView && hasNextPage && !isFetchingNextPage) {
-    fetchNextPage();
-  }}, [inView, hasNextPage, isFetchingNextPage])
-
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['themeProducts', themeIdNumber],
+    queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeIdNumber, pageParam, LIMIT),
+    getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+  });
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage]);
 
   const {
     data: themeData,
     isLoading,
     error,
   } = useQuery({
-    queryKey:['theme', themeIdNumber],
-    queryFn:()=>fetchthemeInfo(themeIdNumber)
-  
-  })
- 
-useEffect(()=>{
-  if(error){
-  if(axios.isAxiosError(error)){
-    const status= error.status
-    if(status===404){
-      toast.error("선물 테마 정보를 받아올 수 없어요.")
-      navigate(ROUTE_PATH.HOME)
+    queryKey: ['theme', themeIdNumber],
+    queryFn: () => fetchthemeInfo(themeIdNumber),
+  });
+
+  useEffect(() => {
+    if (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.status;
+        if (status === 404) {
+          toast.error('선물 테마 정보를 받아올 수 없어요.');
+          navigate(ROUTE_PATH.HOME);
+        }
+      }
     }
-  }
+  }, [error]);
 
-console.dir(error)}
-}, [error])
+  const products = data?.pages.flatMap((page) => page.list) ?? [];
 
-const products = data?.pages.flatMap((page) => page.list) ?? [];
-
-
-  console.dir(products);
   if (isLoading || !themeData) return <div>로딩중...</div>;
 
   return (

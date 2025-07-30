@@ -1,6 +1,6 @@
-import Navbar from "@/components/navbar/Navbar";
-import styled from "@emotion/styled";
-import { PaddingSm, PaddingMd, PaddingLg } from "@/components/common/Padding";
+import Navbar from '@/components/navbar/Navbar';
+import styled from '@emotion/styled';
+import { PaddingSm, PaddingMd, PaddingLg } from '@/components/common/Padding';
 const MainSection = styled.section`
   display: flex;
   flex-direction: column;

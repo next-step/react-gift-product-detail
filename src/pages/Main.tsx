@@ -5,7 +5,6 @@ import FriendsBox from '@/components/friendsbox/FriendsBox';
 import Navbar from '@/components/navbar/Navbar';
 import Ranking from '@/components/ranking/ranking/Ranking';
 
-
 const Main = () => {
   return (
     <>

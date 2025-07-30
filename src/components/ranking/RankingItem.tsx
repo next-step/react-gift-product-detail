@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { PaddingSm } from "../common/Padding";
+import styled from '@emotion/styled';
+import { PaddingSm } from '../common/Padding';
 const RankingItemWrap = styled.div`
   cursor: pointer;
 `;
@@ -39,14 +39,7 @@ interface RankingItemProps {
     imageURL: string;
   };
 }
-const RankingItem = ({
-  id,
-  name,
-  imageURL,
-  price,
-  brandInfo,
-  onClick,
-}: RankingItemProps) => {
+const RankingItem = ({ id, name, imageURL, price, brandInfo, onClick }: RankingItemProps) => {
   return (
     <RankingItemWrap onClick={onClick} key={id}>
       <Image src={imageURL} alt={name} />

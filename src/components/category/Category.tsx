@@ -14,9 +14,9 @@ import { ROUTE_PATH } from '@/routes/Router';
 import { useQuery } from '@tanstack/react-query';
 
 const Category = () => {
-  const navigete = useNavigate();
+  const navigate = useNavigate();
   const {
-    data: category=[],
+    data: category = [],
     isLoading,
     error,
   } = useQuery<CategoryType[]>({
@@ -24,13 +24,12 @@ const Category = () => {
     queryFn: fetchCategories,
   });
   const handleClickCategory = (themeId: number) => {
-    navigete(ROUTE_PATH.THEME.replace(':themeId', String(themeId)));
+    navigate(ROUTE_PATH.THEME.replace(':themeId', String(themeId)));
   };
 
   if (isLoading) return <div>📢 카테고리가 로딩중입니다..</div>;
   if (error) return <div>❌ 오류 발생: {String(error)}</div>;
   if (category?.length === 0) return <div>📭 선물 테마가 없습니다.</div>;
-
 
   return (
     <CategoryWrapper>
