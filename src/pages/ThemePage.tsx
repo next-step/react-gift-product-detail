@@ -8,10 +8,10 @@ import { RankingGrid } from '@/components/RankingGrid';
 import { RankingGridSkeleton } from '@/components/RankingGridSkeleton';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { getThemeInfo, getThemeProducts } from '@/api/services';
+import { getThemeProducts } from '@/api/services';
 import type { GiftItem } from '@/types';
 import { css } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
+import { useThemeInfoQuery } from '@/hooks/queries/useThemeInfoQuery';
 
 const centeredMessage = css`
   text-align: center;
@@ -23,11 +23,7 @@ const ThemePage = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
 
-  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useQuery({
-    queryKey: ['themeInfo', themeId], 
-    queryFn: () => getThemeInfo(themeId!), 
-    enabled: !!themeId, 
-  });
+  const { data: themeInfo, error: themeInfoError, isLoading: isThemeInfoLoading } = useThemeInfoQuery(themeId);
 
   const {
     data: productsData,
@@ -59,7 +55,7 @@ const ThemePage = () => {
   }, [themeInfoError, navigate]);
 
   const handleCardClick = (item: GiftItem) => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
 
   if (isThemeInfoLoading) {

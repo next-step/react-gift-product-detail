@@ -1,5 +1,6 @@
 import { client } from './client';
 import type { GenderFilter, SortFilter } from '@/components/RankingTabs';
+import type { Product, ProductDetail, ProductWish, ProductReview } from '@/types';
 
 export const getThemes = async () => {
   const response = await client.get('/api/themes');
@@ -22,9 +23,29 @@ export const getRanking = async (targetType: GenderFilter, rankType: SortFilter)
   return response.data.data;
 };
 
-export const getProductDetail = async (productId: string) => {
+export const getProduct = async (productId: string): Promise<Product> => {
   const response = await client.get(`/api/products/${productId}`);
   return response.data.data;
+};
+
+export const getProductDetailInfo = async (productId: string): Promise<ProductDetail> => {
+  const response = await client.get(`/api/products/${productId}/detail`);
+  return response.data.data;
+};
+
+export const getProductReviews = async (productId: string): Promise<{ totalCount: number, reviews: ProductReview[] }> => {
+  const response = await client.get(`/api/products/${productId}/highlight-review`);
+  return response.data.data;
+};
+
+export const getProductWish = async (productId: string): Promise<ProductWish> => {
+  const response = await client.get(`/api/products/${productId}/wish`);
+  return response.data.data; 
+};
+
+export const toggleProductWish = async (productId: string): Promise<{ success: boolean }> => {
+  const response = await client.post(`/api/products/${productId}/wish`);
+  return response.data;
 };
 
 export const getProductSummary = async (productId: string) => {
