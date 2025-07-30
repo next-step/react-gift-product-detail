@@ -4,22 +4,15 @@ import { toast } from 'react-toastify';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { useForm } from 'react-hook-form';
 import type { OrderInfoValues } from '@/types';
-import useRanking from './useRanking';
+import useProductSummary from './useProductSummary';
 import { useMutation } from '@tanstack/react-query';
 import { requests } from '@/api/requests';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 const useOrderForm = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { productSummaryData, isError } = useRanking(id as string);
-
-  useEffect(() => {
-    if (isError) {
-      navigate(ROUTE_PATH.HOME);
-    }
-  }, [isError, navigate]);
+  const productSummaryData = useProductSummary(id as string);
 
   const { userInfo } = useUserInfo();
   const orderForm = useForm<OrderInfoValues>({
@@ -30,7 +23,7 @@ const useOrderForm = () => {
 
   const { mutate: order } = useMutation({
     mutationFn: requests.fetchOrder,
-    onSuccess: data => {
+    onSuccess: () => {
       alert(`
       주문이 완료되었습니다.
       상품명: ${productSummaryData?.name}
@@ -39,12 +32,9 @@ const useOrderForm = () => {
       메시지: ${orderData.message}`);
       navigate(ROUTE_PATH.HOME);
     },
-    onError: (error: Error) => {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.data?.data?.statusCode;
-        if (status === 401) {
-          navigate(ROUTE_PATH.LOGIN);
-        }
+    onError: error => {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        navigate(ROUTE_PATH.LOGIN);
       }
     },
   });

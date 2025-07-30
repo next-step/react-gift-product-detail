@@ -4,6 +4,7 @@ import axios from 'axios';
 import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 const useThemeInfo = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,14 +16,11 @@ const useThemeInfo = () => {
     queryFn: () => requests.fetchThemeIdInfo(index),
   });
 
-  if (error) {
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      if (status === 404) {
-        navigate(ROUTE_PATH.HOME);
-      }
+  useEffect(() => {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      navigate(ROUTE_PATH.HOME);
     }
-  }
+  }, [error, navigate]);
 
   return { themeIdInfo: data, isError, error };
 };

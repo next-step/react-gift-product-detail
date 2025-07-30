@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { requests } from '@/api/requests';
 import useIntersectionObserver from './useIntersectionObserver';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const useThemeItems = () => {
   const { id } = useParams<{ id: string }>();
