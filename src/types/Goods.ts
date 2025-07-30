@@ -18,9 +18,11 @@ export interface Goods {
 }
 
 export interface GoodSummary {
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-  imageURL: string;
+  data: {
+    id: number;
+    name: string;
+    brandName: string;
+    price: number;
+    imageURL: string;
+  };
 }

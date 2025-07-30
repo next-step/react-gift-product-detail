@@ -8,6 +8,5 @@ export const useGetOrderForm = (productId: string | undefined) => {
     queryKey: ['productSummary', { productId }],
     queryFn: () => getFetch<GoodSummary>(`${BASIC_ENDPOINT.product}/${productId}/summary`, {}),
   });
-
   return { data, isError, isLoading };
 };
