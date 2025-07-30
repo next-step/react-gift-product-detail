@@ -29,12 +29,12 @@ const ProductGrid = () => {
 
   console.log(rankType, targetType)
 
-  const handleGoOrder = useCallback(
+  const handleGoProduct = useCallback(
     (id: number) => {
       if (!isLoggedIn) {
         navigate(ROUTES.LOGIN)
       } else {
-        navigate(getRoute(ROUTES.ORDER, { id }))
+        navigate(getRoute(ROUTES.PRODUCT, { id }))
       }
     },
     [isLoggedIn, navigate]
@@ -69,7 +69,7 @@ const ProductGrid = () => {
           <Card
             key={item.id}
             borderRadius="spacing02"
-            onClick={() => handleGoOrder(item.id)}
+            onClick={() => handleGoProduct(item.id)}
           >
             <IndexBadge backGroundColor={idx < 3 ? "critical" : "gray400"}>
               {idx + 1}

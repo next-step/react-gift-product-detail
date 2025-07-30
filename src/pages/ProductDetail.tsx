@@ -13,6 +13,10 @@ import Layout from "@/components/Layout"
 import Blank from "@/components/Blank"
 import theme from "@/styles/theme"
 import Row from "@/components/Row"
+import { useAuth } from "@/context/AuthContext"
+import MoreButton from "@/components/MoreButton"
+import { useCallback } from "react"
+import getRoute from "@/functions/getRoute"
 
 const BrandRow = styled.div`
   display: flex;
@@ -103,6 +107,7 @@ const ProductDetailButton = () => {
   )
 }
 const ProductDetail = () => {
+  const { isLoggedIn } = useAuth()
   const { productId } = useParams<{ productId: string }>()
   if (!productId) return <ThemeNotFound />
   const { product, loading, error } = useProduct(productId)
@@ -115,7 +120,16 @@ const ProductDetail = () => {
       }
     }
   }, [error, navigate])
-
+  const handleGoOrder = useCallback(
+    (id: number) => {
+      if (!isLoggedIn) {
+        navigate(ROUTES.LOGIN)
+      } else {
+        navigate(getRoute(ROUTES.ORDER, { id }))
+      }
+    },
+    [isLoggedIn, navigate]
+  )
   if (loading) return <Loading />
   if (error) return <ThemeNotFound />
   if (!product) return null
@@ -130,6 +144,13 @@ const ProductDetail = () => {
       <ProductBrandInfo {...product} />
       <Blank height="8px" backGroundColor={theme.colors.gray300}></Blank>
       <ProductDetailButton />
+      <MoreButton
+        background="kakaoYellow"
+        borderRadius="spacing0"
+        onClick={() => handleGoOrder(Number(productId))}
+      >
+        주문하기
+      </MoreButton>
     </>
   )
 }
