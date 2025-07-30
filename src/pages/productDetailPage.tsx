@@ -4,13 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from '@emotion/styled';
 
-type Props = { productId: string };
+type Announcement = { name: string; value: string; displayOrder: number };
 type Detail = {
   description: string;
-  announcement: { name: string; value: string; displayOrder: number }[];
+  announcement?: Announcement[];
+  announcements?: Announcement[];
 };
 type Review = { id: string; authorName: string; content: string };
 type WishData = { wishCount: number; isWished: boolean };
+
+type Props = { productId: string };
 
 export default function ProductDetailPage({ productId }: Props) {
   const navigate = useNavigate();
@@ -31,9 +34,13 @@ export default function ProductDetailPage({ productId }: Props) {
     return <Loading>로딩 중…</Loading>;
   }
 
+  // announcement 또는 announcements 중 하나를 쓰되, 타입을 명확히 지정
+  const announcements: Announcement[] =
+    detail.announcement ?? detail.announcements ?? [];
+
   return (
     <Container>
-      {/* Header: 이미지, 이름, 가격 */}
+      {/* Header */}
       <Header>
         <ProductImage src={info.imageURL} alt={info.name} />
         <Title>{info.name}</Title>
@@ -42,17 +49,15 @@ export default function ProductDetailPage({ productId }: Props) {
 
       {/* Tabs */}
       <TabWrapper>
-        <TabButton type="button" active={tab === 'desc'} onClick={() => setTab('desc')}>상품설명</TabButton>
-        <TabButton type="button" active={tab === 'rev'} onClick={() => setTab('rev')}>선물후기</TabButton>
-        <TabButton type="button" active={tab === 'info'} onClick={() => setTab('info')}>상세정보</TabButton>
+        <TabButton active={tab === 'desc'} onClick={() => setTab('desc')}>상품설명</TabButton>
+        <TabButton active={tab === 'rev'} onClick={() => setTab('rev')}>선물후기</TabButton>
+        <TabButton active={tab === 'info'} onClick={() => setTab('info')}>상세정보</TabButton>
       </TabWrapper>
 
       {/* Content */}
       <Content>
         {tab === 'desc' && (
-          <DescriptionContainer
-            dangerouslySetInnerHTML={{ __html: detail.description }}
-          />
+          <DescriptionContainer dangerouslySetInnerHTML={{ __html: detail.description }} />
         )}
         {tab === 'rev' && (
           reviews.map(r => (
@@ -63,25 +68,21 @@ export default function ProductDetailPage({ productId }: Props) {
         )}
         {tab === 'info' && (
           <InfoList>
-            {detail.announcement && detail.announcement.length > 0 ? (
-              [...detail.announcement]
-                .sort((a, b) => a.displayOrder - b.displayOrder)
-                .map(item => (
-                  <InfoItem key={item.displayOrder}>
-                    <InfoName>{item.name}</InfoName>
-                    <InfoValue>{item.value}</InfoValue>
-                  </InfoItem>
-                ))
-            ) : (
-              <EmptyInfo>등록된 상세 정보가 없습니다.</EmptyInfo>
-            )}
+            {announcements
+              .sort((a, b) => a.displayOrder - b.displayOrder)
+              .map(item => (
+                <InfoItem key={item.displayOrder}>
+                  <InfoName>{item.name}</InfoName>
+                  <InfoValue>{item.value}</InfoValue>
+                </InfoItem>
+              ))}
           </InfoList>
         )}
       </Content>
 
-      {/* Footer: 찜, 주문 */}
+      {/* Footer */}
       <Footer>
-        <WishButton onClick={() => {/* 낙관적 업데이트 로직 */}}>
+        <WishButton onClick={() => {/* 낙관적 업데이트 */}}>
           {wishData.isWished ? '❤️' : '🤍'} {wishData.wishCount}
         </WishButton>
         <OrderButton onClick={() => navigate(`/order/${productId}`)}>
@@ -137,6 +138,7 @@ const TabButton = styled.button<{ active: boolean }>`
   font-weight: ${p => p.active ? 'bold' : 'normal'};
   border-bottom: ${p => p.active ? '2px solid #000' : '2px solid transparent'};
   cursor: pointer;
+  &:focus { outline: none; }
 `;
 
 const Content = styled.div`
@@ -163,15 +165,10 @@ const InfoItem = styled.li`
 
 const InfoName = styled.div`
   font-weight: bold;
-  margin-bottom: 0.25rem;
 `;
 
 const InfoValue = styled.div`
   color: #555;
-`;
-
-const EmptyInfo = styled.div`
-  color: #999;
 `;
 
 const Footer = styled.div`
