@@ -4,7 +4,7 @@ import {
   StyledPresentThemeItemDiv,
   StyledPresentThemeItemP,
 } from '@src/components/Home/PresentTheme/Item/StyledPresnetThemeItem';
-import { StyledPresentThemeCommonP } from '@src/components/Home/PresentTheme/StyledPresentThemeCommonP';
+import { StyledPresentThemeCommonP } from '@src/components/Home/PresentTheme/Common/StyledPresentThemeCommonP';
 import type { Theme } from './ThemeType';
 import { usePresentThemeFetch } from '@src/components/Home/PresentTheme/usePresentThemeFetch';
 

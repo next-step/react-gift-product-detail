@@ -1,8 +1,7 @@
-import axios from 'axios';
-axios.defaults.baseURL = 'https://api.example.com';
+import { instance } from './baseUrl';
 
-export const getBasicFetch = async (): Promise<T> => {
-  const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme);
+export const getBasicFetch = async <T>(endpoint: string): Promise<T> => {
+  const res = await instance.get(endpoint);
   const data = res.data;
   return data;
 };
