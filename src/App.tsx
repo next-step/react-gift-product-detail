@@ -1,6 +1,6 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ThemeProductsPage from '@/pages/ThemeProductsPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ThemeProductsPage from '@/pages/ThemeProductsPage'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './styles/theme'
 import { BaseLayout } from './components/Layout/BaseLayout'
@@ -12,11 +12,10 @@ import MyPage from '@/pages/MyPage/MyPage'
 import NotFound from '@/pages/NotFound/Page'
 import { RequireAuth } from '@/components/RequireAuth'
 
-// React Toastify 스타일 & 컨테이너
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <BaseLayout header={<Navigation />}>
