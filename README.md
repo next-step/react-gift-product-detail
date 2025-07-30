@@ -12,8 +12,8 @@
 
 ### 1단계 :
 
-- [ ] 환경 설정
-  - [ ] react-query 설치
+- [x] 환경 설정
+  - [x] react-query 설치
 - [ ] useQuery를 사용한 데이터 조회 로직 리팩토링
   - [ ] 상품 랭킹 조회 (`hooks/useProducts.ts`)
   - [ ] 테마 정보 조회 (`services/theme.ts`의 `getThemeInfo`)
