@@ -43,6 +43,7 @@ export default function OrderPage() {
   const { mutate: createOrder } = useCreateOrder()
 
   // 5) Form setup
+
   const {
     control,
     register,
@@ -62,6 +63,7 @@ export default function OrderPage() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<number>(initialTemplateId)
   const selectedTemplate = templates.find(t => t.id === selectedTemplateId) || templates[0]
   const [messageText, setMessageText] = useState<string>(selectedTemplate.defaultTextMessage)
+
 
   useEffect(() => {
     setMessageText(selectedTemplate.defaultTextMessage)
@@ -100,11 +102,13 @@ export default function OrderPage() {
   // 9) Format price safely
   const price = productSummary.price?.sellingPrice ?? 0
 
+
   return (
     <div style={{ padding: 20 }}>
       {/* 템플릿 리스트 */}
       <div style={{ display: 'flex', overflowX: 'auto', gap: 8, padding: '8px 0' }}>
         {templates.map(t => (
+
           <img
             key={t.id}
             src={t.thumbUrl}
@@ -134,6 +138,7 @@ export default function OrderPage() {
         onChange={e => setMessageText(e.target.value)}
         rows={3}
         style={{ width: '100%', padding: 8, border: '1px solid #ccc', borderRadius: 4 }}
+
       />
 
       {/* 주문 폼 */}
@@ -147,6 +152,7 @@ export default function OrderPage() {
             className="w-full p-2 border rounded"
           />
           {errors.sender && <p className="text-red-500 text-sm">{errors.sender.message}</p>}
+
         </div>
 
         {/* 받는 사람 리스트 */}
@@ -174,6 +180,7 @@ export default function OrderPage() {
         {fields.map((field, idx) => (
           <div key={field.id} style={{ marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
               <h3>받는 사람 {idx + 1}</h3>
               <button type="button" onClick={() => remove(idx)} className="text-red-500">
                 ✕
@@ -189,6 +196,7 @@ export default function OrderPage() {
               />
               {errors.receivers?.[idx]?.name && (
                 <p className="text-red-500 text-sm mt-1">{errors.receivers[idx]?.name?.message}</p>
+
               )}
             </div>
 
@@ -200,11 +208,13 @@ export default function OrderPage() {
                   required: '전화번호를 입력하세요.',
                   pattern: { value: /^010\d{8}$/, message: '01012345678 형식이어야 해요.' },
                   validate: val => receivers.filter(r => r.phone === val).length === 1 || '중복된 전화번호가 있습니다.'
+
                 })}
                 className="w-full p-2 border rounded"
               />
               {errors.receivers?.[idx]?.phone && (
                 <p className="text-red-500 text-sm mt-1">{errors.receivers[idx]?.phone?.message}</p>
+
               )}
             </div>
 
@@ -214,11 +224,13 @@ export default function OrderPage() {
               <input
                 type="number"
                 {...register(`receivers.${idx}.quantity`, { min: { value: 1, message: '1개 이상 입력하세요.' } })}
+
                 className="w-full p-2 border rounded"
                 min={1}
               />
               {errors.receivers?.[idx]?.quantity && (
                 <p className="text-red-500 text-sm mt-1">{errors.receivers[idx]?.quantity?.message}</p>
+
               )}
             </div>
           </div>

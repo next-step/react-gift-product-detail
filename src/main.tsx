@@ -5,7 +5,6 @@ import App from '@/App'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './styles/theme'
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
