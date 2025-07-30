@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/authContext";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import { useMutation } from "@tanstack/react-query";
 import postLogin from "@/apis/login/postLogin";
+import InputField from "./components/InputField";
 
 interface LoginData {
   email: string;
@@ -41,30 +42,24 @@ const LoginPage = () => {
       <Content>
         <Logo>kakao</Logo>
         <Form onSubmit={handleLoginSubmit}>
-          <InputWrapper>
-            <Input
-              name="id"
-              type="email"
-              placeholder="이메일"
-              onChange={onChange}
-              onBlur={onBlur}
-              errorMsg={errorMsg.id}
-              value={user.id}
-            />
-            {errorMsg.id && <ErrorMsg>{errorMsg.id}</ErrorMsg>}
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              name="password"
-              type="password"
-              placeholder="비밀번호"
-              onChange={onChange}
-              onBlur={onBlur}
-              errorMsg={errorMsg.password}
-              value={user.password}
-            />
-            {errorMsg.password && <ErrorMsg>{errorMsg.password}</ErrorMsg>}
-          </InputWrapper>
+          <InputField
+            name="id"
+            type="email"
+            placeholder="이메일"
+            onChange={onChange}
+            onBlur={onBlur}
+            errorMsg={errorMsg.id}
+            value={user.id}
+          />
+          <InputField
+            name="password"
+            type="password"
+            placeholder="비밀번호"
+            onChange={onChange}
+            onBlur={onBlur}
+            errorMsg={errorMsg.password}
+            value={user.password}
+          />
           <Divider />
           <Button fullWidth round type="submit" disabled={!isValidIdAndPassword}>
             로그인
@@ -99,43 +94,6 @@ const Form = styled.form`
   align-items: center;
   padding: ${({ theme }) => theme.spacing.spacing4};
   gap: ${({ theme }) => theme.spacing.spacing3};
-`;
-const InputWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.spacing1};
-`;
-
-type InputType = {
-  errorMsg: string | null;
-};
-const Input = styled.input<InputType>`
-  width: 100%;
-  min-height: 2.75rem;
-  border: none;
-  ${({ errorMsg, theme }) => {
-    if (errorMsg === null) {
-      return `border-bottom: 1px solid ${theme.color.borderColor.disabled};`;
-    } else {
-      return `border-bottom: 1px solid ${theme.color.stateColor.critical};`;
-    }
-  }}
-
-  font: ${({ theme }) => theme.typography.subtitle1Regular};
-  outline: none;
-  &:focus {
-    border-bottom: 1px solid ${({ theme }) => theme.color.gray600};
-  }
-`;
-const ErrorMsg = styled.p`
-  width: 100%;
-  text-align: left;
-  font: ${({ theme }) => theme.typography.label2Regular};
-  color: ${({ theme }) => theme.color.stateColor.critical};
-  min-height: 1rem;
 `;
 
 export default LoginPage;
