@@ -4,10 +4,23 @@ import { CentorAlignDiv240,} from '@/styles/CommomStyle/Common.styled';
 import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
 import Loading from '../Loading';
 import useProductList from '@/hook/useProductList';
+import type { ProductItem } from '@/type/GiftAPI/product';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const ProductList = () => {
-   const {data, isLoading, error, productList,extraLoading,handleClickProduct,setLoaderRef} = useProductList();
+  const {isLoading, error, productList,extraLoading,setLoaderRef} = useProductList();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+   const handleClickProduct = (product: ProductItem) => {
+    if (!user) {
+      navigate(`/login?redirect=/order?id=${product.id}`);
+    } else {
+      navigate(`/order?id=${product.id}`);
+    }
+  };
 
   if (error) return null
 
@@ -15,7 +28,7 @@ const ProductList = () => {
     <Loading/>
   );
   
-  if (!isLoading && productList.length === 0 && data?.list?.length === 0) return (
+  if (!isLoading && productList.length === 0) return (
     <CentorAlignDiv240>
       <p>상품이 없습니다</p>
     </CentorAlignDiv240>

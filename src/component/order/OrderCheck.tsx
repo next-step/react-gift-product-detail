@@ -1,4 +1,5 @@
 import useOrderCompleteMessage from '@/hook/useOrderCompleteMessage';
+import useProductSummary from '@/hook/useProductSummary';
 import {
   DefaultComponentDiv,
   Gap,
@@ -16,7 +17,8 @@ import {
 import { ToastContainer } from 'react-toastify';
 
 const OrderCheck = () => {
-  const { price, imageUrl, name, brandName, total, handleOrder} = useOrderCompleteMessage();
+  const {price, imageUrl, name, brandName} = useProductSummary();
+  const {total, handleOrder} = useOrderCompleteMessage();
 
   return (
     <DefaultComponentDiv>
