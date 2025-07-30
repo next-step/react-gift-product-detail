@@ -1,17 +1,9 @@
-import postRequest from '@apis/postRequest';
+import { postLogin } from '@apis/loginApi';
+import { useMutation } from '@tanstack/react-query';
+import handleAxiosError from '@utils/handleAxiosError';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface User {
-  email: string;
-  name: string;
-  authToken: string;
-}
+import type { LoginCredentials, User } from 'src/types/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -20,40 +12,40 @@ interface AuthContextType {
   isInitialized: boolean;
 }
 
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  // 유저 정보 및 초기화 종료 여부 Stae
   const [user, setUser] = useState<User | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // 세션 스토리지에 저장된 정보 불러오기
   useEffect(() => {
     const savedUser = sessionStorage.getItem('userInfo');
     if (savedUser) setUser(JSON.parse(savedUser));
     setIsInitialized(true);
   }, []);
 
+  const { mutateAsync: loginMutate } = useMutation({
+    mutationFn: postLogin,
+  });
+
   const login = async ({
     email,
     password,
   }: LoginCredentials): Promise<boolean> => {
-    //임시 검증 로직
-
-    const { data, success, error, status } = await postRequest<User>('/login', {
-      email,
-      password,
-    });
-
-    if (success && data) {
+    try {
+      const data = await loginMutate({ email, password });
       setUser(data);
       sessionStorage.setItem('userInfo', JSON.stringify(data));
       toast.success('로그인 성공');
       return true;
-    } else {
-      if (status && status >= 400 && status < 500) {
-        toast.error(error);
-      } else {
-        toast.error('서버 오류 또는 네트워크 문제 발생');
-      }
+    } catch (error) {
+      handleAxiosError(error);
       return false;
     }
   };

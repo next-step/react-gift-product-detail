@@ -7,6 +7,10 @@ type UseFetchResult<T> = {
   error: unknown; //추후 변경 예정
 };
 
+/**
+ * Tanstack-query로 리팩토링 하기 전 사용하던 GET요청 훅
+ * @deprecated
+ */
 const useFetch = <T>(
   url: string,
   body?: Record<string, unknown>

@@ -20,6 +20,7 @@ export default defineConfig({
       '@schemas': path.resolve(__dirname, 'src/schemas'),
       '@apis': path.resolve(__dirname, 'src/apis'),
       '@features': path.resolve(__dirname, 'src/features'),
+      '@queries': path.resolve(__dirname, 'src/queries'),
     },
   },
 });

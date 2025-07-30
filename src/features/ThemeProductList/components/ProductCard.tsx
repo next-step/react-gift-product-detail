@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import type { ThemeProduct } from './ProductList';
 import styled from '@emotion/styled';
+import type { ThemeProduct } from '../themeProductType';
 
 const ProductCard = (productInfo: ThemeProduct) => {
   const navigate = useNavigate();

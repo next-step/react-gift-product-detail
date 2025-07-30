@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import useFetch from '@hooks/useFetch';
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import TargetTab from './TargetTab';
@@ -15,7 +14,10 @@ import {
 } from './RankingTypes';
 import RankTab from './RankTab';
 import ProductGrid from './ProductGrid';
+import { useQuery } from '@tanstack/react-query';
+import { RankedProductsOptions } from '@queries/product';
 
+// Product 타입에 ranking을 추가해주는 함수
 const addRanking = (products: Product[]): RankedProduct[] => {
   return products.map((product, i) => ({
     ...product,
@@ -44,12 +46,17 @@ const RankingSection = () => {
     setSearchParams(newParams);
   };
 
-  const { data, loading, error } = useFetch<Product[]>(
-    `/products/ranking?targetType=${Target_MAP[selectedTarget]}&rankType=${Rank_MAP[selectedRank]}`
+  // 랭킹 상품 API 요청
+  const apiTargetType = Target_MAP[selectedTarget];
+  const apiRankType = Rank_MAP[selectedRank];
+  const { data, isError, isPending } = useQuery(
+    RankedProductsOptions(apiTargetType, apiRankType)
   );
 
+  // Product 타입에 ranking을 추가
   const products = data ? addRanking(data) : [];
 
+  // 상품 클릭시 해당 상품의 order page로 이동
   const navigate = useNavigate();
   const handleClick = (item: RankedProduct) => {
     navigate(`/order/${item.id}`);
@@ -70,8 +77,8 @@ const RankingSection = () => {
 
       <ProductGrid
         products={products}
-        loading={loading}
-        error={error}
+        isPending={isPending}
+        isError={isError}
         isExpanded={isExpanded}
         toggleExpand={() => setIsExpanded((prev) => !prev)}
         onClickItem={handleClick}

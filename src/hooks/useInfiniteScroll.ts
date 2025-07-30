@@ -1,35 +1,40 @@
 import { useEffect, useRef } from 'react';
 
+// 파라미터 타입
 interface UseInfiniteScrollParams {
-  fetchNextPage: () => Promise<void>;
-  hasMoreList: boolean;
-  isFetching: boolean;
+  onIntersect: () => void;
+  enabled: boolean;
 }
 
 const useInfiniteScroll = ({
-  fetchNextPage,
-  hasMoreList,
-  isFetching,
+  enabled,
+  onIntersect,
 }: UseInfiniteScrollParams) => {
-  //Ref
+  // 스크롤 관찰 대상 요소를 참조할 Ref
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  // IntersectionObserver 객체를 저장할 ref
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
-    if (!sentinelRef.current || !hasMoreList || isFetching) return;
+    // ref가 없거나 스크롤 비활성 상태면 바로 리턴
+    if (!sentinelRef.current || !enabled) return;
 
+    //기존 옵저버 해제하여 중복 관찰 방지
     observerRef.current?.disconnect();
 
+    //옵저버 생성
     observerRef.current = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        fetchNextPage();
+        onIntersect();
       }
     });
 
+    //관찰 시작
     observerRef.current.observe(sentinelRef.current);
 
+    //클린업
     return () => observerRef.current?.disconnect();
-  }, [fetchNextPage, hasMoreList, isFetching]);
+  }, [onIntersect, enabled]);
   return { sentinelRef };
 };
 
