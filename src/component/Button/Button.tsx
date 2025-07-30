@@ -92,7 +92,9 @@ const setButtonStyle = ({
 }
 
 const StyledButton = styled.button<ButtonProps>`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: ${theme.spacing[1]};
 
   ${({

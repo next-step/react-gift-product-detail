@@ -1,5 +1,4 @@
 import ProductCard from '@/component/ProductCard/ProductCard'
-import Loading from '@/component/Loading/Loading'
 import { useThemeProducts } from '../../hooks/useThemeProducts'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import * as S from './ThemeProducts.styles'
@@ -11,13 +10,7 @@ interface ThemeProductsProps {
 }
 
 const ThemeProducts = ({ themeId, onProductSelect }: ThemeProductsProps) => {
-  const {
-    products,
-    loading: productsLoading,
-    error: productsError,
-    fetchNextPage,
-    hasMore,
-  } = useThemeProducts(themeId)
+  const { products, fetchNextPage, hasMore } = useThemeProducts(themeId)
 
   const observerRef = useInfiniteScroll({
     onIntersect: fetchNextPage,
@@ -26,10 +19,9 @@ const ThemeProducts = ({ themeId, onProductSelect }: ThemeProductsProps) => {
     rootMargin: '100px',
   })
 
-  if (productsError) return <S.ErrorText>{productsError.message}</S.ErrorText>
-  if (productsLoading && products.length === 0) return <Loading />
-  if (!productsLoading && products.length === 0)
+  if (products.length === 0) {
     return <S.NoProduct>상품이 없습니다.</S.NoProduct>
+  }
 
   return (
     <S.Container>

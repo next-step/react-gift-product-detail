@@ -1,5 +1,5 @@
 import * as S from './ProductCard.styles'
-import type { Product } from '@/features/Gift/hooks/useProductsRanking'
+import type { Product } from '@/types/CommonTypes'
 import MyButton from '@/component/Button/Button'
 
 interface ProductCardProps {

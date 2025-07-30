@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { api } from '@/lib/axios'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { apiGet } from '@/lib/axios'
 import type { Product } from '../types/ThemeTypes'
 
 interface ThemeProductResponse {
@@ -18,15 +18,18 @@ const fetchThemeProducts = async ({
   limit?: number
 }): Promise<ThemeProductResponse | null> => {
   if (!themeId) return null
-  const res = await api.get(`/themes/${themeId}/products`, {
-    params: { cursor, limit },
-  })
-  return res.data.data as ThemeProductResponse
+  const res = await apiGet<ThemeProductResponse>(
+    `/themes/${themeId}/products`,
+    {
+      params: { cursor, limit },
+    }
+  )
+  return res
 }
 
 export const useThemeProducts = (themeId: number | null, limit = 10) => {
-  const { data, fetchNextPage, hasNextPage, isLoading, error, refetch } =
-    useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, refetch } =
+    useSuspenseInfiniteQuery({
       queryKey: ['themeProducts', themeId],
       queryFn: ({ pageParam = 0 }) =>
         fetchThemeProducts({ themeId, cursor: pageParam, limit }),
@@ -35,15 +38,12 @@ export const useThemeProducts = (themeId: number | null, limit = 10) => {
         return lastPage.hasMoreList ? lastPage.cursor : undefined
       },
       initialPageParam: 0,
-      enabled: !!themeId,
     })
 
   const products = data?.pages.flatMap((page) => page?.list ?? []) ?? []
 
   return {
     products,
-    loading: isLoading,
-    error,
     fetchNextPage,
     hasMore: !!hasNextPage,
     refetch,

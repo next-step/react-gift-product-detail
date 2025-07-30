@@ -1,20 +1,26 @@
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useUserContext } from '@/contexts/UserContext'
-import { api } from '@/lib/axios'
+import { apiPost } from '@/lib/axios'
 import type { LoginFormInputs } from '../schema/loginSchema'
 import { useMutation } from '@tanstack/react-query'
+
+interface LoginResponse {
+  email: string
+  name: string
+  authToken: string
+}
 
 export const useLoginSubmit = (redirectPath: string) => {
   const navigate = useNavigate()
   const { login } = useUserContext()
 
   const submitLogin = async (userInfo: LoginFormInputs) => {
-    const res = await api.post('/login', {
+    const res = await apiPost<LoginResponse, LoginFormInputs>('/login', {
       email: userInfo.email,
       password: userInfo.password,
     })
-    return res.data.data
+    return res
   }
 
   const mutation = useMutation({
