@@ -21,10 +21,11 @@ export function useProductDetailQuery(productId: number) {
   });
 }
 
-export function useProductReviewQuery(productId: number) {
+export function useProductReviewQuery(productId: number, options?: { enabled?: boolean }) {
   return useSuspenseQuery<ProductReviewResponse>({
     queryKey: ['productReview', productId],
     queryFn: () => getProductHighlightReview(productId),
+    ...options,
   });
 }
 

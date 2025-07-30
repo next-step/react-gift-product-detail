@@ -48,10 +48,12 @@ const tabs = ['상품설명', '선물후기', '상세정보'] as const;
 type Tab = (typeof tabs)[number];
 
 export default function ProductTabSection({ productId }: Props) {
-  const { data: detail } = useProductDetailQuery(productId);
-  const { data: review } = useProductReviewQuery(productId);
-
   const [selectedTab, setSelectedTab] = useState<Tab>('상품설명');
+
+  const { data: detail } = useProductDetailQuery(productId);
+  const { data: review } = useProductReviewQuery(productId, {
+    enabled: selectedTab === '선물후기',
+  });
 
   return (
     <>
