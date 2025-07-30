@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:3000';
 export const fetchGiftProductById = async (
   id: number
 ): Promise<GiftItem> => {
-  const res = await fetch(`${BASE_URL}/api/products/${id}/summary`);
+  const res = await fetch(`${BASE_URL}/api/products/${id}`);
   if (!res.ok) {
     const errorText = await res.text();
     const message =
@@ -26,9 +26,7 @@ export const fetchGiftProductById = async (
 export const useGiftProductById = (id: number) => {
   const navigate = useNavigate();
 
-  const query = useQuery<GiftItem, Error>(
-    giftProductQueryOptions(id)
-  );
+  const query = useQuery(giftProductQueryOptions(id));
 
   useEffect(() => {
     if (query.isError) {

@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import type { Product } from '../../types/GiftTheme';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ProductListProps {
   products: Product[];
@@ -14,10 +16,12 @@ const ProductGrid = styled.div`
 `;
 
 const ProductCard = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.borderDefault};
+  position: relative;
   border-radius: 8px;
-  padding: 12px;
-  background-color: white;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 `;
 
 const ProductImage = styled.img`
@@ -44,6 +48,19 @@ const ProductPrice = styled.div`
 `;
 
 export const ProductList = ({ products }: ProductListProps) => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleClick = (id: number) => {
+    if (isAuthenticated) {
+      navigate(`/products/${id}`);
+    } else {
+      navigate('/login', {
+        state: { redirectTo: `/products/${id}` },
+      });
+    }
+  };
+
   if (products.length === 0) {
     return <p>상품이 없습니다.</p>;
   }
@@ -51,7 +68,10 @@ export const ProductList = ({ products }: ProductListProps) => {
   return (
     <ProductGrid>
       {products.map(product => (
-        <ProductCard key={product.id}>
+        <ProductCard
+          key={product.id}
+          onClick={() => handleClick(product.id)}
+        >
           <ProductImage src={product.imageURL} alt={product.name} />
           <BrandName>{product.brandInfo.name}</BrandName>
           <ProductName>{product.name}</ProductName>
