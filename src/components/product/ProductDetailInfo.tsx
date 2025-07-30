@@ -18,7 +18,7 @@ const ProductDetailInfo = ({ productId }: ProductDetailInfoProps) => {
   return (
     <ReviewWrapper>
       {data.announcements.map((announcements) => (
-        <ReviewItem key={announcements.displayOrder}>
+        <ReviewItem key={`${productId}-${announcements.displayOrder}`}>
           <AuthorName>{announcements.name}</AuthorName>
           <Gap height={8} />
           <Content>{announcements.value}</Content>
