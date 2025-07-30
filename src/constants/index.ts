@@ -11,3 +11,4 @@ export { NON_BREAKING_SPACE } from "@/constants/non-breaking-code";
 export { TAB_DATA } from "@/constants/tabs";
 export { TAGS } from "@/constants/tags";
 export { API_ERROR_MESSAGE } from "@/constants/api-error-message";
+export * from "@/constants/product-tab";
