@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import type { GiftItemData, QueryKey } from '@/api/types/giftItem.dto';
+import type { QueryKey } from '@/api/types/giftItem.dto';
 import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
