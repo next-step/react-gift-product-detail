@@ -76,5 +76,6 @@ export const isOrderComplete = (order: Partial<OrderFormData>): boolean => {
   return hasBasicInfo && hasReceivers;
 };
 
+export type Receiver = z.infer<typeof receiverSchema>;
 export type ReceiverKeys = keyof z.infer<typeof receiverSchema>;
 export type OrderFormData = z.infer<typeof orderSchema>;

@@ -1,15 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "@/api/order/create-order";
 import { useRouter } from "@/hooks/common/useRouter";
-import { useOrderForm, useOrderCalculation } from "@/hooks/order";
-import { showToast } from "@/utils";
+import { useOrderForm } from "@/hooks/order";
+import { orderPriceCalculator, showToast } from "@/utils";
 import { API_ERROR_MESSAGE } from "@/constants";
 import { ApiError, UnauthorizedError } from "@/api/custom-error";
 
 export const useCreateOrder = (productId: number, productName?: string) => {
   const { goHomePage, goLoginPage } = useRouter();
   const { watch, reset } = useOrderForm();
-  const { totalQuantity } = useOrderCalculation();
+  const receivers = watch("receivers");
+  const { totalQuantity } = orderPriceCalculator(receivers);
 
   const orderMutation = useMutation({
     mutationFn: createOrder,

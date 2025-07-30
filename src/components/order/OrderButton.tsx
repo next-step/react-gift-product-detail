@@ -1,6 +1,8 @@
 import { Button } from "@/components/common";
-import { useOrderCalculation } from "@/hooks/order";
+import { useOrderForm } from "@/hooks/order";
+import { orderPriceCalculator } from "@/utils";
 import styled from "@emotion/styled";
+import { useMemo } from "react";
 
 interface OrderButtonProps {
   onClick: () => void;
@@ -24,7 +26,13 @@ const OrderButtonText = styled.span(({ theme }) => ({
   color: theme.color.gray[900],
 }));
 export const OrderButton = ({ onClick, productPrice }: OrderButtonProps) => {
-  const { totalPrice } = useOrderCalculation(productPrice);
+  const { watch } = useOrderForm();
+  const receivers = watch("receivers");
+
+  const { totalPrice } = useMemo(
+    () => orderPriceCalculator(receivers, productPrice),
+    [receivers, productPrice],
+  );
 
   return (
     <OrderButtonContainer>
