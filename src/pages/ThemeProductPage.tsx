@@ -6,18 +6,31 @@ import {
   ThemeProductHero,
   ThemeProductPageLayout,
 } from "@/components/themes";
+import { queryKeys } from "@/lib/query-keys";
+import { queryClient } from "@/query-client";
 import { Suspense } from "react";
 import { useParams } from "react-router-dom";
 
 export const ThemeProductPage = () => {
   const { id: themeId } = useParams<{ id: string }>();
+  const handleRetry = () => {
+    const themeIdNum = Number(themeId);
+
+    queryClient.refetchQueries({
+      queryKey: queryKeys.themes.detail(themeIdNum),
+    });
+    queryClient.refetchQueries({
+      queryKey: queryKeys.themes.productList(themeIdNum, 10),
+    });
+  };
+
   return (
     <ThemeProductPageLayout>
       <ErrorBoundary
         fallback={reset => (
           <MainPageErrorFallback
             onRetry={() => {
-              console.log("다시시도");
+              handleRetry();
               reset();
             }}
             title="테마 정보를 불러올 수 없습니다."
