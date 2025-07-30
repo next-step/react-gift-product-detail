@@ -1,6 +1,8 @@
 export class HTTPException extends Error {
+    public readonly code: number;
     constructor(code: number) {
         super(code.toString());
+        this.code = code;
         this.name = "HTTPException";
         Object.setPrototypeOf(this, new.target.prototype);
     }
