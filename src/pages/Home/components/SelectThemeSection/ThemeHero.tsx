@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch';
 import type { UseFetchResult } from '@/hooks/useFetch';
 
-interface ThemeInfo {
+export interface ThemeInfo {
   themeId: number;
   name: string;
   title: string;
