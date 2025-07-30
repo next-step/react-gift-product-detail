@@ -12,15 +12,19 @@ import {
 } from "@/components/order";
 import { OrderProvider } from "@/contexts/order/OrderProvider";
 import { OverlayProvider } from "@/contexts/overlay/OverlayProvider";
+import { useRouter } from "@/hooks/common/useRouter";
 import { useOrderPageLogic } from "@/hooks/order/useOrderPageLogic";
 import { useProductSummary } from "@/hooks/products";
+import { queryKeys } from "@/lib/query-keys";
+import { queryClient } from "@/query-client";
 import { Suspense } from "react";
+import { useParams } from "react-router-dom";
 
 const OrderPageContent = () => {
-  const { product, productId, isLoading: ProductLoading } = useProductSummary();
+  const { product, productId } = useProductSummary();
   const { handleOrderSubmit, OrderLoading } = useOrderPageLogic();
 
-  if (ProductLoading || OrderLoading) {
+  if (OrderLoading) {
     return <LoadingSpinner />;
   }
 
@@ -46,18 +50,29 @@ const OrderPageContent = () => {
 };
 
 export const OrderPage = () => {
+  const { goHomePage, goLoginPage } = useRouter();
+  const { id } = useParams<{ id: string }>();
+  const handleProductSummaryRetry = () => {
+    if (id) {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.products.summary(Number(id)),
+      });
+    }
+  };
   return (
     <OrderProvider>
       <ErrorBoundary
         fallback={reset => (
           <MainPageErrorFallback
             onRetry={() => {
-              console.log("다시시도");
+              handleProductSummaryRetry();
               reset();
             }}
-            title="주문 정보를 불러올 수 없습니다."
+            title="상품 정보를 불러올 수 없습니다."
           />
         )}
+        onUnauthorized={() => goLoginPage({ redirect: true })}
+        onClientError={() => goHomePage()}
       >
         <Suspense fallback={<LoadingSpinner />}>
           <OrderPageContent />
