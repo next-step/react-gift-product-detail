@@ -7,6 +7,7 @@
 - ReceiverInfoSection.tsx는 모달을 여는 함수를 실행해 isModalOpen을 true로 변경하고, onSubmit, onClose 보고를 받으면 함수를 실행해 데이터를 업데이트하거나 모달을 닫습니다.
 - ProductDetailTabs에서는 onTabClick이라는 prop을 받고, 어떤 탭이 클릭되었는지에 대한 정보만 담아서 onTabClick을 호출합니다.
 - ProductDetailPage에서는 onTabClick 이벤트를 받아서, activeTab 상태를 변경하는 로직을 수행합니다.
+- useThemeinfiniteScroll.ts에서 useInitialThemeQuery, useThemeData, useNextThemeQuery, useInterSectionObserver 훅으로 추상화 시켜 각각 최초 데이터 펫칭, 데이터 기록, 새로운 데이터 펫칭, 페이지 감시의 역할을 수행할 수 있게 한 뒤 useThemeinfiniteScroll.ts에서 조합하여 사용할 수 있도록 리팩터링했습니다. 이제 더이상 useSuspenseApiQuery, useApiQuery처럼 1차 추상화된 훅을 직접적으로 사용하지 않습니다.
 
 ## step2 구현 내용
 
