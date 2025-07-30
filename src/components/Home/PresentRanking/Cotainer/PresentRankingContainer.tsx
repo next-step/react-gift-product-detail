@@ -1,6 +1,6 @@
 import PresentRankingItem from '@src/components/Home/PresentRanking/Item/PresentRankingItem';
 import RankingTagContainer from '@src/components/Home/PresentRanking/Cotainer/RankingTagContainer';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import {
   StyledPresenetRankingAddItemBtn,
   StyledPresenetRankingAddItemBtnDiv,
@@ -8,17 +8,10 @@ import {
   StyledPresentRankingContainerTitle,
   StyledPrsentRankingDiv,
 } from '@src/components/Home/PresentRanking/Cotainer/StyledPresentRankingContainer';
-import { useLocation } from 'react-router-dom';
-import { PARAMS } from '@src/assets/params';
-import { useRankingItem } from '@src/components/Home/PresentRanking/Cotainer/useRankingItem';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const rankType = params.get(PARAMS.rankType);
-  const targetType = params.get(PARAMS.targetType);
-  const { data, isLoading, isError } = useRankingItem({ targetType, rankType });
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -33,13 +26,11 @@ const PresentRankingContainer = () => {
         <RankingTagContainer></RankingTagContainer>
       </div>
       <StyledPrsentRankingDiv>
-        <PresentRankingItem
-          goods={data}
-          isLoading={isLoading}
-          isError={isError}
-          isVisible={isVisible}
-          showRankingNumber={true}
-        ></PresentRankingItem>
+        <ErrorBoundary fallback={<div>에러 발생!</div>}>
+          <Suspense fallback={<div>Loading...</div>}>
+            <PresentRankingItem isVisible={isVisible} showRankingNumber={true}></PresentRankingItem>
+          </Suspense>
+        </ErrorBoundary>
       </StyledPrsentRankingDiv>
       <StyledPresenetRankingAddItemBtnDiv>
         <StyledPresenetRankingAddItemBtn onClick={handelToogle}>

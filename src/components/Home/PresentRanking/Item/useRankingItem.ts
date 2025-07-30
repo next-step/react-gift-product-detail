@@ -10,7 +10,7 @@ export const useRankingItem = ({
   targetType: string | null;
   rankType: string | null;
 }) => {
-  const { data, isError, isLoading } = useSuspenseQuery<Goods>({
+  const { data, isError } = useSuspenseQuery<Goods>({
     queryKey: ['ranking', { targetType, rankType }],
     queryFn: () =>
       getBasicFetch<Goods>(BASIC_ENDPOINT.ranking, {
@@ -18,5 +18,5 @@ export const useRankingItem = ({
         rankType,
       }),
   });
-  return { data, isError, isLoading };
+  return { data, isError };
 };
