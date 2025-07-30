@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import type { CategoryCardData } from '@/api/types/giftItem.dto';
 import { CategoryCard } from '@/components/gift_list_page/Category/CategoryCard';
 import { keyframes } from '@emotion/react';
 import { useQuery } from '@tanstack/react-query';
@@ -63,7 +62,7 @@ const Spinner = styled.div`
 `;
 
 export const Category = () => {
-  const { data, isLoading, isError } = useQuery<CategoryCardData[]>({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   });

@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getThemeInfo } from '@/api/services/giftItem.service';
-import type { QueryKey, ThemeInfo } from '@/api/types/giftItem.dto';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
@@ -46,7 +45,7 @@ export const Banner = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isError } = useQuery<ThemeInfo, Error, ThemeInfo, QueryKey>({
+  const { data, isError } = useQuery({
     queryKey: ['ThemeInfo', { id: parsedId }],
     queryFn: getThemeInfo,
   });

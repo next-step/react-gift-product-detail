@@ -2,7 +2,6 @@ import useProductInfo from '@/hooks/useProductInfo';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { GiftItemData, QueryKey } from '@/api/types/giftItem.dto';
 import { useQuery } from '@tanstack/react-query';
 import { getGiftItemDetail } from '@/api/services/giftItem.service';
 
@@ -84,7 +83,7 @@ export const ProductInfo = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isLoading } = useQuery<GiftItemData, Error, GiftItemData, QueryKey>({
+  const { data, isLoading } = useQuery({
     queryKey: ['giftItemDetail', { id: parsedId }],
     queryFn: getGiftItemDetail,
   });

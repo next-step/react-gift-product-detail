@@ -51,22 +51,12 @@ const ErrorText = styled.div`
   font-weight: 500;
 `;
 
-type Params = {
-  targetType: string;
-  rankType: string;
-};
-
 export const GiftList = () => {
   const [giftItems, setGiftItems] = useState<GiftItemData[]>([]);
   const [isViewMore, setIsViewMore] = useState(false);
   const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
-  const { data, isLoading, isError } = useQuery<
-    GiftItemData[],
-    Error,
-    GiftItemData[],
-    [string, Params]
-  >({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['giftItems', { targetType, rankType }],
     queryFn: getGiftItems,
   });
