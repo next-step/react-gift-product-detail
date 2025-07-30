@@ -6,20 +6,24 @@ import styled from '@emotion/styled';
 import AppRouter from './routes/Routers';
 import { UserInfoProvider } from './contexts/UserInfoContext';
 import { ToastContainer } from 'react-toastify';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
+  const queryClient = new QueryClient();
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <UserInfoProvider>
-        <AppContainer>
-          <Navigation />
-          <AppRouter />
-          <div id="receiverModal" />
-          <ToastContainer />
-        </AppContainer>
-      </UserInfoProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <UserInfoProvider>
+          <AppContainer>
+            <Navigation />
+            <AppRouter />
+            <div id="receiverModal" />
+            <ToastContainer />
+          </AppContainer>
+        </UserInfoProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

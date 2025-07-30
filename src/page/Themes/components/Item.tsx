@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { generatePath, Link } from 'react-router-dom';
-import type { ItemData } from '..';
+import type { ItemData } from '@/types';
 import { ROUTE_PATH } from '@/routes/routePath';
 
 const ItemBox = ({ item }: { item: ItemData }) => {

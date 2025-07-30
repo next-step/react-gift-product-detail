@@ -3,40 +3,6 @@ import CardSection from './components/CardSection';
 import GridSection from './components/GridSection';
 import useThemeInfo from './hooks/useThemeInfo';
 
-interface BrandInfo {
-  id: number;
-  name: string;
-  imageURL: string;
-}
-
-interface Price {
-  basicPrice: number;
-  sellingPrice: number;
-  discountRate: number;
-}
-
-export interface ItemData {
-  id: number;
-  name: string;
-  price: Price;
-  imageURL: string;
-  brandInfo: BrandInfo;
-}
-
-export interface ThemeIdItemsData {
-  list: ItemData[];
-  cursor: number;
-  hasMoreList: boolean;
-}
-
-export interface ThemeIdInfoData {
-  themeId: number;
-  name: string;
-  title: string;
-  description: string;
-  backgroundColor: string;
-}
-
 const ThemesPage = () => {
   const { themeIdInfo } = useThemeInfo();
 

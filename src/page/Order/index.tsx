@@ -8,12 +8,6 @@ import toLocaleString from '@/utils/toLocaleString';
 import ProductInfo from './components/ProductInfo';
 import useOrderForm from './hooks/useOrderForm';
 
-export interface OrderInfoValues {
-  message: string;
-  name: string;
-  receiverInfos: { name: string; phoneNumber: string; quantity: number }[];
-}
-
 const OrderPage = () => {
   const { orderForm, onSubmit, price, productSummaryData } = useOrderForm();
 

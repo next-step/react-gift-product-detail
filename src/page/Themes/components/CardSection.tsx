@@ -1,5 +1,5 @@
+import type { ThemeIdInfoData } from '@/types';
 import styled from '@emotion/styled';
-import type { ThemeIdInfoData } from '..';
 
 interface CardSectionProps {
   themeIdInfo?: ThemeIdInfoData;

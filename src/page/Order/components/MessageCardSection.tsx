@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { messageCardDatas, type MessageCard } from '@/data/messageCardDatas';
 import { useState } from 'react';
-import type { OrderInfoValues } from '..';
 import { useFormContext } from 'react-hook-form';
+import type { OrderInfoValues } from '@/types';
 
 const MessageCardSection = () => {
   const { setValue } = useFormContext<OrderInfoValues>();

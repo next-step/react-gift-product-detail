@@ -3,7 +3,7 @@ import ReceiverModal from './ReceiverModal';
 import { useFormContext } from 'react-hook-form';
 import { useState } from 'react';
 import ReceiverInfoArray from './ReceiverInfoArray';
-import type { OrderInfoValues } from '..';
+import type { OrderInfoValues } from '@/types';
 
 const ReceiverField = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

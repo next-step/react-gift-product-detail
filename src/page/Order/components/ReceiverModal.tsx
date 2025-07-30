@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import type { OrderInfoValues } from '..';
 import ReceiverInfo from './ReceiverInfo';
 import { createPortal } from 'react-dom';
 import useModal from '../hooks/useModal';
+import type { OrderInfoValues } from '@/types';
 
 interface ReceiverInfoProps {
   isModalOpen: boolean;

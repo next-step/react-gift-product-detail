@@ -1,27 +1,23 @@
 import styled from '@emotion/styled';
 import useInput from './hooks/useInput';
 import InputField from './components/InputField';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ROUTE_PATH } from '@/routes/routePath';
+
 import useLogin from './hooks/useLogin';
 
 const LoginPage = () => {
-  const { loginAndStoreSession } = useLogin();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || ROUTE_PATH.MY;
   const username = useInput('email');
   const password = useInput('password');
+  const { login } = useLogin();
 
   const isButtonActive = username.isValid && password.isValid;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!username.isValid || !password.isValid) return;
-    const isSuccess = await loginAndStoreSession({ username, password });
-    if (isSuccess) {
-      navigate(from, { replace: true });
-    }
+    login({
+      username: { value: username.value },
+      password: { value: password.value },
+    });
   };
 
   return (
