@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import GlobalStyle from '@/styles/GlobalStyle';
@@ -30,7 +30,7 @@ function ProductPage() {
   const { data: highlightReview } = useProductHighlightReviewQuery(productId);
 
   // 리스트 컴포넌트(후기/상세정보 공용)
-  const List = ({ items, type }: { items: any[]; type: 'review' | 'announcement' }) => (
+  const List = ({ items, type }: { items: any[]; type: any }) => (
     <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
       {items.map((item) => (
         <li key={type === 'review' ? item.id : item.name} style={{ borderBottom: '1px solid #eee', padding: '16px 0' }}>
@@ -43,7 +43,7 @@ function ProductPage() {
   if (isLoading) return <div>로딩중...</div>;
   if (error) return <div>상품 정보를 불러올 수 없습니다.</div>;
 
-  const handleProductClick = (productId) => {
+  const handleProductClick = (productId: any) => {
     navigate(`/order/${productId}`);
   }
 

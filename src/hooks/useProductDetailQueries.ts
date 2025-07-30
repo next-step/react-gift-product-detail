@@ -6,7 +6,8 @@ import {
   fetchProductHighlightReview
 } from '@/api/productApi';
 
-export function useProductBasicQuery(productId) {
+
+export function useProductBasicQuery(productId: any): any {
   return useQuery({
     queryKey: ['productBasic', productId],
     queryFn: () => fetchProductBasic(productId),
@@ -14,7 +15,8 @@ export function useProductBasicQuery(productId) {
   });
 }
 
-export function useProductDetailQuery(productId) {
+
+export function useProductDetailQuery(productId: any): any {
   return useQuery({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(productId),
@@ -22,7 +24,8 @@ export function useProductDetailQuery(productId) {
   });
 }
 
-export function useProductWishQuery(productId) {
+
+export function useProductWishQuery(productId: any): any {
   return useQuery({
     queryKey: ['productWish', productId],
     queryFn: () => fetchProductWish(productId),
@@ -30,7 +33,8 @@ export function useProductWishQuery(productId) {
   });
 }
 
-export function useProductHighlightReviewQuery(productId) {
+
+export function useProductHighlightReviewQuery(productId: any): any {
   return useQuery({
     queryKey: ['productHighlightReview', productId],
     queryFn: () => fetchProductHighlightReview(productId),
