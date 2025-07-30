@@ -28,6 +28,7 @@ const tabList = ['상품설명', '선물후기', '상세정보'];
     </ul>
   );
 
+
 function ProductPage() {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(0);
