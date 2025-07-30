@@ -10,7 +10,9 @@ export const useThemeData = (initialData?: ThemeProductResponse) => {
     if (initialData) {
       setProducts(initialData.list);
       setCursor(initialData.cursor ?? null);
-      setMoreAvailable(initialData.hasMoreList !== false && !!initialData.list.length);
+      setMoreAvailable(
+        initialData.hasMoreList !== false && !!initialData.list.length
+      );
     }
   }, [initialData]);
 
@@ -18,7 +20,9 @@ export const useThemeData = (initialData?: ThemeProductResponse) => {
     (newProducts: Product[], newCursor: number | null, hasMore: boolean) => {
       setProducts((prev) => {
         const existingIds = new Set(prev.map((item) => item.id));
-        const filtered = newProducts.filter((item) => !existingIds.has(item.id));
+        const filtered = newProducts.filter(
+          (item) => !existingIds.has(item.id)
+        );
         return [...prev, ...filtered];
       });
       setCursor(newCursor);
@@ -32,6 +36,6 @@ export const useThemeData = (initialData?: ThemeProductResponse) => {
     cursor,
     moreAvailable,
     append,
-    setProducts, // 초기화 등을 위해 노출
+    setProducts,
   };
 };
