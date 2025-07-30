@@ -18,15 +18,24 @@ export const getThemeInfo = async (id: number) => {
 
 export const getThemedGiftItems = async (id: number, cursor: number) => {
   const { data } = await publicClient.get<{ data: ThemedGiftItemsPage }>(
-    `/api/themes/${id}/products?cursor=${cursor}&limit=10`
+    `/api/themes/${id}/products`,
+    {
+      params: {
+        cursor: cursor,
+        limit: 10,
+      },
+    }
   );
   return data.data;
 };
 
 export const getGiftItems = async (targetType: string, rankType: string) => {
-  const { data } = await publicClient.get<{ data: GiftItemData[] }>(
-    `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
-  );
+  const { data } = await publicClient.get<{ data: GiftItemData[] }>(`/api/products/ranking`, {
+    params: {
+      targetType,
+      rankType,
+    },
+  });
   return data.data;
 };
 
