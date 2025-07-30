@@ -1,4 +1,4 @@
-import { getFetch } from '@src/api/getFetch';
+import { getFetch } from '@src/api/getBasicFetch';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import type { GoodSummary } from '@src/types/Goods';
 import { useQuery } from '@tanstack/react-query';

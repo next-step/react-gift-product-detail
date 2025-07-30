@@ -5,8 +5,8 @@ import {
 } from './StyledThemesProductItem';
 import { usePresentThemeFetch } from './useThemesProductItem';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import PresentProductList from '../Home/PresentRanking/Item/PresentRankingItem';
 import { ThemesProductionLabel } from './ThemesProductionLabel';
+import PresentProductList from '../Home/PresentRanking/Item/PresentProductList';
 
 const ThemesProductItem = () => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage } = usePresentThemeFetch();
@@ -20,7 +20,7 @@ const ThemesProductItem = () => {
       <ThemesProductionLabel />
       <StyledThemesProductPaddingContainer className='padding-container'>
         <StyledThemesProductGridContainer className='theme-grid-container'>
-          <PresentProductList data={data} />
+          <PresentProductList data={data} isLoading={isLoading} isError={isError} />
           <div className='loader' ref={loaderRef}></div>
         </StyledThemesProductGridContainer>
       </StyledThemesProductPaddingContainer>
