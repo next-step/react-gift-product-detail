@@ -88,19 +88,25 @@ function App() {
     navigate(ROUTE_MY);
   };
 
+  // 네비게이션 표시 여부를 결정하는 함수
+  const shouldShowNavigation = (pathname: string): boolean => {
+    return (
+      !pathname.startsWith(ROUTE_ORDER) && !pathname.startsWith('/products')
+    );
+  };
+
   return (
     <ErrorBoundary>
       <MobileLayout>
-        {!location.pathname.startsWith(ROUTE_ORDER) &&
-          !location.pathname.startsWith('/products') && (
-            <NavigationBar
-              title={navConfig.title}
-              showBackButton={navConfig.showBackButton}
-              showProfileButton={navConfig.showProfileButton}
-              onBackClick={handleBackClick}
-              onProfileClick={handleProfileClick}
-            />
-          )}
+        {shouldShowNavigation(location.pathname) && (
+          <NavigationBar
+            title={navConfig.title}
+            showBackButton={navConfig.showBackButton}
+            showProfileButton={navConfig.showProfileButton}
+            onBackClick={handleBackClick}
+            onProfileClick={handleProfileClick}
+          />
+        )}
 
         <Suspense fallback={<LoadingSkeleton type="card" />}>
           <Routes>
