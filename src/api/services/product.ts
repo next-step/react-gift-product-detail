@@ -1,13 +1,12 @@
 import apiClient from '@/api'
 import { API_ENDPOINTS } from '@/api/constants'
-import {
-  RankType,
-  TargetType,
-  type Product,
-  type ProductSummary,
-  type ProductDetail,
-  type ProductHighlightReview,
-  type ProductWish,
+import { RankType, TargetType } from '@/api/types'
+import type {
+  Product,
+  ProductSummary,
+  ProductDetail,
+  ProductHighlightReview,
+  ProductWish,
 } from '@/api/types'
 
 // * 상품 랭킹 목록 조회하기
