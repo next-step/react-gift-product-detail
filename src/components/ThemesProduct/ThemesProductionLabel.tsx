@@ -2,7 +2,7 @@ import { StyledThemesProductLabelItem } from './StyledThemesProductItem';
 import { usePresentThemeLabel } from '@src/components/ThemesProduct/useThemesProductLabel';
 
 export const ThemesProductionLabel = () => {
-  const { label, labelError, isLabelLoading } = usePresentThemeLabel();
+  const { data: label, isError: labelError, isLoading: isLabelLoading } = usePresentThemeLabel();
 
   if (isLabelLoading) {
     return <div>로딩 중</div>;
