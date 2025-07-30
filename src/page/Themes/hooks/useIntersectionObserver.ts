@@ -9,7 +9,8 @@ const useIntersectionObserver = ({ onIntersect, enable = true }: useIntersection
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!enable) {
+    const el = ref.current;
+    if (!enable || !el) {
       return;
     }
     const observer = new IntersectionObserver(
@@ -21,12 +22,9 @@ const useIntersectionObserver = ({ onIntersect, enable = true }: useIntersection
       { threshold: 1.0 }
     );
 
-    const el = ref.current;
-    if (el) observer.observe(el);
+    observer.observe(el);
 
-    return () => {
-      if (el) observer.unobserve(el);
-    };
+    return () => observer.unobserve(el);
   }, [enable, onIntersect]);
 
   return ref;
