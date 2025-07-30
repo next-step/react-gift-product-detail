@@ -9,8 +9,9 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { getUserFromSession } from "@/utils/getUserFromStorage";
 import { PATH } from "@/paths";
+import { withAsyncBoundary } from "@/hoc/withAsyncBoundary";
 
-function ProductDetailContent() {
+function ProductDetailPage() {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
@@ -57,15 +58,7 @@ function ProductDetailContent() {
   );
 }
 
-export default function ProductDetailPage() {
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={<LoadingSpinner message="페이지를 불러오는 중..." />}>
-        <ProductDetailContent />
-      </Suspense>
-    </ErrorBoundary>
-  );
-}
+export default withAsyncBoundary(ProductDetailPage)
 
 const Container = styled.div`
   max-width: 720px;

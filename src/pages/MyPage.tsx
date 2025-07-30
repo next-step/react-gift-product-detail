@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import Spacing from "@/components/Spacing";
 import { STORAGE_KEY } from "@/constants/storage";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { withErrorBoundary } from "@/hoc/withErrorBoundary";
 
-function MyPageContent() {
+function MyPage() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -46,13 +46,7 @@ function MyPageContent() {
   );
 }
 
-export default function MyPage() {
-  return (
-    <ErrorBoundary>
-      <MyPageContent />
-    </ErrorBoundary>
-  );
-}
+export default withErrorBoundary(MyPage);
 
 const Wrapper = styled.div`
   max-width: 720px;
