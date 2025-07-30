@@ -5,6 +5,7 @@ import {
   type UseQueryOptions,
   type UseQueryResult,
 } from '@tanstack/react-query'
+import { productKeys } from '@/constants/queryKeys'
 
 export interface ProductSummary {
   id: number
@@ -53,8 +54,7 @@ export function useProductRankingQuery(
   options?: UseQueryOptions<Product[], Error>,
 ): UseQueryResult<Product[], Error> {
   return useQuery<Product[], Error>({
-    queryKey: ['products', 'ranking', targetType, rankType],
-    queryFn: () => fetchProductRanking(targetType, rankType),
+    queryKey: productKeys.ranking(targetType, rankType),    queryFn: () => fetchProductRanking(targetType, rankType),
     ...options,
   })
 }
@@ -64,8 +64,7 @@ export function useProductSummaryQuery(
   options?: UseQueryOptions<ProductSummary, Error>,
 ): UseQueryResult<ProductSummary, Error> {
   return useQuery<ProductSummary, Error>({
-    queryKey: ['products', productId, 'summary'],
-    queryFn: () => fetchProductSummary(productId!),
+    queryKey: productKeys.summary(productId!),    queryFn: () => fetchProductSummary(productId!),
     enabled: productId !== undefined,
     ...options,
   })
