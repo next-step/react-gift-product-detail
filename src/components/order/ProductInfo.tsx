@@ -65,7 +65,7 @@ type Props = {
   product: ProductSummary;
 };
 
-const ProductInfo = ( {product} : Props) => {
+const ProductInfo = ({ product }: Props) => {
   return (
     <SidePadding>
       <Padding3 />

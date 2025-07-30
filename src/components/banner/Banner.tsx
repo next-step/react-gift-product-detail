@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 const BannerWrapper = styled.section`
   padding: 0 ${({ theme }) => theme.spacing.spacing2};

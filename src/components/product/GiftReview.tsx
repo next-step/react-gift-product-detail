@@ -3,7 +3,7 @@ import { Padding4, Padding2 } from '@/components/common/Padding';
 export type Review = {
   id: string;
   authorName: string;
-  content:string;
+  content: string;
 };
 
 type Props = {

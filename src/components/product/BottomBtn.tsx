@@ -33,7 +33,7 @@ const LikeBtn = styled.button`
   -webkit-box-align: center;
   align-items: center;
   flex-direction: column;
-  color:red;
+  color: red;
 `;
 const OrderBtn = styled.button`
   width: 100%;

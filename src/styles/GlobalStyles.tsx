@@ -1,10 +1,10 @@
-import { Global, css } from "@emotion/react";
+import { Global, css } from '@emotion/react';
 
 const GlobalStyles = () => {
   return (
     <Global
       styles={css`
-        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
         /* 박스크기계산 방식 통일: padding 과 border 포함해서 계산 */
 
         *,
@@ -36,33 +36,32 @@ const GlobalStyles = () => {
         ol {
           list-style: none;
         }
-button{
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-
-}
-img{
-  width:100%;
-}
+        button {
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+        }
+        img {
+          width: 100%;
+        }
         /* 폰트 적용 */
         * {
           font-family:
-            "Pretendard Variable",
+            'Pretendard Variable',
             Pretendard,
             -apple-system,
             BlinkMacSystemFont,
             system-ui,
             Roboto,
-            "Helvetica Neue",
-            "Segoe UI",
-            "Apple SD Gothic Neo",
-            "Noto Sans KR",
-            "Malgun Gothic",
-            "Apple Color Emoji",
-            "Segoe UI Emoji",
-            "Segoe UI Symbol",
+            'Helvetica Neue',
+            'Segoe UI',
+            'Apple SD Gothic Neo',
+            'Noto Sans KR',
+            'Malgun Gothic',
+            'Apple Color Emoji',
+            'Segoe UI Emoji',
+            'Segoe UI Symbol',
             sans-serif;
         }
       `}

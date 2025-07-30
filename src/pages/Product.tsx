@@ -16,7 +16,7 @@ import ProductDescription from '@/components/product/ProductDescription';
 import GiftReview, { type Review } from '@/components/product/GiftReview';
 import ProductDetail from '@/components/product/ProductDetail';
 import BottomBtn from '@/components/product/BottomBtn';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   fetchProductDetail,
@@ -47,6 +47,7 @@ const ProductContent = () => {
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(parsedId),
   });
+
   const { data: ReviewData } = useSuspenseQuery<Review[]>({
     queryKey: ['productHighlightReview', parsedId],
     queryFn: () => fetchProductHighlightReview(parsedId),
@@ -73,10 +74,7 @@ const ProductContent = () => {
       <Navbar />
       <div>
         <MainSection>
-          <ProductImage
-            alt={productData.name}
-            src="https://st.kakaocdn.net/product/gift/product/20250424150621_f98d9eb304024200bc62261f942e3b62.jpg"
-          ></ProductImage>
+          <ProductImage alt={productData.name} src={productData.imageURL}></ProductImage>
           <Padding5 />
           <div>
             <h3>{productData.name}</h3>
@@ -100,7 +98,7 @@ const ProductContent = () => {
         <DetailSection>
           <Flex>
             {['상품설명', '선물후기', '상세정보'].map((tap) => (
-              <DetailButton key={tap} onClick={() => setActiveTab(tap as typeof atctiveTab)}>
+              <DetailButton key={tap} onClick={() => setActiveTab(tap as typeof activeTab)}>
                 <p>{tap}</p>
                 {activeTab === tap && <BottemLine />}
               </DetailButton>

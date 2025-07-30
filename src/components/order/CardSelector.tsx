@@ -55,7 +55,10 @@ const CardImg = styled.img`
 
 const CardSelector = ({ setSelectedCard }) => {
   useEffect(() => {
-    setSelectedCard({ id: String(order_cards[0].id), message: order_cards[0].defaultTextMessage });
+    setSelectedCard({
+      id: String(order_cards[0].id),
+      message: order_cards[0].defaultTextMessage,
+    });
   }, []);
   const [selectedCardUrl, setSelectedCardUrl] = useState(order_cards[0].imageUrl);
   return (
@@ -65,7 +68,10 @@ const CardSelector = ({ setSelectedCard }) => {
           <Card
             key={item.id}
             onClick={() => {
-              setSelectedCard({ id: String(item.id), message: item.defaultTextMessage });
+              setSelectedCard({
+                id: String(item.id),
+                message: item.defaultTextMessage,
+              });
               setSelectedCardUrl(item.imageUrl);
             }}
           >

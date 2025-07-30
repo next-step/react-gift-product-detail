@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { FetchLogin } from '@/services/authAPi';
 import { useMutation } from '@tanstack/react-query';
 
-
 const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;

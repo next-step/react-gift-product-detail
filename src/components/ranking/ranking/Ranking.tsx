@@ -3,7 +3,7 @@ import RankingItem from '../RankingItem';
 import { PaddingLg } from '../../common/Padding';
 import PersonCategory from '../PersonCategory';
 import BehaviorCategory from '../BehaviorCategory';
-import {useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   type BehaviorFilterLabels,
@@ -31,7 +31,6 @@ const behaviorOptions: { label: BehaviorFilterLabels; param: BehaviorParam }[] =
   { label: '많이 선물한', param: 'MANY_RECEIVE' },
   { label: '위시로 받은', param: 'MANY_WISH_RECEIVE' },
 ] as const;
-
 
 const Ranking = () => {
   const navigator = useNavigate();
@@ -70,7 +69,6 @@ const Ranking = () => {
       navigator(ROUTE_PATH.PRODUCT.replace(':productId', String(id)));
     }
   };
- 
 
   const { data: products = [], isLoading: isProductLoading } = useQuery<ProductType[]>({
     queryFn: () => fetchRankingData(personParam, behaviorParam),

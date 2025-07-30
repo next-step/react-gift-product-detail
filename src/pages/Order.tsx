@@ -60,7 +60,6 @@ const Order = () => {
     isLoading,
     error,
   } = useQuery({
-
     queryFn: () => fetchProductSummary(product_id),
     queryKey: ['productSummary', productId],
   });

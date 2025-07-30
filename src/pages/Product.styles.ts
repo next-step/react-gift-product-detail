@@ -1,4 +1,4 @@
-import  styled  from '@emotion/styled';
+import styled from '@emotion/styled';
 export const MainWrapper = styled.div`
   max-width: 720px;
   width: 100%;
@@ -7,9 +7,7 @@ export const MainWrapper = styled.div`
   background-color: rgba(255, 18, 18, 1);
   padding-top: 2.75rem;
 `;
-export const MainSection = styled.section`
- 
-`;
+export const MainSection = styled.section``;
 export const ProductImage = styled.img`
   width: 100%;
   height: 100%;

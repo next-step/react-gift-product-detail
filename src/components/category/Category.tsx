@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query';
 const Category = () => {
   const navigate = useNavigate();
   const {
-    data: category=[],
+    data: category = [],
     isLoading,
     error,
   } = useQuery<CategoryType[]>({
