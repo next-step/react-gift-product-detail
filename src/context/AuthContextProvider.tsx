@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react"
+import React, { useCallback, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { AuthContext, AuthContextType } from "./AuthContext"
 import { useLogin } from "@/hooks/useLogin"
@@ -38,7 +38,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const logout = useCallback(() => {
     setIsLoggingOut(true)
-    
+
     // localStorage 제거
     localStorage.removeItem("authToken")
     localStorage.removeItem("email")
@@ -46,10 +46,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
     // 캐시에서 auth 쿼리 데이터를 완전히 제거
     qc.removeQueries({ queryKey: ["auth"] })
-    
+
     // 캐시를 명시적으로 null로 설정
     qc.setQueryData(["auth"], null)
-    
+
     // 캐시 무효화
     qc.invalidateQueries({ queryKey: ["auth"] })
 
@@ -67,22 +67,29 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       logout,
       isLoggingIn: loginMutation.isPending,
     }
-    return <AuthContext.Provider value={logoutValue}>{children}</AuthContext.Provider>
+    return (
+      <AuthContext.Provider value={logoutValue}>
+        {children}
+      </AuthContext.Provider>
+    )
   }
 
   const cached = qc.getQueryData<LoginData>(["auth"])
-  
+
   // 캐시가 null이면 로그아웃 상태, 아니면 localStorage에서 가져옴
-  const authData: LoginData = cached !== null ? (cached ?? {
-    authToken: localStorage.getItem("authToken") || null,
-    email: localStorage.getItem("email") || "",
-    name: localStorage.getItem("name") || "",
-  }) : {
-    authToken: null,
-    email: "",
-    name: "",
-  }
-  
+  const authData: LoginData =
+    cached !== null
+      ? (cached ?? {
+          authToken: localStorage.getItem("authToken") || null,
+          email: localStorage.getItem("email") || "",
+          name: localStorage.getItem("name") || "",
+        })
+      : {
+          authToken: null,
+          email: "",
+          name: "",
+        }
+
   const value: AuthContextType = {
     isLoggedIn: !!authData.authToken,
     authToken: authData.authToken,

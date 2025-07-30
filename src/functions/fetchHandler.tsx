@@ -1,6 +1,5 @@
-import axios from "axios"
-
-const fetchHandler = <T,>(url: string) =>
-  axios.get<T>(url).then((res) => res.data)
+import axiosInstance from "@/utils/axiosInstance"
+const fetchHandler = <T,>(url: string,options?:any) =>
+  axiosInstance.get<T>(url,options).then((res) => res.data)
 
 export default fetchHandler
