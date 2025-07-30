@@ -1,9 +1,7 @@
-export type LoginBody = {
-  email: string;
-  password: string;
-};
+import { instance } from './baseUrl';
 
-const PostFetch = async (body: LoginBody) => {
-  const response = await axios.post(BASE_URL + BASIC_ENDPOINT.login, body);
-  return response.data;
+export const PostFetch = async <T, K>(endpoint: string, body: K): Promise<T> => {
+  const res = await instance.post(endpoint, body);
+  const data = res.data;
+  return data;
 };

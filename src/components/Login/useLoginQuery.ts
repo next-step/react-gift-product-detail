@@ -4,19 +4,22 @@ import { SESSION_KEY_NAME } from '@src/assets/sessionKeyName';
 import { URLS } from '@src/assets/urls';
 import { useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import axios from 'axios';
-import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import type {
   HttpsFailedResponseTypes,
   HttpsSuccessResponseType,
 } from '@src/types/LoginFetchDataType';
+import { PostFetch } from '@src/api/postFetch';
+import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+export type LoginBody = {
+  email: string;
+  password: string;
+};
 export const useLoginQuery = () => {
   const navigate = useNavigate();
   return useMutation<HttpsSuccessResponseType, AxiosError<HttpsFailedResponseTypes>, LoginBody>({
-    mutationFn: loginApi,
+    mutationFn: (body) =>
+      PostFetch<HttpsSuccessResponseType, LoginBody>(BASIC_ENDPOINT.login, body),
     onSuccess: (data: HttpsSuccessResponseType) => {
       sessionStorage.setItem(SESSION_KEY_NAME.email, data.data.email);
       sessionStorage.setItem(SESSION_KEY_NAME.username, data.data.name);
