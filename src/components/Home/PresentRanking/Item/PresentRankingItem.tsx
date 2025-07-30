@@ -32,7 +32,7 @@ const PresentProductList = ({ data, isVisible = false, showRankingNumber = false
   };
   return (
     <>
-      {data.data.slice(0, repeatCnt).map((item: Good, index: number) => (
+      {data?.data.slice(0, repeatCnt).map((item: Good, index: number) => (
         <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
           <StyledPresentRankingItemDiv>
             {showRankingNumber && (

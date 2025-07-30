@@ -20,7 +20,7 @@ const ThemesProductItem = () => {
       <ThemesProductionLabel />
       <StyledThemesProductPaddingContainer className='padding-container'>
         <StyledThemesProductGridContainer className='theme-grid-container'>
-          <PresentProductList />
+          <PresentProductList data={data} />
           <div className='loader' ref={loaderRef}></div>
         </StyledThemesProductGridContainer>
       </StyledThemesProductPaddingContainer>

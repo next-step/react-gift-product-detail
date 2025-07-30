@@ -1,4 +1,3 @@
-import PresentRankingItem from '@src/components/Home/PresentRanking/Item/PresentRankingItem';
 import RankingTagContainer from '@src/components/Home/PresentRanking/Cotainer/RankingTagContainer';
 import { Suspense, useState } from 'react';
 import {
@@ -12,6 +11,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useLocation } from 'react-router-dom';
 import { PARAMS } from '@src/assets/params';
 import { useRankingItem } from '../Item/useRankingItem';
+import PresentProductList from '@src/components/Home/PresentRanking/Item/PresentRankingItem';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);
@@ -36,11 +36,11 @@ const PresentRankingContainer = () => {
       <StyledPrsentRankingDiv>
         <ErrorBoundary fallback={<div>에러 발생!</div>}>
           <Suspense fallback={<div>Loading...</div>}>
-            <PresentRankingItem
+            <PresentProductList
               data={data}
               isVisible={isVisible}
               showRankingNumber={true}
-            ></PresentRankingItem>
+            ></PresentProductList>
           </Suspense>
         </ErrorBoundary>
       </StyledPrsentRankingDiv>
