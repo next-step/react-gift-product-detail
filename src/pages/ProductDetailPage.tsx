@@ -7,6 +7,7 @@ import NavBar from '@/components/NavBar';
 import ProductInfo from '@/components/detail/ProductInfo';
 import ProductTabs from '@/components/detail/ProductTabs';
 import FooterButton from '@/components/detail/FooterButton';
+import { useProductWish } from '@/hooks/useProductWish';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,18 +18,14 @@ const Wrapper = styled.div`
 
 export default function ProductDetailPage() {
   const { productId } = useParams<{ productId: string }>();
+  const parsedId = Number(productId);
 
   const [activeTab, setActiveTab] = useState<'description' | 'review' | 'detail'>('description');
 
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(176);
+  const { isWished, wishCount, toggleWish, isLoading } = useProductWish(parsedId);
 
-  const toggleLike = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-  };
-
-  if (!productId) return <div>유효하지 않은 상품입니다.</div>;
+  if (!productId || isNaN(parsedId)) return <div>유효하지 않은 상품입니다.</div>;
+  if (isLoading) return <div>로딩중...</div>;
 
   return (
     <MobileLayout>
@@ -36,7 +33,12 @@ export default function ProductDetailPage() {
         <NavBar />
         <ProductInfo />
         <ProductTabs activeTab={activeTab} setActiveTab={setActiveTab} productId={productId} />
-        <FooterButton liked={liked} likeCount={likeCount} toggleLike={toggleLike} />
+        <FooterButton
+          liked={isWished}
+          likeCount={wishCount}
+          toggleLike={toggleWish}
+          productId={productId}
+        />
       </Wrapper>
     </MobileLayout>
   );

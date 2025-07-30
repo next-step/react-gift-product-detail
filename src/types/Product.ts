@@ -43,3 +43,8 @@ export interface ProductReview {
   totalCount: number;
   reviews: Review[];
 }
+
+export interface ProductWish {
+  wishCount: number;
+  isWished: boolean;
+}

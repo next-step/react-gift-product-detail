@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
+import { useGoToOrder } from '@/hooks/useGoTo';
 
 const Wrapper = styled.footer`
   display: flex;
@@ -41,18 +42,24 @@ interface FooterButtonProps {
   liked: boolean;
   likeCount: number;
   toggleLike: () => void;
+  productId: number | string;
 }
 
-export default function FooterButton({ liked, likeCount, toggleLike }: FooterButtonProps) {
+export default function FooterButton({
+  liked,
+  likeCount,
+  toggleLike,
+  productId,
+}: FooterButtonProps) {
   return (
     <Wrapper>
       <LikeSection>
         <LikeButton onClick={toggleLike}>
-          {liked ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+          {liked ? <FaHeart size={20} color="#fa342c" /> : <FaRegHeart size={20} />}
         </LikeButton>
         <LikeCount>{likeCount}</LikeCount>
       </LikeSection>
-      <OrderButton>주문하기</OrderButton>
+      <OrderButton onClick={useGoToOrder(productId)}>주문하기</OrderButton>
     </Wrapper>
   );
 }
