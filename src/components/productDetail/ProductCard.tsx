@@ -1,6 +1,5 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
-import type { ProductInfo } from "@/types/product";
 import { useProductDetail } from "@/hooks/useProductDetail";
 
 export default function ProductCard({ productId }: { productId: string }) {
@@ -8,7 +7,7 @@ export default function ProductCard({ productId }: { productId: string }) {
     data: product,
     isLoading,
     isError,
-  } = useProductDetail<ProductInfo>(productId);
+  } = useProductDetail(productId);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError || !product) return <div>에러 발생</div>;
