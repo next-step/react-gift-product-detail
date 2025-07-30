@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { css } from '@emotion/react';
 import GlobalStyle from '@/styles/GlobalStyle';
@@ -17,16 +17,16 @@ import {
 const tabList = ['상품설명', '선물후기', '상세정보'];
 
 // 리스트 컴포넌트(후기/상세정보 공용)
-  const List = ({ items, type }: { items: any[]; type: any }) => (
-    <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
-      {items.map((item) => (
-        <li key={type === 'review' ? item.id : item.name} style={{ borderBottom: '1px solid #eee', padding: '16px 0' }}>
-          <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#222' }}>{type === 'review' ? item.authorName : item.name}</div>
-          <div style={{ color: '#444', whiteSpace: type === 'review' ? 'pre-line' : undefined }}>{type === 'review' ? item.content : item.value}</div>
-        </li>
-      ))}
-    </ul>
-  );
+const List = ({ items, type }: { items: any[]; type: any }) => (
+  <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
+    {items.map((item) => (
+      <li key={type === 'review' ? item.id : item.name} style={{ borderBottom: '1px solid #eee', padding: '16px 0' }}>
+        <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#222' }}>{type === 'review' ? item.authorName : item.name}</div>
+        <div style={{ color: '#444', whiteSpace: type === 'review' ? 'pre-line' : undefined }}>{type === 'review' ? item.content : item.value}</div>
+      </li>
+    ))}
+  </ul>
+);
 
 
 function ProductPage() {
@@ -45,11 +45,11 @@ function ProductPage() {
   const [wishCount, setWishCount] = useState(wish?.wishCount);
 
   useEffect(() => {
-  if (wish) {
-    setLiked(wish.isWish);
-    setWishCount(wish.wishCount);
-  }
-}, [wish]);
+    if (wish) {
+      setLiked(wish.isWish);
+      setWishCount(wish.wishCount);
+    }
+  }, [wish]);
 
   const handleProductClick = (productId: any) => {
     navigate(`/order/${productId}`);
