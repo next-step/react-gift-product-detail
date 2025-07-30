@@ -7,7 +7,7 @@ import ProductInfoContent from '@/components/product/ProductInfoContent';
 import ProductDescription from '@/components/product/ProductDescription';
 import ProductReview from '@/components/product/ProductReview';
 import ProductDetailInfo from '@/components/product/ProductDetailInfo';
-import { TabContainer, Tab, TabName } from '@/components/product/product.style';
+import { TabContainer, TabContentWrapper, Tab, TabName } from '@/components/product/product.style';
 import WishAndOrderBar from '@/components/product/WishAndOrderBar';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
@@ -42,21 +42,23 @@ const Product = () => {
       </TabContainer>
 
       <ErrorBoundary>
-        {selectedTab === 'description' && (
-          <Suspense fallback={<div style={{ padding: '20px' }}>설명 로딩 중...</div>}>
-            <ProductDescription productId={id} />
-          </Suspense>
-        )}
-        {selectedTab === 'review' && (
-          <Suspense fallback={<div style={{ padding: '20px' }}>후기 로딩 중...</div>}>
-            <ProductReview productId={id} />
-          </Suspense>
-        )}
-        {selectedTab === 'info' && (
-          <Suspense fallback={<div style={{ padding: '20px' }}>상세 정보 로딩 중...</div>}>
-            <ProductDetailInfo productId={id} />
-          </Suspense>
-        )}
+        <TabContentWrapper>
+          {selectedTab === 'description' && (
+            <Suspense fallback={<div style={{ padding: '20px' }}>설명 로딩 중...</div>}>
+              <ProductDescription productId={id} />
+            </Suspense>
+          )}
+          {selectedTab === 'review' && (
+            <Suspense fallback={<div style={{ padding: '20px' }}>후기 로딩 중...</div>}>
+              <ProductReview productId={id} />
+            </Suspense>
+          )}
+          {selectedTab === 'info' && (
+            <Suspense fallback={<div style={{ padding: '20px' }}>상세 정보 로딩 중...</div>}>
+              <ProductDetailInfo productId={id} />
+            </Suspense>
+          )}
+        </TabContentWrapper>
       </ErrorBoundary>
     </Layout>
   );

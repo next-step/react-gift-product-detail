@@ -6,6 +6,11 @@ export const TabContainer = styled.div`
   border-bottom: 1px solid rgb(238, 239, 241);
 `;
 
+export const TabContentWrapper = styled.div`
+  min-height: 200px;
+  padding: 20px 0 80px; 
+`;
+
 export const Tab = styled.button<{ active: boolean }>`
   position: relative;
   padding: 16px 20px;
@@ -29,15 +34,13 @@ export const Tab = styled.button<{ active: boolean }>`
     color: ${({ active, theme }) =>
       active ? theme.color.semantic.text.default : theme.color.semantic.text.disabled};
 
-    border-bottom: ${({ active }) =>
-      active ? undefined : '2px solid transparent'}; 
+    border-bottom: ${({ active }) => (active ? undefined : '2px solid transparent')};
   }
 
   &:focus {
     outline: none;
   }
 `;
-
 
 export const TabName = styled.div`
   font-size: 1rem;
