@@ -75,6 +75,33 @@ const ProductBrandInfo = ({ brandInfo }: Product) => {
     </Layout>
   )
 }
+const GetDetailButton = styled.button`
+  width: 100%;
+  padding: ${theme.space.spacing4} ${theme.space.spacing5};
+  border: none;
+  background-color: ${theme.colors.gray00};
+`
+const ProductDetailButton = () => {
+  return (
+    <Row padding="spacing0">
+      <GetDetailButton type="button">
+        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
+          상품설명
+        </Text>
+      </GetDetailButton>
+      <GetDetailButton type="button">
+        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
+          선물후기
+        </Text>
+      </GetDetailButton>
+      <GetDetailButton type="button">
+        <Text variant="title2Regular" margin="spacing0" padding="spacing0">
+          상세정보
+        </Text>
+      </GetDetailButton>
+    </Row>
+  )
+}
 const ProductDetail = () => {
   const { productId } = useParams<{ productId: string }>()
   if (!productId) return <ThemeNotFound />
@@ -102,6 +129,7 @@ const ProductDetail = () => {
       <Blank height="1px" backGroundColor={theme.colors.gray300}></Blank>
       <ProductBrandInfo {...product} />
       <Blank height="8px" backGroundColor={theme.colors.gray300}></Blank>
+      <ProductDetailButton />
     </>
   )
 }
