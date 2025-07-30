@@ -1,6 +1,6 @@
 import { apiClient } from '@src/api/FetchData';
 import { useEffect, useState } from 'react';
-import type { Themes } from '../components/Home/PresentTheme/Item/ThemeType';
+import type { Themes } from './Item/ThemeType';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import type { HttpTypes } from '@src/api/HttpType';
 

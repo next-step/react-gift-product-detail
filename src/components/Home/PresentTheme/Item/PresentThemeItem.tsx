@@ -6,7 +6,7 @@ import {
 } from '@src/components/Home/PresentTheme/Item/StyledPresnetThemeItem';
 import { StyledPresentThemeCommonP } from '@src/components/Home/PresentTheme/StyledPresentThemeCommonP';
 import type { Theme } from './ThemeType';
-import { usePresentThemeFetch } from '@src/hooks/usePresentThemeFetch';
+import { usePresentThemeFetch } from '@src/components/Home/PresentTheme/usePresentThemeFetch';
 
 const PresentThemeItem = () => {
   const { data, isError, isLoading } = usePresentThemeFetch();
@@ -24,7 +24,6 @@ const PresentThemeItem = () => {
             data?.data.map((item: Theme) => (
               <a href={'/themes/' + item.themeId} key={item.themeId}>
                 <StyledPresentThemeItemDiv key={item.themeId} className='border'>
-
                   <StyledImage src={item.image} alt={item.name} />
                   <StyledPresentThemeItemP>{item.name}</StyledPresentThemeItemP>
                 </StyledPresentThemeItemDiv>

@@ -1,5 +1,5 @@
 import { StyledThemesProductLabelItem } from './StyledThemesProductItem';
-import { usePresentThemeLabel } from '@src/hooks/useThemesProductLabel';
+import { usePresentThemeLabel } from '@src/components/ThemesProduct/useThemesProductLabel';
 
 export const ThemesProductionLabel = () => {
   const { label, labelError, isLabelLoading } = usePresentThemeLabel();

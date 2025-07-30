@@ -10,7 +10,7 @@ import {
 } from '@src/components/Home/PresentRanking/Cotainer/StyledPresentRankingContainer';
 import { useLocation } from 'react-router-dom';
 import { PARAMS } from '@src/assets/params';
-import { useRankingItem } from '@src/hooks/useRankingItem';
+import { useRankingItem } from '@src/components/Home/PresentRanking/Item/useRankingItem';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);

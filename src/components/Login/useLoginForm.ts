@@ -1,5 +1,5 @@
-import { useLoginEmailForm } from '@src/hooks/useLoginEmailForm';
-import { useLoginPwForm } from '@src/hooks/useLoginPwForm';
+import { useLoginEmailForm } from '@src/components/Login/useLoginEmailForm';
+import { useLoginPwForm } from '@src/components/Login/useLoginPwForm';
 import { useMemo } from 'react';
 
 export const useLoginForm = () => {

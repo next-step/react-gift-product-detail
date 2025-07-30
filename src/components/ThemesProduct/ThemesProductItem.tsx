@@ -3,7 +3,7 @@ import {
   StyledThemesProductGridContainer,
   StyledThemesProductPaddingContainer,
 } from './StyledThemesProductItem';
-import { usePresentThemeFetch } from '../../hooks/useThemesProductItem';
+import { usePresentThemeFetch } from './useThemesProductItem';
 import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import PresentProductList from '../Home/PresentRanking/Item/PresentRankingItem';
 import { ThemesProductionLabel } from './ThemesProductionLabel';

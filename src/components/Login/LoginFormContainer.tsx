@@ -4,7 +4,7 @@ import {
   StyledLoginComponentDiv,
   StyledLoginKakoLogo,
 } from '@src/components/Login/StyledLoginFormContainer';
-import { useLoginForm } from '../../hooks/useLoginForm';
+import { useLoginForm } from './useLoginForm';
 import { useLoginQuery } from './useLoginQuery';
 
 const LoginForm = () => {
