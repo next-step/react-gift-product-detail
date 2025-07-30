@@ -1,29 +1,16 @@
 import { getFetch } from '@src/api/getBasicFetch';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
-import type { Goods } from '@src/types/Goods';
+import type { Good } from '@src/types/Goods';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 type FetchDataType = {
   data: {
-    list: Goods;
+    list: Good[];
     cursor: number;
     hasMoreList: boolean;
   };
 };
-
-// const getFetch = async (
-//   themeId: string | undefined,
-//   cursor_value: number
-// ): Promise<FetchDataType> => {
-//   console.log(cursor_value);
-//   const params = { cursor: cursor_value };
-//   const res = await axios.get(BASE_URL + BASIC_ENDPOINT.theme + `/${themeId}/products`, {
-//     params,
-//   });
-//   const data = res.data.data;
-//   return data;
-// };
 export const usePresentThemeFetch = () => {
   const { themeId } = useParams();
 
@@ -41,7 +28,7 @@ export const usePresentThemeFetch = () => {
   });
   console.log(data);
   return {
-    data: { data: data?.pages.flatMap((item) => item.data.list.data) } as Goods,
+    data: { data: (data?.pages ?? []).flatMap((item: FetchDataType) => item.data.list) },
     isError,
     isLoading,
     hasNextPage,

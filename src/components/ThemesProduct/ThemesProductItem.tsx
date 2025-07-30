@@ -11,6 +11,7 @@ import PresentProductList from '../Home/PresentRanking/Item/PresentProductList';
 const ThemesProductItem = () => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage } = usePresentThemeFetch();
 
+  console.log(data);
   const loaderRef = useIntersectionObserver({
     onIntersect: fetchNextPage,
     canLoadMore: hasNextPage,
