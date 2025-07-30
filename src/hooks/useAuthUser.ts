@@ -24,7 +24,9 @@ export const useAuthUser = () => {
         setIsLoggedIn(true);
         setToken(stored.token);
       } else {
-        throw new Error('Invalid session user');
+        setUser(null);
+        setIsLoggedIn(false);
+        setToken(null);
       }
     } catch (error) {
       console.error(error);

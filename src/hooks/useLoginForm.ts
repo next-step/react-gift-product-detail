@@ -7,7 +7,7 @@ export interface LoginFormInputs {
 
 export const useLoginForm = () => {
   return useForm<LoginFormInputs>({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       id: '',
       password: '',
