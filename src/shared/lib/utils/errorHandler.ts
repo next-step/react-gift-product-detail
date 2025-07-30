@@ -1,19 +1,11 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import type { AxiosErrorResponse } from '@/shared/types';
-
-const isAxiosError = (error: unknown): error is AxiosErrorResponse => {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'response' in error &&
-    typeof (error as any).response === 'object'
-  );
-};
+import { ROUTES } from '@/shared/config';
+import { isAxiosError, type AxiosError } from 'axios';
 
 export const handleApiError = (
-  error: unknown,
+  error: unknown, // 다양한 타입의 에러를 처리하기 위해 unknown 타입 사용
   navigate?: (path: string) => void,
   customHandlers?: Record<number, (message?: string) => void>
 ) => {
@@ -21,21 +13,21 @@ export const handleApiError = (
     toast.error('예상치 못한 오류가 발생했습니다. 다시 시도해주세요.');
     return;
   }
-  
+
   if (error.response) {
     const status = error.response.status;
     const message = error.response.data?.data?.message;
-    
+
     if (customHandlers?.[status]) {
       customHandlers[status](message);
       return;
     }
-    
+
     switch (status) {
       case 401:
         toast.error(message || '로그인이 필요합니다.');
         if (navigate) {
-          navigate('/login');
+          navigate(ROUTES.LOGIN);
         }
         break;
       case 400:
@@ -60,13 +52,21 @@ export const handleApiError = (
 
 export const useErrorHandler = () => {
   const navigate = useNavigate();
-  
-  const handleError = useCallback((
-    error: unknown,
-    customHandlers?: Record<number, (message?: string) => void>
-  ) => {
-    handleApiError(error, navigate, customHandlers);
-  }, [navigate]);
-  
+
+  const handleError = useCallback(
+    (error: AxiosError, customHandlers?: Record<number, (message?: string) => void>) => {
+      handleApiError(error, navigate, customHandlers);
+    },
+    [navigate]
+  );
+
   return { handleError };
-}; 
+};
+
+export const mutationErrorHandler = (defaultMessage: string) => {
+  return (error: AxiosError) => {
+    handleApiError(error, undefined, {
+      400: message => toast.error(message || defaultMessage),
+    });
+  };
+};

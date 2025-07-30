@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Z_INDEX } from '@/shared/styles/zIndex';
 
 export const Card = styled.div`
   display: flex;
@@ -18,11 +19,12 @@ export const RankBadge = styled.span<{ rank: number }>`
   justify-content: center;
   width: 24px;
   height: 24px;
-  background-color: ${({ theme, rank }) => rank <= 3 ? theme.colors.red[600] : theme.colors.gray[600]};
+  background-color: ${({ theme, rank }) =>
+    rank <= 3 ? theme.colors.red[600] : theme.colors.gray[600]};
   border-radius: 4px;
   ${({ theme }) => theme.typography.label2Bold}
   color: white;
-  z-index: 1;
+  z-index: ${Z_INDEX.COMPONENT};
 `;
 
 export const Image = styled.img`
@@ -55,4 +57,4 @@ export const Price = styled.p`
   text-align: left;
   word-break: break-word;
   width: 100%;
-`; 
+`;

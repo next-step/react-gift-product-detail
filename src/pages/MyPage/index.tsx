@@ -1,6 +1,7 @@
 import { useAuth } from '@/entities/user/model/context';
 import { useNavigate } from 'react-router-dom';
 import * as S from './styles';
+import { ROUTES } from '@/shared/config';
 
 const MyPage = () => {
   const { userInfo, logout } = useAuth();
@@ -8,7 +9,7 @@ const MyPage = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate(ROUTES.LOGIN);
   };
 
   return (
@@ -24,4 +25,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage; 
+export default MyPage;

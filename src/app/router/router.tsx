@@ -1,27 +1,40 @@
-import { createBrowserRouter} from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../layout';
 import ProtectedRoute from './ProtectedRoute';
-import { Home, Login, MyPage, Order, NotFound, Theme } from '@/pages';
+import { Home, Login, MyPage, Order, NotFound, Theme, Product } from '@/pages';
+import { ROUTES } from '@/shared/config';
+import { Suspense } from 'react';
+import { Loading } from '@/shared/ui';
 
 const router = createBrowserRouter([
   {
-    path: '/',
     element: <Layout />,
+    errorElement: <NotFound />,
     children: [
       {
         index: true,
         element: <Home />,
       },
       {
-        path: 'login',
+        path: ROUTES.LOGIN,
         element: <Login />,
       },
       {
-        path: 'themes/:themeId',
+        path: `${ROUTES.THEME}/:themeId`,
         element: <Theme />,
       },
       {
-        path: 'mypage',
+        path: `${ROUTES.PRODUCT}/:productId`,
+        element: (
+          <ProtectedRoute>
+            <Suspense fallback={<Loading />}>
+              <Product />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.MYPAGE,
         element: (
           <ProtectedRoute>
             <MyPage />
@@ -29,7 +42,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'order/:productId?',
+        path: `${ROUTES.ORDER}/:productId?`,
         element: (
           <ProtectedRoute>
             <Order />
@@ -37,7 +50,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '*',
+        path: ROUTES.NOT_FOUND,
         element: <NotFound />,
       },
     ],

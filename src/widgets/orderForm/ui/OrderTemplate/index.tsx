@@ -1,6 +1,4 @@
-import { 
-  Image, MessageTextArea
-} from '@/shared/ui';
+import { Image, MessageTextArea } from '@/shared/ui';
 import { SenderSection } from '@/features/orderCreation';
 import { ReceiverSection } from '@/features/receiverManagement';
 import { useReceiver } from '@/entities/receiver/model/context';
@@ -56,7 +54,7 @@ const OrderTemplate = ({
               orders={orders}
               selectedCardId={cardState.selectedCardId}
               onCardClick={onCardClick}
-            />         
+            />
             <S.PreviewContainer>
               <S.PreviewImageContainer>
                 <Image
@@ -65,21 +63,17 @@ const OrderTemplate = ({
                   variant="preview"
                 />
               </S.PreviewImageContainer>
-            </S.PreviewContainer>           
+            </S.PreviewContainer>
             <MessageTextArea
               value={cardState.message}
               onChange={onMessageChange}
               placeholder="메시지를 입력하세요"
             />
-          </S.FirstSection>    
-          <S.Spacer />        
-          <SenderSection
-            senderName={formData.senderName}
-            onSenderNameChange={onSenderNameChange}
-          />       
-          <S.Spacer /> 
-          <ReceiverSection
-          />        
+          </S.FirstSection>
+          <S.Spacer />
+          <SenderSection senderName={formData.senderName} onSenderNameChange={onSenderNameChange} />
+          <S.Spacer />
+          <ReceiverSection />
           {product && (
             <>
               <S.Spacer />
@@ -87,9 +81,11 @@ const OrderTemplate = ({
             </>
           )}
         </S.Container>
-      </S.ContentWrapper> 
+      </S.ContentWrapper>
       <S.FixedBottomButton onClick={onSubmit}>
-        {product && totalQuantity > 0 ? `${(product.price * totalQuantity).toLocaleString()}원 결제하기` : '선물하기'}
+        {product && totalQuantity > 0
+          ? `${(product.price * totalQuantity).toLocaleString()}원 주문하기`
+          : '0원 주문하기'}
       </S.FixedBottomButton>
     </>
   );

@@ -5,6 +5,7 @@ import RankingItemCard from '@/entities/product/ui/RankingItemCard';
 import { Loading } from '@/shared/ui';
 import type { RankingProduct } from '@/entities/product/model/types';
 import * as S from './styles';
+import { ROUTES } from '@/shared/config';
 
 interface ThemeProductSectionProps {
   themeId: number;
@@ -13,10 +14,10 @@ interface ThemeProductSectionProps {
 const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   const navigate = useNavigate();
   const loadingRef = useRef<HTMLDivElement>(null);
-  const { products, isLoading, isError, hasMore, fetchNextPage, isFetchingNextPage } = useThemeProducts(themeId);
+  const { products, hasMore, fetchNextPage, isFetchingNextPage } = useThemeProducts(themeId);
 
   const handleProductClick = (product: RankingProduct) => {
-    navigate(`/order/${product.id}`);
+    navigate(`${ROUTES.PRODUCT}/${product.id}`);
   };
 
   useEffect(() => {
@@ -34,23 +35,7 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
     return () => observer.disconnect();
   }, [hasMore, isFetchingNextPage, fetchNextPage]);
 
-  if (isError) {
-    return (
-      <S.Section>
-        <S.EmptyMessage>해당 테마의 상품이 없습니다.</S.EmptyMessage>
-      </S.Section>
-    );
-  }
-
-  if (isLoading && products.length === 0) {
-    return (
-      <S.Section>
-        <Loading height="400px" />
-      </S.Section>
-    );
-  }
-
-  if (!isLoading && products.length === 0) {
+  if (products.length === 0) {
     return (
       <S.Section>
         <S.EmptyMessage>해당 테마의 상품이 없습니다.</S.EmptyMessage>
@@ -61,7 +46,7 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   return (
     <S.Section>
       <S.Grid>
-        {products.map((product) => (
+        {products.map(product => (
           <RankingItemCard
             key={product.id}
             imageUrl={product.imageURL}
@@ -84,4 +69,4 @@ const ThemeProductSection = ({ themeId }: ThemeProductSectionProps) => {
   );
 };
 
-export default ThemeProductSection; 
+export default ThemeProductSection;

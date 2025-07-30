@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Z_INDEX } from '@/shared/styles/zIndex';
 
 export const Container = styled.div`
   background-color: ${({ theme }) => theme.semantic.background.fill};
@@ -31,23 +32,23 @@ export const FixedBottomButton = styled.button`
   position: fixed;
   bottom: 0;
   width: 720px;
-  height: 60px;
+  height: 48px;
   background-color: ${({ theme }) => theme.semantic.brand.kakaoYellow};
   color: ${({ theme }) => theme.colors.gray[900]};
   border: none;
   ${({ theme }) => theme.typography.body1Bold};
   cursor: pointer;
-  z-index: 1000;
-  
+  z-index: ${Z_INDEX.FIXED_BOTTOM};
+
   &:hover {
     background-color: ${({ theme }) => theme.semantic.brand.kakaoYellowHover};
   }
-  
+
   &:active {
     background-color: ${({ theme }) => theme.semantic.brand.kakaoYellowActive};
   }
 `;
 
 export const ContentWrapper = styled.div`
-  padding-bottom: 70px;
+  padding-bottom: 48px;
 `;

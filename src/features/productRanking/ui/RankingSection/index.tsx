@@ -4,10 +4,10 @@ import { getRankingProducts } from '@/entities/product/api/productApi';
 import type { RankingProduct, TargetType, RankType } from '@/entities/product/model/types';
 import { genderItems, actionItems } from '../../model/constants';
 import { RankingItemCard } from '@/entities/product/ui';
-import { Loading, ErrorMessage } from '@/shared/ui';
 import * as S from './styles';
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '@/shared/config/queryKeys';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { productQueryKeys } from '@/entities/product/api/queryKeys';
+import { ROUTES } from '@/shared/config';
 
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,8 +17,8 @@ const RankingSection = () => {
   const selectedGender = searchParams.get('gender') || 'ALL';
   const selectedAction = searchParams.get('action') || 'MANY_WISH';
 
-  const { data, isLoading, isError } = useQuery<RankingProduct[]>({
-    queryKey: QUERY_KEYS.RANKING_PRODUCTS(selectedGender, selectedAction),
+  const { data } = useSuspenseQuery<RankingProduct[]>({
+    queryKey: productQueryKeys.ranking(selectedGender, selectedAction),
     queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
   });
 
@@ -38,32 +38,14 @@ const RankingSection = () => {
     });
   };
 
-  const handleItemCardClick = (item: RankingProduct) => {
-    navigate(`/order/${item.id}`);
+  const handleItemCardClick = (productId: number) => {
+    navigate(`${ROUTES.PRODUCT}/${productId}`);
   };
-
-  if (isError) {
-    return (
-      <S.Section>
-        <ErrorMessage height="400px" />
-      </S.Section>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <S.Section>
-        <Loading height="400px" />
-      </S.Section>
-    );
-  }
-
-  if (!data) return null;
 
   return (
     <S.Section>
       <S.Title>실시간 급상승 선물랭킹</S.Title>
-      
+
       <S.FilterContainer>
         <S.GenderFilterContainer>
           {genderItems.map(option => (
@@ -71,17 +53,15 @@ const RankingSection = () => {
               <S.GenderIconContainer isSelected={selectedGender === option.key}>
                 {option.icon}
               </S.GenderIconContainer>
-              <S.GenderText isSelected={selectedGender === option.key}>
-                {option.label}
-              </S.GenderText>
+              <S.GenderText isSelected={selectedGender === option.key}>{option.label}</S.GenderText>
             </S.GenderButton>
           ))}
         </S.GenderFilterContainer>
-        
+
         <S.ActionFilterContainer>
           {actionItems.map(action => (
-            <S.ActionButton 
-              key={action.key} 
+            <S.ActionButton
+              key={action.key}
               isSelected={selectedAction === action.key}
               onClick={() => handleActionChange(action.key)}
             >
@@ -90,29 +70,28 @@ const RankingSection = () => {
           ))}
         </S.ActionFilterContainer>
       </S.FilterContainer>
-      
-      
-        <>
-          <S.Grid>
-            {(isExpanded ? data : data?.slice(0, 6))?.map((item, index) => (
-              <RankingItemCard
-                key={item.id}
-                imageUrl={item.imageURL}
-                title={item.name}
-                subtitle={item.brandInfo.name}
-                price={item.price.sellingPrice}
-                rank={index + 1}
-                onClick={() => handleItemCardClick(item)}
-              />
-            ))}
-          </S.Grid>
 
-          <S.MoreButton onClick={() => setIsExpanded(!isExpanded)}>
-            {isExpanded ? '접기' : '더보기'}
-          </S.MoreButton>
-        </>
+      <>
+        <S.Grid>
+          {(isExpanded ? data : data.slice(0, 6)).map((item, index) => (
+            <RankingItemCard
+              key={item.id}
+              imageUrl={item.imageURL}
+              title={item.name}
+              subtitle={item.brandInfo.name}
+              price={item.price.sellingPrice}
+              rank={index + 1}
+              onClick={() => handleItemCardClick(item.id)}
+            />
+          ))}
+        </S.Grid>
+
+        <S.MoreButton onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? '접기' : '더보기'}
+        </S.MoreButton>
+      </>
     </S.Section>
   );
 };
 
-export default RankingSection; 
+export default RankingSection;

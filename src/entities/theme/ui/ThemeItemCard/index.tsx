@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/shared/config';
 import * as S from './styles';
 
 interface ThemeItemCardProps {
@@ -10,11 +11,11 @@ interface ThemeItemCardProps {
 const ThemeItemCard = (props: ThemeItemCardProps) => {
   const { themeId, imageUrl, title } = props;
   const navigate = useNavigate();
-  
+
   const handleClick = () => {
-    navigate(`/themes/${themeId}`);
+    navigate(`${ROUTES.THEME}/${themeId}`);
   };
-  
+
   return (
     <S.Card onClick={handleClick}>
       <S.Image src={imageUrl} alt={title} />
@@ -23,4 +24,4 @@ const ThemeItemCard = (props: ThemeItemCardProps) => {
   );
 };
 
-export default ThemeItemCard; 
+export default ThemeItemCard;

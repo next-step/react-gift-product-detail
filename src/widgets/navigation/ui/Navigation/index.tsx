@@ -1,23 +1,24 @@
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as S from './styles';
 import { IconButton } from '@/shared/ui';
 import { useAuth } from '@/entities/user/model/context';
 import { ChevronLeft, User } from 'lucide-react';
+import { ROUTES } from '@/shared/config';
 
 const Navigation = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
   const handleLogoClick = () => {
-    navigate('/');
+    navigate(ROUTES.HOME);
   };
 
   const handleLoginClick = () => {
-    navigate(isLoggedIn ? '/mypage' : '/login');
+    navigate(isLoggedIn ? ROUTES.MYPAGE : ROUTES.LOGIN);
   };
 
   return (
@@ -25,12 +26,9 @@ const Navigation = () => {
       <IconButton onClick={handleBack}>
         <ChevronLeft />
       </IconButton>
-      
-      <S.Logo onClick={handleLogoClick}
-        src="/카카오톡 선물하기.webp" 
-        alt="카카오톡 선물하기" 
-      />
-      
+
+      <S.Logo onClick={handleLogoClick} src="/카카오톡 선물하기.webp" alt="카카오톡 선물하기" />
+
       <IconButton onClick={handleLoginClick}>
         <User />
       </IconButton>
@@ -38,4 +36,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation; 
+export default Navigation;
