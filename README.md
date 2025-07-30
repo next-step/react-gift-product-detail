@@ -17,6 +17,7 @@
 - 초기 프로젝트 세팅
 - ProductInfo UI 구현
 - TabMenu 구현
+- 각 Tab 세부 UI 구현
 
 ## 리뷰 반영
 
