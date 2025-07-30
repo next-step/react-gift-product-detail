@@ -6,7 +6,7 @@ import PresentWho from "@/components/PresentWho"
 import { useAuth } from "@/context/AuthContext"
 
 const PlusNewPerson = () => {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, name } = useAuth()
 
   if (!isLoggedIn) {
     return (
@@ -55,7 +55,7 @@ const PlusNewPerson = () => {
           padding="spacing2"
           marginTop="spacing1"
         >
-          {localStorage.getItem("name")}님! 선물할 친구를 선택해 주세요.
+          {name}님! 선물할 친구를 선택해 주세요.
         </Text>
       </PresentWho>
     </PresentWhoBackGround>

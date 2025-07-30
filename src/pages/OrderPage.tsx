@@ -31,12 +31,12 @@ const OrderPage = () => {
   const navigate = useNavigate()
 
   const { product, loading, error } = useProductInfo(productId)
-  const storedName = localStorage.getItem("name") ?? ""
+  const { name } = useAuth()
 
   const methods = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
-      senderName: storedName,
+      senderName: name || "",
       receivers: [],
       message: "",
       messageCardId: "",

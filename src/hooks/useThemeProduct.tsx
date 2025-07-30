@@ -1,11 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import type { ThemeProductListResponse } from "@/interfaces/ThemeProductListResponse"
 import type { Product } from "@/interfaces/Product"
-import useFetch from "../functions/fetchHandler"
+import axiosInstance from "@/utils/axiosInstance"
 
 function useThemeProduct(themeId: string, limit = 12) {
-  const baseUrl = import.meta.env.VITE_BASE_URL
-
   const {
     data,
     isLoading,
@@ -20,11 +18,15 @@ function useThemeProduct(themeId: string, limit = 12) {
     getNextPageParam: (last) =>
       last.data.hasMoreList ? last.data.cursor : undefined,
     queryFn: async ({ pageParam = null }) => {
-      const url = new URL(`/api/themes/${themeId}/products`, baseUrl)
-      url.searchParams.append("limit", String(limit))
-      if (pageParam !== null)
-        url.searchParams.append("cursor", String(pageParam))
-      return useFetch<ThemeProductListResponse>(url.toString())
+      const url = `/api/themes/${themeId}/products`
+      return axiosInstance
+        .get<ThemeProductListResponse>(url, {
+          params: {
+            limit: String(limit),
+            cursor: pageParam !== null ? String(pageParam) : undefined,
+          },
+        })
+        .then((res) => res.data)
     },
   })
 

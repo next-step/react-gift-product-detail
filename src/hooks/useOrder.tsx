@@ -1,4 +1,4 @@
-import axios from "axios"
+import axiosInstance from "@/utils/axiosInstance"
 import type { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
 import { useMutation } from "@tanstack/react-query"
@@ -15,8 +15,6 @@ export interface OrderRequest {
 }
 
 export function useOrder() {
-  const baseUrl = import.meta.env.VITE_BASE_URL
-  const orderUrl = new URL("/api/order", baseUrl).toString()
   const navigate = useNavigate()
 
   return useMutation<
@@ -25,7 +23,7 @@ export function useOrder() {
     { order: OrderRequest; token: string }
   >({
     mutationFn: async ({ order, token }) => {
-      const { data } = await axios.post(orderUrl, order, {
+      const { data } = await axiosInstance.post("/api/order", order, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,

@@ -14,7 +14,7 @@ import { useCallback } from "react"
 import { ROUTES } from "@/constants/routes"
 import getRoute from "@/functions/getRoute"
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
+import axiosInstance from "@/utils/axiosInstance"
 
 interface PresentItem {
   themeId: number
@@ -51,12 +51,9 @@ interface ThemesResponse {
   data: PresentItem[]
 }
 const PresentList = () => {
-  const baseUrl = import.meta.env.VITE_BASE_URL
-  const url = new URL("/api/themes", baseUrl).toString()
-
   const { data: themesData, isLoading: loading } = useQuery<ThemesResponse>({
     queryKey: ["themes"],
-    queryFn: () => axios.get<ThemesResponse>(url).then((res) => res.data),
+    queryFn: () => axiosInstance.get<ThemesResponse>("/api/themes").then((res) => res.data),
   })
 
   const presents = themesData?.data || []

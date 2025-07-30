@@ -13,7 +13,7 @@ import getRoute from "@/functions/getRoute"
 import useQueryState from "@/hooks/useQueryState"
 import Loading from "./PresentTheme/Loading"
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
+import axiosInstance from "@/utils/axiosInstance"
 import ProductsResponse from "@/interfaces/ProductResponse"
 
 const VISIBLE_COUNT = 6
@@ -29,8 +29,6 @@ const ProductGrid = () => {
 
   console.log(rankType, targetType)
 
-  const baseUrl = import.meta.env.VITE_BASE_URL
-
   const handleGoOrder = useCallback(
     (id: number) => {
       if (!isLoggedIn) {
@@ -42,14 +40,14 @@ const ProductGrid = () => {
     [isLoggedIn, navigate]
   )
 
-  const rankingUrlObj = new URL("/api/products/ranking", baseUrl)
-  rankingUrlObj.searchParams.set("targetType", targetType)
-  rankingUrlObj.searchParams.set("rankType", rankType)
-  const rankingUrl = rankingUrlObj.toString()
-
   const { data: productsData, isLoading: loading } = useQuery<ProductsResponse>({
     queryKey: ["products", "ranking", rankType, targetType],
-    queryFn: () => axios.get<ProductsResponse>(rankingUrl).then((res) => res.data),
+    queryFn: () => {
+      const params = new URLSearchParams()
+      params.append("targetType", targetType)
+      params.append("rankType", rankType)
+      return axiosInstance.get<ProductsResponse>(`/api/products/ranking?${params.toString()}`).then((res) => res.data)
+    },
     enabled: !!rankType && !!targetType,
   })
 
