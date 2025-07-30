@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getThemeInfo } from '@/api/services/giftItem.service';
+import type { QueryKey } from '@/api/types/giftItem.dto';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
@@ -47,7 +48,11 @@ export const Banner = () => {
   const parsedId = parseInt(id!);
   const { data, isError } = useQuery({
     queryKey: ['ThemeInfo', { id: parsedId }],
-    queryFn: getThemeInfo,
+    queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
+      const { id } = queryKey[1];
+      if (!id) return;
+      return getThemeInfo(id);
+    },
   });
   const { name, title, description, backgroundColor } = data || {
     name: '',

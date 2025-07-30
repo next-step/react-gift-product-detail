@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import type { GiftItemData } from '@/api/types/giftItem.dto';
+import type { GiftItemData, QueryKey } from '@/api/types/giftItem.dto';
 import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
@@ -58,11 +58,16 @@ export const GiftList = () => {
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
   const { data, isLoading, isError } = useQuery({
     queryKey: ['giftItems', { targetType, rankType }],
-    queryFn: getGiftItems,
+    queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
+      const { targetType, rankType } = queryKey[1];
+      if (!targetType || !rankType) throw new Error('arguments are required');
+      return getGiftItems(targetType, rankType);
+    },
   });
 
   useEffect(() => {
     if (isLoading) return;
+    if (!data) return;
 
     if (isViewMore) {
       setGiftItems(data!);

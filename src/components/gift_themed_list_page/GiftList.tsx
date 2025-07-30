@@ -2,9 +2,8 @@ import styled from '@emotion/styled';
 import { GiftItemCard } from '../shared/GiftItemCard';
 import { useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
-import type { PageParam, QueryKey, ThemedGiftItemsPage } from '@/api/types/giftItem.dto';
 import { useParams } from 'react-router-dom';
-import { useInfiniteQuery, type InfiniteData } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getThemedGiftItems } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
@@ -61,17 +60,16 @@ export const GiftList = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isLoading, isError, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
-    ThemedGiftItemsPage,
-    Error,
-    InfiniteData<ThemedGiftItemsPage>,
-    QueryKey,
-    PageParam
-  >({
+  const { data, isLoading, isError, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['themedGiftItems', { id: parsedId }],
-    queryFn: getThemedGiftItems,
+    queryFn: ({ queryKey, pageParam }) => {
+      const { id } = queryKey[1] as { id: number };
+      const cursor = pageParam || 0;
+      if (!id) throw new Error('id is required');
+      return getThemedGiftItems(id, cursor);
+    },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => (lastPage.hasMoreList ? lastPage.cursor : undefined),
+    getNextPageParam: (lastPage) => (lastPage?.hasMoreList ? lastPage.cursor : undefined),
   });
 
   console.log('data', data);

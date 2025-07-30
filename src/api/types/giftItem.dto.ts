@@ -33,8 +33,6 @@ export type ThemedGiftItemsPage = {
   hasMoreList: boolean;
 };
 
-export type PageParam = number;
-
 type Params = {
   id?: number;
   targetType?: string;

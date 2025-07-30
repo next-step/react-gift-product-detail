@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getGiftItemDetail } from '@/api/services/giftItem.service';
+import type { QueryKey } from '@/api/types/giftItem.dto';
 
 const Container = styled.div`
   display: flex;
@@ -85,7 +86,11 @@ export const ProductInfo = () => {
   const parsedId = parseInt(id!);
   const { data, isLoading } = useQuery({
     queryKey: ['giftItemDetail', { id: parsedId }],
-    queryFn: getGiftItemDetail,
+    queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
+      const { id } = queryKey[1];
+      if (!id) throw new Error('id is required');
+      return getGiftItemDetail(id);
+    },
   });
   const { setId, setName, setPrice, setBrand } = useProductInfo();
 
