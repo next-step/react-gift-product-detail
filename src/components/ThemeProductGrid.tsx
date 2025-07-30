@@ -1,13 +1,13 @@
-import React from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { css } from '@emotion/react';
-import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
 import { useAuth } from '@/contexts/AuthContext';
-import { type Product } from '../types/product';
 import { spinnerStyle } from '../styles/common';
+import { fetchThemeProducts } from '../api/categoryApi';
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` });
 const gridStyle = css({
@@ -45,8 +45,15 @@ const emptyStyle = css({
   gap: spacing.spacing2,
 });
 
-import { useThemeProductsQuery } from '@/hooks/useCategoryQuery';
-import type { ThemeProductList } from '@/types/category';
+// 로딩 스피너 스타일 (인라인으로 표시)
+const loadingSpinnerStyle = css({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: spacing.spacing4,
+  color: colors.textSub,
+  gap: spacing.spacing2,
+});
 
 interface ThemeProductGridProps {
   themeId: number;
@@ -55,40 +62,59 @@ interface ThemeProductGridProps {
 const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  // 페이지네이션 및 상품 누적 관리
-  const [page, setPage] = React.useState(0);
-  const [products, setProducts] = React.useState<Product[]>([]);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [productLoading, setProductLoading] = React.useState(false);
-
-  // 상품 불러오기 쿼리
-  const { data: productData } = useThemeProductsQuery(themeId, page, 10) as { data?: ThemeProductList };
-
-  React.useEffect(() => {
-    if (productData) {
-      setProducts(prev => {
-        const newList = productData.list.filter(
-          item => !prev.some(p => p.id === item.id)
-        );
-        return page === 0 ? productData.list : [...prev, ...newList];
-      });
-      setHasMore(productData.hasMoreList);
-      setProductLoading(false);
-    }
-  }, [productData, page]);
-
-  // useInfiniteScroll 훅 사용
-  const setObserverRef = useInfiniteScroll<HTMLDivElement>({
-    loading: productLoading,
-    hasMore,
-    onLoadMore: () => {
-      if (!productLoading && hasMore) {
-        setProductLoading(true);
-        setPage(prev => prev + 1);
-      }
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    error
+  } = useInfiniteQuery({
+    queryKey: ['themeProducts', themeId],
+    queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeId, pageParam, 10),
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasMoreList ? lastPage.cursor : undefined
     },
+    initialPageParam: 0,
   });
+
+  // fetchNextPage를 useCallback으로 메모이제이션
+  const handleFetchNextPage = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Observer 설정을 useCallback으로 메모이제이션
+  const setupObserver = useCallback(() => {
+    if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          handleFetchNextPage();
+        }
+      },
+      { 
+        threshold: 0.1,
+        rootMargin: '50px' // 조금 더 일찍 트리거되도록 설정
+      }
+    );
+
+    observer.observe(observerRef.current);
+    return observer;
+  }, [hasNextPage, isFetchingNextPage, handleFetchNextPage]);
+
+  useEffect(() => {
+    const observer = setupObserver();
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [setupObserver]);
 
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
@@ -99,52 +125,76 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     }
   };
 
-  if (productLoading && products.length === 0) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <div css={spinnerStyle}></div>
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
-
-  if (!products || products.length === 0) {
+  // 초기 로딩 중일 때만 전체 로딩 표시
+  if (isLoading) {
     return (
       <section css={sectionStyle}>
         <div css={emptyStyle}>
-          <div>등록된 상품이 없습니다.</div>
+          <div css={spinnerStyle}></div>
+          <div>상품을 불러오는 중...</div>
         </div>
       </section>
     );
   }
 
+  // 에러 처리
+  if (error) {
+    return (
+      <section css={sectionStyle}>
+        <div css={emptyStyle}>
+          <div>상품을 불러오는데 실패했습니다.</div>
+        </div>
+      </section>
+    );
+  }
+
+  // 데이터가 없는 경우
+  if (!data || data.pages[0]?.list?.length === 0) {
+    return (
+      <section css={sectionStyle}>
+        <div css={emptyStyle}>
+          <div>상품이 없습니다.</div>
+        </div>
+      </section>
+    );
+  }
+
+  // 모든 상품을 flat하게 배열로 만들기
+  const products = data.pages.flatMap((page: any) => page?.list ?? []);
+
   return (
     <section css={sectionStyle}>
       <div css={gridStyle}>
-        {products.map((product, index) => {
-          const isLast = index === products.length - 1;
-          return (
-            <div
-              key={product.id}
-              css={cardStyle}
-              onClick={() => handleProductClick(product.id)}
-              ref={isLast && hasMore ? setObserverRef : undefined}
-            >
-              <img
-                src={product.imageURL}
-                alt={product.name}
-                width={160}
-                height={120}
-                css={imgStyle}
-              />
-              <div css={nameStyle}>{product.name}</div>
-              <div css={priceStyle}>{product.price.sellingPrice.toLocaleString()}원</div>
-              <div css={brandStyle}>{product.brandInfo.name}</div>
-            </div>
-          );
-        })}
+        {products.map((product: any) => (
+          <div
+            key={product.id}
+            css={cardStyle}
+            onClick={() => handleProductClick(product.id)}
+          >
+            <img
+              src={product.imageURL}
+              alt={product.name}
+              width={160}
+              height={120}
+              css={imgStyle}
+            />
+            <div css={nameStyle}>{product.name}</div>
+            <div css={priceStyle}>{product.price.sellingPrice.toLocaleString()}원</div>
+            <div css={brandStyle}>{product.brandInfo.name}</div>
+          </div>
+        ))}
       </div>
-      {/* 더보기 버튼은 무한스크롤로 대체, 필요시 유지 가능 */}
+      
+      {/* 추가 로딩 인디케이터 - 기존 콘텐츠 아래에 표시 */}
+      {isFetchingNextPage && (
+        <div css={loadingSpinnerStyle}>
+          <div css={spinnerStyle}></div>
+          <span>더 많은 상품을 불러오는 중...</span>
+        </div>
+      )}
+      
+      {/* 무한스크롤 트리거 요소 */}
+      <div ref={observerRef} style={{ height: '1px' }} />
     </section>
   );
 };
