@@ -1,294 +1,199 @@
-import React, { useContext, useEffect, useState } from "react"
-import { useParams, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm, useFieldArray } from "react-hook-form"
-import axios, { AxiosResponse, AxiosError } from "axios"
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { AuthContext } from "@/context/AuthContext"
-import { templates } from "@/resources/mock/templates"
-import type { ProductData } from "@/types/products"
+import { AxiosError } from 'axios'
+import styled from '@emotion/styled'
+import { AuthContext } from '@/context/AuthContext'
+import { templates } from '@/resources/mock/templates'
+import { useProduct, useCreateOrder, OrderPayload } from '@/hooks/orderHooks'
 
-// 주문 받는 사람 타입
 type Receiver = { name: string; phone: string; quantity: number }
-// Form 기본값
 type FormValues = { sender: string; receivers: Receiver[] }
-
 const MAX_RECEIVERS = 10
-const DEFAULT_RECEIVER: Receiver = { name: "", phone: "", quantity: 1 }
+const DEFAULT_RECEIVER: Receiver = { name: '', phone: '', quantity: 1 }
 
 export default function OrderPage() {
-  // ── 1. 모든 Hooks 호출 (조건 없이)
+  // Hooks at top-level
   const params = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { user, token } = useContext(AuthContext)!
-  const userName = user?.name || ""
+  const { user, token, initialized } = useContext(AuthContext)
+  const userName = user?.name ?? ''
+  const productId = Number(params.id)
 
-  // React Hook Form 설정
+  // Data fetching & mutation
+  const { data: productSummary, isLoading, isError } = useProduct(productId)
+  const { mutate: createOrder } = useCreateOrder()
+
+  // Form setup
   const {
     control,
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    trigger,
-  } = useForm<FormValues>({
-    defaultValues: { sender: userName, receivers: [DEFAULT_RECEIVER] },
-    mode: "onChange",
-  })
-  const receivers = watch("receivers")
-  const { fields, append, remove } = useFieldArray({ control, name: "receivers" })
+    trigger
+  } = useForm<FormValues>({ defaultValues: { sender: userName, receivers: [DEFAULT_RECEIVER] }, mode: 'onChange' })
+  const receivers = watch('receivers')
+  const { fields, append, remove } = useFieldArray({ control, name: 'receivers' })
 
-  // 템플릿 상태
-  const initialTemplateId = Number(searchParams.get("template")) || templates[0].id
+  // Template state
+  const initialTemplateId = Number(searchParams.get('template')) || templates[0].id
   const [selectedTemplateId, setSelectedTemplateId] = useState<number>(initialTemplateId)
-  const selectedTemplate =
-    templates.find((t) => t.id === selectedTemplateId) || templates[0]
-  const [messageText, setMessageText] = useState(selectedTemplate.defaultTextMessage)
+  const selectedTemplate = templates.find(t => t.id === selectedTemplateId) || templates[0]
+  const [messageText, setMessageText] = useState<string>(selectedTemplate.defaultTextMessage)
+
 
   useEffect(() => {
     setMessageText(selectedTemplate.defaultTextMessage)
-  }, [selectedTemplateId])
+  }, [selectedTemplate.defaultTextMessage])
 
-  // 상품 조회 상태
-  const productId = Number(params.id)
-  const [productSummary, setProductSummary] = useState<ProductData | null>(null)
-  const [loadingProduct, setLoadingProduct] = useState(true)
-  const [errorProduct, setErrorProduct] = useState(false)
-
+  // Redirect if not authenticated
   useEffect(() => {
-    setLoadingProduct(true)
-    setErrorProduct(false)
-    axios
-      .get<{ data: ProductData }>(`http://127.0.0.1:3000/api/products/${productId}/summary`)
-      .then((res: AxiosResponse<{ data: ProductData }>) => {
-        setProductSummary(res.data.data)
-        setLoadingProduct(false)
-      })
-      .catch((err: AxiosError) => {
-        console.error("상품 조회 실패:", err)
-        setErrorProduct(true)
-        setLoadingProduct(false)
-        const msg =
-          err.response?.data && typeof err.response.data === "object" && "data" in err.response.data
-            ? (err.response.data as any).data.message
-            : "제품 정보를 불러오지 못했습니다."
-        toast.error(msg)
-        navigate("/", { replace: true })
-      })
-  }, [productId, navigate])
-
-  // 주문 제출 핸들러
-  const onSubmit = async (data: FormValues) => {
-    try {
-      await axios.post(
-        "http://127.0.0.1:3000/api/order",
-        {
-          productId,
-          message: messageText,
-          messageCardId: String(selectedTemplateId),
-          ordererName: data.sender,
-          receivers: data.receivers.map((r) => ({
-            name: r.name,
-            phoneNumber: r.phone,
-            quantity: r.quantity,
-          })),
-        },
-        { headers: { Authorization: token } }
-      )
-      alert("주문이 완료되었습니다!")
-      navigate("/", { replace: true })
-    } catch (err: any) {
-      const status = err.response?.status
-      if (status === 401) {
-        const redirectTo = location.pathname + location.search
-        navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`, { replace: true })
-        return
-      }
-      console.error("주문 에러 응답:", err.response?.data)
-      alert(err.response?.data?.message || `서버 에러: ${status}`)
-    }
-  }
-
-  // ── 2. Hooks 호출 이후에 조건부 return
-  // 로그인 전 상태
-  useEffect(() => {
-    if (!token) {
+    if (initialized && !token) {
       const redirectTo = location.pathname + location.search
       navigate(`/login?redirect=${encodeURIComponent(redirectTo)}`, { replace: true })
     }
-  }, [token, navigate])
+  }, [initialized, token, navigate])
 
+  // Early returns
+  if (!initialized) return <Loader>로딩 중…</Loader>
   if (!token || !user) return null
+  if (isLoading) return <Loader>상품 정보를 로딩 중…</Loader>
+  if (isError || !productSummary) return <ErrorMsg>상품 정보를 가져올 수 없습니다. (ID: {productId})</ErrorMsg>
 
-  // 상품 로딩/에러 상태
-  if (loadingProduct) return <div>상품 정보를 로딩 중…</div>
-  if (errorProduct || !productSummary)
-    return <div>상품 정보를 가져올 수 없습니다. (ID: {productId})</div>
-
-  // ── 3. 최종 렌더링
-  const templateListStyle: React.CSSProperties = {
-    display: "flex",
-    overflowX: "auto",
-    gap: 8,
-    padding: "8px 0",
+  // Submit handler
+  const onSubmit = (data: FormValues) => {
+    const payload: OrderPayload = {
+      productId,
+      message: messageText,
+      messageCardId: String(selectedTemplateId),
+      ordererName: data.sender,
+      receivers: data.receivers.map(r => ({ name: r.name, phoneNumber: r.phone, quantity: r.quantity }))
+    }
+    createOrder(payload, {
+      onSuccess: () => {
+        alert('주문이 완료되었습니다!')
+        navigate('/', { replace: true })
+      },
+      onError: (error: AxiosError<{ data: { message: string } }>) => {
+        const msg = error.response?.data.data.message || '주문 중 오류가 발생했습니다.'
+        toast.error(msg)
+      }
+    })
   }
 
+  // Price formatting
+  const price = productSummary.price?.sellingPrice ?? 0
+
+
   return (
-    <div style={{ padding: 20 }}>
-      {/* 템플릿 리스트 */}
-      <div style={templateListStyle}>
-        {templates.map((t) => (
-          <img
+    <Container>
+      <TemplateList>
+        {templates.map(t => (
+          <Thumb
             key={t.id}
+            selected={t.id === selectedTemplateId}
+            onClick={() => setSelectedTemplateId(t.id)}
             src={t.thumbUrl}
             alt={t.defaultTextMessage}
-            onClick={() => setSelectedTemplateId(t.id)}
-            style={{
-              width: 80,
-              height: 80,
-              objectFit: "cover",
-              cursor: "pointer",
-              border:
-                selectedTemplateId === t.id ? "2px solid #467DE9" : "2px solid transparent",
-              borderRadius: 4,
-            }}
           />
         ))}
-      </div>
+      </TemplateList>
 
-      {/* 선택된 템플릿 미리보기 */}
-      <img
-        src={selectedTemplate.imageUrl}
-        alt="선택된 템플릿 메시지 카드 미리보기"
-        style={{ width: "100%", borderRadius: 8, marginBottom: 16 }}
-      />
-      <label style={{ display: "block", marginBottom: 8 }}>메시지 내용:</label>
-      <textarea
-        value={messageText}
-        onChange={(e) => setMessageText(e.target.value)}
-        rows={3}
-        style={{ width: "100%", padding: 8, border: "1px solid #ccc", borderRadius: 4 }}
-      />
+      <PreviewImage src={selectedTemplate.imageUrl} alt="템플릿 카드 미리보기" />
 
-      {/* 주문 폼 */}
-      <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 24 }}>
-        {/* 보내는 사람 */}
-        <div style={{ marginBottom: 16 }}>
-          <label>보내는 사람</label>
-          <input
-            {...register("sender", { required: "보내는 사람 이름을 입력하세요." })}
-            defaultValue={userName}
-            className="w-full p-2 border rounded"
-          />
-          {errors.sender && (
-            <p className="text-red-500 text-sm">{errors.sender.message}</p>
-          )}
-        </div>
+      <Section>
+        <Label>메시지 내용:</Label>
+        <MessageInput value={messageText} onChange={e => setMessageText(e.target.value)} rows={3} />
+      </Section>
 
-        {/* 받는 사람 리스트 */}
-        <h2>받는 사람</h2>
-        <p>* 최대 {MAX_RECEIVERS}명까지 추가할 수 있어요.</p>
-        <p>* 전화번호 중복 입력 불가.</p>
-        <button
-          type="button"
-          onClick={() => {
-            if (fields.length < MAX_RECEIVERS) append(DEFAULT_RECEIVER)
-            trigger()
-          }}
-          style={{
-            marginBottom: 16,
-            padding: "4px 12px",
-            backgroundColor: "#f3f4f6",
-            borderRadius: 4,
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          추가하기
-        </button>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormGroup>
+          <Label>보내는 사람</Label>
+          <Input {...register('sender', { required: '보내는 사람 이름을 입력하세요.' })} defaultValue={userName} />
+          {errors.sender && <ErrorMsg>{errors.sender.message}</ErrorMsg>}
+        </FormGroup>
+
+        <FormGroup>
+          <Label>받는 사람 (최대 {MAX_RECEIVERS}명)</Label>
+          <AddButton type="button" onClick={() => { if (fields.length < MAX_RECEIVERS) append(DEFAULT_RECEIVER); trigger(); }}>추가하기</AddButton>
+        </FormGroup>
 
         {fields.map((field, idx) => (
-          <div key={field.id} style={{ marginBottom: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <ReceiverSection key={field.id}>
+            <ReceiverHeader>
               <h3>받는 사람 {idx + 1}</h3>
-              <button type="button" onClick={() => remove(idx)} className="text-red-500">
-                ✕
-              </button>
-            </div>
+              <RemoveButton type="button" onClick={() => remove(idx)}>✕</RemoveButton>
+            </ReceiverHeader>
 
-            {/* 이름 */}
-            <div className="mb-2">
-              <label>이름</label>
-              <input
-                {...register(`receivers.${idx}.name`, { required: "이름을 입력하세요." })}
-                className="w-full p-2 border rounded"
-              />
-              {errors.receivers?.[idx]?.name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.receivers[idx]?.name?.message}
-                </p>
-              )}
-            </div>
+            <FormGroup>
+              <Label>이름</Label>
+              <Input {...register(`receivers.${idx}.name`, { required: '이름을 입력하세요.' })} />
+              {errors.receivers?.[idx]?.name && <ErrorMsg>{errors.receivers[idx]?.name?.message}</ErrorMsg>}
+            </FormGroup>
 
-            {/* 전화번호 */}
-            <div className="mb-2">
-              <label>전화번호</label>
-              <input
+            <FormGroup>
+              <Label>전화번호</Label>
+              <Input
                 {...register(`receivers.${idx}.phone`, {
-                  required: "전화번호를 입력하세요.",
-                  pattern: {
-                    value: /^010\d{8}$/,
-                    message: "01012345678 형식이어야 해요.",
-                  },
-                  validate: (val) => {
-                    const count = receivers.filter((r) => r.phone === val).length
-                    return count === 1 || "중복된 전화번호가 있습니다."
-                  },
-                })}
-                className="w-full p-2 border rounded"
-              />
-              {errors.receivers?.[idx]?.phone && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.receivers[idx]?.phone?.message}
-                </p>
-              )}
-            </div>
+                  required: '전화번호를 입력하세요.',
+                  pattern: { value: /^010\d{8}$/, message: '01012345678 형식이어야 해요.' },
+                  validate: val => receivers.filter(r => r.phone === val).length === 1 || '중복된 전화번호가 있습니다.'
 
-            {/* 수량 */}
-            <div className="mb-2">
-              <label>수량</label>
-              <input
-                type="number"
-                {...register(`receivers.${idx}.quantity`, {
-                  min: { value: 1, message: "1개 이상 입력하세요." },
                 })}
-                className="w-full p-2 border rounded"
-                min={1}
               />
-              {errors.receivers?.[idx]?.quantity && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.receivers[idx]?.quantity?.message}
-                </p>
-              )}
-            </div>
-          </div>
+              {errors.receivers?.[idx]?.phone && <ErrorMsg>{errors.receivers[idx]?.phone?.message}</ErrorMsg>}
+            </FormGroup>
+
+            <FormGroup>
+              <Label>수량</Label>
+              <Input type="number" {...register(`receivers.${idx}.quantity`, { min: { value: 1, message: '1개 이상 입력하세요.' } })} />
+              {errors.receivers?.[idx]?.quantity && <ErrorMsg>{errors.receivers[idx]?.quantity?.message}</ErrorMsg>}
+            </FormGroup>
+          </ReceiverSection>
         ))}
 
-        <button type="submit" className="px-4 py-2 bg-yellow-400 rounded w-full">
-          {fields.length}명 완료
-        </button>
-      </form>
+        <SubmitButton type="submit">{fields.length}명 완료</SubmitButton>
+      </Form>
 
-      {/* 상품 정보 */}
-      <div style={{ marginTop: 32 }}>
-        <img
-          src={productSummary.imageURL}
-          alt={productSummary.name}
-          style={{ width: 80, borderRadius: 8 }}
-        />
-        <div>{productSummary.name}</div>
-        <p>₩{productSummary.price.sellingPrice.toLocaleString()}</p>
-      </div>
-    </div>
+      <ProductSection>
+        <ProductImage src={productSummary.imageURL} alt={productSummary.name} />
+        <ProductInfo>
+          <div>{productSummary.name}</div>
+          <div>₩{price.toLocaleString()}</div>
+        </ProductInfo>
+      </ProductSection>
+    </Container>
   )
 }
+
+// Styled components
+const Container = styled.div`padding: 20px;`
+const TemplateList = styled.div`display: flex; overflow-x: auto; gap: 8px; padding: 8px 0;`
+const Thumb = styled.img<{ selected: boolean }>`
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid ${props => props.selected ? '#467DE9' : 'transparent'};
+  border-radius: 4px;
+`
+const PreviewImage = styled.img`width: 100%; border-radius: 8px;	margin-bottom: 16px;`
+const Section = styled.div`margin-bottom: 16px;`
+const Label = styled.label`display: block; margin-bottom: 8px;`
+const MessageInput = styled.textarea`width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;`
+const Form = styled.form`margin-top: 24px;`
+const FormGroup = styled.div`margin-bottom: 16px;`
+const Input = styled.input`width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;`
+const AddButton = styled.button`padding: 4px 12px; background-color: #f3f4f6; border: none; border-radius: 4px; cursor: pointer;`
+const ReceiverSection = styled.div`margin-bottom: 16px;`
+const ReceiverHeader = styled.div`display: flex; justify-content: space-between; align-items: center;`
+const RemoveButton = styled.button`background: none; border: none; color: #e53e3e; cursor: pointer;`
+const SubmitButton = styled.button`width: 100%; padding: 12px; background-color: #f3f4f6; border: none; border-radius: 4px; cursor: pointer;`
+const ProductSection = styled.div`display: flex; align-items: center; margin-top: 32px;`
+const ProductImage = styled.img`width: 80px; border-radius: 8px; margin-right: 16px;`
+const ProductInfo = styled.div`font-size: 16px; line-height: 1.5;`
+const Loader = styled.div`padding: 20px; text-align: center;`
+const ErrorMsg = styled.div`padding: 20px; text-align: center; color: #e53e3e;`

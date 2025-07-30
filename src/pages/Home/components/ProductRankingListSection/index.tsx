@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import styled from '@emotion/styled';
 import { Typography } from '@/components/common/Typography';
@@ -7,7 +7,7 @@ import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing
 import ProductRankingList from './ProductRankingList';
 import type { ProductData, ProductRankingFilterOption } from '@/types/products';
 
-const ProductRankingListSection: React.FC = () => {
+const ProductRankingListSection = () => {
   // 필터 상태 관리
   const [filterOption, setFilterOption] = useState<ProductRankingFilterOption>({
     targetType: 'ALL',
@@ -15,17 +15,17 @@ const ProductRankingListSection: React.FC = () => {
   });
   // API 데이터 & 상태
   const [products, setProducts] = useState<ProductData[]>([]);
-  const [loading, setLoading]   = useState<boolean>(true);
-  const [error, setError]       = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
-  // 랭킹 조회 함수
-  const fetchRanking = () => {
+  // 랭킹 조회 함수 (useCallback으로 안정화)
+  const fetchRanking = useCallback(() => {
     setLoading(true);
     setError(false);
     axios
       .get<{ data: ProductData[] }>('/api/products/ranking', { params: filterOption })
-      .then((res: AxiosResponse<{ data: ProductData[] }>) => {
-        setProducts(res.data.data ?? []);
+      .then(({ data }) => {
+        setProducts(data.data ?? []);
         setLoading(false);
       })
       .catch((err: AxiosError) => {
@@ -33,10 +33,12 @@ const ProductRankingListSection: React.FC = () => {
         setError(true);
         setLoading(false);
       });
-  };
+  }, [filterOption]);
 
   // 필터가 바뀔 때마다 재조회
-  useEffect(fetchRanking, [filterOption]);
+  useEffect(() => {
+    fetchRanking();
+  }, [fetchRanking]);
 
   return (
     <Section>

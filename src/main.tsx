@@ -5,15 +5,22 @@ import App from '@/App'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from './styles/theme'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>                     {/* ← 여기서 한 번만 Router 선언 */}
-      <AuthProvider>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AuthProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </AuthProvider>
+      </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>
 )

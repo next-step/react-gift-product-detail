@@ -1,1 +1,1 @@
-# react-gift-login
+# react-gift-product-detail

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '@/hooks/useFetch';
 import type { UseFetchResult } from '@/hooks/useFetch';
@@ -18,27 +18,23 @@ interface ThemeHeroProps {
 export function ThemeHero({ themeId }: ThemeHeroProps) {
   const navigate = useNavigate();
   const { data: info, loading, error } = useFetch<{ data: ThemeInfo }>(
-    {
-      url: `/api/themes/${themeId}/info`,
-      method: 'get',
-    },
+    { url: `/api/themes/${themeId}/info`, method: 'get' },
     [themeId]
   );
 
-  // 로딩
-  if (loading) return <div>로딩 중…</div>;
-
-  // 에러 처리: 404 시 홈으로 리다이렉트
-  if (error) {
-    if (error.response?.status === 404) {
-      navigate('/', { replace: true });
-      return null;
+  // Redirect on 404 or log other errors
+  useEffect(() => {
+    if (error) {
+      if (error.response?.status === 404) {
+        navigate('/', { replace: true });
+      } else {
+        console.error('테마 상세 정보 로드 실패:', error);
+      }
     }
-    console.error('테마 상세 정보 로드 실패:', error);
-    return <div>정보를 불러오는 중 오류가 발생했습니다.</div>;
-  }
+  }, [error, navigate]);
 
-  // 데이터 없으면 렌더링하지 않음
+  if (loading) return <div>로딩 중…</div>;
+  if (error) return <div>정보를 불러오는 중 오류가 발생했습니다.</div>;
   if (!info) return null;
 
   const { title, description, backgroundColor } = info.data;
