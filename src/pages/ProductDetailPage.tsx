@@ -2,6 +2,7 @@ import { useState, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   useSuspenseQuery,
+  useQuery,
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
@@ -92,10 +93,8 @@ function ProductDetailPage() {
         );
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['product', 'wish', productId],
-      });
+    onSuccess: () => {
+      // Optimistic Update 유지
     },
   });
 
