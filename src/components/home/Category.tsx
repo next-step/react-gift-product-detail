@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useFetch } from "@/hooks/useFetch";
 import { API } from "@/constants/api";
 import { useNavigate } from "react-router-dom";
+import QUERY_KEY from "@/constants/queryKey";
 
 type Theme = {
   themeId: number;
@@ -12,7 +13,7 @@ type Theme = {
 
 export default function Category() {
   const { data, isLoading, isError } = useFetch<Theme[]>({
-    queryKey: ["themeList"],
+    queryKey: QUERY_KEY.THEME_LIST,
     url: API.THEMES,
   });
   const categories = data ?? [];

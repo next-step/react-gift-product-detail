@@ -1,9 +1,7 @@
 import styled from "@emotion/styled";
 import Spacing from "@/components/Spacing";
 import type { ProductInfo } from "@/types/product";
-import { getUserFromSession } from "@/utils/getUserFromStorage";
 import { useNavigate } from "react-router-dom";
-import { PATH } from "@/paths";
 
 interface Props {
   item: ProductInfo;
@@ -12,12 +10,7 @@ interface Props {
 export default function ProductCard({ item }: Props) {
   const navigate = useNavigate();
   const goToOrder = (itemId: number) => {
-    const userInfo = getUserFromSession();
-    if (userInfo) navigate(PATH.toORDER(itemId));
-    else
-      navigate(PATH.LOGIN, {
-        state: { from: `/order/${itemId}` },
-      });
+    navigate(`/products/${itemId}`);
   };
 
   return (

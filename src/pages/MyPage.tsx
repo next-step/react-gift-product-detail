@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import Spacing from "@/components/Spacing";
 import { STORAGE_KEY } from "@/constants/storage";
+import { withErrorBoundary } from "@/hoc/withErrorBoundary";
 
-export default function MyPage() {
+function MyPage() {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ export default function MyPage() {
     </>
   );
 }
+
+export default withErrorBoundary(MyPage);
 
 const Wrapper = styled.div`
   max-width: 720px;

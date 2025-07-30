@@ -9,8 +9,9 @@ import { REGEX } from "@/constants/regex";
 import { ERROR_MESSAGE } from "@/constants/messages";
 import axios from "axios";
 import { useLoginMutation } from "@/hooks/useLoginMutation";
+import { withErrorBoundary } from "@/hoc/withErrorBoundary";
 
-export default function LoginPage() {
+function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: string })?.from || "/";
@@ -92,12 +93,15 @@ export default function LoginPage() {
   );
 }
 
+export default withErrorBoundary(LoginPage);
+
 const Wrapper = styled.div`
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
   min-height: calc(100vh - 56px);
   display: flex;
+  align-items: center;
   justify-content: center;
   align-items: center;
   padding: 0 16px;

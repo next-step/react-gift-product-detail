@@ -159,8 +159,8 @@ const OrderBtn = styled.button`
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.kakao.yellow.default};
   border: none;
+  background-color: ${({ theme }) => theme.colors.kakao.yellow.default};
   color: ${({ theme }) => theme.colors.gray[900]};
   transition:
     background-color 200ms,
