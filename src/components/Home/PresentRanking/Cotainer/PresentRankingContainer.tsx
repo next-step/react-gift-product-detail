@@ -9,9 +9,17 @@ import {
   StyledPrsentRankingDiv,
 } from '@src/components/Home/PresentRanking/Cotainer/StyledPresentRankingContainer';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useLocation } from 'react-router-dom';
+import { PARAMS } from '@src/assets/params';
+import { useRankingItem } from '../Item/useRankingItem';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const rankType = params.get(PARAMS.rankType);
+  const targetType = params.get(PARAMS.targetType);
+  const { data } = useRankingItem({ targetType, rankType });
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -28,7 +36,11 @@ const PresentRankingContainer = () => {
       <StyledPrsentRankingDiv>
         <ErrorBoundary fallback={<div>에러 발생!</div>}>
           <Suspense fallback={<div>Loading...</div>}>
-            <PresentRankingItem isVisible={isVisible} showRankingNumber={true}></PresentRankingItem>
+            <PresentRankingItem
+              data={data}
+              isVisible={isVisible}
+              showRankingNumber={true}
+            ></PresentRankingItem>
           </Suspense>
         </ErrorBoundary>
       </StyledPrsentRankingDiv>

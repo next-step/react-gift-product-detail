@@ -15,17 +15,12 @@ const ThemesProductItem = () => {
     onIntersect: fetchNextPage,
     canLoadMore: hasNextPage,
   });
-
   return (
     <StyledTopestDiv>
       <ThemesProductionLabel />
       <StyledThemesProductPaddingContainer className='padding-container'>
         <StyledThemesProductGridContainer className='theme-grid-container'>
-          <PresentProductList
-            goods={(data?.pages ?? []).flatMap((page) => page.list)}
-            isError={isError}
-            isLoading={isLoading}
-          />
+          <PresentProductList />
           <div className='loader' ref={loaderRef}></div>
         </StyledThemesProductGridContainer>
       </StyledThemesProductPaddingContainer>

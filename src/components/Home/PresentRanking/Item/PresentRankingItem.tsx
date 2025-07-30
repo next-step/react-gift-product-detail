@@ -8,26 +8,19 @@ import {
   StyledPresentRankingItemPresentItem,
   StyledPresentRankingNumContainer,
 } from '@src/components/Home/PresentRanking/Item/StyledPresentRankingItem';
-import type { Good } from '@src/types/Goods';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { PARAMS } from '@src/assets/params';
-import { useRankingItem } from './useRankingItem';
+import type { Good, Goods } from '@src/types/Goods';
+import { useNavigate } from 'react-router-dom';
 interface Props {
+  data: Goods;
   isVisible?: boolean;
   showRankingNumber?: boolean;
 }
 const BASIC_RANKING_COMPONENT_NUMBER = 6;
 const MANY_RANKING_COMPONENT_NUMBER = 18;
 
-const PresentProductList = ({ isVisible = false, showRankingNumber = false }: Props) => {
+const PresentProductList = ({ data, isVisible = false, showRankingNumber = false }: Props) => {
   const navigate = useNavigate();
   const repeatCnt = isVisible ? MANY_RANKING_COMPONENT_NUMBER : BASIC_RANKING_COMPONENT_NUMBER;
-
-  const { search } = useLocation();
-  const params = new URLSearchParams(search);
-  const rankType = params.get(PARAMS.rankType);
-  const targetType = params.get(PARAMS.targetType);
-  const { data } = useRankingItem({ targetType, rankType });
 
   const handleItemClick = (item: Good) => {
     if (!sessionStorage.getItem('email')) {
