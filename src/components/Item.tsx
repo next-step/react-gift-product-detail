@@ -8,7 +8,7 @@ import {
   ItemName,
   ItemPrice,
 } from '@/styles/Item/Item.styles';
-import useProductDetail from '@/hooks/useProductDetail';
+import useProductDetail from '@/hooks/product/useProductDetail';
 
 type ItemProps = {
   index: number;

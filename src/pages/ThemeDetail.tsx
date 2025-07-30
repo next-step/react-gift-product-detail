@@ -14,7 +14,7 @@ import {
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
-import useProductDetail from '@/hooks/useProductDetail';
+import useProductDetail from '@/hooks/product/useProductDetail';
 
 function ThemeDetail() {
   const { themeId } = useParams();
@@ -43,20 +43,18 @@ function ThemeDetail() {
 
   return (
     <ThemeContainerWrapper>
-      {themeInfo ? (
+      {themeInfo && (
         <ThemeInfoContainer backgroundColor={themeInfo.backgroundColor}>
           <p>{themeInfo.name}</p>
           <p>{themeInfo.title}</p>
           <p>{themeInfo.description}</p>
         </ThemeInfoContainer>
-      ) : (
-        <p>로딩중...</p>
       )}
 
       <ProductList>
         {products.length === 0 && !loading && <div>상품이 없습니다.</div>}
         {products.map((item, idx) => (
-          <ProductCard onClick={() => handleItemClick(item.id)} key={`${item.id}-${idx}`}>
+          <ProductCard key={`${item.id}-${idx}`} onClick={() => handleItemClick(item.id)}>
             <ProductImg src={item.imageURL} alt={item.name} />
             <ProductName>{item.name}</ProductName>
             <ProductBrand>{item.brandInfo.name}</ProductBrand>
