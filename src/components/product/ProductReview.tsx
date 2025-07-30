@@ -1,4 +1,6 @@
-import { useHighlightReview } from '@/hooks/useProduct';
+import { highlightReviewQueryOptions } from '@/hooks/useProduct';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import Gap from '@/components/common/Gap.style';
 import {
   ReviewWrapper,
@@ -12,8 +14,7 @@ interface ProductReviewProps {
 }
 
 const ProductReview = ({ productId }: ProductReviewProps) => {
-  const { data } = useHighlightReview(productId);
-
+  const { data } = useSuspenseQuery(highlightReviewQueryOptions(productId));
   return (
     <ReviewWrapper>
       {data.reviews.map((review) => (

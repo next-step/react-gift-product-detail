@@ -7,9 +7,22 @@ import ProductInfoContent from '@/components/product/ProductInfoContent';
 import ProductDescription from '@/components/product/ProductDescription';
 import ProductReview from '@/components/product/ProductReview';
 import ProductDetailInfo from '@/components/product/ProductDetailInfo';
-import { TabContainer, TabContentWrapper, Tab, TabName } from '@/components/product/product.style';
 import WishAndOrderBar from '@/components/product/WishAndOrderBar';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
+
+import { TabContainer, TabContentWrapper, Tab, TabName } from '@/components/product/product.style';
+
+const tabs = [
+  { key: 'description', label: '상품설명' },
+  { key: 'review', label: '선물후기' },
+  { key: 'info', label: '상세정보' },
+] as const;
+
+const TabContentMap = {
+  description: ProductDescription,
+  review: ProductReview,
+  info: ProductDetailInfo,
+} as const;
 
 const Product = () => {
   const { productId } = useParams();
@@ -30,34 +43,21 @@ const Product = () => {
       <WishAndOrderBar />
 
       <TabContainer>
-        <Tab active={selectedTab === 'description'} onClick={() => setSelectedTab('description')}>
-          <TabName>상품설명</TabName>
-        </Tab>
-        <Tab active={selectedTab === 'review'} onClick={() => setSelectedTab('review')}>
-          <TabName>선물후기</TabName>
-        </Tab>
-        <Tab active={selectedTab === 'info'} onClick={() => setSelectedTab('info')}>
-          <TabName>상세정보</TabName>
-        </Tab>
+        {tabs.map(({ key, label }) => (
+          <Tab key={key} active={selectedTab === key} onClick={() => setSelectedTab(key)}>
+            <TabName>{label}</TabName>
+          </Tab>
+        ))}
       </TabContainer>
 
       <ErrorBoundary>
         <TabContentWrapper>
-          {selectedTab === 'description' && (
-            <Suspense fallback={<div style={{ padding: '20px' }}>설명 로딩 중...</div>}>
-              <ProductDescription productId={id} />
-            </Suspense>
-          )}
-          {selectedTab === 'review' && (
-            <Suspense fallback={<div style={{ padding: '20px' }}>후기 로딩 중...</div>}>
-              <ProductReview productId={id} />
-            </Suspense>
-          )}
-          {selectedTab === 'info' && (
-            <Suspense fallback={<div style={{ padding: '20px' }}>상세 정보 로딩 중...</div>}>
-              <ProductDetailInfo productId={id} />
-            </Suspense>
-          )}
+          <Suspense fallback={<div style={{ padding: '20px' }}>탭 콘텐츠 로딩 중...</div>}>
+            {(() => {
+              const Component = TabContentMap[selectedTab];
+              return <Component productId={id} />;
+            })()}
+          </Suspense>
         </TabContentWrapper>
       </ErrorBoundary>
     </Layout>

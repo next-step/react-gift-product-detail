@@ -1,17 +1,28 @@
 import { useParams } from 'react-router-dom';
-import { useWishCount, useToggleWish } from '@/hooks/useProduct';
+import { useToggleWish } from '@/hooks/useProduct';
+import { wishCountQueryOptions } from '@/hooks/useProduct';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
 import { useNavigate } from 'react-router-dom';
 import HeartIcon from '@/components/icons/HeartIcon';
-import {Wrapper,WishBox,WishCount,OrderButton,OrderText} from '@/components/product/WishAndOrderBar.style'
+import {
+  Wrapper,
+  WishBox,
+  WishCount,
+  OrderButton,
+  OrderText,
+} from '@/components/product/WishAndOrderBar.style';
+
 const WishAndOrderBar = () => {
   const { productId } = useParams();
-  const id = Number(productId);
+const navigate = useNavigate();
 
-  const navigate = useNavigate();
-  const { data } = useWishCount(id);
-  const { mutate: toggleWish } = useToggleWish(id);
+const id = Number(productId ?? 0); 
 
-  if (!data) return null;
+const { data } = useSuspenseQuery(wishCountQueryOptions(id));
+const { mutate: toggleWish } = useToggleWish(id);
+
+if (!productId || !data) return null;
 
   return (
     <Wrapper>

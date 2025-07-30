@@ -1,5 +1,7 @@
 import parse from 'html-react-parser';
-import { useProductDetail } from '@/hooks/useProduct';
+
+import { productDetailQueryOptions } from '@/hooks/useProduct';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import Gap from '@/components/common/Gap.style';
 import { Description } from '@/components/product/ProductDescription.style';
@@ -9,8 +11,7 @@ interface ProductDescriptionProps {
 }
 
 const ProductDescription = ({ productId }: ProductDescriptionProps) => {
-  const { data } = useProductDetail(productId);
-
+  const { data } = useSuspenseQuery(productDetailQueryOptions(productId));
   return (
     <>
       <Description>{parse(data.description)}</Description>

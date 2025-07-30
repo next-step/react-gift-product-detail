@@ -1,4 +1,5 @@
-import { useProductDetail } from '@/hooks/useProduct';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { productDetailQueryOptions } from '@/hooks/useProduct';
 
 import {
   ReviewWrapper,
@@ -13,7 +14,7 @@ interface ProductDetailInfoProps {
 }
 
 const ProductDetailInfo = ({ productId }: ProductDetailInfoProps) => {
-  const { data } = useProductDetail(productId);
+  const { data } = useSuspenseQuery(productDetailQueryOptions(productId));
 
   return (
     <ReviewWrapper>

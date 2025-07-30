@@ -1,4 +1,5 @@
-import { useProductInfo } from '@/hooks/useProduct';
+import { productInfoQueryOptions } from '@/hooks/useProduct';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import {
   ProductImage,
@@ -15,8 +16,8 @@ interface ProductDetailInfoProps {
 }
 
 const ProductInfoContent = ({ productId }: ProductDetailInfoProps) => {
-  const { data } = useProductInfo(productId);
-
+  const { data } = useSuspenseQuery(productInfoQueryOptions(productId));
+    
   return (
     <>
       <ProductImage src={data.imageURL} alt={data.name} />
