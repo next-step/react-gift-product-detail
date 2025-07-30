@@ -20,3 +20,11 @@ export const PRODUCT_SUMMARY_URL = (id: number) => `${BASE_URL}/products/${id}/s
 export const THEMES_INFO = (themesId: number) => `${BASE_URL}/themes/${themesId}/info`;
 
 export const THEMES_PRODUCTS = (themesId: number) => `${BASE_URL}/themes/${themesId}/products`;
+
+export const PRODUCT_URL = (id: number) => `${BASE_URL}/products/${id}`;
+
+export const PRODUCT_DETAIL_URL = (id: number) => `${BASE_URL}/products/${id}/detail`;
+
+export const PRODUCT_REVIEW_URL = (id: number) => `${BASE_URL}/products/${id}/highlight-review`;
+
+export const PRODUCT_WISH_URL = (id: number) => `${BASE_URL}/products/${id}/wish`;

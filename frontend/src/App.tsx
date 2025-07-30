@@ -12,6 +12,7 @@ import ThemeItems from '@/pages/ThemeItem/ThemeItems.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import Home from '@/pages/Home.tsx';
+import ProductDetail from '@/pages/ProductDetail/ProductDetail.tsx';
 
 const queryClientConfig: QueryClientConfig = {
   defaultOptions: {
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/my" element={<My />} />
             <Route path="/order/:id" element={<Order />} />
             <Route path="/themes/:id" element={<ThemeItems />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

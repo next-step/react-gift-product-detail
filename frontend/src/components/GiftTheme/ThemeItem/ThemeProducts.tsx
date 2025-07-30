@@ -45,8 +45,8 @@ export default function ThemeProducts({ themeId }: ThemeProductProps) {
             price={item.price.sellingPrice}
             brand={item.brandInfo.name}
             onClick={() =>
-              navigate(userInfo ? `${PATH.ORDER}/${item.id}` : `${PATH.LOGIN}`, {
-                state: { from: `${PATH.ORDER}/${item.id}` },
+              navigate(userInfo ? `${PATH.PRODUCT}/${item.id}` : `${PATH.LOGIN}`, {
+                state: { from: `${PATH.PRODUCT}/${item.id}` },
               })
             }
           />

@@ -1,6 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import type { Product } from '@/types/themes/types.ts';
+import type { Product } from '@/types/products/types.ts';
 
 interface ThemesProduct {
   list: Product[];

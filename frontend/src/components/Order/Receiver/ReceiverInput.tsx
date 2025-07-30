@@ -1,17 +1,23 @@
+import type {
+  FieldError,
+  FieldPath,
+  FieldValues,
+  RegisterOptions,
+  UseFormRegister,
+} from 'react-hook-form';
 import { Input, ItemInput, ReceiverItem } from '@/components/Order/Receiver/Receiver.style.ts';
-import type { FieldError, RegisterOptions, UseFormRegister } from 'react-hook-form';
 
-interface Props {
+interface Props<T extends FieldValues, K extends FieldPath<T>> {
   type?: string;
   label: string;
-  name: string;
+  name: K;
   placeholder?: string;
-  register: UseFormRegister<any>;
-  rules?: RegisterOptions;
+  register: UseFormRegister<T>;
+  rules?: RegisterOptions<T, K>;
   error?: FieldError | null;
 }
 
-export default function ReceiverInput({
+export default function ReceiverInput<T extends FieldValues, K extends FieldPath<T>>({
   type = 'text',
   label,
   name,
@@ -19,7 +25,7 @@ export default function ReceiverInput({
   register,
   rules,
   error,
-}: Props) {
+}: Props<T, K>) {
   return (
     <ReceiverItem>
       <span>{label}</span>
@@ -28,7 +34,7 @@ export default function ReceiverInput({
           type={type}
           {...register(name, {
             required: `${label}를 입력해주세요`,
-            ...rules, // 여기에 rules 삽입
+            ...rules,
           })}
           isActive={!!error}
           placeholder={placeholder}

@@ -1,6 +1,6 @@
 import { THEMES_PRODUCTS } from '@/api/api.ts';
 import useInfiniteFetchThemesProduct from '@/hooks/fetch/useInfiniteFetchThemesProduct.ts';
-import type { Product } from '@/types/themes/types.ts';
+import type { Product } from '@/types/products/types.ts';
 
 interface UseFetchThemesProductResult {
   list: Product[];

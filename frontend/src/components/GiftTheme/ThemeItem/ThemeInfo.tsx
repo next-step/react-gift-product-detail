@@ -3,7 +3,7 @@ import {
   ThemeInfoWrapper,
 } from '@/components/GiftTheme/ThemeItem/ThemeInfo.styles.ts';
 import { ProductsError } from '@/components/GiftTheme/ThemeItem/ThemeProducts.styles.ts';
-import type { ThemeInfo } from '@/types/themes/types.ts';
+import type { ThemeInfo } from '@/types/products/types.ts';
 
 interface ThemeInfoProps {
   error?: Error | null;

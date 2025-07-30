@@ -11,7 +11,7 @@ import useReceiverForm from '@/hooks/order/receiver/useReceiverForm.ts';
 import { Wrapper } from '@/pages/Order/Order.style.ts';
 import { getUserInfo } from '@/storage/userInfo.ts';
 import { orderMessage } from '@/data/orderMessage.ts';
-import useFetchProductData from '@/hooks/fetch/useFetchProductData.ts';
+import useFetchProductSummaryData from '@/hooks/fetch/useFetchProductSummaryData.ts';
 import useErrorRedirect from '@/hooks/order/useErrorRedirect.ts';
 
 export default function Order() {
@@ -35,7 +35,7 @@ export default function Order() {
     },
   });
 
-  const { product, loading, error } = useFetchProductData(id);
+  const { product, loading, error } = useFetchProductSummaryData(id);
 
   useErrorRedirect(error?.message);
 

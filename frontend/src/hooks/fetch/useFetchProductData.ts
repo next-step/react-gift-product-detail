@@ -1,16 +1,11 @@
-import { PRODUCT_SUMMARY_URL } from '@/api/api.ts';
 import useFetchData from '@/hooks/fetch/useFetchData.ts';
-import type { SelectedItemInfo } from '@/types/order/types.ts';
+import { PRODUCT_URL } from '@/api/api.ts';
+import type { Product } from '@/types/products/types.ts';
 
-export default function useFetchProductData(id: number) {
-  const { data, isLoading, error } = useFetchData<SelectedItemInfo>(
-    ['product', id],
-    PRODUCT_SUMMARY_URL(id),
-  );
+export default function useFetchProductData(productId: number) {
+  const { data } = useFetchData<Product>(['productId', productId], PRODUCT_URL(productId));
 
   return {
-    product: data?.data,
-    loading: isLoading,
-    error,
+    data: data?.data,
   };
 }
