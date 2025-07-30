@@ -21,7 +21,7 @@ import useOrderSubmit from './hooks/useOrderSubmit';
 import useOrderInvalid from './hooks/useOrderInvalid';
 import EmptyMessage from '@components/common/EmptyMessage';
 import { useQuery } from '@tanstack/react-query';
-import { fetchProductSummury } from '@apis/giftOrderApi';
+import { productSummaryOptions } from '@queries/product';
 
 const GiftOrderPage = () => {
   // 데이터 fetch
@@ -31,10 +31,7 @@ const GiftOrderPage = () => {
     isError,
     isPending,
     error,
-  } = useQuery({
-    queryKey: ['productSummary', id],
-    queryFn: ({ queryKey }) => fetchProductSummury(queryKey[1]),
-  });
+  } = useQuery(productSummaryOptions(id));
 
   //useForm 사용
   const methods = useGiftOrderForm();

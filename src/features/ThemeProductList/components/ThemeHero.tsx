@@ -1,4 +1,3 @@
-import { fetchThemeInfo } from '@apis/themeApi';
 import LoadingSpinner from '@components/common/LoadingSpinner';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
@@ -7,6 +6,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { ThemeProductProps } from '../themeProductType';
+import { themeHeroInfoOptions } from '@queries/theme';
 
 export interface ThemeInfo {
   themeId: number;
@@ -17,10 +17,9 @@ export interface ThemeInfo {
 }
 
 const ThemeHero = ({ id }: ThemeProductProps) => {
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ['themeInfo', id],
-    queryFn: ({ queryKey }) => fetchThemeInfo(queryKey[1]),
-  });
+  const { data, isPending, isError, error } = useQuery(
+    themeHeroInfoOptions(id)
+  );
 
   const navigate = useNavigate();
   useEffect(() => {

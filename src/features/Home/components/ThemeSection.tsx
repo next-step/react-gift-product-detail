@@ -1,6 +1,6 @@
-import { fetchThemes } from '@apis/themeApi';
 import LoadingSpinner from '@components/common/LoadingSpinner';
 import styled from '@emotion/styled';
+import { themeOptions } from '@queries/theme';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 export interface GiftTheme {
@@ -10,14 +10,7 @@ export interface GiftTheme {
 }
 
 const ThemeSection = () => {
-  const {
-    data: themes,
-    isError,
-    isPending,
-  } = useQuery({
-    queryKey: ['Themes'],
-    queryFn: fetchThemes,
-  });
+  const { data: themes, isError, isPending } = useQuery(themeOptions());
 
   return (
     <Section>
