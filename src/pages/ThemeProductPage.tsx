@@ -7,7 +7,7 @@ import type { ThemeInfo } from '@/types/theme';
 import type { Product } from '@/types/product';
 import Header from '@/components/Header';
 import styled from '@emotion/styled';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 const PageContainer = styled.div`
   width: 100vw;
@@ -31,15 +31,8 @@ const ThemeProductPage = () => {
       .catch(() => setError('테마 정보를 불러올 수 없습니다.'));
   }, [themeId]);
 
-  // useInfiniteQuery로 상품 목록 무한 스크롤 처리
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    error: queryError,
-  } = useInfiniteQuery<
+  // useSuspenseInfiniteQuery로 상품 목록 무한 스크롤 처리
+  const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery<
     { list: Product[]; cursor: number; hasMoreList: boolean },
     Error
   >({
@@ -54,7 +47,6 @@ const ThemeProductPage = () => {
     },
     getNextPageParam: (lastPage) =>
       lastPage.hasMoreList ? lastPage.cursor : undefined,
-    enabled: !!themeId,
     initialPageParam: 0,
   });
 
@@ -75,20 +67,17 @@ const ThemeProductPage = () => {
     };
   }, [fetchNextPage, hasNextPage]);
 
-  if (isLoading) return <div>로딩중...</div>;
-  if (isError || error || queryError)
-    return <div>{error || queryError?.message || '에러 발생'}</div>;
+  if (error) return <div>{error}</div>;
   if (!theme) return <div>테마 정보를 찾을 수 없습니다.</div>;
 
   // 모든 페이지의 상품을 합쳐서 전달
-  const products = data?.pages.flatMap((page) => page.list as Product[]) || [];
+  const products = data?.pages.flatMap((page) => page.list) || [];
 
   return (
     <PageContainer>
       <Header />
       <ThemeHeroSection theme={theme} />
       <ProductList products={products} showRank={false} />
-      {isLoading && <div>로딩중...</div>}
       <div ref={observerRef} style={{ height: 1 }} />
       {!hasNextPage && products.length === 0 && <div>상품이 없습니다.</div>}
     </PageContainer>

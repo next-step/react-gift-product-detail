@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import type { Theme } from '@/types/theme';
 import { fetchThemes } from '@/api/theme';
 
@@ -51,27 +51,13 @@ const Name = styled.div`
 
 function CategoryList({ onHide }: { onHide?: () => void }) {
   const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useQuery<Theme[], Error>({
+  const { data } = useSuspenseQuery<Theme[], Error>({
     queryKey: ['themes'],
     queryFn: fetchThemes,
   });
 
   const themes: Theme[] = data || [];
 
-  if (isLoading)
-    return (
-      <Box>
-        <Title>선물 테마</Title>
-        <div>로딩 중 ... </div>
-      </Box>
-    );
-  if (isError)
-    return (
-      <Box>
-        <Title>선물 테마</Title>
-        <div>{error?.message}</div>
-      </Box>
-    );
   if (themes.length === 0)
     return (
       <Box>

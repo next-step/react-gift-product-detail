@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import type { Product } from '@/types/product';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchProductRanking } from '@/api/product';
 
 const List = styled.ul`
@@ -96,7 +96,7 @@ function ProductList({
   // 더보기/접기 state
   const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE);
 
-  const { data, isLoading, isError, error } = useQuery<Product[], Error>({
+  const { data } = useSuspenseQuery<Product[], Error>({
     queryKey: ['products', 'ranking'],
     queryFn: fetchProductRanking,
   });
@@ -112,8 +112,6 @@ function ProductList({
     navigate(`/products/${id}`);
   };
 
-  if (isLoading) return <div>로딩 중 ...</div>;
-  if (isError) return <div>{error?.message}</div>;
   if (visibleProducts.length === 0) return <div>상품 목록이 없습니다.</div>;
 
   return (
