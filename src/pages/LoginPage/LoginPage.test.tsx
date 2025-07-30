@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -77,22 +77,6 @@ describe('LoginPage 이메일 폼 테스트', () => {
       renderLoginPage();
       const emailInput = screen.getByTestId('email');
 
-      // When
-      fireEvent.click(emailInput);
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-
-      // Then
-      expect(screen.queryByText('ID를 입력해주세요.')).not.toBeInTheDocument();
-      expect(
-        screen.queryByText('ID는 이메일 형식으로 입력해주세요.')
-      ).not.toBeInTheDocument();
-    });
-
-    test('Given: 이메일 폼이 포커스된 상태일 때, When: 올바른 이메일 형식을 입력했을 때, Then: 에러 메시지가 사라져야 한다', () => {
-      // Given
-      renderLoginPage();
-      const emailInput = screen.getByTestId('email');
-
       // When & Then
       const validEmails = [
         'user@naver.com',
@@ -151,5 +135,65 @@ describe('LoginPage 비밀번호 폼 테스트', () => {
     expect(
       screen.queryByText('PW는 최소 8글자 이상이어야 합니다.')
     ).not.toBeInTheDocument();
+  });
+});
+
+describe('LoginPage 로그인 버튼 테스트', () => {
+  test('Given: 로그인 페이지가 렌더링되었을 때, When: 이메일과 비밀번호가 형식에 모두 맞을 때, Then: 로그인 버튼이 enabled 상태여야 한다', () => {
+    // Given
+    renderLoginPage();
+    const emailInput = screen.getByTestId('email');
+    const passwordInput = screen.getByTestId('password');
+
+    // When
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: '12345678' } });
+
+    // Then
+    expect(screen.getByText('로그인')).toBeEnabled();
+  });
+  test('Given: 로그인 페이지가 렌더링되었을 때, When: 이메일이나 비밀번호가 형식에 맞지 않을 때, Then: 로그인 버튼이 disabled 상태여야 한다', () => {
+    // Given
+    renderLoginPage();
+    const emailInput = screen.getByTestId('email');
+    const passwordInput = screen.getByTestId('password');
+
+    // When
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: '1234567' } });
+
+    // Then
+    expect(screen.getByText('로그인')).toBeDisabled();
+
+    // When
+    fireEvent.change(emailInput, { target: { value: 'testexample.com' } });
+    fireEvent.change(passwordInput, { target: { value: '12345678' } });
+
+    // Then
+    expect(screen.getByText('로그인')).toBeDisabled();
+
+    // When
+    fireEvent.change(emailInput, { target: { value: 'testexample.com' } });
+    fireEvent.change(passwordInput, { target: { value: '1234567' } });
+
+    // Then
+    expect(screen.getByText('로그인')).toBeDisabled();
+  });
+  test('Given: 로그인 페이지가 렌더링되었을 때, When: 이메일과 비밀번호가 형식에 모두 맞을 때, Then: 로그인 버튼을 클릭하면 로그인 성공 시 메인 페이지로 이동해야 한다', async () => {
+    // Given: 로그인 컴포넌트를 렌더링
+    renderLoginPage();
+    const emailInput = screen.getByTestId('email');
+    const passwordInput = screen.getByTestId('password');
+    const loginButton = screen.getByText('로그인');
+
+    // When: 올바른 이메일과 비밀번호를 입력하고 로그인 버튼 클릭
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: '12345678' } });
+    fireEvent.click(loginButton);
+
+    // Then: 로그인 성공 시 홈페이지로 이동하는지 확인
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/');
+    });
   });
 });
