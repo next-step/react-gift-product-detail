@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from '@emotion/styled';
 
+// API 기본 URL 설정
+axios.defaults.baseURL = 'http://localhost:3000';
+
 type Announcement = { name: string; value: string; displayOrder: number };
 type Detail = {
   description: string;
@@ -30,11 +33,18 @@ export default function ProductDetailPage({ productId }: Props) {
     axios.get(`/api/products/${productId}/wish`).then(res => setWishData(res.data.data));
   }, [productId]);
 
+  // 찜 토글 함수 (낙관적 업데이트)
+  const handleWish = () => {
+    setWishData(prev => ({
+      wishCount: prev.isWished ? prev.wishCount - 1 : prev.wishCount + 1,
+      isWished: !prev.isWished,
+    }));
+  };
+
   if (!info || !detail) {
     return <Loading>로딩 중…</Loading>;
   }
 
-  // announcement 또는 announcements 중 하나를 쓰되, 타입을 명확히 지정
   const announcements: Announcement[] =
     detail.announcement ?? detail.announcements ?? [];
 
@@ -80,9 +90,9 @@ export default function ProductDetailPage({ productId }: Props) {
         )}
       </Content>
 
-      {/* Footer */}
+      {/* Footer: 찜 버튼과 주문 버튼 */}
       <Footer>
-        <WishButton onClick={() => {/* 낙관적 업데이트 */}}>
+        <WishButton isWished={wishData.isWished} onClick={handleWish}>
           {wishData.isWished ? '❤️' : '🤍'} {wishData.wishCount}
         </WishButton>
         <OrderButton onClick={() => navigate(`/order/${productId}`)}>
@@ -179,7 +189,7 @@ const Footer = styled.div`
   border-top: 1px solid #ddd;
 `;
 
-const WishButton = styled.button`
+const WishButton = styled.button<{ isWished: boolean }>`
   flex: 1;
   padding: 1rem;
   background: #fff;
