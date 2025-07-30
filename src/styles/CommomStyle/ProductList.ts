@@ -11,7 +11,7 @@ export const ProductGrid = styled.div`
   gap: 24px 8px;
 `;
 
-export const ProductCard = styled.div`
+export const ProductCardSection = styled.div`
   text-align: center;
   overflow: hidden;
   border-radius: 8px;

@@ -1,26 +1,14 @@
 import {
 } from '@/component/main/GiftRanking.styled';
 import { CentorAlignDiv240,} from '@/styles/CommomStyle/Common.styled';
-import { BrandImage, Price, ProductCard, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
+import {  ProductGrid } from '@/styles/CommomStyle/ProductList';
 import Loading from '../Loading';
 import useProductList from '@/hook/useProductList';
-import type { ProductItem } from '@/type/GiftAPI/product';
-import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import ProductCard from '../ProductCard';
 
 
 const ProductList = () => {
   const {isLoading, error, productList,extraLoading,setLoaderRef} = useProductList();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-   const handleClickProduct = (product: ProductItem) => {
-    if (!user) {
-      navigate(`/login?redirect=/order?id=${product.id}`);
-    } else {
-      navigate(`/order?id=${product.id}`);
-    }
-  };
 
   if (error) return null
 
@@ -38,12 +26,7 @@ const ProductList = () => {
     <>
       <ProductGrid>
         {productList.map(product => (
-          <ProductCard key={product.id} onClick={() => handleClickProduct(product)}>
-            <ProductImage src={product.imageURL} alt={product.name} />
-            <BrandImage src={product.brandInfo.imageURL} alt={product.brandInfo.name} />
-            <ProductInfo title={product.name}>{product.name}</ProductInfo>
-            <Price>{product.price.sellingPrice.toLocaleString()} 원</Price>
-          </ProductCard>
+          <ProductCard {...product}/>
         ))}
       </ProductGrid>
       <Loading loading={extraLoading}/>
