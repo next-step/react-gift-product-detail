@@ -38,7 +38,7 @@ const ProductDetail = () => {
           )}
         </Wrapper>
       </div>
-      <FixedBottonBar />
+      <FixedBottonBar productWishInfo={{ wishCount: 10, isWished: false }} />
     </>
   );
 };
