@@ -6,39 +6,46 @@ import DetailInfo from './components/TabContent/DetailInfo';
 import FixedBottonBar from './components/FixedBottonBar';
 import { useParams } from 'react-router-dom';
 import Divider from '@components/common/Divider';
-import {
-  mockData,
-  mockProductDetailInfo,
-  mockProductHighlightReview,
-} from './mockData';
 import styled from '@emotion/styled';
 import Reviews from './components/TabContent/Reviews';
-
-const mockProduct = mockData;
-const ProductDetailInfo = mockProductDetailInfo;
-const reviews = mockProductHighlightReview;
+import { useQuery } from '@tanstack/react-query';
+import {
+  productDetailOptions,
+  productOptions,
+  productReviewOptions,
+  productWishOptions,
+} from '@queries/product';
 
 export type ProductDetailTab = 'description' | 'review' | 'detailInfo';
 const ProductDetail = () => {
   const { id } = useParams();
-  console.log(id);
   const [activeTab, setActiveTab] = useState<ProductDetailTab>('description');
+
+  const { data: product } = useQuery(productOptions(id));
+  const { data: highlightReview } = useQuery(productReviewOptions(id));
+  const { data: productWishInfo } = useQuery(productWishOptions(id));
+  const { data: productDetailInfo } = useQuery(productDetailOptions(id));
+
+  if (!product || !highlightReview || !productDetailInfo || !productWishInfo)
+    return <div>데이터 전송 오류 발생</div>;
 
   return (
     <>
       <div>
-        <ProductInfo product={mockProduct} />
+        <ProductInfo product={product} />
         <Divider />
         <TabMenu activeTab={activeTab} setActiveTab={setActiveTab} />
         <Wrapper>
-          {activeTab == 'description' && <Description />}
-          {activeTab == 'review' && <Reviews reviewData={reviews} />}
+          {activeTab == 'description' && (
+            <Description description={productDetailInfo.description} />
+          )}
+          {activeTab == 'review' && <Reviews reviewData={highlightReview} />}
           {activeTab == 'detailInfo' && (
-            <DetailInfo productDetailInfo={ProductDetailInfo} />
+            <DetailInfo productDetailInfo={productDetailInfo} />
           )}
         </Wrapper>
       </div>
-      <FixedBottonBar productWishInfo={{ wishCount: 10, isWished: false }} />
+      <FixedBottonBar productWishInfo={productWishInfo} />
     </>
   );
 };
@@ -47,4 +54,5 @@ export default ProductDetail;
 
 const Wrapper = styled.div`
   min-height: 400px;
+  padding-bottom: 56px;
 `;

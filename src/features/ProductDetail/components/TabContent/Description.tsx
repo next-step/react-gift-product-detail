@@ -1,6 +1,20 @@
-const Description = () => {
-  //API 상 이곳에 넣을 만한 데이터가 없어 비워두었습니다
-  return <>Description</>;
+import styled from '@emotion/styled';
+
+interface DescriptionProps {
+  description: string;
+}
+
+const Description = ({ description }: DescriptionProps) => {
+  return <Content dangerouslySetInnerHTML={{ __html: description }} />;
 };
 
 export default Description;
+
+const Content = styled.div`
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+`;

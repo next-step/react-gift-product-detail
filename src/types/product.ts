@@ -1,6 +1,9 @@
 //상품 요청 관련 API 응답 타입에서 데이터만 추출한 타입
 // API 응답이 아닌 데이터 타입이기 때문에 type 대신 interace로 작성
 
+// 상품 Id
+export type ProductId = string | undefined;
+
 // 상품 기본정보
 export interface ProductBasicInfo {
   id: number;

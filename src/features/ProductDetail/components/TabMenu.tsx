@@ -36,7 +36,6 @@ export default TabMenu;
 const TabContainer = styled.div(({ theme }) => ({
   display: 'flex',
   borderBottom: `2px solid ${theme.colors.semantic.backgroundDisabled}`,
-  marginBottom: theme.spacing.spacing2,
 }));
 
 const TabButton = styled.button<{ $active: boolean }>(({ theme, $active }) => ({
@@ -46,7 +45,7 @@ const TabButton = styled.button<{ $active: boolean }>(({ theme, $active }) => ({
   border: 'none',
   ...theme.typography.body1Regular,
   borderBottom: $active
-    ? `2px solid ${theme.colors.semantic.textDefault}`
+    ? `3px solid ${theme.colors.semantic.textDefault}`
     : 'none',
   color: $active
     ? theme.colors.semantic.textDefault
