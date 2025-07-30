@@ -9,6 +9,10 @@ interface PostRequestResult<T> {
   status?: number;
 }
 
+/**
+ * Tanstack-query로 리팩토링 하기 전 사용하던 POST 요청 추상 메서드
+ * @deprecated
+ */
 const postRequest = async <T>(
   url: string,
   body: Record<string, unknown>,

@@ -23,3 +23,5 @@
 - get: theme 세부 상품 무한 스크롤
 
 ## 리뷰 반영
+
+- postRequest, useFetch에 JSDoc의 @deprecated 어노테이션을 추가
