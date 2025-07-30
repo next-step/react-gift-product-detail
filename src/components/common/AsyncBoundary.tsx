@@ -1,11 +1,34 @@
 import { Suspense } from "react";
-import ErrorBoundary from "./ErrorBoundary";
-import { Spinner } from "./Spinner";
+import type { ReactNode } from "react";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { Spinner } from "@/components/common/Spinner";
 
-const AsyncBoundary = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<Spinner size={48} withWrapper />}>
-    <ErrorBoundary>{children}</ErrorBoundary>
-  </Suspense>
-);
+interface AsyncBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  errorFallback?: ReactNode;
+}
+
+const AsyncBoundary = ({
+  children,
+  fallback = <Spinner withWrapper />,
+  errorFallback,
+  useErrorBoundary = true,
+}: AsyncBoundaryProps & { useErrorBoundary?: boolean }) => {
+  const content = (
+    <Suspense fallback={fallback}>
+      {children}
+    </Suspense>
+  );
+
+  return useErrorBoundary ? (
+    <ErrorBoundary fallback={errorFallback}>
+      {content}
+    </ErrorBoundary>
+  ) : (
+    content
+  );
+};
+
 
 export default AsyncBoundary;

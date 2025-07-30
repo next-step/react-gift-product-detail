@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import * as S from "@/styles/ThemeProductStyles";
@@ -9,6 +10,7 @@ import { Spinner } from "@/components/common/Spinner";
 import { fetchThemeInfo, fetchThemeProducts } from "@/api/theme";
 import { PATH } from "@/constants/path";
 import { useIntersect } from "@/hooks/useIntersect";
+import { useAuth } from "@/contexts/AuthContext";
 import type { ProductSummary } from "@/api/product";
 
 interface ThemeInfo {
@@ -22,6 +24,7 @@ interface ThemeInfo {
 const ThemeProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const [theme, setTheme] = useState<ThemeInfo | null>(null);
   const [products, setProducts] = useState<ProductSummary[]>([]);
@@ -75,7 +78,20 @@ const ThemeProduct = () => {
 
   const observerRef = useIntersect<HTMLDivElement>(loadProducts, hasMore);
 
-  if (loading) return <Spinner size={48} withWrapper />;
+  const handleCardClick = (productId: number) => {
+    if (isLoggedIn) {
+      navigate(`/product/${productId}`);
+    } else {
+      navigate(PATH.LOGIN, {
+        state: { from: { pathname: `/product/${productId}` } },
+      });
+    }
+  };
+
+  if (loading) {
+  return <Spinner withWrapper />;
+}
+
 
   return (
     <PageLayout>
@@ -97,8 +113,12 @@ const ThemeProduct = () => {
             <S.ProductList>
               {products.map((item, index) => {
                 const isLast = index === products.length - 1;
+
                 return (
-                  <S.ProductCard key={item.id}>
+                  <S.ProductCard
+                    key={item.id}
+                    onClick={() => handleCardClick(item.id)}
+                  >
                     {isLast ? (
                       <div ref={observerRef}>
                         <S.ProductImage src={item.imageURL} alt={item.name} />

@@ -5,5 +5,7 @@ export const PATH = {
   ORDER: (id: string | number = ":id") => `/order/${id}`,
   THEME: (id: string | number = ":id") => `/theme/${id}`,
   NOT_FOUND: "/not-found",
+  PRODUCT: (id: string | number = ":productId") => `/product/${id}`,
+
   ALL: "*",
 } as const;
