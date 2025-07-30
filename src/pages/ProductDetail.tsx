@@ -87,13 +87,19 @@ const ProductBrandInfo = ({ brandInfo }: Product) => {
 }
 
 const ProductDescription = styled.div`
+  background-color: ${theme.colors.gray00};
   img {
+    background-color: ${theme.colors.gray00};
     max-width: 100%;
     height: auto;
     display: block;
   }
-
+  p {
+    background-color: ${theme.colors.gray00};
+    margin: 16px;
+  }
   [class*="__cu_imgsize"] {
+    background-color: ${theme.colors.gray00};
     max-width: 100%;
     height: auto;
     display: block;
@@ -187,18 +193,25 @@ const ProductDetail = () => {
         (detailLoading ? (
           <Loading />
         ) : (
-          <ProductDescription
-            dangerouslySetInnerHTML={{
-              __html: detailData?.description ?? "",
-            }}
-          />
+          <Layout height="auto" paddingDown="spacing4" paddingUp="spacing4">
+            <ProductDescription
+              dangerouslySetInnerHTML={{
+                __html: detailData?.description ?? "",
+              }}
+            />
+          </Layout>
         ))}
 
       {tab === "announcement" &&
         (detailLoading ? (
           <Loading />
         ) : (
-          <div style={{ padding: "0 16px" }}>
+          <Layout
+            paddingLeft="spacing4"
+            paddingRight="spacing4"
+            height="auto"
+            paddingDown="spacing4"
+          >
             {detailData?.announcements.map((a) => (
               <div key={a.displayOrder} style={{ marginBottom: "16px" }}>
                 <Text variant="body2Bold" margin="spacing0" padding="spacing0">
@@ -213,21 +226,31 @@ const ProductDetail = () => {
                 </Text>
               </div>
             ))}
-          </div>
+          </Layout>
         ))}
 
       {tab === "review" &&
         (reviewLoading ? (
           <Loading />
         ) : (
-          <div style={{ padding: "0 16px" }}>
+          <Layout
+            height="auto"
+            marginBottom="spacing0"
+            paddingLeft="spacing4"
+            paddingRight="spacing4"
+            paddingDown="spacing4"
+          >
             {reviewData?.reviews.map((r) => (
-              <div key={r.id} style={{ marginBottom: "24px" }}>
-                <Text variant="body2Bold" margin="spacing0" padding="spacing0">
+              <div key={r.id} style={{ marginBottom: "16px" }}>
+                <Text
+                  variant="subtitle2Bold"
+                  margin="spacing0"
+                  padding="spacing0"
+                >
                   {r.authorName}
                 </Text>
                 <Text
-                  variant="body2Regular"
+                  variant="body1Regular"
                   margin="spacing0"
                   padding="spacing0"
                 >
@@ -235,9 +258,10 @@ const ProductDetail = () => {
                 </Text>
               </div>
             ))}
-          </div>
+          </Layout>
         ))}
       <MoreButton
+        marginTop="spacing0"
         background="kakaoYellow"
         borderRadius="spacing0"
         onClick={() => handleGoOrder(Number(productId))}

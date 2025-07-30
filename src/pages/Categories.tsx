@@ -53,7 +53,8 @@ interface ThemesResponse {
 const PresentList = () => {
   const { data: themesData, isLoading: loading } = useQuery<ThemesResponse>({
     queryKey: ["themes"],
-    queryFn: () => axiosInstance.get<ThemesResponse>("/api/themes").then((res) => res.data),
+    queryFn: () =>
+      axiosInstance.get<ThemesResponse>("/api/themes").then((res) => res.data),
   })
 
   const presents = themesData?.data || []
@@ -76,7 +77,7 @@ const PresentList = () => {
 
 const Categories = () => {
   return (
-    <Layout>
+    <Layout color="gray00">
       <PlusNewPerson />
 
       <Layout>

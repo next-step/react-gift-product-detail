@@ -137,6 +137,7 @@ const OrderPage = () => {
           type="submit"
           background="kakaoYellow"
           borderRadius="spacing0"
+          marginTop="spacing8"
         >
           {totalQuantity
             ? `${totalPrice.toLocaleString()}원 주문하기`
