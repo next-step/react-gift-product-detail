@@ -7,7 +7,7 @@ import useLogin from './hooks/useLogin';
 const LoginPage = () => {
   const username = useInput('email');
   const password = useInput('password');
-  const { login } = useLogin();
+  const login = useLogin();
 
   const isButtonActive = username.isValid && password.isValid;
 

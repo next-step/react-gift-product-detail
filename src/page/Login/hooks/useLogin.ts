@@ -19,12 +19,12 @@ const useLogin = () => {
       toast(`${data.name}님, 환영합니다!`);
       navigate(from, { replace: true });
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(error.message);
     },
   });
 
-  return { login: mutate };
+  return mutate;
 };
 
 export default useLogin;
