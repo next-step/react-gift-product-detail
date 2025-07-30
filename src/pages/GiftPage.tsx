@@ -14,9 +14,9 @@ import { RankingGrid } from '@/components/RankingGrid';
 import type { GiftItem } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { getThemes, getRanking } from '@/api/services';
 import { RankingGridSkeleton } from '@/components/RankingGridSkeleton';
-import { useQuery } from '@tanstack/react-query';
+import { useThemesQuery } from '@/hooks/queries/useThemesQuery';
+import { useRankingQuery } from '@/hooks/queries/useRankingQuery';
 
 export const GiftPage = () => {
   const [gender, setGender] = useState<GenderFilter>('ALL');
@@ -24,15 +24,8 @@ export const GiftPage = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const { data: categories, isLoading: isCategoriesLoading, error: categoriesError } = useQuery({
-    queryKey: ['themes'],
-    queryFn: getThemes,
-  });
-  const { data: rankingList, isLoading: isRankingLoading, error: rankingError } = useQuery({
-    queryKey: ['ranking', gender, sort],
-    queryFn: () => getRanking(gender, sort),
-  });
-
+  const { data: categories, isLoading: isCategoriesLoading, error: categoriesError } = useThemesQuery();
+  const { data: rankingList, isLoading: isRankingLoading, error: rankingError } = useRankingQuery(gender, sort);
   const handleCardClick = (item: GiftItem) => {
     if (!isLoggedIn) {
       alert('로그인이 필요해요.');
