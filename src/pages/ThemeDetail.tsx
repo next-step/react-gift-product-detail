@@ -14,7 +14,7 @@ import {
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
-import useProductDetail from '@/hooks/product/useProductDetail';
+import { useProductDetail } from '@/hooks/product';
 
 function ThemeDetail() {
   const { themeId } = useParams();

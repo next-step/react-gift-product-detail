@@ -14,7 +14,7 @@ import {
   TabContainer,
   ProductDetailContainer,
 } from '@/styles/Product/Product.styles';
-import useProductDetail from '@/hooks/product/useProductDetail';
+import { useProductDetail } from '@/hooks/product';
 
 function Product() {
   const { activeTab, setActiveTab, productBasicInfo, productDetailInfo, productReviewInfo } =
