@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import {
   Routes,
   Route,
@@ -7,7 +8,11 @@ import {
 } from 'react-router-dom';
 import { MobileLayout } from '@/components/layout';
 import { NavigationBar } from '@/components/navigation';
-import { PrivateRoute } from '@/components/common';
+import {
+  PrivateRoute,
+  ErrorBoundary,
+  LoadingSkeleton,
+} from '@/components/common';
 import {
   HomePage,
   LoginPage,
@@ -15,6 +20,7 @@ import {
   OrderPage,
   NotFoundPage,
   ThemeProductListPage,
+  ProductDetailPage,
 } from '@/pages';
 import {
   ROUTE_HOME,
@@ -23,6 +29,7 @@ import {
   ROUTE_ORDER,
   ROUTE_NOT_FOUND,
   ROUTE_THEME_PRODUCTS,
+  ROUTE_PRODUCT_DETAIL,
 } from '@/constants';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,7 +43,23 @@ function OrderLayout() {
         title="선물하기"
         showBackButton={true}
         showProfileButton={false}
-        onBackClick={() => navigate(ROUTE_HOME)}
+        onBackClick={() => navigate(-1)}
+      />
+      <Outlet />
+    </>
+  );
+}
+
+// ProductDetailLayout 컴포넌트 추가
+function ProductDetailLayout() {
+  const navigate = useNavigate();
+  return (
+    <>
+      <NavigationBar
+        title="선물하기"
+        showBackButton={true}
+        showProfileButton={false}
+        onBackClick={() => navigate(-1)}
       />
       <Outlet />
     </>
@@ -65,44 +88,64 @@ function App() {
     navigate(ROUTE_MY);
   };
 
-  return (
-    <MobileLayout>
-      {!location.pathname.startsWith(ROUTE_ORDER) && (
-        <NavigationBar
-          title={navConfig.title}
-          showBackButton={navConfig.showBackButton}
-          showProfileButton={navConfig.showProfileButton}
-          onBackClick={handleBackClick}
-          onProfileClick={handleProfileClick}
-        />
-      )}
+  // 네비게이션 표시 여부를 결정하는 함수
+  const shouldShowNavigation = (pathname: string): boolean => {
+    return (
+      !pathname.startsWith(ROUTE_ORDER) && !pathname.startsWith('/products')
+    );
+  };
 
-      <Routes>
-        <Route path={ROUTE_HOME} element={<HomePage />} />
-        <Route path={ROUTE_LOGIN} element={<LoginPage />} />
-        <Route
-          path={ROUTE_MY}
-          element={
-            <PrivateRoute>
-              <MyPage />
-            </PrivateRoute>
-          }
-        />
-        <Route path={ROUTE_ORDER} element={<OrderLayout />}>
-          <Route
-            path=":productId"
-            element={
-              <PrivateRoute>
-                <OrderPage />
-              </PrivateRoute>
-            }
+  return (
+    <ErrorBoundary>
+      <MobileLayout>
+        {shouldShowNavigation(location.pathname) && (
+          <NavigationBar
+            title={navConfig.title}
+            showBackButton={navConfig.showBackButton}
+            showProfileButton={navConfig.showProfileButton}
+            onBackClick={handleBackClick}
+            onProfileClick={handleProfileClick}
           />
-        </Route>
-        <Route path={ROUTE_THEME_PRODUCTS} element={<ThemeProductListPage />} />
-        <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
-      </Routes>
-      <ToastContainer />
-    </MobileLayout>
+        )}
+
+        <Suspense fallback={<LoadingSkeleton type="card" />}>
+          <Routes>
+            <Route path={ROUTE_HOME} element={<HomePage />} />
+            <Route path={ROUTE_LOGIN} element={<LoginPage />} />
+            <Route
+              path={ROUTE_MY}
+              element={
+                <PrivateRoute>
+                  <MyPage />
+                </PrivateRoute>
+              }
+            />
+            <Route path={ROUTE_ORDER} element={<OrderLayout />}>
+              <Route
+                path=":productId"
+                element={
+                  <PrivateRoute>
+                    <OrderPage />
+                  </PrivateRoute>
+                }
+              />
+            </Route>
+            <Route
+              path={ROUTE_PRODUCT_DETAIL}
+              element={<ProductDetailLayout />}
+            >
+              <Route index element={<ProductDetailPage />} />
+            </Route>
+            <Route
+              path={ROUTE_THEME_PRODUCTS}
+              element={<ThemeProductListPage />}
+            />
+            <Route path={ROUTE_NOT_FOUND} element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
+        <ToastContainer />
+      </MobileLayout>
+    </ErrorBoundary>
   );
 }
 

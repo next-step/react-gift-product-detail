@@ -4,3 +4,4 @@ export const ROUTE_MY = '/my';
 export const ROUTE_ORDER = '/order';
 export const ROUTE_NOT_FOUND = '*';
 export const ROUTE_THEME_PRODUCTS = '/themes/:themeId';
+export const ROUTE_PRODUCT_DETAIL = '/products/:productId';

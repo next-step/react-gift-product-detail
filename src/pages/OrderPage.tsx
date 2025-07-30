@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { ROUTE_HOME, ROUTE_LOGIN } from '@/constants';
 import { useOrderMutation } from '@/api/order';
-import type { ProductSummary } from '@/api/product';
+import type { ProductSummary } from '@/api/types';
 import { Suspense } from 'react';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 

@@ -1,14 +1,12 @@
-// TODO: 아래 API는 아직 미구현입니다.
-// - /api/products/:productId/detail (상세 정보)
-// - /api/products/:productId/wish (찜 정보)
-// - /api/products/:productId/highlight-review (리뷰)
-
 import apiClient from '../index';
 import type {
   RankingResponse,
   TargetType,
   RankType,
   ProductResponse,
+  ProductDetailResponse,
+  ProductWishResponse,
+  ProductHighlightReviewResponse,
 } from '../types';
 import axios from 'axios';
 
@@ -50,3 +48,57 @@ export async function getProductSummary(productId: string) {
   );
   return response.data.data;
 }
+
+/**
+ * 상품 상세 정보를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductDetail = async (
+  productId: string | number
+): Promise<ProductDetailResponse> => {
+  const response = await apiClient.get<ProductDetailResponse>(
+    `/api/products/${productId}/detail`
+  );
+  return response.data;
+};
+
+/**
+ * 상품 찜 정보를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductWish = async (
+  productId: string | number
+): Promise<ProductWishResponse> => {
+  const response = await apiClient.get<ProductWishResponse>(
+    `/api/products/${productId}/wish`
+  );
+  return response.data;
+};
+
+/**
+ * 상품 하이라이트 리뷰를 조회합니다.
+ * @param productId - 상품 ID
+ */
+export const getProductHighlightReview = async (
+  productId: string | number
+): Promise<ProductHighlightReviewResponse> => {
+  const response = await apiClient.get<ProductHighlightReviewResponse>(
+    `/api/products/${productId}/highlight-review`
+  );
+  return response.data;
+};
+
+/**
+ * 상품 찜을 토글합니다.
+ * @param productId - 상품 ID
+ */
+export const toggleWish = async (
+  productId: string | number
+): Promise<{ success: boolean }> => {
+  // 실제 API가 없으므로 시뮬레이션
+  // 실제로는 POST/PUT 요청을 보내야 함
+  console.log(`상품 ${productId} 찜 토글 요청`);
+  await new Promise((resolve) => setTimeout(resolve, 100)); // 0.1초 지연 시뮬레이션
+
+  return { success: true };
+};
