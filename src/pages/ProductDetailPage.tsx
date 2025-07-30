@@ -61,15 +61,12 @@ const ProductDetailPage = () => {
     );
   }
 
-  if (hasError || !productBasic) {
-    return (
-      <Container>
-        <div style={{ padding: '20px', textAlign: 'center' }}>
-          <h1>상품 정보를 불러오지 못했습니다.</h1>
-          <p>상품 ID: {productId}</p>
-        </div>
-      </Container>
-    );
+  if (!productBasic) {
+    throw new Error(`존재하지 않는 상품입니다. (상품 ID: ${productId})`);
+  }
+
+  if (hasError) {
+    throw new Error(`API 오류가 발생했습니다. (상품 ID: ${productId})`);
   }
 
   return (
