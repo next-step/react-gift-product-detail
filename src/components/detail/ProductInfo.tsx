@@ -47,10 +47,7 @@ const BrandName = styled.span`
 
 export default function ProductInfo() {
   const { productId } = useParams<{ productId: string }>();
-  const { data, isLoading, isError } = useProductInfo(Number(productId));
-
-  if (isLoading) return <div>로딩중...</div>;
-  if (isError || !data) return <div>상품 정보를 불러올 수 없습니다.</div>;
+  const { data } = useProductInfo(Number(productId));
 
   return (
     <Wrapper>

@@ -86,8 +86,8 @@ interface ProductTabsProps {
 }
 
 export default function ProductTabs({ activeTab, setActiveTab, productId }: ProductTabsProps) {
-  const { data: detailData, isLoading: isDetailLoading } = useProductDetail(productId);
-  const { data: reviewData, isLoading: isReviewLoading } = useProductHighlightReview(productId);
+  const { data: detailData } = useProductDetail(productId);
+  const { data: reviewData } = useProductHighlightReview(productId);
 
   return (
     <Wrapper>
@@ -104,33 +104,27 @@ export default function ProductTabs({ activeTab, setActiveTab, productId }: Prod
       </Tabs>
 
       <TabContent>
-        {activeTab === 'description' &&
-          (isDetailLoading ? (
-            <div>로딩 중...</div>
-          ) : detailData?.description ? (
+        {activeTab === 'description' ? (
+          detailData?.description ? (
             <DescriptionImg dangerouslySetInnerHTML={{ __html: detailData.description }} />
           ) : (
             <div>설명 정보가 없습니다.</div>
-          ))}
+          )
+        ) : null}
 
-        {activeTab === 'review' &&
-          (isReviewLoading ? (
-            <div>로딩 중...</div>
-          ) : (
-            <ReviewList>
-              {reviewData?.reviews.map((review) => (
-                <ReviewItem key={review.id}>
-                  <ReviewerName>{review.authorName}</ReviewerName>
-                  <ReviewContent>{review.content}</ReviewContent>
-                </ReviewItem>
-              ))}
-            </ReviewList>
-          ))}
+        {activeTab === 'review' ? (
+          <ReviewList>
+            {reviewData?.reviews.map((review) => (
+              <ReviewItem key={review.id}>
+                <ReviewerName>{review.authorName}</ReviewerName>
+                <ReviewContent>{review.content}</ReviewContent>
+              </ReviewItem>
+            ))}
+          </ReviewList>
+        ) : null}
 
-        {activeTab === 'detail' &&
-          (isDetailLoading ? (
-            <div>로딩 중...</div>
-          ) : detailData?.announcements?.length ? (
+        {activeTab === 'detail' ? (
+          detailData?.announcements?.length ? (
             <DetailList>
               {detailData.announcements.map((item) => (
                 <DetailItem key={item.displayOrder}>
@@ -141,7 +135,8 @@ export default function ProductTabs({ activeTab, setActiveTab, productId }: Prod
             </DetailList>
           ) : (
             <div>상세 정보가 없습니다.</div>
-          ))}
+          )
+        ) : null}
       </TabContent>
     </Wrapper>
   );
