@@ -52,7 +52,6 @@ const ErrorText = styled.div`
 `;
 
 export const GiftList = () => {
-  const [giftItems, setGiftItems] = useState<GiftItemData[]>([]);
   const [isViewMore, setIsViewMore] = useState(false);
   const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
@@ -64,17 +63,6 @@ export const GiftList = () => {
       return getGiftItems(targetType, rankType);
     },
   });
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (!data) return;
-
-    if (isViewMore) {
-      setGiftItems(data!);
-    } else {
-      setGiftItems(data!.slice(0, 6));
-    }
-  }, [data, isLoading, isViewMore]);
 
   return (
     <>
@@ -88,7 +76,7 @@ export const GiftList = () => {
         {isLoading && <Spinner />}
         {!isLoading && (
           <List>
-            {giftItems.map((item, i) => {
+            {(data && isViewMore ? data : data!.slice(0, 6)).map((item, i) => {
               return (
                 <GiftItemCard
                   key={`GIFT_LIST_${item.id}`}
@@ -106,9 +94,9 @@ export const GiftList = () => {
         {isError && (
           <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
         )}
-        {!isLoading && giftItems?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
+        {!isLoading && data?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
       </Container>
-      {!isLoading && !isError && !(giftItems?.length === 0) && (
+      {!isLoading && !isError && !(data?.length === 0) && (
         <MoreButton isViewMore={isViewMore} setIsViewMore={setIsViewMore} />
       )}
     </>
