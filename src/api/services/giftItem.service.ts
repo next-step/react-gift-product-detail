@@ -9,50 +9,36 @@ import type {
   ThemeInfo,
 } from '../types/giftItem.dto';
 
-export const getCategories = async (): Promise<CategoryCardData[]> => {
-  const { data } = await publicClient.get('/api/themes');
-  const categories = data.data;
-  return categories;
+export const getCategories = async () => {
+  const { data } = await publicClient.get<{ data: CategoryCardData[] }>('/api/themes');
+  return data.data;
 };
 
-export const getThemeInfo = async ({ queryKey }: { queryKey: QueryKey }): Promise<ThemeInfo> => {
+export const getThemeInfo = async ({ queryKey }: { queryKey: QueryKey }) => {
   const { id } = queryKey[1];
-  const response = await publicClient.get(`/api/themes/${id}/info`);
-  const { data } = response.data;
-
-  return data;
+  const { data } = await publicClient.get<{ data: ThemeInfo }>(`/api/themes/${id}/info`);
+  return data.data;
 };
 
-export const getThemedGiftItems = async (
-  context: QueryFunctionContext<QueryKey, PageParam>
-): Promise<ThemedGiftItemsPage> => {
+export const getThemedGiftItems = async (context: QueryFunctionContext<QueryKey, PageParam>) => {
   const { id } = context.queryKey[1];
   const cursor = context.pageParam || 0;
-  const response = await publicClient.get(`/api/themes/${id}/products?cursor=${cursor}&limit=10`);
-  const { data } = response.data;
-  return data;
+  const { data } = await publicClient.get<{ data: ThemedGiftItemsPage }>(
+    `/api/themes/${id}/products?cursor=${cursor}&limit=10`
+  );
+  return data.data;
 };
 
-export const getGiftItems = async ({
-  queryKey,
-}: {
-  queryKey: QueryKey;
-}): Promise<GiftItemData[]> => {
+export const getGiftItems = async ({ queryKey }: { queryKey: QueryKey }) => {
   const { targetType, rankType } = queryKey[1];
-  const response = await publicClient.get(
+  const { data } = await publicClient.get<{ data: GiftItemData[] }>(
     `/api/products/ranking?targetType=${targetType}&rankType=${rankType}`
   );
-  const { data } = response.data;
-  return data;
+  return data.data;
 };
 
-export const getGiftItemDetail = async ({
-  queryKey,
-}: {
-  queryKey: QueryKey;
-}): Promise<GiftItemData> => {
+export const getGiftItemDetail = async ({ queryKey }: { queryKey: QueryKey }) => {
   const { id } = queryKey[1];
-  const response = await publicClient.get(`/api/products/${id}`);
-  const { data } = response.data;
-  return data;
+  const { data } = await publicClient.get<{ data: GiftItemData }>(`/api/products/${id}`);
+  return data.data;
 };
