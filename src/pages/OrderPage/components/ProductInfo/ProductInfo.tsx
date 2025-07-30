@@ -22,23 +22,23 @@ function ProductInfo({ product, quantity }: ProductInfoProps) {
   return (
     <>
       <ProductSection>
-        <Typography variant="title2Bold" as="h2" color="default">
+        <Typography variant="title2Bold" as="h2" color="text-default">
           {PRODUCT_INFO_CONSTANTS.TITLE}
         </Typography>
         <ProductContainer>
           <ProductImage src={product.imageURL} alt={product.name} />
           <ProductDetails>
-            <Typography variant="body2Regular" as="h3" color="default">
+            <Typography variant="body2Regular" as="h3" color="text-default">
               {product.name}
             </Typography>
-            <Typography variant="label2Regular" as="p" color="sub">
+            <Typography variant="label2Regular" as="p" color="text-sub">
               {product.brandName}
             </Typography>
             <PriceContainer>
-              <Typography variant="body2Regular" as="span" color="sub">
+              <Typography variant="body2Regular" as="span" color="text-sub">
                 {PRODUCT_INFO_CONSTANTS.PRICE_LABEL}
               </Typography>
-              <Typography variant="title2Bold" as="span" color="default">
+              <Typography variant="title2Bold" as="span" color="text-default">
                 {product.price.toLocaleString()}
                 {PRODUCT_INFO_CONSTANTS.WON}
               </Typography>
