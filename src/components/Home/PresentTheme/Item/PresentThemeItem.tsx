@@ -6,7 +6,7 @@ import {
 } from '@src/components/Home/PresentTheme/Item/StyledPresnetThemeItem';
 import { StyledPresentThemeCommonP } from '@src/components/Home/PresentTheme/Common/StyledPresentThemeCommonP';
 import type { Theme } from './ThemeType';
-import { usePresentThemeFetch } from '@src/components/Home/PresentTheme/usePresentThemeFetch';
+import { usePresentThemeFetch } from '@src/components/Home/PresentTheme/Item/usePresentThemeFetch';
 
 const PresentThemeItem = () => {
   const { data, isError, isLoading } = usePresentThemeFetch();

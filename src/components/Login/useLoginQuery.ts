@@ -13,15 +13,6 @@ import type {
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export type LoginBody = {
-  email: string;
-  password: string;
-};
-
-const loginApi = async (body: LoginBody) => {
-  const response = await axios.post(BASE_URL + BASIC_ENDPOINT.login, body);
-  return response.data;
-};
 export const useLoginQuery = () => {
   const navigate = useNavigate();
   return useMutation<HttpsSuccessResponseType, AxiosError<HttpsFailedResponseTypes>, LoginBody>({
