@@ -14,6 +14,10 @@ const queryClient = new QueryClient({
       gcTime: 1000 * 60 * 5,
       retry: 1,
     },
+    mutations: {
+      retry: 0,
+      throwOnError: false, // 현재는 ErrorBoudary 미사용, 다음 과제때 변경 예정
+    },
   },
 });
 

@@ -25,3 +25,4 @@
 ## 리뷰 반영
 
 - postRequest, useFetch에 JSDoc의 @deprecated 어노테이션을 추가
+- mutations에 대한 전역 기본 설정 추가
