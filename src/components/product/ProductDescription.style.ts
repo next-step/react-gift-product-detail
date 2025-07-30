@@ -1,12 +1,5 @@
 import styled from '@emotion/styled';
 
-export const Image = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 16px;
-`;
-
 export const Description = styled.div`
   font-size: 1rem;
   font-weight: 400;
