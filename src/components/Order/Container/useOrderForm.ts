@@ -15,8 +15,7 @@ export const useOrderForm = () => {
   const navigate = useNavigate();
 
   const { productId } = useParams<{ productId: string }>();
-  const { data, isError, isLoading } = useGetOrderForm(productId);
-  const selectedProduct = data?.data;
+  const { data: selectedProduct, isError, isLoading } = useGetOrderForm(productId);
   useEffect(() => {
     if (isError) {
       toast('상품 정보 로딩에 실패하였습니다.');
