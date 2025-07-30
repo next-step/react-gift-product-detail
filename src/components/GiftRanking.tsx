@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import type { Product } from '@/types/Product';
-import RankingItem from './RankingItem';
-import useGiftRanking from '@/hooks/useGiftRanking';
+import { Suspense } from 'react';
+import Spinner from './common/Spinner';
+import { ErrorBoundary } from '@/ErrorBoundary';
+import RankingGrid from './RankingGrid';
 
 const Wrapper = styled.section`
   margin-top: ${({ theme }) => theme.spacing.spacing10};
@@ -73,35 +74,6 @@ const TabBtn = styled.button<{ active: boolean }>`
     font-weight 200ms;
 `;
 
-/* 그리드 */
-const Grid = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: ${({ theme }) => theme.spacing.spacing6} ${({ theme }) => theme.spacing.spacing2};
-`;
-
-const MoreBtn = styled.button`
-  width: 100%;
-  margin-top: ${({ theme }) => theme.spacing.spacing8};
-  margin-bottom: ${({ theme }) => theme.spacing.spacing10};
-  padding: ${({ theme }) => theme.spacing.spacing3};
-  border: 1px solid ${({ theme }) => theme.colors.gray[400]};
-  border-radius: 4px;
-  background: #fff;
-  ${({ theme }) => theme.typography.body2Regular};
-  cursor: pointer;
-`;
-
-const Loading = styled.p`
-  padding: 0 8px;
-  ${({ theme }) => theme.typography.body2Regular};
-  color: ${({ theme }) => theme.colors.gray[600]};
-  height: 509px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const ageGenderFilters = [
   { key: 'all', icon: 'ALL', label: '전체' },
   { key: 'female', icon: '👩🏻', label: '여성이' },
@@ -122,9 +94,6 @@ export default function GiftRanking() {
 
   const [filter, setFilter] = useState(initGender);
   const [tab, setTab] = useState(initType);
-  const [collapsed, setCollapsed] = useState(true);
-
-  const { data: products = [], isLoading, isError } = useGiftRanking(filter, tab);
 
   const updateParams = (key: string, value: string) => {
     const next = new URLSearchParams(searchParams);
@@ -140,8 +109,6 @@ export default function GiftRanking() {
     setTab(key);
     updateParams('type', key);
   };
-
-  const visible: Product[] = collapsed ? (products ?? []).slice(0, 6) : (products ?? []);
 
   return (
     <Wrapper>
@@ -170,22 +137,24 @@ export default function GiftRanking() {
       </TabRow>
 
       {/* 상품 목록 */}
-      {isLoading ? (
-        <Loading>로딩중</Loading>
-      ) : isError ? (
-        <p>상품 목록을 불러오는 데 실패했습니다.</p>
-      ) : (products ?? []).length === 0 ? (
-        <p>상품 목록이 없습니다.</p>
-      ) : (
-        <>
-          <Grid>
-            {visible.map((item, index) => (
-              <RankingItem key={item.id} item={item} rank={index + 1} />
-            ))}
-          </Grid>
-          <MoreBtn onClick={() => setCollapsed((c) => !c)}>{collapsed ? '더보기' : '접기'}</MoreBtn>
-        </>
-      )}
+      <ErrorBoundary fallback={<p>상품 목록을 불러오는 데 실패했습니다.</p>}>
+        <Suspense
+          fallback={
+            <div
+              style={{
+                height: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Spinner />
+            </div>
+          }
+        >
+          <RankingGrid gender={filter} type={tab} />
+        </Suspense>
+      </ErrorBoundary>
     </Wrapper>
   );
 }
