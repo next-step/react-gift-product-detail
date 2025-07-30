@@ -44,7 +44,7 @@ const PresentProductList = ({
     return <div>Error 발생</div>;
   } else if (data.data.length === 0) {
     return <div>상품이 없습니다.</div>;
-  } else {
+  } else if (showRankingNumber) {
     return (
       <>
         {data &&
@@ -69,6 +69,25 @@ const PresentProductList = ({
               </StyledPresentRankingItemDiv>
             </div>
           ))}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {data.data.map((item: Good) => (
+          <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
+            <StyledPresentRankingItemDiv>
+              <StyledPresentRankingItemImage src={item.imageURL} alt={item.name} />
+              <StyledPresentRankingItemBrandName>
+                {item.brandInfo.name}
+              </StyledPresentRankingItemBrandName>
+              <StyledPresentRankingItemPresentItem>{item.name}</StyledPresentRankingItemPresentItem>
+              <StyledPresentRankingItemPrasentPrice>
+                {item.price.sellingPrice.toLocaleString()} 원
+              </StyledPresentRankingItemPrasentPrice>
+            </StyledPresentRankingItemDiv>
+          </div>
+        ))}
       </>
     );
   }

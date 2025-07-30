@@ -26,9 +26,8 @@ export const usePresentThemeFetch = () => {
       pageParams: data.pageParams,
     }),
   });
-  console.log(data);
   return {
-    data: { data: (data?.pages ?? []).flatMap((item: FetchDataType) => item.data.list) },
+    data: (data?.pages ?? []).flatMap((item: FetchDataType) => item.data.list),
     isError,
     isLoading,
     hasNextPage,
