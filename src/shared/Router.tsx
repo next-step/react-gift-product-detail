@@ -13,6 +13,7 @@ import CardProvider from "@/context/CardProvider"
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from "react-toastify"
 import ThemeInfo from "@/pages/ThemeInfoPage"
+import ProductDetail from "@/pages/ProductDetail"
 
 const Router = () => {
   return (
@@ -43,11 +44,10 @@ const Router = () => {
                       </ProtectedRoute>
                     }
                   />
-                                    <Route
-                    path="/theme/:themeId"
-                    element={
-                        <ThemeInfo />
-                    }
+                  <Route path="/theme/:themeId" element={<ThemeInfo />} />
+                  <Route
+                    path="/product/:productId"
+                    element={<ProductDetail />}
                   />
                   <Route path={"*"} element={<NotFound />} />
                 </Route>

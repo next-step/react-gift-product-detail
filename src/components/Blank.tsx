@@ -5,5 +5,6 @@ const Blank = styled.div<ComponentStyle>`
   width: 100%;
   max-width: 720px;
   height: ${(props) => props.height};
+  background-color: ${(props) => props.backGroundColor};
 `
 export default Blank

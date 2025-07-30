@@ -3,4 +3,5 @@ export const ROUTES = {
   LOGIN: "/login",
   ORDER: "/order/:id",
   THEME: "theme/:id",
+  PRODUCT: "/product/:id",
 } as const

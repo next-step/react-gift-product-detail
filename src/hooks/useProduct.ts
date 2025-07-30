@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
-import ProductsResponseSingle from "@/interfaces/ProductResponseSingle"
 import { AxiosError } from "axios"
 import fetchHandler from "@/functions/fetchHandler"
+import ProductsResponseNormal from "@/interfaces/ProductResponseNormal"
 
 function useProduct(productId?: string) {
   const { data, isLoading, error } = useQuery<
-    ProductsResponseSingle,
+    ProductsResponseNormal,
     AxiosError
   >({
-    queryKey: ["productInfo", productId],
+    queryKey: ["product", productId],
     queryFn: () =>
-      fetchHandler<ProductsResponseSingle>(`/api/products/${productId}`),
+      fetchHandler<ProductsResponseNormal>(`/api/products/${productId}`),
     enabled: !!productId,
   })
 
