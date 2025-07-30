@@ -15,15 +15,14 @@ export const useOrderForm = () => {
   const navigate = useNavigate();
 
   const { productId } = useParams<{ productId: string }>();
-
-  const { goodSummary: selectedProduct, isError: isProductError } = useGetOrderForm(productId);
+  const { data: selectedProduct, isError, isLoading } = useGetOrderForm(productId);
 
   useEffect(() => {
-    if (isProductError) {
+    if (isError) {
       toast('상품 정보 로딩에 실패하였습니다.');
       navigate(URLS.home);
     }
-  }, [isProductError, navigate]);
+  }, [isError, navigate]);
 
   const {
     mutate: postOrder,
@@ -80,7 +79,7 @@ export const useOrderForm = () => {
 
   return {
     selectedProduct,
-    isProductError,
+    isProductError: isError,
     isOrderError,
     orderErrorMessage: orderError?.message,
     methods,

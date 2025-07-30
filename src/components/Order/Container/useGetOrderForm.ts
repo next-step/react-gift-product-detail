@@ -1,13 +1,13 @@
-import { useApiQuery } from '@src/api/useApiQuery';
+import { getFetch } from '@src/api/getFetch';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import type { GoodSummary } from '@src/types/Goods';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetOrderForm = (productId: string | undefined) => {
-  const { nullNotData: goodSummary, isError } = useApiQuery<GoodSummary>({
-    endpoint: `${BASIC_ENDPOINT.product}/${productId}/summary`,
+  const { data, isError, isLoading } = useQuery<GoodSummary>({
     queryKey: ['productSummary', { productId }],
-    enabled: !!productId,
+    queryFn: () => getFetch<GoodSummary>(`${BASIC_ENDPOINT.theme}/${productId}/summary`, {}),
   });
 
-  return { goodSummary, isError };
+  return { data, isError, isLoading };
 };
