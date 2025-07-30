@@ -1,5 +1,3 @@
-import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
 import { renderWithTheme } from "@/setupTests";
 import {
   describe,
@@ -17,6 +15,18 @@ import { LOGIN_ERROR_MESSAGES, LOGIN_LABELS } from "../constants/labels";
 import { API_LOGIN_ERROR_MESSAGES } from "../constants/apiMessage";
 import { toast } from "react-toastify";
 import { ROUTES } from "@/constants/routes";
+import {
+  expectEmailField,
+  expectPasswordField,
+  expectLoginButton,
+  expectEmailFieldError,
+  expectEmailFieldNotError,
+  expectPasswordFieldError,
+  expectPasswordFieldNotError,
+  mockLoginSuccess,
+  mockLoginFailure,
+  server,
+} from "./LoginPage.test-utils";
 
 vi.mock("react-toastify");
 
@@ -28,67 +38,6 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
   };
 });
-
-const server = setupServer();
-
-const expectEmailField = () => {
-  expect(
-    screen.getByPlaceholderText(LOGIN_LABELS.EMAIL_PLACEHOLDER)
-  ).toBeInTheDocument();
-};
-
-const expectPasswordField = () => {
-  expect(
-    screen.getByPlaceholderText(LOGIN_LABELS.PASSWORD_PLACEHOLDER)
-  ).toBeInTheDocument();
-};
-
-const expectLoginButton = () => {
-  expect(
-    screen.getByRole("button", { name: LOGIN_LABELS.LOGIN_BUTTON })
-  ).toBeInTheDocument();
-};
-
-const expectEmailFieldError = (label: string) => {
-  expect(screen.getByText(label)).toBeInTheDocument();
-};
-
-const expectEmailFieldNotError = (label: string) => {
-  expect(screen.queryByText(label)).not.toBeInTheDocument();
-};
-
-const expectPasswordFieldError = (label: string) => {
-  expect(screen.getByText(label)).toBeInTheDocument();
-};
-
-const expectPasswordFieldNotError = (label: string) => {
-  expect(screen.queryByText(label)).not.toBeInTheDocument();
-};
-
-const mockLoginSuccess = (userData: {
-  email: string;
-  name: string;
-  authToken: string;
-}) => {
-  server.use(
-    http.post("/api/login", () => {
-      return HttpResponse.json(
-        {
-          data: userData,
-        },
-        { status: 200 }
-      );
-    })
-  );
-};
-
-const mockLoginFailure = (status: number = 400) => {
-  server.use(
-    http.post("/api/login", () => {
-      return HttpResponse.json({}, { status });
-    })
-  );
-};
 
 describe("로그인 페이지", () => {
   let emailField: HTMLInputElement;
