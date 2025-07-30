@@ -56,7 +56,7 @@ export default function ReceiverFormDialog({
 
   return (
     <Overlay>
-      <DialogBox>
+      <DialogBox role="dialog" aria-labelledby="receiver-dialog-title">
         <form onSubmit={onSubmit}>
           <Title>받는 사람</Title>
           <Description>
