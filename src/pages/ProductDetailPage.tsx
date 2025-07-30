@@ -12,13 +12,13 @@ import { PATH } from "@/paths";
 import { withAsyncBoundary } from "@/hoc/withAsyncBoundary";
 
 function ProductDetailPage() {
-  const { productId = '' } = useParams<{ productId: string }>();
+  const { productId = "" } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
-  
+
   const goToOrder = (itemId: string) => {
     const userInfo = getUserFromSession();
     if (userInfo) navigate(PATH.toORDER(itemId));
@@ -32,19 +32,23 @@ function ProductDetailPage() {
     <Container>
       <Wrapper>
         <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner message="상품 정보를 불러오는 중..." />}>
+          <Suspense
+            fallback={<LoadingSpinner message="상품 정보를 불러오는 중..." />}
+          >
             <ProductCard productId={productId} />
           </Suspense>
         </ErrorBoundary>
-        
+
         <Spacing height="8px" />
-        
+
         <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner message="상세 정보를 불러오는 중..." />}>
+          <Suspense
+            fallback={<LoadingSpinner message="상세 정보를 불러오는 중..." />}
+          >
             <DetailCard productId={productId} />
           </Suspense>
         </ErrorBoundary>
-        
+
         <OrderWrapper>
           <ErrorBoundary>
             <Suspense fallback={<LoadingSpinner size="small" />}>
@@ -60,7 +64,7 @@ function ProductDetailPage() {
   );
 }
 
-export default withAsyncBoundary(ProductDetailPage)
+export default withAsyncBoundary(ProductDetailPage);
 
 const Container = styled.div`
   max-width: 720px;

@@ -5,7 +5,10 @@ interface LoadingSpinnerProps {
   message?: string;
 }
 
-export default function LoadingSpinner({ size = "medium", message }: LoadingSpinnerProps) {
+export default function LoadingSpinner({
+  size = "medium",
+  message,
+}: LoadingSpinnerProps) {
   return (
     <Container>
       <Spinner size={size} />
@@ -26,16 +29,22 @@ const Container = styled.div`
 const Spinner = styled.div<{ size: string }>`
   width: ${({ size }) => {
     switch (size) {
-      case "small": return "20px";
-      case "large": return "40px";
-      default: return "30px";
+      case "small":
+        return "20px";
+      case "large":
+        return "40px";
+      default:
+        return "30px";
     }
   }};
   height: ${({ size }) => {
     switch (size) {
-      case "small": return "20px";
-      case "large": return "40px";
-      default: return "30px";
+      case "small":
+        return "20px";
+      case "large":
+        return "40px";
+      default:
+        return "30px";
     }
   }};
   border: 3px solid ${({ theme }) => theme.colors.gray[200]};
@@ -44,8 +53,12 @@ const Spinner = styled.div<{ size: string }>`
   animation: spin 1s linear infinite;
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -54,4 +67,4 @@ const Message = styled.p`
   color: ${({ theme }) => theme.colors.gray[600]};
   margin: 1rem 0 0 0;
   text-align: center;
-`; 
+`;

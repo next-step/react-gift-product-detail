@@ -3,11 +3,7 @@ import styled from "@emotion/styled";
 import { useProductDetail } from "@/hooks/useProductDetail";
 
 export default function ProductCard({ productId }: { productId: string }) {
-  const {
-    data: product,
-    isLoading,
-    isError,
-  } = useProductDetail(productId);
+  const { data: product, isLoading, isError } = useProductDetail(productId);
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError || !product) return <div>에러 발생</div>;

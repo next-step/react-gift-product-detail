@@ -178,4 +178,3 @@ const LoginButton = styled.button<{ disabled: boolean }>`
 
   ${({ disabled }) => (disabled ? disabledStyles : enabledStyles)}
 `;
-
