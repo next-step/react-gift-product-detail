@@ -11,13 +11,19 @@ import {
 import { OrderProvider } from "@/contexts/order/OrderProvider";
 import { OverlayProvider } from "@/contexts/overlay/OverlayProvider";
 import { useOrderPageLogic } from "@/hooks/order/useOrderPageLogic";
+import { useProductSummary } from "@/hooks/products";
 
 const OrderPageContent = () => {
-  const { product, handleOrderSubmit, isLoading, error } = useOrderPageLogic();
+  const { product, productId, isLoading: ProductLoading } = useProductSummary();
+  const { handleOrderSubmit, OrderLoading } = useOrderPageLogic();
 
-  if (isLoading || error) {
+  if (ProductLoading || OrderLoading) {
     return <LoadingSpinner />;
   }
+
+  const onOrderSubmit = () => {
+    handleOrderSubmit(productId, product?.name);
+  };
 
   return (
     <OverlayProvider>
@@ -30,10 +36,7 @@ const OrderPageContent = () => {
         <ReceiverInfoSection />
         <BlankSpace />
         <OrderProductInfoSection product={product} />
-        <OrderButton
-          onClick={handleOrderSubmit}
-          productPrice={product?.price}
-        />
+        <OrderButton onClick={onOrderSubmit} productPrice={product?.price} />
       </OrderLayout>
     </OverlayProvider>
   );
