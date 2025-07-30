@@ -122,7 +122,7 @@ export const useToggleWish = (productId: number) => {
 
       return { previousWish };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       // 에러 발생 시 이전 데이터로 롤백
       if (context?.previousWish) {
         queryClient.setQueryData(['product', 'wish', productId], context.previousWish);

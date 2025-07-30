@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
 import { useProductInfo, useProductDetail, useProductHighlightReview, useProductWish, useToggleWish } from '@/api/productDetail';
 import ErrorBoundary from '@/Components/ErrorBoundary';
-import LoadingSpinner from '@/Components/LoadingSpinner';
 
 const ProductContainer = styled.div`
   max-width: 1200px;
@@ -62,12 +61,7 @@ const DiscountRate = styled.span`
   font-weight: 600;
 `;
 
-const Description = styled.p`
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  line-height: 1.6;
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
+
 
 const LoadingMessage = styled.div`
   text-align: center;
@@ -76,12 +70,7 @@ const LoadingMessage = styled.div`
   font-size: 1.2rem;
 `;
 
-const ErrorMessage = styled.div`
-  text-align: center;
-  padding: ${({ theme }) => theme.spacing.xxl};
-  color: ${({ theme }) => theme.colors.red.red600};
-  font-size: 1.2rem;
-`;
+
 
 const DetailSection = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xxl};
@@ -124,25 +113,9 @@ const ReviewSummary = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const AverageRating = styled.span`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-`;
-
 const TotalReviews = styled.span`
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray.gray600};
-`;
-
-const StarRating = styled.div`
-  display: flex;
-  gap: 2px;
-`;
-
-const Star = styled.span<{ filled: boolean }>`
-  color: ${({ filled, theme }) => filled ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray300};
-  font-size: 1.2rem;
 `;
 
 const ReviewList = styled.div`
@@ -176,21 +149,7 @@ const ReviewerName = styled.span`
   color: ${({ theme }) => theme.colors.semantic.textDefault};
 `;
 
-const ReviewDate = styled.span`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-`;
 
-const ReviewRating = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const ReviewStar = styled.span<{ filled: boolean }>`
-  color: ${({ filled, theme }) => filled ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray300};
-  font-size: 1rem;
-`;
 
 const ReviewContent = styled.p`
   font-size: 1rem;
@@ -232,10 +191,7 @@ const WishButton = styled.button<{ isWished: boolean }>`
   }
 `;
 
-const WishCount = styled.span`
-  font-size: 0.9rem;
-  margin-left: ${({ theme }) => theme.spacing.sm};
-`;
+
 
 const WishButtonContainer = styled.div`
   display: flex;
@@ -412,7 +368,7 @@ const ProductDetailContent = () => {
 
             {reviewData.reviews && reviewData.reviews.length > 0 ? (
               <ReviewList>
-                {reviewData.reviews.map((review, index) => (
+                {reviewData.reviews.map((review) => (
                   <ReviewItem key={review.id}>
                     <ReviewHeaderItem>
                       <ReviewerInfo>
