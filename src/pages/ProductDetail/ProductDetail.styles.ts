@@ -81,6 +81,16 @@ export const ProductDescription = styled.div`
   line-height: 1.6;
   color: #222;
   margin-bottom: 20px;
+  padding: 0 20px;
+  overflow: hidden;
+  word-wrap: break-word;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+  }
 `;
 
 export const ReviewList = styled.div`
@@ -153,6 +163,7 @@ export const WishButton = styled.button<{ isWished: boolean }>`
   height: 56px;
   background: #f5f6fa;
   border: none;
+  border-radius: 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -161,7 +172,6 @@ export const WishButton = styled.button<{ isWished: boolean }>`
   gap: 2px;
   z-index: 100;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 0 18px;
 `;
 
 export const WishIcon = styled.div<{ isWished: boolean }>`
@@ -188,7 +198,7 @@ export const OrderButton = styled.button`
   font-size: 18px;
   font-weight: bold;
   border: none;
-  border-radius: 0 0 18px 0;
+  border-radius: 0;
   cursor: pointer;
   z-index: 100;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
