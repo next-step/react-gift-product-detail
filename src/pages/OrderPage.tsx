@@ -1,5 +1,4 @@
-import TheHeader from "@/components/layout/TheHeader";
-import { useParams, useLocation, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { ROUTE_PATH } from "@/routes/paths";
 import { cards } from "@/data/card";
@@ -13,13 +12,13 @@ import { useUserInfo } from "@/contexts/UserInfoContext";
 import { FormProvider, useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import type { OrderFormValue } from "@/types/order";
-import { fetchProductsSummary } from "@/api/productSummary";
 import type { OrderRequest } from "@/types/order";
 import { postOrder } from "@/api/order";
-import { useQuery } from "@tanstack/react-query";
+import withUser from "@/hoc/withUser";
+import useProductsSummary from "@/hooks/api/useProductsSummary";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 
 const OrderPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [selectedCard, setSelectedCard] = useState<Card>(cards[0]);
   const userInfo = useUserInfo();
@@ -38,30 +37,14 @@ const OrderPage = () => {
     methods.setValue("message", selectedCard.defaultTextMessage);
   }, [selectedCard, methods]);
 
-  useEffect(() => {
-    if (!userInfo?.email) {
-      navigate(`${ROUTE_PATH.LOGIN}?redirect=${location.pathname}`, {
-        replace: true,
-      });
-    }
-  }, [location.pathname, navigate, userInfo]);
-
   const { id } = useParams<{ id: string }>();
-  const {
-    data: gift,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["gift", id],
-    queryFn: () => fetchProductsSummary({ productId: Number(id) }),
-    enabled: !!id,
-  });
+  const { gift, isError } = useProductsSummary({ id });
 
   useEffect(() => {
-    if (!gift && !isPending && isError) {
+    if (!gift && isError) {
       navigate(ROUTE_PATH.HOME, { replace: true });
     }
-  }, [gift, isPending, isError, navigate]);
+  }, [gift, isError, navigate]);
 
   if (!gift) return null;
 
@@ -104,31 +87,28 @@ const OrderPage = () => {
   };
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit(onValid)}>
-            <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
-            <SenderSection />
-            <ReceiverSection />
-            <GiftInformationSection {...gift} />
-            <Button type="submit">
-              {gift.price *
-                watchedReceiver.reduce(
-                  (total, receiver) => total + Number(receiver.quantity || 0),
-                  0,
-                )}
-              원 주문하기
-            </Button>
-          </Form>
-        </FormProvider>
-      </Main>
-    </>
+    <Main>
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit(onValid)}>
+          <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
+          <SenderSection />
+          <ReceiverSection />
+          <GiftInformationSection {...gift} />
+          <Button type="submit">
+            {gift.price *
+              watchedReceiver.reduce(
+                (total, receiver) => total + Number(receiver.quantity || 0),
+                0,
+              )}
+            원 주문하기
+          </Button>
+        </Form>
+      </FormProvider>
+    </Main>
   );
 };
 
-export default OrderPage;
+export default withUser(withSuspenseBoundary(OrderPage, true));
 
 const Main = styled.main`
   display: flex;

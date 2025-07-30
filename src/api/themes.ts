@@ -4,6 +4,6 @@ import type { Theme } from "@/types/theme";
 
 type FetchThemeResult = Theme[];
 
-export const fetchTheme = async (): Promise<FetchThemeResult> => {
-  return await axiosInstance.get(API_PATHS.THEMES);
+export const fetchThemes = async (): Promise<FetchThemeResult> => {
+  return await axiosInstance.get(API_PATHS.THEMES.LIST);
 };

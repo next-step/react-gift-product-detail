@@ -1,4 +1,3 @@
-import TheHeader from "@/components/layout/TheHeader";
 import ThemesInfo from "@/components/themes/ThemesInfo";
 import ThemesProducts from "@/components/themes/ThemesProducts";
 import styled from "@emotion/styled";
@@ -8,13 +7,10 @@ const ThemesPage = () => {
   const { id } = useParams<{ id: string }>();
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <ThemesInfo id={id} />
-        <ThemesProducts id={id} />
-      </Main>
-    </>
+    <Main>
+      <ThemesInfo id={id} />
+      <ThemesProducts id={id} />
+    </Main>
   );
 };
 

@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 import type { GiftSummary } from "@/types/gift";
 
 type FetchProductsSummaryParams = {
-  productId: number;
+  id: number;
 };
 
 type FetchProductsSummaryResult = GiftSummary;
@@ -11,7 +11,5 @@ type FetchProductsSummaryResult = GiftSummary;
 export const fetchProductsSummary = async (
   params: FetchProductsSummaryParams,
 ): Promise<FetchProductsSummaryResult> => {
-  return await axiosInstance.get(API_PATHS.PRODUCT_SUMMARY(params.productId), {
-    params: { productId: params.productId },
-  });
+  return await axiosInstance.get(API_PATHS.PRODUCTS.SUMMARY(params.id));
 };

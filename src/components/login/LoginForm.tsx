@@ -1,15 +1,10 @@
 import styled from "@emotion/styled";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
 import ErrorMessage from "../common/ErrorMessage";
-import {
-  postLogin,
-  type PostLoginParams,
-  type PostLoginResult,
-} from "@/api/login";
 import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { LoginFormValues } from "@/types/user";
-import { useMutation } from "@tanstack/react-query";
+import useLogin from "@/hooks/api/useLogin";
 
 const LoginForm = () => {
   const method = useForm<LoginFormValues>({
@@ -22,13 +17,8 @@ const LoginForm = () => {
   const email = method.watch("email");
   const password = method.watch("password");
 
-  const { data, isPending, isError, mutate } = useMutation<
-    PostLoginResult,
-    Error,
-    PostLoginParams
-  >({
-    mutationFn: postLogin,
-    onSuccess: () => {
+  const { data, isPending, isError, login } = useLogin({
+    onSuccessCallback: () => {
       method.reset();
     },
   });
@@ -45,7 +35,7 @@ const LoginForm = () => {
     data: LoginFormValues,
   ) => {
     const { email, password } = data;
-    mutate({ email, password });
+    login({ email, password });
   };
 
   return (

@@ -1,24 +1,15 @@
-import { fetchThemesInfo } from "@/api/themesInfo";
 import styled from "@emotion/styled";
-import type { ThemeInfo } from "@/types/theme";
-import { useQuery } from "@tanstack/react-query";
+import useThemesInfo from "@/hooks/api/useThemesInfo";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 
 type ThemesInfoProps = {
   id: string | undefined;
 };
 
 const ThemesInfo = ({ id }: ThemesInfoProps) => {
-  const {
-    data: themeInfoData,
-    isPending,
-    isError,
-  } = useQuery<ThemeInfo>({
-    queryKey: ["themeInfo", id],
-    queryFn: () => fetchThemesInfo({ themeId: Number(id) }),
-    enabled: !!id,
-  });
+  const { themeInfoData, isError } = useThemesInfo({ id });
 
-  if (!themeInfoData && isPending && !isError) {
+  if (!themeInfoData && !isError) {
     return null;
   }
 
@@ -35,7 +26,7 @@ const ThemesInfo = ({ id }: ThemesInfoProps) => {
   );
 };
 
-export default ThemesInfo;
+export default withSuspenseBoundary(ThemesInfo, true);
 
 const InfoSection = styled.section<{ backgroundColor?: string }>`
   margin: 0px;

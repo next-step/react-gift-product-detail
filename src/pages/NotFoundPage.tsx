@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router";
-import TheHeader from "@/components/layout/TheHeader";
 import Wrong from "@/components/image/Wrong";
 import { ROUTE_PATH } from "@/routes/paths";
 
@@ -11,15 +10,12 @@ const NotFoundPage = () => {
   };
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <Wrong size={"150px"} />
-        <Title>잘못된 접근입니다.</Title>
-        <Context>찾으시는 페이지가 존재하지 않습니다.</Context>
-        <Button onClick={navigateToHome}>홈으로</Button>
-      </Main>
-    </>
+    <Main>
+      <Wrong size={"150px"} />
+      <Title>잘못된 접근입니다.</Title>
+      <Context>찾으시는 페이지가 존재하지 않습니다.</Context>
+      <Button onClick={navigateToHome}>홈으로</Button>
+    </Main>
   );
 };
 

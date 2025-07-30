@@ -1,22 +1,9 @@
-import TheHeader from "@/components/layout/TheHeader";
 import { useUserInfo } from "@/contexts/UserInfoContext";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
+import withUser from "@/hoc/withUser";
 import styled from "@emotion/styled";
-import { ROUTE_PATH } from "@/routes/paths";
 
 const MyPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const user = useUserInfo();
-
-  useEffect(() => {
-    if (!user?.email) {
-      navigate(`${ROUTE_PATH.LOGIN}?redirect=${location.pathname}`, {
-        replace: true,
-      });
-    }
-  }, [user, location.pathname, navigate]);
 
   if (!user?.email) return null;
 
@@ -27,19 +14,16 @@ const MyPage = () => {
   };
 
   return (
-    <>
-      <TheHeader />
-      <Main>
-        <Title>마이 페이지</Title>
-        <Content>{name}님 안녕하세요!</Content>
-        <Content>이메일 주소는 {email}입니다.</Content>
-        <Button onClick={handleLogout}>로그아웃</Button>
-      </Main>
-    </>
+    <Main>
+      <Title>마이 페이지</Title>
+      <Content>{name}님 안녕하세요!</Content>
+      <Content>이메일 주소는 {email}입니다.</Content>
+      <Button onClick={handleLogout}>로그아웃</Button>
+    </Main>
   );
 };
 
-export default MyPage;
+export default withUser(MyPage);
 
 const Main = styled.main`
   display: block;
