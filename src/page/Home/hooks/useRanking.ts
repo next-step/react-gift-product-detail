@@ -8,7 +8,7 @@ const useRanking = ({ activeGeneration, activeFilter }: RankingApiProps) => {
     queryFn: () => requests.fetchRanking({ activeGeneration, activeFilter }),
   });
 
-  return { rankingDatas: data, isLoading };
+  return { data, isLoading };
 };
 
 export default useRanking;
