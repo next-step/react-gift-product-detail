@@ -17,3 +17,17 @@ export const ProductTab = () => {
         </Styles.TabContainer>
     );
 };
+
+export interface ProductTabContentProps {
+    productTab: (typeof PRODUCT_TABS)[number];
+    children?: React.ReactNode;
+}
+
+export const ProductTabContent = ({ productTab, children }: ProductTabContentProps) => {
+    const { productTab: selectedProductTab } = useProductTabContext();
+
+    if (productTab === selectedProductTab) {
+        return children;
+    }
+    return null;
+};
