@@ -18,6 +18,5 @@ export const useRankingItem = ({
         rankType,
       }),
   });
-  console.log(data);
   return { data: { data: data?.data ?? [] } as Goods, isError, isLoading };
 };

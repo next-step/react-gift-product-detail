@@ -27,7 +27,7 @@ export const useLoginQuery = () => {
       const redirectProductId = sessionStorage.getItem('redirectProductId');
       if (redirectProductId) {
         sessionStorage.removeItem('redirectProductId');
-        navigate(`${URLS.order}?productId=${redirectProductId}`);
+        navigate(`${URLS.order}/${redirectProductId}`);
       } else {
         navigate(URLS.home);
       }
