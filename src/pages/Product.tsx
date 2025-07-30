@@ -81,10 +81,6 @@ export const ProductContent = () => {
     navigate(`${ROUTE_PATH.ORDER}/${productId}`)
   }
 
-  // * 디버깅용 데이터 로그
-  console.log('Product Detail:', productDetail)
-  console.log('Reviews:', reviews)
-
   return (
     <ProductPageContainer>
       {/* 상품 정보 섹션 */}
