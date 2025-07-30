@@ -89,13 +89,3 @@ export const NoProduct = styled.div`
   ${theme.typography.body2Regular};
   text-align: center;
 `
-
-export const ErrorText = styled.div`
-  height: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${theme.typography.body2Regular};
-  color: ${theme.colors.semanticColor.stateColor.critical};
-  text-align: center;
-`

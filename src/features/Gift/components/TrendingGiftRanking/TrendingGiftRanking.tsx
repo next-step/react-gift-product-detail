@@ -3,12 +3,12 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import Loading from '@/component/Loading/Loading'
 import * as S from './TrendingGiftRanking.styles'
 import { FilterGender, FilterType } from './TrendingGiftRankingFilter'
-import ProductCard from '@/component/ProductCard/ProductCard'
 import { ROUTE_PATH } from '@/routes/Router'
-import { useProductsRanking } from '@/features/Gift/hooks/useProductsRanking'
 import type { Gender, Type, Product } from '@/features/Gift/types/GiftTypes'
+import { ErrorBoundary } from '@/component/Error/ErrorBoundary'
+import { Suspense } from 'react'
+import RankingSection from './RakingSection'
 
-const INITIAL_VISIBLE_COUNT = 6
 const genderList = [
   { label: 'All', icon: 'ALL' },
   { label: '남성이', icon: '👨‍🦰' },
@@ -18,21 +18,20 @@ const genderList = [
 const typeList = ['받고 싶어한', '많이 선물한', '위시로 받은'] as const
 
 const TrendingGiftRanking = () => {
-  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const selectedGender = (searchParams.get('gender') ??
     genderList[0].label) as Gender
   const selectedType = (searchParams.get('type') ?? typeList[0]) as Type
 
-  const { products, loading, error } = useProductsRanking(
-    selectedGender,
-    selectedType
-  )
-
+  const navigate = useNavigate()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT)
-  const [isExpanded, setIsExpanded] = useState(false)
+
+  const handleProductSelect = (product: Product) => {
+    setSelectedProduct(product)
+    console.log(`선택된 상품 : ${product.name}`)
+    navigate(ROUTE_PATH.PRODUCT.replace(':productId', String(product.id)))
+  }
 
   const handleGenderSelect = (gender: Gender) => {
     const params = new URLSearchParams(searchParams)
@@ -46,16 +45,6 @@ const TrendingGiftRanking = () => {
     params.set('type', type)
     if (selectedGender) params.set('gender', selectedGender)
     setSearchParams(params, { replace: true })
-  }
-
-  const handleProductSelect = (product: Product) => {
-    setSelectedProduct(product)
-    navigate(ROUTE_PATH.ORDER.replace(':productId', String(product.id)))
-  }
-
-  const handleToggleView = () => {
-    setIsExpanded(!isExpanded)
-    setVisibleCount(isExpanded ? INITIAL_VISIBLE_COUNT : products.length)
   }
 
   useEffect(() => {
@@ -102,22 +91,15 @@ const TrendingGiftRanking = () => {
         ))}
       </S.TypeTab>
 
-      {loading && <Loading />}
-      {error && <S.ErrorText>{error.message}</S.ErrorText>}
-
-      {!loading && !error && products.length === 0 && (
-        <S.NoProduct>상품이 없습니다.</S.NoProduct>
-      )}
-
-      {!loading && !error && products.length !== 0 && (
-        <ProductCard
-          products={products}
-          visibleCount={visibleCount}
-          isExpanded={isExpanded}
-          onProductSelect={handleProductSelect}
-          onToggleView={handleToggleView}
-        />
-      )}
+      <ErrorBoundary>
+        <Suspense fallback={<Loading />}>
+          <RankingSection
+            selectedGender={selectedGender}
+            selectedType={selectedType}
+            onProductSelect={handleProductSelect}
+          />
+        </Suspense>
+      </ErrorBoundary>
     </S.Container>
   )
 }
