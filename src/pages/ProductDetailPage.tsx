@@ -77,7 +77,8 @@ const ProductDetailPage = () => {
       </Layout>
     );
   }
-  
+  console.log('Final data before render:', { product, detail, reviews, wishData });
+
   return (
     <Layout>
       <NavBar />

@@ -51,7 +51,7 @@ export const ProductDetailTabs = ({ detail, reviews }: Props) => {
         </TabButton>
       </div>
       <div css={tabContent}>
-        <TabContent activeTab={activeTab} detail={detail} reviews={reviews} />
+        <TabContent activeTab={activeTab} reviews={reviews} detail={detail} />
       </div>
     </div>
   );

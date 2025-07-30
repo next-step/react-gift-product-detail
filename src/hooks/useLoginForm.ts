@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { validateId, validatePw } from '@/utils/validation';
-import { useAuth } from '@/contexts/AuthContext';
-import { login as loginService } from '@/api/services';
-import { toastError } from '@/utils/toast';
-import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
 import { useLoginMutation } from './queries/useLoginMutation';
 
 export const useLoginForm = () => {
@@ -14,11 +8,6 @@ export const useLoginForm = () => {
   const [idError, setIdError] = useState('');
   const [pwError, setPwError] = useState('');
   const [touched, setTouched] = useState({ id: false, pw: false });
-  const { login } = useAuth();
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as { from?: string })?.from ?? '/';
 
   const onChangeId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setId(e.target.value);
