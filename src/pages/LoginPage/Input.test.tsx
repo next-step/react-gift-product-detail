@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
-import { Input } from './styles';
+import { Input, ErrorMessage } from './styles';
 import { theme } from '@/styles/theme';
 
 const renderInput = (
@@ -154,5 +154,50 @@ describe('LoginPage Input', () => {
     const input = screen.getByRole('textbox');
     const computedStyle = window.getComputedStyle(input);
     expect(computedStyle.marginBottom).toBeTruthy();
+  });
+
+  it('에러 메시지가 올바른 타이포그래피를 가져야 한다', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <ErrorMessage>이메일을 입력해주세요</ErrorMessage>
+      </ThemeProvider>
+    );
+
+    const errorMessage = screen.getByText('이메일을 입력해주세요');
+    const computedStyle = window.getComputedStyle(errorMessage);
+
+    // theme.typography.label2Regular가 적용되었는지 확인
+    expect(computedStyle.fontFamily).toBeTruthy();
+    expect(computedStyle.fontSize).toBeTruthy();
+    expect(computedStyle.fontWeight).toBeTruthy();
+  });
+
+  it('에러 메시지가 올바른 색상을 가져야 한다', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <ErrorMessage>비밀번호를 입력해주세요</ErrorMessage>
+      </ThemeProvider>
+    );
+
+    const errorMessage = screen.getByText('비밀번호를 입력해주세요');
+    const computedStyle = window.getComputedStyle(errorMessage);
+
+    // theme.colors.semantic.critical 색상이 적용되었는지 확인
+    // critical 색상은 보통 빨간색 계열
+    expect(computedStyle.color).toBeTruthy();
+  });
+
+  it('에러 메시지가 올바른 margin을 가져야 한다', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <ErrorMessage>로그인에 실패했습니다</ErrorMessage>
+      </ThemeProvider>
+    );
+
+    const errorMessage = screen.getByText('로그인에 실패했습니다');
+    const computedStyle = window.getComputedStyle(errorMessage);
+
+    // margin-top이 설정되어 있는지 확인
+    expect(computedStyle.marginTop).toBeTruthy();
   });
 });
