@@ -31,7 +31,7 @@ export const router = createBrowserRouter(
         }
       />
       <Route path="/themes/:themeId" element={<ThemeListPage />} />
-      <Route path="/detail" element={<ProductDetailPage />} />
+      <Route path="/products/:productId" element={<ProductDetailPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </>,
   ),

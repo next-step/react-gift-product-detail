@@ -28,6 +28,13 @@ export function useGoToTheme(themeId: number | string) {
   };
 }
 
+export function useGoToDetail(productId: number | string) {
+  const navigate = useNavigate();
+  return () => {
+    navigate(`/products/${productId}`);
+  };
+}
+
 export function useGoBack() {
   const navigate = useNavigate();
   return () => {

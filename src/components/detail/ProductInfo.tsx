@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { useParams } from 'react-router-dom';
+import { useProductInfo } from '@/hooks/useProductInfo';
 
 const Wrapper = styled.div`
   margin-bottom: 8px;
@@ -44,17 +46,23 @@ const BrandName = styled.span`
 `;
 
 export default function ProductInfo() {
+  const { productId } = useParams<{ productId: string }>();
+  const { data, isLoading, isError } = useProductInfo(Number(productId));
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (isError || !data) return <div>상품 정보를 불러올 수 없습니다.</div>;
+
   return (
     <Wrapper>
-      <ProductImg />
+      <ProductImg src={data.imageURL} alt={data.name} />
 
       <ProductText>
-        <ProductTitle>부드러운 고구마 라떼 케이크</ProductTitle>
-        <ProductPrice>26350원</ProductPrice>
+        <ProductTitle>{data.name}</ProductTitle>
+        <ProductPrice>{data.price.sellingPrice}원</ProductPrice>
       </ProductText>
       <Brand>
-        <BrandImg />
-        <BrandName>뚜레쥬르</BrandName>
+        <BrandImg src={data.brandInfo.imageURL} alt={data.brandInfo.name} />
+        <BrandName>{data.brandInfo.name}</BrandName>
       </Brand>
     </Wrapper>
   );
