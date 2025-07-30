@@ -26,3 +26,13 @@
   - 상품 관심 등록 수 섹션 구현
   - 상품 관심 등록 버튼 낙관적 업데이트 적용 (api 반영은 없음)
 - ErrorBoundary와 Suspense를 사용하여 코드 구조 리팩터링
+
+## step3
+
+- step2 피드백 반영
+  - wrapper 유틸 함수를 구현해 여러 hoc를 적용하도록 구현
+  - 함수 이름 수정
+- src/components에 있는 Form Field와 Typography에 대한 테스트 코드를 작성
+- 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성
+- MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성
+- github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드를 실행
