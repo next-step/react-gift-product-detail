@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import LogoutButton from "@/components/common/BaseButton";
 
 const MyPage = () => {
-  const { userInfo, logout } = useAuth();
-  const userEmail = userInfo?.email || "";
-  const userName = userInfo?.name || "";
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleNavigateToLogin = () => {
     navigate("/login");
   };
+
+  const { userInfo, logout } = useAuth({ onLogout: handleNavigateToLogin });
+  const userEmail = userInfo?.email || "";
+  const userName = userInfo?.name || "";
 
   return (
     <Wrapper>
@@ -24,7 +24,7 @@ const MyPage = () => {
         color="yellow"
         label="로그아웃"
         size="large"
-        onClick={handleLogout}
+        onClick={logout}
       />
     </Wrapper>
   );

@@ -1,3 +1,13 @@
+## step2 피드백 반영 내용
+
+- suspense와 errorboundary로 반복되던 코드를 hoc를 정의하여 리팩터링했습니다.
+- MyPage.tsx에서 로그아웃버튼이 눌리면 useAuth내부에서 로그아웃을 한 뒤, onLogout을 통해 Mypage로 로그아웃됨을 알려 navigate 로직이 실행되도록 했습니다.
+- ReceiverModal.tsx에서 받는 사람의 목록을 편집하는 UI를 제공하고, 입력된 데이터를 검증하여 외부에 알리는 것에만 집중하도록 관심사를 분리했습니다. props를 통해 전달받은 콜백 함수를 통해 완료 버튼이 눌리면 onSubmit(data)를 호출하여 보고하고, 취소 버튼이 눌리면 onClose()를 호출하여 취소했다고 보고하는 형식으로 리팩터링했습니다.
+- ReceiverModal.tsx는 이제 스스로를 닫지 않습니다. onClose, onSubmit을 호출 하기만 합니다. onSubmit으로 넘겨지는 데이터에 대해서 관심을 가지지 않도록 유지했습니다.
+- ReceiverInfoSection.tsx는 모달을 여는 함수를 실행해 isModalOpen을 true로 변경하고, onSubmit, onClose 보고를 받으면 함수를 실행해 데이터를 업데이트하거나 모달을 닫습니다.
+- ProductDetailTabs에서는 onTabClick이라는 prop을 받고, 어떤 탭이 클릭되었는지에 대한 정보만 담아서 onTabClick을 호출합니다.
+- ProductDetailPage에서는 onTabClick 이벤트를 받아서, activeTab 상태를 변경하는 로직을 수행합니다.
+
 ## step2 구현 내용
 
 - 상품 카드를 클릭하면 상품상세페이지로 이동하도록 로직을 변경했습니다.

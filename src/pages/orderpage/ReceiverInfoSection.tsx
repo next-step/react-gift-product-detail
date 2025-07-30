@@ -3,37 +3,29 @@ import { useFormContext } from "react-hook-form";
 import styled from "@emotion/styled";
 import ReceiverModal from "@/pages/orderpage/ReceiverModal";
 import { useState } from "react";
-import type { FullOrderFormValues } from "@/utils/validator";
+import type {
+  FullOrderFormValues,
+  ReceiverArrayFormValues,
+} from "@/utils/validator";
 
 const ReceiverInfoSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [initialReceivers, setInitialReceivers] = useState<
-    { name: string; phoneNumber: string; quantity: number }[]
-  >([]);
   const { setValue, watch } = useFormContext<FullOrderFormValues>();
   const receivers = watch("receivers");
 
-  const handleClickAdd = () => {
-    setInitialReceivers([...receivers]);
-    setIsModalOpen(true);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSubmitReceiverData = (data: {
-    receivers: { name: string; phoneNumber: string; quantity: number }[];
-  }) => {
-    setValue("receivers", data.receivers);
-    setIsModalOpen(false);
+  const handleSubmitReceivers = (data: ReceiverArrayFormValues) => {
+    setValue("receivers", data.receivers, { shouldValidate: true });
+    closeModal();
   };
 
   return (
     <SectionContainer>
       <HeaderRow>
         <Title>받는 사람</Title>
-        <AddButton type="button" onClick={handleClickAdd}>
+        <AddButton type="button" onClick={openModal}>
           {receivers.length > 0 ? "수정" : "추가"}
         </AddButton>
       </HeaderRow>
@@ -68,9 +60,9 @@ const ReceiverInfoSection = () => {
       {isModalOpen && (
         <ReceiverModal
           isOpen={isModalOpen}
-          handleClose={handleCloseModal}
-          onSubmit={handleSubmitReceiverData}
-          initialReceivers={initialReceivers}
+          onClose={closeModal}
+          onSubmit={handleSubmitReceivers}
+          initialReceivers={receivers}
         />
       )}
     </SectionContainer>

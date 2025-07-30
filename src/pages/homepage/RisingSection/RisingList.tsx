@@ -13,7 +13,7 @@ export default function RisingList() {
   const navigate = useNavigate();
   const { data } = useProducts();
 
-  const navigateToOrder = (item: Product & { id: number }) => {
+  const navigateToProduct = (item: Product & { id: number }) => {
     navigate(`/product/${item.id}`);
   };
 
@@ -29,7 +29,7 @@ export default function RisingList() {
     <Wrapper>
       <Grid>
         {data.slice(0, visibleCount).map((item: Product, index: number) => (
-          <CardWrapper key={item.id} onClick={() => navigateToOrder(item)}>
+          <CardWrapper key={item.id} onClick={() => navigateToProduct(item)}>
             <RankBadge>{index + 1}</RankBadge>
             <RisingItem product={item} />
           </CardWrapper>
