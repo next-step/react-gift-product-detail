@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { Typography } from '@/shared/components'
 import type { ProductDetail, ProductHighlightReview } from '@/api/types'
-
-// * 탭 타입 정의
-type TabType = 'description' | 'reviews' | 'details'
+import { PRODUCT_TAB_CONSTANTS, type TabType } from '../constants'
 
 interface ProductTabsProps {
   productDetail?: ProductDetail
@@ -15,19 +13,30 @@ interface ProductTabsProps {
 export const ProductTabs = ({ productDetail, reviews }: ProductTabsProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('description')
 
-  const tabs = [
-    { id: 'description' as const, label: '상품설명' },
-    { id: 'reviews' as const, label: '선물후기' },
-    { id: 'details' as const, label: '상세정보' },
-  ]
+  // * 조건 변수들 (useMemo로 최적화 - 불필요한 재계산 방지)
+  const tabConditions = useMemo(
+    () => ({
+      hasDescription: productDetail?.description,
+      hasReviews: reviews?.reviews && reviews.reviews.length > 0,
+      hasTotalCount: reviews?.totalCount && reviews.totalCount > 0,
+      hasAnnouncements: productDetail?.announcements && productDetail.announcements.length > 0,
+    }),
+    [productDetail, reviews],
+  )
+
+  // * 구조 분해 할당을 통해 개별 조건 변수 사용
+  const { hasDescription, hasReviews, hasTotalCount, hasAnnouncements } = tabConditions
+  const isLoadingReviews = hasTotalCount && !hasReviews
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'description':
         return (
           <TabContent>
-            {productDetail?.description ? (
-              <DescriptionContent dangerouslySetInnerHTML={{ __html: productDetail.description }} />
+            {hasDescription ? (
+              <DescriptionContent
+                dangerouslySetInnerHTML={{ __html: productDetail!.description }}
+              />
             ) : (
               <EmptyContent>상품 설명이 없습니다.</EmptyContent>
             )}
@@ -36,16 +45,16 @@ export const ProductTabs = ({ productDetail, reviews }: ProductTabsProps) => {
       case 'reviews':
         return (
           <TabContent>
-            {reviews?.reviews && reviews.reviews.length > 0 ? (
+            {hasReviews ? (
               <ReviewsList>
-                {reviews.reviews.map((review, index: number) => (
+                {reviews!.reviews.map((review, index: number) => (
                   <ReviewItem key={index}>
                     <ReviewAuthor variant="label1Bold">{review.authorName}</ReviewAuthor>
                     <ReviewText variant="body1Regular">{review.content}</ReviewText>
                   </ReviewItem>
                 ))}
               </ReviewsList>
-            ) : reviews?.totalCount && reviews.totalCount > 0 ? (
+            ) : isLoadingReviews ? (
               <EmptyContent>후기 데이터를 불러오는 중...</EmptyContent>
             ) : (
               <EmptyContent>아직 후기가 없습니다.</EmptyContent>
@@ -55,9 +64,9 @@ export const ProductTabs = ({ productDetail, reviews }: ProductTabsProps) => {
       case 'details':
         return (
           <TabContent>
-            {productDetail?.announcements && productDetail.announcements.length > 0 ? (
+            {hasAnnouncements ? (
               <DetailsList>
-                {productDetail.announcements.map((item, index: number) => (
+                {productDetail!.announcements.map((item, index: number) => (
                   <DetailItem key={index}>
                     <DetailLabel variant="label1Bold">{item.name}</DetailLabel>
                     <DetailValue variant="body1Regular">{item.value}</DetailValue>
@@ -77,7 +86,7 @@ export const ProductTabs = ({ productDetail, reviews }: ProductTabsProps) => {
   return (
     <TabsContainer>
       <TabsHeader>
-        {tabs.map((tab) => (
+        {PRODUCT_TAB_CONSTANTS.map((tab) => (
           <TabButton
             key={tab.id}
             role="tab"
