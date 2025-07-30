@@ -7,6 +7,7 @@ import NavLayout from '@/component/Layout/NavLayout'
 import MyPage from '@/features/My/pages/MyPage'
 import OrderPage from '@/features/Order/pages/OrderPage'
 import ThemePage from '@/features/Theme/pages/ThemePage'
+import ProductPage from '@/features/Product/pages/ProductPage'
 import PrivateRoute from '@/routes/PrivateRoute'
 
 export const ROUTE_PATH = {
@@ -15,6 +16,7 @@ export const ROUTE_PATH = {
   MY: '/my',
   ORDER: '/order/:productId',
   THEME: '/themes/:themeId',
+  PRODUCT: '/product/:productId',
   NOT_FOUND: '*',
 }
 
@@ -51,6 +53,14 @@ const Router = createBrowserRouter([
       {
         path: ROUTE_PATH.THEME,
         element: <ThemePage />,
+      },
+      {
+        path: ROUTE_PATH.PRODUCT,
+        element: (
+          <PrivateRoute>
+            <ProductPage />
+          </PrivateRoute>
+        ),
       },
     ],
   },
