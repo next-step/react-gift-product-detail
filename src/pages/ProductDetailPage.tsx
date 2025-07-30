@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import MobileLayout from '@/layouts/MobileLayout';
 import NavBar from '@/components/NavBar';
@@ -15,6 +16,8 @@ const Wrapper = styled.div`
 `;
 
 export default function ProductDetailPage() {
+  const { productId } = useParams<{ productId: string }>();
+
   const [activeTab, setActiveTab] = useState<'description' | 'review' | 'detail'>('description');
 
   const [liked, setLiked] = useState(false);
@@ -25,12 +28,14 @@ export default function ProductDetailPage() {
     setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
   };
 
+  if (!productId) return <div>유효하지 않은 상품입니다.</div>;
+
   return (
     <MobileLayout>
       <Wrapper>
         <NavBar />
         <ProductInfo />
-        <ProductTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <ProductTabs activeTab={activeTab} setActiveTab={setActiveTab} productId={productId} />
         <FooterButton liked={liked} likeCount={likeCount} toggleLike={toggleLike} />
       </Wrapper>
     </MobileLayout>

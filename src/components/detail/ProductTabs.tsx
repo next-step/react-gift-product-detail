@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { useProductDetail } from '@/hooks/useProductDetail';
+import { useProductHighlightReview } from '@/hooks/useProductDetail';
 
 const Wrapper = styled.section``;
 
@@ -22,6 +24,57 @@ const Tab = styled.button<{ active: boolean }>`
 const TabContent = styled.div`
   background: #fff;
   padding: 16px;
+  min-height: 400px;
+`;
+
+const DescriptionImg = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  p {
+    ${({ theme }) => theme.typography.body1Regular};
+  }
+`;
+
+const ReviewList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ReviewItem = styled.div`
+  margin-top: 16px;
+`;
+
+const ReviewerName = styled.p`
+  ${({ theme }) => theme.typography.body2Bold};
+`;
+
+const ReviewContent = styled.p`
+  ${({ theme }) => theme.typography.body1Regular};
+  margin: 8px 0;
+`;
+
+const DetailList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const DetailItem = styled.div`
+  margin-top: 16px;
+`;
+
+const DetailLabel = styled.p`
+  ${({ theme }) => theme.typography.body2Bold};
+`;
+
+const DetailText = styled.p`
+  ${({ theme }) => theme.typography.body1Regular};
+  margin: 8px 0;
 `;
 
 type TabType = 'description' | 'review' | 'detail';
@@ -29,9 +82,13 @@ type TabType = 'description' | 'review' | 'detail';
 interface ProductTabsProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  productId: string;
 }
 
-export default function ProductTabs({ activeTab, setActiveTab }: ProductTabsProps) {
+export default function ProductTabs({ activeTab, setActiveTab, productId }: ProductTabsProps) {
+  const { data: detailData, isLoading: isDetailLoading } = useProductDetail(productId);
+  const { data: reviewData, isLoading: isReviewLoading } = useProductHighlightReview(productId);
+
   return (
     <Wrapper>
       <Tabs>
@@ -47,9 +104,44 @@ export default function ProductTabs({ activeTab, setActiveTab }: ProductTabsProp
       </Tabs>
 
       <TabContent>
-        {activeTab === 'description' && <div>상품설명 콘텐츠 영역</div>}
-        {activeTab === 'review' && <div>선물후기 콘텐츠 영역</div>}
-        {activeTab === 'detail' && <div>상세정보 콘텐츠 영역</div>}
+        {activeTab === 'description' &&
+          (isDetailLoading ? (
+            <div>로딩 중...</div>
+          ) : detailData?.description ? (
+            <DescriptionImg dangerouslySetInnerHTML={{ __html: detailData.description }} />
+          ) : (
+            <div>설명 정보가 없습니다.</div>
+          ))}
+
+        {activeTab === 'review' &&
+          (isReviewLoading ? (
+            <div>로딩 중...</div>
+          ) : (
+            <ReviewList>
+              {reviewData?.reviews.map((review) => (
+                <ReviewItem key={review.id}>
+                  <ReviewerName>{review.authorName}</ReviewerName>
+                  <ReviewContent>{review.content}</ReviewContent>
+                </ReviewItem>
+              ))}
+            </ReviewList>
+          ))}
+
+        {activeTab === 'detail' &&
+          (isDetailLoading ? (
+            <div>로딩 중...</div>
+          ) : detailData?.announcements?.length ? (
+            <DetailList>
+              {detailData.announcements.map((item) => (
+                <DetailItem key={item.displayOrder}>
+                  <DetailLabel>{item.name}</DetailLabel>
+                  <DetailText>{item.value}</DetailText>
+                </DetailItem>
+              ))}
+            </DetailList>
+          ) : (
+            <div>상세 정보가 없습니다.</div>
+          ))}
       </TabContent>
     </Wrapper>
   );

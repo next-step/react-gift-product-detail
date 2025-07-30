@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 
 const ProductImg = styled.img`
   width: 100%;
-  height: 483px;
+  height: auto;
 `;
 
 const ProductText = styled.section`

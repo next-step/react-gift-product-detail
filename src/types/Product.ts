@@ -21,3 +21,25 @@ export interface ProductSummary {
   brandName: string;
   price: number;
 }
+
+export interface ProductAnnouncement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
+export interface ProductDetail {
+  description: string;
+  announcements: ProductAnnouncement[];
+}
+
+export interface Review {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface ProductReview {
+  totalCount: number;
+  reviews: Review[];
+}
