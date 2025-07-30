@@ -10,7 +10,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import MyPage from './pages/MyPage';
 import {
   UserManagementProvider,
-  UserManagement,
+  userManagement,
 } from './pages/Login/contexts/UserManagement';
 import React from 'react';
 import OrderPage from './pages/Order/OrderPage';
@@ -33,12 +33,12 @@ const Home = () => (
 );
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user } = UserManagement();
+  const { user } = userManagement();
   return user ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
 const RedirectIfLoggedIn = ({ children }: { children: React.ReactNode }) => {
-  const { user } = UserManagement();
+  const { user } = userManagement();
   return user ? <Navigate to="/my" replace /> : <>{children}</>;
 };
 

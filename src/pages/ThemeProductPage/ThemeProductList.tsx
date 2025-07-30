@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import ProductCard from '../Home/components/Shared/RankingCard';
 import theme from '../../styles/theme';
 import { useThemeProducts } from '../../apis/product';
-import { UserManagement } from '../Login/contexts/UserManagement';
+import { userManagement } from '../Login/contexts/UserManagement';
 import { ErrorBoundary } from '../../ErrorBoundary';
 
 const LIMIT = 10;
@@ -13,7 +13,7 @@ const LIMIT = 10;
 const ThemeProductListContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
-  const { user } = UserManagement();
+  const { user } = userManagement();
 
   const numericThemeId = Number(themeId);
 

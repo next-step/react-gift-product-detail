@@ -27,7 +27,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { cardTemplates } from '../../data/cardTemplates';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserManagement } from '../Login/contexts/UserManagement';
+import { userManagement } from '../Login/contexts/UserManagement';
 
 import { useProductSummaryQuery } from '../../apis/summary';
 import { postOrder } from '../../apis/orders';
@@ -37,7 +37,7 @@ const OrderPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
-  const { user } = UserManagement();
+  const { user } = userManagement();
   const authToken = user?.authToken || '';
 
   const [selectedCard, setSelectedCard] = useState(cardTemplates[0]);

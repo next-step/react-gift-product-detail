@@ -16,7 +16,7 @@ import {
 
 import TabButton from '../Shared/TabButton';
 import RankingCard from '../Shared/RankingCard';
-import { UserManagement } from '../../../Login/contexts/UserManagement';
+import { userManagement } from '../../../Login/contexts/UserManagement';
 
 import { useSuspenseRanking } from '../../../../apis/ranking';
 import { ErrorBoundary } from '../../../../ErrorBoundary';
@@ -79,7 +79,7 @@ const RankingContent = ({
 const RankingSection = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { user } = UserManagement();
+  const { user } = userManagement();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const initialGender = searchParams.get('gender') || '전체';
