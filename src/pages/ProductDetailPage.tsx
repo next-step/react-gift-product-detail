@@ -10,10 +10,11 @@ import {
   ProductDetailSummary,
   ProductDetailTab,
 } from "@/components/productDetail";
+import { PRODUCT_DETAIL_TABS, type ProductDetailTabId } from "@/constants";
 import { useRouter } from "@/hooks/common/useRouter";
 import { useFakeWish, useProductDetail } from "@/hooks/products";
 import { queryClient } from "@/query-client";
-import { Suspense, useState } from "react";
+import { Suspense, useState, type ReactNode } from "react";
 import { useParams } from "react-router-dom";
 
 const ProductDetailContent = ({ productId }: { productId: number }) => {
@@ -22,22 +23,28 @@ const ProductDetailContent = ({ productId }: { productId: number }) => {
     useProductDetail(productId);
   const wishMutation = useFakeWish();
 
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState<ProductDetailTabId>(
+    PRODUCT_DETAIL_TABS.DESCRIPTION,
+  );
 
   const handleWishClick = () => {
     wishMutation.mutate(productId);
   };
 
-  const handleTabChange = (tabId: string) => {
+  const handleTabChange = (tabId: ProductDetailTabId) => {
     setActiveTab(tabId);
   };
 
-  const tabContent = {
-    description: (
+  const tabContent: Record<ProductDetailTabId, ReactNode> = {
+    [PRODUCT_DETAIL_TABS.DESCRIPTION]: (
       <ProductDetailSummary description={productDetail?.description} />
     ),
-    review: <ProductDetailReview reviews={highlightReview} />,
-    details: <ProductDetailDescription detail={productDetail} />,
+    [PRODUCT_DETAIL_TABS.REVIEW]: (
+      <ProductDetailReview reviews={highlightReview} />
+    ),
+    [PRODUCT_DETAIL_TABS.DETAILS]: (
+      <ProductDetailDescription detail={productDetail} />
+    ),
   };
 
   return (

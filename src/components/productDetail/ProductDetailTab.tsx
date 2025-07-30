@@ -1,20 +1,14 @@
+import {
+  PRODUCT_DETAIL_TAB_LIST,
+  PRODUCT_DETAIL_TABS,
+  type ProductDetailTabId,
+} from "@/constants";
 import styled from "@emotion/styled";
 import { useState } from "react";
 
-type TabItem = {
-  id: string;
-  label: string;
-};
-
-const tabs: TabItem[] = [
-  { id: "description", label: "상품설명" },
-  { id: "review", label: "선물후기" },
-  { id: "details", label: "상세정보" },
-];
-
 const TabContainer = styled.div(({ theme }) => ({
   display: "flex",
-  backgroundColor: "#fff",
+  backgroundColor: theme.color.gray[0],
   borderBottom: `1px solid ${theme.color.gray[300]}`,
 }));
 
@@ -40,24 +34,24 @@ const TabButton = styled.button<{ isActive: boolean }>(
 );
 
 interface ProductDetailTabProps {
-  activeTab?: string;
-  onTabChange?: (tabId: string) => void;
+  activeTab?: ProductDetailTabId;
+  onTabChange?: (tabId: ProductDetailTabId) => void;
 }
 
 export const ProductDetailTab = ({
-  activeTab = "description",
+  activeTab = PRODUCT_DETAIL_TABS.DESCRIPTION,
   onTabChange,
 }: ProductDetailTabProps) => {
   const [selectedTab, setSelectedTab] = useState(activeTab);
 
-  const handleTabClick = (tabId: string) => {
+  const handleTabClick = (tabId: ProductDetailTabId) => {
     setSelectedTab(tabId);
     onTabChange?.(tabId);
   };
 
   return (
     <TabContainer>
-      {tabs.map(tab => (
+      {PRODUCT_DETAIL_TAB_LIST.map(tab => (
         <TabButton
           key={tab.id}
           isActive={selectedTab === tab.id}
