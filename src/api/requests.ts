@@ -1,7 +1,7 @@
 import type {
   UserInfoData,
   UserInfoProps,
-  GiftRankingItem,
+  ProductInfo,
   RankingApiProps,
   OrderInfoValues,
   ProductSummaryData,
@@ -9,6 +9,9 @@ import type {
   ThemeIdInfoData,
   ThemeIdItemsData,
   OrderResponseData,
+  ProductDetailData,
+  ProductWishData,
+  ProductReviewData,
 } from '@/types';
 import { apiClient } from './apiClient';
 
@@ -43,10 +46,7 @@ export const requests = {
   fetchSummary: (id: string): Promise<ProductSummaryData> => {
     return apiClient.get(`/api/products/${id}/summary`);
   },
-  fetchRanking: ({
-    activeGeneration,
-    activeFilter,
-  }: RankingApiProps): Promise<GiftRankingItem[]> => {
+  fetchRanking: ({ activeGeneration, activeFilter }: RankingApiProps): Promise<ProductInfo[]> => {
     return apiClient.get(
       `/api/products/ranking?targetType=${activeGeneration}&rankType=${activeFilter}`
     );
@@ -59,4 +59,12 @@ export const requests = {
     currentCursor,
   }: fetchThemeIdItemsProps): Promise<ThemeIdItemsData> =>
     apiClient.get(`/api/themes/${index}/products?cursor=${currentCursor}`),
+
+  fetchProduct: (index: number): Promise<ProductInfo> => apiClient.get(`/api/products/${index}`),
+  fetchProductDetail: (index: number): Promise<ProductDetailData> =>
+    apiClient.get(`/api/products/${index}/detail`),
+  fetchProductReview: (index: number): Promise<ProductReviewData> =>
+    apiClient.get(`/api/products/${index}/highlight-review`),
+  fetchProductWish: (index: number): Promise<ProductWishData> =>
+    apiClient.get(`/api/products/${index}/wish`),
 };

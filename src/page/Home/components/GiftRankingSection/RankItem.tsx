@@ -1,9 +1,9 @@
-import type { GiftRankingItem } from '@/types';
+import type { ProductInfo } from '@/types';
 import toLocaleString from '@/utils/toLocaleString';
 import styled from '@emotion/styled';
 
 interface ItemProps {
-  rank: GiftRankingItem;
+  rank: ProductInfo;
   index: number;
   onClick: (id: number) => void;
 }

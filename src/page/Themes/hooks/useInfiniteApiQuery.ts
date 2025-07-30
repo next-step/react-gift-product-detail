@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useParamsIndex } from "./useParamsIndex";
+import { useParamsIndex } from "../../../hooks/useParamsIndex";
 import { requests } from "@/api/requests";
 
 export const useInfiniteApiQuery = () => {
