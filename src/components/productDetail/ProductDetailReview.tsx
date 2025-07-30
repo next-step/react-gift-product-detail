@@ -37,7 +37,7 @@ export const ProductDetailReview = ({ reviews }: ProductDetailReviewProps) => {
   return (
     <ProductDetailReviewContainer>
       {productReview.map(review => (
-        <ProductDetailReviewWrapper>
+        <ProductDetailReviewWrapper key={`${review.id}+${review.authorName}`}>
           <ProductDetailAuthorName>{review.authorName}</ProductDetailAuthorName>
           <ProductDetailReviewContent>
             {review.content}
