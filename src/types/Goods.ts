@@ -13,6 +13,9 @@ export interface Good {
     imageURL: string;
   };
 }
+export interface Goods {
+  data: Good[];
+}
 
 export interface GoodSummary {
   id: number;

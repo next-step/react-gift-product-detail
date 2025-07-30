@@ -8,10 +8,10 @@ import {
   StyledPresentRankingItemPresentItem,
   StyledPresentRankingNumContainer,
 } from '@src/components/Home/PresentRanking/Item/StyledPresentRankingItem';
-import type { Good } from '@src/types/Goods';
+import type { Good, Goods } from '@src/types/Goods';
 import { useNavigate } from 'react-router-dom';
 interface Props {
-  goods: Good[] | null;
+  goods: Goods | null;
   isLoading: boolean;
   isError: boolean;
   isVisible?: boolean;
@@ -46,32 +46,31 @@ const PresentProductList = ({
   if (goods && showRankingNumber) {
     return (
       <>
-        {goods &&
-          goods.slice(0, repeatCnt).map((item: Good, index: number) => (
-            <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
-              <StyledPresentRankingItemDiv>
-                <StyledPresentRankingNumContainer index={index + 1}>
-                  {index + 1}
-                </StyledPresentRankingNumContainer>
-                <StyledPresentRankingItemImage src={item.imageURL} alt={item.name} />
-                <StyledPresentRankingItemBrandName className='brand_name'>
-                  {item.brandInfo.name}
-                </StyledPresentRankingItemBrandName>
-                <StyledPresentRankingItemPresentItem className='goods_name'>
-                  {item.name}
-                </StyledPresentRankingItemPresentItem>
-                <StyledPresentRankingItemPrasentPrice className='goods_price'>
-                  {item.price.sellingPrice.toLocaleString()} 원
-                </StyledPresentRankingItemPrasentPrice>
-              </StyledPresentRankingItemDiv>
-            </div>
-          ))}
+        {goods.data.slice(0, repeatCnt).map((item: Good, index: number) => (
+          <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
+            <StyledPresentRankingItemDiv>
+              <StyledPresentRankingNumContainer index={index + 1}>
+                {index + 1}
+              </StyledPresentRankingNumContainer>
+              <StyledPresentRankingItemImage src={item.imageURL} alt={item.name} />
+              <StyledPresentRankingItemBrandName className='brand_name'>
+                {item.brandInfo.name}
+              </StyledPresentRankingItemBrandName>
+              <StyledPresentRankingItemPresentItem className='goods_name'>
+                {item.name}
+              </StyledPresentRankingItemPresentItem>
+              <StyledPresentRankingItemPrasentPrice className='goods_price'>
+                {item.price.sellingPrice.toLocaleString()} 원
+              </StyledPresentRankingItemPrasentPrice>
+            </StyledPresentRankingItemDiv>
+          </div>
+        ))}
       </>
     );
   } else {
     return (
       <>
-        {goods.map((item, index) => (
+        {goods.data.map((item, index) => (
           <div key={item.id} onClick={() => handleItemClick(item)} style={{ cursor: 'pointer' }}>
             <StyledPresentRankingItemDiv>
               {showRankingNumber && (
