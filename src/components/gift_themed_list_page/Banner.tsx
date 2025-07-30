@@ -53,13 +53,14 @@ export const Banner = () => {
       if (!id) return;
       return getThemeInfo(id);
     },
+    placeholderData: {
+      name: '',
+      title: '',
+      description: '',
+      backgroundColor: '#FFFFFF',
+    },
   });
-  const { name, title, description, backgroundColor } = data || {
-    name: '',
-    title: '',
-    description: '',
-    backgroundColor: '#FFFFFF',
-  };
+  const { name, title, description, backgroundColor } = data!;
 
   return (
     <Container backgroundColor={backgroundColor}>
