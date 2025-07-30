@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { css } from '@emotion/react';
 import { palette, spacing, typography } from '@/styles/theme';
 import type { ProductDetail, ProductReview } from '@/types';
+import styled from '@emotion/styled';
 
 interface Props {
   detail: ProductDetail;
@@ -13,30 +14,40 @@ interface Props {
 
 type Tab = 'description' | 'reviews' | 'details';
 
+const TabButton = styled.button<{ isActive: boolean }>`
+  flex: 1;
+  padding: ${spacing.spacing4} 0;
+  font-size: ${typography.body1Regular.fontSize};
+  font-weight: 700;
+  color: ${(props) => (props.isActive ? palette.gray900 : palette.gray600)};
+  border-bottom: 2px solid ${(props) => (props.isActive ? palette.gray900 : 'transparent')};
+  transition: all 0.2s;
+`;
+
 export const ProductDetailTabs = ({ detail, reviews }: Props) => {
   const [activeTab, setActiveTab] = useState<Tab>('description');
 
   return (
     <div>
       <div css={tabNav}>
-        <button
+        <TabButton
           onClick={() => setActiveTab('description')}
-          css={tabButton(activeTab === 'description')}
+          isActive={activeTab === 'description'}
         >
           상품설명
-        </button>
-        <button
+        </TabButton>
+        <TabButton
           onClick={() => setActiveTab('reviews')}
-          css={tabButton(activeTab === 'reviews')}
+          isActive={activeTab === 'reviews'}
         >
           선물후기 ({reviews.totalCount})
-        </button>
-        <button
+        </TabButton>
+        <TabButton
           onClick={() => setActiveTab('details')}
-          css={tabButton(activeTab === 'details')}
+          isActive={activeTab === 'details'}
         >
           상세정보
-        </button>
+        </TabButton>
       </div>
       <div css={tabContent}>
         {activeTab === 'description' && (
@@ -74,16 +85,6 @@ export const ProductDetailTabs = ({ detail, reviews }: Props) => {
 const tabNav = css`
   display: flex;
   border-bottom: 1px solid ${palette.gray200};
-`;
-
-const tabButton = (isActive: boolean) => css`
-  flex: 1;
-  padding: ${spacing.spacing4} 0;
-  font-size: ${typography.body1Regular.fontSize};
-  font-weight: 700;
-  color: ${isActive ? palette.gray900 : palette.gray600};
-  border-bottom: 2px solid ${isActive ? palette.gray900 : 'transparent'};
-  transition: all 0.2s;
 `;
 
 const tabContent = css`
