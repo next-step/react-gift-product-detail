@@ -8,23 +8,20 @@ import { useParams } from 'react-router-dom';
 import Divider from '@components/common/Divider';
 import styled from '@emotion/styled';
 import Reviews from './components/TabContent/Reviews';
-import { useQuery } from '@tanstack/react-query';
-import {
-  productDetailOptions,
-  productOptions,
-  productReviewOptions,
-  productWishOptions,
-} from '@queries/product';
+import { useProduct } from '@hooks/useProduct';
 
 export type ProductDetailTab = 'description' | 'review' | 'detailInfo';
 const ProductDetail = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState<ProductDetailTab>('description');
 
-  const { data: product } = useQuery(productOptions(id));
-  const { data: highlightReview } = useQuery(productReviewOptions(id));
-  const { data: productWishInfo } = useQuery(productWishOptions(id));
-  const { data: productDetailInfo } = useQuery(productDetailOptions(id));
+  const {
+    product,
+    productDetailInfo,
+    highlightReview,
+    productWishInfo,
+    wishMutate,
+  } = useProduct(id);
 
   if (!product || !highlightReview || !productDetailInfo || !productWishInfo)
     return <div>데이터 전송 오류 발생</div>;
@@ -45,7 +42,10 @@ const ProductDetail = () => {
           )}
         </Wrapper>
       </div>
-      <FixedBottonBar productWishInfo={productWishInfo} />
+      <FixedBottonBar
+        productWishInfo={productWishInfo}
+        wishMutate={wishMutate}
+      />
     </>
   );
 };

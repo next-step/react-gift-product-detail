@@ -1,35 +1,30 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ProductWishInfo } from 'src/types/product';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import { useState } from 'react';
 import styled from '@emotion/styled';
 
 interface FixedBottonBarProps {
   productWishInfo: ProductWishInfo;
+  wishMutate: () => void;
 }
 
-const FixedBottonBar = ({ productWishInfo }: FixedBottonBarProps) => {
+const FixedBottonBar = ({
+  productWishInfo,
+  wishMutate,
+}: FixedBottonBarProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const handleOrder = () => navigate(`/order/${id}`);
 
-  const [wishCount, setWishCount] = useState(productWishInfo.wishCount);
-  const [isWished, setIsWished] = useState(productWishInfo.isWished);
-
-  const handleToggleWish = () => {
-    setIsWished((prev) => !prev);
-    setWishCount((prev) => (isWished ? prev - 1 : prev + 1));
-  };
-
   return (
     <FixedContainer>
-      <WishButton onClick={handleToggleWish}>
-        {isWished ? (
+      <WishButton onClick={wishMutate}>
+        {productWishInfo.isWished ? (
           <AiFillHeart color="red" size={24} />
         ) : (
           <AiOutlineHeart size={24} />
         )}
-        <span>{wishCount}</span>
+        <span>{productWishInfo.wishCount}</span>
       </WishButton>
       <OrderButton onClick={handleOrder}>주문하기</OrderButton>
     </FixedContainer>

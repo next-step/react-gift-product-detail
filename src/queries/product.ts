@@ -42,7 +42,7 @@ export const productReviewOptions = (id: ProductId) => {
 
 export const productWishOptions = (id: ProductId) => {
   return queryOptions({
-    queryKey: ['wishInfo', id],
+    queryKey: ['wishInfo', id] as const,
     queryFn: ({ queryKey }) => fetchProductWishInfo(queryKey[1]),
   });
 };

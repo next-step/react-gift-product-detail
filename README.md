@@ -20,5 +20,6 @@
 - 각 Tab 세부 UI 구현
 - 하단 고정 버튼 바 구현
 - API 연동
+- Wish의 useQuery를 mutate로 변경, useProduct 훅 제작
 
 ## 리뷰 반영
