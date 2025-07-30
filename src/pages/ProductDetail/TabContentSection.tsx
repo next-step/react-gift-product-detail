@@ -10,8 +10,6 @@ import {
   AnnouncementItem,
   AnnouncementName,
   AnnouncementValue,
-  LoadingSpinner,
-  ErrorMessage,
 } from './ProductDetail.styles';
 import type { ProductDetail, ProductReview } from '@/types/product';
 
@@ -19,22 +17,14 @@ type TabType = 'description' | 'reviews' | 'detail';
 
 interface TabContentSectionProps {
   activeTab: TabType;
-  productDetail?: ProductDetail;
-  productReviews?: ProductReview;
-  isLoadingReviews: boolean;
-  errorReviews: Error | null;
-  isLoadingDetail: boolean;
-  errorDetail: Error | null;
+  productDetail: ProductDetail;
+  productReviews: ProductReview;
 }
 
 const TabContentSection: React.FC<TabContentSectionProps> = ({
   activeTab,
   productDetail,
   productReviews,
-  isLoadingReviews,
-  errorReviews,
-  isLoadingDetail,
-  errorDetail,
 }) => {
   return (
     <TabContent>
@@ -54,11 +44,7 @@ const TabContentSection: React.FC<TabContentSectionProps> = ({
 
       {activeTab === 'reviews' && (
         <ReviewList>
-          {isLoadingReviews ? (
-            <LoadingSpinner>리뷰를 불러오는 중...</LoadingSpinner>
-          ) : errorReviews ? (
-            <ErrorMessage>리뷰를 불러올 수 없습니다.</ErrorMessage>
-          ) : productReviews?.reviews && productReviews.reviews.length > 0 ? (
+          {productReviews?.reviews && productReviews.reviews.length > 0 ? (
             productReviews.reviews.map((review) => (
               <ReviewItem key={review.id}>
                 <ReviewAuthor>{review.authorName}</ReviewAuthor>
@@ -81,12 +67,8 @@ const TabContentSection: React.FC<TabContentSectionProps> = ({
 
       {activeTab === 'detail' && (
         <AnnouncementList>
-          {isLoadingDetail ? (
-            <LoadingSpinner>상세 정보를 불러오는 중...</LoadingSpinner>
-          ) : errorDetail ? (
-            <ErrorMessage>상세 정보를 불러올 수 없습니다.</ErrorMessage>
-          ) : productDetail?.announcements &&
-            productDetail.announcements.length > 0 ? (
+          {productDetail?.announcements &&
+          productDetail.announcements.length > 0 ? (
             <>
               {productDetail.announcements.map((item, index) => (
                 <AnnouncementItem key={index}>
