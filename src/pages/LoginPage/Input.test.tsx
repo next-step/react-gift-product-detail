@@ -166,7 +166,6 @@ describe('LoginPage Input', () => {
     const errorMessage = screen.getByText('이메일을 입력해주세요');
     const computedStyle = window.getComputedStyle(errorMessage);
 
-    // theme.typography.label2Regular가 적용되었는지 확인
     expect(computedStyle.fontFamily).toBeTruthy();
     expect(computedStyle.fontSize).toBeTruthy();
     expect(computedStyle.fontWeight).toBeTruthy();
@@ -182,8 +181,6 @@ describe('LoginPage Input', () => {
     const errorMessage = screen.getByText('비밀번호를 입력해주세요');
     const computedStyle = window.getComputedStyle(errorMessage);
 
-    // theme.colors.semantic.critical 색상이 적용되었는지 확인
-    // critical 색상은 보통 빨간색 계열
     expect(computedStyle.color).toBeTruthy();
   });
 
@@ -197,7 +194,6 @@ describe('LoginPage Input', () => {
     const errorMessage = screen.getByText('로그인에 실패했습니다');
     const computedStyle = window.getComputedStyle(errorMessage);
 
-    // margin-top이 설정되어 있는지 확인
     expect(computedStyle.marginTop).toBeTruthy();
   });
 });

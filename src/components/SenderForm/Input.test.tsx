@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
-import { Input } from './styles';
+import { Input, ErrorMessage, Hint } from './styles';
 import { theme } from '@/styles/theme';
 
 const renderInput = (
@@ -88,5 +88,27 @@ describe('SenderForm Input', () => {
     renderInput();
     const input = screen.getByRole('textbox');
     expect(input).toHaveStyle({ marginTop: expect.any(String) });
+  });
+
+  it('에러 메시지가 올바른 스타일을 가져야 한다', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <ErrorMessage>에러 메시지</ErrorMessage>
+      </ThemeProvider>
+    );
+    const errorMessage = screen.getByText('에러 메시지');
+    expect(errorMessage).toHaveStyle({ color: 'rgb(255, 0, 0)' });
+    expect(errorMessage).toHaveStyle({ fontSize: '12px' });
+  });
+  it('힌트 메시지가 올바른 스타일을 가져야 한다', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Hint>힌트 메시지</Hint>
+      </ThemeProvider>
+    );
+    const hint = screen.getByText('힌트 메시지');
+    expect(hint).toHaveStyle({ color: 'rgb(176, 179, 186)' });
+    expect(hint).toHaveStyle({ fontSize: '0.75rem' });
+    expect(hint).toHaveStyle({ fontFamily: 'Pretendard' });
   });
 });
