@@ -21,6 +21,8 @@ import useProductDetail from "@/hooks/useProductDetail"
 import { useProductReviews } from "@/hooks/useProductReviews"
 import TabButtonProduct from "@/components/TabButtonProduct"
 import WishButton from "@/components/WishButton"
+import ErrorBoundary from "@/components/ErrorBoundary"
+import { Suspense } from "react"
 
 const TAB_LIST = ["description", "review", "announcement"] as const
 type Tab = (typeof TAB_LIST)[number]
@@ -190,81 +192,124 @@ const ProductDetail = () => {
           상세정보
         </TabButtonProduct>
       </Row>
-      {tab === "description" &&
-        (detailLoading ? (
-          <Loading />
-        ) : (
-          <Layout height="auto" paddingDown="spacing16" paddingUp="spacing4">
-            <ProductDescription
-              dangerouslySetInnerHTML={{
-                __html: detailData?.description ?? "",
-              }}
-            />
-          </Layout>
-        ))}
+      {tab === "description" && (
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            {(() => {
+              if (detailError) throw detailError
 
-      {tab === "announcement" &&
-        (detailLoading ? (
-          <Loading />
-        ) : (
-          <Layout
-            paddingLeft="spacing4"
-            paddingRight="spacing4"
-            height="auto"
-            paddingDown="spacing16"
-          >
-            {detailData?.announcements.map((a) => (
-              <div key={a.displayOrder} style={{ marginBottom: "16px" }}>
-                <Text variant="body2Bold" margin="spacing0" padding="spacing0">
-                  {a.name}
-                </Text>
-                <Text
-                  variant="body2Regular"
-                  margin="spacing0"
-                  padding="spacing0"
-                >
-                  {a.value}
-                </Text>
-              </div>
-            ))}
-          </Layout>
-        ))}
+              if (detailLoading) return <Loading />
 
-      {tab === "review" &&
-        (reviewLoading ? (
-          <Loading />
-        ) : (
-          <Layout
-            height="auto"
-            marginBottom="spacing0"
-            paddingLeft="spacing4"
-            paddingRight="spacing4"
-            paddingDown="spacing16"
-          >
-            {reviewData?.reviews.map((r) => (
-              <div key={r.id} style={{ marginBottom: "16px" }}>
-                <Text
-                  variant="subtitle2Bold"
-                  margin="spacing0"
-                  padding="spacing0"
+              return (
+                <Layout
+                  height="auto"
+                  paddingDown="spacing16"
+                  paddingUp="spacing4"
                 >
-                  {r.authorName}
-                </Text>
-                <Text
-                  variant="body1Regular"
-                  margin="spacing0"
-                  padding="spacing0"
+                  <ProductDescription
+                    dangerouslySetInnerHTML={{
+                      __html: detailData?.description ?? "",
+                    }}
+                  />
+                </Layout>
+              )
+            })()}
+          </Suspense>
+        </ErrorBoundary>
+      )}
+
+      {tab === "announcement" && (
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            {(() => {
+              if (detailError) throw detailError
+
+              if (detailLoading) return <Loading />
+
+              return (
+                <Layout
+                  paddingLeft="spacing4"
+                  paddingRight="spacing4"
+                  height="auto"
+                  paddingDown="spacing16"
                 >
-                  {r.content}
-                </Text>
-              </div>
-            ))}
-          </Layout>
-        ))}
+                  {detailData?.announcements.map((a) => (
+                    <div key={a.displayOrder} style={{ marginBottom: "16px" }}>
+                      <Text
+                        variant="body2Bold"
+                        margin="spacing0"
+                        padding="spacing0"
+                      >
+                        {a.name}
+                      </Text>
+                      <Text
+                        variant="body2Regular"
+                        margin="spacing0"
+                        padding="spacing0"
+                      >
+                        {a.value}
+                      </Text>
+                    </div>
+                  ))}
+                </Layout>
+              )
+            })()}
+          </Suspense>
+        </ErrorBoundary>
+      )}
+
+      {tab === "review" && (
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            {(() => {
+              if (reviewError) throw reviewError
+
+              if (reviewLoading) return <Loading />
+
+              return (
+                <Layout
+                  height="auto"
+                  marginBottom="spacing0"
+                  paddingLeft="spacing4"
+                  paddingRight="spacing4"
+                  paddingDown="spacing16"
+                >
+                  {reviewData?.reviews.map((r) => (
+                    <div key={r.id} style={{ marginBottom: "16px" }}>
+                      <Text
+                        variant="subtitle2Bold"
+                        margin="spacing0"
+                        padding="spacing0"
+                      >
+                        {r.authorName}
+                      </Text>
+                      <Text
+                        variant="body1Regular"
+                        margin="spacing0"
+                        padding="spacing0"
+                      >
+                        {r.content}
+                      </Text>
+                    </div>
+                  ))}
+                </Layout>
+              )
+            })()}
+          </Suspense>
+        </ErrorBoundary>
+      )}
 
       <Row
         padding="spacing0"
-        style={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        style={{
+          width: "100%",
+          maxWidth: "720px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          justifyContent: "center",
+          position: "fixed",
+          bottom: 0,
+        }}
       >
         <WishButton productId={productId} />
         <MoreButton
@@ -274,7 +319,9 @@ const ProductDetail = () => {
           style={{ flex: 1 }}
           onClick={() => handleGoOrder(Number(productId))}
         >
-          주문하기
+          <Text variant="subtitle1Bold" margin="spacing0" padding="spacing0">
+            주문하기
+          </Text>
         </MoreButton>
       </Row>
     </>
