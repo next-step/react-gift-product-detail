@@ -113,3 +113,43 @@ describe('LoginPage 이메일 폼 테스트', () => {
     });
   });
 });
+
+describe('LoginPage 비밀번호 폼 테스트', () => {
+  test('Given: 비밀번호 폼이 포커스된 상태일 때, When: 특정 값을 쓰다가 다시 삭제해서 빈 값으로 입력했을 때, Then: "비밀번호를 입력해주세요." 에러 메시지가 표시되어야 한다', () => {
+    // Given
+    renderLoginPage();
+    const passwordInput = screen.getByTestId('password');
+
+    // When
+    fireEvent.click(passwordInput);
+    fireEvent.change(passwordInput, { target: { value: 'invalid-password' } });
+  });
+  test('Given: 비밀번호 폼이 포커스된 상태일 때, When: 비밀번호가 8자 미만일 때, Then: "비밀번호는 8자 이상 입력해주세요." 에러 메시지가 표시되어야 한다', () => {
+    // Given
+    renderLoginPage();
+    const passwordInput = screen.getByTestId('password');
+
+    // When
+    fireEvent.click(passwordInput);
+    fireEvent.change(passwordInput, { target: { value: '1234567' } });
+
+    // Then
+    expect(
+      screen.getByText('PW는 최소 8글자 이상이어야 합니다.')
+    ).toBeInTheDocument();
+  });
+  test('Given: 비밀번호 폼이 포커스된 상태일 때, When: 비밀번호가 8자 이상일 때, Then: 에러 메시지가 사라져야 한다', () => {
+    // Given
+    renderLoginPage();
+    const passwordInput = screen.getByTestId('password');
+
+    // When
+    fireEvent.click(passwordInput);
+    fireEvent.change(passwordInput, { target: { value: '12345678' } });
+
+    // Then
+    expect(
+      screen.queryByText('PW는 최소 8글자 이상이어야 합니다.')
+    ).not.toBeInTheDocument();
+  });
+});
