@@ -1,7 +1,8 @@
 // hooks/usePresentThemeLabel.ts
 import { useParams } from 'react-router-dom';
-import { useApiQuery } from '@src/api/useApiQuery';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
+import { useQuery } from '@tanstack/react-query';
+import { getFetch } from '@src/api/getFetch';
 
 type ThemeLabel = {
   themeId: number;
@@ -14,19 +15,14 @@ type ThemeLabel = {
 export const usePresentThemeLabel = () => {
   const { themeId } = useParams<{ themeId: string }>();
 
-  const {
-    nullNotData: label,
-    isError: labelError,
-    isLoading: isLabelLoading,
-  } = useApiQuery<ThemeLabel>({
-    endpoint: `${BASIC_ENDPOINT.theme}/${themeId}/info`,
-    queryKey: ['productsLabel', { themeId }],
-    enabled: !!themeId,
+  const { data, isError, isLoading } = useQuery<ThemeLabel>({
+    queryKey: ['productSummary', { themeId }],
+    queryFn: () => getFetch<ThemeLabel>(`${BASIC_ENDPOINT.theme}/${themeId}/info`, {}),
   });
 
   return {
-    label,
-    labelError,
-    isLabelLoading,
+    data,
+    isError,
+    isLoading,
   };
 };
