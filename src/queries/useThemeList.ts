@@ -6,5 +6,5 @@ export const useThemeList = () =>
   useQuery({
     queryKey: queryKeys.themeList(),
     queryFn: getThemeList,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });

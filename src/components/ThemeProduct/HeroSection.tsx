@@ -56,7 +56,7 @@ const HeroSection: React.FC<Props> = ({ themeId }) => {
     queryKey: queryKeys.themeList(),
     queryFn: getThemeList,
     enabled: themeId === undefined,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 
   /* 2️⃣ 최종 조회할 themeId 결정 */
@@ -71,7 +71,7 @@ const HeroSection: React.FC<Props> = ({ themeId }) => {
     queryKey: queryKeys.themeInfo(resolvedId as number),
     queryFn: () => getThemeInfo(resolvedId as number),
     enabled: resolvedId !== undefined,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
   });
 
   /* 4️⃣ 에러 → 홈 리다이렉트 */
