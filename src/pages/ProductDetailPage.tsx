@@ -1,7 +1,7 @@
 import Spacing from "@/components/Spacing";
 import styled from "@emotion/styled";
 import { useNavigate, useParams } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import ProductCard from "@/components/productDetail/ProductCard";
 import DetailCard from "@/components/productDetail/DetailCard";
 import WishButton from "@/components/productDetail/WishButton";
@@ -15,7 +15,9 @@ function ProductDetailPage() {
   const { productId = '' } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
-  window.scrollTo({ top: 0, behavior: "instant" }); 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
   
   const goToOrder = (itemId: string) => {
     const userInfo = getUserFromSession();
