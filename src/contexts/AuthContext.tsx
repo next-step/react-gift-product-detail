@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect, useMemo, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useCallback, type ReactNode } from 'react';
 import { toast } from 'react-toastify';
 import { useLoginMutation } from '../hooks/useAuthQuery';
 import { STORAGE_KEYS } from '../constants/storage';
@@ -29,72 +29,71 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // 사용자 정보 상태
-  const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  // 인증 상태 계산 (user가 존재하면 true)
-  const isAuthenticated = !!user;
+  const { mutateAsync, isPending, error: mutationError, data } = useLoginMutation();
 
-  // react-query mutation 사용
-  const loginMutation = useLoginMutation();
-
-  // 컴포넌트 마운트 시 localStorage에서 사용자 정보 불러오기
-  useEffect(() => {
+  // 로그인 성공 시 user 정보 추출 또는 localStorage에서 복원
+  let user: User | null = null;
+  if (data) {
+    user = {
+      email: data.data.email,
+      name: data.data.name,
+      authToken: data.data.authToken,
+    };
+  } else {
     const storedUser = localStorage.getItem(STORAGE_KEYS.USER_INFO);
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        user = JSON.parse(storedUser);
       } catch (e) {
-        // 잘못된 JSON 형식일 경우 localStorage 데이터 삭제
         localStorage.removeItem(STORAGE_KEYS.USER_INFO);
       }
     }
-  }, []);
+  }
+  const isAuthenticated = !!user;
 
-  // 로그인 처리 (mutation 호출 시 옵션 전달)
+  // 로그인 처리
   const login = useCallback(async (email: string, password: string) => {
-    setError(null);
-    await loginMutation.mutateAsync(
-      { email, password },
-      {
-        onSuccess: (response: any) => {
-          const newUser: User = {
-            email: response.data.email,
-            name: response.data.name,
-            authToken: response.data.authToken,
-          };
-          setUser(newUser);
-          localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(newUser));
-          toast.success('로그인이 완료되었습니다!');
-        },
-        onError: (err: any) => {
-          const errorMessage = err instanceof Error ? err.message : '로그인에 실패했습니다.';
-          setError(errorMessage);
-          toast.error(errorMessage);
-        }
+    await mutateAsync({ email, password }, {
+      onSuccess: (response: any) => {
+        // localStorage에 로그인 정보 저장
+        const newUser: User = {
+          email: response.data.email,
+          name: response.data.name,
+          authToken: response.data.authToken,
+        };
+        localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(newUser));
+        toast.success('로그인이 완료되었습니다!');
+      },
+      onError: (err: any) => {
+        const errorMessage = err instanceof Error ? err.message : '로그인에 실패했습니다.';
+        toast.error(errorMessage);
       }
-    );
-  }, [loginMutation]);
+    });
+  }, [mutateAsync]);
 
-  // 로그아웃 처리 (useCallback으로 메모이제이션)
+  // 로그아웃 처리
   const logout = useCallback(() => {
-    // 사용자 정보 초기화
-    setUser(null);
-    setError(null);
-    // localStorage에서 사용자 정보 삭제
     localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+    window.location.reload(); // 상태 초기화 목적(필요시)
   }, []);
 
   // 컨텍스트 값 정의
-  const value = useMemo(() => ({
-    user,
-    isAuthenticated,
-    login,
-    logout,
-    loading: loginMutation.isPending,
-    error,
-  }), [user, isAuthenticated, login, logout, loginMutation.isPending, error]);
+  const value = useMemo(() => {
+    let mergedError: string | null = null;
+    if (mutationError) {
+      mergedError = typeof mutationError === 'string' ? mutationError : mutationError.message ?? '알 수 없는 에러';
+    }
+    return {
+      user,
+      isAuthenticated,
+      login,
+      logout,
+      loading: isPending,
+      error: mergedError,
+    };
+  }, [user, isAuthenticated, login, logout, isPending, mutationError]);
 
   // Provider로 자식 컴포넌트 감싸기
   return (
