@@ -9,7 +9,6 @@ import ThemesPage from '@/page/Themes';
 import { ROUTE_PATH } from './routePath';
 import ProductPage from '@/page/Product';
 
-
 const AppRouter = () => {
   return (
     <Routes>
