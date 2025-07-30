@@ -11,7 +11,7 @@ const useThemeInfo = () => {
   const index = Number(id);
   const navigate = useNavigate();
 
-  const { data, isError, error } = useQuery<ThemeIdInfoData>({
+  const { data, error } = useQuery<ThemeIdInfoData>({
     queryKey: ['themeIdInfoData', index],
     queryFn: () => requests.fetchThemeIdInfo(index),
   });
@@ -22,6 +22,6 @@ const useThemeInfo = () => {
     }
   }, [error, navigate]);
 
-  return { themeIdInfo: data, isError, error };
+  return data;
 };
 export default useThemeInfo;

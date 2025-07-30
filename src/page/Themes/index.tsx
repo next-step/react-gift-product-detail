@@ -1,16 +1,11 @@
 import styled from '@emotion/styled';
 import CardSection from './components/CardSection';
 import GridSection from './components/GridSection';
-import useThemeInfo from './hooks/useThemeInfo';
 
 const ThemesPage = () => {
-  const { themeIdInfo } = useThemeInfo();
-
-  if (!themeIdInfo) return null;
-
   return (
     <Container>
-      <CardSection themeIdInfo={themeIdInfo} />
+      <CardSection />
       <GridSection />
     </Container>
   );

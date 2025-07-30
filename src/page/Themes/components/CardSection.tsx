@@ -1,12 +1,11 @@
-import type { ThemeIdInfoData } from '@/types';
 import styled from '@emotion/styled';
+import useThemeInfo from '../hooks/useThemeInfo';
 
-interface CardSectionProps {
-  themeIdInfo?: ThemeIdInfoData;
-}
+const CardSection = () => {
+  const themeIdInfo = useThemeInfo();
 
-const CardSection = ({ themeIdInfo }: CardSectionProps) => {
   if (!themeIdInfo) return null;
+
   return (
     <Section bg={themeIdInfo.backgroundColor}>
       <Subtitle2Bold>{themeIdInfo.name}</Subtitle2Bold>
