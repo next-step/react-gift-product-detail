@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import type { Product } from '@/types/product'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 export interface ThemeInfo {
@@ -43,7 +42,7 @@ const fetchProducts = async ({
 }
 
 export function useThemeInfoQuery(themeId: string) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['themeInfo', themeId],
     queryFn: () => fetchThemeInfo(themeId),
     retry: false,
@@ -63,30 +62,14 @@ export function useThemeProductsQuery(themeId: string) {
 }
 
 export function useTheme(themeId?: string) {
-  const navigate = useNavigate()
   const observerRef = useRef<HTMLDivElement | null>(null)
 
-  const {
-    data: themeInfo,
-    error: themeError,
-    isLoading: themeLoading,
-  } = useThemeInfoQuery(themeId || '')
+  const { data: themeInfo } = useThemeInfoQuery(themeId || '')
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useThemeProductsQuery(themeId || '')
 
   const products: Product[] = data?.pages.flatMap((page) => page.list) ?? []
-
-  useEffect(() => {
-    if (themeError) {
-      if (
-        themeError instanceof axios.AxiosError &&
-        themeError.response?.status === axios.HttpStatusCode.NotFound
-      ) {
-        navigate('/')
-      }
-    }
-  }, [themeError, navigate])
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -109,7 +92,5 @@ export function useTheme(themeId?: string) {
     themeInfo,
     products,
     observerRef,
-    themeLoading,
-    themeError,
   }
 }

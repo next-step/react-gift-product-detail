@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import apiInstance from '@/apis/apiInstance'
 
 interface OrderPayload {
   productId: number
@@ -11,22 +11,10 @@ interface OrderPayload {
     phoneNumber: string
     quantity: number
   }[]
-  authToken: string
 }
 
-const order = async ({
-  authToken,
-  ...payload
-}: OrderPayload): Promise<void> => {
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_BASE_URL}/api/order`,
-    payload,
-    {
-      headers: {
-        Authorization: authToken || '',
-      },
-    }
-  )
+const order = async (payload: OrderPayload): Promise<void> => {
+  const response = await apiInstance.post('/api/order', payload)
   return response.data
 }
 

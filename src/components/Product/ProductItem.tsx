@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import type { Product } from '@/types/product'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export const ProductItem = memo(function ProductItem({
   id,
@@ -15,16 +16,16 @@ export const ProductItem = memo(function ProductItem({
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const goOrderPage = () => {
+  const goProductDetailPage = () => {
     if (user) {
-      navigate(`/order/${id}`)
+      navigate(`/products/${id}`)
     } else {
-      navigate('/login', { state: { from: `/order/${id}` } })
+      navigate(ROUTE_PATH.LOGIN, { state: { from: `/products/${id}` } })
     }
   }
 
   return (
-    <Wrapper onClick={goOrderPage}>
+    <Wrapper onClick={goProductDetailPage}>
       <ImageWrapper>
         {rank !== undefined && <RankBadge rank={rank}>{rank}</RankBadge>}
         <Image src={imageURL} alt={name} />

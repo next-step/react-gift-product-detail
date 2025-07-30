@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar/Navbar'
 import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
 import { Layout } from '@/components/Layout/Layout'
+import { ROUTE_PATH } from '@/routes/AppRoutes'
 
 export function NotFoundPage() {
   const navigate = useNavigate()
@@ -15,7 +16,9 @@ export function NotFoundPage() {
             잘못된 접근입니다. <br />
             <SubMessage>찾으시는 페이지가 존재하지 않습니다.</SubMessage>
           </Message>
-          <HomeButton onClick={() => navigate('/')}>홈으로</HomeButton>
+          <HomeButton onClick={() => navigate(ROUTE_PATH.HOME)}>
+            홈으로
+          </HomeButton>
         </Wrapper>
       </Layout>
     </>

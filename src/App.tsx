@@ -1,29 +1,24 @@
-import { Routes, Route } from 'react-router-dom'
-import { LoginPage } from '@/pages/LoginPage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
-import { Home } from '@/pages/Home'
-import { MyPage } from '@/pages/MyPage'
-import { RequireAuth } from '@/routes/RequireAuth'
-import { OrderPage } from '@/pages/OrderPage/OrderPage'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { ThemePage } from '@/pages/ThemePage'
+import { GlobalStyles } from '@/styles/GlobalStyles'
+import { ThemeProvider } from '@emotion/react'
+import { theme } from '@/styles/theme'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from '@/utils/query'
+import { AppRoutes } from '@/routes/AppRoutes'
 
-function App() {
+export function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route element={<RequireAuth />}>
-          <Route path="/my" element={<MyPage />} />
-          <Route path="/order/:id" element={<OrderPage />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/themes/:themeId" element={<ThemePage />} />
-      </Routes>
-      <ToastContainer position="bottom-center" hideProgressBar />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <BrowserRouter>
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryClientProvider>
   )
 }
 

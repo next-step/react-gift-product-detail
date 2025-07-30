@@ -2,20 +2,25 @@ import styled from '@emotion/styled'
 import { useState, useMemo } from 'react'
 import { ProductItem } from '@/components/Product/ProductItem'
 import { useProductRanking } from '@/hooks/useProductRanking'
+import { Suspense } from 'react'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 const genderOptions = ['전체', '여성이', '남성이', '청소년이']
 const topicOptions = ['받고 싶어한', '많이 선물한', '위시로 받은']
 
 export function ProductListSection() {
-  const {
-    products,
-    isLoading,
-    isError,
-    selectedGender,
-    selectedTopic,
-    selectGender,
-    selectTopic,
-  } = useProductRanking()
+  return (
+    <ErrorBoundary fallback={<p>선물 랭킹 로딩 중 오류가 발생했습니다.</p>}>
+      <Suspense fallback={<p>선물 랭킹 로딩중...</p>}>
+        <ProductListSectionContent />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+function ProductListSectionContent() {
+  const { products, selectedGender, selectedTopic, selectGender, selectTopic } =
+    useProductRanking()
 
   const [showAll, setShowAll] = useState(false)
 
@@ -51,13 +56,9 @@ export function ProductListSection() {
         ))}
       </SubTab>
 
-      {isLoading && <p>선물랭킹 로딩중...</p>}
+      {(!products || products.length === 0) && <p>상품 목록이 없습니다.</p>}
 
-      {!isLoading && (isError || !products || products.length === 0) && (
-        <p>상품 목록이 없습니다.</p>
-      )}
-
-      {!isLoading && !isError && products.length > 0 && (
+      {products.length > 0 && (
         <>
           <ProductListWrapper>
             {displayedProducts.map((product, index) => (

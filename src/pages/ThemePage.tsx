@@ -4,12 +4,22 @@ import { Navbar } from '@/components/Navbar/Navbar'
 import styled from '@emotion/styled'
 import { ProductItem } from '@/components/Product/ProductItem'
 import { useTheme } from '@/hooks/useTheme'
+import { Suspense } from 'react'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 export function ThemePage() {
+  return (
+    <ErrorBoundary fallback={<p>테마 로딩 중 오류가 발생했습니다.</p>}>
+      <Suspense fallback={<p>로딩 중...</p>}>
+        <ThemePageContent />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+function ThemePageContent() {
   const { themeId } = useParams()
   const { themeInfo, products, observerRef } = useTheme(themeId)
-
-  if (!themeInfo) return <div>로딩 중...</div>
 
   return (
     <Layout>

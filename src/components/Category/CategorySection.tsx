@@ -3,7 +3,9 @@ import { CategoryItem } from '@/components/Category/CategoryItem'
 import { FiPlus } from 'react-icons/fi'
 import axios from 'axios'
 import { useAuth } from '@/contexts/AuthContext'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 
 interface Theme {
   themeId: number
@@ -19,22 +21,27 @@ const fetchThemes = async (): Promise<Theme[]> => {
 }
 
 export function useThemesQuery() {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['themes'],
     queryFn: fetchThemes,
   })
 }
 
 export function CategorySection() {
-  const { data: themes, isLoading, isError } = useThemesQuery()
+  return (
+    <ErrorBoundary fallback={<p>선물 테마 로딩 중 오류가 발생했습니다.</p>}>
+      <Suspense fallback={<p>선물 테마 로딩중...</p>}>
+        <CategorySectionContent />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+function CategorySectionContent() {
+  const { data: themes } = useThemesQuery()
   const { user } = useAuth()
 
-  console.log('themes: ', themes)
-  if (isLoading) {
-    return <p>선물 테마 로딩중...</p>
-  }
-
-  if (isError || !themes || themes.length === 0) {
+  if (!themes || themes.length === 0) {
     return null
   }
 
