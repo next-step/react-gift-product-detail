@@ -20,7 +20,7 @@ const ProductRankingList: React.FC<Props> = ({ products }) => {
     <Wrapper>
       <List>
         {currentList.map((p, idx) => (
-          <Item key={p.id} onClick={() => navigate(`/order/${p.id}`)}>
+          <Item key={p.id} onClick={() => navigate(`/products/${p.id}`)}>
             <RankingProductListItem
               rankingIndex={idx + 1}
               imageSrc={p.imageURL}
