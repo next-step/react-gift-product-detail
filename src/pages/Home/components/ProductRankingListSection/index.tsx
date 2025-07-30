@@ -1,41 +1,59 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+// src/pages/ProductRankingListSection.tsx
+import React, { Component, Suspense, lazy, useEffect, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
-import { Typography } from '@/components/common/Typography';
-import { ProductRankingFilter } from './RankingFilter';
-import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
-import ProductRankingList from './ProductRankingList';
 import type { ProductData, ProductRankingFilterOption } from '@/types/products';
+import { Typography } from '@/components/common/Typography';
+import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
 
-const ProductRankingListSection = () => {
-  // 필터 상태 관리
-  const [filterOption, setFilterOption] = useState<ProductRankingFilterOption>({
-    targetType: 'ALL',
-    rankType: 'MANY_WISH',
-  });
-  // API 데이터 & 상태
+const ProductRankingFilter = lazy(() => import('./RankingFilter').then(mod => ({ default: mod.ProductRankingFilter })));
+const ProductRankingList = lazy(() => import('./ProductRankingList'));
+
+// ErrorBoundary 컴포넌트
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error: Error) { console.error('ErrorBoundary caught:', error); }
+  render() {
+    if (this.state.hasError) {
+      return <Typography as="p" variant="body1Regular" color="default">에러가 발생했습니다.</Typography>;
+    }
+    return this.props.children;
+  }
+}
+
+export default function ProductRankingListSection() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<LoadingText>로딩 중…</LoadingText>}>
+        <RankingSectionContent />
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
+function RankingSectionContent() {
+  const [filterOption, setFilterOption] = useState<ProductRankingFilterOption>({ targetType: 'ALL', rankType: 'MANY_WISH' });
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  // 랭킹 조회 함수 (useCallback으로 안정화)
   const fetchRanking = useCallback(() => {
     setLoading(true);
     setError(false);
-    axios
-      .get<{ data: ProductData[] }>('/api/products/ranking', { params: filterOption })
-      .then(({ data }) => {
-        setProducts(data.data ?? []);
-        setLoading(false);
-      })
-      .catch((err: AxiosError) => {
-        console.error('랭킹 조회 실패:', err);
-        setError(true);
-        setLoading(false);
-      });
+    import('axios').then(({ default: axios }) => {
+      axios.get<{ data: ProductData[] }>('/api/products/ranking', { params: filterOption })
+        .then(({ data }) => {
+          setProducts(data.data ?? []);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('랭킹 조회 실패:', err);
+          setError(true);
+          setLoading(false);
+        });
+    });
   }, [filterOption]);
 
-  // 필터가 바뀔 때마다 재조회
   useEffect(() => {
     fetchRanking();
   }, [fetchRanking]);
@@ -47,41 +65,41 @@ const ProductRankingListSection = () => {
       </Typography>
       <HorizontalSpacing size="spacing5" />
 
-      <ProductRankingFilter
-        option={filterOption}
-        onOptionChange={opt => setFilterOption(opt)}
-      />
+      <Suspense fallback={<LoadingText>필터 로딩 중…</LoadingText>}>
+        <ProductRankingFilter option={filterOption} onOptionChange={setFilterOption} />
+      </Suspense>
 
       <HorizontalSpacing size="spacing4" />
 
-      {loading && (
-        <Typography as="p" variant="body1Regular" color="default">
-          로딩 중…
-        </Typography>
-      )}
-
-      {!loading && error && (
-        <Typography as="p" variant="body1Regular" color="default">
-          랭킹을 불러오는 중 오류가 발생했습니다.
-        </Typography>
-      )}
-
-      {!loading && !error && products.length === 0 && (
-        <Typography as="p" variant="body1Regular" color="default">
-          현재 급상승 선물이 없습니다.
-        </Typography>
-      )}
+      {loading && <LoadingText>로딩 중…</LoadingText>}
+      {!loading && error && <ErrorText>랭킹을 불러오는 중 오류가 발생했습니다.</ErrorText>}
+      {!loading && !error && products.length === 0 && <EmptyText>현재 급상승 선물이 없습니다.</EmptyText>}
 
       {!loading && !error && products.length > 0 && (
-        <ProductRankingList products={products} />
+        <Suspense fallback={<LoadingText>목록 로딩 중…</LoadingText>}>
+          <ProductRankingList products={products} />
+        </Suspense>
       )}
     </Section>
   );
-};
+}
 
-export default ProductRankingListSection;
+// Styled
+const Section = styled.section(({ theme }) => ({ padding: `0 ${theme.spacing.spacing4}`, width: '100%' }));
 
-const Section = styled.section(({ theme }) => ({
-  padding: `0 ${theme.spacing.spacing4}`,
-  width: '100%',
-}));
+// LoadingText, ErrorText, EmptyText components without attrs
+const LoadingTextBase: React.FC<{children: React.ReactNode}> = ({ children }) => (
+  <Typography as="p" variant="body1Regular" color="default">
+    {children}
+  </Typography>
+);
+
+const LoadingText = styled(LoadingTextBase)`
+  margin: 1rem 0;
+`;
+const ErrorText = styled(LoadingText)`
+  color: red;
+`;
+const EmptyText = styled(LoadingText)`
+  color: #555;
+`;
