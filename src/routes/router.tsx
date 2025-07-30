@@ -5,6 +5,7 @@ import NotFoundPage from '@/pages/NotFoundPage';
 import MyPage from '@/pages/MyPage';
 import OrderPage from '@/pages/OrderPage';
 import ThemeProductPage from '@/pages/ThemeProductPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 import { ROUTE_PATH } from '@/constants/routes';
 
 export const router = createBrowserRouter([
@@ -21,11 +22,15 @@ export const router = createBrowserRouter([
     element: <MyPage />,
   },
   {
-    path: '/order/:productId',
+    path: ROUTE_PATH.ORDER,
     element: <OrderPage />,
   },
   {
-    path: '/themes/:themeId',
+    path: ROUTE_PATH.PRODUCT_DETAIL,
+    element: <ProductDetailPage />,
+  },
+  {
+    path: ROUTE_PATH.THEME_PRODUCT,
     element: <ThemeProductPage />,
   },
   {
