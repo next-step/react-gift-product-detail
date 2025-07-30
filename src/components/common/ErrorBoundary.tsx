@@ -1,8 +1,13 @@
+import { UnauthorizedError, ApiError } from "@/api/custom-error";
+import { API_ERROR_MESSAGE } from "@/constants";
+import { showToast } from "@/utils";
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
   fallback: (resetErrorBoundary: () => void) => ReactNode;
+  onUnauthorized?: () => void;
+  onClientError?: () => void;
 }
 
 interface State {
@@ -22,6 +27,20 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("에러 바운더리에서 에러가 잡혔습니다:", error, errorInfo);
+
+    if (error instanceof UnauthorizedError) {
+      showToast.error(API_ERROR_MESSAGE.LOGIN);
+      this.props.onUnauthorized?.();
+    } else if (
+      error instanceof ApiError &&
+      error.statusCode >= 400 &&
+      error.statusCode < 500
+    ) {
+      showToast.error(error.message);
+      this.props.onClientError?.();
+    } else {
+      showToast.error(API_ERROR_MESSAGE.DEFAULT);
+    }
   }
 
   handleReset = () => {
