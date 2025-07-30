@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import type { ThemeProductProps } from '../themeProductType';
 
-interface ThemeInfo {
+export interface ThemeInfo {
   themeId: number;
   name: string;
   title: string;
@@ -17,10 +17,9 @@ interface ThemeInfo {
 }
 
 const ThemeHero = ({ id }: ThemeProductProps) => {
-  const { data, isPending, isError, error } = useQuery<ThemeInfo>({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ['themeInfo', id],
-    queryFn: ({ queryKey }) =>
-      fetchThemeInfo(queryKey[1] as string | undefined),
+    queryFn: ({ queryKey }) => fetchThemeInfo(queryKey[1]),
   });
 
   const navigate = useNavigate();

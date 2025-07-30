@@ -19,7 +19,6 @@ import useGiftOrderForm from './hooks/useGiftOrderForm';
 import useReceiveModal from './hooks/useReceiveModal';
 import useOrderSubmit from './hooks/useOrderSubmit';
 import useOrderInvalid from './hooks/useOrderInvalid';
-import type { ProductSummaryInfo } from './OrderTypes';
 import EmptyMessage from '@components/common/EmptyMessage';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProductSummury } from '@apis/giftOrderApi';
@@ -32,10 +31,9 @@ const GiftOrderPage = () => {
     isError,
     isPending,
     error,
-  } = useQuery<ProductSummaryInfo>({
+  } = useQuery({
     queryKey: ['productSummary', id],
-    queryFn: ({ queryKey }) =>
-      fetchProductSummury(queryKey[1] as string | undefined),
+    queryFn: ({ queryKey }) => fetchProductSummury(queryKey[1]),
   });
 
   //useForm 사용

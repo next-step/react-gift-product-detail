@@ -3,7 +3,7 @@ import LoadingSpinner from '@components/common/LoadingSpinner';
 import styled from '@emotion/styled';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-interface GiftTheme {
+export interface GiftTheme {
   themeId: number;
   name: string;
   image: string;
@@ -14,7 +14,7 @@ const ThemeSection = () => {
     data: themes,
     isError,
     isPending,
-  } = useQuery<GiftTheme[]>({
+  } = useQuery({
     queryKey: ['Themes'],
     queryFn: fetchThemes,
   });

@@ -49,7 +49,7 @@ const RankingSection = () => {
   // 랭킹 상품 API 요청
   const apiTargetType = Target_MAP[selectedTarget];
   const apiRankType = Rank_MAP[selectedRank];
-  const { data, isError, isPending } = useQuery<Product[]>({
+  const { data, isError, isPending } = useQuery({
     queryKey: ['RankedProducts', apiTargetType, apiRankType],
     queryFn: () => fetchRankedProducts(apiTargetType, apiRankType),
   });
