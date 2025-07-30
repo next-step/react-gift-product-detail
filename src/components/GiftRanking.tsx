@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import type { Product } from '@/types/Product';
 import RankingItem from './RankingItem';
-import { spinner } from './common/Spinner';
 import useGiftRanking from '@/hooks/useGiftRanking';
 
 const Wrapper = styled.section`
@@ -172,7 +171,7 @@ export default function GiftRanking() {
 
       {/* 상품 목록 */}
       {isLoading ? (
-        <Loading>{spinner}</Loading>
+        <Loading>로딩중</Loading>
       ) : isError ? (
         <p>상품 목록을 불러오는 데 실패했습니다.</p>
       ) : (products ?? []).length === 0 ? (

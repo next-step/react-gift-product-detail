@@ -16,4 +16,4 @@
 - [x] 상품 주요 리뷰 API
 - [x] 상품 관심 등록 수 API
 - [x] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트 통해 수 변경
-- [] ErrorBoundary와 Suspense 사용하여 코드 구조 리팩터링
+- [x] ErrorBoundary와 Suspense 사용하여 코드 구조 리팩터링

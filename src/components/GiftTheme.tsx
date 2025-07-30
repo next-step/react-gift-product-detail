@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
+import { Suspense } from 'react';
+import Spinner from './common/Spinner';
+import { ErrorBoundary } from '@/ErrorBoundary';
 import CategoryItem from './CategoryItem';
-import { spinner } from './common/Spinner';
 import useGiftTheme from '@/hooks/useGiftTheme';
 
 const Wrapper = styled.section`
@@ -21,38 +23,36 @@ const Grid = styled.ul`
   cursor: pointer;
 `;
 
-const Loading = styled.p`
-  padding: 0 8px;
+const GridFallback = styled.div`
   height: 250px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
+function GiftThemeContent() {
+  const { data: themes } = useGiftTheme();
+
+  if (themes.length === 0) return null;
+
+  return (
+    <Grid>
+      {themes.map(({ themeId, name, image }) => (
+        <CategoryItem key={themeId} themeId={themeId} name={name} image={image} />
+      ))}
+    </Grid>
+  );
+}
+
 export default function GiftTheme() {
-  const { data: themes = [], isLoading: loading, isError: error } = useGiftTheme();
-
-  if (loading) {
-    return (
-      <Wrapper>
-        <Title>선물 테마</Title>
-        <Loading>{spinner}</Loading>
-      </Wrapper>
-    );
-  }
-
-  if (error || (themes ?? []).length === 0) {
-    return null;
-  }
-
   return (
     <Wrapper>
       <Title>선물 테마</Title>
-      <Grid>
-        {themes.map(({ themeId, name, image }) => (
-          <CategoryItem key={themeId} themeId={themeId} name={name} image={image} />
-        ))}
-      </Grid>
+      <ErrorBoundary fallback={<div>에러가 발생했어요</div>}>
+        <Suspense fallback={<GridFallback>{<Spinner />}</GridFallback>}>
+          <GiftThemeContent />
+        </Suspense>
+      </ErrorBoundary>
     </Wrapper>
   );
 }

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
+import Spinner from '../common/Spinner';
 import { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import useThemeProducts from '@/hooks/useThemeProducts';
 import ThemeProductCard from './ProductCard';
 import type { Product } from '@/types/Product';
@@ -20,12 +20,13 @@ const EmptyState = styled.div`
   ${({ theme }) => theme.typography.body2Regular};
 `;
 
-export default function ThemeList() {
-  const { themeId } = useParams();
-  const parsedId = Number(themeId);
+interface ThemeListProps {
+  themeId: number;
+}
 
+export default function ThemeList({ themeId }: ThemeListProps) {
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
-    useThemeProducts(parsedId);
+    useThemeProducts(themeId);
 
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -44,7 +45,22 @@ export default function ThemeList() {
 
   const products = data?.pages.flatMap((page) => page.list) ?? [];
 
-  if (!isLoading && products.length === 0) {
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          height: 'calc(100dvh - 56px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
     return <EmptyState>상품이 없습니다.</EmptyState>;
   }
 
