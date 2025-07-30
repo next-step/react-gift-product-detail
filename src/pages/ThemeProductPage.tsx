@@ -13,24 +13,24 @@ import { useParams } from "react-router-dom";
 
 export const ThemeProductPage = () => {
   const { id: themeId } = useParams<{ id: string }>();
-  const handleRetry = () => {
-    const themeIdNum = Number(themeId);
-
+  const themeIdNum = Number(themeId);
+  const handleThemeRetry = () => {
     queryClient.refetchQueries({
       queryKey: queryKeys.themes.detail(themeIdNum),
     });
+  };
+  const handleThemeProductRetry = () => {
     queryClient.refetchQueries({
       queryKey: queryKeys.themes.productList(themeIdNum, 10),
     });
   };
-
   return (
     <ThemeProductPageLayout>
       <ErrorBoundary
         fallback={reset => (
           <MainPageErrorFallback
             onRetry={() => {
-              handleRetry();
+              handleThemeRetry();
               reset();
             }}
             title="테마 정보를 불러올 수 없습니다."
@@ -39,6 +39,20 @@ export const ThemeProductPage = () => {
       >
         <Suspense fallback={<LoadingSpinner />}>
           <ThemeProductHero themeId={Number(themeId)} />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary
+        fallback={reset => (
+          <MainPageErrorFallback
+            onRetry={() => {
+              handleThemeProductRetry();
+              reset();
+            }}
+            title="테마 상품을 불러올 수 없습니다."
+          />
+        )}
+      >
+        <Suspense fallback={<LoadingSpinner />}>
           <ThemeProductGrid themeId={Number(themeId)} />
         </Suspense>
       </ErrorBoundary>
