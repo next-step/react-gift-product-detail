@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 export const useGetOrderForm = (productId: string | undefined) => {
   const { data, isError, isLoading } = useQuery<GoodSummary>({
     queryKey: ['productSummary', { productId }],
-    queryFn: () => getFetch<GoodSummary>(`${BASIC_ENDPOINT.theme}/${productId}/summary`, {}),
+    queryFn: () => getFetch<GoodSummary>(`${BASIC_ENDPOINT.product}/${productId}/summary`, {}),
   });
 
   return { data, isError, isLoading };
