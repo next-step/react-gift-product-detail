@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { palette, spacing, typography } from '@/styles/theme';
 import type { ProductDetail, ProductReview } from '@/types';
 import styled from '@emotion/styled';
+import { TabContent } from './TabContent';
 
 interface Props {
   detail: ProductDetail;
@@ -50,38 +51,12 @@ export const ProductDetailTabs = ({ detail, reviews }: Props) => {
         </TabButton>
       </div>
       <div css={tabContent}>
-        {activeTab === 'description' && (
-          <div dangerouslySetInnerHTML={{ __html: detail.description }} />
-        )}
-        {activeTab === 'reviews' && (
-          <div>
-            {reviews.reviews.length > 0 ? (
-              reviews.reviews.map(review => (
-                <div key={review.id} css={reviewItem}>
-                  <strong>{review.authorName}</strong>
-                  <p>{review.content}</p>
-                </div>
-              ))
-            ) : (
-              <div>등록된 선물후기가 없습니다.</div>
-            )}
-          </div>
-        )}
-        {activeTab === 'details' && (
-          <div>
-            {detail.announcement.map(item => (
-              <div key={item.name} css={detailItem}>
-                <strong>{item.name}</strong>
-                <span>{item.value}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        <TabContent activeTab={activeTab} detail={detail} reviews={reviews} />
       </div>
     </div>
   );
 };
- 
+
 const tabNav = css`
   display: flex;
   border-bottom: 1px solid ${palette.gray200};
@@ -94,39 +69,4 @@ const tabContent = css`
 
   img { max-width: 100%; }
   p { margin-bottom: 1em; }
-`;
-
-const reviewItem = css`
-  padding-bottom: ${spacing.spacing4};
-  margin-bottom: ${spacing.spacing4};
-  border-bottom: 1px solid ${palette.gray100};
-
-  strong {
-    font-weight: 700;
-    font-size: 14px;
-  }
-  p {
-    margin-top: ${spacing.spacing1};
-    color: ${palette.gray800};
-  }
-
-  &:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-  }
-`;
-
-const detailItem = css`
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  padding: ${spacing.spacing3} 0;
-
-  strong {
-    color: ${palette.gray800};
-    font-weight: normal;
-  }
-  span {
-    color: ${palette.gray700};
-  }
 `;
