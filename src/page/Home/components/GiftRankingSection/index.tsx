@@ -8,12 +8,8 @@ interface ButtonProps {
 }
 
 const GiftRankingSection = () => {
-  const {
-    handleGenerationGroupClick,
-    handleFilterGroupClick,
-    activeGenerationButton,
-    activeFilterButton,
-  } = useSearchParamState();
+  const { selectGeneration, selectFilter, activeGeneration, activeFilter } =
+    useSearchParamState();
 
   return (
     <Section>
@@ -24,8 +20,8 @@ const GiftRankingSection = () => {
           {generations.map(({ id, emoji, label }) => (
             <Button
               key={id}
-              isActive={activeGenerationButton === id}
-              onClick={() => handleGenerationGroupClick(id)}
+              isActive={activeGeneration === id}
+              onClick={() => selectGeneration(id)}
             >
               <div>{emoji}</div>
               <p>{label}</p>
@@ -35,19 +31,15 @@ const GiftRankingSection = () => {
 
         <FilterGroup>
           {filters.map(({ id, label }) => (
-            <Button
-              key={id}
-              isActive={activeFilterButton === id}
-              onClick={() => handleFilterGroupClick(id)}
-            >
+            <Button key={id} isActive={activeFilter === id} onClick={() => selectFilter(id)}>
               <p>{label}</p>
             </Button>
           ))}
         </FilterGroup>
       </CatContainer>
       <RankList
-        activeGenerationButton={activeGenerationButton}
-        activeFilterButton={activeFilterButton}
+        activeGeneration={activeGeneration}
+        activeFilter={activeFilter}
       />
     </Section>
   );

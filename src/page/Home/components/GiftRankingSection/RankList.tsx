@@ -7,8 +7,8 @@ import RankItem from './RankItem';
 import useRanking from '../../hooks/useRanking';
 import type { RankingApiProps } from '@/types';
 
-const RankList = ({ activeGenerationButton, activeFilterButton }: RankingApiProps) => {
-  const { rankingDatas, isLoading } = useRanking({ activeGenerationButton, activeFilterButton });
+const RankList = ({ activeGeneration, activeFilter }: RankingApiProps) => {
+  const { rankingDatas, isLoading } = useRanking({ activeGeneration, activeFilter });
   const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(
     rankingDatas?.length || 0
   );

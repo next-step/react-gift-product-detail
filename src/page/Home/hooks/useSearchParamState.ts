@@ -5,34 +5,34 @@ import { useSearchParams } from 'react-router-dom';
 const useSearchParamState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [activeGenerationButton, setActiveGenerationButton] = useState<GenerationId>('ALL');
-  const [activeFilterButton, setActiveFilterButton] = useState<FilterId>('MANY_WISH');
+  const [activeGeneration, setActiveGeneration] = useState<GenerationId>('ALL');
+  const [activeFilter, setActiveFilter] = useState<FilterId>('MANY_WISH');
 
   useEffect(() => {
     const generation = searchParams.get('targetType') ?? 'ALL';
     const filter = searchParams.get('rankType') ?? 'MANY_WISH';
 
-    setActiveGenerationButton(generation as GenerationId);
-    setActiveFilterButton(filter as FilterId);
+    setActiveGeneration(generation as GenerationId);
+    setActiveFilter(filter as FilterId);
   }, [searchParams]);
 
-  const handleGenerationGroupClick = (id: GenerationId) => {
-    setActiveGenerationButton(id);
+  const selectGeneration = (id: GenerationId) => {
+    setActiveGeneration(id);
     searchParams.set('targetType', id);
     setSearchParams(searchParams, { replace: true });
   };
 
-  const handleFilterGroupClick = (id: FilterId) => {
-    setActiveFilterButton(id);
+  const selectFilter = (id: FilterId) => {
+    setActiveFilter(id);
     searchParams.set('rankType', id);
     setSearchParams(searchParams, { replace: true });
   };
 
   return {
-    handleGenerationGroupClick,
-    handleFilterGroupClick,
-    activeGenerationButton,
-    activeFilterButton,
+    selectGeneration,
+    selectFilter,
+    activeGeneration,
+    activeFilter,
   };
 };
 

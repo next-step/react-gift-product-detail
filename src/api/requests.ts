@@ -44,11 +44,11 @@ export const requests = {
     return apiClient.get(`/api/products/${id}/summary`);
   },
   fetchRanking: ({
-    activeGenerationButton,
-    activeFilterButton,
+    activeGeneration,
+    activeFilter,
   }: RankingApiProps): Promise<GiftRankingItem[]> => {
     return apiClient.get(
-      `/api/products/ranking?targetType=${activeGenerationButton}&rankType=${activeFilterButton}`
+      `/api/products/ranking?targetType=${activeGeneration}&rankType=${activeFilter}`
     );
   },
   fetchTheme: (): Promise<ThemeInfo[]> => apiClient.get('/api/themes'),

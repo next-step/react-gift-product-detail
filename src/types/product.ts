@@ -19,8 +19,8 @@ export interface GiftRankingItem {
 }
 
 export interface RankingApiProps {
-  activeGenerationButton: string;
-  activeFilterButton: string;
+  activeGeneration: string;
+  activeFilter: string;
 }
 
 export interface ProductSummaryData {
