@@ -125,6 +125,7 @@ const PresentDisplay = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: 24px 8px;
 `;
 
@@ -152,24 +153,37 @@ const ProductBox = styled.div`
   width: 100%;
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ProductInfo = styled.div`
   width: 100%;
+  flex: 1 0 auto;
+`;
+
+const ProductThumb = styled.div`
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 const ProductImage = styled.img`
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center center;
-  border-radius: 4px;
-  overflow: hidden;
 `;
 
 const SubProductName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.1875rem;
@@ -181,7 +195,9 @@ const SubProductName = styled.p`
 const ProdudctName = styled.h6`
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.1875rem;
@@ -378,7 +394,9 @@ const PresentRanking: React.FC = () => {
                     {index + 1}
                   </NumberLogo>
                   <ProductInfo>
-                    <ProductImage src={p.imageURL} alt={p.name} />
+                    <ProductThumb>
+                      <ProductImage src={p.imageURL} alt={p.name} />
+                    </ProductThumb>
                     <div
                       css={css`
                         width: 100%;
