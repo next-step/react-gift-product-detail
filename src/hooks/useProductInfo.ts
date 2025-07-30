@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import ProductsResponseSingle from "@/interfaces/ProductResponseSingle"
 import { AxiosError } from "axios"
-import useFetch from "./useFetch"
+import useFetch from "../functions/fetchHandler"
+
 function useProductInfo(productId?: string) {
   const baseUrl = import.meta.env.VITE_BASE_URL
   const url = productId

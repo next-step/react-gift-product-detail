@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import type { ThemeProductListResponse } from "@/interfaces/ThemeProductListResponse"
 import type { Product } from "@/interfaces/Product"
-import useFetch from "./useFetch"
+import useFetch from "../functions/fetchHandler"
 
 function useThemeProduct(themeId: string, limit = 12) {
   const baseUrl = import.meta.env.VITE_BASE_URL

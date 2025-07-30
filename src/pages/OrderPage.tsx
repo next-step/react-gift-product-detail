@@ -49,7 +49,7 @@ const OrderPage = () => {
     }
   }, [error, navigate])
 
-  const { mutate: createOrder, isPending: orderLoading, isSuccess } = useOrder()
+  const { mutate: createOrder } = useOrder()
   const { authToken } = useAuth()
 
   const { handleSubmit, reset, watch } = methods

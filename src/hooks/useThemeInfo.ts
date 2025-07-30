@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import ThemeInfoResponse from "@/interfaces/ThemeInfoResponse"
 import { AxiosError } from "axios"
-import useFetch from "./useFetch"
+import useFetch from "../functions/fetchHandler"
 
 function useThemeInfo(themeId?: string) {
   const baseUrl = import.meta.env.VITE_BASE_URL
