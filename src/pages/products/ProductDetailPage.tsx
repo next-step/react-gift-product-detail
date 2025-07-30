@@ -1,4 +1,5 @@
 import { ProductDescriptionTab } from "@/features/product/container/ProductDescriptionTab";
+import { ProductFooter } from "@/features/product/container/ProductFooter";
 import { ProductHero } from "@/features/product/container/ProductHero";
 import { ProductInfoTab } from "@/features/product/container/ProductInfoTab";
 import { ProductReviewTab } from "@/features/product/container/ProductReviewTab";
@@ -40,6 +41,8 @@ export default function ProductDetailPage() {
                 <ProductTabContent productTab="상세정보">
                     <ProductDescriptionTab />
                 </ProductTabContent>
+
+                <ProductFooter />
             </HTTPBoundary>
         </ProductTabProvider>
     );
