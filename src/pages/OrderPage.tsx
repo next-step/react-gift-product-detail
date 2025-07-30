@@ -231,7 +231,7 @@ const OrderPage = () => {
   const { productId } = useParams();
 
   // 제품 정보 쿼리 훅 사용
-  const { data: productData, isLoading: loading, error: productError } = useProductSummaryQuery(Number(productId));
+  const { data: productData } = useProductSummaryQuery(Number(productId));
 
   // 모든 훅을 최상단에 선언
   const { register, handleSubmit, formState: { errors }, setValue } = useForm({
@@ -252,13 +252,6 @@ const OrderPage = () => {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }
   }, [isAuthenticated, navigate, productId]);
-
-  // 에러 발생 시 홈으로 이동
-  if (productError) {
-    toast.error(productError.message);
-    navigate('/');
-    return null;
-  }
 
   // 카드 선택 핸들러
   const handleCardSelect = (card: OrderCard) => {
@@ -310,19 +303,6 @@ const OrderPage = () => {
   // 받는 사람 전체 수량 합계 계산
   const totalQuantity = receivers.reduce((sum, r) => sum + (r.quantity || 0), 0);
   const totalPrice = productData ? productData.price * (totalQuantity || 0) : 0;
-
-  // 로딩 중이거나 제품 정보가 없는 경우
-  if (loading || !productData) {
-    return (
-      <>
-        <GlobalStyle />
-        <Header />
-        <div style={{ textAlign: 'center', padding: '50px' }}>
-          {loading ? '제품 정보를 불러오는 중...' : '제품 정보를 찾을 수 없습니다.'}
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -419,14 +399,14 @@ const OrderPage = () => {
           <h2 css={sectionTitle}>상품 정보</h2>
           <div css={orderInfoContainer}>
             <img 
-              src={productData.imageURL} 
-              alt={productData.name} 
+              src={productData?.imageURL} 
+              alt={productData?.name} 
               css={orderInfoImage}
             />
             <div css={orderInfoText}>
-              <div css={css({ ...typography.body2Bold })}>{productData.brandName}</div>
-              <div css={css({ ...typography.body1Regular })}>{productData.name}</div>
-              <div css={css({ ...typography.body2Bold })}>{productData.price.toLocaleString()}원</div>
+              <div css={css({ ...typography.body2Bold })}>{productData?.brandName}</div>
+              <div css={css({ ...typography.body1Regular })}>{productData?.name}</div>
+              <div css={css({ ...typography.body2Bold })}>{productData?.price.toLocaleString()}원</div>
             </div>
           </div>
           

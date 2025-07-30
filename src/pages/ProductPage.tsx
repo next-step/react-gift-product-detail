@@ -36,7 +36,7 @@ function ProductPage() {
   // 라우터 param에서 productId 받아오기
   const params = useParams();
   const productId = params.productId;
-  const { data: product, isLoading, error } = useProductBasicQuery(productId);
+  const { data: product} = useProductBasicQuery(productId);
   const { data: wish } = useProductWishQuery(productId);
   const { data: detail } = useProductDetailQuery(productId);
   const { data: highlightReview } = useProductHighlightReviewQuery(productId);
@@ -60,9 +60,6 @@ function ProductPage() {
     setLiked(!liked);
     setWishCount(wish.wishCount + (liked ? 0 : 1));
   };
-
-  if (isLoading) return <div>로딩중...</div>;
-  if (error) return <div>상품 정보를 불러올 수 없습니다.</div>;
 
 
   return (

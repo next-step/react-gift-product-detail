@@ -35,16 +35,6 @@ const nameStyle = css({ marginTop: parseInt(spacing.spacing3), ...typography.bod
 const priceStyle = css({ marginTop: parseInt(spacing.spacing2), ...typography.body2Regular, color: colors.textDefault });
 const brandStyle = css({ marginTop: parseInt(spacing.spacing1), ...typography.label2Regular, color: colors.textSub });
 
-const emptyStyle = css({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '200px',
-  color: colors.textSub,
-  flexDirection: 'column',
-  gap: spacing.spacing2,
-});
-
 // 로딩 스피너 스타일 (인라인으로 표시)
 const loadingSpinnerStyle = css({
   display: 'flex',
@@ -69,8 +59,6 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading,
-    error
   } = useInfiniteQuery({
     queryKey: ['themeProducts', themeId],
     queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeId, pageParam, 10),
@@ -125,47 +113,14 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     }
   };
 
-  // 초기 로딩 중일 때만 전체 로딩 표시
-  if (isLoading) {
-    return (
-      <section css={sectionStyle}>
-        <div css={emptyStyle}>
-          <div css={spinnerStyle}></div>
-          <div>상품을 불러오는 중...</div>
-        </div>
-      </section>
-    );
-  }
-
-  // 에러 처리
-  if (error) {
-    return (
-      <section css={sectionStyle}>
-        <div css={emptyStyle}>
-          <div>상품을 불러오는데 실패했습니다.</div>
-        </div>
-      </section>
-    );
-  }
-
-  // 데이터가 없는 경우
-  if (!data || data.pages[0]?.list?.length === 0) {
-    return (
-      <section css={sectionStyle}>
-        <div css={emptyStyle}>
-          <div>상품이 없습니다.</div>
-        </div>
-      </section>
-    );
-  }
 
   // 모든 상품을 flat하게 배열로 만들기
-  const products = data.pages.flatMap((page: any) => page?.list ?? []);
+  const products = data?.pages.flatMap((page: any) => page?.list ?? []);
 
   return (
     <section css={sectionStyle}>
       <div css={gridStyle}>
-        {products.map((product: any) => (
+        {products?.map((product: any) => (
           <div
             key={product.id}
             css={cardStyle}
