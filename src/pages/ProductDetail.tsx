@@ -20,6 +20,7 @@ import getRoute from "@/functions/getRoute"
 import useProductDetail from "@/hooks/useProductDetail"
 import { useProductReviews } from "@/hooks/useProductReviews"
 import TabButtonProduct from "@/components/TabButtonProduct"
+import WishButton from "@/components/WishButton"
 
 const TAB_LIST = ["description", "review", "announcement"] as const
 type Tab = (typeof TAB_LIST)[number]
@@ -193,7 +194,7 @@ const ProductDetail = () => {
         (detailLoading ? (
           <Loading />
         ) : (
-          <Layout height="auto" paddingDown="spacing4" paddingUp="spacing4">
+          <Layout height="auto" paddingDown="spacing16" paddingUp="spacing4">
             <ProductDescription
               dangerouslySetInnerHTML={{
                 __html: detailData?.description ?? "",
@@ -210,7 +211,7 @@ const ProductDetail = () => {
             paddingLeft="spacing4"
             paddingRight="spacing4"
             height="auto"
-            paddingDown="spacing4"
+            paddingDown="spacing16"
           >
             {detailData?.announcements.map((a) => (
               <div key={a.displayOrder} style={{ marginBottom: "16px" }}>
@@ -238,7 +239,7 @@ const ProductDetail = () => {
             marginBottom="spacing0"
             paddingLeft="spacing4"
             paddingRight="spacing4"
-            paddingDown="spacing4"
+            paddingDown="spacing16"
           >
             {reviewData?.reviews.map((r) => (
               <div key={r.id} style={{ marginBottom: "16px" }}>
@@ -260,14 +261,22 @@ const ProductDetail = () => {
             ))}
           </Layout>
         ))}
-      <MoreButton
-        marginTop="spacing0"
-        background="kakaoYellow"
-        borderRadius="spacing0"
-        onClick={() => handleGoOrder(Number(productId))}
+
+      <Row
+        padding="spacing0"
+        style={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
       >
-        주문하기
-      </MoreButton>
+        <WishButton productId={productId} />
+        <MoreButton
+          marginTop="spacing0"
+          background="kakaoYellow"
+          borderRadius="spacing0"
+          style={{ flex: 1 }}
+          onClick={() => handleGoOrder(Number(productId))}
+        >
+          주문하기
+        </MoreButton>
+      </Row>
     </>
   )
 }

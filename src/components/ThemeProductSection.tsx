@@ -28,7 +28,7 @@ const ThemeProductSection = ({ themeId }: { themeId: string }) => {
   const handleGoOrder = useCallback(
     (id: number) => {
       if (!isLoggedIn) navigate(ROUTES.LOGIN)
-      else navigate(getRoute(ROUTES.ORDER, { id }))
+      else navigate(getRoute(ROUTES.PRODUCT, { id }))
     },
     [isLoggedIn, navigate]
   )

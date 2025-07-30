@@ -8,7 +8,7 @@ import ProductGrid from "@/components/ProductGrid"
 
 const Trending = () => {
   return (
-    <Layout paddingLeft="spacing4" paddingRight="spacing4">
+    <Layout paddingLeft="spacing4" paddingRight="spacing4" height="auto">
       <Text variant="title1Bold" margin="spacing0" padding="spacing0">
         실시간 급상승 선물랭킹
       </Text>
