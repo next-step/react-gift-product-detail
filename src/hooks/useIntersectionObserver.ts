@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import type { RankItemType } from '@/types/DTO/productDTO';
+import type { ProductBasicInfo } from '@/types/DTO/productDTO';
 import { getThemeProducts } from '@/apis/theme';
 import { useQuery } from '@tanstack/react-query';
 import type { ThemeProductsResponseDTO } from '@/types/DTO/themeDTO';
 
 export function useIntersectionObserver(themeId: number) {
-  const [products, setProducts] = useState<RankItemType[]>([]);
+  const [products, setProducts] = useState<ProductBasicInfo[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [cursor, setCursor] = useState(0);
