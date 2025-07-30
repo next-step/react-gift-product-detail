@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit -p tsconfig.app.json"
+    "type-check": "tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
