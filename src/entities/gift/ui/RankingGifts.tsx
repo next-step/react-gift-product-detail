@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { GiftCard, GiftCardGrid } from "@/entities/gift/ui";
-
 import { useRankingGifts } from "@/entities/gift/services/getRankingGifts";
+import { GiftCard, GiftCardGrid } from "@/entities/gift/ui";
 
 import { Button } from "@/shared/ui";
 import { Spinner } from "@/shared/ui/Spinner.styled";
@@ -42,7 +41,7 @@ export const RankingGifts = () => {
                             imageURL={gift.imageURL}
                             price={gift.price}
                             brandInfo={gift.brandInfo}
-                            onClick={() => navigate(`/order/${gift.id}`)}
+                            onClick={() => navigate(`/product/${gift.id}`)}
                         />
                     );
                 })}
