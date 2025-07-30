@@ -17,8 +17,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@/contexts/AuthContext';
 
-/* ---------------------------- styled components --------------------------- */
-
 const Wrapper = styled.section(({ theme }) => ({
   width: '100%',
   paddingBottom: '3.125rem',
@@ -31,8 +29,6 @@ const Margin = styled.div<{ height: string }>(({ theme, height }) => ({
   backgroundColor: theme.semanticColors.background.fill,
 }));
 
-/* --------------------------------- types --------------------------------- */
-
 interface RecipientItem {
   name: string;
   phone: string;
@@ -44,10 +40,7 @@ export interface OrderFormValues {
   recipients: RecipientItem[];
 }
 
-/* -------------------------------- component ------------------------------ */
-
 const OrderForm = () => {
-  /* ------------ 기본 설정 ------------ */
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
   const navigate = useNavigate();
@@ -55,10 +48,8 @@ const OrderForm = () => {
   const productId = Number(searchParams.get('productId'));
   const [messageCardId, setMessageCardId] = useState(String(MOCK_CARDFORM_LIST[0].id));
 
-  /* ------------ 상품 요약 (React Query) ------------ */
   const { data: summary, isError, error } = useProductSummary(productId);
 
-  /** 기존 구조에 맞춰 가벼운 매핑 */
   const selectedProduct = summary
     ? {
         imageURL: summary.imageURL,
@@ -68,7 +59,6 @@ const OrderForm = () => {
       }
     : null;
 
-  /* 404 → 홈 리다이렉트 */
   useEffect(() => {
     if (isError && axios.isAxiosError(error) && error.response?.status === 404) {
       toast.error('상품 정보를 불러오지 못했어요.');
@@ -76,7 +66,6 @@ const OrderForm = () => {
     }
   }, [isError, error, navigate]);
 
-  /* ------------ react-hook-form ------------ */
   const methods = useForm<OrderFormValues>({
     defaultValues: {
       message: MOCK_CARDFORM_LIST[0].defaultTextMessage || '',
@@ -88,7 +77,6 @@ const OrderForm = () => {
 
   const { setValue } = methods;
 
-  /* 로그인 후 사용자 이름 자동 입력 */
   useEffect(() => {
     if (user?.name) {
       setValue('sender', user.name, { shouldDirty: false });
@@ -101,7 +89,6 @@ const OrderForm = () => {
     formState: { errors },
   } = methods;
 
-  /* ------------ 주문 Mutation (컴포넌트 내부) ------------ */
   const qc = useQueryClient();
   const { mutate: submitOrder } = useMutation({
     mutationFn: postOrder,
@@ -159,7 +146,6 @@ const OrderForm = () => {
     );
   };
 
-  /* ------------ 가격 계산 ------------ */
   const recipients = useWatch({
     control: methods.control,
     name: 'recipients',
@@ -169,12 +155,10 @@ const OrderForm = () => {
     ? selectedProduct.price.sellingPrice * totalQuantity
     : 0;
 
-  /* ------------ 렌더링 ------------ */
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Wrapper>
-          {/* 메시지 카드 */}
           <Controller
             name="message"
             control={control}
@@ -190,7 +174,6 @@ const OrderForm = () => {
           />
           <Margin height="8px" />
 
-          {/* 발신자 입력 */}
           <Controller
             name="sender"
             control={control}
@@ -205,15 +188,12 @@ const OrderForm = () => {
           />
           <Margin height="8px" />
 
-          {/* 받는 사람 (모달) */}
           <Recipient />
 
           <Margin height="8px" />
 
-          {/* 상품 요약 */}
           <ProductInfo product={selectedProduct} />
 
-          {/* 최종 주문 버튼 */}
           <OrderButton type="submit" totalPrice={totalPrice} />
         </Wrapper>
       </form>

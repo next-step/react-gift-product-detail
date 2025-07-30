@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/queries/queryKeys';
 
-/* ------------------ styled (기존 그대로) ------------------ */
 const Wrapper = styled.section`
   width: 100%;
   padding: 1.625rem 1rem 1.375rem;
@@ -39,7 +38,6 @@ const Title = styled.h5<{ variant: keyof TypographyType }>(({ theme, variant }) 
   };
 });
 
-/* ------------------ 컴포넌트 ------------------ */
 interface Props {
   themeId?: number;
 }
@@ -47,7 +45,6 @@ interface Props {
 const HeroSection: React.FC<Props> = ({ themeId }) => {
   const navigate = useNavigate();
 
-  /* 1️⃣ theme list ‑ URL 파라미터가 없을 때만 호출 */
   const {
     data: themeList,
     isLoading: listLoading,
@@ -59,10 +56,8 @@ const HeroSection: React.FC<Props> = ({ themeId }) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  /* 2️⃣ 최종 조회할 themeId 결정 */
   const resolvedId = themeId ?? themeList?.[0]?.themeId;
 
-  /* 3️⃣ theme info */
   const {
     data: theme,
     isLoading: infoLoading,
@@ -74,16 +69,13 @@ const HeroSection: React.FC<Props> = ({ themeId }) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  /* 4️⃣ 에러 → 홈 리다이렉트 */
   if (listError || infoError) {
     navigate(ROUTE_PATH.HOME, { replace: true });
     return null;
   }
 
-  /* 5️⃣ 로딩 또는 데이터 없음 */
   if (listLoading || infoLoading || !theme) return null;
 
-  /* 6️⃣ 정상 렌더 */
   return (
     <Wrapper style={{ backgroundColor: theme.backgroundColor }}>
       <Text variant="subtitle2Bold">{theme.name}</Text>

@@ -265,7 +265,6 @@ const PresentRanking: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  /* ───── 파라미터 매핑 ───── */
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
     female: 'FEMALE',
@@ -274,7 +273,6 @@ const PresentRanking: React.FC = () => {
   };
   const apiRankTypeMap = ['MANY_WISH', 'MANY_RECEIVE', 'MANY_WISH_RECEIVE'] as const;
 
-  /* ───── Preferences 복원 ───── */
   useEffect(() => {
     const savedType = localStorage.getItem('selectedType') as
       | 'all'
@@ -287,7 +285,6 @@ const PresentRanking: React.FC = () => {
     if (savedPresentType !== null) setSelectedPresentType(Number(savedPresentType));
   }, []);
 
-  /* ───── React Query: 랭킹 데이터 ───── */
   const {
     data: products = [],
     isLoading,
@@ -299,7 +296,6 @@ const PresentRanking: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  /* ───── 핸들러 ───── */
   const handleTypeSelect = (type: typeof selectedType) => {
     setShowAll(false);
     setSelectedType(type);
@@ -334,7 +330,6 @@ const PresentRanking: React.FC = () => {
         <Title>실시간 급상승 선물랭킹</Title>
         <MarginBox1 />
 
-        {/* 수신자 유형 선택 */}
         <SelectionBanner>
           <ReceiverType>
             {typeOptions.map((type) => (
@@ -348,7 +343,6 @@ const PresentRanking: React.FC = () => {
 
         <MarginBox2 />
 
-        {/* 랭킹 기준 선택 */}
         <PresentType>
           {presentTypes.map((text, index) => (
             <PresentTypeButton
@@ -363,7 +357,6 @@ const PresentRanking: React.FC = () => {
 
         <MarginBox2 />
 
-        {/* 랭킹 리스트 */}
         <PresentDisplayContainer>
           {isLoading ? (
             <LoadingContainer>
@@ -408,7 +401,6 @@ const PresentRanking: React.FC = () => {
           )}
         </PresentDisplayContainer>
 
-        {/* 더보기 / 접기 */}
         {products.length > 6 && (
           <>
             <div

@@ -121,9 +121,7 @@ const HoriziontalSpacing2 = styled.div(({ theme }) => ({
 
 type LocationState = { from?: string };
 
-/* --------------------------- component --------------------------- */
 const Login: React.FC = () => {
-  /* 기본 라우팅 / 훅 */
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -131,7 +129,6 @@ const Login: React.FC = () => {
   const redirectTo =
     searchParams.get('redirect') || (location.state as LocationState | null)?.from || '/';
 
-  /* 커스텀 훅: 입력 상태 */
   const {
     id,
     idError,
@@ -144,10 +141,8 @@ const Login: React.FC = () => {
     isFormValid,
   } = useLoginForm();
 
-  /* 인증 컨텍스트 */
   const { login } = useAuth();
 
-  /* React Query mutation */
   const loginMutation = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       postLogin(email, password).then((r) => r.data.data),
@@ -175,7 +170,6 @@ const Login: React.FC = () => {
     },
   });
 
-  /* 버튼 클릭 → mutate */
   const handleClick = () => {
     if (!isFormValid() || loginMutation.isPending) return;
     loginMutation.mutate({ email: id, password: pw });
