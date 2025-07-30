@@ -5,6 +5,7 @@ import type { NavigateFunction } from 'react-router-dom';
 import { BASIC_ENDPOINT } from '@src/assets/endpoints';
 import { SESSION_KEY_NAME } from '@src/assets/sessionKeyName';
 import { URLS } from '@src/assets/urls';
+import { PostFetch } from '@src/api/postFetch';
 
 export type OrderRequestData = {
   productId: number | undefined;
@@ -28,24 +29,19 @@ export type OrderFailedResponse = {
   statusCode: number;
 };
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 export const usePostOrderForm = (navigate: NavigateFunction) => {
   return useMutation<OrderSuccessResponse, AxiosError<OrderFailedResponse>, OrderRequestData>({
     mutationFn: async (orderData: OrderRequestData) => {
       const authToken = sessionStorage.getItem(SESSION_KEY_NAME.token) as string;
-
       if (!authToken) {
         navigate(URLS.login);
         throw new Error('로그인이 필요합니다.');
       }
-
-      const response = await axios.post(BASE_URL + BASIC_ENDPOINT.order, orderData, {
+      return PostFetch<OrderSuccessResponse, OrderRequestData>(BASIC_ENDPOINT.order, orderData, {
         headers: {
           Authorization: authToken,
         },
       });
-      return response.data;
     },
     onSuccess: (data) => {
       if (!data.data.success) {
