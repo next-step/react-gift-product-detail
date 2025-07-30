@@ -1,5 +1,5 @@
-import { api } from '@/lib/axios'
-import { useQuery } from '@tanstack/react-query'
+import { apiGet } from '@/lib/axios'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import type { Product, Gender, Type } from '../types/GiftTypes'
 
 const genderMap: Record<Gender, string> = {
@@ -19,29 +19,21 @@ const fetchProductsRanking = async (
   gender: Gender,
   type: Type
 ): Promise<Product[]> => {
-  const res = await api.get('/products/ranking', {
+  const res = await apiGet<Product[]>('/products/ranking', {
     params: {
       targetType: genderMap[gender],
       rankType: typeMap[type],
     },
   })
-  return res.data.data
+  return res
 }
 
 export const useProductsRanking = (gender: Gender, type: Type) => {
-  const {
-    data: products = [],
-    isLoading: loading,
-    error,
-  } = useQuery<Product[]>({
+  const { data: productsRanking } = useSuspenseQuery<Product[]>({
     queryKey: ['productsRanking', gender, type],
     queryFn: () => fetchProductsRanking(gender, type),
     staleTime: 1000 * 60 * 5,
   })
 
-  return {
-    products,
-    loading,
-    error,
-  }
+  return productsRanking
 }

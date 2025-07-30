@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from '@/contexts/UserContext'
-import { api } from '@/lib/axios'
+import { apiPost } from '@/lib/axios'
 import { toast } from 'react-toastify'
 import { ROUTE_PATH } from '@/routes/Router'
 import { useMutation } from '@tanstack/react-query'
@@ -25,10 +25,10 @@ export const useOrderSubmit = () => {
   const authToken = user?.authToken
 
   const submitOrder = async (orderPayload: OrderPayload) => {
-    const res = await api.post('/order', orderPayload, {
+    const res = await apiPost('/order', orderPayload, {
       headers: { Authorization: authToken },
     })
-    return res.data
+    return res
   }
 
   const mutation = useMutation({
