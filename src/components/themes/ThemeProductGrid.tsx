@@ -68,13 +68,11 @@ interface ThemeProductGridProps {
 }
 
 export const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
-  const { products, loading, hasMore, ref } = useGetThemeProducts(themeId);
+  const { products, hasMore, ref, isFetchingNextPage } =
+    useGetThemeProducts(themeId);
   const { goProductDetail } = useRouter();
 
-  if (loading && products.length === 0) {
-    return <LoadingSpinner />;
-  }
-  if (!loading && products.length === 0) {
+  if (products.length === 0) {
     return <EmptyContainer>상품이 없습니다.</EmptyContainer>;
   }
 
@@ -98,12 +96,12 @@ export const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
           </ThemeProductPriceText>
         </ThemeProductGridItem>
       ))}
-      {loading && products.length > 0 && (
+      {isFetchingNextPage && products.length > 0 && (
         <LoadingTrigger>
           <LoadingSpinner />
         </LoadingTrigger>
       )}
-      {hasMore && !loading && <LoadingTrigger ref={ref} />}
+      {hasMore && !isFetchingNextPage && <LoadingTrigger ref={ref} />}
     </ThemeProductGridContainer>
   );
 };
