@@ -12,7 +12,7 @@ import { PATH } from "@/paths";
 import { withAsyncBoundary } from "@/hoc/withAsyncBoundary";
 
 function ProductDetailPage() {
-  const { productId } = useParams<{ productId: string }>();
+  const { productId = '' } = useParams<{ productId: string }>();
   const navigate = useNavigate();
 
   window.scrollTo({ top: 0, behavior: "instant" }); 
@@ -31,7 +31,7 @@ function ProductDetailPage() {
       <Wrapper>
         <ErrorBoundary>
           <Suspense fallback={<LoadingSpinner message="상품 정보를 불러오는 중..." />}>
-            <ProductCard productId={productId ?? ""} />
+            <ProductCard productId={productId} />
           </Suspense>
         </ErrorBoundary>
         
@@ -39,17 +39,17 @@ function ProductDetailPage() {
         
         <ErrorBoundary>
           <Suspense fallback={<LoadingSpinner message="상세 정보를 불러오는 중..." />}>
-            <DetailCard productId={productId ?? ""} />
+            <DetailCard productId={productId} />
           </Suspense>
         </ErrorBoundary>
         
         <OrderWrapper>
           <ErrorBoundary>
             <Suspense fallback={<LoadingSpinner size="small" />}>
-              <WishButton productId={productId ?? ""} />
+              <WishButton productId={productId} />
             </Suspense>
           </ErrorBoundary>
-          <OrderButton onClick={() => goToOrder(productId ?? "")}>
+          <OrderButton onClick={() => goToOrder(productId)}>
             <Order>주문하기</Order>
           </OrderButton>
         </OrderWrapper>
