@@ -62,7 +62,7 @@ interface ProductDetailInfoProps {
 export const ProductDetailInfo = ({ productInfo }: ProductDetailInfoProps) => {
   return (
     <ProductDetailInfoSection>
-      <ProductImage src={productInfo.imageURL} alt="상품 이미지" />
+      <ProductImage src={productInfo.imageURL} alt={productInfo.name} />
       <ProductDescription>
         <ProductTitle>{productInfo.name}</ProductTitle>
         <ProductPrice>{productInfo.price.sellingPrice}원</ProductPrice>
