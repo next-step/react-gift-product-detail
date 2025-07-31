@@ -1,3 +1,4 @@
+import { useToggleWish } from '@/queries/useToggleWish';
 import { useWishInfo } from '@/queries/useWishInfo';
 import { theme } from '@/theme/theme';
 import styled from '@emotion/styled';
@@ -28,18 +29,26 @@ interface LikeButtonProps {
 }
 
 const LikeButton = ({ productId }: LikeButtonProps) => {
-  const { data, isLoading, isError } = useWishInfo(productId);
-
-  if (isLoading || isError || !data)
+  const { data, isLoading } = useWishInfo(productId);
+  const { mutate, isPending } = useToggleWish(productId);
+  if (isLoading || !data)
     return (
       <Button>
         <Heart size={20} strokeWidth={1.5} />
         <Counter>-</Counter>
       </Button>
     );
+
+  const { wishCount, isWished } = data;
+
   return (
-    <Button>
-      <Heart size={20} strokeWidth={1.5} />
+    <Button onClick={() => mutate()} disabled={isPending}>
+      <Heart
+        size={20}
+        strokeWidth={1.5}
+        fill={isWished ? 'rgb(250, 52, 44)' : 'none'}
+        color={isWished ? 'rgb(250, 52, 44)' : 'rgb(42,48,56)'}
+      />
       <Counter>{data.wishCount.toLocaleString()}</Counter>
     </Button>
   );
