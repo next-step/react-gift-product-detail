@@ -12,9 +12,9 @@ import { useOrderStore } from '@/stores/orderStore';
 import useAuthStore from '@/stores/authStore';
 import { FieldSet, Legend } from '@/components/common/FieldSet';
 import { VerticalSpacing } from '@/components/common/VerticalSpacing';
-import { createOrder } from '@/services/order';
 import { Spinner } from '@/components/common/Spinner';
 import { useProductSummaryQuery } from '@/hooks/queries/useProductSummaryQuery';
+import { useCreateOrderMutation } from '@/hooks/mutations/useCreateOrderMutation';
 
 export default function OrderPage() {
   const { productId } = useParams();
@@ -22,10 +22,11 @@ export default function OrderPage() {
   const { user } = useAuthStore();
 
   const { data: product, isPending, isError } = useProductSummaryQuery(Number(productId));
+  const { mutate: createOrder, isPending: isCreatingOrder } = useCreateOrderMutation();
 
   const [selectedCardId, setSelectedCardId] = useState(cardTemplates[0].id);
   const selectedCard = useMemo(
-    () => cardTemplates.find(card => card.id === selectedCardId),
+    () => cardTemplates.find((card) => card.id === selectedCardId),
     [selectedCardId],
   );
 
@@ -65,33 +66,34 @@ export default function OrderPage() {
       return;
     }
 
-    try {
-      const mappedReceivers = receivers.map(receiver => ({
-        name: receiver.receiverName,
-        phoneNumber: receiver.phoneNumber,
-        quantity: receiver.quantity,
-      }));
+    const mappedReceivers = receivers.map((receiver) => ({
+      name: receiver.receiverName,
+      phoneNumber: receiver.phoneNumber,
+      quantity: receiver.quantity,
+    }));
 
-      const orderPayload = {
-        productId: product.id,
-        ordererName: formData.senderName,
-        message: formData.message,
-        messageCardId: selectedCard.id.toString(),
-        receivers: mappedReceivers,
-      };
+    const orderPayload = {
+      productId: product.id,
+      ordererName: formData.senderName,
+      message: formData.message,
+      messageCardId: selectedCard.id.toString(),
+      receivers: mappedReceivers,
+    };
 
-      console.log('Order Payload:', orderPayload); // 주문 정보 콘솔 출력
-
-      await createOrder(orderPayload);
-      toast.success('주문이 완료되었습니다.');
-    } catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        toast.error('로그인이 필요합니다.');
-        navigate('/login');
-      } else {
-        toast.error('주문에 실패했습니다.');
-      }
-    }
+    createOrder(orderPayload, {
+      onSuccess: () => {
+        toast.success('주문이 완료되었습니다.');
+        navigate('/'); // 성공 시 홈으로 이동
+      },
+      onError: (error) => {
+        if (error instanceof Error && error.message === 'Unauthorized') {
+          toast.error('로그인이 필요합니다.');
+          navigate('/login');
+        } else {
+          toast.error('주문에 실패했습니다.');
+        }
+      },
+    });
   };
 
   return (
@@ -130,7 +132,9 @@ export default function OrderPage() {
 
       <VerticalSpacing size="60px" />
 
-      <OrderButton onClick={handleOrderSubmit}>주문하기</OrderButton>
+      <OrderButton onClick={handleOrderSubmit} disabled={isCreatingOrder}>
+        {isCreatingOrder ? '주문 중...' : '주문하기'}
+      </OrderButton>
     </Container>
   );
 }

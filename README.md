@@ -20,9 +20,9 @@
   - [x] 상품 요약 정보 조회 (`services/product.ts`의 `getProductSummary`)
 - [x] useInfiniteQuery를 사용한 무한 스크롤 리팩토링
   - [x] 테마 상품 목록 조회 (`hooks/useThemeProducts.ts`)
-- [ ] useMutation을 사용한 데이터 변경 로직 리팩토링
-  - [ ] 로그인 (`services/login.ts`)
-  - [ ] 주문 생성 (`services/order.ts`)
+- [x] useMutation을 사용한 데이터 변경 로직 리팩토링
+  - [x] 로그인 (`services/login.ts`)
+  - [x] 주문 생성 (`services/order.ts`)
 - [ ] 기존 코드 제거
   - [ ] `hooks/useHTTP.ts` 삭제
   - [ ] 컴포넌트 내 상태 관리 코드 정리
