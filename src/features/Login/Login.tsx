@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSchema, type LoginFormData } from '@schemas/loginSchema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UnderlineInputField } from '@components/common/UnderlineInputField';
+import { UnderlineInputField } from '@components/common/UnderlineInputField/UnderlineInputField';
 
 interface LoginButtonProps {
   disabled: boolean;
@@ -82,26 +82,6 @@ const Title = styled.h1(({ theme }) => ({
   lineHeight: theme.typography.title1Regular.lineHeight,
   marginBottom: theme.spacing.spacing10,
   color: theme.colors.semantic.textDefault,
-}));
-
-const Input = styled.input<{ error?: boolean }>(({ theme, error }) => ({
-  width: '100%',
-  maxWidth: '320px',
-  padding: `${theme.spacing.spacing3} 0`,
-  marginBottom: theme.spacing.spacing2,
-  border: 'none',
-  borderBottom: `1px solid ${
-    error ? theme.colors.semantic.critical : theme.colors.semantic.borderDefault
-  }`,
-  fontSize: theme.typography.body1Regular.fontSize,
-  fontWeight: theme.typography.body1Regular.fontWeight,
-  color: theme.colors.semantic.textDefault,
-  backgroundColor: 'transparent',
-  outline: 'none',
-
-  '::placeholder': {
-    color: theme.colors.semantic.textPlaceholder,
-  },
 }));
 
 const loginButtonYellowDisabled = '#fff584';

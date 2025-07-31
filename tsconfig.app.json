@@ -15,7 +15,8 @@
       "@schemas/*": ["src/schemas/*"],
       "@apis/*": ["src/apis/*"],
       "@features/*": ["src/features/*"],
-      "@queries/*": ["src/queries/*"]
+      "@queries/*": ["src/queries/*"],
+      "@test/*": ["src/test/*"]
     },
     "types": ["node", "vitest/globals"],
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

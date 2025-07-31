@@ -28,6 +28,7 @@ export default defineConfig({
       '@apis': path.resolve(__dirname, 'src/apis'),
       '@features': path.resolve(__dirname, 'src/features'),
       '@queries': path.resolve(__dirname, 'src/queries'),
+      '@test': path.resolve(__dirname, 'src/test'),
     },
   },
 });

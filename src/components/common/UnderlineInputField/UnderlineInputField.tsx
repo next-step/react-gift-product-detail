@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import type { HTMLInputTypeAttribute } from 'react';
-import ErrorText from './ErrorText';
+import ErrorText from '../ErrorText';
 
 interface UnderlineInputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
