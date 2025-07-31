@@ -1,11 +1,11 @@
 import { requests } from '@/api/requests';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface ProductReviewSectionProps {
   index: number;
 }
 const ProductReviewSection = ({ index }: ProductReviewSectionProps) => {
-  const productReviewQuery = useQuery({
+  const productReviewQuery = useSuspenseQuery({
     queryKey: ['productReviewData', index],
     queryFn: () => requests.fetchProductReview(index),
   });

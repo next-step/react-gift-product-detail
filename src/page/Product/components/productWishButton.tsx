@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { requests } from '@/api/requests';
 import { useWishToggleMutation } from '../hooks/useWishToggleMutation';
 
@@ -7,7 +7,7 @@ interface ProductWishButtonProps {
 }
 
 const ProductWishButton = ({ index }: ProductWishButtonProps) => {
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['productWishData', index],
     queryFn: () => requests.fetchProductWish(index),
   });

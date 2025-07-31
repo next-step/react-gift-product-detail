@@ -1,14 +1,14 @@
 import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
 import type { ProductSummaryData } from '@/types';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useProductSummary = (index: number) => {
   const navigate = useNavigate();
-  const { data, error } = useQuery<ProductSummaryData>({
+  const { data, error } = useSuspenseQuery<ProductSummaryData>({
     queryKey: ['summaryData', index],
     queryFn: () => requests.fetchSummary(index),
   });

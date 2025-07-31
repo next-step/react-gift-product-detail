@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 import { requests } from '@/api/requests';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface ProductDetailSectionProps {
   index: number;
 }
 
 const ProductDetailSection = ({ index }: ProductDetailSectionProps) => {
-  const productDetailQuery = useQuery({
+  const productDetailQuery = useSuspenseQuery({
     queryKey: ['productDetailData', index],
     queryFn: () => requests.fetchProductDetail(index),
   });

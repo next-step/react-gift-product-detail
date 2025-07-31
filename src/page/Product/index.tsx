@@ -5,8 +5,9 @@ import ProductDetailSection from './components/ProductDetailSection';
 import ProductWishButton from './components/productWishButton';
 import ProductSection from './components/ProductSection';
 import { useParamsIndex } from '@/hooks/useParamsIndex';
-import { useState } from 'react';
-import OrderButton from './OrderButton';
+import { Suspense, useState } from 'react';
+import OrderButton from './components/OrderButton';
+import Loading from '@/components/Loading';
 
 const ProductPage = () => {
   const index = useParamsIndex();
@@ -29,11 +30,18 @@ const ProductPage = () => {
               <p>상세정보</p>
             </button>
           </ButtonWrapper>
-
-          {activeTab === 'description' && <ProductDescriptionSection index={index} />}
-          {activeTab === 'review' && <ProductReviewSection index={index} />}
-          {activeTab === 'detail' && <ProductDetailSection index={index} />}
-          <ProductWishButton index={index} />
+          <Suspense fallback={<Loading />}>
+            {activeTab === 'description' && <ProductDescriptionSection index={index} />}
+          </Suspense>
+          <Suspense fallback={<Loading />}>
+            {activeTab === 'review' && <ProductReviewSection index={index} />}{' '}
+          </Suspense>
+          <Suspense fallback={<Loading />}>
+            {activeTab === 'detail' && <ProductDetailSection index={index} />}
+          </Suspense>
+          <Suspense fallback={<Loading />}>
+            <ProductWishButton index={index} />
+          </Suspense>
           <OrderButton index={index} />
         </div>
       </section>
