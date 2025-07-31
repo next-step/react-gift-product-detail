@@ -3,6 +3,11 @@ import styled from '@emotion/styled';
 import { Layout } from '@/Components/layout/Layout';
 import { useProductInfo, useProductDetail, useProductHighlightReview, useProductWish, useToggleWish } from '@/api/productDetail';
 import ErrorBoundary from '@/Components/ErrorBoundary';
+import ProductHeader from '@/Components/ProductHeader';
+import ProductWishSection from '@/Components/ProductWishSection';
+import ProductDetailSection from '@/Components/ProductDetailSection';
+import ProductReviewSection from '@/Components/ProductReviewSection';
+import ProductOrderSection from '@/Components/ProductOrderSection';
 
 const ProductContainer = styled.div`
   max-width: 1200px;
@@ -10,56 +15,7 @@ const ProductContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.layout.containerPadding};
 `;
 
-const ProductImage = styled.img`
-  width: 100%;
-  max-width: 500px;
-  height: 400px;
-  object-fit: cover;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
 
-const BrandName = styled.div`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-`;
-
-const ProductName = styled.h1`
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  line-height: 1.3;
-`;
-
-const PriceSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const SellingPrice = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-`;
-
-const BasicPrice = styled.span`
-  font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  text-decoration: line-through;
-`;
-
-const DiscountRate = styled.span`
-  background: ${({ theme }) => theme.colors.red.red500};
-  color: white;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border-radius: ${({ theme }) => theme.spacing.sm};
-  font-size: 1rem;
-  font-weight: 600;
-`;
 
 
 
@@ -72,40 +28,17 @@ const LoadingMessage = styled.div`
 
 
 
-const DetailSection = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.xxl};
-  padding-top: ${({ theme }) => theme.spacing.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
 
 
 
-const DetailDescription = styled.div`
-  font-size: 1.1rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  line-height: 1.6;
-  white-space: pre-line;
-`;
 
-const ReviewSection = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.xxl};
-  padding-top: ${({ theme }) => theme.spacing.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
-`;
 
-const ReviewHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
+
+
+
+
+
+
 
 const ReviewSummary = styled.div`
   display: flex;
@@ -290,104 +223,25 @@ const ProductDetailContent = () => {
   return (
     <Layout>
       <ProductContainer>
-        <ProductImage src={product.imageURL} alt={product.name} />
-        
-        <BrandName>{product.brandInfo.name}</BrandName>
-        <ProductName>{product.name}</ProductName>
-        
-        <PriceSection>
-          <SellingPrice>
-            {product.price?.sellingPrice?.toLocaleString()}원
-          </SellingPrice>
-          {hasDiscount && (
-            <>
-              <BasicPrice>
-                {product.price?.basicPrice?.toLocaleString()}원
-              </BasicPrice>
-              <DiscountRate>{discountRate}%</DiscountRate>
-            </>
-          )}
-        </PriceSection>
-
-        {/* 상품 설명은 ProductDetail API에서 가져옴 */}
+        <ProductHeader product={product} />
 
         {wishData && (
-          <WishButtonContainer>
-            <WishButton
-              isWished={wishData.isWished}
-              onClick={handleToggleWish}
-              disabled={toggleWishMutation.isPending}
-              aria-label={wishData.isWished ? '관심 해제' : '관심 등록'}
-            >
-              ❤️
-            </WishButton>
-            <span style={{ fontSize: '1rem', color: '#666' }}>
-              {wishData.wishCount}명이 관심 등록
-              {wishData.isWished && ' (내가 관심 등록함)'}
-            </span>
-          </WishButtonContainer>
+          <ProductWishSection
+            wishData={wishData}
+            onToggleWish={handleToggleWish}
+            isPending={toggleWishMutation.isPending}
+          />
         )}
 
         {productDetail && (
-          <DetailSection>
-            <SectionTitle>상품 상세 정보</SectionTitle>
-            
-            <DetailDescription>{productDetail.description}</DetailDescription>
-
-            {productDetail.announcement && productDetail.announcement.length > 0 && (
-              <div style={{ marginTop: '24px' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '16px' }}>
-                  공지사항
-                </h3>
-                {productDetail.announcement
-                  .sort((a, b) => a.displayOrder - b.displayOrder)
-                  .map((item, index) => (
-                    <div key={index} style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      padding: '12px 0',
-                      borderBottom: index < productDetail.announcement.length - 1 ? '1px solid #eee' : 'none'
-                    }}>
-                      <span style={{ fontWeight: 500, color: '#666' }}>{item.name}</span>
-                      <span>{item.value}</span>
-                    </div>
-                  ))}
-              </div>
-            )}
-          </DetailSection>
+          <ProductDetailSection productDetail={productDetail} />
         )}
 
         {reviewData && (
-          <ReviewSection>
-            <ReviewHeader>
-              <SectionTitle>하이라이트 리뷰</SectionTitle>
-              <ReviewSummary>
-                <TotalReviews>총 {reviewData.totalCount}개의 리뷰</TotalReviews>
-              </ReviewSummary>
-            </ReviewHeader>
-
-            {reviewData.reviews && reviewData.reviews.length > 0 ? (
-              <ReviewList>
-                {reviewData.reviews.map((review) => (
-                  <ReviewItem key={review.id}>
-                    <ReviewHeaderItem>
-                      <ReviewerInfo>
-                        <ReviewerName>{review.authorName}</ReviewerName>
-                      </ReviewerInfo>
-                    </ReviewHeaderItem>
-                    <ReviewContent>{review.content}</ReviewContent>
-                  </ReviewItem>
-                ))}
-              </ReviewList>
-            ) : (
-              <NoReviews>아직 리뷰가 없습니다.</NoReviews>
-            )}
-          </ReviewSection>
+          <ProductReviewSection reviewData={reviewData} />
         )}
 
-        <OrderButton onClick={handleOrderClick}>
-          주문하기
-        </OrderButton>
+        <ProductOrderSection onOrderClick={handleOrderClick} />
       </ProductContainer>
     </Layout>
   );
