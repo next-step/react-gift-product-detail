@@ -335,6 +335,247 @@ const ModalButton = styled.button`
   }
 `;
 
+const OrderContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  padding: ${({ theme }) => theme.spacing.layout.containerPadding};
+`;
+
+const OrderHeader = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.xxl};
+`;
+
+const OrderTitle = styled.h1`
+  font-size: ${({ theme }) => theme.typography.title1Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title1Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  line-height: ${({ theme }) => theme.typography.title1Bold.lineHeight};
+`;
+
+const ProductSection = styled.div`
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  padding: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const ProductInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+const ProductImage = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  object-fit: cover;
+`;
+
+const ProductDetails = styled.div`
+  flex: 1;
+`;
+
+const ProductName = styled.h3`
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+`;
+
+const ProductPrice = styled.div`
+  font-size: ${({ theme }) => theme.typography.body1Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  line-height: ${({ theme }) => theme.typography.body1Bold.lineHeight};
+`;
+
+const FormSection = styled.div`
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  padding: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const FormTitle = styled.h2`
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  font-weight: ${({ theme }) => theme.typography.body1Regular.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+`;
+
+const Input = styled.input`
+  width: 100%;
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  padding: ${({ theme }) => theme.spacing.md};
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+  box-sizing: border-box;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray.gray500};
+  }
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  padding: ${({ theme }) => theme.spacing.md};
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+  resize: vertical;
+  min-height: 100px;
+  box-sizing: border-box;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray.gray500};
+  }
+`;
+
+const Select = styled.select`
+  width: 100%;
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  padding: ${({ theme }) => theme.spacing.md};
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+  box-sizing: border-box;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  }
+`;
+
+const Option = styled.option`
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+`;
+
+const PaymentSection = styled.div`
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  padding: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const PaymentTitle = styled.h2`
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+`;
+
+const PaymentMethod = styled.div<{ selected: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md};
+  border: 2px solid ${({ selected, theme }) => 
+    selected ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray200};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  }
+`;
+
+const PaymentMethodRadio = styled.input`
+  margin: 0;
+`;
+
+const PaymentMethodLabel = styled.label`
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  font-weight: ${({ theme }) => theme.typography.body1Regular.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  cursor: pointer;
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+  flex: 1;
+`;
+
+const SubmitButton = styled.button`
+  width: 100%;
+  background: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  border: none;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  padding: ${({ theme }) => theme.spacing.button.paddingLarge};
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  cursor: pointer;
+  transition: background 0.2s;
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+  margin-top: ${({ theme }) => theme.spacing.md};
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.semantic.kakaoYellowHover};
+  }
+
+  &:disabled {
+    background: ${({ theme }) => theme.colors.gray.gray400};
+    cursor: not-allowed;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: ${({ theme }) => theme.colors.red.red700};
+  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
+`;
+
+const SuccessMessage = styled.div`
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
+`;
+
 const Order = () => {
   const { id } = useParams();
   const navigate = useNavigate();
