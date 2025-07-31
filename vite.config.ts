@@ -2,6 +2,9 @@
 import { defineConfig } from 'vitest/config'; // vitest에서 가져옴
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env.test' });
 
 // https://vite.dev/config/
 export default defineConfig({

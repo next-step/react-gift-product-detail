@@ -21,5 +21,6 @@
 - 로그인 페이지에 대한 테스트에 MSW 적용
 - RankingSection MSW 사용한 테스트 코드 작성
 - github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 작성
+- env.test 추가
 
 ## 리뷰 반영
