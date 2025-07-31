@@ -1,7 +1,9 @@
-const ERROR_MSG_ID_EMPTY = "ID를 입력해주세요.";
-const ERROR_MSG_ID_FORM = "ID는 이메일 형식으로 입력해주세요.";
-const ERROR_MSG_PASSWORD_EMPTY = "PW를 입력해주세요.";
-const ERROR_MSG_PASSWORD_FORM = "PW는 최소 8글자 이상이어야 합니다.";
+import {
+  ERROR_MSG_ID_EMPTY,
+  ERROR_MSG_ID_FORM,
+  ERROR_MSG_PASSWORD_EMPTY,
+  ERROR_MSG_PASSWORD_FORM,
+} from "@/constants/errorMessage";
 
 export const getIdError = (id: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
