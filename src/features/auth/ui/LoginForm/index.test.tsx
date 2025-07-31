@@ -56,4 +56,21 @@ describe('<LoginForm />', () => {
     const loginButton = screen.getByRole('button', { name: '로그인' });
     expect(loginButton).toBeDisabled();
   });
+
+  it('올바른 값을 입력하면 버튼이 활성화되어야 한다.', async () => {
+    const user = userEvent.setup();
+    // Given - 로그인 폼 렌더링
+    renderWithRouter(<LoginForm />);
+
+    const emailInput = screen.getByPlaceholderText('이메일');
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const loginButton = screen.getByRole('button', { name: '로그인' });
+
+    // 1. When - 유효한 이메일과 비밀번호를 입력한다.
+    await user.type(emailInput, 'test@kakao.com');
+    await user.type(passwordInput, '12345678');
+
+    // 2. Then - 로그인 버튼이 활성화된다.
+    expect(loginButton).toBeEnabled();
+  });
 });
