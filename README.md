@@ -93,3 +93,14 @@
   - [x] validation.ts에 사용하지 않는 변수 제거 및 조금 더 적절한 에러 메시지 문구 추가했습니다.
   - [x] ErrorBoundary + Suspense 구조를 WithSuspenseBoundary.tsx로 추출해 낸다음 기존에 ErrorBoundary + Suspense 구조를 활용하는 부분들을 WithSuspenseBoundary로 대체해주었습니다.
   - [x] html 구조로 제공되는 api 요청 결과를 화면에 성공적으로 띄우기 위해 기존의 dangerouslySetInnerHTML 대신 html-react-parser를 npm install로 설치하여 html 문자열을 element로 렌더링해 화면에 띄우도록 수정해주었습니다.
+
+## ✅4번째 미션 3단계
+
+### 요구사항
+
+- [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
+- [ ] 기능 단위로 나누어 커밋을 해주세요.
+- [ ] **`src/components`**에 있는 Form Field와 Typography에 대한 테스트 코드를 작성해주세요.
+- [ ] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성해주세요.
+- [ ] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성해주세요.
+- [ ] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 해주세요.
