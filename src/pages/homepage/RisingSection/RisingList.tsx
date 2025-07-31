@@ -29,7 +29,11 @@ export default function RisingList() {
     <Wrapper>
       <Grid>
         {data.slice(0, visibleCount).map((item: Product, index: number) => (
-          <CardWrapper key={item.id} onClick={() => navigateToProduct(item)}>
+          <CardWrapper
+            key={item.id}
+            onClick={() => navigateToProduct(item)}
+            role="listitem"
+          >
             <RankBadge>{index + 1}</RankBadge>
             <RisingItem product={item} />
           </CardWrapper>

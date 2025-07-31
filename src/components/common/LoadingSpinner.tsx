@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export default function LoadingSpinner() {
   return (
-    <Wrapper>
+    <Wrapper data-testid="loading-spinner">
       <Spinner />
     </Wrapper>
   );
