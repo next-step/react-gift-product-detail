@@ -4,4 +4,5 @@ export const BASIC_ENDPOINT = {
   ranking: 'products/ranking',
   order: 'order',
   product: 'products',
+  productSummary: 'products/:productId/summary',
 };

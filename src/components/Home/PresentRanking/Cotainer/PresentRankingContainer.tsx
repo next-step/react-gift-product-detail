@@ -1,4 +1,3 @@
-import PresentRankingItem from '@src/components/Home/PresentRanking/Item/PresentRankingItem';
 import RankingTagContainer from '@src/components/Home/PresentRanking/Cotainer/RankingTagContainer';
 import { useState } from 'react';
 import {
@@ -8,11 +7,18 @@ import {
   StyledPresentRankingContainerTitle,
   StyledPrsentRankingDiv,
 } from '@src/components/Home/PresentRanking/Cotainer/StyledPresentRankingContainer';
-import { useRankingItem } from '@src/hooks/useRankingItem';
+import { useLocation } from 'react-router-dom';
+import { PARAMS } from '@src/assets/params';
+import { useRankingItem } from '../Item/useRankingItem';
+import PresentProductList from '../Item/PresentProductList';
 
 const PresentRankingContainer = () => {
   const [isVisible, setisVisible] = useState(false);
-  const { goods, isLoading, isError } = useRankingItem();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const rankType = params.get(PARAMS.rankType);
+  const targetType = params.get(PARAMS.targetType);
+  const { data, isError, isLoading } = useRankingItem({ targetType, rankType });
 
   const handelToogle = () => {
     setisVisible((prev) => !prev);
@@ -27,13 +33,13 @@ const PresentRankingContainer = () => {
         <RankingTagContainer></RankingTagContainer>
       </div>
       <StyledPrsentRankingDiv>
-        <PresentRankingItem
-          goods={goods}
-          isLoading={isLoading}
+        <PresentProductList
+          data={data}
           isError={isError}
+          isLoading={isLoading}
           isVisible={isVisible}
           showRankingNumber={true}
-        ></PresentRankingItem>
+        ></PresentProductList>
       </StyledPrsentRankingDiv>
       <StyledPresenetRankingAddItemBtnDiv>
         <StyledPresenetRankingAddItemBtn onClick={handelToogle}>

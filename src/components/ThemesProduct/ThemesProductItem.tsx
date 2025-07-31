@@ -1,34 +1,31 @@
 import StyledTopestDiv from '@src/styles/StyledTopesDiv';
-import { useThemesProductLabel } from './useThemesProductLabel';
 import {
   StyledThemesProductGridContainer,
-  StyledThemesProductLabelItem,
   StyledThemesProductPaddingContainer,
 } from './StyledThemesProductItem';
-import { useThemesProductItem } from './useThemesProductItem';
-import { useNavigate } from 'react-router-dom';
-import { useIntersectionObserver } from './useIntersectionObserver';
-import PresentProductList from '../Home/PresentRanking/Item/PresentRankingItem';
+import { usePresentThemeFetch } from './useThemesProductItem';
+import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { ThemesProductionLabel } from './ThemesProductionLabel';
+import PresentProductList from '../Home/PresentRanking/Item/PresentProductList';
+import type { Goods } from '@src/types/Goods';
 
 const ThemesProductItem = () => {
-  const navigate = useNavigate();
-  const { label } = useThemesProductLabel(navigate);
-  const { goods, isLoading, isError, loadItem, hasMore } = useThemesProductItem(navigate);
-  const loaderRef = useIntersectionObserver({
-    onIntersect: loadItem,
-    canLoadMore: hasMore,
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage } = usePresentThemeFetch();
 
+  const loaderRef = useIntersectionObserver({
+    onIntersect: fetchNextPage,
+    canLoadMore: hasNextPage,
+  });
   return (
     <StyledTopestDiv>
-      <StyledThemesProductLabelItem background={label?.backgroundColor}>
-        <p className='label1Reuglar color-white'>{label?.name}</p>
-        <p className='title2Bold color-white'>{label?.title}</p>
-        <p className='title2Regular color-white'>{label?.description}</p>
-      </StyledThemesProductLabelItem>
+      <ThemesProductionLabel />
       <StyledThemesProductPaddingContainer className='padding-container'>
         <StyledThemesProductGridContainer className='theme-grid-container'>
-          <PresentProductList goods={goods} isError={isError} isLoading={isLoading} />
+          <PresentProductList
+            data={{ data: data } as Goods}
+            isLoading={isLoading}
+            isError={isError}
+          />
           <div className='loader' ref={loaderRef}></div>
         </StyledThemesProductGridContainer>
       </StyledThemesProductPaddingContainer>

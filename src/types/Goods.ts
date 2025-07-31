@@ -13,11 +13,16 @@ export interface Good {
     imageURL: string;
   };
 }
+export interface Goods {
+  data: Good[];
+}
 
 export interface GoodSummary {
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-  imageURL: string;
+  data: {
+    id: number;
+    name: string;
+    brandName: string;
+    price: number;
+    imageURL: string;
+  };
 }

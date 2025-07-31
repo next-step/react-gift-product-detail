@@ -1,10 +1,18 @@
 export type HttpsSuccessResponseType = {
-  email: string;
-  name: string;
-  authToken: string;
+  data: {
+    email: string;
+    name: string;
+    authToken: string;
+  };
 };
 export type HttpsFailedResponseTypes = {
-  message: string;
-  status: string;
-  statusCode: number;
+  data: {
+    message: string;
+    status: string;
+    statusCode: number;
+  };
+};
+export type LoginBody = {
+  email: string;
+  password: string;
 };

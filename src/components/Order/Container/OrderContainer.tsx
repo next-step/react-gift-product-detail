@@ -10,10 +10,10 @@ import {
   StyledOrderButton,
 } from '@src/components/Order/Container/StyledOrderContainer';
 import { useOrderForm } from './useOrderForm';
+import { Suspense } from 'react';
 
 const OrderContainer = () => {
   const {
-    selectedProduct,
     methods,
     handleSubmit,
     control,
@@ -21,6 +21,8 @@ const OrderContainer = () => {
     onSubmit,
     currentRecipients,
     totalPrice,
+    selectedProduct,
+    isProductError,
   } = useOrderForm();
   return (
     <FormProvider {...methods}>
@@ -33,29 +35,31 @@ const OrderContainer = () => {
             errors={errors}
             currentRecipients={currentRecipients}
           />
-
           <StyledItemInfoContainer className='item-info background-default'>
             <p className='title2Bold basic-label'>상품 정보</p>
-            {selectedProduct ? (
-              <div className='item-info-text'>
-                <img
-                  src={selectedProduct.imageURL}
-                  alt={selectedProduct.name}
-                  className='item-info-img'
-                  loading='lazy'
-                />
-                <div>
-                  <p className='body1Regular'>{selectedProduct.name}</p>
-                  <p className='label2Regular'>{selectedProduct.brandName}</p>
+            <Suspense fallback={<div>Loading...</div>}>
+              {selectedProduct ? (
+                <div className='item-info-text'>
+                  <img
+                    src={selectedProduct.imageURL}
+                    alt={selectedProduct.name}
+                    className='item-info-img'
+                    loading='lazy'
+                  />
+                  <div>
+                    <p className='body1Regular'>{selectedProduct.name}</p>
+                    <p className='label2Regular'>{selectedProduct.brandName}</p>
 
-                  <p className='item-price body2Bold basic-label'>
-                    <span className='label1Regular'>상품가 {selectedProduct.price}원</span>
-                  </p>
+                    <p className='item-price body2Bold basic-label'>
+                      <span className='label1Regular'>상품가 {selectedProduct.price}원</span>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <p>선택된 상품이 없습니다.</p>
-            )}
+              ) : (
+                <p>선택된 상품이 없습니다.</p>
+              )}
+              {isProductError ? <div>에러 발생</div> : <></>}
+            </Suspense>
           </StyledItemInfoContainer>
 
           <StyledOrderButton type='submit' className='order body1Bold'>
