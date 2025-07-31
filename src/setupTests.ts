@@ -1,3 +1,4 @@
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import { server } from './mocks/server';
 
 // 모든 테스트 시작 전 MSW 서버 실행
