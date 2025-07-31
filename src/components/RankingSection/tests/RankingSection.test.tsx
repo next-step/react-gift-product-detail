@@ -35,13 +35,13 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
       // Then: 기본 필터 조건에 맞는 상품이 표시됨
       expect(
         await screen.findByText(text =>
-          text.includes('부드러운 고구마 라떼 케이크')
+          text.replace(/\s/g, '').includes('부드러운고구마라떼케이크')
         )
       ).toBeInTheDocument();
 
       expect(
         await screen.findByText(text =>
-          text.includes('우유가득 생크림케이크 1호')
+          text.replace(/\s/g, '').includes('우유가득생크림케이크1호')
         )
       ).toBeInTheDocument();
     });
@@ -52,7 +52,9 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
 
       // Then: FEMALE 필터용 상품은 보이지 않아야 함
       expect(
-        screen.queryByText(text => text.includes('맛초킹+치즈볼+콜라1.25L'))
+        screen.queryByText(text =>
+          text.replace(/\s/g, '').includes('맛초킹+치즈볼+콜라1.25L')
+        )
       ).not.toBeInTheDocument();
     });
   });
@@ -70,7 +72,7 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
       // Then: FEMALE에 해당하는 상품이 표시됨
       expect(
         await screen.findByText(text =>
-          text.includes('맛초킹+치즈볼+콜라1.25L')
+          text.replace(/\s/g, '').includes('맛초킹+치즈볼+콜라1.25L')
         )
       ).toBeInTheDocument();
     });
@@ -81,7 +83,7 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
       // Given: 기본 6개 상품이 렌더링된 상태
       renderWithProviders(<RankingGroup />);
       await screen.findByText(text =>
-        text.includes('부드러운 고구마 라떼 케이크')
+        text.replace(/\s/g, '').includes('부드러운고구마라떼케이크')
       );
 
       // When: 더보기 버튼 클릭
@@ -91,9 +93,11 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
       // Then: 7번째 상품이 나타남
       expect(
         await screen.findByText(text =>
-          text.includes(
-            '마이넘버원 초코생크림 조각케이크+마이넘버원 고구마 조각케이크 +아이스 아메리카노 2잔'
-          )
+          text
+            .replace(/\s/g, '')
+            .includes(
+              '마이넘버원초코생크림조각케이크+마이넘버원고구마조각케이크+아이스아메리카노2잔'
+            )
         )
       ).toBeInTheDocument();
     });
@@ -101,7 +105,7 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
     it('접기 버튼 클릭 시 다시 6개만 표시된다.', async () => {
       renderWithProviders(<RankingGroup />);
       await screen.findByText(text =>
-        text.includes('부드러운 고구마 라떼 케이크')
+        text.replace(/\s/g, '').includes('부드러운고구마라떼케이크')
       );
 
       const moreButton = screen.getByRole('button', { name: /더보기/i });
@@ -115,9 +119,11 @@ describe('실시간 급상승 선물랭킹 섹션', () => {
       // Then: 7번째 상품은 사라짐
       expect(
         screen.queryByText(text =>
-          text.includes(
-            '마이넘버원 초코생크림 조각케이크+마이넘버원 고구마 조각케이크 +아이스 아메리카노 2잔'
-          )
+          text
+            .replace(/\s/g, '')
+            .includes(
+              '마이넘버원초코생크림조각케이크+마이넘버원고구마조각케이크+아이스아메리카노2잔'
+            )
         )
       ).not.toBeInTheDocument();
     });
