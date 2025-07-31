@@ -18,5 +18,6 @@
 - renderWithTheme 함수 제작후 리팩토링
 - UnderlineInputField 테스트 코드 작성
 - 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성 (MSW X)
+- 로그인 페이지에 대한 테스트에 MSW 적용
 
 ## 리뷰 반영

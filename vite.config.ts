@@ -29,6 +29,7 @@ export default defineConfig({
       '@features': path.resolve(__dirname, 'src/features'),
       '@queries': path.resolve(__dirname, 'src/queries'),
       '@test': path.resolve(__dirname, 'src/test'),
+      '@mock': path.resolve(__dirname, 'src/mock'),
     },
   },
 });

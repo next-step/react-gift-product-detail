@@ -50,15 +50,30 @@ describe('LoginPage', () => {
     const passwordInput = screen.getByPlaceholderText('비밀번호');
     const loginButton = screen.getByRole('button', { name: /로그인/ });
 
+    // 핸들러가 정의한 성공 조건에 맞는 입력 값 사용
     await userEvent.type(emailInput, 'test@kakao.com');
     await userEvent.type(passwordInput, 'password123');
-    expect(loginButton).toBeEnabled();
-
     await userEvent.click(loginButton);
 
-    // 토스트 메시지가 뜨는지 확인
     await waitFor(() => {
       expect(screen.getByText('로그인 성공')).toBeInTheDocument();
+    });
+  });
+
+  it('로그인 실패 시 토스트 메시지 출력', async () => {
+    renderWithProviders(<Login />);
+    const emailInput = screen.getByPlaceholderText('이메일');
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const loginButton = screen.getByRole('button', { name: /로그인/ });
+
+    await userEvent.type(emailInput, 'invalid@kakao.com');
+    await userEvent.type(passwordInput, 'wrongpassword');
+    await userEvent.click(loginButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('알 수 없는 에러가 발생했습니다.')
+      ).toBeInTheDocument();
     });
   });
 });
