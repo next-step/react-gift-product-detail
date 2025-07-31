@@ -8,7 +8,7 @@ import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing
 import ErrorBoundary from '@/pages/Home/components/ErrorBoundary';
 
 const ProductRankingFilter = lazy(() =>
-  import('./RankingFilter').then(mod => ({ default: mod.ProductRankingFilter })),
+  import('./RankingFilter').then((mod) => ({ default: mod.ProductRankingFilter })),
 );
 const ProductRankingList = lazy(() => import('./ProductRankingList'));
 
@@ -41,7 +41,7 @@ function RankingSectionContent() {
           setProducts(data.data ?? []);
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.error('랭킹 조회 실패:', err);
           setError(true);
           setLoading(false);
