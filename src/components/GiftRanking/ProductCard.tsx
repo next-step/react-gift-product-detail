@@ -7,7 +7,6 @@ import {
   Price,
 } from '@/components/GiftRanking/GiftRanking.styles';
 import { Link } from 'react-router-dom';
-import { PATH } from '@/constants/paths';
 
 type ProductCardProps = {
   id: number;

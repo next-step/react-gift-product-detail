@@ -1,0 +1,30 @@
+name: Test
+
+on:
+  push:
+    branches: [main, react-gift-product-detail/*, next-step/*]
+  pull_request:
+    branches: [main, react-gift-product-detail/*, next-step/*]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run test
+        run: npm test
