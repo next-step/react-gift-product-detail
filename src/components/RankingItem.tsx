@@ -60,9 +60,10 @@ interface Props {
 
 export default function RankingItem({ item, rank }: Props) {
   const isTop3 = rank <= 3;
+  const goToDetail = useGoToDetail(item.id);
 
   return (
-    <Card onClick={useGoToDetail(item.id)}>
+    <Card onClick={goToDetail}>
       <ItemImage>
         <img src={item.imageURL} alt={item.name} />
         <RankBadge top3={isTop3}>{rank}</RankBadge>

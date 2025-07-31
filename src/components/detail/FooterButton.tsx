@@ -18,10 +18,11 @@ const LikeSection = styled.div`
   padding: 0 16px;
 `;
 
-const LikeButton = styled.button`
+const LikeButton = styled.button<{ liked: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
+  color: ${({ liked, theme }) => (liked ? theme.colors.red[700] : theme.colors.gray[900])};
 `;
 
 const LikeCount = styled.span`
@@ -51,15 +52,17 @@ export default function FooterButton({
   toggleLike,
   productId,
 }: FooterButtonProps) {
+  const goToOrder = useGoToOrder(productId);
+
   return (
     <Wrapper>
       <LikeSection>
-        <LikeButton onClick={toggleLike}>
-          {liked ? <FaHeart size={20} color="#fa342c" /> : <FaRegHeart size={20} />}
+        <LikeButton onClick={toggleLike} liked={liked}>
+          {liked ? <FaHeart size={20} color="currentColor" /> : <FaRegHeart size={20} />}
         </LikeButton>
         <LikeCount>{likeCount}</LikeCount>
       </LikeSection>
-      <OrderButton onClick={useGoToOrder(productId)}>주문하기</OrderButton>
+      <OrderButton onClick={goToOrder}>주문하기</OrderButton>
     </Wrapper>
   );
 }

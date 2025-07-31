@@ -27,8 +27,10 @@ interface CategoryItemProps {
 }
 
 export default function CategoryItem({ name, image, themeId }: CategoryItemProps) {
+  const goToTheme = useGoToTheme(themeId);
+
   return (
-    <ItemWrapper onClick={useGoToTheme(themeId)}>
+    <ItemWrapper onClick={goToTheme}>
       <ItemImage src={image} alt={name} />
       <ItemName>{name}</ItemName>
     </ItemWrapper>
