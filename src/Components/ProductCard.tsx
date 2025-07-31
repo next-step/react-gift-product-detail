@@ -1,6 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import type { ThemeProduct } from '@/api/themes';
+
+// 범용 상품 타입 정의
+export interface ProductData {
+  id: number;
+  name: string;
+  imageURL: string;
+  brandInfo?: {
+    id?: number;
+    name: string;
+    imageURL?: string;
+  };
+  price?: {
+    basicPrice?: number;
+    sellingPrice: number;
+    discountRate?: number;
+  };
+  rankingType?: string;
+}
 
 const Card = styled.div`
   background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
@@ -39,24 +56,17 @@ const Content = styled.div`
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.md};
 `;
 
-const DiscountBadge = styled.div`
+const RankBadge = styled.span`
   position: absolute;
-  top: ${({ theme }) => theme.spacing.sm};
-  left: ${({ theme }) => theme.spacing.sm};
+  top: ${({ theme }) => theme.spacing.md};
+  left: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.red.red700};
   color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  font-size: ${({ theme }) => theme.typography.label1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.label1Bold.fontWeight};
+  font-weight: 700;
+  font-size: 1.1rem;
   border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-  z-index: 1;
-`;
-
-const BrandName = styled.div`
-  font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  font-weight: ${({ theme }) => theme.typography.label2Regular.fontWeight};
+  padding: 2px 10px;
+  z-index: 2;
 `;
 
 const ProductName = styled.h3`
@@ -120,46 +130,72 @@ const BrandText = styled.span`
 `;
 
 interface ProductCardProps {
-  product: ThemeProduct;
+  product: ProductData;
+  onClick?: (productId: number) => void;
+  showRankBadge?: boolean;
+  rankNumber?: number;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ 
+  product, 
+  onClick, 
+  showRankBadge = false, 
+  rankNumber 
+}: ProductCardProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/product/${product.id}`);
+    if (onClick) {
+      onClick(product.id);
+    } else {
+      navigate(`/product/${product.id}`);
+    }
   };
 
-  const discountRate = product.price?.discountRate || 0;
+  // 할인율이 0보다 큰 경우에만 할인 정보 표시
+  const discountRate = product.price?.discountRate;
   const hasDiscount = typeof discountRate === 'number' && discountRate > 0;
+  const hasBasicPrice = product.price?.basicPrice && product.price.basicPrice > product.price.sellingPrice;
+  const shouldShowDiscount = hasDiscount && hasBasicPrice;
 
   return (
     <Card onClick={handleClick}>
       <ImageContainer>
-        {hasDiscount && (
-          <DiscountBadge>{discountRate}%</DiscountBadge>
+        {showRankBadge && rankNumber && (
+          <RankBadge>{rankNumber}</RankBadge>
         )}
         <ProductImage src={product.imageURL} alt={product.name} />
       </ImageContainer>
       
       <Content>
-        <BrandInfo>
-          <BrandLogo src={product.brandInfo.imageURL} alt={product.brandInfo.name} />
-          <BrandText>{product.brandInfo.name}</BrandText>
-        </BrandInfo>
+        {product.brandInfo?.name && (
+          <BrandInfo>
+            {product.brandInfo.imageURL && (
+              <BrandLogo src={product.brandInfo.imageURL} alt={product.brandInfo.name} />
+            )}
+            <BrandText>{product.brandInfo.name}</BrandText>
+          </BrandInfo>
+        )}
         
         <ProductName>{product.name}</ProductName>
         
         <PriceSection>
-          {hasDiscount && (
-            <BasicPrice>
-              {product.price.basicPrice.toLocaleString()}원
-            </BasicPrice>
-          )}
           <SellingPrice>
-            {product.price.sellingPrice.toLocaleString()}원
-            {hasDiscount && <DiscountRate>{discountRate}%</DiscountRate>}
+            {product.price?.sellingPrice && product.price.sellingPrice > 0
+              ? `${product.price.sellingPrice.toLocaleString()}원`
+              : "가격 정보 없음"
+            }
           </SellingPrice>
+          {shouldShowDiscount && (
+            <>
+              <BasicPrice>
+                {product.price?.basicPrice?.toLocaleString()}원
+              </BasicPrice>
+              <DiscountRate>
+                {discountRate}%
+              </DiscountRate>
+            </>
+          )}
         </PriceSection>
       </Content>
     </Card>

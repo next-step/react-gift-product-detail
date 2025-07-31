@@ -1,12 +1,6 @@
 import styled from '@emotion/styled';
 import type { ProductDetail } from '@/types/productDetail';
 
-const DetailSection = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.xxl};
-  padding-top: ${({ theme }) => theme.spacing.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray200};
-`;
-
 const DetailDescription = styled.div`
   font-size: 1.1rem;
   color: ${({ theme }) => theme.colors.gray.gray700};

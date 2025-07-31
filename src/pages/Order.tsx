@@ -98,170 +98,103 @@ const CardItem = styled.div<{ selected: boolean }>`
   background: ${({ selected }) => (selected ? "#fffbe6" : "transparent")};
   box-shadow: ${({ selected }) => (selected ? "0 2px 8px #ffe14a" : "none")};
   transition:
-    border 0.2s,
     background 0.2s,
-    box-shadow 0.2s;
-`;
-
-const Thumb = styled.img<{ selected: boolean }>`
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  object-fit: cover;
-  margin-bottom: 4px;
-  border: 2px solid ${({ selected }) => (selected ? "#f7e244" : "#eee")};
-  box-shadow: ${({ selected }) => (selected ? "0 2px 8px #ffe14a" : "none")};
-  transition:
     border 0.2s,
     box-shadow 0.2s;
+  &:hover {
+    background: ${({ selected }) => (selected ? "#fffbe6" : "#fafafa")};
+  }
 `;
 
-// ===== 주문 버튼 스타일 =====
-const OrderButton = styled.button`
-  width: 100%;
-  background: #f7e244;
+const CardImage = styled.img`
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+`;
+
+const CardName = styled.span`
+  font-size: 0.8rem;
   color: #222;
-  font-size: 1.2rem;
+  text-align: center;
+  line-height: 1.2;
+`;
+
+// ===== 폼 관련 스타일 =====
+const FormSection = styled.div`
+  background: #fafbfc;
+  border-radius: 12px;
+  padding: 24px 16px 16px 16px;
+  margin-bottom: 24px;
+`;
+
+const SectionTitle = styled.h3`
+  font-size: 1.1rem;
   font-weight: 700;
+  margin-bottom: 12px;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 12px;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 8px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  font-size: 1rem;
+  padding: 14px 16px;
+  border: 1.5px solid #d6dbe1;
+  border-radius: 16px;
+  background: #fff;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+  &::placeholder {
+    color: #b0b3ba;
+  }
+`;
+
+// ===== 버튼 관련 스타일 =====
+const SubmitButton = styled.button`
+  width: 100%;
+  background: #4a90e2;
+  color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 18px 0;
-  margin-top: 12px;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  &:hover:enabled {
-    background: #ffe14a;
+  &:hover {
+    background: #357abd;
   }
   &:disabled {
-    background: #f0f0f0;
-    color: #b0b3ba;
+    background: #b0b3ba;
     cursor: not-allowed;
   }
 `;
 
-// ===== 보내는 사람 섹션 스타일 =====
-const SenderSection = styled.section`
-  background: #fafbfc;
-  border-radius: 12px;
-  padding: 24px 16px 16px 16px;
-  margin-bottom: 24px;
-`;
-
-const SenderTitle = styled.h3`
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-`;
-
-const SenderInput = styled.input`
-  width: 100%;
-  font-size: 1.1rem;
-  padding: 16px 18px;
-  border: 1.5px solid #d6dbe1;
-  border-radius: 16px;
-  outline: none;
-  margin-bottom: 8px;
-  background: #fff;
-  &::placeholder {
-    color: #b0b3ba;
-  }
-`;
-
-const SenderGuide = styled.div`
-  font-size: 0.95rem;
-  color: #b0b3ba;
-  margin-left: 2px;
-`;
-
-// ===== 받는 사람 섹션 스타일 =====
-const ReceiverSection = styled.section`
-  background: #fafbfc;
-  border-radius: 12px;
-  padding: 24px 16px 16px 16px;
-  margin-bottom: 24px;
-`;
-
-const ReceiverTitle = styled.h3`
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-`;
-
-const ReceiverRow = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-`;
-
-const ReceiverLabel = styled.label`
-  width: 80px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #222;
-`;
-
-const ReceiverInput = styled.input`
-  flex: 1;
-  font-size: 1.1rem;
-  padding: 14px 16px;
-  border: 1.5px solid #d6dbe1;
-  border-radius: 12px;
-  outline: none;
-  background: #fff;
-  &::placeholder {
-    color: #b0b3ba;
-  }
-`;
-
-// ===== 상품 정보 섹션 스타일 =====
-const ProductSection = styled.section`
-  background: #fafbfc;
-  border-radius: 12px;
-  padding: 24px 16px 16px 16px;
-  margin-bottom: 24px;
-`;
-
-const ProductTitle = styled.h3`
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-`;
-
-const ProductBox = styled.div`
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 18px;
-  padding: 18px 20px;
-  gap: 18px;
-`;
-
-const ProductImg = styled.img`
-  width: 72px;
-  height: 72px;
-  border-radius: 10px;
-  object-fit: cover;
-  background: #f0f0f0;
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;
-
-const ProductName = styled.div`
-  font-size: 1.08rem;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 2px;
+// ===== 메시지 관련 스타일 =====
+const ErrorMessage = styled.div`
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 4px;
 `;
 
 // ===== 레이아웃 관련 스타일 =====
 const ContentWrapper = styled.div`
-  padding-bottom: 100px; // 푸터 높이만큼 여백
+  padding-bottom: 100px;
 `;
 
 const FixedFooter = styled.div`
@@ -279,13 +212,6 @@ const FixedFooter = styled.div`
     left: 50%;
     transform: translateX(-50%);
   }
-`;
-
-// ===== 에러 메시지 스타일 =====
-const ErrorMessage = styled.div`
-  color: #e74c3c;
-  font-size: 1rem;
-  margin: 4px 0 8px 4px;
 `;
 
 // ===== 커스텀 모달 스타일 =====
@@ -307,273 +233,54 @@ const ModalContent = styled.div`
   border-radius: 16px;
   max-width: 480px;
   width: 95vw;
-  padding: 32px 24px 24px 24px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+`;
+
+const ModalHeader = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 const ModalTitle = styled.h2`
   font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 18px;
+  color: #222;
 `;
 
-const ModalButton = styled.button`
-  background: #f7e244;
-  color: #222;
-  font-size: 1rem;
-  font-weight: 700;
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  &:hover {
+    color: #222;
+  }
+`;
+
+const ModalFooter = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+`;
+
+const ModalButton = styled.button<{ primary?: boolean }>`
+  flex: 1;
+  padding: 12px;
   border: none;
   border-radius: 8px;
-  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  background: ${({ primary }) => (primary ? "#4a90e2" : "#f0f0f0")};
+  color: ${({ primary }) => (primary ? "#fff" : "#222")};
   &:hover {
-    background: #ffe14a;
+    background: ${({ primary }) => (primary ? "#357abd" : "#e0e0e0")};
   }
-`;
-
-const OrderContainer = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-  padding: ${({ theme }) => theme.spacing.layout.containerPadding};
-`;
-
-const OrderHeader = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.xxl};
-`;
-
-const OrderTitle = styled.h1`
-  font-size: ${({ theme }) => theme.typography.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  line-height: ${({ theme }) => theme.typography.title1Bold.lineHeight};
-`;
-
-const ProductSection = styled.div`
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-  padding: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-`;
-
-const ProductImage = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  object-fit: cover;
-`;
-
-const ProductDetails = styled.div`
-  flex: 1;
-`;
-
-const ProductName = styled.h3`
-  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
-`;
-
-const ProductPrice = styled.div`
-  font-size: ${({ theme }) => theme.typography.body1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  line-height: ${({ theme }) => theme.typography.body1Bold.lineHeight};
-`;
-
-const FormSection = styled.div`
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-  padding: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const FormTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const Label = styled.label`
-  display: block;
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-  box-sizing: border-box;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.gray.gray500};
-  }
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-  resize: vertical;
-  min-height: 100px;
-  box-sizing: border-box;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.gray.gray500};
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-  box-sizing: border-box;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
-  }
-`;
-
-const Option = styled.option`
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-`;
-
-const PaymentSection = styled.div`
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-  padding: ${({ theme }) => theme.spacing.lg};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const PaymentTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
-`;
-
-const PaymentMethod = styled.div<{ selected: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
-  padding: ${({ theme }) => theme.spacing.md};
-  border: 2px solid ${({ selected, theme }) => 
-    selected ? theme.colors.semantic.kakaoYellow : theme.colors.gray.gray200};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
-  }
-`;
-
-const PaymentMethodRadio = styled.input`
-  margin: 0;
-`;
-
-const PaymentMethodLabel = styled.label`
-  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  cursor: pointer;
-  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
-  flex: 1;
-`;
-
-const SubmitButton = styled.button`
-  width: 100%;
-  background: ${({ theme }) => theme.colors.semantic.kakaoYellow};
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  border: none;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  padding: ${({ theme }) => theme.spacing.button.paddingLarge};
-  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
-  cursor: pointer;
-  transition: background 0.2s;
-  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
-  margin-top: ${({ theme }) => theme.spacing.md};
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.semantic.kakaoYellowHover};
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.colors.gray.gray400};
-    cursor: not-allowed;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.colors.red.red700};
-  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-  line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
-`;
-
-const SuccessMessage = styled.div`
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
-  margin-top: ${({ theme }) => theme.spacing.xs};
-  line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
 `;
 
 const Order = () => {
@@ -746,11 +453,8 @@ const Order = () => {
               selected={watch("selectedCardId") === card.id}
               onClick={() => handleSelect(card.id)}
             >
-              <Thumb
-                src={card.thumbUrl}
-                alt={card.defaultTextMessage}
-                selected={watch("selectedCardId") === card.id}
-              />
+              <CardImage src={card.thumbUrl} alt={card.defaultTextMessage} />
+              <CardName>{card.defaultTextMessage}</CardName>
             </CardItem>
           ))}
         </CardList>
@@ -775,27 +479,27 @@ const Order = () => {
         </PreviewWrapper>
 
         {/* ===== 보내는 사람 섹션 ===== */}
-        <SenderSection>
-          <SenderTitle>보내는 사람</SenderTitle>
-          <SenderInput
-            type="text"
-            placeholder="이름을 입력하세요."
-            defaultValue={senderName}
-            {...register("sender", {
-              required: "보내는 사람 이름을 입력하세요.",
-            })}
-          />
-          {errors.sender && (
-            <ErrorMessage>{errors.sender.message}</ErrorMessage>
-          )}
-          <SenderGuide>
-            * 실제 선물 발송 시 발신자이름으로 반영되는 정보입니다.
-          </SenderGuide>
-        </SenderSection>
+        <FormSection>
+          <SectionTitle>보내는 사람</SectionTitle>
+          <FormGroup>
+            <Label>이름</Label>
+            <Input
+              type="text"
+              placeholder="이름을 입력하세요."
+              defaultValue={senderName}
+              {...register("sender", {
+                required: "보내는 사람 이름을 입력하세요.",
+              })}
+            />
+            {errors.sender && (
+              <ErrorMessage>{errors.sender.message}</ErrorMessage>
+            )}
+          </FormGroup>
+        </FormSection>
 
         {/* ===== 받는 사람 섹션 (요약 테이블/리스트 + 추가/수정 버튼만) ===== */}
-        <ReceiverSection>
-          <ReceiverTitle>받는 사람</ReceiverTitle>
+        <FormSection>
+          <SectionTitle>받는 사람</SectionTitle>
           {/* 받는 사람 요약 테이블 */}
           {watch("receivers").length === 0 ? (
             <div
@@ -848,7 +552,7 @@ const Order = () => {
               </tbody>
             </table>
           )}
-          <OrderButton
+          <SubmitButton
             type="button"
             onClick={openReceiverModal}
             style={{
@@ -859,45 +563,42 @@ const Order = () => {
             }}
           >
             {watch("receivers").length === 0 ? "추가" : "수정"}
-          </OrderButton>
-        </ReceiverSection>
+          </SubmitButton>
+        </FormSection>
 
         {/* ===== 제품 정보 섹션 (주문 버튼 위) ===== */}
-        <ProductSection>
-          <ProductTitle>선택한 상품</ProductTitle>
-          <ProductBox>
-            <ProductImg src={product.imageURL} alt={product.name} />
-            <ProductInfo>
-              <ProductName>{product.name}</ProductName>
-              <div style={{ color: "#666", fontSize: "0.95rem" }}>
-                {product.brandName}
-              </div>
-              <div style={{ fontWeight: 700, color: "#222", marginTop: 4 }}>
-                {product.price?.toLocaleString()}원
-              </div>
-            </ProductInfo>
-          </ProductBox>
-        </ProductSection>
+        <FormSection>
+          <SectionTitle>선택한 상품</SectionTitle>
+          <div style={{ display: "flex", alignItems: "center", background: "#fff", borderRadius: 12, padding: "18px 20px", gap: 18, marginBottom: 16 }}>
+            <img src={product.imageURL} alt={product.name} style={{ width: 72, height: 72, borderRadius: 10, background: "#f0f0f0" }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <div style={{ fontSize: "1.08rem", fontWeight: 600, color: "#222" }}>{product.name}</div>
+              <div style={{ color: "#666", fontSize: "0.95rem" }}>{product.brandName}</div>
+              <div style={{ fontWeight: 700, color: "#222", marginTop: 4 }}>{product.price?.toLocaleString()}원</div>
+            </div>
+          </div>
+        </FormSection>
       </ContentWrapper>
       <FixedFooter>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <OrderButton type="submit" disabled={orderLoading}>
+          <SubmitButton type="submit" disabled={orderLoading}>
             {orderLoading
               ? "주문 처리 중..."
               : userInfo?.authToken
                 ? "주문하기"
                 : "로그인 후 주문하기"}
-          </OrderButton>
+          </SubmitButton>
         </form>
       </FixedFooter>
       {/* ===== 받는 사람 입력/수정 모달 ===== */}
       {receiverModalOpen && (
         <ModalOverlay onClick={() => setReceiverModalOpen(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalTitle>받는 사람</ModalTitle>
-            <div
-              style={{ fontSize: "0.98rem", color: "#888", marginBottom: 12 }}
-            >
+            <ModalHeader>
+              <ModalTitle>받는 사람</ModalTitle>
+              <CloseButton onClick={() => setReceiverModalOpen(false)}>&times;</CloseButton>
+            </ModalHeader>
+            <div style={{ fontSize: "0.98rem", color: "#888", marginBottom: 12 }}>
               * 최대 10명까지 추가 할 수 있어요.
               <br />* 받는 사람의 전화번호를 중복으로 입력할 수 없어요.
             </div>
@@ -952,33 +653,35 @@ const Order = () => {
                     ×
                   </span>
                 </div>
-                <ReceiverRow>
-                  <ReceiverLabel>이름</ReceiverLabel>
-                  <ReceiverInput
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+                  <Label>이름</Label>
+                  <Input
                     {...modalRegister(`receivers.${idx}.name`)}
                     placeholder="이름"
                   />
-                </ReceiverRow>
-                <ReceiverRow>
-                  <ReceiverLabel>전화번호</ReceiverLabel>
-                  <ReceiverInput
+                </div>
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+                  <Label>전화번호</Label>
+                  <Input
                     {...modalRegister(`receivers.${idx}.phone`)}
                     placeholder="01012345678"
                   />
-                </ReceiverRow>
-                <ReceiverRow>
-                  <ReceiverLabel>수량</ReceiverLabel>
-                  <ReceiverInput
+                </div>
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+                  <Label>수량</Label>
+                  <Input
                     type="number"
                     min={1}
                     {...modalRegister(`receivers.${idx}.quantity`)}
                   />
-                </ReceiverRow>
+                </div>
               </div>
             ))}
-            <ModalButton type="button" onClick={handleReceiverModalComplete}>
-              완료
-            </ModalButton>
+            <ModalFooter>
+              <ModalButton type="button" onClick={handleReceiverModalComplete}>
+                완료
+              </ModalButton>
+            </ModalFooter>
           </ModalContent>
         </ModalOverlay>
       )}
