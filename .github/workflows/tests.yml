@@ -1,13 +1,15 @@
-name: Run Tests on PR and Main
+name: Run Tests
 
-# PR 요청과 main 브랜치 푸시 시 동작
 on:
   pull_request:
     branches:
       - main
+      - eunchae-04
   push:
     branches:
       - main
+      - eunchae-04
+      - step3
 
 jobs:
   test:
