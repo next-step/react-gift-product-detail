@@ -109,6 +109,11 @@
   - [x] package.json에는 test, test:dev와 관련하여 명령어를 등록해주엇습니다.
   - [x] setupTests.ts를 src/tests 폴더 안에 만든다음 jest-dom을 전역 선언했습니다.
 - [ ] **`src/components`**에 있는 Form Field와 Typography에 대한 테스트 코드를 작성해주세요.
+  - [x] InputField에 대해 테스트 진행
+  - [x] placeholder를 포함해서 InputField를 구성하는 기본적인 요소들이 제대로 렌더링이 되는지 확인
+  - [x] 유저가 값을 입력할 때 onChange 이벤트가 제대로 호출되는지 확인
+  - [x] 에러 메시지를 띄워야 할 때 제대로 띄우는지 확인
+  - [x] 화면의 요소에 style이 제대로 적용되는지 테스트
 - [x] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성해주세요.
   - [x] 렌더링된 로그인 폼 UI에 필수 요소들이 존재하는지 확인
   - [x] 입력값이 유효하지 않을 때 로그인 버튼이 비활성화되는지 테스트
