@@ -4,6 +4,7 @@ import { Themes } from '@/pages/Themes'
 import { Layout } from '@/shared/components'
 import { ROUTE_PATH } from '@/shared/constants'
 import { withAuth } from '@/hoc'
+import { Product } from '@/pages/Product'
 
 // * 라우터 컴포넌트
 const Router = () => {
@@ -21,6 +22,8 @@ const Router = () => {
         <Route path={`${ROUTE_PATH.ORDER}/:id`} element={<AuthPages.Order />} />
         {/* 테마 상품 목록 페이지 */}
         <Route path={`${ROUTE_PATH.THEMES}/:id`} element={<Themes />} />
+        {/* 상품 상세 페이지 */}
+        <Route path={`${ROUTE_PATH.PRODUCT}/:id`} element={<Product />} />
 
         {/* 404 NotFound 페이지 - 기타 구현되지 않은 경로 페이지 */}
         <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFound />} />

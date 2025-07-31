@@ -9,6 +9,10 @@ export const API_ENDPOINTS = {
   PRODUCTS: {
     RANKING: '/api/products/ranking',
     SUMMARY: (productId: number) => `/api/products/${productId}/summary`,
+    INFO: (productId: number) => `/api/products/${productId}`,
+    DETAIL: (productId: number) => `/api/products/${productId}/detail`,
+    REVIEW: (productId: number) => `/api/products/${productId}/highlight-review`,
+    WISH: (productId: number) => `/api/products/${productId}/wish`,
   },
 
   // Theme 관련
