@@ -1,10 +1,10 @@
 import { ReceiverInfoSection } from "@/components/order/ReceiverInfoSection";
-import { withOrderProvider } from "@/components/order/stories/decorators";
+import { OrderDecorator } from "@/components/order/stories/OrderDecorators";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta: Meta<typeof ReceiverInfoSection> = {
   component: ReceiverInfoSection,
-  decorators: [withOrderProvider],
+  decorators: [OrderDecorator],
 };
 
 export default meta;

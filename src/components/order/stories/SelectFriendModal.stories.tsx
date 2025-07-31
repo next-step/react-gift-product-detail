@@ -1,10 +1,10 @@
 import { SelectFriendModal } from "@/components/order/SelectFriendModal";
-import { withOrderProvider } from "@/components/order/stories/decorators";
+import { OrderDecorator } from "@/components/order/stories/OrderDecorators";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta: Meta<typeof SelectFriendModal> = {
   component: SelectFriendModal,
-  decorators: [withOrderProvider],
+  decorators: [OrderDecorator],
 };
 
 export default meta;
