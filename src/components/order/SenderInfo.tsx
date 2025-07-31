@@ -55,7 +55,7 @@ export default function SenderInfo({ register, error }: Props) {
   return (
     <Content>
       <Title>보내는 사람</Title>
-      <Input placeholder="이름을 입력하세요." {...register} error={!!error} />
+      <Input placeholder="이름을 입력하세요." {...register} error={!!error} data-error={!!error} />
       {error ? (
         <Error>{error}</Error>
       ) : (
