@@ -24,7 +24,7 @@
 - [x] src/components에 있는 Form Field와 Typography에 대한 테스트 코드를 작성(없을 시 components 내의 코드 중 2개)
 - [x] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성
 - [x] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성
-- [ ] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행
+- [x] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행
 
 ### 테스트별 시나리오
 
