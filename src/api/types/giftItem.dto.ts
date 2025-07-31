@@ -20,6 +20,24 @@ export type GiftItemData = {
   };
 };
 
+export type GiftItemDetailData = {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
+};
+
+export type GiftItemHighlightReviewData = {
+  totalCount: number;
+  reviews: {
+    id: string;
+    authorName: string;
+    content: string;
+  }[];
+};
+
 export type ThemeInfo = {
   name: string;
   title: string;
@@ -31,6 +49,11 @@ export type ThemedGiftItemsPage = {
   list: GiftItemData[];
   cursor: number;
   hasMoreList: boolean;
+};
+
+export type WishInfo = {
+  wishCount: number;
+  isWished: boolean;
 };
 
 type Params = {
