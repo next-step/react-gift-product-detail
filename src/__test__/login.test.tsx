@@ -95,6 +95,7 @@ describe("LoginPage 테스트", () => {
         email: "test@kakao.com",
         name: "test",
       });
+      expect(window.location.pathname).toBe("/");
     });
   });
 
