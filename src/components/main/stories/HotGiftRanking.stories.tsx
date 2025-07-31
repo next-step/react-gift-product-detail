@@ -1,16 +1,10 @@
 import { HotGiftRanking } from "@/components/main";
+import { MainPageDecorator } from "@/components/main/stories/MainPageDecorators";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MemoryRouter } from "react-router-dom";
 
 const meta: Meta<typeof HotGiftRanking> = {
   component: HotGiftRanking,
-  decorators: Story => {
-    return (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    );
-  },
+  decorators: [MainPageDecorator],
 };
 
 export default meta;
