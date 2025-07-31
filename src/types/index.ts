@@ -68,7 +68,7 @@ export interface OrderPayload {
 
 export interface ProductDetail {
   description: string;
-  announcement: {
+  announcements: {
     name: string;
     value: string;
   }[];

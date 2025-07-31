@@ -66,7 +66,7 @@ export const TabContent = ({ activeTab, detail, reviews }: TabContentProps) => {
     case 'details':
       return (
         <div>
-          {detail?.announcement?.map(item => (
+          {detail.announcements.map(item => (
             <div key={item.name} css={detailItem}>
               <strong>{item.name}</strong>
               <span>{item.value}</span>
