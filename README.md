@@ -21,5 +21,6 @@
 - 하단 고정 버튼 바 구현
 - API 연동
 - Wish의 useQuery를 mutate로 변경, useProduct 훅 제작
+- suspense, ErrorBoundary 적용
 
 ## 리뷰 반영

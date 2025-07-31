@@ -23,9 +23,6 @@ const ProductDetail = () => {
     wishMutate,
   } = useProduct(id);
 
-  if (!product || !highlightReview || !productDetailInfo || !productWishInfo)
-    return <div>데이터 전송 오류 발생</div>;
-
   return (
     <>
       <div>

@@ -25,14 +25,13 @@ export interface RankedProduct extends ProductBasicInfo {
 }
 
 export interface FilterProps {
-  selected: string;
+  selected: TargetType | RankType;
   onSelect: (label: string) => void;
 }
 
 export interface GridProps {
-  products: RankedProduct[];
-  isPending: boolean;
-  isError: unknown;
+  selectedTarget: TargetType;
+  selectedRank: RankType;
   isExpanded: boolean;
   toggleExpand: () => void;
   onClickItem: (item: RankedProduct) => void;

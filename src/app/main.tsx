@@ -16,7 +16,6 @@ const queryClient = new QueryClient({
     },
     mutations: {
       retry: 0,
-      throwOnError: false, // 현재는 ErrorBoudary 미사용, 다음 과제때 변경 예정
     },
   },
 });

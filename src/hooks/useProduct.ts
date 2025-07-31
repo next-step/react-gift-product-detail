@@ -4,13 +4,19 @@ import {
   productReviewOptions,
   productWishOptions,
 } from '@queries/product';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import type { ProductId, ProductWishInfo } from 'src/types/product';
 
 export const useProduct = (id: ProductId) => {
-  const { data: product } = useQuery(productOptions(id));
-  const { data: highlightReview } = useQuery(productReviewOptions(id));
-  const { data: productDetailInfo } = useQuery(productDetailOptions(id));
+  const { data: product } = useSuspenseQuery(productOptions(id));
+  const { data: highlightReview } = useSuspenseQuery(productReviewOptions(id));
+  const { data: productDetailInfo } = useSuspenseQuery(
+    productDetailOptions(id)
+  );
   const { productWishInfo, wishMutate } = useWish(id);
 
   return {
@@ -25,7 +31,7 @@ export const useProduct = (id: ProductId) => {
 export const useWish = (id: ProductId) => {
   const queryClient = useQueryClient();
   const { queryKey, queryFn } = productWishOptions(id);
-  const { data: productWishInfo } = useQuery({ queryKey, queryFn });
+  const { data: productWishInfo } = useSuspenseQuery({ queryKey, queryFn });
 
   const { mutate: wishMutate } = useMutation({
     mutationFn: () => Promise.resolve(), // 해당 API가 없음, 실제

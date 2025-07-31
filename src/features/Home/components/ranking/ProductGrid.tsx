@@ -1,35 +1,56 @@
-import LoadingSpinner from '@components/common/LoadingSpinner';
-import type { GridProps, RankedProduct } from './RankingTypes';
+import {
+  Rank_MAP,
+  Target_MAP,
+  type GridProps,
+  type RankedProduct,
+} from './RankingTypes';
 import styled from '@emotion/styled';
 import EmptyMessage from '@components/common/EmptyMessage';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import type { ProductBasicInfo } from 'src/types/product';
+import { RankedProductsOptions } from '@queries/product';
+
+// Product 타입에 ranking을 추가해주는 함수
+const addRanking = (products: ProductBasicInfo[]): RankedProduct[] => {
+  return products.map((product, i) => ({
+    ...product,
+    ranking: i + 1,
+  }));
+};
 
 const ProductGrid = ({
-  products,
-  isError,
-  isPending,
+  selectedTarget,
+  selectedRank,
   isExpanded,
   toggleExpand,
   onClickItem,
 }: GridProps) => {
+  // 랭킹 상품 API 요청
+  const apiTargetType = Target_MAP[selectedTarget];
+  const apiRankType = Rank_MAP[selectedRank];
+  const { data } = useSuspenseQuery(
+    RankedProductsOptions(apiTargetType, apiRankType)
+  );
+
+  // Product 타입에 ranking을 추가
+  const products = data ? addRanking(data) : [];
+
+  if (products.length === 0)
+    return <EmptyMessage>상품이 없습니다.</EmptyMessage>;
+
   // 더보기 버튼이 클릭되지 않았을 경우 전체 배열중 6개만 이용(1등~6등)
   const visibleItems = isExpanded ? products : products.slice(0, 6);
   return (
     <>
-      {isPending && <LoadingSpinner />}
-
-      {!isPending && !isError && products.length > 0 ? (
-        <Grid>
-          {visibleItems.map((item: RankedProduct) => (
-            <ProductCard
-              key={item.ranking}
-              item={item}
-              onClickItem={onClickItem}
-            />
-          ))}
-        </Grid>
-      ) : (
-        <EmptyMessage>상품이 없습니다.</EmptyMessage>
-      )}
+      <Grid>
+        {visibleItems.map((item: RankedProduct) => (
+          <ProductCard
+            key={item.ranking}
+            item={item}
+            onClickItem={onClickItem}
+          />
+        ))}
+      </Grid>
 
       {/* 더보기 / 접기 버튼 */}
       <ToggleButton onClick={toggleExpand}>
