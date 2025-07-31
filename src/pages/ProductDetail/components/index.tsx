@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import ProductInfoSection from './ProductInfoSection';
 import { theme } from '@/theme/theme';
 import DetailSection from './Details';
+import OrderFooter from '@/pages/ProductDetail/components/OrderFooter';
 
 const Wrapper = styled.main`
   width: 100%;
@@ -31,6 +32,7 @@ const BodySection = ({ productId }: BodySectionProps) => {
         <Fill />
         <DetailSection productId={productId} />
         <Margin height="64px" />
+        <OrderFooter productId={productId} />
       </Wrapper>
     </>
   );
