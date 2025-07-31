@@ -16,24 +16,21 @@ import {
   ERROR_MSG_PASSWORD_EMPTY,
   ERROR_MSG_PASSWORD_FORM,
 } from "@/constants/errorMessage";
-import { vi } from "vitest";
-import postLogin from "@/apis/login/postLogin";
 import { getCookieValue } from "@/utils/cookie";
+import { ToastContainer } from "react-toastify";
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <BrowserRouter>
     <QueryClientProvider client={new QueryClient()}>
       <AuthProvider>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          {children}
+          <ToastContainer />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   </BrowserRouter>
 );
-
-// Mock postLogin API
-vi.mock("@/apis/login/postLogin", () => ({
-  default: vi.fn(),
-}));
 
 // 테스트 시나리오 흐름
 // Given: 사용자가 로그인 페이지에 접속했을 때 이메일, 비밀번호 입력 창과 로그인 버튼을 본다.
@@ -49,20 +46,13 @@ describe("LoginPage 통합 테스트", () => {
     cleanup();
   });
 
-  test("로그인 버튼을 클릭했을 때 로그인이 성공하면 Auth 정보를 쿠키에 저장하고 메인 페이지로 이동하는지 테스트", async () => {
+  test("이메일과 비밀번호를 입력하고 로그인 버튼을 클릭했을 때 로그인 성공 시 Auth 정보를 쿠키에 저장하고 메인 페이지로 이동", async () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
         <LoginPage />
       </TestWrapper>,
     );
-    // 로그인 성공 시 반환되는 데이터
-    const mockResponse = {
-      email: "test@kakao.com",
-      name: "test",
-      authToken: "dummy-token",
-    };
-    vi.mocked(postLogin).mockResolvedValue(mockResponse);
 
     // 입력 필드, 버튼 가져오기
     const emailInput = screen.getByPlaceholderText("이메일");
@@ -82,6 +72,30 @@ describe("LoginPage 통합 테스트", () => {
       expect(window.location.pathname).toBe("/");
     });
   });
+
+  test("kakao.com이 아닌 이메일로 로그인 시 토스트 에러 메시지 표시", async () => {
+    // Given: 로그인 페이지 렌더링
+    render(
+      <TestWrapper>
+        <LoginPage />
+      </TestWrapper>,
+    );
+
+    // 입력 필드, 버튼 가져오기
+    const emailInput = screen.getByPlaceholderText("이메일");
+    const passwordInput = screen.getByPlaceholderText("비밀번호");
+    const loginButton = screen.getByRole("button", { name: "로그인" });
+
+    // When: 사용자가 kakao.com이 아닌 이메일과 비밀번호를 입력하고 로그인 버튼을 클릭한다.
+    fireEvent.change(emailInput, { target: { value: "test@naver.com" } });
+    fireEvent.change(passwordInput, { target: { value: "test1234" } });
+    fireEvent.click(loginButton);
+
+    // Then: 토스트 에러 메시지가 표시되어야 한다.
+    await waitFor(() => {
+      expect(screen.getByText("@kakao.com 이메일 주소만 가능합니다.")).toBeInTheDocument();
+    });
+  });
 });
 
 describe("LoginPage 단위 테스트", () => {
@@ -93,7 +107,26 @@ describe("LoginPage 단위 테스트", () => {
     cleanup();
   });
 
-  test("이메일과 비밀번호를 입력하지 않았을 때 로그인 버튼이 비활성화되는지 테스트", () => {
+  test("이메일, 비밀번호 입력 필드와 로그인 버튼 렌더링", () => {
+    // Given: 로그인 페이지 렌더링
+    render(
+      <TestWrapper>
+        <LoginPage />
+      </TestWrapper>,
+    );
+
+    // 입력 필드와 버튼 가져오기
+    const emailInput = screen.getByPlaceholderText("이메일");
+    const passwordInput = screen.getByPlaceholderText("비밀번호");
+    const loginButton = screen.getByRole("button", { name: "로그인" });
+
+    // Then: 입력 필드와 버튼이 렌더링되어야 한다.
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(loginButton).toBeInTheDocument();
+  });
+
+  test("이메일과 비밀번호를 입력하지 않았을 때 로그인 버튼 비활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -114,7 +147,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeDisabled();
   });
 
-  test("이메일을 입력하고 비밀번호를 입력하지 않았을 때 로그인 버튼이 비활성화되는지 테스트", () => {
+  test("이메일을 입력하고 비밀번호를 입력하지 않았을 때 로그인 버튼 비활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -135,7 +168,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeDisabled();
   });
 
-  test("이메일 입력값이 유효성 검사를 통과하고 비밀번호 입력값이 유효성 검사를 통과하지 못했을 때 로그인 버튼이 비활성화되는지 테스트", () => {
+  test("이메일 입력값이 유효성 검사 통과, 비밀번호 입력값 유효성 검사 통과하지 못했을 때 로그인 버튼 비활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -160,7 +193,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeDisabled();
   });
 
-  test("이메일을 입력하지 않고 비밀번호를 입력했을 때 로그인 버튼이 비활성화되는지 테스트", () => {
+  test("이메일을 입력하지 않고 비밀번호를 입력했을 때 로그인 버튼 비활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -181,7 +214,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeDisabled();
   });
 
-  test("이메일 입력값이 유효성 검사를 통과하지 못하고 비밀번호 입력값이 유효성 검사를 통과했을 때 로그인 버튼이 비활성화되는지 테스트", () => {
+  test("이메일 입력값이 유효성 검사를 통과하지 못하고 비밀번호 입력값이 유효성 검사를 통과했을 때 로그인 버튼 비활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -206,7 +239,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeDisabled();
   });
 
-  test("이메일 입력값과 비밀번호 입력값이 유효성 검사를 통과했을 때 로그인 버튼이 활성화되는지 테스트", () => {
+  test("이메일 입력값과 비밀번호 입력값이 유효성 검사를 통과했을 때 로그인 버튼 활성화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -230,7 +263,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(loginButton).toBeEnabled();
   });
 
-  test("onBlur 이벤트가 발생했을 때 에러 메시지가 표시되는지 테스트", () => {
+  test("onBlur 이벤트가 발생했을 때 에러 메시지 표시", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -255,7 +288,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(screen.getByText(ERROR_MSG_PASSWORD_EMPTY)).toBeInTheDocument();
   });
 
-  test("onBlur 이벤트가 발생 후 입력 필드 유효성 검사에 따라 에러 메시지가 변화하는지 테스트", () => {
+  test("onBlur 이벤트가 발생 후 입력 필드 유효성 검사에 따라 에러 메시지 변화", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -284,7 +317,7 @@ describe("LoginPage 단위 테스트", () => {
     expect(screen.getByText(ERROR_MSG_PASSWORD_FORM)).toBeInTheDocument();
   });
 
-  test("onBlur 이벤트가 발생 후 입력 필드 유효성 검사를 통과하면 에러 메시지가 사라지는지 테스트", () => {
+  test("onBlur 이벤트가 발생 후 입력 필드 유효성 검사를 통과하면 에러 메시지 사라짐", () => {
     // Given: 로그인 페이지 렌더링
     render(
       <TestWrapper>
@@ -311,29 +344,5 @@ describe("LoginPage 단위 테스트", () => {
     // Then: 이메일과 비밀번호 입력 필드에 대한 에러 메시지가 사라져야 한다.
     expect(screen.queryByText(ERROR_MSG_ID_EMPTY)).not.toBeInTheDocument();
     expect(screen.queryByText(ERROR_MSG_PASSWORD_EMPTY)).not.toBeInTheDocument();
-  });
-
-  test("로그인 버튼을 클릭했을 때 API가 호출되는지 테스트", async () => {
-    // Given: 로그인 페이지 렌더링
-    render(
-      <TestWrapper>
-        <LoginPage />
-      </TestWrapper>,
-    );
-
-    // 입력 필드, 버튼 가져오기
-    const emailInput = screen.getByPlaceholderText("이메일");
-    const passwordInput = screen.getByPlaceholderText("비밀번호");
-    const loginButton = screen.getByRole("button", { name: "로그인" });
-
-    // When: 사용자가 올바른 이메일과 비밀번호를 입력하고 로그인 버튼을 클릭한다.
-    fireEvent.change(emailInput, { target: { value: "test@kakao.com" } });
-    fireEvent.change(passwordInput, { target: { value: "test1234" } });
-    fireEvent.click(loginButton);
-
-    // Then: 로그인 API가 호출되어야 한다.
-    await waitFor(() => {
-      expect(postLogin).toHaveBeenCalled();
-    });
   });
 });
