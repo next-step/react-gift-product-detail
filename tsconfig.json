@@ -6,7 +6,7 @@
     },
     "types": ["node"]
   },
-  "include": ["src"],
+  "include": ["src", "vitest.config.ts"],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
