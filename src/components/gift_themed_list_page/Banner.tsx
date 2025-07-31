@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getThemeInfo } from '@/api/services/giftItem.service';
 import type { QueryKey } from '@/api/types/giftItem.dto';
@@ -36,28 +36,16 @@ const Description = styled.div`
   color: white;
 `;
 
-const ErrorText = styled.div`
-  margin: auto;
-  font-size: 1rem;
-  font-weight: 500;
-`;
-
 export const Banner = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ThemeInfo', { id: parsedId }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { id } = queryKey[1];
       if (!id) return;
       return getThemeInfo(id);
-    },
-    placeholderData: {
-      name: '',
-      title: '',
-      description: '',
-      backgroundColor: '#FFFFFF',
     },
   });
   const { name, title, description, backgroundColor } = data!;
@@ -67,7 +55,6 @@ export const Banner = () => {
       {name && <ThemeName>{name}</ThemeName>}
       {title && <Title>{title}</Title>}
       {description && <Description>{description}</Description>}
-      {isError && <ErrorText>⚠️ 테마 정보를 불러오는 데 실패했습니다.</ErrorText>}
     </Container>
   );
 };

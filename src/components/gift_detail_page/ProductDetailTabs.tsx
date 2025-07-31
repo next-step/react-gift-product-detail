@@ -1,6 +1,6 @@
 import { getGiftItemDetail, getReviews } from '@/api/services/giftItem.service';
 import styled from '@emotion/styled';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { HtmlRenderer } from '../shared/HtmlRenderer';
@@ -66,7 +66,7 @@ export const ProductDetailTabs = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data: detailData } = useQuery({
+  const { data: detailData } = useSuspenseQuery({
     queryKey: ['giftItem-summary', { id: parsedId }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { id } = queryKey[1];
@@ -74,7 +74,7 @@ export const ProductDetailTabs = () => {
       return getGiftItemDetail(id);
     },
   });
-  const { data: reviewsData } = useQuery({
+  const { data: reviewsData } = useSuspenseQuery({
     queryKey: ['highlight-review', { id: parsedId }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { id } = queryKey[1];

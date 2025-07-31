@@ -3,7 +3,7 @@ import { GiftItemCard } from '../shared/GiftItemCard';
 import { useEffect, useRef } from 'react';
 import { keyframes } from '@emotion/react';
 import { useParams } from 'react-router-dom';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { getThemedGiftItems } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
@@ -60,7 +60,7 @@ export const GiftList = () => {
   const { id } = useParams();
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
-  const { data, isLoading, isError, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery({
     queryKey: ['themedGiftItems', { id: parsedId }],
     queryFn: ({ queryKey, pageParam }) => {
       const { id } = queryKey[1] as { id: number };
@@ -99,29 +99,23 @@ export const GiftList = () => {
 
   return (
     <Container>
-      {isLoading && <Spinner />}
-      {!isLoading && (
-        <List>
-          {data?.pages.map((item) =>
-            item.list.map((item) => {
-              return (
-                <GiftItemCard
-                  key={`GIFT_THEMED_LIST_${item.id}`}
-                  id={item.id}
-                  name={item.name}
-                  image={item.imageURL}
-                  brandName={item.brandInfo.name}
-                  price={item.price.basicPrice}
-                />
-              );
-            })
-          )}
-        </List>
-      )}
-      {isError && (
-        <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
-      )}
-      {!isLoading && data?.pages.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
+      <List>
+        {data?.pages.map((item) =>
+          item.list.map((item) => {
+            return (
+              <GiftItemCard
+                key={`GIFT_THEMED_LIST_${item.id}`}
+                id={item.id}
+                name={item.name}
+                image={item.imageURL}
+                brandName={item.brandInfo.name}
+                price={item.price.basicPrice}
+              />
+            );
+          })
+        )}
+      </List>
+      {data?.pages.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
       {data?.pages[data.pages.length - 1].hasMoreList && (
         <IntersectionTrigger ref={intersectionTriggerRef}>
           {isFetchingNextPage && <Spinner />}
