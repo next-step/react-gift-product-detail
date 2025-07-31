@@ -14,12 +14,12 @@
 
 - [x] 환경 설정
   - [x] react-query 설치
-- [ ] useQuery를 사용한 데이터 조회 로직 리팩토링
-  - [ ] 상품 랭킹 조회 (`hooks/useProducts.ts`)
-  - [ ] 테마 정보 조회 (`services/theme.ts`의 `getThemeInfo`)
-  - [ ] 상품 요약 정보 조회 (`services/product.ts`의 `getProductSummary`)
-- [ ] useInfiniteQuery를 사용한 무한 스크롤 리팩토링
-  - [ ] 테마 상품 목록 조회 (`hooks/useThemeProducts.ts`)
+- [x] useQuery를 사용한 데이터 조회 로직 리팩토링
+  - [x] 상품 랭킹 조회 (`hooks/useProducts.ts`)
+  - [x] 테마 정보 조회 (`services/theme.ts`의 `getThemeInfo`)
+  - [x] 상품 요약 정보 조회 (`services/product.ts`의 `getProductSummary`)
+- [x] useInfiniteQuery를 사용한 무한 스크롤 리팩토링
+  - [x] 테마 상품 목록 조회 (`hooks/useThemeProducts.ts`)
 - [ ] useMutation을 사용한 데이터 변경 로직 리팩토링
   - [ ] 로그인 (`services/login.ts`)
   - [ ] 주문 생성 (`services/order.ts`)

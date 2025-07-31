@@ -12,17 +12,16 @@ import { useOrderStore } from '@/stores/orderStore';
 import useAuthStore from '@/stores/authStore';
 import { FieldSet, Legend } from '@/components/common/FieldSet';
 import { VerticalSpacing } from '@/components/common/VerticalSpacing';
-import { getProductSummary } from '@/services/product';
 import { createOrder } from '@/services/order';
-import type { Product } from '@/types/product';
 import { Spinner } from '@/components/common/Spinner';
+import { useProductSummaryQuery } from '@/hooks/queries/useProductSummaryQuery';
 
 export default function OrderPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const { data: product, isPending, isError } = useProductSummaryQuery(Number(productId));
 
   const [selectedCardId, setSelectedCardId] = useState(cardTemplates[0].id);
   const selectedCard = useMemo(
@@ -34,31 +33,12 @@ export default function OrderPage() {
   const { setReceivers } = useOrderStore();
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const productData = await getProductSummary(Number(productId));
-        setProduct(productData);
-        // console.log('Product State Updated:', productData);
-      } catch {
-        toast.error('제품 정보를 불러오는데 실패했습니다.');
-        navigate('/');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (productId) {
-      fetchProduct();
-    }
-  }, [productId, navigate]);
-
-  useEffect(() => {
     return () => {
       setReceivers([]);
     };
   }, [setReceivers]);
 
-  if (loading) {
+  if (isPending) {
     return (
       <Container>
         <Spinner size="40px" borderWidth="4px" color="#000" />
@@ -66,7 +46,7 @@ export default function OrderPage() {
     );
   }
 
-  if (!product) {
+  if (isError || !product) {
     return <NotFoundPage />;
   }
 

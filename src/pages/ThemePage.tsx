@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { ThemeInfoBanner } from '@/components/ThemeInfoBanner';
 import { useThemeProducts } from '@/hooks/useThemeProducts';
-import { ThemeProductItem } from '@/components/ThemeProductItem'; // 변경된 부분
+import { ThemeProductItem } from '@/components/ThemeProductItem';
 import { Spinner } from '@/components/common/Spinner';
 import styled from '@emotion/styled';
 import RootLayout from '@/layout/RootLayout';
@@ -9,12 +9,12 @@ import { Navbar } from '@/components/Navbar';
 
 export default function ThemePage() {
   const { themeId } = useParams<{ themeId: string }>();
-  const { products, isPending, error, hasMore, loadMoreRef } = useThemeProducts(
+  const { products, isPending, isError, loadMoreRef } = useThemeProducts(
     Number(themeId),
   );
 
-  if (error) {
-    return <div>Error: {String(error)}</div>;
+  if (isError) {
+    return <div>Error: 데이터를 불러오는 중 오류가 발생했습니다.</div>;
   }
 
   return (
@@ -38,17 +38,9 @@ export default function ThemePage() {
         </ProductGrid>
       </Container>
 
-      {hasMore && (
-        <div ref={loadMoreRef} style={{ height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {isPending && <Spinner />}
-        </div>
-      )}
-
-      {!hasMore && products.length > 0 && (
-        <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-          모든 상품을 불러왔습니다.
-        </div>
-      )}
+      <div ref={loadMoreRef} style={{ height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {isPending && <Spinner />}
+      </div>
 
       {!isPending && products.length === 0 && (
         <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
