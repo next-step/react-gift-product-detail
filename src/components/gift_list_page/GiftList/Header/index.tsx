@@ -2,16 +2,12 @@ import styled from '@emotion/styled';
 import React, { useCallback, useEffect } from 'react';
 import { TargetButton } from './TargetButton';
 import { TopicButton } from './TopicButton';
-import type { GiftItemData } from '@/types/giftItemData';
 
 interface Header {
-  getGiftItemList: React.Dispatch<React.SetStateAction<GiftItemData[] | null>>;
   targetType: string;
   setTargetType: React.Dispatch<React.SetStateAction<string>>;
   rankType: string;
   setRankType: React.Dispatch<React.SetStateAction<string>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Container = styled.div`
@@ -69,32 +65,18 @@ const Wrapper = styled.div`
   border-color: ${({ theme }) => theme.colors.blue300};
 `;
 
-export const Header = ({
-  getGiftItemList,
-  targetType,
-  setTargetType,
-  rankType,
-  setRankType,
-  setLoading,
-  setIsError,
-}: Header) => {
+export const Header = ({ targetType, setTargetType, rankType, setRankType }: Header) => {
   const handleTargetClick = useCallback(() => {
-    getGiftItemList(null);
-    setLoading(true);
-    setIsError(false);
     localStorage.setItem('currentTarget', targetType);
-  }, [getGiftItemList, targetType, setLoading, setIsError]);
+  }, [targetType]);
 
   useEffect(() => {
     handleTargetClick();
   }, [handleTargetClick]);
 
   const handleTopicClick = useCallback(() => {
-    getGiftItemList(null);
-    setLoading(true);
-    setIsError(false);
     localStorage.setItem('currentTopic', rankType);
-  }, [getGiftItemList, rankType, setLoading, setIsError]);
+  }, [rankType]);
 
   useEffect(() => {
     handleTopicClick();

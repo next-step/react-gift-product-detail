@@ -1,11 +1,13 @@
 import useProductInfo from '@/hooks/useProductInfo';
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 import styled from '@emotion/styled';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber';
-import authClient from '@/api/clients/authClient';
 import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { orderService } from '@/api/services/order.service';
+import type { GiftItemData } from '@/api/types/giftItem.dto';
 
 const Container = styled.button`
   all: unset;
@@ -27,61 +29,69 @@ const Text = styled.div`
 `;
 
 export const OrderButton = () => {
+  const { id } = useParams();
+  if (!id) throw new Error('id가 없습니다');
+  const parsedId = parseInt(id!);
   const navigate = useNavigate();
   const {
     control,
     watch,
     formState: { isValid },
   } = useFormContext<FormValues>();
-  const { messageCardId, id, name, price } = useProductInfo();
+  const { messageCardId } = useProductInfo();
+  const queryClient = useQueryClient();
+  const giftItemDetail = queryClient.getQueryData<GiftItemData>([
+    'giftItemDetail',
+    { id: parsedId },
+  ]);
   const message = watch('message');
   const senderName = watch('senderName');
   const recipientInfo = useWatch({ control, name: 'recipientInfo' });
-  const receivers = recipientInfo?.map(({ recipientName, phoneNumber, amount }) => ({
-    name: recipientName,
+  const receivers = recipientInfo?.map(({ name, phoneNumber, quantity }) => ({
+    name: name,
     phoneNumber: formatPhoneNumber(phoneNumber),
-    quantity: Number(amount),
+    quantity: Number(quantity),
   }));
   let totalAmount = 0;
   let totalPrice = 0;
 
   recipientInfo?.forEach((recipientForm) => {
-    totalAmount = totalAmount + Number(recipientForm.amount);
+    totalAmount = totalAmount + Number(recipientForm.quantity);
   });
-  totalPrice = price * totalAmount;
-
-  const order = async () => {
-    try {
-      const response = await authClient.post('/api/order', {
-        productId: id,
-        message: message,
-        messageCardId: messageCardId,
-        ordererName: senderName,
-        receivers: receivers,
-      });
-      console.log('주문 성공: ', response.data);
+  totalPrice = (giftItemDetail?.price.basicPrice ?? 0) * totalAmount;
+  const mutation = useMutation({
+    mutationFn: orderService,
+    onSuccess: () => {
       alert(`
             주문이 완료되었습니다.
-            상품명: ${name}
+            상품명: ${giftItemDetail?.name}
             구매 수량: ${totalAmount}
             발신자 이름: ${senderName}
             메시지: ${message}
           `);
       navigate('/');
-    } catch (error) {
-      console.log('주문 실패: ', error);
+    },
+    onError: (error) => {
+      console.error('주문 실패: ', error);
       toast.warn('⚠️ 주문 요청 처리 중 오류가 발생했습니다.', {
         style: {
           width: '25rem',
         },
       });
-    }
-  };
+    },
+  });
 
   return (
     <Container
       onClick={() => {
-        if (isValid) order();
+        if (isValid)
+          mutation.mutate({
+            productId: parsedId,
+            message: message,
+            messageCardId: messageCardId,
+            ordererName: senderName,
+            receivers: receivers,
+          });
       }}
     >
       <Text>{totalPrice}원 주문하기</Text>

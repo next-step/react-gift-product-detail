@@ -1,7 +1,8 @@
-import publicClient from '@/api/clients/publicClient';
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import { getThemeInfo } from '@/api/services/giftItem.service';
+import type { QueryKey } from '@/api/types/giftItem.dto';
 
 const Container = styled.div<{ backgroundColor: string }>`
   display: flex;
@@ -42,36 +43,28 @@ const ErrorText = styled.div`
 `;
 
 export const Banner = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
-  const [themeName, setThemeName] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [backgroundColor, setBackgroundColor] = useState('');
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await publicClient.get(`/api/themes/${id}/info`);
-        const { data } = response.data;
-        const { name, title, description, backgroundColor } = data;
-        setThemeName(name);
-        setTitle(title);
-        setDescription(description);
-        setBackgroundColor(backgroundColor);
-        setIsError(false);
-      } catch (error) {
-        console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-        setIsError(true);
-      }
-    };
-    getData();
-  }, [navigate, id]);
+  if (!id) throw new Error('id가 없습니다');
+  const parsedId = parseInt(id!);
+  const { data, isError } = useQuery({
+    queryKey: ['ThemeInfo', { id: parsedId }],
+    queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
+      const { id } = queryKey[1];
+      if (!id) return;
+      return getThemeInfo(id);
+    },
+    placeholderData: {
+      name: '',
+      title: '',
+      description: '',
+      backgroundColor: '#FFFFFF',
+    },
+  });
+  const { name, title, description, backgroundColor } = data!;
 
   return (
     <Container backgroundColor={backgroundColor}>
-      {themeName && <ThemeName>{themeName}</ThemeName>}
+      {name && <ThemeName>{name}</ThemeName>}
       {title && <Title>{title}</Title>}
       {description && <Description>{description}</Description>}
       {isError && <ErrorText>⚠️ 테마 정보를 불러오는 데 실패했습니다.</ErrorText>}

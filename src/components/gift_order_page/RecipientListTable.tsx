@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { RecipientInput } from './RecipientInput';
 import { CompleteButton } from './CompleteButton';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 
 const Container = styled.div`
   display: flex;
@@ -226,9 +226,9 @@ export const RecipientListTable = () => {
           <Attribute isLabel={true}>전화번호</Attribute>
           <Attribute isLabel={true}>수량</Attribute>
           {recipientInfo?.flatMap((recipient) => [
-            <Attribute isLabel={false}>{recipient.recipientName}</Attribute>,
+            <Attribute isLabel={false}>{recipient.name}</Attribute>,
             <Attribute isLabel={false}>{recipient.phoneNumber}</Attribute>,
-            <Attribute isLabel={false}>{recipient.amount}</Attribute>,
+            <Attribute isLabel={false}>{recipient.quantity}</Attribute>,
           ])}
         </Table>
       )}
@@ -240,9 +240,9 @@ export const RecipientListTable = () => {
           <ModalAddButton
             onClick={() => {
               appendRecipient({
-                recipientName: '',
+                name: '',
                 phoneNumber: '',
-                amount: 0,
+                quantity: 0,
               });
             }}
           >

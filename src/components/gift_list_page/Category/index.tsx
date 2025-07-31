@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import type { CategoryCardData } from '@/types/categoryCardData';
 import { CategoryCard } from '@/components/gift_list_page/Category/CategoryCard';
-import publicClient from '@/api/clients/publicClient';
 import { keyframes } from '@emotion/react';
+import { useQuery } from '@tanstack/react-query';
+import { getCategories } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
   position: relative;
@@ -63,44 +62,22 @@ const Spinner = styled.div`
 `;
 
 export const Category = () => {
-  const [loading, setLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [categories, setCategories] = useState<CategoryCardData[] | null>(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await publicClient.get('/api/themes');
-        setCategories(response.data.data);
-        setIsError(false);
-      } catch (error) {
-        setIsError(true);
-        setLoading(false);
-        console.log('⚠️ 요청 처리 중 오류가 발생했습니다.', error);
-      }
-    };
-    setTimeout(() => {
-      getData();
-    }, 1000);
-  }, []);
-
-  useEffect(() => {
-    if (categories === null) return;
-
-    setLoading(false);
-  }, [categories]);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  });
 
   return (
     <Container>
       <Title>선물 테마</Title>
       <Body>
-        {loading && <Spinner />}
-        {!loading && (
+        {isLoading && <Spinner />}
+        {!isLoading && (
           <CategoryList>
-            {categories?.length === 0 ? (
+            {data?.length === 0 ? (
               <ErrorText>표시할 데이터가 없습니다.</ErrorText>
             ) : (
-              categories?.map((item) => {
+              data?.map((item) => {
                 return (
                   <CategoryCard
                     key={item.themeId}

@@ -1,4 +1,4 @@
-import type { FormValues } from '@/types/orderForm';
+import type { FormValues } from '@/api/types/order.dto';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
