@@ -1,3 +1,4 @@
+import { useProduct } from '@/queries/useProduct';
 import styled from '@emotion/styled';
 
 const Image = styled.img`
@@ -8,10 +9,19 @@ const Image = styled.img`
   background-color: rgb(243, 244, 245);
 `;
 
-const ProductImage = () => {
+const Placeholder = () => <Image alt="상품사진" />;
+
+interface ProductImageProps {
+  productId: number;
+}
+
+const ProductImage = ({ productId }: ProductImageProps) => {
+  const { data, isLoading, isError } = useProduct(productId);
+
+  if (isLoading || isError || !data?.imageURL) return <Placeholder />;
   return (
     <>
-      <Image alt="상품사진" />
+      <Image src={data.imageURL} alt={data.name} />
     </>
   );
 };

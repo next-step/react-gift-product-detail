@@ -2,6 +2,7 @@ import { theme } from '@/theme/theme';
 import NavigationBar from '@components/NavigationBar';
 import styled from '@emotion/styled';
 import BodySection from './components';
+import { useParams } from 'react-router-dom';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -25,12 +26,15 @@ const Main = styled.div`
   padding-top: 2.75rem;
 `;
 const ProductDetail = () => {
+  const { productId } = useParams<{ productId: string }>();
+  const id = Number(productId);
+
   return (
     <>
       <Wrapper>
         <NavigationBar />
         <Main>
-          <BodySection />
+          <BodySection productId={id} />
         </Main>
       </Wrapper>
     </>

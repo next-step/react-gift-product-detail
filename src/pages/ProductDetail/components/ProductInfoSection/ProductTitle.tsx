@@ -1,3 +1,4 @@
+import { useProduct } from '@/queries/useProduct';
 import { theme } from '@/theme/theme';
 import styled from '@emotion/styled';
 
@@ -28,14 +29,22 @@ const Margin = styled.div<{ height: string }>`
   background-color: transparent;
 `;
 
-const ProductTitle = () => {
+interface ProductTitleProps {
+  productId: number;
+}
+
+const ProductTitle = ({ productId }: ProductTitleProps) => {
+  const { data, isLoading, isError } = useProduct(productId);
+
+  if (isLoading || isError || !data) return null;
   return (
     <>
       <Wrapper>
-        <Title>상품명</Title>
+        <Title>{data.name}</Title>
         <Margin height="8px" />
         <Price>
-          가격<span style={{ fontWeight: 400 }}>원</span>
+          {data.price.sellingPrice}
+          <span style={{ fontWeight: 400 }}>원</span>
         </Price>
       </Wrapper>
     </>

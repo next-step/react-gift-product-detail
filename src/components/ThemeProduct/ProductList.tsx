@@ -1,5 +1,5 @@
 import { useThemeProducts } from '@/queries/useThemeProducts';
-import { ROUTE_PATH } from '@/routes/Routes';
+import { getProductDetailPath, ROUTE_PATH } from '@/routes/Routes';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { useEffect, useRef } from 'react';
@@ -45,6 +45,7 @@ interface Props {
 
 const ProductList = ({ themeId }: Props) => {
   const navigate = useNavigate();
+  const goDetail = (id: number) => navigate(getProductDetailPath(id));
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useThemeProducts(themeId);
 
@@ -89,7 +90,7 @@ const ProductList = ({ themeId }: Props) => {
             key={p.id}
             product={p}
             onClick={() => {
-              const target = `${ROUTE_PATH.ORDER}?productId=${p.id}`;
+              const target = getProductDetailPath(p.id);
 
               if (!isLoggedIn()) {
                 navigate(`${ROUTE_PATH.LOGIN}?redirect=${encodeURIComponent(target)}`, {

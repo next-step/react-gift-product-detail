@@ -20,17 +20,21 @@ const Fill = styled.div`
   background-color: ${theme.semanticColors.background.fill};
 `;
 
-const ProductInfoSection = () => {
+interface ProductInfoSectionProps {
+  productId: number;
+}
+
+const ProductInfoSection = ({ productId }: ProductInfoSectionProps) => {
   return (
     <>
       <Section>
-        <ProductImage />
+        <ProductImage productId={productId} />
         <Margin height="20px" />
-        <ProductTitle />
+        <ProductTitle productId={productId} />
         <Margin height="16px" />
         <Fill />
         <Margin height="16px" />
-        <Brand />
+        <Brand productId={productId} />
         <Margin height="16px" />
       </Section>
     </>

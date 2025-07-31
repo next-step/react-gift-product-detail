@@ -11,11 +11,15 @@ const Margin = styled.div<{ height: string }>`
   background-color: transparent;
 `;
 
-const BodySection = () => {
+interface BodySectionProps {
+  productId: number;
+}
+
+const BodySection = ({ productId }: BodySectionProps) => {
   return (
     <>
       <Wrapper>
-        <ProductInfoSection />
+        <ProductInfoSection productId={productId} />
         <Margin height="8px" />
       </Wrapper>
     </>

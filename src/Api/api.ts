@@ -99,7 +99,6 @@ export const getThemeProducts = async (themeId: number, cursor = 0, limit = 10) 
   return data.data;
 };
 
-/* ---------- 상품 랭킹 ---------- */
 interface ProductRankingResponse {
   data: ProductItem[];
 }
@@ -113,7 +112,16 @@ export const getProductRanking = async (targetType = 'ALL', rankType = 'MANY_WIS
   const { data } = await api.get<ProductRankingResponse>('/api/products/ranking', {
     params: { targetType, rankType },
   });
-  return data.data; // 배열
+  return data.data;
+};
+
+interface ProductInfoResponse {
+  data: ProductItem;
+}
+
+export const getProductInfo = async (productId: number): Promise<ProductItem> => {
+  const { data } = await api.get<ProductInfoResponse>(`/api/products/${productId}`);
+  return data.data;
 };
 
 export type ProductRankingItem = ProductItem;

@@ -28,5 +28,7 @@ export const ROUTE_PATH = {
   MY_PAGE: '/Mypage',
   ORDER: '/Order',
   THEME_PRODUCT_LIST: '/themes/:themeId/products',
-  PRODUCT_DETAIL: '/productdetail', // 교체
+  PRODUCT_DETAIL: '/products/:productId',
 };
+
+export const getProductDetailPath = (id: number | string) => `/products/${id}`;

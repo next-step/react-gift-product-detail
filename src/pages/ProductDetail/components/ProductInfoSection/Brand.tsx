@@ -1,3 +1,4 @@
+import { useProduct } from '@/queries/useProduct';
 import { theme } from '@/theme/theme';
 import styled from '@emotion/styled';
 
@@ -27,12 +28,20 @@ const Text = styled.p`
   margin: 0px;
   text-align: left;
 `;
-const Brand = () => {
+
+interface BrandProps {
+  productId: number;
+}
+
+const Brand = ({ productId }: BrandProps) => {
+  const { data, isLoading, isError } = useProduct(productId);
+
+  if (isLoading || isError || !data) return null;
   return (
     <>
       <Wrapper>
-        <Image alt="브랜드 로고" />
-        <Text>브랜드명</Text>
+        <Image src={data.brandInfo.imageURL} alt={data.brandInfo.name} />
+        <Text>{data.brandInfo.name}</Text>
       </Wrapper>
     </>
   );
