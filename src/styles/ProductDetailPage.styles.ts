@@ -58,6 +58,23 @@ export const InfoList = styled.ul`
 export const InfoItem = styled.li`
   white-space: pre-wrap;
 `
+export const Description = styled.p`
+  ${typography.body2Regular};
+`
+
+export const ReviewList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.spacing2};
+`
+
+export const ReviewItem = styled.li`
+  ${typography.body2Regular};
+  white-space: pre-wrap;
+`
 
 export const OrderButton = styled(YellowButton)`
   padding: ${spacing.spacing3};

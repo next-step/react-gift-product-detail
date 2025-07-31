@@ -5,6 +5,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import {
   useProductQuery,
   useProductDetailQuery,
+  useHighlightReviewQuery,
   useWishCountQuery,
   useWishMutation,
 } from '@/api/product'
@@ -17,6 +18,9 @@ import {
   WishButton,
   InfoList,
   InfoItem,
+  Description,
+  ReviewList,
+  ReviewItem,
   OrderButton,
 } from '@/styles/ProductDetailPage.styles'
 
@@ -24,7 +28,8 @@ function DetailContent({ productId }: { productId: number }) {
   const navigate = useNavigate()
   const { data: product } = useProductQuery(productId)
   const { data: detail } = useProductDetailQuery(productId)
-  const { data: wishCount = 0 } = useWishCountQuery(productId)
+  const { data: reviews } = useHighlightReviewQuery(productId)
+  const { data: wishInfo } = useWishCountQuery(productId)
   const { mutate } = useWishMutation(productId)
 
   return (
@@ -35,18 +40,34 @@ function DetailContent({ productId }: { productId: number }) {
         <Brand>{product.brandInfo.name}</Brand>
         <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
         <WishButton onClick={() => mutate()}>
-          ❤️ {wishCount}
+          ❤️ {wishInfo?.wishCount ?? 0}
         </WishButton>
       </div>
       {detail && (
-        <InfoList>
-          {detail.info.map((item, idx) => (
-            <InfoItem key={idx}>
-              <strong>{item.label}</strong>
-              <div>{item.value}</div>
-            </InfoItem>
+                <>
+          <Description>{detail.description}</Description>
+          <InfoList>
+            {detail.announcement
+              .slice()
+              .sort((a, b) => a.displayOrder - b.displayOrder)
+              .map((item, idx) => (
+                <InfoItem key={idx}>
+                  <strong>{item.name}</strong>
+                  <div>{item.value}</div>
+                </InfoItem>
+              ))}
+          </InfoList>
+        </>
+      )}
+      {reviews && reviews.reviews.length > 0 && (
+        <ReviewList>
+          {reviews.reviews.map((rv) => (
+            <ReviewItem key={rv.id}>
+              <strong>{rv.authorName}</strong>
+              <p>{rv.content}</p>
+            </ReviewItem>
           ))}
-        </InfoList>
+        </ReviewList>
       )}
       <OrderButton onClick={() => navigate(`/order/${productId}`)}>
         주문하기

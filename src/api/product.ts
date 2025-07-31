@@ -1,4 +1,9 @@
-﻿import type { Product } from '../type'
+﻿import type {
+  Product,
+  ProductDetail,
+  HighlightReviewResponse,
+  WishInfo,
+} from "../type"
 import { fetchApi } from './client'
 import {
   useQuery,
@@ -74,14 +79,6 @@ export function useProductSummaryQuery(
   })
 }
 
-export interface ProductDetailItem {
-  label: string
-  value: string
-}
-
-export interface ProductDetail {
-  info: ProductDetailItem[]
-}
 
 export async function fetchProduct(productId: number): Promise<Product> {
   return fetchApi<Product>(`/api/products/${productId}`)
@@ -95,15 +92,13 @@ export async function fetchProductDetail(
 
 export async function fetchHighlightReview(
   productId: number,
-): Promise<unknown> {
-  return fetchApi(`/api/products/${productId}/highlight-review`)
-}
-
-export async function fetchWishCount(productId: number): Promise<number> {
-  const data = await fetchApi<{ count: number }>(
-    `/api/products/${productId}/wish`,
+): Promise<HighlightReviewResponse> {
+  return fetchApi<HighlightReviewResponse>(
+    `/api/products/${productId}/highlight-review`,
   )
-  return data.count
+}
+export async function fetchWishCount(productId: number): Promise<WishInfo> {
+  return fetchApi<WishInfo>(`/api/products/${productId}/wish`)
 }
 
 export async function postWish(productId: number): Promise<void> {
@@ -124,9 +119,9 @@ export function useProductQuery(
 
 export function useProductDetailQuery(
   productId: number | undefined,
-  options?: UseQueryOptions<ProductDetail, Error>,
-): UseQueryResult<ProductDetail, Error> {
-  return useQuery<ProductDetail, Error>({
+  options?: UseQueryOptions<HighlightReviewResponse, Error>,
+): UseQueryResult<HighlightReviewResponse, Error> {
+  return useQuery<HighlightReviewResponse, Error>({
     queryKey: productKeys.productDetail(productId!),
     queryFn: () => fetchProductDetail(productId!),
     enabled: productId !== undefined,
@@ -148,9 +143,9 @@ export function useHighlightReviewQuery(
 
 export function useWishCountQuery(
   productId: number | undefined,
-  options?: UseQueryOptions<number, Error>,
-): UseQueryResult<number, Error> {
-  return useQuery<number, Error>({
+  options?: UseQueryOptions<WishInfo, Error>,
+): UseQueryResult<WishInfo, Error> {
+  return useQuery<WishInfo, Error>({
     queryKey: productKeys.wish(productId!),
     queryFn: () => fetchWishCount(productId!),
     enabled: productId !== undefined,
@@ -166,10 +161,9 @@ export function useWishMutation(
   return useMutation<void, Error, void>({
     mutationFn: () => postWish(productId),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: productKeys.wish(productId) })
-      const prev = queryClient.getQueryData<number>(productKeys.wish(productId))
-      queryClient.setQueryData<number>(productKeys.wish(productId), (prev ?? 0) + 1)
-      return { prev }
+    const prev = queryClient.getQueryData<WishInfo>(productKeys.wish(productId))
+    queryClient.setQueryData<WishInfo>(productKeys.wish(productId), (prev ? { ...prev, wishCount: prev.wishCount + 1 } : { wishCount: 1, isWished: true }))
+          return { prev }
     },
     onError: (_err, _vars, context) => {
       if (context?.prev !== undefined) {

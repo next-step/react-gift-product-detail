@@ -58,8 +58,9 @@ export default function LoginFormSection({ onSuccess }: LoginFormSectionProps) {
     e.preventDefault()
     if (!isValid) return
 
-    try
-      const info = await mutateAsync({ email, password })      login(info)
+    try{
+      const info = await mutateAsync({ email, password })      
+      await login(info)
       onSuccess?.(info)
     } catch (err: any) {
       const code = err?.statusCode ?? 0
