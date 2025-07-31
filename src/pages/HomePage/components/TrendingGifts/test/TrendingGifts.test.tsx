@@ -4,19 +4,18 @@ import { renderWithTheme, server } from "@/setupTests";
 import { describe, beforeEach, it, expect } from "vitest";
 import TrendingGifts from "../TrendingGifts";
 import { screen, within, fireEvent, waitFor } from "@testing-library/react";
-import { http, HttpResponse } from "msw";
-import { trendingGiftsMockData } from "@/data/trendingGfitsMockData";
+
+import {
+  setupDefaultDataHandler,
+  setupEmptyDataHandler,
+  setupErrorHandler,
+  setupApiParameterObserver,
+} from "./TrendingGifts.test-utils";
 
 describe("실시간 급상승 선물랭킹", () => {
   describe("UI", () => {
     beforeEach(() => {
-      server.use(
-        http.get("/api/products/ranking", async () => {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          return HttpResponse.json({ data: trendingGiftsMockData });
-        })
-      );
-
+      server.use(setupDefaultDataHandler(100));
       renderWithTheme(<TrendingGifts />);
     });
 
@@ -70,9 +69,7 @@ describe("실시간 급상승 선물랭킹", () => {
 
   describe("빈 상품", () => {
     beforeEach(() => {
-      server.use(
-        http.get("/api/products/ranking", () => HttpResponse.json({ data: [] }))
-      );
+      server.use(setupEmptyDataHandler());
       renderWithTheme(<TrendingGifts />);
     });
 
@@ -88,8 +85,7 @@ describe("실시간 급상승 선물랭킹", () => {
 
   describe("에러 상태", () => {
     beforeEach(() => {
-      server.use(http.get("/api/products/ranking", () => HttpResponse.error()));
-
+      server.use(setupErrorHandler());
       renderWithTheme(<TrendingGifts />);
     });
 
@@ -104,20 +100,13 @@ describe("실시간 급상승 선물랭킹", () => {
   });
 
   describe("탭 별 API 호출", () => {
-    let targetType: string | null = null;
-    let rankType: string | null = null;
+    const params = {
+      targetType: null as string | null,
+      rankType: null as string | null,
+    };
 
     beforeEach(() => {
-      server.use(
-        http.get("/api/products/ranking", async ({ request }) => {
-          const url = new URL(request.url.toString());
-          targetType = url.searchParams.get("targetType");
-          rankType = url.searchParams.get("rankType");
-
-          return HttpResponse.json({ data: trendingGiftsMockData });
-        })
-      );
-
+      server.use(setupApiParameterObserver(params));
       renderWithTheme(<TrendingGifts />);
     });
 
@@ -127,8 +116,8 @@ describe("실시간 급상승 선물랭킹", () => {
       await screen.findByTestId("grid");
 
       // then
-      expect(targetType).toBe("ALL");
-      expect(rankType).toBe("MANY_WISH");
+      expect(params.targetType).toBe("ALL");
+      expect(params.rankType).toBe("MANY_WISH");
     });
 
     it("탭 클릭 시 해당 탭에 대한 API가 호출된다", async () => {
@@ -147,8 +136,8 @@ describe("실시간 급상승 선물랭킹", () => {
       await screen.findByTestId("grid");
 
       // then
-      expect(targetType).toBe("FEMALE");
-      expect(rankType).toBe("MANY_RECEIVE");
+      expect(params.targetType).toBe("FEMALE");
+      expect(params.rankType).toBe("MANY_RECEIVE");
     });
   });
 });
