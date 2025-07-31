@@ -10,6 +10,20 @@ import * as loginFormHook from '../pages/Login/hooks/useLoginForm';
 
 const queryClient = new QueryClient();
 
+// renderComponent 함수를 describe 바깥에 선언해서 모든 테스트에서 사용 가능하도록 함
+const renderComponent = () =>
+  render(
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <UserManagementProvider>
+          <QueryClientProvider client={queryClient}>
+            <LoginFormSection />
+          </QueryClientProvider>
+        </UserManagementProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+
 vi.mock('../pages/Login/hooks/useLoginForm', () => {
   return {
     useLoginForm: vi.fn(() => ({
@@ -38,19 +52,6 @@ describe('LoginFormSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
-  const renderComponent = () =>
-    render(
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <UserManagementProvider>
-            <QueryClientProvider client={queryClient}>
-              <LoginFormSection />
-            </QueryClientProvider>
-          </UserManagementProvider>
-        </BrowserRouter>
-      </ThemeProvider>
-    );
 
   it('초기 렌더링 시 이메일, 비밀번호 입력과 로그인 버튼이 보여지고 버튼은 비활성화', () => {
     vi.spyOn(loginFormHook, 'useLoginForm').mockReturnValue({
@@ -113,5 +114,95 @@ describe('LoginFormSection', () => {
 
     fireEvent.click(loginButton);
     expect(goToLoginMock).toHaveBeenCalled();
+  });
+
+  // Form Field에 대한 테스트 코드
+
+  it('이메일 입력 필드에 값 입력 시 onChange 핸들러가 호출된다', () => {
+    const onChangeMock = vi.fn();
+    vi.spyOn(loginFormHook, 'useLoginForm').mockReturnValue({
+      email: {
+        value: '',
+        error: '',
+        onChange: onChangeMock,
+        validate: vi.fn(),
+        isValid: false,
+      },
+      password: {
+        value: '',
+        error: '',
+        onChange: vi.fn(),
+        validate: vi.fn(),
+        isValid: false,
+      },
+      isValid: false,
+      goToLogin: vi.fn(),
+      loading: false,
+    });
+
+    renderComponent();
+
+    const emailInput = screen.getByPlaceholderText('이메일');
+    fireEvent.change(emailInput, { target: { value: 'user@test.com' } });
+
+    expect(onChangeMock).toHaveBeenCalledWith('user@test.com');
+  });
+
+  it('비밀번호 입력 필드에서 onBlur 이벤트 발생 시 validate 핸들러가 호출된다', () => {
+    const validateMock = vi.fn();
+
+    vi.spyOn(loginFormHook, 'useLoginForm').mockReturnValue({
+      email: {
+        value: '',
+        error: '',
+        onChange: vi.fn(),
+        validate: vi.fn(),
+        isValid: false,
+      },
+      password: {
+        value: '',
+        error: '',
+        onChange: vi.fn(),
+        validate: validateMock,
+        isValid: false,
+      },
+      isValid: false,
+      goToLogin: vi.fn(),
+      loading: false,
+    });
+
+    renderComponent();
+
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    fireEvent.blur(passwordInput);
+
+    expect(validateMock).toHaveBeenCalled();
+  });
+
+  it('에러 메시지가 전달되면 해당 에러 메시지가 표시된다', () => {
+    vi.spyOn(loginFormHook, 'useLoginForm').mockReturnValue({
+      email: {
+        value: '',
+        error: '이메일 에러',
+        onChange: vi.fn(),
+        validate: vi.fn(),
+        isValid: false,
+      },
+      password: {
+        value: '',
+        error: '비밀번호 에러',
+        onChange: vi.fn(),
+        validate: vi.fn(),
+        isValid: false,
+      },
+      isValid: false,
+      goToLogin: vi.fn(),
+      loading: false,
+    });
+
+    renderComponent();
+
+    expect(screen.getByText('이메일 에러')).toBeInTheDocument();
+    expect(screen.getByText('비밀번호 에러')).toBeInTheDocument();
   });
 });
