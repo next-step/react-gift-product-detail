@@ -1,16 +1,13 @@
 // src/pages/ProductRankingListSection.tsx
 
-import React, { Suspense, lazy, useEffect, useCallback, useState } from 'react';
+import React, { Suspense, useEffect, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import type { ProductData, ProductRankingFilterOption } from '@/types/products';
 import { Typography } from '@/components/common/Typography';
 import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
 import ErrorBoundary from '@/pages/Home/components/ErrorBoundary';
-
-const ProductRankingFilter = lazy(() =>
-  import('./RankingFilter').then((mod) => ({ default: mod.ProductRankingFilter })),
-);
-const ProductRankingList = lazy(() => import('./ProductRankingList'));
+import { ProductRankingFilter } from './RankingFilter';
+import ProductRankingList from './ProductRankingList';
 
 export default function ProductRankingListSection() {
   return (
