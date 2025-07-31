@@ -1,10 +1,20 @@
+import { Typography } from "@/components/common/Typography";
 import styled from "@emotion/styled";
 
 export const KakaoTechCampusBanner = () => {
   return (
     <Container>
-      <SubText>카카오테크 캠퍼스 3기</SubText>
-      <MainText>프론트엔드 2단계 과제 화이팅!</MainText>
+      <Typography
+        as="div"
+        typo="body2Regular"
+        color="colorScale.gray.gray800"
+        style={{ marginBottom: 4 }}
+      >
+        카카오테크 캠퍼스 3기
+      </Typography>
+      <Typography as="strong" typo="body1Bold">
+        프론트엔드 2단계 과제 화이팅!
+      </Typography>
     </Container>
   );
 };
@@ -16,19 +26,4 @@ const Container = styled.div`
   margin: 16px;
   border-radius: 12px;
   text-align: left;
-`;
-
-const SubText = styled.div`
-  color: ${({ theme }) => theme.colors.colorScale.gray.gray800};
-  font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body2Regular.fontWeight};
-  line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
-  margin-bottom: 4px;
-`;
-
-const MainText = styled.strong`
-  display: block;
-  font-size: ${({ theme }) => theme.typography.body1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
-  line-height: ${({ theme }) => theme.typography.body1Bold.lineHeight};
 `;
