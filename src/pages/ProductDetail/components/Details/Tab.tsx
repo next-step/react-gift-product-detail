@@ -22,15 +22,23 @@ const Button = styled.button`
   -webkit-box-align: center;
   align-items: center;
   flex: 1 1 0%;
+  :hover {
+    background-color: ${theme.semanticColors.background.fill};
+  }
 `;
 
-const Title = styled.p`
+interface TitleProps {
+  selected?: boolean;
+}
+
+const Title = styled.p<TitleProps>`
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.375rem;
-  color: ${theme.semanticColors.text.default};
   margin: 0px;
   text-align: left;
+  color: ${({ selected, theme }) =>
+    selected ? theme.semanticColors.text.default : theme.semanticColors.text.sub};
 `;
 
 const SelectedTab = styled.div`
@@ -50,15 +58,15 @@ interface TabProps {
 const Tab = ({ active, onSelect }: TabProps) => (
   <Wrapper>
     <Button onClick={() => onSelect('explain')}>
-      <Title>상품설명</Title>
+      <Title selected={active === 'explain'}>상품설명</Title>
       {active === 'explain' && <SelectedTab />}
     </Button>
     <Button onClick={() => onSelect('review')}>
-      <Title>선물후기</Title>
+      <Title selected={active === 'review'}>선물후기</Title>
       {active === 'review' && <SelectedTab />}
     </Button>
     <Button onClick={() => onSelect('detail')}>
-      <Title>상세정보</Title>
+      <Title selected={active === 'detail'}>상세정보</Title>
       {active === 'detail' && <SelectedTab />}
     </Button>
   </Wrapper>
