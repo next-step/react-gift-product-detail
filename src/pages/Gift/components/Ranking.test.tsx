@@ -2,6 +2,9 @@ import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/re
 import Ranking from "@/pages/Gift/components/Ranking";
 import { TestWrapper } from "@/tests/TestWrapper";
 import theme from "@/styles/theme/theme";
+import { productsRankingMockData } from "@/mocks/data/productsRankingMockData";
+import { http, HttpResponse } from "msw";
+import { server } from "@/mocks/server";
 
 // 테스트 시나리오 흐름
 // Given: 사용자가 로그인 페이지에 접속했을 때 이메일, 비밀번호 입력 창과 로그인 버튼을 본다.
@@ -26,9 +29,11 @@ describe("Ranking 단위 테스트", () => {
     // Then: 실시간 급상승 선물 랭킹이 렌더링되어야 한다.
     expect(screen.getByText("실시간 급상승 선물랭킹")).toBeInTheDocument();
 
-    // 랭킹 아이템들이 렌더링되는지 확인 (여러 개이므로 getAllByTestId 사용)
+    // 랭킹 아이템들이 렌더링되는지 확인
     await waitFor(() => {
       const rankingItems = screen.getAllByTestId("ranking-list-item");
+      expect(rankingItems[0]).toHaveTextContent(productsRankingMockData[0].name);
+      expect(rankingItems[0]).toHaveTextContent(productsRankingMockData[0].brandInfo.name);
       expect(rankingItems.length).toBeGreaterThan(0);
     });
   });
@@ -99,5 +104,23 @@ describe("Ranking 단위 테스트", () => {
 
     // Then: 실시간 선물 랭킹 목록이 추가로 렌더링되어야 한다 ( 기본 6개 )
     expect(screen.getAllByTestId("ranking-list-item").length).toBeGreaterThan(6);
+  });
+
+  test("상품이 없을 때 메시지 표시", async () => {
+    server.use(
+      http.get("*/products/ranking*", () => {
+        return HttpResponse.json({ data: [] });
+      }),
+    );
+
+    render(
+      <TestWrapper>
+        <Ranking />
+      </TestWrapper>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("상품이 없습니다.")).toBeInTheDocument();
+    });
   });
 });
