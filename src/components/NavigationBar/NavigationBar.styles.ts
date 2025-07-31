@@ -13,7 +13,8 @@ export const NavigationSection = styled.section`
   padding: 0 ${({ theme }) => theme.spacing[2]};
   box-sizing: border-box;
   z-index: ${({ theme }) => theme.zIndex.navigation};
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const SectionTitle = styled.h2`

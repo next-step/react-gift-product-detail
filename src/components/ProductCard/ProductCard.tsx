@@ -47,21 +47,30 @@ function ProductCard({
   };
 
   return (
-    <ProductCardContainer onClick={handleClick}>
+    <ProductCardContainer onClick={handleClick} data-testid="grid-card">
       {type === PRODUCT_GRID_TYPES.TRENDING_GIFTS && (
         <RankBadge isTopThree={index < 3}>{index + 1}</RankBadge>
       )}
-      <ProductImage src={imageURL} alt={name} />
+      <ProductImage src={imageURL} alt={name} data-testid="product-image" />
       <ProductInfo>
-        <Typography variant="label1Regular" as="p" color="text-sub">
+        <Typography
+          variant="label1Regular"
+          as="p"
+          color="text-sub"
+          data-testid="brand-name"
+        >
           {brandName}
         </Typography>
-        <Typography variant="label1Regular" as="h4">
+        <Typography variant="label1Regular" as="h4" data-testid="product-name">
           {name}
         </Typography>
       </ProductInfo>
       <ProductPrice>
-        <Typography variant="subtitle1Bold" as="span">
+        <Typography
+          variant="subtitle1Bold"
+          as="span"
+          data-testid="product-price"
+        >
           {sellingPrice.toLocaleString()}
         </Typography>{" "}
         원

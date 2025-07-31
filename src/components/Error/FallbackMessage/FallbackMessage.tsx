@@ -3,7 +3,7 @@ import { Typography } from "@/components/Typography/Typography";
 
 export function FallbackMessage({ message }: { message: string }) {
   return (
-    <ErrorContainer>
+    <ErrorContainer data-testid="error-message">
       <Typography variant="label1Regular" as="p">
         {message}
       </Typography>

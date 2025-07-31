@@ -23,14 +23,15 @@ interface ProductsGridPropsType {
 }
 
 function TrendingGiftsProductsGrid({ products }: ProductsGridPropsType) {
-  if (products.length === 0)
+  if (products.length === 0) {
     return (
       <EmptyProductContainer label={TRENDING_GIFTS_EMPTY_MESSAGES.NO_PRODUCT} />
     );
+  }
 
   return (
     <>
-      <ProductGridContainer>
+      <ProductGridContainer data-testid="grid">
         {products.map((product, idx) => (
           <ProductCard
             key={product.id}

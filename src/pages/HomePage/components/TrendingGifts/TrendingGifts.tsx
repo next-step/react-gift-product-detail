@@ -45,9 +45,13 @@ function TrendingGiftsContent() {
 
   return (
     <>
-      <TabsWrapper>
+      <TabsWrapper data-testid="main-tab">
         {TRENDING_GIFTS_TABS.map((el, idx) => (
-          <MainTabButton key={idx} onClick={() => setMainTabIdx(idx)}>
+          <MainTabButton
+            key={idx}
+            onClick={() => setMainTabIdx(idx)}
+            data-testid={`main-tab-${idx}`}
+          >
             <TabIconContainer isSelected={idx === mainTabIdx}>
               {el.ICON}
             </TabIconContainer>

@@ -1,10 +1,8 @@
 import { screen } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
-import { setupServer } from "msw/node";
 import { LOGIN_LABELS } from "../constants/labels";
 import { expect } from "vitest";
-
-const server = setupServer();
+import { server } from "@/setupTests";
 
 // UI 검증 헬퍼 함수들
 export const expectEmailField = () => {

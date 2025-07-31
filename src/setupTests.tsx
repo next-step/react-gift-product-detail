@@ -6,6 +6,7 @@ import { theme } from "@/styles/theme";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setupServer } from "msw/node";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,6 +15,17 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+export const server = setupServer();
+
+beforeEach(() => {
+  queryClient.clear();
+});
+beforeAll(() => server.listen());
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => server.close());
 
 export const renderWithTheme = (children: React.ReactNode) => {
   return render(
