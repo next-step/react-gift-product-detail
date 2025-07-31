@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 
+import { useProductSummaryByProductId } from "@/entities/gift/services/getProductSummaryByProductId";
+
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { cardTemplates } from "@/features/order/constants/cardTemplate";
 import {
@@ -10,7 +12,6 @@ import {
 } from "@/features/order/contexts/ReceiverContext";
 import { useOrder } from "@/features/order/hooks/useOrder";
 import { useCreateOrder } from "@/features/order/services/createOrder";
-import { useProductSummaryByProductId } from "@/entities/gift/services/getProductSummaryByProductId";
 import { LetterCard } from "@/features/order/ui/LetterCard";
 import { ProductInfo } from "@/features/order/ui/ProductInfo";
 import { ReceiverList } from "@/features/order/ui/ReceiverList";
@@ -19,6 +20,7 @@ import { ReceiverModal } from "@/features/order/ui/ReceiverModal";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 import { ModalProvider } from "@/shared/context/ModalContext";
+import { HTTPBoundary } from "@/shared/helpers/HTTPBoundary";
 import withProviders from "@/shared/helpers/withProviders";
 import { useModal } from "@/shared/hooks/useModal";
 import { Button } from "@/shared/ui";
@@ -30,6 +32,36 @@ import { VerticalSpacing } from "@/widgets/layouts/Spacing.styled";
 
 import * as Styles from "./OrderPage.styled";
 
+const ProductInfoSection = ({ productId }: { productId: number }) => {
+    const { data: product } = useProductSummaryByProductId(productId);
+
+    return (
+        <ProductInfo
+            imgSrc={product.imageURL}
+            productName={product.name}
+            brandName={product.brandName}
+            price={product.price}
+        />
+    );
+};
+
+const OrderButtonSection = ({ productId, onClick }: { productId: number; onClick: () => void }) => {
+    const { data: product } = useProductSummaryByProductId(productId);
+    const {
+        receivers: { receivers },
+    } = useReceiverContext();
+
+    const totalQuantity = useMemo(() => {
+        return receivers.reduce((total, receiver) => total + receiver.quantity, 0);
+    }, [receivers]);
+
+    return (
+        <Styles.OrderButton onClick={onClick}>
+            {(product.price * totalQuantity).toLocaleString()}원 주문하기
+        </Styles.OrderButton>
+    );
+};
+
 function OrderPage() {
     const { id } = useParams();
 
@@ -39,7 +71,6 @@ function OrderPage() {
         receivers: { receivers },
     } = useReceiverContext();
     const { orderRefs, validationErrors, submit: validate } = useOrder();
-    const { isPending, data: product } = useProductSummaryByProductId(Number(id));
     const { request: createOrder } = useCreateOrder();
 
     const [selectedLetterCardId, setSelectedLetterCardId] = useState<number>(cardTemplates[0].id);
@@ -48,10 +79,6 @@ function OrderPage() {
         () => cardTemplates.find((cardTemplate) => cardTemplate.id === selectedLetterCardId),
         [selectedLetterCardId],
     );
-
-    const totalQuantity = useMemo(() => {
-        return receivers.reduce((total, receiver) => total + receiver.quantity, 0);
-    }, [receivers]);
 
     const onSubmitButtonClick = () => {
         validate();
@@ -141,24 +168,31 @@ function OrderPage() {
 
             <Styles.FieldSet>
                 <Styles.Legend>상품 정보</Styles.Legend>
-                {isPending || !product ? (
-                    <Spinner />
-                ) : (
-                    <ProductInfo
-                        imgSrc={product.imageURL}
-                        productName={product.name}
-                        brandName={product.brandName}
-                        price={product.price}
-                    />
-                )}
+                <HTTPBoundary
+                    onPending={<Spinner />}
+                    onError={() => <div>상품 정보를 불러올 수 없습니다.</div>}
+                >
+                    <ProductInfoSection productId={Number(id)} />
+                </HTTPBoundary>
             </Styles.FieldSet>
 
             <VerticalSpacing size="60px" />
 
             {createPortal(
-                <Styles.OrderButton onClick={() => onSubmitButtonClick()}>
-                    {product && (product.price * totalQuantity).toLocaleString()}원 주문하기
-                </Styles.OrderButton>,
+                <HTTPBoundary
+                    onPending={
+                        <Styles.OrderButton onClick={() => onSubmitButtonClick()}>
+                            주문하기
+                        </Styles.OrderButton>
+                    }
+                    onError={() => (
+                        <Styles.OrderButton onClick={() => onSubmitButtonClick()}>
+                            주문하기
+                        </Styles.OrderButton>
+                    )}
+                >
+                    <OrderButtonSection productId={Number(id)} onClick={onSubmitButtonClick} />
+                </HTTPBoundary>,
                 document.body as HTMLElement,
             )}
         </Styles.Container>

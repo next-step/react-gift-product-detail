@@ -1,26 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useRankingGifts } from "@/entities/gift/services/getRankingGifts";
 import { GiftCard, GiftCardGrid } from "@/entities/gift/ui";
 
-import { useRankingGifts } from "@/entities/gift/services/getRankingGifts";
-
+import { HTTPBoundary } from "@/shared/helpers/HTTPBoundary";
 import { Button } from "@/shared/ui";
 import { Spinner } from "@/shared/ui/Spinner.styled";
 
-export const RankingGifts = () => {
+const RankingGiftsContent = () => {
     const navigate = useNavigate();
-
     const [showAll, setShowAll] = useState<boolean>(false);
-    const { isPending, data } = useRankingGifts();
-
-    if (isPending) {
-        return (
-            <GiftCardGrid>
-                <Spinner size="40px" borderWidth="4px" color="#000" />
-            </GiftCardGrid>
-        );
-    }
+    const { data } = useRankingGifts();
 
     if (!data || data.length === 0) {
         return <GiftCardGrid>상품이 없습니다</GiftCardGrid>;
@@ -42,7 +33,7 @@ export const RankingGifts = () => {
                             imageURL={gift.imageURL}
                             price={gift.price}
                             brandInfo={gift.brandInfo}
-                            onClick={() => navigate(`/order/${gift.id}`)}
+                            onClick={() => navigate(`/product/${gift.id}`)}
                         />
                     );
                 })}
@@ -61,5 +52,20 @@ export const RankingGifts = () => {
                 </div>
             )}
         </div>
+    );
+};
+
+export const RankingGifts = () => {
+    return (
+        <HTTPBoundary
+            onPending={
+                <GiftCardGrid>
+                    <Spinner size="40px" borderWidth="4px" color="#000" />
+                </GiftCardGrid>
+            }
+            onError={() => <GiftCardGrid>에러 발생</GiftCardGrid>}
+        >
+            <RankingGiftsContent />
+        </HTTPBoundary>
     );
 };

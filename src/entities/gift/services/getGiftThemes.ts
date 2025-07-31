@@ -2,7 +2,7 @@ import { api } from "@/app/lib/api";
 
 import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export type GetThemesResponseBody = Array<{
     themeId: number;
@@ -16,14 +16,13 @@ export async function getGiftThemes() {
 }
 
 export const useGiftThemes = () => {
-    const { isPending, data, error, refetch } = useQuery({
+    const { data, error, refetch } = useSuspenseQuery({
         queryKey: GIFT_QUERY_KEYS.GIFT_THEMES(),
         queryFn: getGiftThemes,
     });
 
     return {
-        isPending,
-        data: data || null,
+        data,
         error,
         request: refetch,
     };

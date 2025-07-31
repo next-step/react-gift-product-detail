@@ -1,12 +1,8 @@
-import { useNavigate } from "react-router-dom";
-
-import { isAxiosError } from "axios";
-
 import { api } from "@/app/lib/api";
 
 import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export interface GetThemeInfoResponseBody {
     themeId: number;
@@ -24,24 +20,13 @@ export async function getGiftThemeInfo(themeId?: number) {
 }
 
 export const useGetGiftThemeInfo = (themeId: number) => {
-    const navigate = useNavigate();
-
-    const { isPending, data, error, refetch } = useQuery({
+    const { data, error, refetch } = useSuspenseQuery({
         queryKey: GIFT_QUERY_KEYS.GIFT_THEME_INFO(themeId),
         queryFn: () => getGiftThemeInfo(themeId),
-        enabled: Boolean(themeId),
-        retry: (failureCount, error) => {
-            if (isAxiosError(error) && error.response?.status === 404) {
-                navigate("/");
-                return false;
-            }
-            return failureCount < 3;
-        },
     });
 
     return {
-        isPending,
-        data: data || null,
+        data,
         error,
         request: refetch,
     };

@@ -6,7 +6,7 @@ import { GIFT_QUERY_KEYS } from "@/entities/gift/services/_keys";
 
 import { useQueryParamState } from "@/shared/hooks/useQueryParamState";
 
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export type GetRankingGiftsResponseBody = Array<{
     id: number;
@@ -36,18 +36,16 @@ export const useRankingGifts = () => {
     const [targetType] = useQueryParamState<TargetGroupQuery>("targetType", "ALL");
     const [rankType] = useQueryParamState<RankTypeQuery>("rankType", "MANY_WISH");
 
-    const { isPending, data, error, refetch } = useQuery({
+    const { data, error, refetch } = useSuspenseQuery({
         queryKey: GIFT_QUERY_KEYS.RANKING_GIFT_BY_QUERY(
             targetType || "ALL",
             rankType || "MANY_WISH",
         ),
         queryFn: () => getRankingGifts(targetType || "ALL", rankType || "MANY_WISH"),
-        enabled: Boolean(targetType && rankType),
     });
 
     return {
-        isPending,
-        data: data || null,
+        data,
         error,
         request: refetch,
     };

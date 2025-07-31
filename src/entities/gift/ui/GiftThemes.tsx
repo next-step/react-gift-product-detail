@@ -3,23 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useGiftThemes } from "@/entities/gift/services/getGiftThemes";
 import { GiftCategoryGrid, GiftCategoryItem } from "@/entities/gift/ui";
 
+import { HTTPBoundary } from "@/shared/helpers/HTTPBoundary";
 import { Spinner } from "@/shared/ui/Spinner";
 
-export const GiftThemes = () => {
+const GiftThemesContent = () => {
     const navigate = useNavigate();
-    const { isPending, data, error } = useGiftThemes();
-
-    if (isPending) {
-        return (
-            <GiftCategoryGrid>
-                <Spinner size="40px" borderWidth="4px" color="#000" />
-            </GiftCategoryGrid>
-        );
-    }
-
-    if (error) {
-        return <GiftCategoryGrid>에러 발생</GiftCategoryGrid>;
-    }
+    const { data } = useGiftThemes();
 
     return (
         <GiftCategoryGrid>
@@ -34,5 +23,20 @@ export const GiftThemes = () => {
                 );
             })}
         </GiftCategoryGrid>
+    );
+};
+
+export const GiftThemes = () => {
+    return (
+        <HTTPBoundary
+            onPending={
+                <GiftCategoryGrid>
+                    <Spinner size="40px" borderWidth="4px" color="#000" />
+                </GiftCategoryGrid>
+            }
+            onError={() => <GiftCategoryGrid>에러 발생</GiftCategoryGrid>}
+        >
+            <GiftThemesContent />
+        </HTTPBoundary>
     );
 };
