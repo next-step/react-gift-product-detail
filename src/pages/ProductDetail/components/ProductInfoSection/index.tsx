@@ -17,7 +17,7 @@ const Margin = styled.div<{ height: string }>`
 const Fill = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${theme.semanticColors.background.fill};
+  background-color: ${theme.semanticColors.background.disabled};
 `;
 
 interface ProductInfoSectionProps {
