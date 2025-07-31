@@ -39,8 +39,13 @@ export const Login = () => {
     mutationFn: loginApi,
     // 로그인 성공 시: 사용자 정보 저장 및 리다이렉트
     onSuccess: ({ email, name, authToken }) => {
+      console.log('onSuccess called', { email, name, authToken })
       login({ email, name, authToken })
       navigate(from, { replace: true }) // * 히스토리 정리
+    },
+    // 로그인 실패 시: 에러 처리
+    onError: (error) => {
+      console.log('onError called', error)
     },
   })
 
