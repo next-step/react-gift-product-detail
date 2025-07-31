@@ -14,7 +14,7 @@ type ColorPath =
 
 type AsProp = keyof JSX.IntrinsicElements;
 
-interface TypographyProps<T extends AsProp = "span">
+export interface TypographyProps<T extends AsProp = "span">
   extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
   typo: TypographyKey;
