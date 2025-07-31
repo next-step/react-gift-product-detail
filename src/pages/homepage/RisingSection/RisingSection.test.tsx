@@ -142,4 +142,10 @@ describe("RisingSection 컴포넌트", () => {
     // Then
     expect(await screen.findByText("상품 상세 페이지")).toBeInTheDocument();
   });
+
+  // 디버깅용 임시 테스트 케이스 - 문제 해결 후 반드시 제거하세요!
+  it("debug env", () => {
+    console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
+    expect(true).toBe(true);
+  });
 });
