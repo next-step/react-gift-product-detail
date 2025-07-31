@@ -26,50 +26,100 @@ const renderWithProviders = (ui: React.ReactElement) => {
 };
 
 describe('실시간 급상승 선물랭킹 섹션', () => {
-  it('기본 필터(ALL + MANY_WISH) 상품들이 정상적으로 렌더링됨', async () => {
-    renderWithProviders(<RankingGroup />);
+  describe('기본 필터: ALL + MANY_WISH', () => {
+    it('해당 조건에 맞는 상품들이 렌더링된다.', async () => {
+      // Given: 컴포넌트가 초기 렌더링됨
+      renderWithProviders(<RankingGroup />);
+      await screen.findByText(/실시간 급상승 선물랭킹/i);
 
-    await screen.findByText(/실시간 급상승 선물랭킹/i);
+      // Then: 기본 필터 조건에 맞는 상품이 표시됨
+      expect(
+        await screen.findByText(text =>
+          text.includes('부드러운 고구마 라떼 케이크')
+        )
+      ).toBeInTheDocument();
 
-    expect(
+      expect(
+        await screen.findByText(text =>
+          text.includes('우유가득 생크림케이크 1호')
+        )
+      ).toBeInTheDocument();
+    });
+
+    it('기본 필터에 맞지 않는 상품들은 렌더링되지 않는다.', async () => {
+      renderWithProviders(<RankingGroup />);
+      await screen.findByText(/실시간 급상승 선물랭킹/i);
+
+      // Then: FEMALE 필터용 상품은 보이지 않아야 함
+      expect(
+        screen.queryByText(text => text.includes('맛초킹+치즈볼+콜라1.25L'))
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('성별 필터 변경: FEMALE', () => {
+    it('FEMALE 조건에 맞는 상품만 표시된다.', async () => {
+      // Given: 초기 상태로 컴포넌트 렌더링
+      renderWithProviders(<RankingGroup />);
+      await screen.findByText(/실시간 급상승 선물랭킹/i);
+
+      // When: FEMALE 필터 버튼 클릭
+      const femaleButton = screen.getByRole('button', { name: /여성이/i });
+      fireEvent.click(femaleButton);
+
+      // Then: FEMALE에 해당하는 상품이 표시됨
+      expect(
+        await screen.findByText(text =>
+          text.includes('맛초킹+치즈볼+콜라1.25L')
+        )
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('더보기/접기 기능', () => {
+    it('더보기 버튼 클릭 시 전체 상품이 표시된다.', async () => {
+      // Given: 기본 6개 상품이 렌더링된 상태
+      renderWithProviders(<RankingGroup />);
       await screen.findByText(text =>
         text.includes('부드러운 고구마 라떼 케이크')
-      )
-    ).toBeInTheDocument();
+      );
 
-    expect(
-      await screen.findByText(text =>
-        text.includes('우유가득 생크림케이크 1호')
-      )
-    ).toBeInTheDocument();
-  });
+      // When: 더보기 버튼 클릭
+      const moreButton = screen.getByRole('button', { name: /더보기/i });
+      fireEvent.click(moreButton);
 
-  it('성별 필터를 FEMALE로 변경 시 해당 상품만 렌더링됨', async () => {
-    renderWithProviders(<RankingGroup />);
-    const femaleButton = screen.getByRole('button', { name: /여성이/i });
-    fireEvent.click(femaleButton);
-
-    expect(
-      await screen.findByText(text => text.includes('맛초킹+치즈볼+콜라1.25L'))
-    ).toBeInTheDocument();
-  });
-
-  it('더보기 버튼 클릭 시 전체 상품이 렌더링됨', async () => {
-    renderWithProviders(<RankingGroup />);
-
-    await screen.findByText(text =>
-      text.includes('부드러운 고구마 라떼 케이크')
-    );
-
-    const moreButton = screen.getByRole('button', { name: /더보기/i });
-    fireEvent.click(moreButton);
-
-    expect(
-      await screen.findByText(text =>
-        text.includes(
-          '마이넘버원 초코생크림 조각케이크+마이넘버원 고구마 조각케이크 +아이스 아메리카노 2잔'
+      // Then: 7번째 상품이 나타남
+      expect(
+        await screen.findByText(text =>
+          text.includes(
+            '마이넘버원 초코생크림 조각케이크+마이넘버원 고구마 조각케이크 +아이스 아메리카노 2잔'
+          )
         )
-      )
-    ).toBeInTheDocument();
+      ).toBeInTheDocument();
+    });
+
+    it('접기 버튼 클릭 시 다시 6개만 표시된다.', async () => {
+      renderWithProviders(<RankingGroup />);
+      await screen.findByText(text =>
+        text.includes('부드러운 고구마 라떼 케이크')
+      );
+
+      const moreButton = screen.getByRole('button', { name: /더보기/i });
+      fireEvent.click(moreButton);
+
+      const collapseButton = await screen.findByRole('button', {
+        name: /접기/i,
+      });
+      fireEvent.click(collapseButton);
+
+      // Then: 7번째 상품은 사라짐
+      expect(
+        screen.queryByText(text =>
+          text.includes(
+            '마이넘버원 초코생크림 조각케이크+마이넘버원 고구마 조각케이크 +아이스 아메리카노 2잔'
+          )
+        )
+      ).not.toBeInTheDocument();
+    });
   });
 });
