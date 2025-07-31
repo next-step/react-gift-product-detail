@@ -1,4 +1,26 @@
 export const mockRankingProducts = [
+  // 'FEMALE' 필터용 데이터
+  {
+    id: 9,
+    name: '여성을 위한 립스틱',
+    brandInfo: { name: '뷰티 브랜드' },
+    price: { sellingPrice: 45000 },
+    imageURL: 'url9',
+    gender: 'FEMALE',
+    action: 'MANY_WISH',
+  },
+
+  // 'MANY_RECEIVE' 필터용 데이터
+  {
+    id: 10349024,
+    name: '5만원권',
+    brandInfo: { name: '성심당' },
+    price: { sellingPrice: 50000 },
+    imageURL: 'url_sungsimdang',
+    gender: 'ALL',
+    action: 'MANY_RECEIVE',
+  },
+
   // 기본 'ALL', 'MANY_WISH' 데이터
   {
     id: 11477185,
@@ -70,76 +92,16 @@ export const mockRankingProducts = [
     gender: 'ALL',
     action: 'MANY_WISH',
   },
+
+  // 'MALE', 'MANY_WISH_RECEIVE' 데이터
   {
-    id: 11527063,
-    name: '떠먹는 화이트 스초생',
-    price: { sellingPrice: 7200 },
+    id: 11430963,
+    name: '행운 가득 복 케이크',
+    price: { sellingPrice: 28500 },
     imageURL:
-      'https://st.kakaocdn.net/product/gift/product/20250123142412_b3b0a3e8c2e74f928aa5e1531d7d5da4.jpg',
-    brandInfo: { name: '투썸플레이스' },
-    gender: 'ALL',
-    action: 'MANY_WISH',
-  },
-  {
-    id: 10795494,
-    name: '도너츠 6개입',
-    price: { sellingPrice: 11400 },
-    imageURL:
-      'https://st.kakaocdn.net/product/gift/product/20241014112403_bad0f28b6c814a16aad4bab2d3596fa7.jpg',
-    brandInfo: { name: '던킨' },
-    gender: 'ALL',
-    action: 'MANY_WISH',
-  },
-  {
-    id: 10994421,
-    name: '춘식이와 파티파티 케이크',
-    price: { sellingPrice: 27000 },
-    imageURL:
-      'https://st.kakaocdn.net/product/gift/product/20240130160541_9159d29e4af54139bc7ad4da1e588460.jpg',
+      'https://st.kakaocdn.net/product/gift/product/20250401142101_8423c355b7c94bd49464ec91fc30aeaf.jpg',
     brandInfo: { name: '파리바게뜨' },
-    gender: 'ALL',
-    action: 'MANY_WISH',
-  },
-  {
-    id: 11527042,
-    name: '떠먹는 티라미수',
-    price: { sellingPrice: 6800 },
-    imageURL:
-      'https://st.kakaocdn.net/product/gift/product/20250311111113_d22947f1c95042fcb6c6e7ecd2b5f213.jpg',
-    brandInfo: { name: '투썸플레이스' },
-    gender: 'ALL',
-    action: 'MANY_WISH',
-  },
-  {
-    id: 11527228,
-    name: '카페라떼 R',
-    price: { sellingPrice: 5200 },
-    imageURL:
-      'https://st.kakaocdn.net/product/gift/product/20231005101943_5dad54f5a2a14663b704f91faa5f75ac.jpg',
-    brandInfo: { name: '투썸플레이스' },
-    gender: 'ALL',
-    action: 'MANY_WISH',
-  },
-
-  // '여성' 필터용 데이터
-  {
-    id: 9,
-    name: '여성을 위한 립스틱',
-    brandInfo: { name: '뷰티 브랜드' },
-    price: { sellingPrice: 45000 },
-    imageURL: 'url9',
-    gender: 'FEMALE',
-    action: 'MANY_WISH',
-  },
-
-  // '많이 받은' 필터용 데이터
-  {
-    id: 10349024,
-    name: '5만원권',
-    brandInfo: { name: '성심당' },
-    price: { sellingPrice: 50000 },
-    imageURL: 'url_sungsimdang',
-    gender: 'ALL',
-    action: 'MANY_RECEIVE',
+    gender: 'MALE',
+    action: 'MANY_WISH_RECEIVE',
   },
 ];

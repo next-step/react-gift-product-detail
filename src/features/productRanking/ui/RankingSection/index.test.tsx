@@ -1,5 +1,3 @@
-// src/widgets/ranking-section/ui/RankingSection.test.tsx
-
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -38,29 +36,31 @@ describe('<RankingSection />', () => {
 
     const firstItem = await screen.findByText('스트로베리 요거트 생크림');
     expect(firstItem).toBeInTheDocument();
-
     expect(screen.getByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
-    expect(screen.getByText('스트로베리 요거트 생크림')).toBeInTheDocument();
+
+    // gender와 action 필터의 유효성을 자동 검사하게함 (Mock데이터 배열 인덱스 순서대로 불러오는데 가장 위에 정의해둠)
     expect(screen.queryByText('여성을 위한 립스틱')).not.toBeInTheDocument();
+    expect(screen.queryByText('5만원권')).not.toBeInTheDocument();
   });
 
-  it("'여성' 필터 버튼을 클릭하면, 여성 상품 랭킹이 표시되어야 한다.", async () => {
+  it("'MALE'과 'MANY_WISH_RECEIVE' 필터를 순차적으로 적용하면 해당하는 상품만 표시되어야 한다.", async () => {
     const user = userEvent.setup();
 
-    // Given - 기본 상품 데이터가 화면에 렌더링된 상태이다.
+    // Given - 기본 상품 데이터가 렌더링된 상태
     renderWithProviders(<RankingSection />);
     await screen.findByText('스트로베리 요거트 생크림');
 
-    // When - '여성이'라는 필터 버튼을 클릭했을 때
-    const femaleFilterButton = screen.getByText('여성이');
-    await user.click(femaleFilterButton);
+    // When - 'MALE' 버튼과 'MANY_WISH_RECEIVE' 버튼을 클릭한다.
+    await user.click(screen.getByText('남성이'));
+    await user.click(screen.getByText('위시로 받은'));
 
-    // Then - 여성 필터에 해당하는 새로운 데이터가 화면에 나타나야 함
-    const femaleProduct = await screen.findByText('여성을 위한 립스틱');
-    expect(femaleProduct).toBeInTheDocument();
+    // Then - 'MALE'이면서 'MANY_WISH_RECEIVE' 상품이 표시되는지 확인
+    const targetProduct = await screen.findByText('행운 가득 복 케이크');
+    expect(targetProduct).toBeInTheDocument();
 
-    // 기존에 있던 기본 데이터는 더 이상 보이지 않는지 확인한다.
-    expect(screen.queryByText('스트로베리 요거트 생크림')).not.toBeInTheDocument();
+    // Then - 다른 상품들은 화면에 보이지 않는지 확인
+    expect(screen.queryByText('5만원권')).not.toBeInTheDocument();
+    expect(screen.queryByText('여성을 위한 립스틱')).not.toBeInTheDocument();
   });
 
   it("'더보기'와 '접기' 버튼이 올바르게 동작해야 한다.", async () => {
