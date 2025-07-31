@@ -5,8 +5,9 @@ import { useProduct } from '@/hooks/useProduct';
 import ProductHeader from '@/components/product/ProductHeader';
 import ProductTabs from '@/components/product/ProductTabs';
 import ProductWishOrderFooter from '@/components/product/ProductWishOrderFooter';
-import Spinner from '@/components/common/Spinner';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
+import PageErrorFallback from '@/components/common/PageErrorFallback';
+import ComponentFallback from '@/components/common/ComponentFallback';
 
 const PageWrapper = styled.div`
   padding-bottom: 50px;
@@ -25,7 +26,7 @@ const ProductDetailContent = () => {
     <PageWrapper>
       <TopWrapper>{product && <ProductHeader product={product} />}</TopWrapper>
 
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<ComponentFallback />}>
         <ProductTabs productId={parsedId} />
       </Suspense>
 
@@ -35,8 +36,8 @@ const ProductDetailContent = () => {
 };
 
 const ProductDetailPage = () => (
-  <ErrorBoundary fallback={<p>페이지 로딩 중 문제가 발생했습니다.</p>}>
-    <Suspense fallback={<Spinner />}>
+  <ErrorBoundary fallback={<PageErrorFallback />}>
+    <Suspense fallback={<ComponentFallback />}>
       <ProductDetailContent />
     </Suspense>
   </ErrorBoundary>

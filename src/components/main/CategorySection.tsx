@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Spinner from '@/components/common/Spinner';
 import { ROUTE } from '@/constants/routes';
 import { useNavigate } from 'react-router-dom';
 import { useThemes } from '@/hooks/useTheme';
@@ -50,20 +49,13 @@ const Label = styled.div`
 
 const CategorySection = () => {
   const navigate = useNavigate();
-  const { data: themes, isLoading, isError } = useThemes();
-
-  if (isLoading) {
-    return <Spinner />;
-  }
-  if (isError || !themes || themes.length === 0) {
-    return null;
-  }
+  const { data: themes } = useThemes();
 
   return (
     <SectionWrapper>
       <Title>선물 테마</Title>
       <Grid>
-        {themes.map(({ themeId, name, image }) => (
+        {themes?.map(({ themeId, name, image }) => (
           <Item key={themeId} onClick={() => navigate(ROUTE.THEME(themeId))}>
             <Image src={image} alt={name} />
             <Label>{name}</Label>

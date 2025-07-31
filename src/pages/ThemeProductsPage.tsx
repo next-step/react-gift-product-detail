@@ -1,13 +1,15 @@
-import { useRef } from 'react';
-import { useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
 import Spinner from '@/components/common/Spinner';
 import { useThemeDetail } from '@/hooks/useTheme';
 import { useThemeProductsInfinite } from '@/hooks/useProduct';
-import { toast } from 'react-toastify';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useUser } from '@/contexts/UserContext';
+import { Suspense } from 'react';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import PageErrorFallback from '@/components/common/PageErrorFallback';
+import ComponentFallback from '@/components/common/ComponentFallback';
 
 const Hero = styled.section<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -75,28 +77,16 @@ const EmptyMessage = styled.div`
   color: ${({ theme }) => theme.colors.semantic.textSub};
 `;
 
-const ThemeProductsPage = () => {
+const ThemeProductsContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const hasShownThemeError = useRef(false);
-  const hasShownProductError = useRef(false);
+  const { data: theme } = useThemeDetail(Number(themeId));
 
-  const {
-    data: theme,
-    isLoading: isThemeLoading,
-    isError: isThemeError,
-  } = useThemeDetail(Number(themeId));
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading: isProductLoading,
-    isError: isProductError,
-  } = useThemeProductsInfinite(Number(themeId));
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsInfinite(
+    Number(themeId)
+  );
 
   const observerRef = useInfiniteScroll({
     hasNextPage,
@@ -104,25 +94,13 @@ const ThemeProductsPage = () => {
     fetchNextPage,
   });
 
-  if (isThemeError) {
-    if (!hasShownThemeError.current) {
-      toast.error('테마 정보를 불러오지 못했습니다.');
-      hasShownThemeError.current = true;
+  const handleProductClick = (productId: number) => {
+    if (user) {
+      navigate(ROUTE.PRODUCT(productId));
+    } else {
+      navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(productId) } });
     }
-    return <Navigate to={ROUTE.MAIN} replace />;
-  }
-
-  if (isProductError) {
-    if (!hasShownProductError.current) {
-      toast.error('상품 정보를 불러오지 못했습니다.');
-      hasShownProductError.current = true;
-    }
-    return <Navigate to={ROUTE.MAIN} replace />;
-  }
-
-  if (!themeId || isThemeLoading || isProductLoading) {
-    return <Spinner />;
-  }
+  };
 
   if (!theme) {
     return null;
@@ -144,16 +122,7 @@ const ThemeProductsPage = () => {
         <>
           <ProductGrid>
             {products.map((item) => (
-              <ProductCard
-                key={item.id}
-                onClick={() => {
-                  if (user) {
-                    navigate(ROUTE.PRODUCT(item.id));
-                  } else {
-                    navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(item.id) } });
-                  }
-                }}
-              >
+              <ProductCard key={item.id} onClick={() => handleProductClick(item.id)}>
                 <img src={item.imageURL} alt={item.name} />
                 <div className="brand">{item.brandInfo.name}</div>
                 <div className="name">{item.name}</div>
@@ -167,6 +136,16 @@ const ThemeProductsPage = () => {
         </>
       )}
     </>
+  );
+};
+
+const ThemeProductsPage = () => {
+  return (
+    <ErrorBoundary fallback={<PageErrorFallback />}>
+      <Suspense fallback={<ComponentFallback />}>
+        <ThemeProductsContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
