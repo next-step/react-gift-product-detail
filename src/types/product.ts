@@ -39,7 +39,7 @@ export interface Announcement {
 
 export interface ProductDetailData {
   description: string;
-  announcement: Announcement[];
+  announcements: Announcement[];
 }
 
 export interface ProductWishData {

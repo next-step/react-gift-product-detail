@@ -6,7 +6,7 @@ interface ProductReviewSectionProps {
 }
 const ProductReviewSection = ({ index }: ProductReviewSectionProps) => {
   const productReviewQuery = useQuery({
-    queryKey: ['productReviewData'],
+    queryKey: ['productReviewData', index],
     queryFn: () => requests.fetchProductReview(index),
   });
 

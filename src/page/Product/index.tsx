@@ -1,57 +1,38 @@
 import styled from '@emotion/styled';
-import { requests } from '@/api/requests';
-import { useQuery } from '@tanstack/react-query';
 import ProductReviewSection from './components/ProductReviewSection';
+import ProductDescriptionSection from './components/ProductDescriptionSection';
+import ProductDetailSection from './components/ProductDetailSection';
+import ProductWishButton from './components/productWishButton';
+import ProductSection from './components/ProductSection';
 import { useParamsIndex } from '@/hooks/useParamsIndex';
+import { useState } from 'react';
 
 const ProductPage = () => {
   const index = useParamsIndex();
-
-  const productQuery = useQuery({
-    queryKey: ['productData'],
-    queryFn: () => requests.fetchProduct(index),
-  });
-
-  const productDetailQuery = useQuery({
-    queryKey: ['productDetailData'],
-    queryFn: () => requests.fetchProductDetail(index),
-  });
-
-  const productWishQuery = useQuery({
-    queryKey: ['productWishData'],
-    queryFn: () => requests.fetchProductWish(index),
-  });
+  const [activeTab, setActiveTab] = useState('description');
   if (!index) return;
 
   return (
     <main>
-      <section>
-        <img src={productQuery.data?.imageURL} alt={productQuery.data?.name} />
-        <h3>{productQuery.data?.name}</h3>
-        <p>{productQuery.data?.price.basicPrice} 원</p>
-        <div>
-          <img
-            src={productQuery.data?.brandInfo.imageURL}
-            alt={productQuery.data?.brandInfo.name}
-          />
-          <p>{productQuery.data?.brandInfo.name}</p>
-        </div>
-      </section>
+      <ProductSection index={index} />
       <section>
         <div>
-          <div>
-            <button>
+          <ButtonWrapper>
+            <button onClick={() => setActiveTab('description')}>
               <p>상품설명</p>
             </button>
-            <button>
+            <button onClick={() => setActiveTab('review')}>
               <p>선물후기</p>
             </button>
-            <button>
+            <button onClick={() => setActiveTab('detail')}>
               <p>상세정보</p>
             </button>
-          </div>
-
-          <ProductReviewSection index={index} />
+          </ButtonWrapper>
+          
+          {activeTab === 'description' && <ProductDescriptionSection index={index} />}
+          {activeTab === 'review' && <ProductReviewSection index={index} />}
+          {activeTab === 'detail' && <ProductDetailSection index={index} />}
+          <ProductWishButton index={index} />
         </div>
       </section>
     </main>
@@ -59,3 +40,10 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+
+const ButtonWrapper = styled.div`
+  justify-content: flex-start;
+  justify-content: space-between;
+  position: relative;
+  border-bottom: 1px solid rgb(238, 239, 241);
+`;
