@@ -4,7 +4,14 @@ import ProductDescription from './ProductDescription';
 import ProductReviews from './ProductReviews';
 import ProductDetailInfo from './ProductDetailInfo';
 
-type TabType = 'description' | 'reviews' | 'productinfo';
+const productTabs = ['description', 'reviews', 'productinfo'] as const;
+type TabType = (typeof productTabs)[number];
+
+const TAB_MAP: Record<TabType, string> = {
+  description: '상품설명',
+  reviews: '선물후기',
+  productinfo: '상세정보',
+};
 
 interface ProductTabsProps {
   productId: number;
@@ -38,21 +45,11 @@ const ProductTabs = ({ productId }: ProductTabsProps) => {
   return (
     <>
       <TabsWrapper>
-        <TabButton
-          selected={selectedTab === 'description'}
-          onClick={() => setSelectedTab('description')}
-        >
-          상품설명
-        </TabButton>
-        <TabButton selected={selectedTab === 'reviews'} onClick={() => setSelectedTab('reviews')}>
-          선물후기
-        </TabButton>
-        <TabButton
-          selected={selectedTab === 'productinfo'}
-          onClick={() => setSelectedTab('productinfo')}
-        >
-          상세정보
-        </TabButton>
+        {productTabs.map((tab) => (
+          <TabButton key={tab} selected={selectedTab === tab} onClick={() => setSelectedTab(tab)}>
+            {TAB_MAP[tab]}
+          </TabButton>
+        ))}
       </TabsWrapper>
 
       <TabContent>
