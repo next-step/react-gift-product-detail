@@ -168,4 +168,4 @@
 - [x] `src/components/` 의 Form Field 와 Typography 에 대한 테스트코드 작성
 - [x] 로그인 페이지 테스트 코드 작성
 - [x] MSW 를 사용하여 실시간 급상승 선물랭킹 섹션의 테스트 코드 작성
-- [ ] github action 을 사용하여 PR 요청 및 Main 브랜치 머지 시 테스트 코드가 실행
+- [x] github action 을 사용하여 PR 요청 및 Main 브랜치 머지 시 테스트 코드가 실행
