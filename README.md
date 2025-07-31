@@ -100,6 +100,11 @@
 
 - [ ] 본인만의 기준으로 일관된 코드를 작성해주세요.
 - [ ] 기능 단위로 나누어 커밋을 해주세요.
+- [ ] 테스트 환경 설정하기
+  - [x] vitest, react-testing-library 명령어 활용하여 설치했습니다.(강의 내용 참고)
+  - [x] vite.config.ts에 test와 관련된 환경 설정을 강의 내용을 참고하여 추가했습니다.
+  - [x] package.json에는 test, test:dev와 관련하여 명령어를 등록해주엇습니다.
+  - [x] setupTests.ts를 src/tests 폴더 안에 만든다음 jest-dom을 전역 선언했습니다.
 - [ ] **`src/components`**에 있는 Form Field와 Typography에 대한 테스트 코드를 작성해주세요.
 - [ ] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성해주세요.
 - [ ] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성해주세요.
