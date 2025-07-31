@@ -29,8 +29,6 @@ const Theme = () => {
     rootMargin: '100px',
   });
 
-  
-
   return (
     <Layout>
       <NavigationBar />

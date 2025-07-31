@@ -24,8 +24,6 @@ const ProductOrder = () => {
   const [message, setMessage] = useState('생일 축하해!');
   const [messageCardId, setMessageCardId] = useState('default-card');
 
-  
-
   return (
     <>
       <NavigationBar />

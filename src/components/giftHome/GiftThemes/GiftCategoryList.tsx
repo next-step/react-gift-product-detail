@@ -7,7 +7,6 @@ import useGiftThemes from '@/hooks/useGiftThemes';
 const GiftCategoryList = () => {
   const { categories } = useGiftThemes();
   const navigate = useNavigate();
-
   return (
     <Layout>
       <Text size="title1" weight="bold">
