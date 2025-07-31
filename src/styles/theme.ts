@@ -7,6 +7,7 @@ export const theme = {
   zIndex: {
     base: 1,
     cardSelector: 100,
+    orderButton: 100,
     modal: 9999,
   },
 };

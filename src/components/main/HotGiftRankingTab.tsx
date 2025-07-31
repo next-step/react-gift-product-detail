@@ -1,4 +1,4 @@
-import type { RankingRankType } from "@/api/product/get-ranking-products";
+import type { RankingRankType } from "@/api/product/types";
 import { TAB_DATA } from "@/constants";
 import styled from "@emotion/styled";
 

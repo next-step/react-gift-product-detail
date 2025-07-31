@@ -14,18 +14,27 @@ export const useRouter = () => {
     navigate(ROUTE_PATH.GO_BACK);
   }, [navigate]);
 
+  const goProductDetail = useCallback(
+    (id: number) => {
+      navigate(ROUTE_PATH.PRODUCT.replace(":id", id.toString()));
+    },
+    [navigate],
+  );
+
   const goOrderPage = useCallback(
     (id: number) => {
       navigate(ROUTE_PATH.ORDER.replace(":id", id.toString()));
     },
     [navigate],
   );
+
   const goThemePage = useCallback(
     (id: number) => {
       navigate(ROUTE_PATH.THEME.replace(":id", id.toString()));
     },
     [navigate],
   );
+
   const goLoginPage = useCallback(
     ({ redirect }: { redirect?: boolean }) => {
       if (redirect) {
@@ -50,5 +59,6 @@ export const useRouter = () => {
     goThemePage,
     goLoginPage,
     goMyPage,
+    goProductDetail,
   };
 };

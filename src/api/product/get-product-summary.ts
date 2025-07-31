@@ -1,12 +1,5 @@
 import { api } from "@/api/api";
-
-interface ProductSummaryResponseBody {
-  id: number;
-  name: string;
-  brandName: string;
-  price: number;
-  imageURL: string;
-}
+import type { ProductSummaryResponseBody } from "@/api/product/types";
 
 export const getProductSummary = async (
   productId: number,

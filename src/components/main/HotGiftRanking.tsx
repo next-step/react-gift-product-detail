@@ -1,7 +1,5 @@
-import type {
-  RankingRankType,
-  RankingTargetType,
-} from "@/api/product/get-ranking-products";
+import type { RankingTargetType, RankingRankType } from "@/api/product/types";
+import { LoadingSpinner } from "@/components/common";
 import {
   HotGiftRankingGrid,
   HotGiftRankingTab,
@@ -10,7 +8,7 @@ import {
 import { TAB_DATA, TAGS } from "@/constants";
 import { parseUrlParam } from "@/utils";
 import styled from "@emotion/styled";
-import { useCallback } from "react";
+import { Suspense, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const HotGiftRankingSectionContainer = styled.section(({ theme }) => ({
@@ -64,26 +62,30 @@ export const HotGiftRanking = () => {
   );
 
   return (
-    <HotGiftRankingSectionContainer>
-      <HotGiftRankingSectionTitle>
-        실시간 급상승 선물랭킹
-      </HotGiftRankingSectionTitle>
-      <HotGiftRankingSectionTagContainer>
-        {TAGS.map(tag => (
-          <HotGiftRankingTag
-            key={tag.id}
-            isSelected={selectedTag === tag.id}
-            onClick={() => handleParamChange("targetType", tag.id)}
-            tagEmoji={tag.emoji}
-            tagText={tag.text}
-          />
-        ))}
-      </HotGiftRankingSectionTagContainer>
-      <HotGiftRankingTab
-        selectedTab={selectedTab}
-        onTabChange={tabId => handleParamChange("rankType", tabId)}
-      />
-      <HotGiftRankingGrid />
-    </HotGiftRankingSectionContainer>
+    <>
+      <HotGiftRankingSectionContainer>
+        <HotGiftRankingSectionTitle>
+          실시간 급상승 선물랭킹
+        </HotGiftRankingSectionTitle>
+        <HotGiftRankingSectionTagContainer>
+          {TAGS.map(tag => (
+            <HotGiftRankingTag
+              key={tag.id}
+              isSelected={selectedTag === tag.id}
+              onClick={() => handleParamChange("targetType", tag.id)}
+              tagEmoji={tag.emoji}
+              tagText={tag.text}
+            />
+          ))}
+        </HotGiftRankingSectionTagContainer>
+        <HotGiftRankingTab
+          selectedTab={selectedTab}
+          onTabChange={tabId => handleParamChange("rankType", tabId)}
+        />
+        <Suspense fallback={<LoadingSpinner />}>
+          <HotGiftRankingGrid />
+        </Suspense>
+      </HotGiftRankingSectionContainer>
+    </>
   );
 };

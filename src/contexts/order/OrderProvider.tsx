@@ -15,7 +15,6 @@ export const OrderProvider = ({ children }: OrderProviderProps) => {
     resolver: zodResolver(orderSchema),
     mode: "onChange",
     defaultValues: {
-      product: null,
       cardTemplate: null,
       message: "",
       senderName: userName,

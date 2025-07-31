@@ -1,4 +1,6 @@
-import { LoadingSpinner } from "@/components/common";
+import { BlankSpace, LoadingSpinner } from "@/components/common";
+import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { MainPageErrorFallback } from "@/components/error/MainPageErrorFallback";
 import {
   CardSelectorBar,
   OrderButton,
@@ -10,20 +12,25 @@ import {
 } from "@/components/order";
 import { OrderProvider } from "@/contexts/order/OrderProvider";
 import { OverlayProvider } from "@/contexts/overlay/OverlayProvider";
+import { useRouter } from "@/hooks/common/useRouter";
 import { useOrderPageLogic } from "@/hooks/order/useOrderPageLogic";
-import styled from "@emotion/styled";
-
-const BlankSpace = styled.div(({ theme }) => ({
-  display: "flex",
-  width: "100%",
-  padding: theme.spacing1,
-  backgroundColor: theme.color.gray[100],
-}));
+import { useProductSummary } from "@/hooks/products";
+import { queryKeys } from "@/lib/query-keys";
+import { queryClient } from "@/query-client";
+import { Suspense } from "react";
+import { useParams } from "react-router-dom";
 
 const OrderPageContent = () => {
-  const { order, handleOrderSubmit, isLoading } = useOrderPageLogic();
+  const { product, productId } = useProductSummary();
+  const { handleOrderSubmit, OrderLoading } = useOrderPageLogic();
 
-  if (isLoading) return <LoadingSpinner />;
+  if (OrderLoading) {
+    return <LoadingSpinner />;
+  }
+
+  const onOrderSubmit = () => {
+    handleOrderSubmit(productId, product?.name);
+  };
 
   return (
     <OverlayProvider>
@@ -35,17 +42,42 @@ const OrderPageContent = () => {
         <BlankSpace />
         <ReceiverInfoSection />
         <BlankSpace />
-        <OrderProductInfoSection product={order.product} />
-        <OrderButton onClick={handleOrderSubmit} />
+        <OrderProductInfoSection product={product} />
+        <OrderButton onClick={onOrderSubmit} productPrice={product?.price} />
       </OrderLayout>
     </OverlayProvider>
   );
 };
 
 export const OrderPage = () => {
+  const { goHomePage, goLoginPage } = useRouter();
+  const { id } = useParams<{ id: string }>();
+  const handleProductSummaryRetry = () => {
+    if (id) {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.products.summary(Number(id)),
+      });
+    }
+  };
   return (
     <OrderProvider>
-      <OrderPageContent />
+      <ErrorBoundary
+        fallback={reset => (
+          <MainPageErrorFallback
+            onRetry={() => {
+              handleProductSummaryRetry();
+              reset();
+            }}
+            title="상품 정보를 불러올 수 없습니다."
+          />
+        )}
+        onUnauthorized={() => goLoginPage({ redirect: true })}
+        onClientError={() => goHomePage()}
+      >
+        <Suspense fallback={<LoadingSpinner />}>
+          <OrderPageContent />
+        </Suspense>
+      </ErrorBoundary>
     </OrderProvider>
   );
 };

@@ -7,6 +7,7 @@ import {
   MyPage,
   NotFoundPage,
   OrderPage,
+  ProductDetailPage,
   ThemeProductPage,
 } from "@/pages";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
@@ -32,6 +33,7 @@ const Router = () => {
           </Route>
           <Route element={<PrivateRoute />}>
             <Route path={ROUTE_PATH.MY} element={<MyPage />} />
+            <Route path={ROUTE_PATH.PRODUCT} element={<ProductDetailPage />} />
             <Route path={ROUTE_PATH.ORDER} element={<OrderPage />} />
           </Route>
           <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />

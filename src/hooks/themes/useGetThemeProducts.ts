@@ -1,5 +1,5 @@
 import { useCallback, type RefObject } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import {
   getThemeProducts,
   type ThemeProductResponseBody,
@@ -9,8 +9,6 @@ import type { ProductType } from "@/types";
 import { queryKeys } from "@/lib/query-keys";
 interface UseThemeProductsResult {
   products: ProductType[];
-  loading: boolean;
-  error: Error | null;
   hasMore: boolean;
   inView: boolean;
   ref: RefObject<HTMLDivElement | null>;
@@ -26,14 +24,12 @@ export const useGetThemeProducts = (
 ): UseThemeProductsResult => {
   const {
     data,
-    error,
-    isError,
-    isLoading,
+
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
     refetch,
-  } = useInfiniteQuery({
+  } = useSuspenseInfiniteQuery({
     queryKey: queryKeys.themes.productList(themeId, limit),
     queryFn: async ({ pageParam = 0 }) => {
       return await getThemeProducts({
@@ -46,7 +42,6 @@ export const useGetThemeProducts = (
       return lastPage.hasMoreList ? lastPage.cursor : undefined;
     },
     initialPageParam: 0,
-    enabled: !!themeId,
   });
 
   const products = data?.pages.flatMap(page => page.list) ?? [];
@@ -68,8 +63,6 @@ export const useGetThemeProducts = (
 
   return {
     products,
-    loading: isLoading,
-    error: isError ? (error as Error) : null,
     hasMore: !!hasNextPage,
     inView,
     ref,

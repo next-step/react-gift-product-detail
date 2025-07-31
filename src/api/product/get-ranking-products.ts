@@ -1,13 +1,6 @@
 import { api } from "@/api/api";
-import { type TAB_DATA, type TAGS } from "@/constants";
+import type { GetRankingProductParams } from "@/api/product/types";
 import type { ProductType } from "@/types";
-
-export type RankingTargetType = (typeof TAGS)[number]["id"];
-export type RankingRankType = (typeof TAB_DATA)[number]["id"];
-interface GetRankingProductParams {
-  targetType: RankingTargetType;
-  rankType: RankingRankType;
-}
 
 export const getRankingProduct = async (
   params: GetRankingProductParams = {
