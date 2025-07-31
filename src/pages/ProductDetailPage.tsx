@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import Layout from '@/Layout'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import type { ProductAnnouncementItem } from '@/type'
 import {
   useProductQuery,
   useProductDetailQuery,
@@ -22,6 +23,8 @@ import {
   ReviewAuthor,
   ReviewContent,
   EmptyText,
+  InfoList,
+  InfoItem,
   StickyBar,
   LikeSection,
   LikeButton,
@@ -46,6 +49,53 @@ function HeartIcon({ filled }: { filled: boolean }) {
     </svg>
   )
 }
+function AnnouncementList({
+  items,
+}: {
+  items: ProductAnnouncementItem[] | Record<string, string> | undefined
+}) {
+  if (!items) {
+    return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
+  }
+
+  if (Array.isArray(items)) {
+    if (items.length === 0) {
+      return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
+    }
+
+    const sorted = items
+      .slice()
+      .sort((a, b) => a.displayOrder - b.displayOrder)
+
+    return (
+      <InfoList>
+        {sorted.map((item, idx) => (
+          <InfoItem key={idx}>
+            <strong>{item.name}</strong>
+            <div>{item.value}</div>
+          </InfoItem>
+        ))}
+      </InfoList>
+    )
+  }
+
+  const entries = Object.entries(items)
+  if (entries.length === 0) {
+    return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
+  }
+
+  return (
+    <InfoList>
+      {entries.map(([name, value], idx) => (
+        <InfoItem key={idx}>
+          <strong>{name}</strong>
+          <div>{value}</div>
+        </InfoItem>
+      ))}
+    </InfoList>
+  )
+}
+
 
 function DetailContent({ productId }: { productId: number }) {
   const navigate = useNavigate()
@@ -109,21 +159,7 @@ function DetailContent({ productId }: { productId: number }) {
           </div>
         )}
         {tab === 'details' && detail && (
-          <div>
-            {Array.isArray(detail.announcement) && (
-              <ul>
-                {detail.announcement
-                  .slice()
-                  .sort((a, b) => a.displayOrder - b.displayOrder)
-                  .map((item, idx) => (
-                    <li key={idx}>
-                      <strong>{item.name}</strong>
-                      <div>{item.value}</div>
-                    </li>
-                  ))}
-              </ul>
-            )}
-          </div>
+          <AnnouncementList items={detail.announcement} />
         )}
       </ContentArea>
 
