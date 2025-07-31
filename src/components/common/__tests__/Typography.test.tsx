@@ -81,7 +81,7 @@ describe("Typography", () => {
 
   it("존재하지 않는 색상 키 적용 테스트", async () => {
     await renderComponent({
-      color: "brand.kakao.wrong" as any,
+      color: "brand.kakao.wrong" as unknown as TypographyProps["color"],
       children: "Wrong Color",
     });
     const el = screen.getByText("Wrong Color");

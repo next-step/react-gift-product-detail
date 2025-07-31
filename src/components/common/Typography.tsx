@@ -27,10 +27,10 @@ const getColorFromTheme = (
   path: string,
 ): string => {
   const keys = path.split(".");
-  let result: any = theme.colors;
+  let result: unknown = theme.colors;
   for (const key of keys) {
     if (!result) break;
-    result = result[key];
+    result = (result as Record<string, unknown>)[key];
   }
 
   if (typeof result !== "string") {
