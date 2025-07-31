@@ -342,6 +342,15 @@ const Order = () => {
     name: "receivers",
   });
 
+  // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (isInitialized && !isLoggedIn) {
+      navigate("/login", {
+        state: { redirect: `/order/${productId}` },
+      });
+    }
+  }, [isLoggedIn, isInitialized, navigate, productId]);
+
   // 초기화가 완료되지 않았으면 로딩 상태 표시
   if (!isInitialized) {
     return (
@@ -352,15 +361,6 @@ const Order = () => {
       </Layout>
     );
   }
-
-  // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
-  useEffect(() => {
-    if (isInitialized && !isLoggedIn) {
-      navigate("/login", {
-        state: { redirect: `/order/${productId}` },
-      });
-    }
-  }, [isLoggedIn, isInitialized, navigate, productId]);
 
   // 로그인이 안 되어 있으면 로딩 상태 표시
   if (!isLoggedIn) {

@@ -26,7 +26,7 @@ export interface ProductDetail {
   description?: string;
   announcements?: AnnouncementItem[];
   // 실제 API 응답에 따라 추가 필드들이 있을 수 있음
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // 상품 주요 리뷰 API 응답 타입
