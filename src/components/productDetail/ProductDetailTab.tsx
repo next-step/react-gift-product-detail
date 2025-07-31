@@ -4,7 +4,6 @@ import {
   type ProductDetailTabId,
 } from "@/constants";
 import styled from "@emotion/styled";
-import { useState } from "react";
 
 const TabContainer = styled.div(({ theme }) => ({
   display: "flex",
@@ -42,10 +41,7 @@ export const ProductDetailTab = ({
   activeTab = PRODUCT_DETAIL_TABS.DESCRIPTION,
   onTabChange,
 }: ProductDetailTabProps) => {
-  const [selectedTab, setSelectedTab] = useState(activeTab);
-
   const handleTabClick = (tabId: ProductDetailTabId) => {
-    setSelectedTab(tabId);
     onTabChange?.(tabId);
   };
 
@@ -54,7 +50,7 @@ export const ProductDetailTab = ({
       {PRODUCT_DETAIL_TAB_LIST.map(tab => (
         <TabButton
           key={tab.id}
-          isActive={selectedTab === tab.id}
+          isActive={activeTab === tab.id}
           onClick={() => handleTabClick(tab.id)}
         >
           {tab.label}
