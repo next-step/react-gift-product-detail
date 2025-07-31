@@ -44,11 +44,13 @@ const ProductGrid = () => {
     {
       queryKey: ["products", "ranking", rankType, targetType],
       queryFn: () => {
-        const params = new URLSearchParams()
-        params.append("targetType", targetType)
-        params.append("rankType", rankType)
         return axiosInstance
-          .get<ProductsResponse>(`/api/products/ranking?${params.toString()}`)
+          .get<ProductsResponse>(`/api/products/ranking`, {
+            params: {
+              targetType,
+              rankType,
+            },
+          })
           .then((res) => res.data)
       },
       enabled: !!rankType && !!targetType,
