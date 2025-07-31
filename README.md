@@ -16,5 +16,6 @@
 - UnderlineInputField를 통해 Login 페이지 리팩토링
 - Typography 테스트 코드 작성
 - renderWithTheme 함수 제작후 리팩토링
+- UnderlineInputField 테스트 코드 작성
 
 ## 리뷰 반영
