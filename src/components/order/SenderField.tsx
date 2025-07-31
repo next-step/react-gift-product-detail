@@ -22,6 +22,7 @@ const SenderField = ({ register, error, showNote }: Props) => {
   return (
     <Section>
       <OrderField
+        id="sender"
         label="보내는 사람"
         placeholder="이름을 입력하세요."
         {...register}

@@ -132,6 +132,7 @@ const OrderPageContent = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <OrderField
+          id="sender"
           label="메시지"
           as="textarea"
           placeholder="축하 메시지를 입력하세요."
