@@ -1,7 +1,10 @@
+// src/pages/ThemeHero.tsx
+
 import React, { useEffect } from 'react';
+import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '@/hooks/useFetch';
-import type { UseFetchResult } from '@/hooks/useFetch';
+import axios, { AxiosError } from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 export interface ThemeInfo {
   themeId: number;
@@ -19,13 +22,19 @@ export function ThemeHero({ themeId }: ThemeHeroProps) {
   const navigate = useNavigate();
   const {
     data: info,
-    loading,
+    isLoading,
     error,
-  } = useFetch<{ data: ThemeInfo }>({ url: `/api/themes/${themeId}/info`, method: 'get' }, [
-    themeId,
-  ]);
+  } = useQuery<ThemeInfo, AxiosError>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () =>
+      axios
+        .get<{ data: ThemeInfo }>(`/api/themes/${themeId}/info`)
+        .then(res => res.data.data),
+    staleTime: 1000 * 60 * 5,   // 5분간 데이터 신선도로 간주
+    retry: false,               // 404 등 오류 시 재시도 비활성화
+  });
 
-  // Redirect on 404 or log other errors
+  // 404는 홈으로 리디렉션, 그 외는 콘솔에 로깅
   useEffect(() => {
     if (error) {
       if (error.response?.status === 404) {
@@ -36,25 +45,48 @@ export function ThemeHero({ themeId }: ThemeHeroProps) {
     }
   }, [error, navigate]);
 
-  if (loading) return <div>로딩 중…</div>;
-  if (error) return <div>정보를 불러오는 중 오류가 발생했습니다.</div>;
-  if (!info) return null;
+  if (isLoading) {
+    return <CenteredMessage>로딩 중…</CenteredMessage>;
+  }
+  if (error) {
+    return <CenteredMessage>정보를 불러오는 중 오류가 발생했습니다.</CenteredMessage>;
+  }
+  if (!info) {
+    return null;
+  }
 
-  const { title, description, backgroundColor } = info.data;
+  const { title, description, backgroundColor } = info;
 
   return (
-    <section
-      style={{
-        backgroundColor,
-        padding: '60px 20px',
-        color: '#fff',
-        textAlign: 'center',
-        borderRadius: 8,
-        marginBottom: 24,
-      }}
-    >
-      <h1 style={{ fontSize: '2.5rem', margin: '0 0 16px' }}>{title}</h1>
-      <p style={{ fontSize: '1.125rem', maxWidth: 600, margin: '0 auto' }}>{description}</p>
-    </section>
+    <HeroSection style={{ backgroundColor }}>
+      <HeroTitle>{title}</HeroTitle>
+      <HeroDescription>{description}</HeroDescription>
+    </HeroSection>
   );
 }
+
+// Styled components
+
+const CenteredMessage = styled.div`
+  padding: 2rem;
+  text-align: center;
+`;
+
+const HeroSection = styled.section`
+  padding: 60px 20px;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 24px;
+`;
+
+const HeroTitle = styled.h1`
+  font-size: 2.5rem;
+  margin: 0 0 16px;
+`;
+
+const HeroDescription = styled.p`
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+`;
