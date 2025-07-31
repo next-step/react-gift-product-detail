@@ -4,7 +4,7 @@ import RecipientFieldModalInputForm from "./ReceiverFieldModalInputForm";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { OrderFormType, ReceiverType } from "@/pages/Order/components/Order";
 import { useEffect, useRef, type ComponentPropsWithoutRef } from "react";
-import ErrorMsg from "./ErrorMsg";
+import ErrorMessage from "@/components/error/ErrorMessage";
 
 interface ReceiverFieldModalProps {
   closeModal: () => void;
@@ -12,7 +12,14 @@ interface ReceiverFieldModalProps {
 }
 
 const ReceiverFieldModal = ({ closeModal, initialRecipients: initialRecipientsProp }: ReceiverFieldModalProps) => {
-  const { control, trigger, setValue, getValues, clearErrors, formState: { errors } } = useFormContext<OrderFormType>();
+  const {
+    control,
+    trigger,
+    setValue,
+    getValues,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext<OrderFormType>();
   const { fields, append, remove } = useFieldArray({ control, name: "receivers" });
   const initialRecipients = useRef(initialRecipientsProp);
 
@@ -44,7 +51,7 @@ const ReceiverFieldModal = ({ closeModal, initialRecipients: initialRecipientsPr
           <Divider spacing="0.25rem" />
           <HelpMsg>* 최대 10명까지 추가할 수 있어요.</HelpMsg>
           <HelpMsg>* 받는 사람의 전화번호를 중복으로 입력할 수 없어요.</HelpMsg>
-          {errors.receivers && <ErrorMsg>{errors.receivers.message}</ErrorMsg>}
+          {errors.receivers && <ErrorMessage>{errors.receivers.message}</ErrorMessage>}
           <Divider spacing="0.5rem" />
           <AddBtn
             type="button"

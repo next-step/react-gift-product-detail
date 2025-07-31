@@ -1,21 +1,21 @@
 import styled from "@emotion/styled";
 import type { ComponentPropsWithoutRef } from "react";
-import ErrorMsg from "@/pages/Order/components/ErrorMsg";
+import ErrorMessage from "@/components/error/ErrorMessage";
 
-interface InputProps extends ComponentPropsWithoutRef<"input"> {
+interface OutlineInputFieldProps extends ComponentPropsWithoutRef<"input"> {
   errorMsg: string | undefined;
 }
 
-const Input = ({ errorMsg, ...props }: InputProps) => {
+const OutlineInputField = ({ errorMsg, ...props }: OutlineInputFieldProps) => {
   return (
     <Wrapper>
-      <Content errorMsg={errorMsg} {...props} />
-      {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
+      <Input errorMsg={errorMsg} {...props} />
+      {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
     </Wrapper>
   );
 };
 
-export default Input;
+export default OutlineInputField;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Content = styled.input<InputProps>`
+const Input = styled.input<OutlineInputFieldProps>`
   box-sizing: border-box;
   width: 100%;
   min-height: 2.75rem;

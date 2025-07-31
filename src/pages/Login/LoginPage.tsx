@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/authContext";
 import { showFetchErrorToast } from "@/utils/showFetchToast";
 import { useMutation } from "@tanstack/react-query";
 import postLogin from "@/apis/login/postLogin";
-import InputField from "./components/InputField";
+import UnderlineInputField from "@/components/form/UnderlineInputField";
 
 interface LoginData {
   email: string;
@@ -42,7 +42,7 @@ const LoginPage = () => {
       <Content>
         <Logo>kakao</Logo>
         <Form onSubmit={handleLoginSubmit}>
-          <InputField
+          <UnderlineInputField
             name="id"
             type="email"
             placeholder="이메일"
@@ -50,8 +50,9 @@ const LoginPage = () => {
             onBlur={onBlur}
             errorMsg={errorMsg.id}
             value={user.id}
+            spacing="2px"
           />
-          <InputField
+          <UnderlineInputField
             name="password"
             type="password"
             placeholder="비밀번호"
@@ -59,6 +60,7 @@ const LoginPage = () => {
             onBlur={onBlur}
             errorMsg={errorMsg.password}
             value={user.password}
+            spacing="2px"
           />
           <Divider />
           <Button fullWidth round type="submit" disabled={!isValidIdAndPassword}>

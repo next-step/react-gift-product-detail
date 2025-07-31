@@ -1,34 +1,33 @@
 import styled from "@emotion/styled";
 import type { ComponentPropsWithoutRef } from "react";
+import ErrorMessage from "@/components/error/ErrorMessage";
 
-interface InputFieldProps extends ComponentPropsWithoutRef<"input"> {
-  errorMsg: string | null;
+interface UnderlineInputFieldProps extends ComponentPropsWithoutRef<"input"> {
+  errorMsg?: string | null;
+  spacing?: string;
 }
 
-const InputField = ({ errorMsg, ...rest }: InputFieldProps) => {
+const UnderlineInputField = ({ errorMsg = null, spacing = "", ...rest }: UnderlineInputFieldProps) => {
   return (
-    <InputWrapper>
+    <Wrapper spacing={spacing}>
       <Input errorMsg={errorMsg} {...rest} />
-      {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
-    </InputWrapper>
+      {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+    </Wrapper>
   );
 };
 
-export default InputField;
+export default UnderlineInputField;
 
-const InputWrapper = styled.div`
+const Wrapper = styled.div<UnderlineInputFieldProps>`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.spacing1};
+  gap: ${({ spacing }) => spacing};
 `;
 
-type InputType = {
-  errorMsg: string | null;
-};
-const Input = styled.input<InputType>`
+const Input = styled.input<UnderlineInputFieldProps>`
   width: 100%;
   min-height: 2.75rem;
   border: none;
@@ -45,11 +44,4 @@ const Input = styled.input<InputType>`
   &:focus {
     border-bottom: 1px solid ${({ theme }) => theme.color.gray600};
   }
-`;
-const ErrorMsg = styled.p`
-  width: 100%;
-  text-align: left;
-  font: ${({ theme }) => theme.typography.label2Regular};
-  color: ${({ theme }) => theme.color.stateColor.critical};
-  min-height: 1rem;
 `;
