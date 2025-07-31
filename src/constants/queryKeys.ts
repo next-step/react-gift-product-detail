@@ -10,6 +10,7 @@ export const queryKeys = {
   // 'themes' 도메인
   themes: {
     all: ['themes'] as const,
+    lists: () => [...queryKeys.themes.all, 'list'] as const, // 추가
     details: () => [...queryKeys.themes.all, 'detail'] as const,
     detail: (id: number) => [...queryKeys.themes.details(), id] as const,
     productLists: () => [...queryKeys.themes.all, 'products'] as const,

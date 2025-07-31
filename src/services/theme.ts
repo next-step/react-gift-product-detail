@@ -1,6 +1,11 @@
 import { api } from './api';
 import type { Theme, ThemeProductListResponse } from '@/types/theme';
 
+export const getThemes = async () => {
+  const response = await api.get<{ data: Theme[] }>('/themes');
+  return response.data.data;
+};
+
 export const getThemeInfo = async (themeId: number): Promise<Theme> => {
   const response = await api.get<{ data: Theme }>(`/themes/${themeId}/info`);
   return response.data.data;

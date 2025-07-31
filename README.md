@@ -23,6 +23,6 @@
 - [x] useMutation을 사용한 데이터 변경 로직 리팩토링
   - [x] 로그인 (`services/login.ts`)
   - [x] 주문 생성 (`services/order.ts`)
-- [ ] 기존 코드 제거
-  - [ ] `hooks/useHTTP.ts` 삭제
-  - [ ] 컴포넌트 내 상태 관리 코드 정리
+- [x] 기존 코드 제거
+  - [x] `hooks/useHTTP.ts` 삭제
+  - [x] 컴포넌트 내 상태 관리 코드 정리

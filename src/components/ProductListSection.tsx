@@ -8,9 +8,9 @@ import { useProductsQuery } from '@/hooks/queries/useProductsQuery';
 
 // NOTE: subTab 값을 rankType으로 변환하는 로직 추가
 const subTabToRankType = {
-  WANT: 'mostWished',
-  GIVE: 'mostGifted',
-  WISH: 'mostReceived',
+  WANT: 'MANY_WISH',
+  GIVE: 'MANY_RECEIVE',
+  WISH: 'MANY_WISH_RECEIVE',
 };
 
 export function ProductListSection() {
