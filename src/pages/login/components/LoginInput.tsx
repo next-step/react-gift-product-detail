@@ -13,6 +13,13 @@ export default function LoginInput({
   onBlur,
   error,
 }: Props) {
+  const testId =
+    type === "email"
+      ? "email-error"
+      : type === "password"
+        ? "password-error"
+        : undefined;
+
   return (
     <InputWrapper>
       <StyledInput
@@ -21,8 +28,14 @@ export default function LoginInput({
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        aria-invalid={!!error}
+        aria-describedby={testId}
       />
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && (
+        <ErrorMessage id={testId} data-testid={testId}>
+          {error}
+        </ErrorMessage>
+      )}
     </InputWrapper>
   );
 }
