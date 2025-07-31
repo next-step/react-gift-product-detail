@@ -2,7 +2,7 @@ import { apiInstance } from "@/apis/instance";
 import API_ENDPOINTS from "@/constants/apiEndpoints";
 import type { Auth } from "@/contexts/authContext";
 
-interface PostLoginParams {
+export interface PostLoginParams {
   email: string;
   password: string;
 }

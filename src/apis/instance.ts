@@ -3,7 +3,7 @@ import { getCookieValue } from "@/utils/cookie";
 import type { AxiosInstance, CreateAxiosDefaults } from "axios";
 import axios from "axios";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const initInstance = (config: CreateAxiosDefaults): AxiosInstance => {
   const instance = axios.create({
