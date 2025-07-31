@@ -20,12 +20,16 @@ export function useProductWish(productId: string) {
 
     onMutate: async () => {
       await qc.cancelQueries({ queryKey: ["wish", productId] })
-      const prev = qc.getQueryData<WishResponse["data"]>(["wish", productId])
+
+      const prev = qc.getQueryData<WishResponse>(["wish", productId])
 
       if (prev) {
-        qc.setQueryData<WishResponse["data"]>(["wish", productId], {
-          wishCount: prev.wishCount + (prev.isWished ? -1 : 1),
-          isWished: !prev.isWished,
+        qc.setQueryData<WishResponse>(["wish", productId], {
+          ...prev,
+          data: {
+            wishCount: prev.data.wishCount + (prev.data.isWished ? -1 : 1),
+            isWished: !prev.data.isWished,
+          },
         })
       }
       return { prev }
