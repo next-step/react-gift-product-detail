@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 import CategoryCard from '@/components/CategoryCard';
-import { useThemesQuery } from '@/hooks/queries/useThemesQuery';
+import { useThemesQuery } from '@/queries/useThemesQuery';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import Spinner from '@/components/Spinner';
+import CustomErrorBoundary from '@/components/CustomErrorBoundary';
 
 const Section = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing5} 0;
@@ -40,15 +39,11 @@ export default function CategorySection() {
   return (
     <Section>
       <SectionTitle>선물 테마</SectionTitle>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} fallbackRender={() => null}>
-            <Suspense fallback={<Spinner />}>
-              <CategoryList />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
+      <CustomErrorBoundary>
+        <Suspense fallback={<Spinner />}>
+          <CategoryList />
+        </Suspense>
+      </CustomErrorBoundary>
     </Section>
   );
 }

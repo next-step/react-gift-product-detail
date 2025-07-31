@@ -15,11 +15,11 @@ import { orderSchema, type OrderFormData } from '@/utils/validateOrderSchema';
 import * as z from 'zod';
 import { toast } from 'react-toastify';
 import { AxiosError, HttpStatusCode } from 'axios';
-import { useAuth } from '@/hooks/service/authHooks';
-import { useOrderMutation, useProductSummaryQuery } from '@/hooks/queries/orderHooks';
+import { useAuth } from '@/hooks/useAuthHooks';
+import { useOrderMutation, useProductSummaryQuery } from '@/queries/useOrderHooks';
 import { Suspense } from 'react';
 import Spinner from '@/components/Spinner';
-import { ErrorBoundary } from 'react-error-boundary';
+import CustomErrorBoundary from '@/components/CustomErrorBoundary';
 
 type FormData = z.infer<typeof orderSchema>;
 
@@ -154,10 +154,10 @@ export default function SuspenseOrderPage() {
   }
 
   return (
-    <ErrorBoundary fallback={<p>에러가 발생했습니다. 다시 시도해주세요.</p>}>
+    <CustomErrorBoundary fallback={<p>에러가 발생했습니다. 다시 시도해주세요.</p>}>
       <Suspense fallback={<Spinner />}>
         <ProtectedOrderPage productId={productId} />
       </Suspense>
-    </ErrorBoundary>
+    </CustomErrorBoundary>
   );
 }

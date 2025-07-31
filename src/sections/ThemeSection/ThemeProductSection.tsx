@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { useThemeProductsQuery } from '@/hooks/queries/useThemesQuery';
+import { useThemeProductsQuery } from '@/queries/useThemesQuery';
 import { type ThemeProduct } from '@/apis/theme';
 
 interface ThemeProductSectionProps {
@@ -69,7 +69,7 @@ export default function ThemeProductSection({ themeId }: ThemeProductSectionProp
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsQuery(themeId);
 
   const handleClick = (id: number) => () => {
-    navigate(`/order/${id}`);
+    navigate(`/product/${id}`);
   };
 
   useEffect(() => {
