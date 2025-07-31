@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getGiftItemDetail } from '@/api/services/giftItem.service';
+import { getGiftItem } from '@/api/services/giftItem.service';
 import type { QueryKey } from '@/api/types/giftItem.dto';
 
 const Container = styled.div`
@@ -83,11 +83,11 @@ export const ProductInfo = () => {
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
   const { data } = useQuery({
-    queryKey: ['giftItemDetail', { id: parsedId }],
+    queryKey: ['giftItem', { id: parsedId }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { id } = queryKey[1];
       if (!id) throw new Error('id is required');
-      return getGiftItemDetail(id);
+      return getGiftItem(id);
     },
   });
 

@@ -31,7 +31,7 @@ const Btn = styled.button`
   cursor: pointer;
 `;
 
-const svgSize = 30;
+const SVG_SIZE = 30;
 
 export const TopNavBar = ({ title, mainPath }: TopNavBar) => {
   const url = useLocation();
@@ -45,7 +45,7 @@ export const TopNavBar = ({ title, mainPath }: TopNavBar) => {
           navigate(-1);
         }}
       >
-        <BackArrow width={svgSize} height={svgSize} fill="black" style={{ marginLeft: '10px' }} />
+        <BackArrow width={SVG_SIZE} height={SVG_SIZE} fill="black" style={{ marginLeft: '10px' }} />
       </Btn>
       <Btn
         onClick={() => {
@@ -67,7 +67,7 @@ export const TopNavBar = ({ title, mainPath }: TopNavBar) => {
           }
         }}
       >
-        <User width={svgSize} height={svgSize} fill="black" style={{ marginRight: '10px' }} />
+        <User width={SVG_SIZE} height={SVG_SIZE} fill="black" style={{ marginRight: '10px' }} />
       </Btn>
     </Container>
   );
