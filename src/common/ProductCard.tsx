@@ -3,15 +3,17 @@ import styled from '@emotion/styled';
 interface ProductCardProps {
   src: string;
   brandName: string;
+  productName: string;
   price: string;
   onClick?: () => void;
 }
 
-const ProductCard = ({ onClick, src, brandName, price }: ProductCardProps) => {
+const ProductCard = ({ onClick, src, brandName, productName, price }: ProductCardProps) => {
   return (
     <Card onClick={onClick}>
       <ProductImage src={src} alt={brandName} />
       <BrandName>{brandName}</BrandName>
+      <ProductName>{productName}</ProductName>
       <Price>{price}원</Price>
     </Card>
   );
@@ -36,6 +38,12 @@ const BrandName = styled.div`
   margin-top: 8px;
   font-size: 0.875rem;
   color: ${({ theme }) => theme.colors.textSub};
+`;
+
+const ProductName = styled.div`
+  margin-top: 4px;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.textDefault};
 `;
 
 const Price = styled.div`
