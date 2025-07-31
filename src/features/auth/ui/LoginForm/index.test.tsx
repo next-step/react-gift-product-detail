@@ -73,4 +73,24 @@ describe('<LoginForm />', () => {
     // 2. Then - 로그인 버튼이 활성화된다.
     expect(loginButton).toBeEnabled();
   });
+
+  it('유효한 폼 제출 시 login 함수가 올바른 인자와 함께 호출되어야 한다.', async () => {
+    const user = userEvent.setup();
+    renderWithRouter(<LoginForm />);
+
+    const emailInput = screen.getByPlaceholderText('이메일');
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const loginButton = screen.getByRole('button', { name: '로그인' });
+
+    // 1. Given - 유효한 값을 모두 입력한다.
+    await user.type(emailInput, 'test@kakao.com');
+    await user.type(passwordInput, '12345678');
+
+    // 2. When - 활성화된 로그인 버튼을 클릭한다.
+    await user.click(loginButton);
+
+    // 3. Then - 모킹된 login 함수가 올바른 인자들과 함께 호출되었는지 확인한다.
+    expect(mockLogin).toHaveBeenCalledTimes(1);
+    expect(mockLogin).toHaveBeenCalledWith('test@kakao.com', '12345678', expect.any(Function));
+  });
 });
