@@ -9,10 +9,7 @@ interface ThemeProduct {
   brandInfo: { name: string };
 }
 
-export function useFetchThemeProducts(
-  themeId: number,
-  limit: number = 10
-) {
+export function useFetchThemeProducts(themeId: number, limit: number = 10) {
   const [products, setProducts] = useState<ThemeProduct[]>([]);
   const [cursor, setCursor] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -25,12 +22,9 @@ export function useFetchThemeProducts(
     try {
       const res = await api.get<{
         data: { list: ThemeProduct[]; cursor: number; hasMoreList: boolean };
-      }>(
-        `/api/themes/${themeId}/products`,
-        { params: { cursor, limit } }
-      );
+      }>(`/api/themes/${themeId}/products`, { params: { cursor, limit } });
       const { list, cursor: nextCursor, hasMoreList } = res.data.data;
-      setProducts(prev => [...prev, ...list]);
+      setProducts((prev) => [...prev, ...list]);
       setCursor(nextCursor);
       setHasMore(hasMoreList);
     } catch (err) {
@@ -53,12 +47,12 @@ export function useFetchThemeProducts(
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         if (entries[0].isIntersecting) {
           fetchPage();
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '200px' },
     );
     if (observerRef.current) observer.observe(observerRef.current);
     return () => observer.disconnect();

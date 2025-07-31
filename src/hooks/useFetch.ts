@@ -14,7 +14,7 @@ export interface UseFetchResult<T> {
  */
 export function useFetch<T>(
   config: AxiosRequestConfig | string,
-  deps: any[] = []
+  deps: any[] = [],
 ): UseFetchResult<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -25,9 +25,7 @@ export function useFetch<T>(
     setError(null);
     try {
       const response =
-        typeof config === 'string'
-          ? await axios.get<T>(config)
-          : await axios.request<T>(config);
+        typeof config === 'string' ? await axios.get<T>(config) : await axios.request<T>(config);
       setData(response.data);
     } catch (err: any) {
       setError(err);
@@ -38,7 +36,7 @@ export function useFetch<T>(
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...deps]);
 
   return { data, loading, error };

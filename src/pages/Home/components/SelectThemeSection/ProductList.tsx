@@ -18,7 +18,7 @@ export const ProductList: React.FC<{ themeId: number }> = ({ themeId }) => {
   return (
     <>
       <Grid>
-        {products.map(p => (
+        {products.map((p) => (
           <ProductCard
             key={p.id}
             image={p.imageURL}

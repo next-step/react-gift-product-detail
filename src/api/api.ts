@@ -3,12 +3,12 @@ import { clearUserInfo } from '@/utils/userInfo';
 import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000', 
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000',
 });
 
 api.interceptors.response.use(
-  res => res,
-  err => {
+  (res) => res,
+  (err) => {
     const status = err.response?.status;
     const msg = err.response?.data?.message || err.message;
 
@@ -24,7 +24,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

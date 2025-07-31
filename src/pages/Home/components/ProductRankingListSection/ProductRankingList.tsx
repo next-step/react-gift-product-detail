@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate }        from 'react-router-dom';
-import styled                 from '@emotion/styled';
-import type { ProductData }   from '@/types/products';
+import { useNavigate } from 'react-router-dom';
+import styled from '@emotion/styled';
+import type { ProductData } from '@/types/products';
 import { RankingProductListItem } from '@/components/ProductListItem/Ranking';
-import { HorizontalSpacing }  from '@/components/common/Spacing/HorizontalSpacing';
-import { Typography }         from '@/components/common/Typography';
+import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
+import { Typography } from '@/components/common/Typography';
 
 interface Props {
   products: ProductData[];
@@ -12,7 +12,7 @@ interface Props {
 
 const ProductRankingList: React.FC<Props> = ({ products }) => {
   const [isMore, setIsMore] = useState(false);
-  const navigate            = useNavigate();
+  const navigate = useNavigate();
 
   const currentList = isMore ? products : products.slice(0, 6);
 
@@ -20,7 +20,7 @@ const ProductRankingList: React.FC<Props> = ({ products }) => {
     <Wrapper>
       <List>
         {currentList.map((p, idx) => (
-          <Item key={p.id} onClick={() => navigate(`/order/${p.id}`)}>
+          <Item key={p.id} onClick={() => navigate(`/products/${p.id}`)}>
             <RankingProductListItem
               rankingIndex={idx + 1}
               imageSrc={p.imageURL}
@@ -34,14 +34,10 @@ const ProductRankingList: React.FC<Props> = ({ products }) => {
 
       {products.length > 6 && (
         <>
-          <HorizontalSpacing size="spacing8" />
+          <HorizontalSpacing size='spacing8' />
           <ButtonWrapper>
             <ToggleButton onClick={() => setIsMore(!isMore)}>
-              <Typography
-                variant="label1Regular"
-                color="default"
-                textAlign="center"
-              >
+              <Typography variant='label1Regular' color='default' textAlign='center'>
                 {isMore ? '접기' : '더보기'}
               </Typography>
             </ToggleButton>
@@ -54,8 +50,12 @@ const ProductRankingList: React.FC<Props> = ({ products }) => {
 
 export default ProductRankingList;
 
-const Wrapper = styled.div`width: 100%;`;
-const Item    = styled.div`cursor: pointer;`;
+const Wrapper = styled.div`
+  width: 100%;
+`;
+const Item = styled.div`
+  cursor: pointer;
+`;
 
 const List = styled.div(({ theme }) => ({
   display: 'grid',
