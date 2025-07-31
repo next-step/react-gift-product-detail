@@ -29,10 +29,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Debug VITE_API_BASE_URL
-        run: npx vitest run --single-thread --test-name-pattern "^debug env$" || true
-        env:
-          CI: true
-
       - name: Run tests
-        run: npm test
+        run: VITE_API_BASE_URL='' npm test

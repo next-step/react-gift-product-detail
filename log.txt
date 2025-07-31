@@ -1,0 +1,3977 @@
+Run npm test
+
+> react-gift-login@0.0.0 test
+> vitest
+
+
+ RUN  v2.1.9 /home/runner/work/react-gift-product-detail/react-gift-product-detail
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 초기 렌더링 시 제목, 필터 버튼, 로딩 스피너가 표시된다
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET /undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다
+A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET /undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+ ✓ src/pages/orderpage/ReceiverFormItem.test.tsx (3 tests) 274ms
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다
+Error: AggregateError
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:63:19)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:536:35)
+    at ClientRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/http-request.js:127:14)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at MockHttpSocket.socketErrorListener (node:_http_client:504:5)
+    at MockHttpSocket.emit (node:events:536:35)
+    at MockHttpSocket.emit (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:160:12)
+    at Socket.<anonymous> (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:293:14) undefined
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다
+Error: AggregateError
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:63:19)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:536:35)
+    at ClientRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/http-request.js:127:14)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at MockHttpSocket.socketErrorListener (node:_http_client:504:5)
+    at MockHttpSocket.emit (node:events:536:35)
+    at MockHttpSocket.emit (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:160:12)
+    at Socket.<anonymous> (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:293:14) undefined
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다
+AxiosError: Network Error
+    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)
+    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)
+    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)
+    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)
+    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19) {
+  [stack]: 'AxiosError: Network Error\n' +
+    '    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)\n' +
+    '    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)\n' +
+    '    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)\n' +
+    '    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)\n' +
+    '    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n' +
+    '    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n' +
+    '    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)\n' +
+    '    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)\n' +
+    '    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)\n' +
+    '    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)\n' +
+    '    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19)',
+  message: 'Network Error',
+  name: 'AxiosError',
+  code: 'ERR_NETWORK',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch', [length]: 3 ],
+    transformRequest: [
+      <ref *1> [Function: transformRequest] {
+        [length]: 2,
+        [name]: 'transformRequest',
+        [prototype]: { [constructor]: [Circular *1] }
+      },
+      [length]: 1
+    ],
+    transformResponse: [
+      <ref *2> [Function: transformResponse] {
+        [length]: 1,
+        [name]: 'transformResponse',
+        [prototype]: { [constructor]: [Circular *2] }
+      },
+      [length]: 1
+    ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: {
+      FormData: <ref *3> [Function: FormData] {
+        [length]: 1,
+        [name]: 'FormData',
+        [prototype]: CombinedStream {
+          [constructor]: [Circular *3],
+          append: [Function],
+          _trackLength: [Function],
+          _lengthRetriever: [Function],
+          _multiPartHeader: [Function],
+          _getContentDisposition: [Function],
+          _getContentType: [Function],
+          _multiPartFooter: [Function],
+          _lastBoundary: [Function],
+          getHeaders: [Function],
+          setBoundary: [Function],
+          getBoundary: [Function],
+          getBuffer: [Function],
+          _generateBoundary: [Function],
+          getLengthSync: [Function],
+          hasKnownLength: [Function],
+          getLength: [Function],
+          submit: [Function],
+          _error: [Function],
+          toString: [Function],
+          _events: undefined,
+          _eventsCount: 0,
+          _maxListeners: undefined,
+          [Symbol(kCapture)]: false
+        },
+        [super_]: [Function: CombinedStream] {
+          [length]: 0,
+          [name]: 'CombinedStream',
+          [arguments]: null,
+          [caller]: null,
+          [prototype]: [Stream],
+          [super_]: [Function],
+          create: [Function],
+          isStreamLike: [Function]
+        },
+        LINE_BREAK: '\r\n',
+        DEFAULT_CONTENT_TYPE: 'application/octet-stream',
+        [Symbol(Symbol.toStringTag)]: 'FormData'
+      },
+      Blob: <ref *4> [class Blob] {
+        [length]: 0,
+        [name]: 'Blob',
+        [prototype]: {
+          [constructor]: [Circular *4],
+          slice: [Function],
+          size: [Getter],
+          type: [Getter],
+          [Symbol(Symbol.toStringTag)]: 'Blob'
+        }
+      }
+    },
+    validateStatus: <ref *5> [Function: validateStatus] {
+      [length]: 1,
+      [name]: 'validateStatus',
+      [prototype]: { [constructor]: [Circular *5] }
+    },
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': undefined,
+      [set]: [Getter/Setter],
+      [get]: [Getter/Setter],
+      [has]: [Getter/Setter],
+      [delete]: [Getter/Setter],
+      [clear]: [Getter/Setter],
+      [normalize]: [Getter/Setter],
+      [concat]: [Getter/Setter],
+      [toJSON]: [Getter/Setter],
+      [toString]: [Getter/Setter],
+      [getSetCookie]: [Getter/Setter],
+      [getContentType]: [Getter/Setter],
+      [setContentType]: [Getter/Setter],
+      [hasContentType]: [Getter/Setter],
+      [getContentLength]: [Getter/Setter],
+      [setContentLength]: [Getter/Setter],
+      [hasContentLength]: [Getter/Setter],
+      [getAccept]: [Getter/Setter],
+      [setAccept]: [Getter/Setter],
+      [hasAccept]: [Getter/Setter],
+      [getAcceptEncoding]: [Getter/Setter],
+      [setAcceptEncoding]: [Getter/Setter],
+      [hasAcceptEncoding]: [Getter/Setter],
+      [getUserAgent]: [Getter/Setter],
+      [setUserAgent]: [Getter/Setter],
+      [hasUserAgent]: [Getter/Setter],
+      [getAuthorization]: [Getter/Setter],
+      [setAuthorization]: [Getter/Setter],
+      [hasAuthorization]: [Getter/Setter],
+      [Symbol(Symbol.toStringTag)]: [Getter]
+    },
+    params: { targetType: 'ALL', rankType: 'MANY_WISH' },
+    method: 'get',
+    url: 'undefined/api/products/ranking',
+    allowAbsoluteUrls: true,
+    data: undefined
+  },
+  request: Proxy [
+    <ref *8> XMLHttpRequest {
+      [constructor]: <ref *6> [class XMLHttpRequest extends XMLHttpRequestEventTarget] {
+        [length]: 0,
+        [name]: 'XMLHttpRequest',
+        [prototype]: XMLHttpRequestEventTarget {
+          [constructor]: [Circular *6],
+          open: [Function],
+          setRequestHeader: [Function],
+          send: [Function],
+          abort: [Function],
+          getResponseHeader: [Function],
+          getAllResponseHeaders: [Function],
+          overrideMimeType: [Function],
+          onreadystatechange: [Getter/Setter],
+          readyState: [Getter],
+          timeout: [Getter/Setter],
+          withCredentials: [Getter/Setter],
+          upload: [Getter],
+          responseURL: [Getter],
+          status: [Getter],
+          statusText: [Getter],
+          responseType: [Getter/Setter],
+          response: [Getter],
+          responseText: [Getter],
+          responseXML: [Getter],
+          UNSENT: 0,
+          OPENED: 1,
+          HEADERS_RECEIVED: 2,
+          LOADING: 3,
+          DONE: 4,
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        UNSENT: 0,
+        OPENED: 1,
+        HEADERS_RECEIVED: 2,
+        LOADING: 3,
+        DONE: 4,
+        [Symbol(isPatchedModule)]: true
+      },
+      open: [Function: open] { [length]: 2, [name]: 'open' },
+      setRequestHeader: [Function: setRequestHeader] {
+        [length]: 2,
+        [name]: 'setRequestHeader'
+      },
+      send: [Function: send] { [length]: 0, [name]: 'send' },
+      abort: [Function: abort] { [length]: 0, [name]: 'abort' },
+      getResponseHeader: [Function: getResponseHeader] {
+        [length]: 1,
+        [name]: 'getResponseHeader'
+      },
+      getAllResponseHeaders: [Function: getAllResponseHeaders] {
+        [length]: 0,
+        [name]: 'getAllResponseHeaders'
+      },
+      overrideMimeType: [Function: overrideMimeType] {
+        [length]: 1,
+        [name]: 'overrideMimeType'
+      },
+      onreadystatechange: [Getter/Setter],
+      readyState: [Getter],
+      timeout: [Getter/Setter],
+      withCredentials: [Getter/Setter],
+      upload: Proxy [
+        XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        { set: [Function], get: [Function] }
+      ],
+      responseURL: [Getter],
+      status: [Getter],
+      statusText: [Getter],
+      responseType: [Getter/Setter],
+      response: [Getter],
+      responseText: [Getter],
+      responseXML: [Getter],
+      UNSENT: 0,
+      OPENED: 1,
+      HEADERS_RECEIVED: 2,
+      LOADING: 3,
+      DONE: 4,
+      [Symbol(impl)]: XMLHttpRequestImpl {
+        _globalObject: <ref *7> Window {
+          _globalObject: [Circular *7],
+          _globalProxy: [Window],
+          [Object]: [Function],
+          [Function]: [Function],
+          [Array]: [Function],
+          [Number]: [Function],
+          [parseFloat]: [Function],
+          [parseInt]: [Function],
+          [Infinity]: Infinity,
+          [NaN]: NaN,
+          [undefined]: undefined,
+          [Boolean]: [Function],
+          [String]: [Function],
+          [Symbol]: [Function],
+          [Date]: [Function],
+          [Promise]: [Function],
+          [RegExp]: [Function],
+Error:    [Error]: [Function],
+          [AggregateError]: [Function],
+          [EvalError]: [Function],
+          [RangeError]: [Function],
+          [ReferenceError]: [Function],
+          [SyntaxError]: [Function],
+          [TypeError]: [Function],
+          [URIError]: [Function],
+          [globalThis]: [Window],
+          [JSON]: [Object],
+          [Math]: [Object],
+          [Intl]: [Object],
+          [ArrayBuffer]: [Function],
+          [Atomics]: [Object],
+          [Uint8Array]: [Function],
+          [Int8Array]: [Function],
+          [Uint16Array]: [Function],
+          [Int16Array]: [Function],
+          [Uint32Array]: [Function],
+          [Int32Array]: [Function],
+          [Float32Array]: [Function],
+          [Float64Array]: [Function],
+          [Uint8ClampedArray]: [Function],
+          [BigUint64Array]: [Function],
+          [BigInt64Array]: [Function],
+          [DataView]: [Function],
+          [Map]: [Function],
+          [BigInt]: [Function],
+          [Set]: [Function],
+          [WeakMap]: [Function],
+          [WeakSet]: [Function],
+          [Proxy]: [Function],
+          [Reflect]: [Object],
+          [FinalizationRegistry]: [Function],
+          [WeakRef]: [Function],
+          [decodeURI]: [Function],
+          [decodeURIComponent]: [Function],
+          [encodeURI]: [Function],
+          [encodeURIComponent]: [Function],
+          [escape]: [Function],
+          [unescape]: [Function],
+          [eval]: [Function],
+          [isFinite]: [Function],
+          [isNaN]: [Function],
+          [SharedArrayBuffer]: [Function],
+          [WebAssembly]: [Object],
+          [DOMException]: [Function],
+          [URL]: [Function],
+          [webkitURL]: [Function],
+          [URLSearchParams]: [Function],
+          [EventTarget]: [Function],
+          [NamedNodeMap]: [Function],
+          [Node]: [Function],
+          [Attr]: [Function],
+          [Element]: [Function],
+          [DocumentFragment]: [Function],
+          [DOMImplementation]: [Function],
+          [Document]: [Function],
+          [XMLDocument]: [Function],
+          [CharacterData]: [Function],
+          [Text]: [Function],
+          [CDATASection]: [Function],
+          [ProcessingInstruction]: [Function],
+          [Comment]: [Function],
+          [DocumentType]: [Function],
+          [NodeList]: [Function],
+          [RadioNodeList]: [Function],
+          [HTMLCollection]: [Function],
+          [HTMLOptionsCollection]: [Function],
+          [DOMStringMap]: [Function],
+          [DOMTokenList]: [Function],
+          [StyleSheetList]: [Function],
+          [HTMLElement]: [Function],
+          [HTMLHeadElement]: [Function],
+          [HTMLTitleElement]: [Function],
+          [HTMLBaseElement]: [Function],
+          [HTMLLinkElement]: [Function],
+          [HTMLMetaElement]: [Function],
+          [HTMLStyleElement]: [Function],
+          [HTMLBodyElement]: [Function],
+          [HTMLHeadingElement]: [Function],
+          [HTMLParagraphElement]: [Function],
+          [HTMLHRElement]: [Function],
+          [HTMLPreElement]: [Function],
+          [HTMLUListElement]: [Function],
+          [HTMLOListElement]: [Function],
+          [HTMLLIElement]: [Function],
+          [HTMLMenuElement]: [Function],
+          [HTMLDListElement]: [Function],
+          [HTMLDivElement]: [Function],
+          [HTMLAnchorElement]: [Function],
+          [HTMLAreaElement]: [Function],
+          [HTMLBRElement]: [Function],
+          [HTMLButtonElement]: [Function],
+          [HTMLCanvasElement]: [Function],
+          [HTMLDataElement]: [Function],
+          [HTMLDataListElement]: [Function],
+          [HTMLDetailsElement]: [Function],
+          [HTMLDialogElement]: [Function],
+          [HTMLDirectoryElement]: [Function],
+          [HTMLFieldSetElement]: [Function],
+          [HTMLFontElement]: [Function],
+          [HTMLFormElement]: [Function],
+          [HTMLHtmlElement]: [Function],
+          [HTMLImageElement]: [Function],
+          [HTMLInputElement]: [Function],
+          [HTMLLabelElement]: [Function],
+          [HTMLLegendElement]: [Function],
+          [HTMLMapElement]: [Function],
+          [HTMLMarqueeElement]: [Function],
+          [HTMLMediaElement]: [Function],
+          [HTMLMeterElement]: [Function],
+          [HTMLModElement]: [Function],
+          [HTMLOptGroupElement]: [Function],
+          [HTMLOptionElement]: [Function],
+          [HTMLOutputElement]: [Function],
+          [HTMLPictureElement]: [Function],
+          [HTMLProgressElement]: [Function],
+          [HTMLQuoteElement]: [Function],
+          [HTMLScriptElement]: [Function],
+          [HTMLSelectElement]: [Function],
+          [HTMLSlotElement]: [Function],
+          [HTMLSourceElement]: [Function],
+          [HTMLSpanElement]: [Function],
+          [HTMLTableCaptionElement]: [Function],
+          [HTMLTableCellElement]: [Function],
+          [HTMLTableColElement]: [Function],
+          [HTMLTableElement]: [Function],
+          [HTMLTimeElement]: [Function],
+          [HTMLTableRowElement]: [Function],
+          [HTMLTableSectionElement]: [Function],
+          [HTMLTemplateElement]: [Function],
+          [HTMLTextAreaElement]: [Function],
+          [HTMLUnknownElement]: [Function],
+          [HTMLFrameElement]: [Function],
+          [HTMLFrameSetElement]: [Function],
+          [HTMLIFrameElement]: [Function],
+          [HTMLEmbedElement]: [Function],
+          [HTMLObjectElement]: [Function],
+          [HTMLParamElement]: [Function],
+          [HTMLVideoElement]: [Function],
+          [HTMLAudioElement]: [Function],
+          [HTMLTrackElement]: [Function],
+          [HTMLFormControlsCollection]: [Function],
+          [SVGElement]: [Function],
+          [SVGGraphicsElement]: [Function],
+          [SVGSVGElement]: [Function],
+          [SVGTitleElement]: [Function],
+          [SVGAnimatedString]: [Function],
+          [SVGNumber]: [Function],
+          [SVGStringList]: [Function],
+          [Event]: [Function],
+          [CloseEvent]: [Function],
+          [CustomEvent]: [Function],
+          [MessageEvent]: [Function],
+          [ErrorEvent]: [Function],
+          [HashChangeEvent]: [Function],
+          [PopStateEvent]: [Function],
+          [StorageEvent]: [Function],
+          [ProgressEvent]: [Function],
+          [PageTransitionEvent]: [Function],
+          [SubmitEvent]: [Function],
+          [UIEvent]: [Function],
+          [FocusEvent]: [Function],
+          [InputEvent]: [Function],
+          [MouseEvent]: [Function],
+          [KeyboardEvent]: [Function],
+          [TouchEvent]: [Function],
+          [CompositionEvent]: [Function],
+          [WheelEvent]: [Function],
+          [BarProp]: [Function],
+          [External]: [Function],
+          [Location]: [Function],
+          [History]: [Function],
+          [Screen]: [Function],
+          [Performance]: [Function],
+          [Navigator]: [Function],
+          [Crypto]: [Function],
+          [PluginArray]: [Function],
+          [MimeTypeArray]: [Function],
+          [Plugin]: [Function],
+          [MimeType]: [Function],
+          [FileReader]: [Function],
+          [Blob]: [Function],
+          [File]: [Function],
+          [FileList]: [Function],
+          [ValidityState]: [Function],
+          [DOMParser]: [Function],
+          [XMLSerializer]: [Function],
+          [FormData]: [Function],
+          [XMLHttpRequestEventTarget]: [Function],
+          [XMLHttpRequestUpload]: [Function],
+          [XMLHttpRequest]: [Function],
+          [WebSocket]: [Function],
+          [NodeFilter]: [Function],
+          [NodeIterator]: [Function],
+          [TreeWalker]: [Function],
+          [AbstractRange]: [Function],
+          [Range]: [Function],
+          [StaticRange]: [Function],
+          [Selection]: [Function],
+          [Storage]: [Function],
+          [CustomElementRegistry]: [Function],
+          [ElementInternals]: [Function],
+          [ShadowRoot]: [Function],
+          [MutationObserver]: [Function],
+          [MutationRecord]: [Function],
+          [Headers]: [Function],
+          [AbortController]: [Function],
+          [AbortSignal]: [Function],
+          [DOMRectReadOnly]: [Function],
+          [DOMRect]: [Function],
+          [HTMLDocument]: [Function],
+          StyleSheet: [Function],
+          MediaList: [Function],
+          CSSStyleSheet: [Function],
+          CSSRule: [Function],
+          CSSStyleRule: [Function],
+          CSSMediaRule: [Function],
+          CSSImportRule: [Function],
+          CSSStyleDeclaration: [Function],
+          XPathException: [Function],
+          XPathExpression: [Function],
+          XPathResult: [Function],
+          XPathEvaluator: [Function],
+          [Window]: [Function],
+          [_proxyWindowEventsToWindow]: [Function],
+          onafterprint: [Getter/Setter],
+          onbeforeprint: [Getter/Setter],
+          onbeforeunload: [Getter/Setter],
+          onhashchange: [Getter/Setter],
+          onlanguagechange: [Getter/Setter],
+          onmessage: [Getter/Setter],
+          onmessageerror: [Getter/Setter],
+          onoffline: [Getter/Setter],
+          ononline: [Getter/Setter],
+          onpagehide: [Getter/Setter],
+          onpageshow: [Getter/Setter],
+          onpopstate: [Getter/Setter],
+          onrejectionhandled: [Getter/Setter],
+          onstorage: [Getter/Setter],
+          onunhandledrejection: [Getter/Setter],
+          onunload: [Getter/Setter],
+          onblur: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onfocus: [Getter/Setter],
+          onload: [Getter/Setter],
+          onresize: [Getter/Setter],
+          onscroll: [Getter/Setter],
+          [_initGlobalEvents]: [Function],
+          [_getEventHandlerTarget]: [Function],
+          [_getEventHandlerFor]: [Function],
+          [_setEventHandlerFor]: [Function],
+          [_globalEventChanged]: [Function],
+          onabort: [Getter/Setter],
+          onauxclick: [Getter/Setter],
+          onbeforeinput: [Getter/Setter],
+          onbeforematch: [Getter/Setter],
+          onbeforetoggle: [Getter/Setter],
+          oncancel: [Getter/Setter],
+          oncanplay: [Getter/Setter],
+          oncanplaythrough: [Getter/Setter],
+          onchange: [Getter/Setter],
+          onclick: [Getter/Setter],
+          onclose: [Getter/Setter],
+          oncontextlost: [Getter/Setter],
+          oncontextmenu: [Getter/Setter],
+          oncontextrestored: [Getter/Setter],
+          oncopy: [Getter/Setter],
+          oncuechange: [Getter/Setter],
+          oncut: [Getter/Setter],
+          ondblclick: [Getter/Setter],
+          ondrag: [Getter/Setter],
+          ondragend: [Getter/Setter],
+          ondragenter: [Getter/Setter],
+          ondragleave: [Getter/Setter],
+          ondragover: [Getter/Setter],
+          ondragstart: [Getter/Setter],
+          ondrop: [Getter/Setter],
+          ondurationchange: [Getter/Setter],
+          onemptied: [Getter/Setter],
+          onended: [Getter/Setter],
+          onformdata: [Getter/Setter],
+          oninput: [Getter/Setter],
+          oninvalid: [Getter/Setter],
+          onkeydown: [Getter/Setter],
+          onkeypress: [Getter/Setter],
+          onkeyup: [Getter/Setter],
+          onloadeddata: [Getter/Setter],
+          onloadedmetadata: [Getter/Setter],
+          onloadstart: [Getter/Setter],
+          onmousedown: [Getter/Setter],
+          onmouseenter: [Getter/Setter],
+          onmouseleave: [Getter/Setter],
+          onmousemove: [Getter/Setter],
+          onmouseout: [Getter/Setter],
+          onmouseover: [Getter/Setter],
+          onmouseup: [Getter/Setter],
+          onpaste: [Getter/Setter],
+          onpause: [Getter/Setter],
+          onplay: [Getter/Setter],
+          onplaying: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onratechange: [Getter/Setter],
+          onreset: [Getter/Setter],
+          onscrollend: [Getter/Setter],
+          onsecuritypolicyviolation: [Getter/Setter],
+          onseeked: [Getter/Setter],
+          onseeking: [Getter/Setter],
+          onselect: [Getter/Setter],
+          onslotchange: [Getter/Setter],
+          onstalled: [Getter/Setter],
+          onsubmit: [Getter/Setter],
+          onsuspend: [Getter/Setter],
+          ontimeupdate: [Getter/Setter],
+          ontoggle: [Getter/Setter],
+          onvolumechange: [Getter/Setter],
+          onwaiting: [Getter/Setter],
+          onwebkitanimationend: [Getter/Setter],
+          onwebkitanimationiteration: [Getter/Setter],
+          onwebkitanimationstart: [Getter/Setter],
+          onwebkittransitionend: [Getter/Setter],
+          onwheel: [Getter/Setter],
+          ontouchstart: [Getter/Setter],
+          ontouchend: [Getter/Setter],
+          ontouchmove: [Getter/Setter],
+          ontouchcancel: [Getter/Setter],
+          _registeredHandlers: Set(0) {},
+          _eventHandlers: [Object: null prototype] {},
+          onautocomplete: [Getter/Setter],
+          onautocompleteerror: [Getter/Setter],
+          onsort: [Getter/Setter],
+          _resourceLoader: [NoOpResourceLoader],
+          _document: [Document],
+          _origin: 'http://localhost:3000',
+          _sessionHistory: [SessionHistory],
+          _virtualConsole: [VirtualConsole],
+          _runScripts: 'dangerously',
+          _top: [Window],
+          _parent: [Window],
+          _frameElement: null,
+          _length: 0,
+          _currentEvent: undefined,
+          _pretendToBeVisual: true,
+          _storageQuota: 5000000,
+          _commonForOrigin: [Object],
+          _currentOriginData: [Object],
+          _localStorage: Proxy [Array],
+          _sessionStorage: Proxy [Array],
+          _selection: [SelectionImpl],
+          getSelection: [Function],
+          _customElementRegistry: [CustomElementRegistry],
+          length: [Getter/Setter],
+          window: [Getter],
+          frameElement: [Getter],
+          frames: [Getter/Setter],
+          self: [Getter/Setter],
+          parent: [Getter/Setter],
+          top: [Getter],
+          document: [Getter],
+          external: [Getter/Setter],
+          location: [Getter/Setter],
+          history: [Getter],
+          navigator: [Getter],
+          locationbar: [Getter/Setter],
+          menubar: [Getter/Setter],
+          personalbar: [Getter/Setter],
+          scrollbars: [Getter/Setter],
+          statusbar: [Getter/Setter],
+          toolbar: [Getter/Setter],
+          performance: [Getter],
+          screen: [Getter/Setter],
+          crypto: [Getter],
+          origin: [Getter/Setter],
+          localStorage: [Getter],
+          sessionStorage: [Getter],
+          customElements: [Getter],
+          event: [Getter/Setter],
+          setTimeout: [Function],
+          setInterval: [Function],
+          clearTimeout: [Function],
+          clearInterval: [Function],
+          queueMicrotask: [Function],
+          requestAnimationFrame: [Function],
+          cancelAnimationFrame: [Function],
+          [Option]: [Function],
+          [Image]: [Function],
+          [Audio]: [Function],
+          postMessage: [Function],
+          atob: [Function],
+          btoa: [Function],
+          stop: [Function],
+          close: [Function],
+          getComputedStyle: [Function],
+          captureEvents: [Function],
+          releaseEvents: [Function],
+          console: [Object],
+          name: '',
+          status: '',
+          devicePixelRatio: 1,
+          innerWidth: 1024,
+          innerHeight: 768,
+          outerWidth: 1024,
+          outerHeight: 768,
+          pageXOffset: 0,
+          pageYOffset: 0,
+          screenX: 0,
+          screenLeft: 0,
+          screenY: 0,
+          screenTop: 0,
+          scrollX: 0,
+          scrollY: 0,
+          alert: [Function],
+          blur: [Function],
+          confirm: [Function],
+          focus: [Function],
+          moveBy: [Function],
+          moveTo: [Function],
+          open: [Function],
+          print: [Function],
+          prompt: [Function],
+          resizeBy: [Function],
+          resizeTo: [Function],
+          scroll: [Function],
+          scrollBy: [Function],
+          scrollTo: [Function],
+          [Symbol([webidl2js] constructor registry)]: [Object: null prototype],
+          [Symbol(named property tracker)]: [NamedPropertiesTracker],
+          [Symbol(impl)]: [EventTargetImpl],
+          [Symbol(Symbol.toStringTag)]: 'Window'
+        },
+        _eventListeners: [Object: null prototype] {
+          loadend: [Array],
+          abort: [Array],
+          error: [Array],
+          timeout: [Array],
+          load: [Array]
+        },
+        upload: XMLHttpRequestUploadImpl {
+          _globalObject: [Window],
+          _eventListeners: [Object: null prototype] {},
+          [Symbol(wrapper)]: [XMLHttpRequestUpload],
+          [_ownerDocument]: [Getter],
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        readyState: 4,
+        responseURL: '',
+        status: 0,
+        statusText: '',
+        flag: {
+          synchronous: false,
+          withCredentials: false,
+          mimeType: null,
+          auth: null,
+          method: 'GET',
+          responseType: '',
+          requestHeaders: [Object],
+          referrer: 'http://localhost:3000/',
+          uri: 'http://localhost:3000/undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH',
+          timeout: 0,
+          body: undefined,
+          formData: false,
+          preflight: false,
+          requestManager: [RequestManager],
+          strictSSL: true,
+          proxy: undefined,
+          cookieJar: [CookieJar],
+          encoding: 'UTF-8',
+          origin: 'http://localhost:3000',
+          userAgent: 'Mozilla/5.0 (linux) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/24.1.3'
+        },
+        properties: {
+          beforeSend: false,
+          send: false,
+          client: [Request],
+          timeoutStart: 0,
+          timeoutId: 0,
+          timeoutFn: null,
+          responseBuffer: null,
+          responseCache: null,
+          responseTextCache: null,
+          responseXMLCache: null,
+          responseHeaders: {},
+          filteredResponseHeaders: [Array],
+          error: [AggregateError],
+          uploadComplete: true,
+          uploadListener: false,
+          abortError: false,
+          cookieJar: [CookieJar],
+          bufferStepSize: 1048576,
+          totalReceivedChunkSize: 0,
+          origin: 'http://localhost:3000'
+        },
+        _registeredHandlers: Set(4) { 'loadend', 'abort', 'error', 'timeout' },
+        _eventHandlers: [Object: null prototype] {
+          loadend: [Function],
+          abort: [Function],
+          error: [Function],
+          timeout: [Function]
+        },
+        [Symbol(wrapper)]: [Circular *8],
+        [responseType]: [Getter/Setter],
+        [response]: [Getter],
+        [responseText]: [Getter],
+        [responseXML]: [Getter],
+        [timeout]: [Getter/Setter],
+        [withCredentials]: [Getter/Setter],
+        onreadystatechange: [Getter/Setter],
+        [_ownerDocument]: [Getter],
+        onloadstart: [Getter/Setter],
+        onprogress: [Getter/Setter],
+        onabort: [Getter/Setter],
+        onerror: [Getter/Setter],
+        onload: [Getter/Setter],
+        ontimeout: [Getter/Setter],
+        onloadend: [Getter/Setter]
+      },
+      [Symbol(SameObject caches)]: [Object: null prototype] {
+        upload: XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        }
+      },
+      [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+      onloadstart: [Getter/Setter],
+      onprogress: [Getter/Setter],
+      onabort: [Getter/Setter],
+      onerror: [Getter/Setter],
+      onload: [Getter/Setter],
+      ontimeout: [Getter/Setter],
+      onloadend: [Getter/Setter]
+    },
+    {
+      set: <ref *9> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *9] }
+      },
+      get: <ref *10> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *10] }
+      }
+    }
+  ],
+  [isAxiosError]: true
+}
+
+The above error occurred in the <RisingList> component.
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+
+
+ ✓ src/pages/loginpage/LoginPage.test.tsx (3 tests) 556ms
+ ✓ src/components/common/Typography.test.tsx (1 test) 27ms
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 실패 시 에러 메시지가 표시된다
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET /undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 실패 시 에러 메시지가 표시된다
+Error: AggregateError
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:63:19)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:536:35)
+    at ClientRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/http-request.js:127:14)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at MockHttpSocket.socketErrorListener (node:_http_client:504:5)
+    at MockHttpSocket.emit (node:events:536:35)
+    at MockHttpSocket.emit (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:160:12)
+    at Socket.<anonymous> (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:293:14) undefined
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 실패 시 에러 메시지가 표시된다
+AxiosError: Network Error
+    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)
+    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)
+    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)
+    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)
+    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19) {
+  [stack]: 'AxiosError: Network Error\n' +
+    '    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)\n' +
+    '    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)\n' +
+    '    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)\n' +
+    '    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)\n' +
+    '    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n' +
+    '    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n' +
+    '    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)\n' +
+    '    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)\n' +
+    '    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)\n' +
+    '    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)\n' +
+    '    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19)',
+  message: 'Network Error',
+  name: 'AxiosError',
+  code: 'ERR_NETWORK',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch', [length]: 3 ],
+    transformRequest: [
+      <ref *1> [Function: transformRequest] {
+        [length]: 2,
+        [name]: 'transformRequest',
+        [prototype]: { [constructor]: [Circular *1] }
+      },
+      [length]: 1
+    ],
+    transformResponse: [
+      <ref *2> [Function: transformResponse] {
+        [length]: 1,
+        [name]: 'transformResponse',
+        [prototype]: { [constructor]: [Circular *2] }
+      },
+      [length]: 1
+    ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: {
+      FormData: <ref *3> [Function: FormData] {
+        [length]: 1,
+        [name]: 'FormData',
+        [prototype]: CombinedStream {
+          [constructor]: [Circular *3],
+          append: [Function],
+          _trackLength: [Function],
+          _lengthRetriever: [Function],
+          _multiPartHeader: [Function],
+          _getContentDisposition: [Function],
+          _getContentType: [Function],
+          _multiPartFooter: [Function],
+          _lastBoundary: [Function],
+          getHeaders: [Function],
+          setBoundary: [Function],
+          getBoundary: [Function],
+          getBuffer: [Function],
+          _generateBoundary: [Function],
+          getLengthSync: [Function],
+          hasKnownLength: [Function],
+          getLength: [Function],
+          submit: [Function],
+          _error: [Function],
+          toString: [Function],
+          _events: undefined,
+          _eventsCount: 0,
+          _maxListeners: undefined,
+          [Symbol(kCapture)]: false
+        },
+        [super_]: [Function: CombinedStream] {
+          [length]: 0,
+          [name]: 'CombinedStream',
+          [arguments]: null,
+          [caller]: null,
+          [prototype]: [Stream],
+          [super_]: [Function],
+          create: [Function],
+          isStreamLike: [Function]
+        },
+        LINE_BREAK: '\r\n',
+        DEFAULT_CONTENT_TYPE: 'application/octet-stream',
+        [Symbol(Symbol.toStringTag)]: 'FormData'
+      },
+      Blob: <ref *4> [class Blob] {
+        [length]: 0,
+        [name]: 'Blob',
+        [prototype]: {
+          [constructor]: [Circular *4],
+          slice: [Function],
+          size: [Getter],
+          type: [Getter],
+          [Symbol(Symbol.toStringTag)]: 'Blob'
+        }
+      }
+    },
+    validateStatus: <ref *5> [Function: validateStatus] {
+      [length]: 1,
+      [name]: 'validateStatus',
+      [prototype]: { [constructor]: [Circular *5] }
+    },
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': undefined,
+      [set]: [Getter/Setter],
+      [get]: [Getter/Setter],
+      [has]: [Getter/Setter],
+      [delete]: [Getter/Setter],
+      [clear]: [Getter/Setter],
+      [normalize]: [Getter/Setter],
+      [concat]: [Getter/Setter],
+      [toJSON]: [Getter/Setter],
+      [toString]: [Getter/Setter],
+      [getSetCookie]: [Getter/Setter],
+      [getContentType]: [Getter/Setter],
+      [setContentType]: [Getter/Setter],
+      [hasContentType]: [Getter/Setter],
+      [getContentLength]: [Getter/Setter],
+      [setContentLength]: [Getter/Setter],
+      [hasContentLength]: [Getter/Setter],
+      [getAccept]: [Getter/Setter],
+      [setAccept]: [Getter/Setter],
+      [hasAccept]: [Getter/Setter],
+      [getAcceptEncoding]: [Getter/Setter],
+      [setAcceptEncoding]: [Getter/Setter],
+      [hasAcceptEncoding]: [Getter/Setter],
+      [getUserAgent]: [Getter/Setter],
+      [setUserAgent]: [Getter/Setter],
+      [hasUserAgent]: [Getter/Setter],
+      [getAuthorization]: [Getter/Setter],
+      [setAuthorization]: [Getter/Setter],
+      [hasAuthorization]: [Getter/Setter],
+      [Symbol(Symbol.toStringTag)]: [Getter]
+    },
+    params: { targetType: 'ALL', rankType: 'MANY_WISH' },
+    method: 'get',
+    url: 'undefined/api/products/ranking',
+    allowAbsoluteUrls: true,
+    data: undefined
+  },
+  request: Proxy [
+    <ref *8> XMLHttpRequest {
+      [constructor]: <ref *6> [class XMLHttpRequest extends XMLHttpRequestEventTarget] {
+        [length]: 0,
+        [name]: 'XMLHttpRequest',
+        [prototype]: XMLHttpRequestEventTarget {
+          [constructor]: [Circular *6],
+          open: [Function],
+          setRequestHeader: [Function],
+          send: [Function],
+          abort: [Function],
+          getResponseHeader: [Function],
+          getAllResponseHeaders: [Function],
+          overrideMimeType: [Function],
+          onreadystatechange: [Getter/Setter],
+          readyState: [Getter],
+          timeout: [Getter/Setter],
+          withCredentials: [Getter/Setter],
+          upload: [Getter],
+          responseURL: [Getter],
+          status: [Getter],
+          statusText: [Getter],
+          responseType: [Getter/Setter],
+          response: [Getter],
+          responseText: [Getter],
+          responseXML: [Getter],
+          UNSENT: 0,
+          OPENED: 1,
+          HEADERS_RECEIVED: 2,
+          LOADING: 3,
+          DONE: 4,
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        UNSENT: 0,
+        OPENED: 1,
+        HEADERS_RECEIVED: 2,
+        LOADING: 3,
+        DONE: 4,
+        [Symbol(isPatchedModule)]: true
+      },
+      open: [Function: open] { [length]: 2, [name]: 'open' },
+      setRequestHeader: [Function: setRequestHeader] {
+        [length]: 2,
+        [name]: 'setRequestHeader'
+      },
+      send: [Function: send] { [length]: 0, [name]: 'send' },
+      abort: [Function: abort] { [length]: 0, [name]: 'abort' },
+      getResponseHeader: [Function: getResponseHeader] {
+        [length]: 1,
+        [name]: 'getResponseHeader'
+      },
+      getAllResponseHeaders: [Function: getAllResponseHeaders] {
+        [length]: 0,
+        [name]: 'getAllResponseHeaders'
+      },
+      overrideMimeType: [Function: overrideMimeType] {
+        [length]: 1,
+        [name]: 'overrideMimeType'
+      },
+      onreadystatechange: [Getter/Setter],
+      readyState: [Getter],
+      timeout: [Getter/Setter],
+      withCredentials: [Getter/Setter],
+      upload: Proxy [
+        XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        { set: [Function], get: [Function] }
+      ],
+      responseURL: [Getter],
+      status: [Getter],
+      statusText: [Getter],
+      responseType: [Getter/Setter],
+      response: [Getter],
+      responseText: [Getter],
+      responseXML: [Getter],
+      UNSENT: 0,
+      OPENED: 1,
+      HEADERS_RECEIVED: 2,
+      LOADING: 3,
+      DONE: 4,
+      [Symbol(impl)]: XMLHttpRequestImpl {
+        _globalObject: <ref *7> Window {
+          _globalObject: [Circular *7],
+          _globalProxy: [Window],
+          [Object]: [Function],
+          [Function]: [Function],
+          [Array]: [Function],
+          [Number]: [Function],
+          [parseFloat]: [Function],
+          [parseInt]: [Function],
+          [Infinity]: Infinity,
+          [NaN]: NaN,
+          [undefined]: undefined,
+          [Boolean]: [Function],
+          [String]: [Function],
+          [Symbol]: [Function],
+          [Date]: [Function],
+          [Promise]: [Function],
+          [RegExp]: [Function],
+Error:    [Error]: [Function],
+          [AggregateError]: [Function],
+          [EvalError]: [Function],
+          [RangeError]: [Function],
+          [ReferenceError]: [Function],
+          [SyntaxError]: [Function],
+          [TypeError]: [Function],
+          [URIError]: [Function],
+          [globalThis]: [Window],
+          [JSON]: [Object],
+          [Math]: [Object],
+          [Intl]: [Object],
+          [ArrayBuffer]: [Function],
+          [Atomics]: [Object],
+          [Uint8Array]: [Function],
+          [Int8Array]: [Function],
+          [Uint16Array]: [Function],
+          [Int16Array]: [Function],
+          [Uint32Array]: [Function],
+          [Int32Array]: [Function],
+          [Float32Array]: [Function],
+          [Float64Array]: [Function],
+          [Uint8ClampedArray]: [Function],
+          [BigUint64Array]: [Function],
+          [BigInt64Array]: [Function],
+          [DataView]: [Function],
+          [Map]: [Function],
+          [BigInt]: [Function],
+          [Set]: [Function],
+          [WeakMap]: [Function],
+          [WeakSet]: [Function],
+          [Proxy]: [Function],
+          [Reflect]: [Object],
+          [FinalizationRegistry]: [Function],
+          [WeakRef]: [Function],
+          [decodeURI]: [Function],
+          [decodeURIComponent]: [Function],
+          [encodeURI]: [Function],
+          [encodeURIComponent]: [Function],
+          [escape]: [Function],
+          [unescape]: [Function],
+          [eval]: [Function],
+          [isFinite]: [Function],
+          [isNaN]: [Function],
+          [SharedArrayBuffer]: [Function],
+          [WebAssembly]: [Object],
+          [DOMException]: [Function],
+          [URL]: [Function],
+          [webkitURL]: [Function],
+          [URLSearchParams]: [Function],
+          [EventTarget]: [Function],
+          [NamedNodeMap]: [Function],
+          [Node]: [Function],
+          [Attr]: [Function],
+          [Element]: [Function],
+          [DocumentFragment]: [Function],
+          [DOMImplementation]: [Function],
+          [Document]: [Function],
+          [XMLDocument]: [Function],
+          [CharacterData]: [Function],
+          [Text]: [Function],
+          [CDATASection]: [Function],
+          [ProcessingInstruction]: [Function],
+          [Comment]: [Function],
+          [DocumentType]: [Function],
+          [NodeList]: [Function],
+          [RadioNodeList]: [Function],
+          [HTMLCollection]: [Function],
+          [HTMLOptionsCollection]: [Function],
+          [DOMStringMap]: [Function],
+          [DOMTokenList]: [Function],
+          [StyleSheetList]: [Function],
+          [HTMLElement]: [Function],
+          [HTMLHeadElement]: [Function],
+          [HTMLTitleElement]: [Function],
+          [HTMLBaseElement]: [Function],
+          [HTMLLinkElement]: [Function],
+          [HTMLMetaElement]: [Function],
+          [HTMLStyleElement]: [Function],
+          [HTMLBodyElement]: [Function],
+          [HTMLHeadingElement]: [Function],
+          [HTMLParagraphElement]: [Function],
+          [HTMLHRElement]: [Function],
+          [HTMLPreElement]: [Function],
+          [HTMLUListElement]: [Function],
+          [HTMLOListElement]: [Function],
+          [HTMLLIElement]: [Function],
+          [HTMLMenuElement]: [Function],
+          [HTMLDListElement]: [Function],
+          [HTMLDivElement]: [Function],
+          [HTMLAnchorElement]: [Function],
+          [HTMLAreaElement]: [Function],
+          [HTMLBRElement]: [Function],
+          [HTMLButtonElement]: [Function],
+          [HTMLCanvasElement]: [Function],
+          [HTMLDataElement]: [Function],
+          [HTMLDataListElement]: [Function],
+          [HTMLDetailsElement]: [Function],
+          [HTMLDialogElement]: [Function],
+          [HTMLDirectoryElement]: [Function],
+          [HTMLFieldSetElement]: [Function],
+          [HTMLFontElement]: [Function],
+          [HTMLFormElement]: [Function],
+          [HTMLHtmlElement]: [Function],
+          [HTMLImageElement]: [Function],
+          [HTMLInputElement]: [Function],
+          [HTMLLabelElement]: [Function],
+          [HTMLLegendElement]: [Function],
+          [HTMLMapElement]: [Function],
+          [HTMLMarqueeElement]: [Function],
+          [HTMLMediaElement]: [Function],
+          [HTMLMeterElement]: [Function],
+          [HTMLModElement]: [Function],
+          [HTMLOptGroupElement]: [Function],
+          [HTMLOptionElement]: [Function],
+          [HTMLOutputElement]: [Function],
+          [HTMLPictureElement]: [Function],
+          [HTMLProgressElement]: [Function],
+          [HTMLQuoteElement]: [Function],
+          [HTMLScriptElement]: [Function],
+          [HTMLSelectElement]: [Function],
+          [HTMLSlotElement]: [Function],
+          [HTMLSourceElement]: [Function],
+          [HTMLSpanElement]: [Function],
+          [HTMLTableCaptionElement]: [Function],
+          [HTMLTableCellElement]: [Function],
+          [HTMLTableColElement]: [Function],
+          [HTMLTableElement]: [Function],
+          [HTMLTimeElement]: [Function],
+          [HTMLTableRowElement]: [Function],
+          [HTMLTableSectionElement]: [Function],
+          [HTMLTemplateElement]: [Function],
+          [HTMLTextAreaElement]: [Function],
+          [HTMLUnknownElement]: [Function],
+          [HTMLFrameElement]: [Function],
+          [HTMLFrameSetElement]: [Function],
+          [HTMLIFrameElement]: [Function],
+          [HTMLEmbedElement]: [Function],
+          [HTMLObjectElement]: [Function],
+          [HTMLParamElement]: [Function],
+          [HTMLVideoElement]: [Function],
+          [HTMLAudioElement]: [Function],
+          [HTMLTrackElement]: [Function],
+          [HTMLFormControlsCollection]: [Function],
+          [SVGElement]: [Function],
+          [SVGGraphicsElement]: [Function],
+          [SVGSVGElement]: [Function],
+          [SVGTitleElement]: [Function],
+          [SVGAnimatedString]: [Function],
+          [SVGNumber]: [Function],
+          [SVGStringList]: [Function],
+          [Event]: [Function],
+          [CloseEvent]: [Function],
+          [CustomEvent]: [Function],
+          [MessageEvent]: [Function],
+          [ErrorEvent]: [Function],
+          [HashChangeEvent]: [Function],
+          [PopStateEvent]: [Function],
+          [StorageEvent]: [Function],
+          [ProgressEvent]: [Function],
+          [PageTransitionEvent]: [Function],
+          [SubmitEvent]: [Function],
+          [UIEvent]: [Function],
+          [FocusEvent]: [Function],
+          [InputEvent]: [Function],
+          [MouseEvent]: [Function],
+          [KeyboardEvent]: [Function],
+          [TouchEvent]: [Function],
+          [CompositionEvent]: [Function],
+          [WheelEvent]: [Function],
+          [BarProp]: [Function],
+          [External]: [Function],
+          [Location]: [Function],
+          [History]: [Function],
+          [Screen]: [Function],
+          [Performance]: [Function],
+          [Navigator]: [Function],
+          [Crypto]: [Function],
+          [PluginArray]: [Function],
+          [MimeTypeArray]: [Function],
+          [Plugin]: [Function],
+          [MimeType]: [Function],
+          [FileReader]: [Function],
+          [Blob]: [Function],
+          [File]: [Function],
+          [FileList]: [Function],
+          [ValidityState]: [Function],
+          [DOMParser]: [Function],
+          [XMLSerializer]: [Function],
+          [FormData]: [Function],
+          [XMLHttpRequestEventTarget]: [Function],
+          [XMLHttpRequestUpload]: [Function],
+          [XMLHttpRequest]: [Function],
+          [WebSocket]: [Function],
+          [NodeFilter]: [Function],
+          [NodeIterator]: [Function],
+          [TreeWalker]: [Function],
+          [AbstractRange]: [Function],
+          [Range]: [Function],
+          [StaticRange]: [Function],
+          [Selection]: [Function],
+          [Storage]: [Function],
+          [CustomElementRegistry]: [Function],
+          [ElementInternals]: [Function],
+          [ShadowRoot]: [Function],
+          [MutationObserver]: [Function],
+          [MutationRecord]: [Function],
+          [Headers]: [Function],
+          [AbortController]: [Function],
+          [AbortSignal]: [Function],
+          [DOMRectReadOnly]: [Function],
+          [DOMRect]: [Function],
+          [HTMLDocument]: [Function],
+          StyleSheet: [Function],
+          MediaList: [Function],
+          CSSStyleSheet: [Function],
+          CSSRule: [Function],
+          CSSStyleRule: [Function],
+          CSSMediaRule: [Function],
+          CSSImportRule: [Function],
+          CSSStyleDeclaration: [Function],
+          XPathException: [Function],
+          XPathExpression: [Function],
+          XPathResult: [Function],
+          XPathEvaluator: [Function],
+          [Window]: [Function],
+          [_proxyWindowEventsToWindow]: [Function],
+          onafterprint: [Getter/Setter],
+          onbeforeprint: [Getter/Setter],
+          onbeforeunload: [Getter/Setter],
+          onhashchange: [Getter/Setter],
+          onlanguagechange: [Getter/Setter],
+          onmessage: [Getter/Setter],
+          onmessageerror: [Getter/Setter],
+          onoffline: [Getter/Setter],
+          ononline: [Getter/Setter],
+          onpagehide: [Getter/Setter],
+          onpageshow: [Getter/Setter],
+          onpopstate: [Getter/Setter],
+          onrejectionhandled: [Getter/Setter],
+          onstorage: [Getter/Setter],
+          onunhandledrejection: [Getter/Setter],
+          onunload: [Getter/Setter],
+          onblur: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onfocus: [Getter/Setter],
+          onload: [Getter/Setter],
+          onresize: [Getter/Setter],
+          onscroll: [Getter/Setter],
+          [_initGlobalEvents]: [Function],
+          [_getEventHandlerTarget]: [Function],
+          [_getEventHandlerFor]: [Function],
+          [_setEventHandlerFor]: [Function],
+          [_globalEventChanged]: [Function],
+          onabort: [Getter/Setter],
+          onauxclick: [Getter/Setter],
+          onbeforeinput: [Getter/Setter],
+          onbeforematch: [Getter/Setter],
+          onbeforetoggle: [Getter/Setter],
+          oncancel: [Getter/Setter],
+          oncanplay: [Getter/Setter],
+          oncanplaythrough: [Getter/Setter],
+          onchange: [Getter/Setter],
+          onclick: [Getter/Setter],
+          onclose: [Getter/Setter],
+          oncontextlost: [Getter/Setter],
+          oncontextmenu: [Getter/Setter],
+          oncontextrestored: [Getter/Setter],
+          oncopy: [Getter/Setter],
+          oncuechange: [Getter/Setter],
+          oncut: [Getter/Setter],
+          ondblclick: [Getter/Setter],
+          ondrag: [Getter/Setter],
+          ondragend: [Getter/Setter],
+          ondragenter: [Getter/Setter],
+          ondragleave: [Getter/Setter],
+          ondragover: [Getter/Setter],
+          ondragstart: [Getter/Setter],
+          ondrop: [Getter/Setter],
+          ondurationchange: [Getter/Setter],
+          onemptied: [Getter/Setter],
+          onended: [Getter/Setter],
+          onformdata: [Getter/Setter],
+          oninput: [Getter/Setter],
+          oninvalid: [Getter/Setter],
+          onkeydown: [Getter/Setter],
+          onkeypress: [Getter/Setter],
+          onkeyup: [Getter/Setter],
+          onloadeddata: [Getter/Setter],
+          onloadedmetadata: [Getter/Setter],
+          onloadstart: [Getter/Setter],
+          onmousedown: [Getter/Setter],
+          onmouseenter: [Getter/Setter],
+          onmouseleave: [Getter/Setter],
+          onmousemove: [Getter/Setter],
+          onmouseout: [Getter/Setter],
+          onmouseover: [Getter/Setter],
+          onmouseup: [Getter/Setter],
+          onpaste: [Getter/Setter],
+          onpause: [Getter/Setter],
+          onplay: [Getter/Setter],
+          onplaying: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onratechange: [Getter/Setter],
+          onreset: [Getter/Setter],
+          onscrollend: [Getter/Setter],
+          onsecuritypolicyviolation: [Getter/Setter],
+          onseeked: [Getter/Setter],
+          onseeking: [Getter/Setter],
+          onselect: [Getter/Setter],
+          onslotchange: [Getter/Setter],
+          onstalled: [Getter/Setter],
+          onsubmit: [Getter/Setter],
+          onsuspend: [Getter/Setter],
+          ontimeupdate: [Getter/Setter],
+          ontoggle: [Getter/Setter],
+          onvolumechange: [Getter/Setter],
+          onwaiting: [Getter/Setter],
+          onwebkitanimationend: [Getter/Setter],
+          onwebkitanimationiteration: [Getter/Setter],
+          onwebkitanimationstart: [Getter/Setter],
+          onwebkittransitionend: [Getter/Setter],
+          onwheel: [Getter/Setter],
+          ontouchstart: [Getter/Setter],
+          ontouchend: [Getter/Setter],
+          ontouchmove: [Getter/Setter],
+          ontouchcancel: [Getter/Setter],
+          _registeredHandlers: Set(0) {},
+          _eventHandlers: [Object: null prototype] {},
+          onautocomplete: [Getter/Setter],
+          onautocompleteerror: [Getter/Setter],
+          onsort: [Getter/Setter],
+          _resourceLoader: [NoOpResourceLoader],
+          _document: [Document],
+          _origin: 'http://localhost:3000',
+          _sessionHistory: [SessionHistory],
+          _virtualConsole: [VirtualConsole],
+          _runScripts: 'dangerously',
+          _top: [Window],
+          _parent: [Window],
+          _frameElement: null,
+          _length: 0,
+          _currentEvent: undefined,
+          _pretendToBeVisual: true,
+          _storageQuota: 5000000,
+          _commonForOrigin: [Object],
+          _currentOriginData: [Object],
+          _localStorage: Proxy [Array],
+          _sessionStorage: Proxy [Array],
+          _selection: [SelectionImpl],
+          getSelection: [Function],
+          _customElementRegistry: [CustomElementRegistry],
+          length: [Getter/Setter],
+          window: [Getter],
+          frameElement: [Getter],
+          frames: [Getter/Setter],
+          self: [Getter/Setter],
+          parent: [Getter/Setter],
+          top: [Getter],
+          document: [Getter],
+          external: [Getter/Setter],
+          location: [Getter/Setter],
+          history: [Getter],
+          navigator: [Getter],
+          locationbar: [Getter/Setter],
+          menubar: [Getter/Setter],
+          personalbar: [Getter/Setter],
+          scrollbars: [Getter/Setter],
+          statusbar: [Getter/Setter],
+          toolbar: [Getter/Setter],
+          performance: [Getter],
+          screen: [Getter/Setter],
+          crypto: [Getter],
+          origin: [Getter/Setter],
+          localStorage: [Getter],
+          sessionStorage: [Getter],
+          customElements: [Getter],
+          event: [Getter/Setter],
+          setTimeout: [Function],
+          setInterval: [Function],
+          clearTimeout: [Function],
+          clearInterval: [Function],
+          queueMicrotask: [Function],
+          requestAnimationFrame: [Function],
+          cancelAnimationFrame: [Function],
+          [Option]: [Function],
+          [Image]: [Function],
+          [Audio]: [Function],
+          postMessage: [Function],
+          atob: [Function],
+          btoa: [Function],
+          stop: [Function],
+          close: [Function],
+          getComputedStyle: [Function],
+          captureEvents: [Function],
+          releaseEvents: [Function],
+          console: [Object],
+          name: '',
+          status: '',
+          devicePixelRatio: 1,
+          innerWidth: 1024,
+          innerHeight: 768,
+          outerWidth: 1024,
+          outerHeight: 768,
+          pageXOffset: 0,
+          pageYOffset: 0,
+          screenX: 0,
+          screenLeft: 0,
+          screenY: 0,
+          screenTop: 0,
+          scrollX: 0,
+          scrollY: 0,
+          alert: [Function],
+          blur: [Function],
+          confirm: [Function],
+          focus: [Function],
+          moveBy: [Function],
+          moveTo: [Function],
+          open: [Function],
+          print: [Function],
+          prompt: [Function],
+          resizeBy: [Function],
+          resizeTo: [Function],
+          scroll: [Function],
+          scrollBy: [Function],
+          scrollTo: [Function],
+          [Symbol([webidl2js] constructor registry)]: [Object: null prototype],
+          [Symbol(named property tracker)]: [NamedPropertiesTracker],
+          [Symbol(impl)]: [EventTargetImpl],
+          [Symbol(Symbol.toStringTag)]: 'Window'
+        },
+        _eventListeners: [Object: null prototype] {
+          loadend: [Array],
+          abort: [Array],
+          error: [Array],
+          timeout: [Array],
+          load: [Array]
+        },
+        upload: XMLHttpRequestUploadImpl {
+          _globalObject: [Window],
+          _eventListeners: [Object: null prototype] {},
+          [Symbol(wrapper)]: [XMLHttpRequestUpload],
+          [_ownerDocument]: [Getter],
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        readyState: 4,
+        responseURL: '',
+        status: 0,
+        statusText: '',
+        flag: {
+          synchronous: false,
+          withCredentials: false,
+          mimeType: null,
+          auth: null,
+          method: 'GET',
+          responseType: '',
+          requestHeaders: [Object],
+          referrer: 'http://localhost:3000/',
+          uri: 'http://localhost:3000/undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH',
+          timeout: 0,
+          body: undefined,
+          formData: false,
+          preflight: false,
+          requestManager: [RequestManager],
+          strictSSL: true,
+          proxy: undefined,
+          cookieJar: [CookieJar],
+          encoding: 'UTF-8',
+          origin: 'http://localhost:3000',
+          userAgent: 'Mozilla/5.0 (linux) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/24.1.3'
+        },
+        properties: {
+          beforeSend: false,
+          send: false,
+          client: [Request],
+          timeoutStart: 0,
+          timeoutId: 0,
+          timeoutFn: null,
+          responseBuffer: null,
+          responseCache: null,
+          responseTextCache: null,
+          responseXMLCache: null,
+          responseHeaders: {},
+          filteredResponseHeaders: [Array],
+          error: [AggregateError],
+          uploadComplete: true,
+          uploadListener: false,
+          abortError: false,
+          cookieJar: [CookieJar],
+          bufferStepSize: 1048576,
+          totalReceivedChunkSize: 0,
+          origin: 'http://localhost:3000'
+        },
+        _registeredHandlers: Set(4) { 'loadend', 'abort', 'error', 'timeout' },
+        _eventHandlers: [Object: null prototype] {
+          loadend: [Function],
+          abort: [Function],
+          error: [Function],
+          timeout: [Function]
+        },
+        [Symbol(wrapper)]: [Circular *8],
+        [responseType]: [Getter/Setter],
+        [response]: [Getter],
+        [responseText]: [Getter],
+        [responseXML]: [Getter],
+        [timeout]: [Getter/Setter],
+        [withCredentials]: [Getter/Setter],
+        onreadystatechange: [Getter/Setter],
+        [_ownerDocument]: [Getter],
+        onloadstart: [Getter/Setter],
+        onprogress: [Getter/Setter],
+        onabort: [Getter/Setter],
+        onerror: [Getter/Setter],
+        onload: [Getter/Setter],
+        ontimeout: [Getter/Setter],
+        onloadend: [Getter/Setter]
+      },
+      [Symbol(SameObject caches)]: [Object: null prototype] {
+        upload: XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        }
+      },
+      [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+      onloadstart: [Getter/Setter],
+      onprogress: [Getter/Setter],
+      onabort: [Getter/Setter],
+      onerror: [Getter/Setter],
+      onload: [Getter/Setter],
+      ontimeout: [Getter/Setter],
+      onloadend: [Getter/Setter]
+    },
+    {
+      set: <ref *9> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *9] }
+      },
+      get: <ref *10> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *10] }
+      }
+    }
+  ],
+  [isAxiosError]: true
+}
+
+The above error occurred in the <RisingList> component.
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 필터 버튼 클릭 시 API가 다시 호출된다
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET /undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 필터 버튼 클릭 시 API가 다시 호출된다
+Error: AggregateError
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:63:19)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:536:35)
+    at ClientRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/http-request.js:127:14)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at MockHttpSocket.socketErrorListener (node:_http_client:504:5)
+    at MockHttpSocket.emit (node:events:536:35)
+    at MockHttpSocket.emit (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:160:12)
+    at Socket.<anonymous> (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:293:14) undefined
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 필터 버튼 클릭 시 API가 다시 호출된다
+AxiosError: Network Error
+    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)
+    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)
+    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)
+    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)
+    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19) {
+  [stack]: 'AxiosError: Network Error\n' +
+    '    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)\n' +
+    '    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)\n' +
+    '    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)\n' +
+    '    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)\n' +
+    '    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n' +
+    '    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n' +
+    '    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)\n' +
+    '    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)\n' +
+    '    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)\n' +
+    '    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)\n' +
+    '    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19)',
+  message: 'Network Error',
+  name: 'AxiosError',
+  code: 'ERR_NETWORK',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch', [length]: 3 ],
+    transformRequest: [
+      <ref *1> [Function: transformRequest] {
+        [length]: 2,
+        [name]: 'transformRequest',
+        [prototype]: { [constructor]: [Circular *1] }
+      },
+      [length]: 1
+    ],
+    transformResponse: [
+      <ref *2> [Function: transformResponse] {
+        [length]: 1,
+        [name]: 'transformResponse',
+        [prototype]: { [constructor]: [Circular *2] }
+      },
+      [length]: 1
+    ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: {
+      FormData: <ref *3> [Function: FormData] {
+        [length]: 1,
+        [name]: 'FormData',
+        [prototype]: CombinedStream {
+          [constructor]: [Circular *3],
+          append: [Function],
+          _trackLength: [Function],
+          _lengthRetriever: [Function],
+          _multiPartHeader: [Function],
+          _getContentDisposition: [Function],
+          _getContentType: [Function],
+          _multiPartFooter: [Function],
+          _lastBoundary: [Function],
+          getHeaders: [Function],
+          setBoundary: [Function],
+          getBoundary: [Function],
+          getBuffer: [Function],
+          _generateBoundary: [Function],
+          getLengthSync: [Function],
+          hasKnownLength: [Function],
+          getLength: [Function],
+          submit: [Function],
+          _error: [Function],
+          toString: [Function],
+          _events: undefined,
+          _eventsCount: 0,
+          _maxListeners: undefined,
+          [Symbol(kCapture)]: false
+        },
+        [super_]: [Function: CombinedStream] {
+          [length]: 0,
+          [name]: 'CombinedStream',
+          [arguments]: null,
+          [caller]: null,
+          [prototype]: [Stream],
+          [super_]: [Function],
+          create: [Function],
+          isStreamLike: [Function]
+        },
+        LINE_BREAK: '\r\n',
+        DEFAULT_CONTENT_TYPE: 'application/octet-stream',
+        [Symbol(Symbol.toStringTag)]: 'FormData'
+      },
+      Blob: <ref *4> [class Blob] {
+        [length]: 0,
+        [name]: 'Blob',
+        [prototype]: {
+          [constructor]: [Circular *4],
+          slice: [Function],
+          size: [Getter],
+          type: [Getter],
+          [Symbol(Symbol.toStringTag)]: 'Blob'
+        }
+      }
+    },
+    validateStatus: <ref *5> [Function: validateStatus] {
+      [length]: 1,
+      [name]: 'validateStatus',
+      [prototype]: { [constructor]: [Circular *5] }
+    },
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': undefined,
+      [set]: [Getter/Setter],
+      [get]: [Getter/Setter],
+      [has]: [Getter/Setter],
+      [delete]: [Getter/Setter],
+      [clear]: [Getter/Setter],
+      [normalize]: [Getter/Setter],
+      [concat]: [Getter/Setter],
+      [toJSON]: [Getter/Setter],
+      [toString]: [Getter/Setter],
+      [getSetCookie]: [Getter/Setter],
+      [getContentType]: [Getter/Setter],
+      [setContentType]: [Getter/Setter],
+      [hasContentType]: [Getter/Setter],
+      [getContentLength]: [Getter/Setter],
+      [setContentLength]: [Getter/Setter],
+      [hasContentLength]: [Getter/Setter],
+      [getAccept]: [Getter/Setter],
+      [setAccept]: [Getter/Setter],
+      [hasAccept]: [Getter/Setter],
+      [getAcceptEncoding]: [Getter/Setter],
+      [setAcceptEncoding]: [Getter/Setter],
+      [hasAcceptEncoding]: [Getter/Setter],
+      [getUserAgent]: [Getter/Setter],
+      [setUserAgent]: [Getter/Setter],
+      [hasUserAgent]: [Getter/Setter],
+      [getAuthorization]: [Getter/Setter],
+      [setAuthorization]: [Getter/Setter],
+      [hasAuthorization]: [Getter/Setter],
+      [Symbol(Symbol.toStringTag)]: [Getter]
+    },
+    params: { targetType: 'ALL', rankType: 'MANY_WISH' },
+    method: 'get',
+    url: 'undefined/api/products/ranking',
+    allowAbsoluteUrls: true,
+    data: undefined
+  },
+  request: Proxy [
+    <ref *8> XMLHttpRequest {
+      [constructor]: <ref *6> [class XMLHttpRequest extends XMLHttpRequestEventTarget] {
+        [length]: 0,
+        [name]: 'XMLHttpRequest',
+        [prototype]: XMLHttpRequestEventTarget {
+          [constructor]: [Circular *6],
+          open: [Function],
+          setRequestHeader: [Function],
+          send: [Function],
+          abort: [Function],
+          getResponseHeader: [Function],
+          getAllResponseHeaders: [Function],
+          overrideMimeType: [Function],
+          onreadystatechange: [Getter/Setter],
+          readyState: [Getter],
+          timeout: [Getter/Setter],
+          withCredentials: [Getter/Setter],
+          upload: [Getter],
+          responseURL: [Getter],
+          status: [Getter],
+          statusText: [Getter],
+          responseType: [Getter/Setter],
+          response: [Getter],
+          responseText: [Getter],
+          responseXML: [Getter],
+          UNSENT: 0,
+          OPENED: 1,
+          HEADERS_RECEIVED: 2,
+          LOADING: 3,
+          DONE: 4,
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        UNSENT: 0,
+        OPENED: 1,
+        HEADERS_RECEIVED: 2,
+        LOADING: 3,
+        DONE: 4,
+        [Symbol(isPatchedModule)]: true
+      },
+      open: [Function: open] { [length]: 2, [name]: 'open' },
+      setRequestHeader: [Function: setRequestHeader] {
+        [length]: 2,
+        [name]: 'setRequestHeader'
+      },
+      send: [Function: send] { [length]: 0, [name]: 'send' },
+      abort: [Function: abort] { [length]: 0, [name]: 'abort' },
+      getResponseHeader: [Function: getResponseHeader] {
+        [length]: 1,
+        [name]: 'getResponseHeader'
+      },
+      getAllResponseHeaders: [Function: getAllResponseHeaders] {
+        [length]: 0,
+        [name]: 'getAllResponseHeaders'
+      },
+      overrideMimeType: [Function: overrideMimeType] {
+        [length]: 1,
+        [name]: 'overrideMimeType'
+      },
+      onreadystatechange: [Getter/Setter],
+      readyState: [Getter],
+      timeout: [Getter/Setter],
+      withCredentials: [Getter/Setter],
+      upload: Proxy [
+        XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        { set: [Function], get: [Function] }
+      ],
+      responseURL: [Getter],
+      status: [Getter],
+      statusText: [Getter],
+      responseType: [Getter/Setter],
+      response: [Getter],
+      responseText: [Getter],
+      responseXML: [Getter],
+      UNSENT: 0,
+      OPENED: 1,
+      HEADERS_RECEIVED: 2,
+      LOADING: 3,
+      DONE: 4,
+      [Symbol(impl)]: XMLHttpRequestImpl {
+        _globalObject: <ref *7> Window {
+          _globalObject: [Circular *7],
+          _globalProxy: [Window],
+          [Object]: [Function],
+          [Function]: [Function],
+          [Array]: [Function],
+          [Number]: [Function],
+          [parseFloat]: [Function],
+          [parseInt]: [Function],
+          [Infinity]: Infinity,
+          [NaN]: NaN,
+          [undefined]: undefined,
+          [Boolean]: [Function],
+          [String]: [Function],
+          [Symbol]: [Function],
+          [Date]: [Function],
+          [Promise]: [Function],
+          [RegExp]: [Function],
+Error:    [Error]: [Function],
+          [AggregateError]: [Function],
+          [EvalError]: [Function],
+          [RangeError]: [Function],
+          [ReferenceError]: [Function],
+          [SyntaxError]: [Function],
+          [TypeError]: [Function],
+          [URIError]: [Function],
+          [globalThis]: [Window],
+          [JSON]: [Object],
+          [Math]: [Object],
+          [Intl]: [Object],
+          [ArrayBuffer]: [Function],
+          [Atomics]: [Object],
+          [Uint8Array]: [Function],
+          [Int8Array]: [Function],
+          [Uint16Array]: [Function],
+          [Int16Array]: [Function],
+          [Uint32Array]: [Function],
+          [Int32Array]: [Function],
+          [Float32Array]: [Function],
+          [Float64Array]: [Function],
+          [Uint8ClampedArray]: [Function],
+          [BigUint64Array]: [Function],
+          [BigInt64Array]: [Function],
+          [DataView]: [Function],
+          [Map]: [Function],
+          [BigInt]: [Function],
+          [Set]: [Function],
+          [WeakMap]: [Function],
+          [WeakSet]: [Function],
+          [Proxy]: [Function],
+          [Reflect]: [Object],
+          [FinalizationRegistry]: [Function],
+          [WeakRef]: [Function],
+          [decodeURI]: [Function],
+          [decodeURIComponent]: [Function],
+          [encodeURI]: [Function],
+          [encodeURIComponent]: [Function],
+          [escape]: [Function],
+          [unescape]: [Function],
+          [eval]: [Function],
+          [isFinite]: [Function],
+          [isNaN]: [Function],
+          [SharedArrayBuffer]: [Function],
+          [WebAssembly]: [Object],
+          [DOMException]: [Function],
+          [URL]: [Function],
+          [webkitURL]: [Function],
+          [URLSearchParams]: [Function],
+          [EventTarget]: [Function],
+          [NamedNodeMap]: [Function],
+          [Node]: [Function],
+          [Attr]: [Function],
+          [Element]: [Function],
+          [DocumentFragment]: [Function],
+          [DOMImplementation]: [Function],
+          [Document]: [Function],
+          [XMLDocument]: [Function],
+          [CharacterData]: [Function],
+          [Text]: [Function],
+          [CDATASection]: [Function],
+          [ProcessingInstruction]: [Function],
+          [Comment]: [Function],
+          [DocumentType]: [Function],
+          [NodeList]: [Function],
+          [RadioNodeList]: [Function],
+          [HTMLCollection]: [Function],
+          [HTMLOptionsCollection]: [Function],
+          [DOMStringMap]: [Function],
+          [DOMTokenList]: [Function],
+          [StyleSheetList]: [Function],
+          [HTMLElement]: [Function],
+          [HTMLHeadElement]: [Function],
+          [HTMLTitleElement]: [Function],
+          [HTMLBaseElement]: [Function],
+          [HTMLLinkElement]: [Function],
+          [HTMLMetaElement]: [Function],
+          [HTMLStyleElement]: [Function],
+          [HTMLBodyElement]: [Function],
+          [HTMLHeadingElement]: [Function],
+          [HTMLParagraphElement]: [Function],
+          [HTMLHRElement]: [Function],
+          [HTMLPreElement]: [Function],
+          [HTMLUListElement]: [Function],
+          [HTMLOListElement]: [Function],
+          [HTMLLIElement]: [Function],
+          [HTMLMenuElement]: [Function],
+          [HTMLDListElement]: [Function],
+          [HTMLDivElement]: [Function],
+          [HTMLAnchorElement]: [Function],
+          [HTMLAreaElement]: [Function],
+          [HTMLBRElement]: [Function],
+          [HTMLButtonElement]: [Function],
+          [HTMLCanvasElement]: [Function],
+          [HTMLDataElement]: [Function],
+          [HTMLDataListElement]: [Function],
+          [HTMLDetailsElement]: [Function],
+          [HTMLDialogElement]: [Function],
+          [HTMLDirectoryElement]: [Function],
+          [HTMLFieldSetElement]: [Function],
+          [HTMLFontElement]: [Function],
+          [HTMLFormElement]: [Function],
+          [HTMLHtmlElement]: [Function],
+          [HTMLImageElement]: [Function],
+          [HTMLInputElement]: [Function],
+          [HTMLLabelElement]: [Function],
+          [HTMLLegendElement]: [Function],
+          [HTMLMapElement]: [Function],
+          [HTMLMarqueeElement]: [Function],
+          [HTMLMediaElement]: [Function],
+          [HTMLMeterElement]: [Function],
+          [HTMLModElement]: [Function],
+          [HTMLOptGroupElement]: [Function],
+          [HTMLOptionElement]: [Function],
+          [HTMLOutputElement]: [Function],
+          [HTMLPictureElement]: [Function],
+          [HTMLProgressElement]: [Function],
+          [HTMLQuoteElement]: [Function],
+          [HTMLScriptElement]: [Function],
+          [HTMLSelectElement]: [Function],
+          [HTMLSlotElement]: [Function],
+          [HTMLSourceElement]: [Function],
+          [HTMLSpanElement]: [Function],
+          [HTMLTableCaptionElement]: [Function],
+          [HTMLTableCellElement]: [Function],
+          [HTMLTableColElement]: [Function],
+          [HTMLTableElement]: [Function],
+          [HTMLTimeElement]: [Function],
+          [HTMLTableRowElement]: [Function],
+          [HTMLTableSectionElement]: [Function],
+          [HTMLTemplateElement]: [Function],
+          [HTMLTextAreaElement]: [Function],
+          [HTMLUnknownElement]: [Function],
+          [HTMLFrameElement]: [Function],
+          [HTMLFrameSetElement]: [Function],
+          [HTMLIFrameElement]: [Function],
+          [HTMLEmbedElement]: [Function],
+          [HTMLObjectElement]: [Function],
+          [HTMLParamElement]: [Function],
+          [HTMLVideoElement]: [Function],
+          [HTMLAudioElement]: [Function],
+          [HTMLTrackElement]: [Function],
+          [HTMLFormControlsCollection]: [Function],
+          [SVGElement]: [Function],
+          [SVGGraphicsElement]: [Function],
+          [SVGSVGElement]: [Function],
+          [SVGTitleElement]: [Function],
+          [SVGAnimatedString]: [Function],
+          [SVGNumber]: [Function],
+          [SVGStringList]: [Function],
+          [Event]: [Function],
+          [CloseEvent]: [Function],
+          [CustomEvent]: [Function],
+          [MessageEvent]: [Function],
+          [ErrorEvent]: [Function],
+          [HashChangeEvent]: [Function],
+          [PopStateEvent]: [Function],
+          [StorageEvent]: [Function],
+          [ProgressEvent]: [Function],
+          [PageTransitionEvent]: [Function],
+          [SubmitEvent]: [Function],
+          [UIEvent]: [Function],
+          [FocusEvent]: [Function],
+          [InputEvent]: [Function],
+          [MouseEvent]: [Function],
+          [KeyboardEvent]: [Function],
+          [TouchEvent]: [Function],
+          [CompositionEvent]: [Function],
+          [WheelEvent]: [Function],
+          [BarProp]: [Function],
+          [External]: [Function],
+          [Location]: [Function],
+          [History]: [Function],
+          [Screen]: [Function],
+          [Performance]: [Function],
+          [Navigator]: [Function],
+          [Crypto]: [Function],
+          [PluginArray]: [Function],
+          [MimeTypeArray]: [Function],
+          [Plugin]: [Function],
+          [MimeType]: [Function],
+          [FileReader]: [Function],
+          [Blob]: [Function],
+          [File]: [Function],
+          [FileList]: [Function],
+          [ValidityState]: [Function],
+          [DOMParser]: [Function],
+          [XMLSerializer]: [Function],
+          [FormData]: [Function],
+          [XMLHttpRequestEventTarget]: [Function],
+          [XMLHttpRequestUpload]: [Function],
+          [XMLHttpRequest]: [Function],
+          [WebSocket]: [Function],
+          [NodeFilter]: [Function],
+          [NodeIterator]: [Function],
+          [TreeWalker]: [Function],
+          [AbstractRange]: [Function],
+          [Range]: [Function],
+          [StaticRange]: [Function],
+          [Selection]: [Function],
+          [Storage]: [Function],
+          [CustomElementRegistry]: [Function],
+          [ElementInternals]: [Function],
+          [ShadowRoot]: [Function],
+          [MutationObserver]: [Function],
+          [MutationRecord]: [Function],
+          [Headers]: [Function],
+          [AbortController]: [Function],
+          [AbortSignal]: [Function],
+          [DOMRectReadOnly]: [Function],
+          [DOMRect]: [Function],
+          [HTMLDocument]: [Function],
+          StyleSheet: [Function],
+          MediaList: [Function],
+          CSSStyleSheet: [Function],
+          CSSRule: [Function],
+          CSSStyleRule: [Function],
+          CSSMediaRule: [Function],
+          CSSImportRule: [Function],
+          CSSStyleDeclaration: [Function],
+          XPathException: [Function],
+          XPathExpression: [Function],
+          XPathResult: [Function],
+          XPathEvaluator: [Function],
+          [Window]: [Function],
+          [_proxyWindowEventsToWindow]: [Function],
+          onafterprint: [Getter/Setter],
+          onbeforeprint: [Getter/Setter],
+          onbeforeunload: [Getter/Setter],
+          onhashchange: [Getter/Setter],
+          onlanguagechange: [Getter/Setter],
+          onmessage: [Getter/Setter],
+          onmessageerror: [Getter/Setter],
+          onoffline: [Getter/Setter],
+          ononline: [Getter/Setter],
+          onpagehide: [Getter/Setter],
+          onpageshow: [Getter/Setter],
+          onpopstate: [Getter/Setter],
+          onrejectionhandled: [Getter/Setter],
+          onstorage: [Getter/Setter],
+          onunhandledrejection: [Getter/Setter],
+          onunload: [Getter/Setter],
+          onblur: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onfocus: [Getter/Setter],
+          onload: [Getter/Setter],
+          onresize: [Getter/Setter],
+          onscroll: [Getter/Setter],
+          [_initGlobalEvents]: [Function],
+          [_getEventHandlerTarget]: [Function],
+          [_getEventHandlerFor]: [Function],
+          [_setEventHandlerFor]: [Function],
+          [_globalEventChanged]: [Function],
+          onabort: [Getter/Setter],
+          onauxclick: [Getter/Setter],
+          onbeforeinput: [Getter/Setter],
+          onbeforematch: [Getter/Setter],
+          onbeforetoggle: [Getter/Setter],
+          oncancel: [Getter/Setter],
+          oncanplay: [Getter/Setter],
+          oncanplaythrough: [Getter/Setter],
+          onchange: [Getter/Setter],
+          onclick: [Getter/Setter],
+          onclose: [Getter/Setter],
+          oncontextlost: [Getter/Setter],
+          oncontextmenu: [Getter/Setter],
+          oncontextrestored: [Getter/Setter],
+          oncopy: [Getter/Setter],
+          oncuechange: [Getter/Setter],
+          oncut: [Getter/Setter],
+          ondblclick: [Getter/Setter],
+          ondrag: [Getter/Setter],
+          ondragend: [Getter/Setter],
+          ondragenter: [Getter/Setter],
+          ondragleave: [Getter/Setter],
+          ondragover: [Getter/Setter],
+          ondragstart: [Getter/Setter],
+          ondrop: [Getter/Setter],
+          ondurationchange: [Getter/Setter],
+          onemptied: [Getter/Setter],
+          onended: [Getter/Setter],
+          onformdata: [Getter/Setter],
+          oninput: [Getter/Setter],
+          oninvalid: [Getter/Setter],
+          onkeydown: [Getter/Setter],
+          onkeypress: [Getter/Setter],
+          onkeyup: [Getter/Setter],
+          onloadeddata: [Getter/Setter],
+          onloadedmetadata: [Getter/Setter],
+          onloadstart: [Getter/Setter],
+          onmousedown: [Getter/Setter],
+          onmouseenter: [Getter/Setter],
+          onmouseleave: [Getter/Setter],
+          onmousemove: [Getter/Setter],
+          onmouseout: [Getter/Setter],
+          onmouseover: [Getter/Setter],
+          onmouseup: [Getter/Setter],
+          onpaste: [Getter/Setter],
+          onpause: [Getter/Setter],
+          onplay: [Getter/Setter],
+          onplaying: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onratechange: [Getter/Setter],
+          onreset: [Getter/Setter],
+          onscrollend: [Getter/Setter],
+          onsecuritypolicyviolation: [Getter/Setter],
+          onseeked: [Getter/Setter],
+          onseeking: [Getter/Setter],
+          onselect: [Getter/Setter],
+          onslotchange: [Getter/Setter],
+          onstalled: [Getter/Setter],
+          onsubmit: [Getter/Setter],
+          onsuspend: [Getter/Setter],
+          ontimeupdate: [Getter/Setter],
+          ontoggle: [Getter/Setter],
+          onvolumechange: [Getter/Setter],
+          onwaiting: [Getter/Setter],
+          onwebkitanimationend: [Getter/Setter],
+          onwebkitanimationiteration: [Getter/Setter],
+          onwebkitanimationstart: [Getter/Setter],
+          onwebkittransitionend: [Getter/Setter],
+          onwheel: [Getter/Setter],
+          ontouchstart: [Getter/Setter],
+          ontouchend: [Getter/Setter],
+          ontouchmove: [Getter/Setter],
+          ontouchcancel: [Getter/Setter],
+          _registeredHandlers: Set(0) {},
+          _eventHandlers: [Object: null prototype] {},
+          onautocomplete: [Getter/Setter],
+          onautocompleteerror: [Getter/Setter],
+          onsort: [Getter/Setter],
+          _resourceLoader: [NoOpResourceLoader],
+          _document: [Document],
+          _origin: 'http://localhost:3000',
+          _sessionHistory: [SessionHistory],
+          _virtualConsole: [VirtualConsole],
+          _runScripts: 'dangerously',
+          _top: [Window],
+          _parent: [Window],
+          _frameElement: null,
+          _length: 0,
+          _currentEvent: undefined,
+          _pretendToBeVisual: true,
+          _storageQuota: 5000000,
+          _commonForOrigin: [Object],
+          _currentOriginData: [Object],
+          _localStorage: Proxy [Array],
+          _sessionStorage: Proxy [Array],
+          _selection: [SelectionImpl],
+          getSelection: [Function],
+          _customElementRegistry: [CustomElementRegistry],
+          length: [Getter/Setter],
+          window: [Getter],
+          frameElement: [Getter],
+          frames: [Getter/Setter],
+          self: [Getter/Setter],
+          parent: [Getter/Setter],
+          top: [Getter],
+          document: [Getter],
+          external: [Getter/Setter],
+          location: [Getter/Setter],
+          history: [Getter],
+          navigator: [Getter],
+          locationbar: [Getter/Setter],
+          menubar: [Getter/Setter],
+          personalbar: [Getter/Setter],
+          scrollbars: [Getter/Setter],
+          statusbar: [Getter/Setter],
+          toolbar: [Getter/Setter],
+          performance: [Getter],
+          screen: [Getter/Setter],
+          crypto: [Getter],
+          origin: [Getter/Setter],
+          localStorage: [Getter],
+          sessionStorage: [Getter],
+          customElements: [Getter],
+          event: [Getter/Setter],
+          setTimeout: [Function],
+          setInterval: [Function],
+          clearTimeout: [Function],
+          clearInterval: [Function],
+          queueMicrotask: [Function],
+          requestAnimationFrame: [Function],
+          cancelAnimationFrame: [Function],
+          [Option]: [Function],
+          [Image]: [Function],
+          [Audio]: [Function],
+          postMessage: [Function],
+          atob: [Function],
+          btoa: [Function],
+          stop: [Function],
+          close: [Function],
+          getComputedStyle: [Function],
+          captureEvents: [Function],
+          releaseEvents: [Function],
+          console: [Object],
+          name: '',
+          status: '',
+          devicePixelRatio: 1,
+          innerWidth: 1024,
+          innerHeight: 768,
+          outerWidth: 1024,
+          outerHeight: 768,
+          pageXOffset: 0,
+          pageYOffset: 0,
+          screenX: 0,
+          screenLeft: 0,
+          screenY: 0,
+          screenTop: 0,
+          scrollX: 0,
+          scrollY: 0,
+          alert: [Function],
+          blur: [Function],
+          confirm: [Function],
+          focus: [Function],
+          moveBy: [Function],
+          moveTo: [Function],
+          open: [Function],
+          print: [Function],
+          prompt: [Function],
+          resizeBy: [Function],
+          resizeTo: [Function],
+          scroll: [Function],
+          scrollBy: [Function],
+          scrollTo: [Function],
+          [Symbol([webidl2js] constructor registry)]: [Object: null prototype],
+          [Symbol(named property tracker)]: [NamedPropertiesTracker],
+          [Symbol(impl)]: [EventTargetImpl],
+          [Symbol(Symbol.toStringTag)]: 'Window'
+        },
+        _eventListeners: [Object: null prototype] {
+          loadend: [Array],
+          abort: [Array],
+          error: [Array],
+          timeout: [Array],
+          load: [Array]
+        },
+        upload: XMLHttpRequestUploadImpl {
+          _globalObject: [Window],
+          _eventListeners: [Object: null prototype] {},
+          [Symbol(wrapper)]: [XMLHttpRequestUpload],
+          [_ownerDocument]: [Getter],
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        readyState: 4,
+        responseURL: '',
+        status: 0,
+        statusText: '',
+        flag: {
+          synchronous: false,
+          withCredentials: false,
+          mimeType: null,
+          auth: null,
+          method: 'GET',
+          responseType: '',
+          requestHeaders: [Object],
+          referrer: 'http://localhost:3000/',
+          uri: 'http://localhost:3000/undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH',
+          timeout: 0,
+          body: undefined,
+          formData: false,
+          preflight: false,
+          requestManager: [RequestManager],
+          strictSSL: true,
+          proxy: undefined,
+          cookieJar: [CookieJar],
+          encoding: 'UTF-8',
+          origin: 'http://localhost:3000',
+          userAgent: 'Mozilla/5.0 (linux) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/24.1.3'
+        },
+        properties: {
+          beforeSend: false,
+          send: false,
+          client: [Request],
+          timeoutStart: 0,
+          timeoutId: 0,
+          timeoutFn: null,
+          responseBuffer: null,
+          responseCache: null,
+          responseTextCache: null,
+          responseXMLCache: null,
+          responseHeaders: {},
+          filteredResponseHeaders: [Array],
+          error: [AggregateError],
+          uploadComplete: true,
+          uploadListener: false,
+          abortError: false,
+          cookieJar: [CookieJar],
+          bufferStepSize: 1048576,
+          totalReceivedChunkSize: 0,
+          origin: 'http://localhost:3000'
+        },
+        _registeredHandlers: Set(4) { 'loadend', 'abort', 'error', 'timeout' },
+        _eventHandlers: [Object: null prototype] {
+          loadend: [Function],
+          abort: [Function],
+          error: [Function],
+          timeout: [Function]
+        },
+        [Symbol(wrapper)]: [Circular *8],
+        [responseType]: [Getter/Setter],
+        [response]: [Getter],
+        [responseText]: [Getter],
+        [responseXML]: [Getter],
+        [timeout]: [Getter/Setter],
+        [withCredentials]: [Getter/Setter],
+        onreadystatechange: [Getter/Setter],
+        [_ownerDocument]: [Getter],
+        onloadstart: [Getter/Setter],
+        onprogress: [Getter/Setter],
+        onabort: [Getter/Setter],
+        onerror: [Getter/Setter],
+        onload: [Getter/Setter],
+        ontimeout: [Getter/Setter],
+        onloadend: [Getter/Setter]
+      },
+      [Symbol(SameObject caches)]: [Object: null prototype] {
+        upload: XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        }
+      },
+      [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+      onloadstart: [Getter/Setter],
+      onprogress: [Getter/Setter],
+      onabort: [Getter/Setter],
+      onerror: [Getter/Setter],
+      onload: [Getter/Setter],
+      ontimeout: [Getter/Setter],
+      onloadend: [Getter/Setter]
+    },
+    {
+      set: <ref *9> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *9] }
+      },
+      get: <ref *10> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *10] }
+      }
+    }
+  ],
+  [isAxiosError]: true
+}
+
+The above error occurred in the <RisingList> component.
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 상품 클릭 시 상품 상세 페이지로 이동한다
+[MSW] Warning: intercepted a request without a matching request handler:
+
+  • GET /undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH
+
+If you still wish to intercept this unhandled request, please create a request handler for it.
+Read more: https://mswjs.io/docs/http/intercepting-requests
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 상품 클릭 시 상품 상세 페이지로 이동한다
+Error: AggregateError
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:63:19)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Request.emit (node:events:536:35)
+    at ClientRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/http-request.js:127:14)
+    at ClientRequest.emit (node:events:524:28)
+    at emitErrorEvent (node:_http_client:101:11)
+    at MockHttpSocket.socketErrorListener (node:_http_client:504:5)
+    at MockHttpSocket.emit (node:events:536:35)
+    at MockHttpSocket.emit (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:160:12)
+    at Socket.<anonymous> (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/@mswjs/interceptors/src/interceptors/ClientRequest/MockHttpSocket.ts:293:14) undefined
+
+stderr | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 상품 클릭 시 상품 상세 페이지로 이동한다
+AxiosError: Network Error
+    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)
+    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)
+    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)
+    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)
+    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)
+    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)
+    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)
+    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19) {
+  [stack]: 'AxiosError: Network Error\n' +
+    '    at XMLHttpRequest.handleError (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/adapters/xhr.js:110:14)\n' +
+    '    at XMLHttpRequest.invokeTheCallbackFunction (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/generated/EventHandlerNonNull.js:14:28)\n' +
+    '    at XMLHttpRequest.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/create-event-accessor.js:35:32)\n' +
+    '    at innerInvokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)\n' +
+    '    at invokeEventListeners (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n' +
+    '    at XMLHttpRequestImpl._dispatch (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n' +
+    '    at fireAnEvent (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/helpers/events.js:18:36)\n' +
+    '    at requestErrorSteps (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:131:3)\n' +
+    '    at Object.dispatchError (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/xhr-utils.js:60:3)\n' +
+    '    at Request.<anonymous> (/home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js:655:18)\n' +
+    '    at Axios.request (file:///home/runner/work/react-gift-product-detail/react-gift-product-detail/node_modules/axios/lib/core/Axios.js:45:41)\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at queryFn (/home/runner/work/react-gift-product-detail/react-gift-product-detail/src/hooks/useSuspenseApiQuery.ts:19:19)',
+  message: 'Network Error',
+  name: 'AxiosError',
+  code: 'ERR_NETWORK',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch', [length]: 3 ],
+    transformRequest: [
+      <ref *1> [Function: transformRequest] {
+        [length]: 2,
+        [name]: 'transformRequest',
+        [prototype]: { [constructor]: [Circular *1] }
+      },
+      [length]: 1
+    ],
+    transformResponse: [
+      <ref *2> [Function: transformResponse] {
+        [length]: 1,
+        [name]: 'transformResponse',
+        [prototype]: { [constructor]: [Circular *2] }
+      },
+      [length]: 1
+    ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: {
+      FormData: <ref *3> [Function: FormData] {
+        [length]: 1,
+        [name]: 'FormData',
+        [prototype]: CombinedStream {
+          [constructor]: [Circular *3],
+          append: [Function],
+          _trackLength: [Function],
+          _lengthRetriever: [Function],
+          _multiPartHeader: [Function],
+          _getContentDisposition: [Function],
+          _getContentType: [Function],
+          _multiPartFooter: [Function],
+          _lastBoundary: [Function],
+          getHeaders: [Function],
+          setBoundary: [Function],
+          getBoundary: [Function],
+          getBuffer: [Function],
+          _generateBoundary: [Function],
+          getLengthSync: [Function],
+          hasKnownLength: [Function],
+          getLength: [Function],
+          submit: [Function],
+          _error: [Function],
+          toString: [Function],
+          _events: undefined,
+          _eventsCount: 0,
+          _maxListeners: undefined,
+          [Symbol(kCapture)]: false
+        },
+        [super_]: [Function: CombinedStream] {
+          [length]: 0,
+          [name]: 'CombinedStream',
+          [arguments]: null,
+          [caller]: null,
+          [prototype]: [Stream],
+          [super_]: [Function],
+          create: [Function],
+          isStreamLike: [Function]
+        },
+        LINE_BREAK: '\r\n',
+        DEFAULT_CONTENT_TYPE: 'application/octet-stream',
+        [Symbol(Symbol.toStringTag)]: 'FormData'
+      },
+      Blob: <ref *4> [class Blob] {
+        [length]: 0,
+        [name]: 'Blob',
+        [prototype]: {
+          [constructor]: [Circular *4],
+          slice: [Function],
+          size: [Getter],
+          type: [Getter],
+          [Symbol(Symbol.toStringTag)]: 'Blob'
+        }
+      }
+    },
+    validateStatus: <ref *5> [Function: validateStatus] {
+      [length]: 1,
+      [name]: 'validateStatus',
+      [prototype]: { [constructor]: [Circular *5] }
+    },
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': undefined,
+      [set]: [Getter/Setter],
+      [get]: [Getter/Setter],
+      [has]: [Getter/Setter],
+      [delete]: [Getter/Setter],
+      [clear]: [Getter/Setter],
+      [normalize]: [Getter/Setter],
+      [concat]: [Getter/Setter],
+      [toJSON]: [Getter/Setter],
+      [toString]: [Getter/Setter],
+      [getSetCookie]: [Getter/Setter],
+      [getContentType]: [Getter/Setter],
+      [setContentType]: [Getter/Setter],
+      [hasContentType]: [Getter/Setter],
+      [getContentLength]: [Getter/Setter],
+      [setContentLength]: [Getter/Setter],
+      [hasContentLength]: [Getter/Setter],
+      [getAccept]: [Getter/Setter],
+      [setAccept]: [Getter/Setter],
+      [hasAccept]: [Getter/Setter],
+      [getAcceptEncoding]: [Getter/Setter],
+      [setAcceptEncoding]: [Getter/Setter],
+      [hasAcceptEncoding]: [Getter/Setter],
+      [getUserAgent]: [Getter/Setter],
+      [setUserAgent]: [Getter/Setter],
+      [hasUserAgent]: [Getter/Setter],
+      [getAuthorization]: [Getter/Setter],
+      [setAuthorization]: [Getter/Setter],
+      [hasAuthorization]: [Getter/Setter],
+      [Symbol(Symbol.toStringTag)]: [Getter]
+    },
+    params: { targetType: 'ALL', rankType: 'MANY_WISH' },
+    method: 'get',
+    url: 'undefined/api/products/ranking',
+    allowAbsoluteUrls: true,
+    data: undefined
+  },
+  request: Proxy [
+    <ref *8> XMLHttpRequest {
+      [constructor]: <ref *6> [class XMLHttpRequest extends XMLHttpRequestEventTarget] {
+        [length]: 0,
+        [name]: 'XMLHttpRequest',
+        [prototype]: XMLHttpRequestEventTarget {
+          [constructor]: [Circular *6],
+          open: [Function],
+          setRequestHeader: [Function],
+          send: [Function],
+          abort: [Function],
+          getResponseHeader: [Function],
+          getAllResponseHeaders: [Function],
+          overrideMimeType: [Function],
+          onreadystatechange: [Getter/Setter],
+          readyState: [Getter],
+          timeout: [Getter/Setter],
+          withCredentials: [Getter/Setter],
+          upload: [Getter],
+          responseURL: [Getter],
+          status: [Getter],
+          statusText: [Getter],
+          responseType: [Getter/Setter],
+          response: [Getter],
+          responseText: [Getter],
+          responseXML: [Getter],
+          UNSENT: 0,
+          OPENED: 1,
+          HEADERS_RECEIVED: 2,
+          LOADING: 3,
+          DONE: 4,
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        UNSENT: 0,
+        OPENED: 1,
+        HEADERS_RECEIVED: 2,
+        LOADING: 3,
+        DONE: 4,
+        [Symbol(isPatchedModule)]: true
+      },
+      open: [Function: open] { [length]: 2, [name]: 'open' },
+      setRequestHeader: [Function: setRequestHeader] {
+        [length]: 2,
+        [name]: 'setRequestHeader'
+      },
+      send: [Function: send] { [length]: 0, [name]: 'send' },
+      abort: [Function: abort] { [length]: 0, [name]: 'abort' },
+      getResponseHeader: [Function: getResponseHeader] {
+        [length]: 1,
+        [name]: 'getResponseHeader'
+      },
+      getAllResponseHeaders: [Function: getAllResponseHeaders] {
+        [length]: 0,
+        [name]: 'getAllResponseHeaders'
+      },
+      overrideMimeType: [Function: overrideMimeType] {
+        [length]: 1,
+        [name]: 'overrideMimeType'
+      },
+      onreadystatechange: [Getter/Setter],
+      readyState: [Getter],
+      timeout: [Getter/Setter],
+      withCredentials: [Getter/Setter],
+      upload: Proxy [
+        XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        { set: [Function], get: [Function] }
+      ],
+      responseURL: [Getter],
+      status: [Getter],
+      statusText: [Getter],
+      responseType: [Getter/Setter],
+      response: [Getter],
+      responseText: [Getter],
+      responseXML: [Getter],
+      UNSENT: 0,
+      OPENED: 1,
+      HEADERS_RECEIVED: 2,
+      LOADING: 3,
+      DONE: 4,
+      [Symbol(impl)]: XMLHttpRequestImpl {
+        _globalObject: <ref *7> Window {
+          _globalObject: [Circular *7],
+          _globalProxy: [Window],
+          [Object]: [Function],
+          [Function]: [Function],
+          [Array]: [Function],
+          [Number]: [Function],
+          [parseFloat]: [Function],
+          [parseInt]: [Function],
+          [Infinity]: Infinity,
+          [NaN]: NaN,
+          [undefined]: undefined,
+          [Boolean]: [Function],
+          [String]: [Function],
+          [Symbol]: [Function],
+          [Date]: [Function],
+          [Promise]: [Function],
+          [RegExp]: [Function],
+Error:    [Error]: [Function],
+          [AggregateError]: [Function],
+          [EvalError]: [Function],
+          [RangeError]: [Function],
+          [ReferenceError]: [Function],
+          [SyntaxError]: [Function],
+          [TypeError]: [Function],
+          [URIError]: [Function],
+          [globalThis]: [Window],
+          [JSON]: [Object],
+          [Math]: [Object],
+          [Intl]: [Object],
+          [ArrayBuffer]: [Function],
+          [Atomics]: [Object],
+          [Uint8Array]: [Function],
+          [Int8Array]: [Function],
+          [Uint16Array]: [Function],
+          [Int16Array]: [Function],
+          [Uint32Array]: [Function],
+          [Int32Array]: [Function],
+          [Float32Array]: [Function],
+          [Float64Array]: [Function],
+          [Uint8ClampedArray]: [Function],
+          [BigUint64Array]: [Function],
+          [BigInt64Array]: [Function],
+          [DataView]: [Function],
+          [Map]: [Function],
+          [BigInt]: [Function],
+          [Set]: [Function],
+          [WeakMap]: [Function],
+          [WeakSet]: [Function],
+          [Proxy]: [Function],
+          [Reflect]: [Object],
+          [FinalizationRegistry]: [Function],
+          [WeakRef]: [Function],
+          [decodeURI]: [Function],
+          [decodeURIComponent]: [Function],
+          [encodeURI]: [Function],
+          [encodeURIComponent]: [Function],
+          [escape]: [Function],
+          [unescape]: [Function],
+          [eval]: [Function],
+          [isFinite]: [Function],
+          [isNaN]: [Function],
+          [SharedArrayBuffer]: [Function],
+          [WebAssembly]: [Object],
+          [DOMException]: [Function],
+          [URL]: [Function],
+          [webkitURL]: [Function],
+          [URLSearchParams]: [Function],
+          [EventTarget]: [Function],
+          [NamedNodeMap]: [Function],
+          [Node]: [Function],
+          [Attr]: [Function],
+          [Element]: [Function],
+          [DocumentFragment]: [Function],
+          [DOMImplementation]: [Function],
+          [Document]: [Function],
+          [XMLDocument]: [Function],
+          [CharacterData]: [Function],
+          [Text]: [Function],
+          [CDATASection]: [Function],
+          [ProcessingInstruction]: [Function],
+          [Comment]: [Function],
+          [DocumentType]: [Function],
+          [NodeList]: [Function],
+          [RadioNodeList]: [Function],
+          [HTMLCollection]: [Function],
+          [HTMLOptionsCollection]: [Function],
+          [DOMStringMap]: [Function],
+          [DOMTokenList]: [Function],
+          [StyleSheetList]: [Function],
+          [HTMLElement]: [Function],
+          [HTMLHeadElement]: [Function],
+          [HTMLTitleElement]: [Function],
+          [HTMLBaseElement]: [Function],
+          [HTMLLinkElement]: [Function],
+          [HTMLMetaElement]: [Function],
+          [HTMLStyleElement]: [Function],
+          [HTMLBodyElement]: [Function],
+          [HTMLHeadingElement]: [Function],
+          [HTMLParagraphElement]: [Function],
+          [HTMLHRElement]: [Function],
+          [HTMLPreElement]: [Function],
+          [HTMLUListElement]: [Function],
+          [HTMLOListElement]: [Function],
+          [HTMLLIElement]: [Function],
+          [HTMLMenuElement]: [Function],
+          [HTMLDListElement]: [Function],
+          [HTMLDivElement]: [Function],
+          [HTMLAnchorElement]: [Function],
+          [HTMLAreaElement]: [Function],
+          [HTMLBRElement]: [Function],
+          [HTMLButtonElement]: [Function],
+          [HTMLCanvasElement]: [Function],
+          [HTMLDataElement]: [Function],
+          [HTMLDataListElement]: [Function],
+          [HTMLDetailsElement]: [Function],
+          [HTMLDialogElement]: [Function],
+          [HTMLDirectoryElement]: [Function],
+          [HTMLFieldSetElement]: [Function],
+          [HTMLFontElement]: [Function],
+          [HTMLFormElement]: [Function],
+          [HTMLHtmlElement]: [Function],
+          [HTMLImageElement]: [Function],
+          [HTMLInputElement]: [Function],
+          [HTMLLabelElement]: [Function],
+          [HTMLLegendElement]: [Function],
+          [HTMLMapElement]: [Function],
+          [HTMLMarqueeElement]: [Function],
+          [HTMLMediaElement]: [Function],
+          [HTMLMeterElement]: [Function],
+          [HTMLModElement]: [Function],
+          [HTMLOptGroupElement]: [Function],
+          [HTMLOptionElement]: [Function],
+          [HTMLOutputElement]: [Function],
+          [HTMLPictureElement]: [Function],
+          [HTMLProgressElement]: [Function],
+          [HTMLQuoteElement]: [Function],
+          [HTMLScriptElement]: [Function],
+          [HTMLSelectElement]: [Function],
+          [HTMLSlotElement]: [Function],
+          [HTMLSourceElement]: [Function],
+          [HTMLSpanElement]: [Function],
+          [HTMLTableCaptionElement]: [Function],
+          [HTMLTableCellElement]: [Function],
+          [HTMLTableColElement]: [Function],
+          [HTMLTableElement]: [Function],
+          [HTMLTimeElement]: [Function],
+          [HTMLTableRowElement]: [Function],
+          [HTMLTableSectionElement]: [Function],
+          [HTMLTemplateElement]: [Function],
+          [HTMLTextAreaElement]: [Function],
+          [HTMLUnknownElement]: [Function],
+          [HTMLFrameElement]: [Function],
+          [HTMLFrameSetElement]: [Function],
+          [HTMLIFrameElement]: [Function],
+          [HTMLEmbedElement]: [Function],
+          [HTMLObjectElement]: [Function],
+          [HTMLParamElement]: [Function],
+          [HTMLVideoElement]: [Function],
+          [HTMLAudioElement]: [Function],
+          [HTMLTrackElement]: [Function],
+          [HTMLFormControlsCollection]: [Function],
+          [SVGElement]: [Function],
+          [SVGGraphicsElement]: [Function],
+          [SVGSVGElement]: [Function],
+          [SVGTitleElement]: [Function],
+          [SVGAnimatedString]: [Function],
+          [SVGNumber]: [Function],
+          [SVGStringList]: [Function],
+          [Event]: [Function],
+          [CloseEvent]: [Function],
+          [CustomEvent]: [Function],
+          [MessageEvent]: [Function],
+          [ErrorEvent]: [Function],
+          [HashChangeEvent]: [Function],
+          [PopStateEvent]: [Function],
+          [StorageEvent]: [Function],
+          [ProgressEvent]: [Function],
+          [PageTransitionEvent]: [Function],
+          [SubmitEvent]: [Function],
+          [UIEvent]: [Function],
+          [FocusEvent]: [Function],
+          [InputEvent]: [Function],
+          [MouseEvent]: [Function],
+          [KeyboardEvent]: [Function],
+          [TouchEvent]: [Function],
+          [CompositionEvent]: [Function],
+          [WheelEvent]: [Function],
+          [BarProp]: [Function],
+          [External]: [Function],
+          [Location]: [Function],
+          [History]: [Function],
+          [Screen]: [Function],
+          [Performance]: [Function],
+          [Navigator]: [Function],
+          [Crypto]: [Function],
+          [PluginArray]: [Function],
+          [MimeTypeArray]: [Function],
+          [Plugin]: [Function],
+          [MimeType]: [Function],
+          [FileReader]: [Function],
+          [Blob]: [Function],
+          [File]: [Function],
+          [FileList]: [Function],
+          [ValidityState]: [Function],
+          [DOMParser]: [Function],
+          [XMLSerializer]: [Function],
+          [FormData]: [Function],
+          [XMLHttpRequestEventTarget]: [Function],
+          [XMLHttpRequestUpload]: [Function],
+          [XMLHttpRequest]: [Function],
+          [WebSocket]: [Function],
+          [NodeFilter]: [Function],
+          [NodeIterator]: [Function],
+          [TreeWalker]: [Function],
+          [AbstractRange]: [Function],
+          [Range]: [Function],
+          [StaticRange]: [Function],
+          [Selection]: [Function],
+          [Storage]: [Function],
+          [CustomElementRegistry]: [Function],
+          [ElementInternals]: [Function],
+          [ShadowRoot]: [Function],
+          [MutationObserver]: [Function],
+          [MutationRecord]: [Function],
+          [Headers]: [Function],
+          [AbortController]: [Function],
+          [AbortSignal]: [Function],
+          [DOMRectReadOnly]: [Function],
+          [DOMRect]: [Function],
+          [HTMLDocument]: [Function],
+          StyleSheet: [Function],
+          MediaList: [Function],
+          CSSStyleSheet: [Function],
+          CSSRule: [Function],
+          CSSStyleRule: [Function],
+          CSSMediaRule: [Function],
+          CSSImportRule: [Function],
+          CSSStyleDeclaration: [Function],
+          XPathException: [Function],
+          XPathExpression: [Function],
+          XPathResult: [Function],
+          XPathEvaluator: [Function],
+          [Window]: [Function],
+          [_proxyWindowEventsToWindow]: [Function],
+          onafterprint: [Getter/Setter],
+          onbeforeprint: [Getter/Setter],
+          onbeforeunload: [Getter/Setter],
+          onhashchange: [Getter/Setter],
+          onlanguagechange: [Getter/Setter],
+          onmessage: [Getter/Setter],
+          onmessageerror: [Getter/Setter],
+          onoffline: [Getter/Setter],
+          ononline: [Getter/Setter],
+          onpagehide: [Getter/Setter],
+          onpageshow: [Getter/Setter],
+          onpopstate: [Getter/Setter],
+          onrejectionhandled: [Getter/Setter],
+          onstorage: [Getter/Setter],
+          onunhandledrejection: [Getter/Setter],
+          onunload: [Getter/Setter],
+          onblur: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onfocus: [Getter/Setter],
+          onload: [Getter/Setter],
+          onresize: [Getter/Setter],
+          onscroll: [Getter/Setter],
+          [_initGlobalEvents]: [Function],
+          [_getEventHandlerTarget]: [Function],
+          [_getEventHandlerFor]: [Function],
+          [_setEventHandlerFor]: [Function],
+          [_globalEventChanged]: [Function],
+          onabort: [Getter/Setter],
+          onauxclick: [Getter/Setter],
+          onbeforeinput: [Getter/Setter],
+          onbeforematch: [Getter/Setter],
+          onbeforetoggle: [Getter/Setter],
+          oncancel: [Getter/Setter],
+          oncanplay: [Getter/Setter],
+          oncanplaythrough: [Getter/Setter],
+          onchange: [Getter/Setter],
+          onclick: [Getter/Setter],
+          onclose: [Getter/Setter],
+          oncontextlost: [Getter/Setter],
+          oncontextmenu: [Getter/Setter],
+          oncontextrestored: [Getter/Setter],
+          oncopy: [Getter/Setter],
+          oncuechange: [Getter/Setter],
+          oncut: [Getter/Setter],
+          ondblclick: [Getter/Setter],
+          ondrag: [Getter/Setter],
+          ondragend: [Getter/Setter],
+          ondragenter: [Getter/Setter],
+          ondragleave: [Getter/Setter],
+          ondragover: [Getter/Setter],
+          ondragstart: [Getter/Setter],
+          ondrop: [Getter/Setter],
+          ondurationchange: [Getter/Setter],
+          onemptied: [Getter/Setter],
+          onended: [Getter/Setter],
+          onformdata: [Getter/Setter],
+          oninput: [Getter/Setter],
+          oninvalid: [Getter/Setter],
+          onkeydown: [Getter/Setter],
+          onkeypress: [Getter/Setter],
+          onkeyup: [Getter/Setter],
+          onloadeddata: [Getter/Setter],
+          onloadedmetadata: [Getter/Setter],
+          onloadstart: [Getter/Setter],
+          onmousedown: [Getter/Setter],
+          onmouseenter: [Getter/Setter],
+          onmouseleave: [Getter/Setter],
+          onmousemove: [Getter/Setter],
+          onmouseout: [Getter/Setter],
+          onmouseover: [Getter/Setter],
+          onmouseup: [Getter/Setter],
+          onpaste: [Getter/Setter],
+          onpause: [Getter/Setter],
+          onplay: [Getter/Setter],
+          onplaying: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onratechange: [Getter/Setter],
+          onreset: [Getter/Setter],
+          onscrollend: [Getter/Setter],
+          onsecuritypolicyviolation: [Getter/Setter],
+          onseeked: [Getter/Setter],
+          onseeking: [Getter/Setter],
+          onselect: [Getter/Setter],
+          onslotchange: [Getter/Setter],
+          onstalled: [Getter/Setter],
+          onsubmit: [Getter/Setter],
+          onsuspend: [Getter/Setter],
+          ontimeupdate: [Getter/Setter],
+          ontoggle: [Getter/Setter],
+          onvolumechange: [Getter/Setter],
+          onwaiting: [Getter/Setter],
+          onwebkitanimationend: [Getter/Setter],
+          onwebkitanimationiteration: [Getter/Setter],
+          onwebkitanimationstart: [Getter/Setter],
+          onwebkittransitionend: [Getter/Setter],
+          onwheel: [Getter/Setter],
+          ontouchstart: [Getter/Setter],
+          ontouchend: [Getter/Setter],
+          ontouchmove: [Getter/Setter],
+          ontouchcancel: [Getter/Setter],
+          _registeredHandlers: Set(0) {},
+          _eventHandlers: [Object: null prototype] {},
+          onautocomplete: [Getter/Setter],
+          onautocompleteerror: [Getter/Setter],
+          onsort: [Getter/Setter],
+          _resourceLoader: [NoOpResourceLoader],
+          _document: [Document],
+          _origin: 'http://localhost:3000',
+          _sessionHistory: [SessionHistory],
+          _virtualConsole: [VirtualConsole],
+          _runScripts: 'dangerously',
+          _top: [Window],
+          _parent: [Window],
+          _frameElement: null,
+          _length: 0,
+          _currentEvent: undefined,
+          _pretendToBeVisual: true,
+          _storageQuota: 5000000,
+          _commonForOrigin: [Object],
+          _currentOriginData: [Object],
+          _localStorage: Proxy [Array],
+          _sessionStorage: Proxy [Array],
+          _selection: [SelectionImpl],
+          getSelection: [Function],
+          _customElementRegistry: [CustomElementRegistry],
+          length: [Getter/Setter],
+          window: [Getter],
+          frameElement: [Getter],
+          frames: [Getter/Setter],
+          self: [Getter/Setter],
+          parent: [Getter/Setter],
+          top: [Getter],
+          document: [Getter],
+          external: [Getter/Setter],
+          location: [Getter/Setter],
+          history: [Getter],
+          navigator: [Getter],
+          locationbar: [Getter/Setter],
+          menubar: [Getter/Setter],
+          personalbar: [Getter/Setter],
+          scrollbars: [Getter/Setter],
+          statusbar: [Getter/Setter],
+          toolbar: [Getter/Setter],
+          performance: [Getter],
+          screen: [Getter/Setter],
+          crypto: [Getter],
+          origin: [Getter/Setter],
+          localStorage: [Getter],
+          sessionStorage: [Getter],
+          customElements: [Getter],
+          event: [Getter/Setter],
+          setTimeout: [Function],
+          setInterval: [Function],
+          clearTimeout: [Function],
+          clearInterval: [Function],
+          queueMicrotask: [Function],
+          requestAnimationFrame: [Function],
+          cancelAnimationFrame: [Function],
+          [Option]: [Function],
+          [Image]: [Function],
+          [Audio]: [Function],
+          postMessage: [Function],
+          atob: [Function],
+          btoa: [Function],
+          stop: [Function],
+          close: [Function],
+          getComputedStyle: [Function],
+          captureEvents: [Function],
+          releaseEvents: [Function],
+          console: [Object],
+          name: '',
+          status: '',
+          devicePixelRatio: 1,
+          innerWidth: 1024,
+          innerHeight: 768,
+          outerWidth: 1024,
+          outerHeight: 768,
+          pageXOffset: 0,
+          pageYOffset: 0,
+          screenX: 0,
+          screenLeft: 0,
+          screenY: 0,
+          screenTop: 0,
+          scrollX: 0,
+          scrollY: 0,
+          alert: [Function],
+          blur: [Function],
+          confirm: [Function],
+          focus: [Function],
+          moveBy: [Function],
+          moveTo: [Function],
+          open: [Function],
+          print: [Function],
+          prompt: [Function],
+          resizeBy: [Function],
+          resizeTo: [Function],
+          scroll: [Function],
+          scrollBy: [Function],
+          scrollTo: [Function],
+          [Symbol([webidl2js] constructor registry)]: [Object: null prototype],
+          [Symbol(named property tracker)]: [NamedPropertiesTracker],
+          [Symbol(impl)]: [EventTargetImpl],
+          [Symbol(Symbol.toStringTag)]: 'Window'
+        },
+        _eventListeners: [Object: null prototype] {
+          loadend: [Array],
+          abort: [Array],
+          error: [Array],
+          timeout: [Array],
+          load: [Array]
+        },
+        upload: XMLHttpRequestUploadImpl {
+          _globalObject: [Window],
+          _eventListeners: [Object: null prototype] {},
+          [Symbol(wrapper)]: [XMLHttpRequestUpload],
+          [_ownerDocument]: [Getter],
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        },
+        readyState: 4,
+        responseURL: '',
+        status: 0,
+        statusText: '',
+        flag: {
+          synchronous: false,
+          withCredentials: false,
+          mimeType: null,
+          auth: null,
+          method: 'GET',
+          responseType: '',
+          requestHeaders: [Object],
+          referrer: 'http://localhost:3000/',
+          uri: 'http://localhost:3000/undefined/api/products/ranking?targetType=ALL&rankType=MANY_WISH',
+          timeout: 0,
+          body: undefined,
+          formData: false,
+          preflight: false,
+          requestManager: [RequestManager],
+          strictSSL: true,
+          proxy: undefined,
+          cookieJar: [CookieJar],
+          encoding: 'UTF-8',
+          origin: 'http://localhost:3000',
+          userAgent: 'Mozilla/5.0 (linux) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/24.1.3'
+        },
+        properties: {
+          beforeSend: false,
+          send: false,
+          client: [Request],
+          timeoutStart: 0,
+          timeoutId: 0,
+          timeoutFn: null,
+          responseBuffer: null,
+          responseCache: null,
+          responseTextCache: null,
+          responseXMLCache: null,
+          responseHeaders: {},
+          filteredResponseHeaders: [Array],
+          error: [AggregateError],
+          uploadComplete: true,
+          uploadListener: false,
+          abortError: false,
+          cookieJar: [CookieJar],
+          bufferStepSize: 1048576,
+          totalReceivedChunkSize: 0,
+          origin: 'http://localhost:3000'
+        },
+        _registeredHandlers: Set(4) { 'loadend', 'abort', 'error', 'timeout' },
+        _eventHandlers: [Object: null prototype] {
+          loadend: [Function],
+          abort: [Function],
+          error: [Function],
+          timeout: [Function]
+        },
+        [Symbol(wrapper)]: [Circular *8],
+        [responseType]: [Getter/Setter],
+        [response]: [Getter],
+        [responseText]: [Getter],
+        [responseXML]: [Getter],
+        [timeout]: [Getter/Setter],
+        [withCredentials]: [Getter/Setter],
+        onreadystatechange: [Getter/Setter],
+        [_ownerDocument]: [Getter],
+        onloadstart: [Getter/Setter],
+        onprogress: [Getter/Setter],
+        onabort: [Getter/Setter],
+        onerror: [Getter/Setter],
+        onload: [Getter/Setter],
+        ontimeout: [Getter/Setter],
+        onloadend: [Getter/Setter]
+      },
+      [Symbol(SameObject caches)]: [Object: null prototype] {
+        upload: XMLHttpRequestUpload {
+          [Symbol(impl)]: [XMLHttpRequestUploadImpl],
+          [Symbol(Symbol.toStringTag)]: 'XMLHttpRequestUpload',
+          onloadstart: [Getter/Setter],
+          onprogress: [Getter/Setter],
+          onabort: [Getter/Setter],
+          onerror: [Getter/Setter],
+          onload: [Getter/Setter],
+          ontimeout: [Getter/Setter],
+          onloadend: [Getter/Setter]
+        }
+      },
+      [Symbol(Symbol.toStringTag)]: 'XMLHttpRequest',
+      onloadstart: [Getter/Setter],
+      onprogress: [Getter/Setter],
+      onabort: [Getter/Setter],
+      onerror: [Getter/Setter],
+      onload: [Getter/Setter],
+      ontimeout: [Getter/Setter],
+      onloadend: [Getter/Setter]
+    },
+    {
+      set: <ref *9> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *9] }
+      },
+      get: <ref *10> [Function (anonymous)] {
+        [length]: 3,
+        [name]: '',
+        [prototype]: { [constructor]: [Circular *10] }
+      }
+    }
+  ],
+  [isAxiosError]: true
+}
+
+The above error occurred in the <RisingList> component.
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+
+
+stdout | src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > debug env
+VITE_API_BASE_URL: undefined
+
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx (6 tests | 3 failed) 3116ms
+   × RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다 1332ms
+     → Unable to find role="listitem"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+   ✓ RisingSection 컴포넌트 > 데이터 로딩 실패 시 에러 메시지가 표시된다 320ms
+   × RisingSection 컴포넌트 > 필터 버튼 클릭 시 API가 다시 호출된다 318ms
+     → Unable to find an element with the text: 여성이. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+   × RisingSection 컴포넌트 > 상품 클릭 시 상품 상세 페이지로 이동한다 1012ms
+     → Unable to find an element with the text: 부드러운 고구마 라떼 케이크. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 데이터 로딩 성공 시 상품 목록이 표시된다
+TestingLibraryElementError: Unable to find role="listitem"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:74:39
+     72| 
+     73|     // Then
+     74|     const productItems = await screen.findAllByRole("listitem");
+       |                                       ^
+     75|     expect(productItems).toHaveLength(mockProducts.data.length);
+     76| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 필터 버튼 클릭 시 API가 다시 호출된다
+TestingLibraryElementError: Unable to find an element with the text: 여성이. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:117:28
+    115| 
+    116|     // When
+    117|     fireEvent.click(screen.getByText("여성이"));
+       |                            ^
+    118| 
+    119|     // Then
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/pages/homepage/RisingSection/RisingSection.test.tsx > RisingSection 컴포넌트 > 상품 클릭 시 상품 상세 페이지로 이동한다
+TestingLibraryElementError: Unable to find an element with the text: 부드러운 고구마 라떼 케이크. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:139:38
+    137|     renderWithProviders(<RisingSection />);
+    138| 
+    139|     const productLink = await screen.findByText("부드러운 고구마 라떼 …
+       |                                      ^
+    140|     fireEvent.click(productLink);
+    141| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  3 failed | 10 passed (13)
+   Start at  12:26:39
+   Duration  4.75s (transform 462ms, setup 862ms, collect 1.61s, tests 3.97s, environment 2.26s, prepare 364ms)
+
+
+Error: TestingLibraryElementError: Unable to find role="listitem"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:74:39
+
+
+
+Error: TestingLibraryElementError: Unable to find an element with the text: 여성이. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:117:28
+
+
+
+Error: TestingLibraryElementError: Unable to find an element with the text: 부드러운 고구마 라떼 케이크. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="css-e9hdbk"
+    >
+      <div
+        class="css-k9pcl7"
+      >
+        에러가 발생했습니다
+      </div>
+      <div
+        class="css-1fndlsa"
+      >
+        Network Error
+      </div>
+      <button
+        class="css-kbpp5x"
+      >
+        홈으로 이동
+      </button>
+    </div>
+    <div />
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ src/pages/homepage/RisingSection/RisingSection.test.tsx:139:38
+
+
+Error: Process completed with exit code 1.
