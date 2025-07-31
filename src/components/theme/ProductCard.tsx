@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useGoToOrder } from '@/hooks/useGoTo';
+import { useGoToDetail } from '@/hooks/useGoTo';
 import type { Product } from '@/types/Product';
 
 const Card = styled.li`
@@ -37,8 +37,10 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+  const goToDetail = useGoToDetail(product.id);
+
   return (
-    <Card onClick={useGoToOrder(product.id)}>
+    <Card onClick={goToDetail}>
       <ItemImage src={product.imageURL} alt={product.name} />
       <Brand>{product.brandInfo.name}</Brand>
       <Name>{product.name}</Name>

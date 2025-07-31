@@ -7,6 +7,7 @@ import MyPage from './pages/MyPage';
 import NotFoundPage from './pages/NotFoundPage';
 import OrderPage from './pages/OrderPage';
 import ThemeListPage from './pages/ThemeListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ export const router = createBrowserRouter(
         }
       />
       <Route path="/themes/:themeId" element={<ThemeListPage />} />
+      <Route path="/products/:productId" element={<ProductDetailPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </>,
   ),

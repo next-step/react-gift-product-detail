@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import useThemeInfo from '@/hooks/useThemeInfo';
 
 const HeroWrapper = styled.section<{ bg: string }>`
   background-color: ${({ bg }) => bg};
@@ -22,18 +23,19 @@ const HeroDescription = styled.p`
 `;
 
 interface ThemeHeroProps {
-  name: string;
-  title: string;
-  description: string;
-  backgroundColor: string;
+  themeId: number;
 }
 
-export default function ThemeHero({ name, title, description, backgroundColor }: ThemeHeroProps) {
+export default function ThemeHero({ themeId }: ThemeHeroProps) {
+  const { data: themeInfo } = useThemeInfo(themeId);
+
+  if (!themeInfo) return null;
+
   return (
-    <HeroWrapper bg={backgroundColor}>
-      <HeroName>{name}</HeroName>
-      <HeroTitle>{title}</HeroTitle>
-      <HeroDescription>{description}</HeroDescription>
+    <HeroWrapper bg={themeInfo.backgroundColor}>
+      <HeroName>{themeInfo.name}</HeroName>
+      <HeroTitle>{themeInfo.title}</HeroTitle>
+      <HeroDescription>{themeInfo.description}</HeroDescription>
     </HeroWrapper>
   );
 }

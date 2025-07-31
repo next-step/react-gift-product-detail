@@ -2,11 +2,10 @@ import styled from '@emotion/styled';
 import { FiPlus } from 'react-icons/fi';
 import { useAuth } from '@/hooks/useAuth';
 
-const Wrapper = styled.button`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 106px;
   padding: ${({ theme }) => theme.spacing.spacing4} ${({ theme }) => theme.spacing.spacing3};
   background: ${({ theme }) => theme.colors.gray[200]};
   border: 0;

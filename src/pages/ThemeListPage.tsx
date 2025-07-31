@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
+import { Suspense } from 'react';
+import Spinner from '@/components/common/Spinner';
+import { ErrorBoundary } from '@/ErrorBoundary';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
 import MobileLayout from '@/layouts/MobileLayout';
 import NavBar from '@/components/NavBar';
 import ThemeHero from '@/components/theme/ThemeHero';
 import ThemeList from '@/components/theme/ThemeList';
-import useThemeInfo from '@/hooks/useThemeInfo';
-import { useGoToHome } from '@/hooks/useGoTo';
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,32 +17,23 @@ const Wrapper = styled.div`
 
 export default function ThemeListPage() {
   const { themeId } = useParams();
-  const parsedId = Number(themeId);
-  const goToHome = useGoToHome();
-
-  const { data: themeInfo, isLoading, isError } = useThemeInfo(parsedId);
-
-  useEffect(() => {
-    if (isError) {
-      goToHome();
-    }
-  }, [isError, goToHome]);
-  if (isLoading) return <p>loading</p>;
-  if (!themeInfo) return null;
 
   return (
     <MobileLayout>
       <Wrapper>
         <NavBar />
 
-        <ThemeHero
-          name={themeInfo.name}
-          title={themeInfo.title}
-          description={themeInfo.description}
-          backgroundColor={themeInfo.backgroundColor}
-        />
+        <ErrorBoundary fallback={<div>테마 정보를 불러오지 못했습니다.</div>}>
+          <Suspense fallback={<Spinner />}>
+            <ThemeHero themeId={Number(themeId)} />
+          </Suspense>
+        </ErrorBoundary>
 
-        <ThemeList />
+        <ErrorBoundary fallback={<div>상품 목록을 불러오지 못했습니다.</div>}>
+          <Suspense fallback={<Spinner />}>
+            <ThemeList themeId={Number(themeId)} />
+          </Suspense>
+        </ErrorBoundary>
       </Wrapper>
     </MobileLayout>
   );

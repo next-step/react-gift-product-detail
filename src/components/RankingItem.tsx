@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useGoToOrder } from '@/hooks/useGoTo';
+import { useGoToDetail } from '@/hooks/useGoTo';
 import type { Product } from '@/types/Product';
 
 const Card = styled.li`
@@ -60,9 +60,10 @@ interface Props {
 
 export default function RankingItem({ item, rank }: Props) {
   const isTop3 = rank <= 3;
+  const goToDetail = useGoToDetail(item.id);
 
   return (
-    <Card onClick={useGoToOrder(item.id)}>
+    <Card onClick={goToDetail}>
       <ItemImage>
         <img src={item.imageURL} alt={item.name} />
         <RankBadge top3={isTop3}>{rank}</RankBadge>

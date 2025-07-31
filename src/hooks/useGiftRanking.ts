@@ -1,4 +1,4 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { fetchRanking } from '@/api/RankingApi';
 
 const giftRankingQueryOptions = (gender: string, type: string) =>
@@ -10,5 +10,5 @@ const giftRankingQueryOptions = (gender: string, type: string) =>
   });
 
 export default function useGiftRanking(gender: string, type: string) {
-  return useQuery(giftRankingQueryOptions(gender, type));
+  return useSuspenseQuery(giftRankingQueryOptions(gender, type));
 }
