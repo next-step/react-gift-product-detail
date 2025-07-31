@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest",
+    "test:ci": "vitest run --project=unit",
     "dev:mock":"VITE_ENABLE_MSW=true vite"
   },
   "dependencies": {

@@ -23,8 +23,5 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: install playwright browsers
-        run: npx playwright install chromium
-
       - name: run tests
-        run: npm test
+        run: npm test:ci
