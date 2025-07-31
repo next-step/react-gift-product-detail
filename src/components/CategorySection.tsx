@@ -1,34 +1,10 @@
-import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { CategoryItem } from '@/components/CategoryItem';
-import { useHTTP } from '@/hooks/useHTTP';
 import { Spinner } from '@/components/common/Spinner';
-import { api } from '@/services/api';
-
-interface Theme {
-  themeId: number;
-  name: string;
-  image: string;
-}
-
-async function getGiftThemes(): Promise<Theme[]> {
-  const response = await api.get<{
-    data: Theme[];
-  }>('/themes');
-  return response.data.data;
-}
+import { useThemesQuery } from '@/hooks/queries/useThemesQuery';
 
 export function CategorySection() {
-  const [themes, setThemes] = useState<Theme[] | null>(null);
-  const { request, isPending, error } = useHTTP<void, Theme[]>({ apiFunction: getGiftThemes });
-
-  useEffect(() => {
-    request().then(data => {
-      if (data) {
-        setThemes(data);
-      }
-    });
-  }, [request]);
+  const { data: themes, isPending, isError } = useThemesQuery();
 
   if (isPending) {
     return (
@@ -38,7 +14,7 @@ export function CategorySection() {
     );
   }
 
-  if (error || !themes || themes.length === 0) {
+  if (isError || !themes || themes.length === 0) {
     return null;
   }
 
@@ -57,7 +33,7 @@ export function CategorySection() {
 
       {/* 테마 목록 그리드 */}
       <Grid>
-        {themes.map(({ themeId, name, image }: Theme) => (
+        {themes.map(({ themeId, name, image }) => (
           <CategoryItem key={themeId} themeId={themeId} name={name} image={image} />
         ))}
       </Grid>

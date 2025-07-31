@@ -1,27 +1,27 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useHTTP } from '@/hooks/useHTTP';
-import { getThemeInfo } from '@/services/theme';
 import { isAxiosError } from 'axios';
 import styled from '@emotion/styled';
 import type { CSSProperties } from 'react';
 import { toast } from 'react-toastify';
+import { useThemeInfoQuery } from '@/hooks/queries/useThemeInfoQuery';
 
 export const ThemeInfoBanner = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
 
-  const { isPending, data } = useHTTP({
-    apiFunction: () => getThemeInfo(Number(themeId)),
-    requestOnMount: true,
-    onError: (error) => {
-      if (isAxiosError(error) && error.response?.status === 404) {
+  const { isPending, data } = useThemeInfoQuery(Number(themeId), {
+    meta: { showToast: false },
+    onError: (err: Error) => {
+      if (isAxiosError(err) && err.response?.status === 404) {
         toast.error('해당 ID에 일치하는 데이터가 없습니다.');
         navigate('/');
+      } else {
+        toast.error('데이터를 불러오는 중 오류가 발생했습니다.');
       }
     },
   });
 
-  if (isPending || !data) return <div style={{height: '128px'}} />;
+  if (isPending || !data) return <div style={{ height: '128px' }} />;
 
   return (
     <Container backgroundColor={data.backgroundColor}>

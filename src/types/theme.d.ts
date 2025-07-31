@@ -4,6 +4,7 @@ export interface Theme {
   title: string;
   description: string;
   backgroundColor: string;
+  image: string;
 }
 
 export interface ThemeProduct {

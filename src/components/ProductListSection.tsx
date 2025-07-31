@@ -2,9 +2,16 @@ import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { Tab } from '@/components/common/Tab';
 import { Button } from '@/components/common/Button';
-import { useProducts } from '@/hooks/useProducts';
 import { Spinner } from '@/components/common/Spinner';
 import { ProductItem } from '@/components/ProductItem';
+import { useProductsQuery } from '@/hooks/queries/useProductsQuery';
+
+// NOTE: subTab 값을 rankType으로 변환하는 로직 추가
+const subTabToRankType = {
+  WANT: 'MANY_WISH',
+  GIVE: 'MANY_RECEIVE',
+  WISH: 'MANY_WISH_RECEIVE',
+};
 
 export function ProductListSection() {
   /* 탭/더보기 상태 */
@@ -12,7 +19,11 @@ export function ProductListSection() {
   const [subTab, setSubTab] = useState<'WANT' | 'GIVE' | 'WISH'>('WANT');
   const [showAll, setShowAll] = useState(false);
 
-  const { products, isLoading, error } = useProducts(mainTab, subTab);
+  const {
+    data: products = [],
+    isPending,
+    isError,
+  } = useProductsQuery(mainTab, subTabToRankType[subTab]);
 
   useEffect(() => {
     const savedMainTab = localStorage.getItem('mainTab');
@@ -78,11 +89,11 @@ export function ProductListSection() {
       </SubTabs>
 
       {/* 상품 그리드 */}
-      {isLoading ? (
+      {isPending ? (
         <SpinnerContainer>
           <Spinner />
         </SpinnerContainer>
-      ) : error ? (
+      ) : isError ? (
         <Message>상품 목록을 불러오는데 실패했습니다.</Message>
       ) : products.length === 0 ? (
         <Message>상품 목록이 없습니다.</Message>
