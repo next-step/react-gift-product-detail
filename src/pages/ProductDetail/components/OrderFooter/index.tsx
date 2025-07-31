@@ -27,7 +27,7 @@ interface OrderFooterProps {
 const OrderFooter = ({ productId }: OrderFooterProps) => {
   return (
     <Wrapper>
-      <LikeButton />
+      <LikeButton productId={productId} />
       <OrderButton productId={productId} />
     </Wrapper>
   );

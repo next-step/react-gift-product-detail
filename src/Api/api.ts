@@ -164,3 +164,15 @@ export const getHighlightReview = async (productId: number): Promise<HighlightRe
   );
   return data.data;
 };
+export interface WishInfo {
+  wishCount: number;
+  isWished: boolean;
+}
+interface WishInfoResponse {
+  data: WishInfo;
+}
+
+export const getWishInfo = async (productId: number): Promise<WishInfo> => {
+  const { data } = await api.get<WishInfoResponse>(`/api/products/${productId}/wish`);
+  return data.data;
+};
