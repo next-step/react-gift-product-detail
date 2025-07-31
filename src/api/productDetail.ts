@@ -1,69 +1,48 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { 
-  ProductInfo, 
-  ProductDetail, 
-  ProductHighlightReview, 
-  ProductWish,
-  ProductInfoResponse,
-  ProductDetailResponse,
-  ProductHighlightReviewResponse,
-  ProductWishResponse
-} from "../types/productDetail";
+import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import type { ProductInfo, ProductDetail, ProductHighlightReview, ProductWish, ProductInfoResponse, ProductDetailResponse, ProductHighlightReviewResponse, ProductWishResponse } from "../types/productDetail";
 
-// 1. 상품 정보 API
 export const fetchProductInfo = async (productId: number): Promise<ProductInfo> => {
   const response = await fetch(`/api/products/${productId}`);
-  const result: ProductInfoResponse = await response.json();
-
   if (!response.ok) {
-    throw new Error(result.data?.toString() || "상품 정보를 불러오는데 실패했습니다.");
+    throw new Error('상품 정보를 불러오는데 실패했습니다.');
   }
-
-  return result.data;
+  const data: ProductInfoResponse = await response.json();
+  return data.data;
 };
 
-// 2. 상품 세부 정보 API
 export const fetchProductDetail = async (productId: number): Promise<ProductDetail> => {
   const response = await fetch(`/api/products/${productId}/detail`);
-  const result: ProductDetailResponse = await response.json();
-
   if (!response.ok) {
-    throw new Error(result.data?.toString() || "상품 세부 정보를 불러오는데 실패했습니다.");
+    throw new Error('상품 상세 정보를 불러오는데 실패했습니다.');
   }
-
-  return result.data;
+  const data: ProductDetailResponse = await response.json();
+  return data.data;
 };
 
-// 3. 상품 주요 리뷰 API
 export const fetchProductHighlightReview = async (productId: number): Promise<ProductHighlightReview> => {
   const response = await fetch(`/api/products/${productId}/highlight-review`);
-  const result: ProductHighlightReviewResponse = await response.json();
-
   if (!response.ok) {
-    throw new Error(result.data?.toString() || "상품 리뷰를 불러오는데 실패했습니다.");
+    throw new Error('상품 리뷰를 불러오는데 실패했습니다.');
   }
-
-  return result.data;
+  const data: ProductHighlightReviewResponse = await response.json();
+  return data.data;
 };
 
-// 4. 상품 관심 등록 수 API
 export const fetchProductWish = async (productId: number): Promise<ProductWish> => {
   const response = await fetch(`/api/products/${productId}/wish`);
-  const result: ProductWishResponse = await response.json();
-
   if (!response.ok) {
-    throw new Error(result.data?.toString() || "상품 관심 정보를 불러오는데 실패했습니다.");
+    throw new Error('상품 찜 정보를 불러오는데 실패했습니다.');
   }
-
-  return result.data;
+  const data: ProductWishResponse = await response.json();
+  return data.data;
 };
 
-// React Query Hooks
+// 기존 useQuery 훅들 (필요시 사용)
 export const useProductInfo = (productId: number) => {
   return useQuery({
     queryKey: ['product', 'info', productId],
     queryFn: () => fetchProductInfo(productId),
-    enabled: !!productId,
+    enabled: productId > 0,
   });
 };
 
@@ -71,7 +50,7 @@ export const useProductDetail = (productId: number) => {
   return useQuery({
     queryKey: ['product', 'detail', productId],
     queryFn: () => fetchProductDetail(productId),
-    enabled: !!productId,
+    enabled: productId > 0,
   });
 };
 
@@ -79,7 +58,7 @@ export const useProductHighlightReview = (productId: number) => {
   return useQuery({
     queryKey: ['product', 'highlight-review', productId],
     queryFn: () => fetchProductHighlightReview(productId),
-    enabled: !!productId,
+    enabled: productId > 0,
   });
 };
 
@@ -87,23 +66,53 @@ export const useProductWish = (productId: number) => {
   return useQuery({
     queryKey: ['product', 'wish', productId],
     queryFn: () => fetchProductWish(productId),
-    enabled: !!productId,
+    enabled: productId > 0,
   });
 };
 
-// 관심 등록/해제 Mutation (낙관적 업데이트용)
+// Suspense용 훅들
+export const useSuspenseProductInfo = (productId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['product', 'info', productId],
+    queryFn: () => fetchProductInfo(productId),
+  });
+};
+
+export const useSuspenseProductDetail = (productId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['product', 'detail', productId],
+    queryFn: () => fetchProductDetail(productId),
+  });
+};
+
+export const useSuspenseProductHighlightReview = (productId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['product', 'highlight-review', productId],
+    queryFn: () => fetchProductHighlightReview(productId),
+  });
+};
+
+export const useSuspenseProductWish = (productId: number) => {
+  return useSuspenseQuery({
+    queryKey: ['product', 'wish', productId],
+    queryFn: () => fetchProductWish(productId),
+  });
+};
+
 export const useToggleWish = (productId: number) => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async () => {
+      // 실제 API 호출 대신 시뮬레이션
       await new Promise(resolve => setTimeout(resolve, 500));
       return { success: true };
     },
     onMutate: async () => {
+      // 이전 데이터 백업
       await queryClient.cancelQueries({ queryKey: ['product', 'wish', productId] });
       const previousWish = queryClient.getQueryData(['product', 'wish', productId]);
 
+      // 낙관적 업데이트
       queryClient.setQueryData(['product', 'wish', productId], (old: ProductWish | undefined) => {
         if (!old) return old;
         return {
@@ -116,6 +125,7 @@ export const useToggleWish = (productId: number) => {
       return { previousWish };
     },
     onError: (_err, _variables, context) => {
+      // 에러 시 이전 데이터로 롤백
       if (context?.previousWish) {
         queryClient.setQueryData(['product', 'wish', productId], context.previousWish);
       }
