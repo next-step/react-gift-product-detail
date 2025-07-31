@@ -9,8 +9,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
 export function renderWithProviders(ui: React.ReactElement) {
-  const queryClient = new QueryClient();
-
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
   return render(
     <MemoryRouter>
       <QueryClientProvider client={queryClient}>

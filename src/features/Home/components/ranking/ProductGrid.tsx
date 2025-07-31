@@ -48,6 +48,7 @@ const ProductGrid = ({
             key={item.ranking}
             item={item}
             onClickItem={onClickItem}
+            role="article"
           />
         ))}
       </Grid>
@@ -65,10 +66,11 @@ export default ProductGrid;
 interface CardProps {
   item: RankedProduct;
   onClickItem: (item: RankedProduct) => void;
+  role: string;
 }
-const ProductCard = ({ item, onClickItem }: CardProps) => {
+const ProductCard = ({ item, onClickItem, role }: CardProps) => {
   return (
-    <Card>
+    <Card role={role}>
       <ImageWrapper onClick={() => onClickItem(item)}>
         <ProductImage src={item.imageURL} alt={item.name} />
         <RankBadge>{item.ranking}</RankBadge>
