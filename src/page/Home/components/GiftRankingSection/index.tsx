@@ -2,14 +2,15 @@ import styled from '@emotion/styled';
 import { filters, generations } from '@/data/categoryDatas';
 import useSearchParamState from '../../hooks/useSearchParamState';
 import RankList from './RankList';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
 
 interface ButtonProps {
   isActive: boolean;
 }
 
 const GiftRankingSection = () => {
-  const { selectGeneration, selectFilter, activeGeneration, activeFilter } =
-    useSearchParamState();
+  const { selectGeneration, selectFilter, activeGeneration, activeFilter } = useSearchParamState();
 
   return (
     <Section>
@@ -37,10 +38,9 @@ const GiftRankingSection = () => {
           ))}
         </FilterGroup>
       </CatContainer>
-      <RankList
-        activeGeneration={activeGeneration}
-        activeFilter={activeFilter}
-      />
+      <Suspense fallback={<Loading />}>
+        <RankList activeGeneration={activeGeneration} activeFilter={activeFilter} />
+      </Suspense>
     </Section>
   );
 };

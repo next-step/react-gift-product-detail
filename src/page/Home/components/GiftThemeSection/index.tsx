@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 import ThemeList from './ThemeList';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
 
 const GiftThemeSection = () => {
   return (
@@ -7,7 +9,9 @@ const GiftThemeSection = () => {
       <TitleContainer>
         <Title>선물 테마</Title>
       </TitleContainer>
-      <ThemeList />
+      <Suspense fallback={<Loading />}>
+        <ThemeList />
+      </Suspense>
     </section>
   );
 };

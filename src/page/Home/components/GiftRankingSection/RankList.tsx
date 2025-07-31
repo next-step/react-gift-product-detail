@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Loading from '@/components/Loading';
 import useToggleCollapse from '../../hooks/useToggleCollapse';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/routes/routePath';
@@ -8,7 +7,7 @@ import useRanking from '../../hooks/useRanking';
 import type { RankingApiProps } from '@/types';
 
 const RankList = ({ activeGeneration, activeFilter }: RankingApiProps) => {
-  const { data, isLoading } = useRanking({ activeGeneration, activeFilter });
+  const { data } = useRanking({ activeGeneration, activeFilter });
   const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(data?.length || 0);
 
   const navigate = useNavigate();
@@ -16,8 +15,6 @@ const RankList = ({ activeGeneration, activeFilter }: RankingApiProps) => {
     navigate(generatePath(ROUTE_PATH.PRODUCT, { id: String(id) }));
   };
 
-  if (!data) return;
-  if (isLoading) return <Loading />;
   if (data.length === 0) {
     return <NoDataMessage>상품이 없습니다.</NoDataMessage>;
   }
