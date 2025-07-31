@@ -1,5 +1,5 @@
 import { theme } from '@/theme/theme';
-import styled from '@emotion/styled/macro';
+import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,6 +32,7 @@ const Title = styled.p`
   margin: 0px;
   text-align: left;
 `;
+
 const SelectedTab = styled.div`
   position: absolute;
   bottom: -1px;
@@ -41,22 +42,26 @@ const SelectedTab = styled.div`
   background-color: rgb(42, 48, 56);
 `;
 
-const Tab = () => {
-  return (
-    <>
-      <Wrapper>
-        <Button>
-          <Title>상품설명</Title>
-        </Button>
-        <Button>
-          <Title>선물후기</Title>
-        </Button>
-        <Button>
-          <Title>상세정보</Title>
-        </Button>
-      </Wrapper>
-    </>
-  );
-};
+interface TabProps {
+  active: 'explain' | 'review' | 'detail';
+  onSelect: (key: 'explain' | 'review' | 'detail') => void;
+}
+
+const Tab = ({ active, onSelect }: TabProps) => (
+  <Wrapper>
+    <Button onClick={() => onSelect('explain')}>
+      <Title>상품설명</Title>
+      {active === 'explain' && <SelectedTab />}
+    </Button>
+    <Button onClick={() => onSelect('review')}>
+      <Title>선물후기</Title>
+      {active === 'review' && <SelectedTab />}
+    </Button>
+    <Button onClick={() => onSelect('detail')}>
+      <Title>상세정보</Title>
+      {active === 'detail' && <SelectedTab />}
+    </Button>
+  </Wrapper>
+);
 
 export default Tab;

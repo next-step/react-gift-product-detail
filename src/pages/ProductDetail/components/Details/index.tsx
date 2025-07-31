@@ -2,6 +2,7 @@ import { theme } from '@/theme/theme';
 import styled from '@emotion/styled';
 import Tab from './Tab';
 import Content from './Content';
+import { useState } from 'react';
 
 const Section = styled.section`
   width: 100%;
@@ -11,13 +12,18 @@ const Section = styled.section`
 const Container = styled.div`
   width: 100%;
 `;
-const DetailSection = () => {
+
+interface DetailSectionProps {
+  productId: number;
+}
+const DetailSection = ({ productId }: DetailSectionProps) => {
+  const [activeTab, setActiveTab] = useState<'explain' | 'review' | 'detail'>('explain');
   return (
     <>
       <Section>
         <Container>
-          <Tab />
-          <Content />
+          <Tab active={activeTab} onSelect={setActiveTab} />
+          <Content active={activeTab} productId={productId} />
         </Container>
       </Section>
     </>

@@ -29,7 +29,7 @@ const BodySection = ({ productId }: BodySectionProps) => {
       <Wrapper>
         <ProductInfoSection productId={productId} />
         <Fill />
-        <DetailSection />
+        <DetailSection productId={productId} />
         <Margin height="64px" />
       </Wrapper>
     </>

@@ -1,4 +1,5 @@
-import styled from '@emotion/styled/macro';
+import { useProductDetail } from '@/queries/useProductDetail';
+import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -23,14 +24,37 @@ const ImageHolder = styled.p`
 const Image = styled.img`
   width: 100%;
 `;
-const ProductExplain = () => {
+
+interface ProductExplainProps {
+  productId: number;
+}
+
+const getFirstImgSrc = (html: string | undefined) => {
+  if (!html) return '';
+  const match = html.match(/<img [^>]*src=["']([^"']+)["']/i);
+  return match ? match[1] : '';
+};
+
+const ProductExplain = ({ productId }: ProductExplainProps) => {
+  const { data, isLoading } = useProductDetail(productId);
+  if (isLoading || !data)
+    return (
+      <ImageHolder>
+        <Image alt="상품 설명 로딩" />
+      </ImageHolder>
+    );
+
+  const imgSrc = getFirstImgSrc(data.description);
+  const hasImg = imgSrc !== '';
   return (
     <>
       <Wrapper>
         <Container>
-          <ImageHolder>
-            <Image />
-          </ImageHolder>
+          {hasImg && (
+            <ImageHolder>
+              <Image src={imgSrc} alt="상품 설명 이미지" />
+            </ImageHolder>
+          )}
         </Container>
       </Wrapper>
     </>

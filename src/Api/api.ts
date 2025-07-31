@@ -125,3 +125,42 @@ export const getProductInfo = async (productId: number): Promise<ProductItem> =>
 };
 
 export type ProductRankingItem = ProductItem;
+
+export interface ProductAnnouncement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+export interface ProductDetailInfo {
+  description: string;
+  announcements: ProductAnnouncement[];
+}
+
+interface ProductDetailResponse {
+  data: ProductDetailInfo;
+}
+
+export const getProductDetailInfo = async (productId: number): Promise<ProductDetailInfo> => {
+  const { data } = await api.get<ProductDetailResponse>(`/api/products/${productId}/detail`);
+  return data.data;
+};
+
+export interface HighlightReviewItem {
+  id: string;
+  authorName: string;
+  content: string;
+}
+export interface HighlightReviewData {
+  totalCount: number;
+  reviews: HighlightReviewItem[];
+}
+interface HighlightReviewResponse {
+  data: HighlightReviewData;
+}
+
+export const getHighlightReview = async (productId: number): Promise<HighlightReviewData> => {
+  const { data } = await api.get<HighlightReviewResponse>(
+    `/api/products/${productId}/highlight-review`
+  );
+  return data.data;
+};

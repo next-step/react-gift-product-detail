@@ -1,5 +1,6 @@
+import { useProductDetail } from '@/queries/useProductDetail';
 import { theme } from '@/theme/theme';
-import styled from '@emotion/styled/macro';
+import styled from '@emotion/styled';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,19 +35,34 @@ const Content = styled.p`
   text-align: left;
 `;
 
-const DetailedInfo = () => {
+interface DetailedInfoProps {
+  productId: number;
+}
+
+const DetailedInfo = ({ productId }: DetailedInfoProps) => {
+  const { data, isLoading, isError } = useProductDetail(productId);
+
+  if (isLoading) return <Wrapper>로딩 중…</Wrapper>;
+  if (isError || !data) return <Wrapper>정보를 불러오지 못했습니다.</Wrapper>;
+
+  const list = data.announcements ?? [];
+
+  if (list.length === 0) return <Wrapper>표시할 상세 정보가 없습니다.</Wrapper>;
+
   return (
-    <>
-      <Wrapper>
-        <TextDummy>
-          <Margin height="16px" />
-          <Title>제목</Title>
-          <Margin height="8px" />
-          <Content>내용</Content>
-          <Margin height="8px" />
-        </TextDummy>
-      </Wrapper>
-    </>
+    <Wrapper>
+      {list
+        .sort((a, b: any) => a.displayOrder - b.displayOrder)
+        .map((a) => (
+          <TextDummy key={a.displayOrder}>
+            <Margin height="16px" />
+            <Title>{a.name}</Title>
+            <Margin height="8px" />
+            <Content>{a.value}</Content>
+            <Margin height="8px" />
+          </TextDummy>
+        ))}
+    </Wrapper>
   );
 };
 
