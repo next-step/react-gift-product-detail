@@ -2,6 +2,7 @@
 import App from '@/App'
 import LoginPage from '@/pages/LoginPage'
 import OrderPage from '@/pages/OrderPage'
+import ProductDetailPage from '@/pages/ProductDetailPage'
 import MyPage from '@/pages/MyPage'
 import NotFound from '@/pages/NotFound'
 import RequireAuth from '@/components/RequireAuth'
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+    {
+    path: '/product/:id',
+    element: <ProductDetailPage />,
   },
   {
     element: <RequireAuth />,

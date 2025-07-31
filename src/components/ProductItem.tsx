@@ -12,7 +12,7 @@ interface ProductItemProps {
 export default function ProductItem({ product }: ProductItemProps) {
   const navigate = useNavigate()
   const handleClick = () => {
-    navigate(`/order/${product.id}`, { state: { product } })
+    navigate(`/product/${product.id}`)
   }
 
   return (

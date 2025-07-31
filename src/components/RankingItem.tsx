@@ -13,7 +13,7 @@ interface RankingItemProps {
 export default function RankingItem({ rank, product }: RankingItemProps) {
   const navigate = useNavigate()
   const handleClick = () => {
-    navigate(`/order/${product.id}`, { state: { product } })
+    navigate(`/product/${product.id}`)
   }
 
   return (
