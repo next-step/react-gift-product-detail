@@ -8,8 +8,7 @@ import HOME from '@/page/Home';
 import ThemesPage from '@/page/Themes';
 import { ROUTE_PATH } from './routePath';
 import ProductPage from '@/page/Product';
-import { Suspense } from 'react';
-import Loading from '@/components/Loading';
+
 
 const AppRouter = () => {
   return (
@@ -28,9 +27,7 @@ const AppRouter = () => {
         path={ROUTE_PATH.ORDER}
         element={
           <RequireAuth>
-            <Suspense fallback={<Loading />}>
-              <OrderPage />
-            </Suspense>
+            <OrderPage />
           </RequireAuth>
         }
       />

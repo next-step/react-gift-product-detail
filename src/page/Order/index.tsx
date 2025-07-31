@@ -7,12 +7,14 @@ import { FormProvider } from 'react-hook-form';
 import toLocaleString from '@/utils/toLocaleString';
 import ProductInfo from './components/ProductInfo';
 import useOrderForm from './hooks/useOrderForm';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
 
 const OrderPage = () => {
   const { orderForm, onSubmit, price, productSummaryData } = useOrderForm();
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <Section>
         <FormProvider {...orderForm}>
           <form onSubmit={orderForm.handleSubmit(onSubmit)}>
@@ -25,7 +27,7 @@ const OrderPage = () => {
           </form>
         </FormProvider>
       </Section>
-    </>
+    </Suspense>
   );
 };
 

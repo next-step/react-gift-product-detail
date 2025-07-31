@@ -16,7 +16,9 @@ const ProductPage = () => {
 
   return (
     <main>
-      <ProductSection index={index} />
+      <Suspense fallback={<Loading />}>
+        <ProductSection index={index} />
+      </Suspense>
       <section>
         <div>
           <ButtonWrapper>
@@ -32,14 +34,8 @@ const ProductPage = () => {
           </ButtonWrapper>
           <Suspense fallback={<Loading />}>
             {activeTab === 'description' && <ProductDescriptionSection index={index} />}
-          </Suspense>
-          <Suspense fallback={<Loading />}>
             {activeTab === 'review' && <ProductReviewSection index={index} />}{' '}
-          </Suspense>
-          <Suspense fallback={<Loading />}>
             {activeTab === 'detail' && <ProductDetailSection index={index} />}
-          </Suspense>
-          <Suspense fallback={<Loading />}>
             <ProductWishButton index={index} />
           </Suspense>
           <OrderButton index={index} />

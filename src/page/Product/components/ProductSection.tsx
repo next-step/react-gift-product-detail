@@ -1,12 +1,12 @@
 import { requests } from '@/api/requests';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface ProductSectionProps {
   index: number;
 }
 
 const ProductSection = ({ index }: ProductSectionProps) => {
-  const productQuery = useQuery({
+  const productQuery = useSuspenseQuery({
     queryKey: ['productData', index],
     queryFn: () => requests.fetchProduct(index),
   });
