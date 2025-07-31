@@ -19,6 +19,61 @@ const DetailDescription = styled.div`
   color: ${({ theme }) => theme.colors.gray.gray700};
   line-height: 1.6;
   white-space: pre-line;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  
+  /* HTML 이미지 스타일링 */
+  img {
+    max-width: 100%;
+    height: auto;
+    margin: ${({ theme }) => theme.spacing.md} 0;
+    border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  }
+  
+  p {
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
+`;
+
+const AnnouncementSection = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.lg};
+`;
+
+const AnnouncementTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const AnnouncementList = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray200};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  overflow: hidden;
+`;
+
+const AnnouncementItem = styled.div<{ isLast: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing.md};
+  background: white;
+  border-bottom: ${({ isLast, theme }) => 
+    isLast ? 'none' : `1px solid ${theme.colors.gray.gray200}`};
+  
+  &:hover {
+    background: ${({ theme }) => theme.colors.gray.gray100};
+  }
+`;
+
+const AnnouncementName = styled.span`
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  font-size: 0.95rem;
+`;
+
+const AnnouncementValue = styled.span`
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  font-size: 0.95rem;
 `;
 
 interface ProductDetailSectionProps {
@@ -26,31 +81,39 @@ interface ProductDetailSectionProps {
 }
 
 const ProductDetailSection = ({ productDetail }: ProductDetailSectionProps) => {
+  const sortedAnnouncements = productDetail.announcement
+    ?.sort((a, b) => a.displayOrder - b.displayOrder) || [];
+
+  // description이나 announcement가 모두 없는 경우 섹션을 숨김
+  if (!productDetail.description && sortedAnnouncements.length === 0) {
+    return null;
+  }
+
   return (
     <DetailSection>
       <SectionTitle>상품 상세 정보</SectionTitle>
       
-      <DetailDescription>{productDetail.description}</DetailDescription>
+      {productDetail.description && (
+        <DetailDescription 
+          dangerouslySetInnerHTML={{ __html: productDetail.description }}
+        />
+      )}
 
-      {productDetail.announcement && productDetail.announcement.length > 0 && (
-        <div style={{ marginTop: '24px' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '16px' }}>
-            공지사항
-          </h3>
-          {productDetail.announcement
-            .sort((a, b) => a.displayOrder - b.displayOrder)
-            .map((item, index) => (
-              <div key={index} style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                padding: '12px 0',
-                borderBottom: index < productDetail.announcement.length - 1 ? '1px solid #eee' : 'none'
-              }}>
-                <span style={{ fontWeight: 500, color: '#666' }}>{item.name}</span>
-                <span>{item.value}</span>
-              </div>
+      {sortedAnnouncements.length > 0 && (
+        <AnnouncementSection>
+          <AnnouncementTitle>공지사항</AnnouncementTitle>
+          <AnnouncementList>
+            {sortedAnnouncements.map((item, index) => (
+              <AnnouncementItem 
+                key={`${item.name}-${index}`} 
+                isLast={index === sortedAnnouncements.length - 1}
+              >
+                <AnnouncementName>{item.name}</AnnouncementName>
+                <AnnouncementValue>{item.value}</AnnouncementValue>
+              </AnnouncementItem>
             ))}
-        </div>
+          </AnnouncementList>
+        </AnnouncementSection>
       )}
     </DetailSection>
   );

@@ -23,8 +23,10 @@ export interface AnnouncementItem {
 }
 
 export interface ProductDetail {
-  description: string;
-  announcement: AnnouncementItem[];
+  description?: string;
+  announcement?: AnnouncementItem[];
+  // 실제 API 응답에 따라 추가 필드들이 있을 수 있음
+  [key: string]: any;
 }
 
 // 상품 주요 리뷰 API 응답 타입

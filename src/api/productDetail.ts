@@ -16,7 +16,11 @@ export const fetchProductDetail = async (productId: number): Promise<ProductDeta
     throw new Error('상품 상세 정보를 불러오는데 실패했습니다.');
   }
   const data: ProductDetailResponse = await response.json();
-  return data.data;
+  
+  // 실제 API 응답 구조에 따라 data.data 또는 data를 반환
+  const detailData = data.data || data;
+  
+  return detailData;
 };
 
 export const fetchProductHighlightReview = async (productId: number): Promise<ProductHighlightReview> => {
