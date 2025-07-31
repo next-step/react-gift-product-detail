@@ -105,6 +105,7 @@ export const HotGiftRankingGrid = () => {
         {displayedItems.map((item, index) => (
           <HotGiftRankingGridItem
             key={item.id}
+            data-testid={`product-${item.id}`}
             onClick={() => goProductDetail(item.id)}
           >
             <HotGiftRankingImageContainer src={item.imageURL} alt={item.name} />
