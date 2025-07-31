@@ -1,15 +1,23 @@
-## 1단계 - 기본 코드 준비 및 미션 3 피드백 반영
+## 2단계 - 상품 상세 페이지 API 구현하기
 
 # 목표
-- **React Query**를 사용하여 API 사용 방식과 사용자 경험을 고도화 해요.
+- 상품 상세 페이지를 구현하여 API 기능을 완성시켜보세요.
 
 # 과제 진행 요구사항
 - 본인만의 기준으로 일관된 코드를 작성해주세요.
 - 기능 단위로 나누어 커밋을 해주세요.
-- 기존에 작성했던 API를 React Query를 이용해서 리팩터링 해요. (GET, POST 모두)
 
-- [ ] auth.ts 를 React Query를 이용하여 리팩터링
-- [ ] client.ts 를 React Query를 이용하여 리팩터링
-- [ ] order.ts 를 React Query를 이용하여 리팩터링
-- [ ] product.ts 를 React Query를 이용하여 리팩터링
-- [ ] themes.ts 를 React Query를 이용하여 리팩터링
+- 상품 상세 페이지
+ - [ ] 참고 URL 을 참고하여 상품 상세 페이지를 구현해주세요.
+ - [ ] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능을 구현하세요.
+ - [ ] 아래 참고 API를 모두 사용해야 해요.
+ - [ ] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경해보세요. (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상이에요.)
+- [ ] ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 해요. (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현해요)
+
+#참고
+상품 상세 페이지에서 사용되는 API는 총 4개에요. 자세한 내용은 API 명세 페이지에서 확인 할 수 있어요.
+
+- 상품 정보 API: /api/products/:productId
+- 상품 세부 정보 API: /api/products/:productId/detail
+- 상품 주요 리뷰 API: /api/products/:productId/highlight-review
+- 상품 관심 등록 수 API: /api/products/:productId/wish
