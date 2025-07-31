@@ -31,7 +31,8 @@ export const PreviewImageContainer = styled.div`
 export const FixedBottomButton = styled.button`
   position: fixed;
   bottom: 0;
-  width: 720px;
+  width: 100%;
+  max-width: 720px;
   height: 48px;
   background-color: ${({ theme }) => theme.semantic.brand.kakaoYellow};
   color: ${({ theme }) => theme.colors.gray[900]};
@@ -39,6 +40,8 @@ export const FixedBottomButton = styled.button`
   ${({ theme }) => theme.typography.body1Bold};
   cursor: pointer;
   z-index: ${Z_INDEX.FIXED_BOTTOM};
+  left: 50%;
+  transform: translateX(-50%);
 
   &:hover {
     background-color: ${({ theme }) => theme.semantic.brand.kakaoYellowHover};
