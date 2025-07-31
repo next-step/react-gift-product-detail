@@ -13,34 +13,30 @@ const AnnouncementTitle = styled.h3`
 `;
 
 const AnnouncementList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.lg};
+`;
+
+const AnnouncementItem = styled.div`
+  padding: ${({ theme }) => theme.spacing.lg};
+  background: white;
   border: 1px solid ${({ theme }) => theme.colors.gray.gray200};
   border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  overflow: hidden;
 `;
 
-const AnnouncementItem = styled.div<{ isLast: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.md};
-  background: white;
-  border-bottom: ${({ isLast, theme }) => 
-    isLast ? 'none' : `1px solid ${theme.colors.gray.gray200}`};
-  
-  &:hover {
-    background: ${({ theme }) => theme.colors.gray.gray100};
-  }
-`;
-
-const AnnouncementName = styled.span`
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  font-size: 0.95rem;
-`;
-
-const AnnouncementValue = styled.span`
+const AnnouncementName = styled.div`
+  font-weight: 600;
   color: ${({ theme }) => theme.colors.semantic.textDefault};
+  font-size: 1rem;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const AnnouncementValue = styled.div`
+  color: ${({ theme }) => theme.colors.gray.gray700};
   font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-line;
 `;
 
 interface ProductAnnouncementSectionProps {
@@ -77,13 +73,10 @@ const ProductAnnouncementSection = ({ productDetail }: ProductAnnouncementSectio
 
   return (
     <AnnouncementSection>
-      <AnnouncementTitle>공지사항</AnnouncementTitle>
+      <AnnouncementTitle>상세정보</AnnouncementTitle>
       <AnnouncementList>
         {sortedAnnouncements.map((item, index) => (
-          <AnnouncementItem 
-            key={`${item.name}-${index}`} 
-            isLast={index === sortedAnnouncements.length - 1}
-          >
+          <AnnouncementItem key={`${item.name}-${index}`}>
             <AnnouncementName>{item.name}</AnnouncementName>
             <AnnouncementValue>{item.value}</AnnouncementValue>
           </AnnouncementItem>
