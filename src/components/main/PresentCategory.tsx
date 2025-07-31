@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
 import useThemes from "@/hooks/api/useThemes";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
+import { wrapper } from "@/utils/wrapper";
 
 const PresentCategory = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const PresentCategory = () => {
   );
 };
 
-export default withSuspenseBoundary(PresentCategory);
+export default wrapper([withSuspenseBoundary()], PresentCategory);
 
 const Background = styled.div`
   width: 100%;

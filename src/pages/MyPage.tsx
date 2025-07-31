@@ -1,5 +1,6 @@
 import { useUserInfo } from "@/contexts/UserInfoContext";
 import withUser from "@/hoc/withUser";
+import { wrapper } from "@/utils/wrapper";
 import styled from "@emotion/styled";
 
 const MyPage = () => {
@@ -23,7 +24,7 @@ const MyPage = () => {
   );
 };
 
-export default withUser(MyPage);
+export default wrapper([withUser], MyPage);
 
 const Main = styled.main`
   display: block;

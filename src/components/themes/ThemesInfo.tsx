@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import useThemesInfo from "@/hooks/api/useThemesInfo";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
+import { wrapper } from "@/utils/wrapper";
 
 type ThemesInfoProps = {
   id: string | undefined;
@@ -26,7 +27,7 @@ const ThemesInfo = ({ id }: ThemesInfoProps) => {
   );
 };
 
-export default withSuspenseBoundary(ThemesInfo, true);
+export default wrapper([withSuspenseBoundary(true)], ThemesInfo);
 
 const InfoSection = styled.section<{ backgroundColor?: string }>`
   margin: 0px;

@@ -3,6 +3,7 @@ import BoxMessage from "@/components/common/BoxMessage";
 import type { TargetType, RankType } from "@/types/gift";
 import useProductsRanking from "@/hooks/api/useProductsRanking";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
+import { wrapper } from "@/utils/wrapper";
 
 type GiftsRenderProps = {
   targetType: TargetType;
@@ -29,4 +30,4 @@ const GiftsRender = ({ targetType, rankType }: GiftsRenderProps) => {
   return <GiftsList items={gifts} />;
 };
 
-export default withSuspenseBoundary(GiftsRender);
+export default wrapper([withSuspenseBoundary()], GiftsRender);

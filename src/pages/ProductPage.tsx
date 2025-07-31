@@ -8,6 +8,7 @@ import type { Tab } from "@/constants/productTab";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import withUser from "@/hoc/withUser";
 import useProductsQueries from "@/hooks/api/useProductsQueries";
+import { wrapper } from "@/utils/wrapper";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -56,7 +57,7 @@ const ProductPage = () => {
   );
 };
 
-export default withUser(withSuspenseBoundary(ProductPage, true));
+export default wrapper([withUser, withSuspenseBoundary(true)], ProductPage);
 
 const Main = styled.main`
   display: flex;

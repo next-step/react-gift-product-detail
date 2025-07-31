@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import LoginForm from "@/components/login/LoginForm";
 import KakaoLogo from "@/components/image/KakaoLogo";
 import withoutUser from "@/hoc/withoutUser";
+import { wrapper } from "@/utils/wrapper";
 
 const LoginPage = () => {
   return (
@@ -12,7 +13,7 @@ const LoginPage = () => {
   );
 };
 
-export default withoutUser(LoginPage);
+export default wrapper([withoutUser], LoginPage);
 
 const Main = styled.main`
   display: flex;

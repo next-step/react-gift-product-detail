@@ -17,6 +17,7 @@ import { postOrder } from "@/api/order";
 import withUser from "@/hoc/withUser";
 import useProductsSummary from "@/hooks/api/useProductsSummary";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
+import { wrapper } from "@/utils/wrapper";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -107,8 +108,7 @@ const OrderPage = () => {
     </Main>
   );
 };
-
-export default withUser(withSuspenseBoundary(OrderPage, true));
+export default wrapper([withUser, withSuspenseBoundary(true)], OrderPage);
 
 const Main = styled.main`
   display: flex;
