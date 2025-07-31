@@ -27,8 +27,6 @@ export default defineConfig({
       {
         extends: true,
         plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
           storybookTest({
             configDir: path.join(dirname, ".storybook"),
           }),
@@ -46,6 +44,22 @@ export default defineConfig({
             ],
           },
           setupFiles: [".storybook/vitest.setup.ts"],
+        },
+      },
+      {
+        test: {
+          name: "unit",
+          globals: true,
+          environment: "jsdom",
+          setupFiles: ["./src/__test__/setup.ts"],
+          include: ["src/**/*.{test,spec}.{js,ts,jsx,tsx}"],
+          exclude: ["src/**/*.stories.{js,ts,jsx,tsx}"],
+        },
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "src"),
+            "@styles": path.resolve(__dirname, "src/styles"),
+          },
         },
       },
     ],
