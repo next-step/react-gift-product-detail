@@ -66,7 +66,7 @@ import ProductGrid from './ProductGrid';
 const RankingTabs = () => {
   const [selected, setSelected] = usePersistentState('rankingTab', 'FEMALE');
   const [selectedWantedTab, setSelectedWantedTab] = usePersistentState('wantedTab', 'MANY_WISH');
-  const { data: products, isLoading } = useProductRankingQuery(selected, selectedWantedTab);
+  const { data: products } = useProductRankingQuery(selected, selectedWantedTab);
 
   const handleTargetTabChange = (value: string) => {
     setSelected(value);
@@ -107,7 +107,7 @@ const RankingTabs = () => {
           </button>
         ))}
       </div>
-      <ProductGrid products={products ?? []} loading={isLoading} />
+      <ProductGrid products={products ?? []}  />
     </>
   );
 }
