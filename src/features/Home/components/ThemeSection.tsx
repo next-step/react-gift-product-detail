@@ -1,7 +1,8 @@
-import LoadingSpinner from '@components/common/LoadingSpinner';
+import EmptyMessage from '@components/common/EmptyMessage';
+import SuspenseErrorBoundaryWrapper from '@components/common/SuspenseErrorBoundaryWrapper ';
 import styled from '@emotion/styled';
 import { themeOptions } from '@queries/theme';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 export interface GiftTheme {
   themeId: number;
@@ -10,21 +11,29 @@ export interface GiftTheme {
 }
 
 const ThemeSection = () => {
-  const { data: themes, isError, isPending } = useQuery(themeOptions());
-
   return (
     <Section>
       <SectionTitle>선물 테마</SectionTitle>
-      {isPending && <LoadingSpinner />}
-
-      {!isPending && !isError && themes && themes.length > 0 && (
-        <Grid>
-          {themes.map((theme: GiftTheme) => (
-            <Theme key={theme.themeId} theme={theme} />
-          ))}
-        </Grid>
-      )}
+      <SuspenseErrorBoundaryWrapper>
+        <ThemeGrid />
+      </SuspenseErrorBoundaryWrapper>
     </Section>
+  );
+};
+
+const ThemeGrid = () => {
+  const { data: themes } = useSuspenseQuery(themeOptions());
+
+  if (themes.length === 0) {
+    return <EmptyMessage>선물 테마가 없습니다.</EmptyMessage>;
+  }
+
+  return (
+    <Grid>
+      {themes.map((theme: GiftTheme) => (
+        <Theme key={theme.themeId} theme={theme} />
+      ))}
+    </Grid>
   );
 };
 

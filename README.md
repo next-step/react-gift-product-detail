@@ -4,27 +4,25 @@
 
 ## 구현할 기능 목록
 
-- post: 로그인 리팩토링
-- post: 주문하기 리팩토링
-- get: 상품 상세 정보
-- get: Theme
-- get: 랭킹 상품
-- get: Theme Hero 정보
-- get: theme 세부 상품 무한 스크롤
+- 상품 상세 페이지
+- API 통신 구현 조건
+  - 최적화
+  - 선언적 구조
+  - react query
+- 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경 (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상)
+- ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현)
 
-## 구현한 기능
+## 구현한 내용
 
-- get: Theme
-- get: 랭킹 상품
-- get: 상품 상세 정보
-- get: Theme Hero 정보
-- post: 로그인 리팩토링
-- post: 주문하기 리팩토링
-- get: theme 세부 상품 무한 스크롤
+- 초기 프로젝트 세팅
+- ProductInfo UI 구현
+- TabMenu 구현
+- 각 Tab 세부 UI 구현
+- 하단 고정 버튼 바 구현
+- API 연동
+- Wish의 useQuery를 mutate로 변경, useProduct 훅 제작
+- suspense, ErrorBoundary 적용
+- 훅을 통해 id가 있는 경우에만 API 호출하도록 변경
+- useSuspenseQuery -> useSuspenseQueries로 병렬 쿼리 통합
 
 ## 리뷰 반영
-
-- postRequest, useFetch에 JSDoc의 @deprecated 어노테이션을 추가
-- mutations에 대한 전역 기본 설정 추가
-- API 요청함수 타입 명시 및 useQuery 제네릭 주입 수정
-- queryOptions를 사용하여 useQuery 리팩토링

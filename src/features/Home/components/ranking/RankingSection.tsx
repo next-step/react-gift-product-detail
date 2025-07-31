@@ -3,27 +3,15 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import TargetTab from './TargetTab';
 import {
-  Rank_MAP,
   RankS,
-  Target_MAP,
   TargetS,
-  type Product,
   type RankedProduct,
   type RankType,
   type TargetType,
 } from './RankingTypes';
 import RankTab from './RankTab';
 import ProductGrid from './ProductGrid';
-import { useQuery } from '@tanstack/react-query';
-import { RankedProductsOptions } from '@queries/product';
-
-// Product 타입에 ranking을 추가해주는 함수
-const addRanking = (products: Product[]): RankedProduct[] => {
-  return products.map((product, i) => ({
-    ...product,
-    ranking: i + 1,
-  }));
-};
+import SuspenseErrorBoundaryWrapper from '@components/common/SuspenseErrorBoundaryWrapper ';
 
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,20 +34,10 @@ const RankingSection = () => {
     setSearchParams(newParams);
   };
 
-  // 랭킹 상품 API 요청
-  const apiTargetType = Target_MAP[selectedTarget];
-  const apiRankType = Rank_MAP[selectedRank];
-  const { data, isError, isPending } = useQuery(
-    RankedProductsOptions(apiTargetType, apiRankType)
-  );
-
-  // Product 타입에 ranking을 추가
-  const products = data ? addRanking(data) : [];
-
   // 상품 클릭시 해당 상품의 order page로 이동
   const navigate = useNavigate();
   const handleClick = (item: RankedProduct) => {
-    navigate(`/order/${item.id}`);
+    navigate(`/product/${item.id}`);
   };
 
   return (
@@ -74,15 +52,16 @@ const RankingSection = () => {
         selected={selectedRank}
         onSelect={(label: string) => updateParam('Rank', label)}
       />
-
-      <ProductGrid
-        products={products}
-        isPending={isPending}
-        isError={isError}
-        isExpanded={isExpanded}
-        toggleExpand={() => setIsExpanded((prev) => !prev)}
-        onClickItem={handleClick}
-      />
+      <SuspenseErrorBoundaryWrapper key={selectedRank + selectedTarget}>
+        {/*쿼리 키만 바뀌는 경우 감지 못해 key 추가*/}
+        <ProductGrid
+          selectedTarget={selectedTarget}
+          selectedRank={selectedRank}
+          isExpanded={isExpanded}
+          toggleExpand={() => setIsExpanded((prev) => !prev)}
+          onClickItem={handleClick}
+        />
+      </SuspenseErrorBoundaryWrapper>
     </Section>
   );
 };
