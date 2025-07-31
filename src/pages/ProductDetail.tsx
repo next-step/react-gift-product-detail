@@ -13,8 +13,7 @@ import ErrorBoundary from '@/Components/ErrorBoundary';
 import LoadingSpinner from '@/Components/LoadingSpinner';
 import ProductHeader from '@/Components/ProductHeader';
 import ProductWishSection from '@/Components/ProductWishSection';
-import ProductDetailSection from '@/Components/ProductDetailSection';
-import ProductReviewSection from '@/Components/ProductReviewSection';
+import ProductTabs from '@/Components/ProductTabs';
 import ProductOrderSection from '@/Components/ProductOrderSection';
 
 const ProductContainer = styled.div`
@@ -59,8 +58,10 @@ const ProductDetailContent = () => {
           onToggleWish={handleToggleWish}
           isPending={toggleWishMutation.isPending}
         />
-        <ProductDetailSection productDetail={productDetail} />
-        <ProductReviewSection reviewData={reviewData} />
+        <ProductTabs 
+          productDetail={productDetail}
+          reviewData={reviewData}
+        />
         <ProductOrderSection onOrderClick={handleOrderClick} />
       </ProductContainer>
     </Layout>
