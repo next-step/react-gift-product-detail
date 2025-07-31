@@ -11,6 +11,7 @@ import { LoginContext } from "./LoginContext";
 
 export function LoginProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserInfo | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // 로그인 상태를 boolean으로 계산
   const isLoggedIn = !!user;
@@ -34,6 +35,8 @@ export function LoginProvider({ children }: { children: ReactNode }) {
         setUser(null);
       }
     }
+    // 초기화 완료 표시
+    setIsInitialized(true);
   }, []);
 
   // login 함수 메모이제이션
@@ -53,10 +56,11 @@ export function LoginProvider({ children }: { children: ReactNode }) {
     () => ({
       user,
       isLoggedIn,
+      isInitialized,
       login,
       logout,
     }),
-    [user, isLoggedIn, login, logout],
+    [user, isLoggedIn, isInitialized, login, logout],
   );
 
   return (

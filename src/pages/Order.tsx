@@ -580,7 +580,7 @@ const Order = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const productId = id ? parseInt(id) : 0;
-  const { isLoggedIn } = useLoginContext();
+  const { isLoggedIn, isInitialized } = useLoginContext();
 
   // 모든 hooks를 early return 이전에 호출
   const {
@@ -635,14 +635,25 @@ const Order = () => {
     name: "receivers",
   });
 
+  // 초기화가 완료되지 않았으면 로딩 상태 표시
+  if (!isInitialized) {
+    return (
+      <Layout>
+        <div style={{ textAlign: "center", padding: "50px" }}>
+          로그인 상태를 확인하는 중...
+        </div>
+      </Layout>
+    );
+  }
+
   // 로그인 상태 확인 - 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isInitialized && !isLoggedIn) {
       navigate("/login", {
         state: { redirect: `/order/${productId}` },
       });
     }
-  }, [isLoggedIn, navigate, productId]);
+  }, [isLoggedIn, isInitialized, navigate, productId]);
 
   // 로그인이 안 되어 있으면 로딩 상태 표시
   if (!isLoggedIn) {
