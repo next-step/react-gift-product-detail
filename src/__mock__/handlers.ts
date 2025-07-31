@@ -3,7 +3,7 @@ import { mockRankingProduct } from "@/__mock__/mock-ranking-product";
 import { http, HttpResponse } from "msw";
 
 export const handlers = [
-  http.get("http://localhost:3000/api/products/ranking", ({ request }) => {
+  http.get("/products/ranking", ({ request }) => {
     const url = new URL(request.url);
     const targetType = url.searchParams.get("targetType") || "ALL";
     const rankType = url.searchParams.get("rankType") || "MANY_WISH";
@@ -46,7 +46,7 @@ export const handlers = [
       data: data.length > 0 ? data : mockRankingProduct.slice(0, 5),
     });
   }),
-  http.get("http://localhost:3000/api/themes", () => {
+  http.get("/themes", () => {
     return HttpResponse.json({
       data: category,
     });
