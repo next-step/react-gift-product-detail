@@ -1,15 +1,6 @@
 import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react";
-import { ThemeProvider } from "@emotion/react";
-import theme from "@/styles/theme/theme";
 import LoginPage from "@/pages/Login/LoginPage";
-import {
-  AUTH_COOKIE_KEY_EMAIL,
-  AUTH_COOKIE_KEY_NAME,
-  AUTH_COOKIE_KEY_TOKEN,
-  AuthProvider,
-} from "@/contexts/authContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
+import { AUTH_COOKIE_KEY_EMAIL, AUTH_COOKIE_KEY_NAME, AUTH_COOKIE_KEY_TOKEN } from "@/contexts/authContext";
 import {
   ERROR_MSG_ID_EMPTY,
   ERROR_MSG_ID_FORM,
@@ -17,20 +8,7 @@ import {
   ERROR_MSG_PASSWORD_FORM,
 } from "@/constants/errorMessage";
 import { getCookieValue } from "@/utils/cookie";
-import { ToastContainer } from "react-toastify";
-
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>
-    <QueryClientProvider client={new QueryClient()}>
-      <AuthProvider>
-        <ThemeProvider theme={theme}>
-          {children}
-          <ToastContainer />
-        </ThemeProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </BrowserRouter>
-);
+import { TestWrapper } from "@/tests/TestWrapper";
 
 // 테스트 시나리오 흐름
 // Given: 사용자가 로그인 페이지에 접속했을 때 이메일, 비밀번호 입력 창과 로그인 버튼을 본다.
@@ -38,10 +16,6 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 // Then: 로그인 성공 시 메인 페이지로 이동하며 auth 정보가 저장되어야 한다.
 
 describe("LoginPage 통합 테스트", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
   });
@@ -99,10 +73,6 @@ describe("LoginPage 통합 테스트", () => {
 });
 
 describe("LoginPage 단위 테스트", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
   });
