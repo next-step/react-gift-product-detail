@@ -1,5 +1,8 @@
 ## step3 과제 수행 내용
 
+- Form Field를 테스트하기 위해 ReceiverFormItem.test.tsx 파일을 만들어 테스트 코드를 만들었습니다.
+- Typography를 테스트하기 위해 Typography.tsx 파일을 만들어 기본적인 컴포넌트를 생성해, Typography.test.tsx파일을 만들어 테스트했습니다.
+
 ## step2 피드백 반영 내용
 
 - suspense와 errorboundary로 반복되던 코드를 hoc를 정의하여 리팩터링했습니다.

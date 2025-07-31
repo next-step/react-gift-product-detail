@@ -19,6 +19,10 @@ const ReceiverFormItem = ({ field, index, onRemove }: Props) => {
     formState: { errors },
   } = useFormContext<{ receivers: ReceiverFormValues[] }>();
 
+  const nameFieldId = `receivers.${index}.name`;
+  const phoneFieldId = `receivers.${index}.phoneNumber`;
+  const quantityFieldId = `receivers.${index}.quantity`;
+
   return (
     <Container>
       <TitleRow>
@@ -43,8 +47,9 @@ const ReceiverFormItem = ({ field, index, onRemove }: Props) => {
       </TitleRow>
 
       <FormRow>
-        <Label>이름</Label>
+        <Label htmlFor={nameFieldId}>이름</Label>
         <Input
+          id={nameFieldId}
           defaultValue={field.name}
           {...register(`receivers.${index}.name`)}
           placeholder="이름을 입력하세요."
@@ -55,8 +60,9 @@ const ReceiverFormItem = ({ field, index, onRemove }: Props) => {
       )}
 
       <FormRow>
-        <Label>전화번호</Label>
+        <Label htmlFor={phoneFieldId}>전화번호</Label>
         <Input
+          id={phoneFieldId}
           defaultValue={field.phoneNumber}
           {...register(`receivers.${index}.phoneNumber`)}
           placeholder="전화번호를 입력하세요."
@@ -67,8 +73,9 @@ const ReceiverFormItem = ({ field, index, onRemove }: Props) => {
       )}
 
       <FormRow>
-        <Label>수량</Label>
+        <Label htmlFor={quantityFieldId}>수량</Label>
         <Input
+          id={quantityFieldId}
           type="number"
           defaultValue={field.quantity}
           {...register(`receivers.${index}.quantity`, {
