@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest",       
+    "test": "vitest",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui"
   },
@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.14.0",
     "@tanstack/react-query": "^5.83.0",
     "axios": "^1.10.0",
+    "msw": "^2.10.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.60.0",
