@@ -2,9 +2,9 @@ name: Run Tests
 
 on:
   push:
-    branches: [main shushuburger]
+    branches: [shushuburger]
   pull_request:
-    branches: [main shushuburger]
+    branches: [shushuburger]
 
 jobs:
   test:
