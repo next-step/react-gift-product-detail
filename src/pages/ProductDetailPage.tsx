@@ -26,10 +26,10 @@ import {
 
 function DetailContent({ productId }: { productId: number }) {
   const navigate = useNavigate()
-  const { data: product } = useProductQuery(productId)
-  const { data: detail } = useProductDetailQuery(productId)
-  const { data: reviews } = useHighlightReviewQuery(productId)
-  const { data: wishInfo } = useWishCountQuery(productId)
+  const { data: product } = useProductQuery(productId, { suspense: true })
+  const { data: detail } = useProductDetailQuery(productId, { suspense: true })
+  const { data: reviews } = useHighlightReviewQuery(productId, { suspense: true })
+  const { data: wishInfo } = useWishCountQuery(productId, { suspense: true })
   const { mutate } = useWishMutation(productId)
 
   return (
@@ -46,17 +46,19 @@ function DetailContent({ productId }: { productId: number }) {
       {detail && (
                 <>
           <Description>{detail.description}</Description>
-          <InfoList>
-            {detail.announcement
-              .slice()
-              .sort((a, b) => a.displayOrder - b.displayOrder)
-              .map((item, idx) => (
-                <InfoItem key={idx}>
-                  <strong>{item.name}</strong>
-                  <div>{item.value}</div>
-                </InfoItem>
-              ))}
-          </InfoList>
+                    {Array.isArray(detail.announcement) && (
+            <InfoList>
+              {detail.announcement
+                .slice()
+                .sort((a, b) => a.displayOrder - b.displayOrder)
+                .map((item, idx) => (
+                  <InfoItem key={idx}>
+                    <strong>{item.name}</strong>
+                    <div>{item.value}</div>
+                  </InfoItem>
+                ))}
+            </InfoList>
+          )}
         </>
       )}
       {reviews && reviews.reviews.length > 0 && (
