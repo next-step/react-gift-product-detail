@@ -1,24 +1,26 @@
 import { useEffect } from 'react';
-import { fetchThemeInfo } from '@/api/theme';
-import type { ThemeInfo } from '@/api/theme';
+import { useQuery } from '@tanstack/react-query';
+import { fetchThemeInfo, type ThemeInfo } from '@/api/theme';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '@/hooks/useFetch';
 
 export function useThemeInfo(themeId: string) {
   const navigate = useNavigate();
   const {
     data: themeInfo,
-    loading,
+    isLoading,
+    isError,
     error,
-  } = useFetch<ThemeInfo>(fetchThemeInfo, [themeId], {
-    errorMessage: '테마 정보를 불러오는 데 실패했어요.',
+  } = useQuery<ThemeInfo, Error>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
   });
 
   useEffect(() => {
-    if (error) {
+    if (isError) {
+      console.error(error);
       navigate('/');
     }
-  }, [error, navigate]);
+  }, [isError, navigate, error]);
 
-  return { themeInfo, loading, error };
+  return { themeInfo, isLoading, isError, error };
 }

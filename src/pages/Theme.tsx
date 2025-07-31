@@ -1,48 +1,42 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useThemeInfo } from '@/hooks/useThemeInfo';
 import { useThemeProducts } from '@/hooks/useThemeProducts';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useAuth } from '@/context/AuthContext';
 
 import NavigationBar from '@/common/NavigationBar';
 import ProductCard from '@/common/ProductCard';
 import Text from '@/common/Text';
-
 import styled from '@emotion/styled';
-import { useRef, useCallback } from 'react';
 
 const Theme = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const { themeInfo, loading: infoLoading } = useThemeInfo(themeId ?? '');
+  const {
+    themeInfo,
+    isLoading: infoLoading,
+    isError: infoError,
+  } = useThemeInfo(themeId ?? '');
   const {
     products,
-    loading: productsLoading,
-    error,
-    hasMore,
     loadMore,
+    hasMore,
+    isLoading: productsLoading,
+    isError: productsError,
+    error,
   } = useThemeProducts(Number(themeId));
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const observer = useRef<IntersectionObserver | null>(null);
-  const lastProductRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (productsLoading) return;
-      if (observer.current) observer.current.disconnect();
-
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadMore();
-        }
-      });
-
-      if (node) observer.current.observe(node);
-    },
-    [productsLoading, hasMore, loadMore]
-  );
+  const lastProductRef = useIntersectionObserver({
+    onIntersect: loadMore,
+    enabled: hasMore && !productsLoading,
+    rootMargin: '100px',
+  });
 
   if (infoLoading) return <div>로딩 중...</div>;
-  if (!themeInfo) return null;
-  if (error) return <div>{error}</div>;
+  if (infoError || !themeInfo)
+    return <div>테마 정보를 불러올 수 없습니다.</div>;
+  if (productsError) return <div>{error?.message}</div>;
 
   return (
     <Layout>
@@ -64,7 +58,7 @@ const Theme = () => {
           </Text>
         </ThemeHeroContent>
 
-        {products.length === 0 ? (
+        {products.length === 0 && !productsLoading ? (
           <EmptyMessage>상품이 없습니다.</EmptyMessage>
         ) : (
           <ProductList>
@@ -78,7 +72,6 @@ const Theme = () => {
               };
 
               if (index === products.length - 1) {
-                // 마지막 아이템에 ref 부여해서 관찰
                 return (
                   <div key={product.id} ref={lastProductRef}>
                     <ProductCard

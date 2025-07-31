@@ -6,11 +6,11 @@ import LoadingSpinner from '@/common/LoadingSpinner';
 import useGiftThemes from '@/hooks/useGiftThemes';
 
 const GiftCategoryList = () => {
-  const { categories, loading, error } = useGiftThemes();
+  const { categories, isLoading, isError, error } = useGiftThemes();
   const navigate = useNavigate();
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <Text>{error}</Text>;
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <Text>{error?.message}</Text>;
 
   return (
     <Layout>

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import apiClient from '@/api/apiClient';
+import { useMutation } from '@tanstack/react-query';
+import { TOAST_MESSAGES } from '@/constants/messages';
 
 interface User {
   name: string;
@@ -39,53 +39,40 @@ const getErrorMessage = (error: any): string => {
 };
 
 export const useLogin = () => {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const login = async (
-    email: string,
-    password: string,
-    onSuccess: (user: { name: string; email: string }) => void,
-    onFailure: () => void
-  ) => {
-    setIsLoading(true);
-
-    try {
-      const response = await apiClient.post('/api/login', { email, password });
-      const { data } = response.data;
-
-      if (!isValidUser(data)) {
+  const { mutate, isPending } = useMutation<User, Error, { email: string; password: string }>({
+    mutationFn: async ({ email, password }) => {
+      const response = await apiClient.post<any>('/api/login', {
+        email,
+        password,
+      });
+      if (!isValidUser(response.data.data)) {
         throw new Error('Invalid user data');
       }
-
-      const { name, email: userEmail, authToken } = data;
-
+      return response.data.data;
+    },
+    onSuccess: (user) => {
       sessionStorage.setItem(
         'userInfo',
-        JSON.stringify({ name, email: userEmail, authToken })
+        JSON.stringify({
+          name: user.name,
+          email: user.email,
+          token: user.authToken,
+        })
       );
-
-      toast.success(`${name}님, 환영합니다!`);
-      onSuccess({ name, email: userEmail });
-      navigate('/');
-    } catch (error: any) {
-      console.error('Login failed:', error);
+      toast.success(`${user.name}님, 환영합니다!`);
+    },
+    onError: (error: any) => {
       const errorMessage = getErrorMessage(error);
-
       const stored = sessionStorage.getItem('userInfo');
+
       if (error.response?.status === 401 && stored) {
-        toast.error('세션이 만료되었습니다. 다시 로그인해주세요.');
+        toast.error(TOAST_MESSAGES.SESSION_EXPIRED);
         sessionStorage.removeItem('userInfo');
-        onFailure();
       } else {
         toast.error(errorMessage);
       }
+    },
+  });
 
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { login, isLoading };
+  return { login: mutate, isLoading: isPending };
 };
