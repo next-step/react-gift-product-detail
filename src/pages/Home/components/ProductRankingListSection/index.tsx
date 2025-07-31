@@ -1,35 +1,16 @@
 // src/pages/ProductRankingListSection.tsx
-import React, { Component, Suspense, lazy, useEffect, useCallback, useState } from 'react';
+
+import React, { Suspense, lazy, useEffect, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import type { ProductData, ProductRankingFilterOption } from '@/types/products';
 import { Typography } from '@/components/common/Typography';
 import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
+import ErrorBoundary from '@/pages/Home/components/ErrorBoundary';
 
 const ProductRankingFilter = lazy(() =>
-  import('./RankingFilter').then((mod) => ({ default: mod.ProductRankingFilter })),
+  import('./RankingFilter').then(mod => ({ default: mod.ProductRankingFilter })),
 );
 const ProductRankingList = lazy(() => import('./ProductRankingList'));
-
-// ErrorBoundary 컴포넌트
-class ErrorBoundary extends Component<{ children: React.ReactNode }, { hasError: boolean }> {
-  state = { hasError: false };
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  componentDidCatch(error: Error) {
-    console.error('ErrorBoundary caught:', error);
-  }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <Typography as='p' variant='body1Regular' color='default'>
-          에러가 발생했습니다.
-        </Typography>
-      );
-    }
-    return this.props.children;
-  }
-}
 
 export default function ProductRankingListSection() {
   return (
@@ -60,7 +41,7 @@ function RankingSectionContent() {
           setProducts(data.data ?? []);
           setLoading(false);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('랭킹 조회 실패:', err);
           setError(true);
           setLoading(false);
@@ -106,7 +87,6 @@ const Section = styled.section(({ theme }) => ({
   width: '100%',
 }));
 
-// LoadingText, ErrorText, EmptyText components without attrs
 const LoadingTextBase: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <Typography as='p' variant='body1Regular' color='default'>
     {children}
