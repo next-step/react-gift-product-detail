@@ -6,11 +6,11 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useProductSummary = (id: string) => {
+const useProductSummary = (index: number) => {
   const navigate = useNavigate();
   const { data, error } = useQuery<ProductSummaryData>({
-    queryKey: ['summaryData', id],
-    queryFn: () => requests.fetchSummary(id),
+    queryKey: ['summaryData', index],
+    queryFn: () => requests.fetchSummary(index),
   });
 
   useEffect(() => {

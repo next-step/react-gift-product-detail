@@ -17,7 +17,7 @@ import { apiClient } from './apiClient';
 
 interface FetchOrderProps {
   orderData: OrderInfoValues;
-  id: string;
+  index: number;
 }
 interface fetchThemeIdItemsProps {
   index: number;
@@ -32,10 +32,10 @@ export const requests = {
     };
     return apiClient.post('/api/login', data);
   },
-  fetchOrder: ({ orderData, id }: FetchOrderProps): Promise<OrderResponseData> => {
+  fetchOrder: ({ orderData, index }: FetchOrderProps): Promise<OrderResponseData> => {
     const { message, name, receiverInfos } = orderData;
     const data = {
-      productId: Number(id),
+      productId: index,
       message: message,
       messageCardId: 'card123',
       ordererName: name,
@@ -43,8 +43,8 @@ export const requests = {
     };
     return apiClient.post('/api/order', data);
   },
-  fetchSummary: (id: string): Promise<ProductSummaryData> => {
-    return apiClient.get(`/api/products/${id}/summary`);
+  fetchSummary: (index: number): Promise<ProductSummaryData> => {
+    return apiClient.get(`/api/products/${index}/summary`);
   },
   fetchRanking: ({ activeGeneration, activeFilter }: RankingApiProps): Promise<ProductInfo[]> => {
     return apiClient.get(
