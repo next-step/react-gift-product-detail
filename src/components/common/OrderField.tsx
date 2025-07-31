@@ -46,6 +46,7 @@ const Textarea = styled.textarea`
 
 type CommonProps = {
   label: string;
+  id: string;
   placeholder?: string;
   error?: string;
 };
@@ -62,18 +63,23 @@ type TextAreaProps = CommonProps &
 
 type OrderFieldProps = InputProps | TextAreaProps;
 
-const OrderField = ({ label, placeholder, error, as = 'input', ...rest }: OrderFieldProps) => {
+const OrderField = ({ label, id, placeholder, error, as = 'input', ...rest }: OrderFieldProps) => {
   return (
     <ReceiverTab>
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <FieldInputWrapper>
         {as === 'textarea' ? (
           <Textarea
+            id={id}
             placeholder={placeholder}
             {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         ) : (
-          <Input placeholder={placeholder} {...(rest as InputHTMLAttributes<HTMLInputElement>)} />
+          <Input
+            id={id}
+            placeholder={placeholder}
+            {...(rest as InputHTMLAttributes<HTMLInputElement>)}
+          />
         )}
         <ErrorMessage message={error} />
       </FieldInputWrapper>

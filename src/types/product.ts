@@ -27,3 +27,28 @@ export interface ProductList {
   cursor: number;
   hasMoreList: boolean;
 }
+
+export interface ProductDetail {
+  description: string;
+  announcements: {
+    name: string;
+    value: string;
+    displayOrder: number;
+  }[];
+}
+
+export interface ProductWish {
+  wishCount: number;
+  isWished: boolean;
+}
+
+export interface ProductReview {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface ProductReviewResponse {
+  totalCount: number;
+  reviews: ProductReview[];
+}

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/constants/routes';
 import { useUser } from '@/contexts/UserContext';
-import Spinner from '@/components/Spinner';
 import { useProductRanking } from '@/hooks/useProduct';
 
 const genderTabs = ['전체', '여성이', '남성이', '청소년이'] as const;
@@ -147,11 +146,6 @@ const ToggleButton = styled.button`
   cursor: pointer;
 `;
 
-const EmptyProduct = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.spacing16};
-  text-align: center;
-`;
-
 const RankingSection = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedGender = (searchParams.get('gender') as GenderType) || '전체';
@@ -161,11 +155,10 @@ const RankingSection = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  const {
-    data: productList = [],
-    isLoading,
-    isError,
-  } = useProductRanking(GENDER_MAP[selectedGender], RANK_MAP[selectedRank]);
+  const { data: productList = [] } = useProductRanking(
+    GENDER_MAP[selectedGender],
+    RANK_MAP[selectedRank]
+  );
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
@@ -189,7 +182,19 @@ const RankingSection = () => {
     setIsExpanded(false);
   };
 
+  const handleProductClick = (productId: number) => {
+    if (user) {
+      navigate(ROUTE.PRODUCT(productId));
+    } else {
+      navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(productId) } });
+    }
+  };
+
   const visibleCount = isExpanded ? productList.length : INIT_COUNT;
+
+  if (productList.length === 0) {
+    return <div>상품이 없습니다.</div>;
+  }
 
   return (
     <SectionWrapper>
@@ -220,33 +225,22 @@ const RankingSection = () => {
         ))}
       </TrendGroupTab>
 
-      {isLoading ? (
-        <Spinner />
-      ) : isError || productList.length === 0 ? (
-        <EmptyProduct>상품이 없습니다.</EmptyProduct>
-      ) : (
-        <>
-          <ProductGrid>
-            {productList.slice(0, visibleCount).map((item, idx) => (
-              <ProductCard
-                key={item.id}
-                onClick={() => (user ? navigate(ROUTE.ORDER(item.id)) : navigate(ROUTE.LOGIN))}
-              >
-                <Badge isTop3={idx < 3}>{idx + 1}</Badge>
-                <img src={item.imageURL} alt={item.name} />
-                <Brand>{item.brandInfo.name}</Brand>
-                <Name>{item.name}</Name>
-                <Price>
-                  <strong>{item.price.sellingPrice.toLocaleString()}</strong> 원
-                </Price>
-              </ProductCard>
-            ))}
-          </ProductGrid>
+      <ProductGrid>
+        {productList.slice(0, visibleCount).map((item, idx) => (
+          <ProductCard key={item.id} onClick={() => handleProductClick(item.id)}>
+            <Badge isTop3={idx < 3}>{idx + 1}</Badge>
+            <img src={item.imageURL} alt={item.name} />
+            <Brand>{item.brandInfo.name}</Brand>
+            <Name>{item.name}</Name>
+            <Price>
+              <strong>{item.price.sellingPrice.toLocaleString()}</strong> 원
+            </Price>
+          </ProductCard>
+        ))}
+      </ProductGrid>
 
-          {productList.length > INIT_COUNT && (
-            <ToggleButton onClick={handleToggle}>{isExpanded ? '접기' : '더보기'}</ToggleButton>
-          )}
-        </>
+      {productList.length > INIT_COUNT && (
+        <ToggleButton onClick={handleToggle}>{isExpanded ? '접기' : '더보기'}</ToggleButton>
       )}
     </SectionWrapper>
   );

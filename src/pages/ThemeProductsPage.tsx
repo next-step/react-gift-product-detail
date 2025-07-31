@@ -1,11 +1,15 @@
-import { useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { ROUTE } from '@/constants/routes';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/common/Spinner';
 import { useThemeDetail } from '@/hooks/useTheme';
 import { useThemeProductsInfinite } from '@/hooks/useProduct';
-import { toast } from 'react-toastify';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useUser } from '@/contexts/UserContext';
+import { Suspense } from 'react';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import PageErrorFallback from '@/components/common/PageErrorFallback';
+import ComponentFallback from '@/components/common/ComponentFallback';
 
 const Hero = styled.section<{ bgColor: string }>`
   background-color: ${({ bgColor }) => bgColor};
@@ -73,66 +77,30 @@ const EmptyMessage = styled.div`
   color: ${({ theme }) => theme.colors.semantic.textSub};
 `;
 
-const ThemeProductsPage = () => {
+const ThemeProductsContent = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const navigate = useNavigate();
+  const { user } = useUser();
 
-  const {
-    data: theme,
-    isLoading: isThemeLoading,
-    isError: isThemeError,
-  } = useThemeDetail(Number(themeId));
+  const { data: theme } = useThemeDetail(Number(themeId));
 
-  const {
-    data,
-    fetchNextPage,
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsInfinite(
+    Number(themeId)
+  );
+
+  const observerRef = useInfiniteScroll({
     hasNextPage,
     isFetchingNextPage,
-    isLoading: isProductLoading,
-    isError: isProductError,
-  } = useThemeProductsInfinite(Number(themeId));
+    fetchNextPage,
+  });
 
-  useEffect(() => {
-    if (isThemeError) {
-      toast.error('테마 정보를 불러오지 못했습니다.');
-      navigate(ROUTE.MAIN);
+  const handleProductClick = (productId: number) => {
+    if (user) {
+      navigate(ROUTE.PRODUCT(productId));
+    } else {
+      navigate(ROUTE.LOGIN, { state: { from: ROUTE.PRODUCT(productId) } });
     }
-  }, [isThemeError, navigate]);
-
-  useEffect(() => {
-    if (isProductError) {
-      toast.error('상품 정보를 불러오지 못했습니다.');
-    }
-  }, [isProductError]);
-
-  const observerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    const current = observerRef.current;
-    if (current) {
-      observer.observe(current);
-    }
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  if (!themeId || isThemeLoading || isProductLoading) {
-    return <Spinner />;
-  }
+  };
 
   if (!theme) {
     return null;
@@ -154,7 +122,7 @@ const ThemeProductsPage = () => {
         <>
           <ProductGrid>
             {products.map((item) => (
-              <ProductCard key={item.id}>
+              <ProductCard key={item.id} onClick={() => handleProductClick(item.id)}>
                 <img src={item.imageURL} alt={item.name} />
                 <div className="brand">{item.brandInfo.name}</div>
                 <div className="name">{item.name}</div>
@@ -168,6 +136,16 @@ const ThemeProductsPage = () => {
         </>
       )}
     </>
+  );
+};
+
+const ThemeProductsPage = () => {
+  return (
+    <ErrorBoundary fallback={<PageErrorFallback />}>
+      <Suspense fallback={<ComponentFallback />}>
+        <ThemeProductsContent />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
