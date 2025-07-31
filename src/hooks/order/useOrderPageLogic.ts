@@ -10,8 +10,8 @@ export const useOrderPageLogic = () => {
 
   const {
     mutateOrder,
-    isLoading: OrderLoading,
-    error: OrderError,
+    isLoading: orderLoading,
+    error: orderError,
   } = useCreateOrder();
 
   const { validateAllFields, isOrderComplete } = useOrderValidation();
@@ -76,7 +76,7 @@ export const useOrderPageLogic = () => {
 
   return {
     handleOrderSubmit,
-    OrderLoading,
-    OrderError,
+    orderLoading,
+    orderError,
   };
 };
