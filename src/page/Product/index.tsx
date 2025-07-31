@@ -8,6 +8,7 @@ import { useParamsIndex } from '@/hooks/useParamsIndex';
 import { Suspense, useState } from 'react';
 import OrderButton from './components/OrderButton';
 import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const ProductPage = () => {
   const index = useParamsIndex();
@@ -16,9 +17,11 @@ const ProductPage = () => {
 
   return (
     <main>
-      <Suspense fallback={<Loading />}>
-        <ProductSection index={index} />
-      </Suspense>
+      <ErrorBoundary fallback={<div>상품 정보를 불러올 수 없습니다.</div>}>
+        <Suspense fallback={<Loading />}>
+          <ProductSection index={index} />
+        </Suspense>
+      </ErrorBoundary>
       <section>
         <div>
           <ButtonWrapper>
@@ -32,12 +35,21 @@ const ProductPage = () => {
               <p>상세정보</p>
             </button>
           </ButtonWrapper>
-          <Suspense fallback={<Loading />}>
-            {activeTab === 'description' && <ProductDescriptionSection index={index} />}
-            {activeTab === 'review' && <ProductReviewSection index={index} />}{' '}
-            {activeTab === 'detail' && <ProductDetailSection index={index} />}
-            <ProductWishButton index={index} />
-          </Suspense>
+
+          <ErrorBoundary fallback={<div>상세 내용을 불러올 수 없습니다.</div>}>
+            <Suspense fallback={<Loading />}>
+              {activeTab === 'description' && <ProductDescriptionSection index={index} />}
+              {activeTab === 'review' && <ProductReviewSection index={index} />}{' '}
+              {activeTab === 'detail' && <ProductDetailSection index={index} />}
+            </Suspense>
+          </ErrorBoundary>
+
+          <ErrorBoundary fallback={<div>관심 등록에 실패했습니다.</div>}>
+            <Suspense fallback={<Loading />}>
+              <ProductWishButton index={index} />
+            </Suspense>
+          </ErrorBoundary>
+
           <OrderButton index={index} />
         </div>
       </section>

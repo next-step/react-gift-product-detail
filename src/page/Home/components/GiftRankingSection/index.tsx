@@ -4,6 +4,7 @@ import useSearchParamState from '../../hooks/useSearchParamState';
 import RankList from './RankList';
 import { Suspense } from 'react';
 import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface ButtonProps {
   isActive: boolean;
@@ -38,9 +39,11 @@ const GiftRankingSection = () => {
           ))}
         </FilterGroup>
       </CatContainer>
-      <Suspense fallback={<Loading />}>
-        <RankList activeGeneration={activeGeneration} activeFilter={activeFilter} />
-      </Suspense>
+      <ErrorBoundary fallback={<div>랭킹을 불러올 수 없습니다.</div>}>
+        <Suspense fallback={<Loading />}>
+          <RankList activeGeneration={activeGeneration} activeFilter={activeFilter} />
+        </Suspense>
+      </ErrorBoundary>
     </Section>
   );
 };

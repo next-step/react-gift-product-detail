@@ -9,25 +9,28 @@ import ProductInfo from './components/ProductInfo';
 import useOrderForm from './hooks/useOrderForm';
 import { Suspense } from 'react';
 import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const OrderPage = () => {
   const { orderForm, onSubmit, price, productSummaryData } = useOrderForm();
 
   return (
-    <Suspense fallback={<Loading />}>
-      <Section>
-        <FormProvider {...orderForm}>
-          <form onSubmit={orderForm.handleSubmit(onSubmit)}>
-            <MessageCardSection />
-            <MessageInput />
-            <SenderInfo />
-            <ReceiverField />
-            {productSummaryData && <ProductInfo productSummaryData={productSummaryData} />}
-            <OrderButton type="submit">{toLocaleString(price)}원 주문하기</OrderButton>
-          </form>
-        </FormProvider>
-      </Section>
-    </Suspense>
+    <ErrorBoundary fallback={<div>주문 페이지를 불러올 수 없습니다.</div>}>
+      <Suspense fallback={<Loading />}>
+        <Section>
+          <FormProvider {...orderForm}>
+            <form onSubmit={orderForm.handleSubmit(onSubmit)}>
+              <MessageCardSection />
+              <MessageInput />
+              <SenderInfo />
+              <ReceiverField />
+              {productSummaryData && <ProductInfo productSummaryData={productSummaryData} />}
+              <OrderButton type="submit">{toLocaleString(price)}원 주문하기</OrderButton>
+            </form>
+          </FormProvider>
+        </Section>
+      </Suspense>
+    </ErrorBoundary>
   );
 };
 
