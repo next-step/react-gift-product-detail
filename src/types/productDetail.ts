@@ -24,7 +24,7 @@ export interface AnnouncementItem {
 
 export interface ProductDetail {
   description?: string;
-  announcement?: AnnouncementItem[];
+  announcements?: AnnouncementItem[];
   // 실제 API 응답에 따라 추가 필드들이 있을 수 있음
   [key: string]: any;
 }

@@ -48,11 +48,31 @@ interface ProductAnnouncementSectionProps {
 }
 
 const ProductAnnouncementSection = ({ productDetail }: ProductAnnouncementSectionProps) => {
-  const sortedAnnouncements = productDetail.announcement
-    ?.sort((a, b) => a.displayOrder - b.displayOrder) || [];
+  // productDetail이 없거나 announcements가 없는 경우
+  if (!productDetail) {
+    return (
+      <div>
+        <h3>상세정보</h3>
+        <p>상품 상세 정보를 불러올 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  // announcements 배열이 있는지 확인
+  const announcements = Array.isArray(productDetail.announcements) 
+    ? productDetail.announcements 
+    : [];
+  
+  const sortedAnnouncements = announcements
+    .sort((a, b) => a.displayOrder - b.displayOrder);
 
   if (sortedAnnouncements.length === 0) {
-    return null;
+    return (
+      <div>
+        <h3>상세정보</h3>
+        <p>공지사항이 없습니다.</p>
+      </div>
+    );
   }
 
   return (
