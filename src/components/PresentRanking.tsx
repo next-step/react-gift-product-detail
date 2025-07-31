@@ -335,10 +335,14 @@ const PresentRanking: React.FC = () => {
 
   const presentTypes = ['받고 싶어한', '많이 선물한', '위시로 받은'];
 
-  const goOrder = (productId: number) => {
-    const to = `/Order?productId=${productId}`;
-    if (user) navigate(to);
-    else navigate('/login', { state: { from: to } });
+  // const goOrder = (productId: number) => {
+  //   const to = `/Order?productId=${productId}`;
+  //   if (user) navigate(to);
+  //   else navigate('/login', { state: { from: to } });
+  // };
+
+  const goDetail = (productId: number) => {
+    navigate(`/products/${productId}`);
   };
   return (
     <ThemeProvider theme={theme}>
@@ -385,7 +389,7 @@ const PresentRanking: React.FC = () => {
           ) : (
             <PresentDisplay>
               {products.slice(0, productsToShow).map((p, index) => (
-                <ProductBox key={p.id} onClick={() => goOrder(p.id)}>
+                <ProductBox key={p.id} onClick={() => goDetail(p.id)}>
                   <NumberLogo
                     css={css`
                       background-color: ${index <= 2 ? 'rgb(252, 106, 102)' : 'rgb(176, 179, 186)'};

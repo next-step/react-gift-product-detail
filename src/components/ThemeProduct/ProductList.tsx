@@ -45,7 +45,7 @@ interface Props {
 
 const ProductList = ({ themeId }: Props) => {
   const navigate = useNavigate();
-  const goDetail = (id: number) => navigate(getProductDetailPath(id));
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useThemeProducts(themeId);
 
