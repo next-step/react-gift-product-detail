@@ -18,7 +18,7 @@ const LoginForm = () => {
   const password = method.watch("password");
 
   const { data, isPending, isError, login } = useLogin({
-    onSuccessCallback: () => {
+    onSuccess: () => {
       method.reset();
     },
   });

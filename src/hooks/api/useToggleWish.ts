@@ -43,11 +43,7 @@ const useToggleWish = ({ productId }: UseToggleWishParams) => {
     },
   });
 
-  const toggle = (current: boolean) => {
-    mutate(current);
-  };
-
-  return { toggle, isPending };
+  return { toggle: mutate, isPending };
 };
 
 export default useToggleWish;

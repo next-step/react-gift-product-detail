@@ -3,11 +3,11 @@ import type { PostLoginParams, PostLoginResult } from "@/api/login";
 import { useMutation } from "@tanstack/react-query";
 
 type UseLoginParams = {
-  onSuccessCallback?: () => void;
-  onErrorCallback?: () => void;
+  onSuccess?: () => void;
+  onError?: () => void;
 };
 
-const useLogin = ({ onSuccessCallback, onErrorCallback }: UseLoginParams) => {
+const useLogin = ({ onSuccess, onError }: UseLoginParams) => {
   const {
     data,
     isPending,
@@ -16,10 +16,10 @@ const useLogin = ({ onSuccessCallback, onErrorCallback }: UseLoginParams) => {
   } = useMutation<PostLoginResult, Error, PostLoginParams>({
     mutationFn: postLogin,
     onSuccess: () => {
-      onSuccessCallback?.();
+      onSuccess?.();
     },
     onError: () => {
-      onErrorCallback?.();
+      onError?.();
     },
   });
 
