@@ -1,4 +1,4 @@
-import { useApi } from '@/hooks/useApi';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 
 export interface Price {
@@ -37,19 +37,40 @@ const typeMap: Record<Type, string> = {
   '위시로 받은': 'MANY_WISH_RECEIVE',
 };
 
+// 쿼리 키 생성 함수 (관리 일원화)
+const getProductsRankingQueryKey = (gender: Gender, type: Type) => [
+  'productsRanking',
+  gender,
+  type,
+];
+
+// 쿼리 함수 분리
+export const fetchProductsRanking = async (
+  gender: Gender,
+  type: Type
+): Promise<Product[]> => {
+  const res = await api.get('/products/ranking', {
+    params: {
+      targetType: genderMap[gender],
+      rankType: typeMap[type],
+    },
+  });
+  return res.data;
+};
+
 export const useProductsRanking = (gender: Gender, type: Type) => {
-  const { data, loading, error } = useApi<Product[]>(async () => {
-    const res = await api.get('/products/ranking', {
-      params: {
-        targetType: genderMap[gender],
-        rankType: typeMap[type],
-      },
-    });
-    return res.data.data;
+  const {
+    data: products = [],
+    isLoading: loading,
+    error,
+  } = useQuery<Product[]>({
+    queryKey: getProductsRankingQueryKey(gender, type),
+    queryFn: () => fetchProductsRanking(gender, type),
+    staleTime: 1000 * 60 * 5,
   });
 
   return {
-    products: data ?? [],
+    products,
     loading,
     error,
   };

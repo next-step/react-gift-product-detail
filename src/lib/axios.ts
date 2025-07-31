@@ -2,8 +2,12 @@ import axios from 'axios';
 
 export const api = axios.create({
   baseURL: 'import.meta.env.VITE_API_URL',
-  timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  withCredentials: true,
 });
+
+api.interceptors.response.use(
+  (res) => {
+    return res.data?.data ?? res.data;
+  },
+  (error) => Promise.reject(error)
+);

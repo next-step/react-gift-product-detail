@@ -1,9 +1,11 @@
 import { isAxiosError } from 'axios';
-import { useApi } from '@/hooks/useApi';
+import { useQuery } from '@tanstack/react-query';
 import type { ThemeInfo } from '../ThemeHero/ThemeTypes';
 import { api } from '@/lib/axios';
 
-const fetchThemeInfo = async (themeId: number | null) => {
+const fetchThemeInfo = async (
+  themeId: number | null
+): Promise<ThemeInfo | null> => {
   if (!themeId) return null;
 
   try {
@@ -18,11 +20,18 @@ const fetchThemeInfo = async (themeId: number | null) => {
 };
 
 export const useThemeInfo = (themeId: number | null) => {
-  const fetcher = () => fetchThemeInfo(themeId);
-  const { data, loading, error } = useApi<ThemeInfo | null>(fetcher);
+  const {
+    data: themeInfo,
+    isLoading: loading,
+    error,
+  } = useQuery<ThemeInfo | null>({
+    queryKey: ['themeInfo', themeId],
+    queryFn: () => fetchThemeInfo(themeId),
+    enabled: !!themeId,
+  });
 
   return {
-    themeInfo: data,
+    themeInfo,
     loading,
     error,
   };

@@ -1,5 +1,6 @@
-import { useApi } from '@/hooks/useApi';
 import { api } from '@/lib/axios';
+import { useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
 export interface ProductSummary {
   id: number;
@@ -9,17 +10,36 @@ export interface ProductSummary {
   imageURL: string;
 }
 
-export const useProductSummary = (productId: number | null) => {
-  const { data, loading, error } = useApi<ProductSummary | null>(async () => {
-    if (!productId) {
-      return null;
-    }
+const fetchProductSummary = async (productId: number | null) => {
+  if (!productId) return null;
+
+  try {
     const res = await api.get(`/products/${productId}/summary`);
     return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (error.response?.status === 404) {
+      return null;
+    }
+
+    throw error;
+  }
+};
+
+export const useProductSummary = (productId: number | null) => {
+  const {
+    data: product,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ['product', productId],
+    queryFn: () => fetchProductSummary(productId),
+    enabled: !!productId,
   });
 
   return {
-    product: data,
+    product,
     loading,
     error,
   };
