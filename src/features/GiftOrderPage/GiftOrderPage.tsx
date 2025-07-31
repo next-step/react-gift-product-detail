@@ -9,7 +9,7 @@ import ReceiveList from '@features/GiftOrderPage/components/ReceiveList';
 import ReceiveModal from '@features/GiftOrderPage/components/ReceiveModal';
 
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FormProvider } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -22,10 +22,11 @@ import useOrderInvalid from './hooks/useOrderInvalid';
 import EmptyMessage from '@components/common/EmptyMessage';
 import { useQuery } from '@tanstack/react-query';
 import { productSummaryOptions } from '@queries/product';
+import useRequiredParam from '@hooks/useRequiredParam';
 
 const GiftOrderPage = () => {
   // 데이터 fetch
-  const { id } = useParams();
+  const id = useRequiredParam('id');
   const {
     data: productInfo,
     isError,

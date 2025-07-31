@@ -4,15 +4,15 @@ import TabMenu from './components/TabMenu';
 import Description from './components/TabContent/Description';
 import DetailInfo from './components/TabContent/DetailInfo';
 import FixedBottonBar from './components/FixedBottonBar';
-import { useParams } from 'react-router-dom';
 import Divider from '@components/common/Divider';
 import styled from '@emotion/styled';
 import Reviews from './components/TabContent/Reviews';
 import { useProduct } from '@hooks/useProduct';
+import useRequiredParam from '@hooks/useRequiredParam';
 
 export type ProductDetailTab = 'description' | 'review' | 'detailInfo';
 const ProductDetail = () => {
-  const { id } = useParams();
+  const id = useRequiredParam('id');
   const [activeTab, setActiveTab] = useState<ProductDetailTab>('description');
 
   const {

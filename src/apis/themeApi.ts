@@ -2,6 +2,7 @@ import type { ThemeProducts } from '@features/ThemeProductList/themeProductType'
 import axiosInstance from './axiosInstance';
 import type { GiftTheme } from '@features/Home/components/ThemeSection';
 import type { ThemeInfo } from '@features/ThemeProductList/components/ThemeHero';
+import type { ProductId } from 'src/types/product';
 
 // Home 페이지 Theme 요청 API
 export const fetchThemes = async (): Promise<GiftTheme[]> => {
@@ -10,9 +11,7 @@ export const fetchThemes = async (): Promise<GiftTheme[]> => {
 };
 
 // Theme Product List 페이지 상단 Hero 정보 요청 API
-export const fetchThemeInfo = async (
-  id: string | undefined
-): Promise<ThemeInfo> => {
+export const fetchThemeInfo = async (id: ProductId): Promise<ThemeInfo> => {
   const res = await axiosInstance.get(`/themes/${id}/info`);
   return res.data.data;
 };

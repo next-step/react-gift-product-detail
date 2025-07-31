@@ -2,7 +2,7 @@
 // API 응답이 아닌 데이터 타입이기 때문에 type 대신 interace로 작성
 
 // useParams에서 얻은 상품 Id 타입
-export type ProductId = string | undefined;
+export type ProductId = string;
 
 // 상품 기본정보
 export interface ProductBasicInfo {

@@ -1,7 +1,8 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { ProductWishInfo } from 'src/types/product';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import styled from '@emotion/styled';
+import useRequiredParam from '@hooks/useRequiredParam';
 
 interface FixedBottonBarProps {
   productWishInfo: ProductWishInfo;
@@ -12,7 +13,7 @@ const FixedBottonBar = ({
   productWishInfo,
   wishMutate,
 }: FixedBottonBarProps) => {
-  const { id } = useParams();
+  const id = useRequiredParam('id');
   const navigate = useNavigate();
   const handleOrder = () => navigate(`/order/${id}`);
 
