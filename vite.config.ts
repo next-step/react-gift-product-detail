@@ -1,10 +1,17 @@
-import { defineConfig } from 'vite';
+// import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config'; // vitest에서 가져옴
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+  },
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, 'src/components'),

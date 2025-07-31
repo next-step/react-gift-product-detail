@@ -1,4 +1,3 @@
-import ErrorText from '@components/common/ErrorText';
 import { useAuth } from '@contexts/AuthContext';
 import styled from '@emotion/styled';
 import { useState } from 'react';
