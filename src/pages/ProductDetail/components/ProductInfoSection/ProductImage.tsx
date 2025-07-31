@@ -1,4 +1,4 @@
-import { useProduct } from '@/queries/useProduct';
+import { useSuspenseProduct } from '@/queries/useProduct';
 import styled from '@emotion/styled';
 
 const Image = styled.img`
@@ -16,9 +16,8 @@ interface ProductImageProps {
 }
 
 const ProductImage = ({ productId }: ProductImageProps) => {
-  const { data, isLoading, isError } = useProduct(productId);
-
-  if (isLoading || isError || !data?.imageURL) return <Placeholder />;
+  const { data } = useSuspenseProduct(productId);
+  if (!data?.imageURL) return <Placeholder />;
   return (
     <>
       <Image src={data.imageURL} alt={data.name} />
