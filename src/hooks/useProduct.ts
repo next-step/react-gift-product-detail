@@ -7,16 +7,23 @@ import {
 import {
   useMutation,
   useQueryClient,
+  useSuspenseQueries,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import type { ProductId, ProductWishInfo } from 'src/types/product';
 
 export const useProduct = (id: ProductId) => {
-  const { data: product } = useSuspenseQuery(productOptions(id));
-  const { data: highlightReview } = useSuspenseQuery(productReviewOptions(id));
-  const { data: productDetailInfo } = useSuspenseQuery(
-    productDetailOptions(id)
-  );
+  const res = useSuspenseQueries({
+    queries: [
+      productOptions(id),
+      productReviewOptions(id),
+      productDetailOptions(id),
+    ],
+  });
+  const product = res[0].data;
+  const highlightReview = res[1].data;
+  const productDetailInfo = res[2].data;
+
   const { productWishInfo, wishMutate } = useWish(id);
 
   return {

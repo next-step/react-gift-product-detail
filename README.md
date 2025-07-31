@@ -23,5 +23,6 @@
 - Wish의 useQuery를 mutate로 변경, useProduct 훅 제작
 - suspense, ErrorBoundary 적용
 - 훅을 통해 id가 있는 경우에만 API 호출하도록 변경
+- useSuspenseQuery -> useSuspenseQueries로 병렬 쿼리 통합
 
 ## 리뷰 반영
