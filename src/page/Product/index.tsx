@@ -6,6 +6,7 @@ import ProductWishButton from './components/productWishButton';
 import ProductSection from './components/ProductSection';
 import { useParamsIndex } from '@/hooks/useParamsIndex';
 import { useState } from 'react';
+import OrderButton from './OrderButton';
 
 const ProductPage = () => {
   const index = useParamsIndex();
@@ -28,11 +29,12 @@ const ProductPage = () => {
               <p>상세정보</p>
             </button>
           </ButtonWrapper>
-          
+
           {activeTab === 'description' && <ProductDescriptionSection index={index} />}
           {activeTab === 'review' && <ProductReviewSection index={index} />}
           {activeTab === 'detail' && <ProductDetailSection index={index} />}
           <ProductWishButton index={index} />
+          <OrderButton index={index} />
         </div>
       </section>
     </main>

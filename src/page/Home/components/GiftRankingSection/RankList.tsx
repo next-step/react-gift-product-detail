@@ -9,13 +9,11 @@ import type { RankingApiProps } from '@/types';
 
 const RankList = ({ activeGeneration, activeFilter }: RankingApiProps) => {
   const { data, isLoading } = useRanking({ activeGeneration, activeFilter });
-  const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(
-    data?.length || 0
-  );
+  const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(data?.length || 0);
 
   const navigate = useNavigate();
   const moveToOrder = (id: number) => {
-    navigate(generatePath(ROUTE_PATH.ORDER, { id: String(id) }));
+    navigate(generatePath(ROUTE_PATH.PRODUCT, { id: String(id) }));
   };
 
   if (!data) return;

@@ -7,7 +7,7 @@ const ItemBox = ({ item }: { item: ItemData }) => {
   if (!item) return null;
 
   return (
-    <Link to={generatePath(ROUTE_PATH.ORDER, { id: String(item.id) })} data-discover>
+    <Link to={generatePath(ROUTE_PATH.PRODUCT, { id: String(item.id) })} data-discover>
       <ItemOntainer>
         <ItemImg alt={item.name} src={item.imageURL} />
         <ItemBrandInfo>{item.brandInfo.name}</ItemBrandInfo>
