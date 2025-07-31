@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { HTMLInputTypeAttribute } from 'react';
+import ErrorText from './ErrorText';
 
 interface UnderlineInputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -16,7 +17,7 @@ export const UnderlineInputField = ({
   return (
     <Container>
       <Input {...props} error={error} />
-      {message && <Message error={error}>{message}</Message>}
+      {message && <ErrorText>{message}</ErrorText>}
     </Container>
   );
 };
@@ -43,12 +44,4 @@ const Input = styled.input<{ error: boolean }>(({ theme, error }) => ({
   '::placeholder': {
     color: theme.colors.semantic.textPlaceholder,
   },
-}));
-
-const Message = styled.p<{ error: boolean }>(({ theme, error }) => ({
-  marginTop: theme.spacing.spacing1,
-  fontSize: theme.typography.label2Regular.fontSize,
-  fontWeight: theme.typography.label2Regular.fontWeight,
-  lineHeight: theme.typography.label2Regular.lineHeight,
-  color: error ? theme.colors.semantic.critical : theme.colors.gray.gray600,
 }));

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSchema, type LoginFormData } from '@schemas/loginSchema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { UnderlineInputField } from '@components/common/UnderlineInputField';
 
 interface LoginButtonProps {
   disabled: boolean;
@@ -41,21 +42,21 @@ const Login = () => {
   return (
     <Container onSubmit={handleSubmit(onSubmit)}>
       <Title>kakao</Title>
-      <Input
+      <UnderlineInputField
         type="email"
         placeholder="이메일"
         {...register('email')}
         error={!!errors.email}
+        message={errors.email?.message}
       />
-      {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
 
-      <Input
+      <UnderlineInputField
         type="password"
         placeholder="비밀번호"
         {...register('password')}
         error={!!errors.password}
+        message={errors.password?.message}
       />
-      {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
 
       <Button type="submit" disabled={!isValid}>
         로그인
