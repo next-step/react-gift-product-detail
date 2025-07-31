@@ -31,23 +31,20 @@
 
 - 상품 상세 페이지를 구현하여 API 기능을 완성시키기
 
+## STEP 3
+
+### 목표
+
+- 상황에 맞는 테스트 코드 방식을 통해 테스트 코드 작성하기
+- Github Action을 통해 매 PR에서 테스트 코드가 실행되도록 하기
+
 ### 과제 진행 요구사항
 
-- 상품 상세 페이지
-  - [x] 참고 URL 을 참고하여 상품 상세 페이지 구현
-  - [x] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능 구현
-  - [x] 아래 참고 API를 모두 사용하여 구현하기
-    - 상품 상세 페이지에서 사용되는 API는 총 4개 ([API 명세](https://edu.nextstep.camp/s/0eoNzeZS/ls/zJw3ijiQ))
-      - [x] 상품 정보 API: /api/products/:productId
-      - [x] 상품 세부 정보 API: /api/products/:productId/detail
-      - [x] 상품 주요 리뷰 API: /api/products/:productId/highlight-review
-      - [x] 상품 관심 등록 수 API: /api/products/:productId/wish
+- [ ] src/components에 있는 Form Field와 Typography에 대한 테스트 코드 작성하기
+- [ ] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드 작성하기
+- [ ] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드 작성하기
 
-  - [x] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경할 수 있도록 구현
-        (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상)
+- [ ] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 하기
 
-- [x] ErrorBoundary와 Suspense를 사용하여 코드 구조 리팩터링 하기
-      (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현)
-
-- [x] 본인만의 기준으로 일관된 코드 작성하기
-- [x] 기능 단위로 나누어 커밋 하기
+- [ ] 본인만의 기준으로 일관된 코드 작성하기
+- [ ] 기능 단위로 나누어 커밋 하기
