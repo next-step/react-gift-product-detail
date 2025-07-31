@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const USER_INFO_KEY = 'userInfo'
+
 const apiInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
@@ -8,7 +10,7 @@ const apiInstance = axios.create({
 })
 
 apiInstance.interceptors.request.use((config) => {
-  const userInfo = localStorage.getItem('userInfo')
+  const userInfo = localStorage.getItem(USER_INFO_KEY)
   if (!userInfo) return config
 
   try {
