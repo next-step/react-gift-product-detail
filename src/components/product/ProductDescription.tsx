@@ -24,11 +24,18 @@ const Description = styled.div`
   }
 `;
 
+const Empty = styled.p`
+  ${({ theme }) => theme.typography.body2Regular};
+  color: ${({ theme }) => theme.colors.semantic.textSub};
+  text-align: center;
+  margin-top: ${({ theme }) => theme.spacing.spacing6};
+`;
+
 const ProductDescription = ({ productId }: ProductDescriptionProps) => {
   const { data } = useProductDetail(productId);
 
   if (!data?.description) {
-    return null;
+    return <Empty>상품에 대한 설명이 아직 없어요.</Empty>;
   }
 
   return <Description>{parse(data.description)}</Description>;
