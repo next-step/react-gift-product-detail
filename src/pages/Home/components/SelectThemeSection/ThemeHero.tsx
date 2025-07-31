@@ -17,10 +17,13 @@ interface ThemeHeroProps {
 
 export function ThemeHero({ themeId }: ThemeHeroProps) {
   const navigate = useNavigate();
-  const { data: info, loading, error } = useFetch<{ data: ThemeInfo }>(
-    { url: `/api/themes/${themeId}/info`, method: 'get' },
-    [themeId]
-  );
+  const {
+    data: info,
+    loading,
+    error,
+  } = useFetch<{ data: ThemeInfo }>({ url: `/api/themes/${themeId}/info`, method: 'get' }, [
+    themeId,
+  ]);
 
   // Redirect on 404 or log other errors
   useEffect(() => {
@@ -51,9 +54,7 @@ export function ThemeHero({ themeId }: ThemeHeroProps) {
       }}
     >
       <h1 style={{ fontSize: '2.5rem', margin: '0 0 16px' }}>{title}</h1>
-      <p style={{ fontSize: '1.125rem', maxWidth: 600, margin: '0 auto' }}>
-        {description}
-      </p>
+      <p style={{ fontSize: '1.125rem', maxWidth: 600, margin: '0 auto' }}>{description}</p>
     </section>
   );
 }

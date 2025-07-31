@@ -23,13 +23,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <Image src={image} alt={name} />
       </ImageWrapper>
       <Content>
-        <Typography as="p" variant="body1Regular" color="gray500">
+        <Typography as='p' variant='body1Regular' color='gray500'>
           {brandName}
         </Typography>
-        <Typography as="p" variant="body1Bold" color="default">
+        <Typography as='p' variant='body1Bold' color='default'>
           {name}
         </Typography>
-        <Typography as="p" variant="body1Regular" color="sub">
+        <Typography as='p' variant='body1Regular' color='sub'>
           ₩{price.toLocaleString()}
         </Typography>
       </Content>

@@ -24,21 +24,23 @@ export default function ProductDetailContent() {
       axios.get(`/api/products/${productId}/detail`),
       axios.get(`/api/products/${productId}/highlight-review`),
       axios.get(`/api/products/${productId}/wish`),
-    ]).then(([r1, r2, r3, r4]) => {
-      setInfo(r1.data.data);
-      setDetail(r2.data.data);
-      setReviews(r3.data.data.reviews);
-      setWishData(r4.data.data);
-    }).catch(() => {
-      console.error('데이터 로딩 실패');
-    });
+    ])
+      .then(([r1, r2, r3, r4]) => {
+        setInfo(r1.data.data);
+        setDetail(r2.data.data);
+        setReviews(r3.data.data.reviews);
+        setWishData(r4.data.data);
+      })
+      .catch(() => {
+        console.error('데이터 로딩 실패');
+      });
   }, [productId]);
 
   if (!info || !detail) {
     return <Loading>로딩 중…</Loading>;
   }
 
-    const announcements: Announcement[] = detail.announcement ?? [];
+  const announcements: Announcement[] = detail.announcement ?? [];
 
   return (
     <Container>
@@ -51,9 +53,15 @@ export default function ProductDetailContent() {
 
       {/* Tabs */}
       <TabWrapper>
-        <Tab active={tab === 'desc'} onClick={() => setTab('desc')}>상품설명</Tab>
-        <Tab active={tab === 'rev'} onClick={() => setTab('rev')}>선물후기</Tab>
-        <Tab active={tab === 'info'} onClick={() => setTab('info')}>상세정보</Tab>
+        <Tab active={tab === 'desc'} onClick={() => setTab('desc')}>
+          상품설명
+        </Tab>
+        <Tab active={tab === 'rev'} onClick={() => setTab('rev')}>
+          선물후기
+        </Tab>
+        <Tab active={tab === 'info'} onClick={() => setTab('info')}>
+          상세정보
+        </Tab>
       </TabWrapper>
 
       {/* Content */}
@@ -61,18 +69,18 @@ export default function ProductDetailContent() {
         {tab === 'desc' && (
           <DescriptionContainer dangerouslySetInnerHTML={{ __html: detail.description }} />
         )}
-        {tab === 'rev' && (
+        {tab === 'rev' &&
           reviews.map((r: Review) => (
             <ReviewItem key={r.id}>
               <strong>{r.authorName}</strong>: {r.content}
             </ReviewItem>
-          ))
-        )}
+          ))}
         {tab === 'info' && (
           <InfoList>
             {announcements.length > 0 ? (
-              [...announcements].sort((a, b) => a.displayOrder - b.displayOrder)
-                .map(item => (
+              [...announcements]
+                .sort((a, b) => a.displayOrder - b.displayOrder)
+                .map((item) => (
                   <InfoItem key={item.displayOrder}>
                     <InfoName>{item.name}</InfoName>
                     <InfoValue>{item.value}</InfoValue>
@@ -89,16 +97,16 @@ export default function ProductDetailContent() {
       <Footer>
         <WishButton
           isWished={wishData.isWished}
-          onClick={() => setWishData(prev => ({
-            wishCount: prev.isWished ? prev.wishCount - 1 : prev.wishCount + 1,
-            isWished: !prev.isWished,
-          }))}
+          onClick={() =>
+            setWishData((prev) => ({
+              wishCount: prev.isWished ? prev.wishCount - 1 : prev.wishCount + 1,
+              isWished: !prev.isWished,
+            }))
+          }
         >
           {wishData.isWished ? '❤️' : '🤍'} {wishData.wishCount}
         </WishButton>
-        <OrderButton onClick={() => navigate(`/order/${productId}`)}>
-          주문하기
-        </OrderButton>
+        <OrderButton onClick={() => navigate(`/order/${productId}`)}>주문하기</OrderButton>
       </Footer>
     </Container>
   );
@@ -140,8 +148,8 @@ const Tab = styled.button<{ active: boolean }>`
   padding: 0.75rem;
   background: none;
   border: none;
-  font-weight: ${p => (p.active ? 'bold' : 'normal')};
-  border-bottom: ${p => (p.active ? '2px solid #000' : '2px solid transparent')};
+  font-weight: ${(p) => (p.active ? 'bold' : 'normal')};
+  border-bottom: ${(p) => (p.active ? '2px solid #000' : '2px solid transparent')};
   cursor: pointer;
   &:focus {
     outline: none;

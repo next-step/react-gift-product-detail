@@ -24,7 +24,7 @@ export const RankingFilterTargetTypeButton = ({ value, selected, onClick }: Prop
 };
 
 const Wrapper = styled.button(({ theme }) => ({
-  all: 'unset',              // margin, padding, border, background 등 모두 초기화
+  all: 'unset', // margin, padding, border, background 등 모두 초기화
   boxSizing: 'border-box',
   cursor: 'pointer',
   width: '3.625rem',

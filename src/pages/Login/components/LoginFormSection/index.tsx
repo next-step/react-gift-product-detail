@@ -1,18 +1,18 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing'
-import { UnderlineInputField } from '@/components/Form/InputField/UnderlineInputField'
+import React from 'react';
+import styled from '@emotion/styled';
+import { HorizontalSpacing } from '@/components/common/Spacing/HorizontalSpacing';
+import { UnderlineInputField } from '@/components/Form/InputField/UnderlineInputField';
 
 export interface LoginFormSectionProps {
-  email: string
-  password: string
-  onChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onSubmit: () => void
-  emailError?: string | null
-  passwordError?: string | null
-  loginError?: string | null
-  isFormValid: boolean
+  email: string;
+  password: string;
+  onChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  emailError?: string | null;
+  passwordError?: string | null;
+  loginError?: string | null;
+  isFormValid: boolean;
 }
 
 export const LoginFormSection: React.FC<LoginFormSectionProps> = ({
@@ -27,17 +27,13 @@ export const LoginFormSection: React.FC<LoginFormSectionProps> = ({
   isFormValid,
 }) => (
   <Wrapper>
-    <UnderlineInputField
-      placeholder="이메일"
-      value={email}
-      onChange={onChangeEmail}
-    />
+    <UnderlineInputField placeholder='이메일' value={email} onChange={onChangeEmail} />
     {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-    <HorizontalSpacing size="spacing4" />
+    <HorizontalSpacing size='spacing4' />
 
     <UnderlineInputField
-      placeholder="비밀번호"
-      type="password"
+      placeholder='비밀번호'
+      type='password'
       value={password}
       onChange={onChangePassword}
     />
@@ -46,30 +42,30 @@ export const LoginFormSection: React.FC<LoginFormSectionProps> = ({
     {/* 로그인 실패 시 출력되는 에러 메세지 */}
     {loginError && <GlobalError>{loginError}</GlobalError>}
 
-    <HorizontalSpacing size="spacing12" />
+    <HorizontalSpacing size='spacing12' />
     <Button disabled={!isFormValid} onClick={onSubmit}>
       로그인
     </Button>
   </Wrapper>
-)
+);
 
 const Wrapper = styled.section(({ theme }) => ({
   width: '100%',
   maxWidth: '26.25rem',
   padding: theme.spacing.spacing4,
-}))
+}));
 
 const ErrorMessage = styled.div(({ theme }) => ({
   color: theme.colors.semantic.critical.default,
   ...theme.typography.label2Regular,
   marginTop: theme.spacing.spacing1,
-}))
+}));
 
 const GlobalError = styled.div(({ theme }) => ({
   color: theme.colors.semantic.critical.default,
   ...theme.typography.body2Regular,
   marginTop: theme.spacing.spacing2,
-}))
+}));
 
 const Button = styled.button(({ theme }) => ({
   width: '100%',
@@ -91,6 +87,6 @@ const Button = styled.button(({ theme }) => ({
     backgroundColor: theme.colors.scale.gray300,
     cursor: 'not-allowed',
   },
-}))
+}));
 
-export { default as LoginForm } from './LoginForm'
+export { default as LoginForm } from './LoginForm';

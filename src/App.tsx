@@ -40,25 +40,25 @@ const App = () => (
       <BaseLayout header={<Navigation />}>
         {/* React Router 이미 최상위 index.tsx에서 설정되어 있어야 합니다 */}
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="themes/:themeId/products" element={<ThemeProductsPage />} />
-          <Route path="products/:productId" element={<ProductDetailWrapper />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="order/:id" element={<OrderPage />} />
+          <Route path='/' element={<HomePage />} />
+          <Route path='themes/:themeId/products' element={<ThemeProductsPage />} />
+          <Route path='products/:productId' element={<ProductDetailWrapper />} />
+          <Route path='login' element={<LoginPage />} />
+          <Route path='order/:id' element={<OrderPage />} />
           <Route
-            path="my"
+            path='my'
             element={
               <RequireAuth>
                 <MyPage />
               </RequireAuth>
             }
           />
-          <Route path="*" element={<NotFound />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BaseLayout>
       {/* 전역 Toast */}
       <ToastContainer
-        position="top-right"
+        position='top-right'
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
