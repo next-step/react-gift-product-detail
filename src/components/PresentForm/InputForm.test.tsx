@@ -4,7 +4,8 @@ import "@testing-library/jest-dom"
 import InputForm from "./InputForm"
 import { ThemeProvider } from "@emotion/react"
 import theme from "@/styles/theme"
-function renderWithTheme(ui: React.ReactElement) {
+
+export function renderWithTheme(ui: React.ReactElement) {
   return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>)
 }
 
