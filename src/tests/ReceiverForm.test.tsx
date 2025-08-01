@@ -44,6 +44,8 @@ describe('ReceiverForm', () => {
     expect(
       screen.getByPlaceholderText('전화번호를 입력하세요')
     ).toBeInTheDocument();
+    const inputs = screen.getAllByRole('spinbutton');
+    expect(inputs).toHaveLength(1);
   });
 
   it('input 변경 시 onChange가 호출된다.', () => {
