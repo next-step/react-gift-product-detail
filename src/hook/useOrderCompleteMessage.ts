@@ -1,6 +1,6 @@
 import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { orderAPI } from "@/utils/orderApi";
 import useProductSummary from "./useProductSummary";
 
@@ -12,7 +12,8 @@ function useOrderCompleteMessage() {
   const navigate = useNavigate();
 
   const total = receivers.reduce((acc, receiver) => acc + receiver.quantity, 0);
-  const {id, name } = useProductSummary();
+  const { productId } = useParams<{ productId: string }>();
+  const { name } = useProductSummary();
 
   const handleOrder = async () => {
     ordererName.validate();
@@ -20,7 +21,7 @@ function useOrderCompleteMessage() {
     if (!ordererName.error) {
       try {
         await orderAPI(
-          (id ?? 0),
+          Number(productId),
           message,
           messageCardId,
           ordererName.value,

@@ -60,6 +60,10 @@ export const globalStyles = css`
         font-family: 'Pretendard-Regular', sans-serif;
     }
 
+    img{
+        width: 100%;
+    }
+
 
 
 `;

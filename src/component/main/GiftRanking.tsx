@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import {
   CategoryGroup,
   GiftRanKingSection,
@@ -14,6 +14,8 @@ import GiftRankingList from './GiftRankingList';
 import { RankFilterOption, RankType, TargetFilterOption, TargetType } from '@/type/giftRanking';
 import { Gap, Title } from '@/styles/CommomStyle/Common.styled';
 import { ProductDiv } from '@/styles/CommomStyle/ProductList';
+import Loading from '../Loading';
+import { ErrorBoundary } from 'react-error-boundary';
 
 
 const GiftRanking = () => {
@@ -65,7 +67,11 @@ const GiftRanking = () => {
       </CategoryGroup>
       <Gap height={16} />
       <ProductDiv>
-        <GiftRankingList targetType={targetType} rankType={rankType} />
+        <ErrorBoundary fallback={null}>
+          <Suspense fallback={<Loading />}>
+            <GiftRankingList targetType={targetType} rankType={rankType} />
+          </Suspense>
+        </ErrorBoundary>
       </ProductDiv>
     </GiftRanKingSection>
   );

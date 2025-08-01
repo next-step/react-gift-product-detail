@@ -9,14 +9,11 @@ import type { ThemeInfo } from '@/type/GiftAPI/theme';
 import { getFromUrl } from '@/utils/getFromUrl';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-//import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
-
 
 
 const Themes = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const themesInfoUrl = getThemesInfoUrl(themeId);
-  //const themeInfo = useFetchFromUrlT<ThemeInfo>(themesUrl, getFromUrl, defaultThemeInfo);
   const { data } = useQuery<ThemeInfo>({
     queryKey : ['ThemeInfo'],
     queryFn : () => getFromUrl(themesInfoUrl)

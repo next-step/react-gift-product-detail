@@ -24,7 +24,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/My" element={<ProtectedRoute><My /></ProtectedRoute>} />
-          <Route path="/Order" element={
+          <Route path="/Order/:productId" element={
             <OrderContextProvider>
               <ReceiverProvider>      
                 <Order />

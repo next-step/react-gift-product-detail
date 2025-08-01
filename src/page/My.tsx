@@ -12,7 +12,6 @@ const My = () => {
   };
   return (
     <DefaultDiv>
-      
       <SimplePadding20>
       <h1>마이 페이지</h1>
       <p>{auth.user?.name} 님 안녕하세요!</p>

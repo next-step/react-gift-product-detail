@@ -9,6 +9,7 @@ export const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px 8px;
+  padding: 16px;
 `;
 
 export const ProductCardSection = styled.div`

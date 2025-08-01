@@ -55,3 +55,13 @@ export const DescriptionText = styled.p`
     margin: 0px;
     text-align: left;
 `
+
+export const PrdocutDescriptionDiv = styled.div`
+    white-space: pre-wrap;
+    max-width: 100%;
+    width: 100%;
+    overflow-y: hidden;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+`

@@ -340,6 +340,7 @@ export const SpinnerWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 40px 0;
+  height : 100%;
 `;
 
 export const Spinner = styled.div`

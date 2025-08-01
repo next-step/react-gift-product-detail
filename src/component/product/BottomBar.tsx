@@ -2,14 +2,23 @@ import { BottomBarDiv, LikeButton, OrderButton, OrderButtonText } from './Bottom
 import { likeImage } from '@/assets/imgUrl'
 import useLike from '@/hook/product/useLike'
 import theme from '@/styles/theme';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const BottomBar = () => {
     const {wishCount, isWished, handleClick} = useLike();
 
     const wishColor = isWished ?  theme.colors.red700 : theme.colors.text_default;
     const fill = isWished ?  theme.colors.red700 : "none"
+    const { productId } = useParams<{ productId: string }>();
+    const navigate = useNavigate();
+    const goOrder = () => {
+        navigate(`/order/11675363`);
+    }
+              
 
     return (
+
+        
         <BottomBarDiv>
             <LikeButton onClick={handleClick}>
                 <svg
@@ -27,7 +36,7 @@ const BottomBar = () => {
                 </svg>
                 <p style= {{fontSize : '0.625rem'}}>{wishCount}</p>
             </LikeButton>
-            <OrderButton>
+            <OrderButton onClick = {() => navigate(`/order/11675363`)}>
                 <OrderButtonText>주문하기</OrderButtonText>
             </OrderButton>
         </BottomBarDiv>

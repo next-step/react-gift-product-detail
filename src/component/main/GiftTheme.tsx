@@ -1,30 +1,32 @@
 import { GiftThemeSection, ThemeGrid, ThemeImage, ThemeItem, ThemeLabel } from './GiftTheme.styled';
-import { Gap, Spinner, SpinnerWrapper, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
+import { Gap, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
 import { useNavigate } from 'react-router-dom';
 import { themeUrl } from '@/constant/api';
 import { getFromUrl } from '@/utils/getFromUrl';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense } from 'react';
+import Loading from '../Loading';
 
 
 
 
 
 const GiftThemeList = () => {
-  const { data, error, isLoading  } = useQuery<[]>({
-    queryKey : ['themeLogoData'],
-    queryFn : () => getFromUrl(themeUrl)
+  const { data } = useSuspenseQuery<[]>({
+    queryKey: ['themeLogoData'],
+    queryFn: () => getFromUrl(themeUrl),
   });
 
   const navigate = useNavigate();
-
+  /*
   if (error) return null
 
   if (isLoading) return (
     <SpinnerWrapper>
       <Spinner />
     </SpinnerWrapper>
-  )
-
+  )*/
   return (
     <ThemeGrid>
       {data?.map(({ themeId, name, image }) => (
@@ -44,10 +46,14 @@ const GiftTheme = () => {
 
   return (
     <GiftThemeSection>
-      <Gap height={24}  />
+      <Gap height={24} />
       <TitleDiv><Title>선물 테마</Title></TitleDiv>
-      <GiftThemeList />
-      <Gap height={24}  />
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={<Loading />}>
+        <GiftThemeList />
+        </Suspense>
+        </ErrorBoundary>
+        <Gap height={24} />
     </GiftThemeSection>
   );
 };
