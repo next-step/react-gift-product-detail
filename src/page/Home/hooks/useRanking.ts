@@ -1,14 +1,14 @@
 import { requests } from '@/api/requests';
-import type { GiftRankingItem, RankingApiProps } from '@/types';
-import { useQuery } from '@tanstack/react-query';
+import type { ProductInfo, RankingApiProps } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-const useRanking = ({ activeGenerationButton, activeFilterButton }: RankingApiProps) => {
-  const { data, isLoading } = useQuery<GiftRankingItem[]>({
-    queryKey: ['rankDatas', activeGenerationButton, activeFilterButton],
-    queryFn: () => requests.fetchRanking({ activeGenerationButton, activeFilterButton }),
+const useRanking = ({ activeGeneration, activeFilter }: RankingApiProps) => {
+  const { data } = useSuspenseQuery<ProductInfo[]>({
+    queryKey: ['rankDatas', activeGeneration, activeFilter],
+    queryFn: () => requests.fetchRanking({ activeGeneration, activeFilter }),
   });
 
-  return { rankingDatas: data, isLoading };
+  return { data };
 };
 
 export default useRanking;

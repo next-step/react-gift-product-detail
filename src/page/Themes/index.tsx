@@ -1,16 +1,18 @@
 import styled from '@emotion/styled';
 import CardSection from './components/CardSection';
 import GridSection from './components/GridSection';
-import useThemeInfo from './hooks/useThemeInfo';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const ThemesPage = () => {
-  const { themeIdInfo } = useThemeInfo();
-
-  if (!themeIdInfo) return null;
-
   return (
     <Container>
-      <CardSection themeIdInfo={themeIdInfo} />
+      <ErrorBoundary fallback={<div>카드 정보를 불러올 수 없습니다.</div>}>
+        <Suspense fallback={<Loading />}>
+          <CardSection />
+        </Suspense>
+      </ErrorBoundary>
       <GridSection />
     </Container>
   );

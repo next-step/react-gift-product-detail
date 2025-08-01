@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
 import ThemeList from './ThemeList';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const GiftThemeSection = () => {
   return (
@@ -7,7 +10,11 @@ const GiftThemeSection = () => {
       <TitleContainer>
         <Title>선물 테마</Title>
       </TitleContainer>
-      <ThemeList />
+      <ErrorBoundary fallback={<div>테마 정보를 불러올 수 없습니다.</div>}>
+        <Suspense fallback={<Loading />}>
+          <ThemeList />
+        </Suspense>
+      </ErrorBoundary>
     </section>
   );
 };

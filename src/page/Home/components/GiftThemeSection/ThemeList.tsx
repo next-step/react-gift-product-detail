@@ -1,19 +1,16 @@
 import styled from '@emotion/styled';
-import Loading from '@/components/Loading';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { generatePath, useNavigate } from 'react-router-dom';
 import useThemes from '../../hooks/useThemes';
 
 const ThemeList = () => {
-  const { themes, isLoading, error } = useThemes();
+  const { themes } = useThemes();
   const navigate = useNavigate();
 
   const handleClick = (id: number) => {
     navigate(generatePath(ROUTE_PATH.THEMES, { id: String(id) }));
   };
 
-  if (error || !themes) return null;
-  if (isLoading) return <Loading />;
   return (
     <Container>
       {themes.map(theme => (

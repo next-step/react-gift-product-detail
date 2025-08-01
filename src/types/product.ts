@@ -10,7 +10,7 @@ interface PriceInfo {
   discountRate: number;
 }
 
-export interface GiftRankingItem {
+export interface ProductInfo {
   id: number;
   name: string;
   price: PriceInfo;
@@ -19,8 +19,8 @@ export interface GiftRankingItem {
 }
 
 export interface RankingApiProps {
-  activeGenerationButton: string;
-  activeFilterButton: string;
+  activeGeneration: string;
+  activeFilter: string;
 }
 
 export interface ProductSummaryData {
@@ -29,4 +29,31 @@ export interface ProductSummaryData {
   brandName: string;
   price: number;
   imageURL: string;
+}
+
+export interface Announcement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+
+export interface ProductDetailData {
+  description: string;
+  announcements: Announcement[];
+}
+
+export interface ProductWishData {
+  wishCount: number;
+  isWished: boolean;
+}
+
+export interface Review {
+  id: string;
+  authorName: string;
+  content: string;
+}
+
+export interface ProductReviewData {
+  totalCount: number;
+  reviews: Review[];
 }

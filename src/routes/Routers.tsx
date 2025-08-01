@@ -7,6 +7,8 @@ import RequireAuth from './RequireAuth';
 import HOME from '@/page/Home';
 import ThemesPage from '@/page/Themes';
 import { ROUTE_PATH } from './routePath';
+import ProductPage from '@/page/Product';
+
 
 const AppRouter = () => {
   return (
@@ -29,6 +31,7 @@ const AppRouter = () => {
           </RequireAuth>
         }
       />
+      <Route path={ROUTE_PATH.PRODUCT} element={<ProductPage />} />
       <Route path={ROUTE_PATH.THEMES} element={<ThemesPage />} />
       <Route path={ROUTE_PATH.NOTFOUND} element={<NotFound />} />
     </Routes>

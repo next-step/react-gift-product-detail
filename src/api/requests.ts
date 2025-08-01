@@ -1,7 +1,7 @@
 import type {
   UserInfoData,
   UserInfoProps,
-  GiftRankingItem,
+  ProductInfo,
   RankingApiProps,
   OrderInfoValues,
   ProductSummaryData,
@@ -9,12 +9,15 @@ import type {
   ThemeIdInfoData,
   ThemeIdItemsData,
   OrderResponseData,
+  ProductDetailData,
+  ProductWishData,
+  ProductReviewData,
 } from '@/types';
 import { apiClient } from './apiClient';
 
 interface FetchOrderProps {
   orderData: OrderInfoValues;
-  id: string;
+  index: number;
 }
 interface fetchThemeIdItemsProps {
   index: number;
@@ -29,10 +32,10 @@ export const requests = {
     };
     return apiClient.post('/api/login', data);
   },
-  fetchOrder: ({ orderData, id }: FetchOrderProps): Promise<OrderResponseData> => {
+  fetchOrder: ({ orderData, index }: FetchOrderProps): Promise<OrderResponseData> => {
     const { message, name, receiverInfos } = orderData;
     const data = {
-      productId: Number(id),
+      productId: index,
       message: message,
       messageCardId: 'card123',
       ordererName: name,
@@ -40,15 +43,12 @@ export const requests = {
     };
     return apiClient.post('/api/order', data);
   },
-  fetchSummary: (id: string): Promise<ProductSummaryData> => {
-    return apiClient.get(`/api/products/${id}/summary`);
+  fetchSummary: (index: number): Promise<ProductSummaryData> => {
+    return apiClient.get(`/api/products/${index}/summary`);
   },
-  fetchRanking: ({
-    activeGenerationButton,
-    activeFilterButton,
-  }: RankingApiProps): Promise<GiftRankingItem[]> => {
+  fetchRanking: ({ activeGeneration, activeFilter }: RankingApiProps): Promise<ProductInfo[]> => {
     return apiClient.get(
-      `/api/products/ranking?targetType=${activeGenerationButton}&rankType=${activeFilterButton}`
+      `/api/products/ranking?targetType=${activeGeneration}&rankType=${activeFilter}`
     );
   },
   fetchTheme: (): Promise<ThemeInfo[]> => apiClient.get('/api/themes'),
@@ -59,4 +59,12 @@ export const requests = {
     currentCursor,
   }: fetchThemeIdItemsProps): Promise<ThemeIdItemsData> =>
     apiClient.get(`/api/themes/${index}/products?cursor=${currentCursor}`),
+
+  fetchProduct: (index: number): Promise<ProductInfo> => apiClient.get(`/api/products/${index}`),
+  fetchProductDetail: (index: number): Promise<ProductDetailData> =>
+    apiClient.get(`/api/products/${index}/detail`),
+  fetchProductReview: (index: number): Promise<ProductReviewData> =>
+    apiClient.get(`/api/products/${index}/highlight-review`),
+  fetchProductWish: (index: number): Promise<ProductWishData> =>
+    apiClient.get(`/api/products/${index}/wish`),
 };

@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import type { ItemData } from '@/types';
 import ProductBox from './Item';
-import useThemeItems from '../hooks/useThemeItems';
+import useThemeInfiniteScroll from '../hooks/useThemeInfiniteScroll';
 
 const GridSection = () => {
-  const { items, observerRef, hasNextPage } = useThemeItems();
+  const { items, observerRef, hasNextPage } = useThemeInfiniteScroll();
 
   if (!hasNextPage && !items.length) {
     return <Container>상품이 없습니다.</Container>;

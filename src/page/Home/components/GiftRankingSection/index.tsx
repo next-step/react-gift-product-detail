@@ -2,18 +2,16 @@ import styled from '@emotion/styled';
 import { filters, generations } from '@/data/categoryDatas';
 import useSearchParamState from '../../hooks/useSearchParamState';
 import RankList from './RankList';
+import { Suspense } from 'react';
+import Loading from '@/components/Loading';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 interface ButtonProps {
   isActive: boolean;
 }
 
 const GiftRankingSection = () => {
-  const {
-    handleGenerationGroupClick,
-    handleFilterGroupClick,
-    activeGenerationButton,
-    activeFilterButton,
-  } = useSearchParamState();
+  const { selectGeneration, selectFilter, activeGeneration, activeFilter } = useSearchParamState();
 
   return (
     <Section>
@@ -24,8 +22,8 @@ const GiftRankingSection = () => {
           {generations.map(({ id, emoji, label }) => (
             <Button
               key={id}
-              isActive={activeGenerationButton === id}
-              onClick={() => handleGenerationGroupClick(id)}
+              isActive={activeGeneration === id}
+              onClick={() => selectGeneration(id)}
             >
               <div>{emoji}</div>
               <p>{label}</p>
@@ -35,20 +33,17 @@ const GiftRankingSection = () => {
 
         <FilterGroup>
           {filters.map(({ id, label }) => (
-            <Button
-              key={id}
-              isActive={activeFilterButton === id}
-              onClick={() => handleFilterGroupClick(id)}
-            >
+            <Button key={id} isActive={activeFilter === id} onClick={() => selectFilter(id)}>
               <p>{label}</p>
             </Button>
           ))}
         </FilterGroup>
       </CatContainer>
-      <RankList
-        activeGenerationButton={activeGenerationButton}
-        activeFilterButton={activeFilterButton}
-      />
+      <ErrorBoundary fallback={<div>랭킹을 불러올 수 없습니다.</div>}>
+        <Suspense fallback={<Loading />}>
+          <RankList activeGeneration={activeGeneration} activeFilter={activeFilter} />
+        </Suspense>
+      </ErrorBoundary>
     </Section>
   );
 };
