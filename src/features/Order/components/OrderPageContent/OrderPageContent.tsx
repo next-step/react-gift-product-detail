@@ -25,15 +25,33 @@ const OrderPageContent = ({ idNum }: Props) => {
 
   const [selectedCardId, setSelectedCardId] = useState<number>(904);
   const selectedCard = cards.find((card) => card.id === selectedCardId)!;
+  const [message, setMessage] = useState<string>(
+    selectedCard.defaultTextMessage
+  );
 
-  const { methods, onSubmit, totalPrice, confirmReceivers } = useOrderForm({
+  const {
+    methods,
+    fields,
+    append,
+    remove,
+    getValues,
+    trigger,
+    confirmReceivers,
+    totalPrice,
+    onSubmit,
+  } = useOrderForm({
     productId: idNum,
-    defaultMessage: selectedCard.defaultTextMessage,
+    defaultMessage: message,
     productName: product.name ?? '',
     sellingPrice: product.price ?? 0,
     selectedCardId,
-    selectedCardMessage: selectedCard.defaultTextMessage,
+    selectedCardMessage: message,
   });
+
+  const {
+    register,
+    formState: { errors },
+  } = methods;
 
   return (
     <FormProvider {...methods}>
@@ -43,9 +61,25 @@ const OrderPageContent = ({ idNum }: Props) => {
           setSelectedCardId={setSelectedCardId}
         />
         <CardPreview selectedCardId={selectedCardId} />
-        <MessageInput />
-        <SenderInput />
-        <ReceiverSection onConfirm={confirmReceivers} />
+        <MessageInput
+          message={message}
+          setMessage={setMessage}
+          error={errors?.message?.message}
+        />
+        <SenderInput
+          register={register('sender')}
+          error={errors?.sender?.message}
+        />
+        <ReceiverSection
+          fields={fields}
+          register={register}
+          errors={errors}
+          append={append}
+          remove={remove}
+          getValues={getValues}
+          trigger={trigger}
+          onConfirm={confirmReceivers}
+        />
         <ProductInfo product={product} />
         <BottomPurchaseBar handlePurchase={onSubmit} totalPrice={totalPrice} />
       </form>

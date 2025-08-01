@@ -16,7 +16,6 @@ const fetchWish = (productId: number): Promise<WishResponse> => {
 };
 
 const toggleWish = async ({
-  productId,
   newStatus,
 }: {
   productId: number;

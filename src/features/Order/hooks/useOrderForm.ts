@@ -46,6 +46,7 @@ export const useOrderForm = ({
     handleSubmit,
     setValue,
     getValues,
+    trigger,
     formState: { errors },
   } = methods;
 
@@ -109,5 +110,7 @@ export const useOrderForm = ({
     fields,
     append,
     remove,
+    getValues,
+    trigger,
   };
 };
