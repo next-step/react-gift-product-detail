@@ -119,9 +119,9 @@ export function useProductQuery(
 
 export function useProductDetailQuery(
   productId: number | undefined,
-  options?: UseQueryOptions<HighlightReviewResponse, Error>,
-): UseQueryResult<HighlightReviewResponse, Error> {
-  return useQuery<HighlightReviewResponse, Error>({
+  options?: UseQueryOptions<ProductDetail, Error>,
+): UseQueryResult<ProductDetail, Error> {
+  return useQuery<ProductDetail, Error>({
     queryKey: productKeys.productDetail(productId!),
     queryFn: () => fetchProductDetail(productId!),
     enabled: productId !== undefined,
