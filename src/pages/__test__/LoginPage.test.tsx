@@ -5,10 +5,17 @@ import LoginPage from "@/pages/LoginPage";
 import { MemoryRouter } from "react-router-dom";
 import { STORAGE_KEY } from "@/constants/storage";
 import * as toastModule from "@/styles/toast";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 const mockNavigate = vi.fn();
 const mockSetItem = vi.fn();
 const mockMutate = vi.fn();
+let mutateFn: UseMutationResult<
+  void,
+  unknown,
+  { email: string; password: string },
+  unknown
+>;
 
 const defaultLoginForm = {
   email: "test@kakao.com",
@@ -38,9 +45,34 @@ vi.mock("react-router-dom", async () => {
 });
 
 vi.mock("@/hooks/useLoginMutation", () => ({
-  useLoginMutation: () => ({
-    mutate: mockMutate,
-  }),
+  useLoginMutation: () => {
+    mutateFn = {
+      mutate: mockMutate,
+      mutateAsync: vi.fn(),
+      reset: vi.fn(),
+      data: undefined,
+      error: null,
+      isError: false,
+      isIdle: false,
+      isLoading: false,
+      isSuccess: false,
+      status: "idle",
+      variables: undefined,
+      context: undefined,
+      failureCount: 0,
+      failureReason: null,
+      isPaused: false,
+      onSettled: undefined,
+      onSuccess: undefined,
+      onError: undefined,
+    } as unknown as UseMutationResult<
+      void,
+      unknown,
+      { email: string; password: string },
+      unknown
+    >;
+    return mutateFn;
+  },
 }));
 
 vi.mock("@/hooks/useLoginForm", () => ({
@@ -56,8 +88,6 @@ function renderWithRouter(ui: React.ReactNode) {
 }
 
 describe("LoginPage", () => {
-  let mutateFn: any;
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -136,7 +166,8 @@ describe("LoginPage", () => {
     const responseData = { authToken: "abc123", name: "test" };
 
     // When
-    mutateFn.success?.(responseData);
+    const [, options] = mockMutate.mock.calls[0];
+    options.onSuccess?.(responseData, undefined, undefined);
 
     // Then
     expect(sessionStorage.setItem).toHaveBeenCalledWith(
@@ -151,7 +182,9 @@ describe("LoginPage", () => {
     // Given
     renderWithRouter(<LoginPage />);
     // When
-    mutateFn.error?.({ isAxiosError: true });
+    const error = { isAxiosError: true };
+    const [, options] = mockMutate.mock.calls[0];
+    options.onError?.(error, undefined, undefined);
     // Then
     expect(toastModule.showErrorToast).toHaveBeenCalled();
   });
