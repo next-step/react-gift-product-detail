@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import LoginPage from "@/pages/LoginPage";
 import { MemoryRouter } from "react-router-dom";
 import { STORAGE_KEY } from "@/constants/storage";
-import * as toastModule from "@/styles/toast";
+import { showErrorToast } from "@/styles/toast";
 import * as loginFormModule from "@/hooks/useLoginForm";
 
 let mutateOptions: any;
@@ -75,8 +75,17 @@ vi.mock("axios", () => ({
   isAxiosError: () => true,
 }));
 
-vi.stubGlobal("sessionStorage", {
-  setItem: mockSetItem,
+beforeAll(() => {
+  const sessionStorageMock = {
+    setItem: mockSetItem,
+    getItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  };
+  Object.defineProperty(window, "sessionStorage", {
+    value: sessionStorageMock,
+    writable: true,
+  });
 });
 
 function renderWithRouter(ui: React.ReactNode) {
@@ -86,14 +95,6 @@ function renderWithRouter(ui: React.ReactNode) {
 describe("LoginPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    Object.defineProperty(window, "sessionStorage", {
-      value: {
-        setItem: mockSetItem,
-      },
-      writable: true,
-    });
-    vi.spyOn(toastModule, "showErrorToast").mockImplementation(vi.fn());
   });
 
   // 1. 이메일, 비밀번호 input이 보여야 함.
@@ -121,7 +122,7 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
 
     // Then
-    expect(toastModule.showErrorToast).toHaveBeenCalledWith(
+    expect(showErrorToast).toHaveBeenCalledWith(
       expect.stringMatching(/이메일/)
     );
   });
@@ -191,6 +192,6 @@ describe("LoginPage", () => {
     // When
     mutateOptions?.onError?.(error, undefined, undefined);
     // Then
-    expect(toastModule.showErrorToast).toHaveBeenCalled();
+    expect(showErrorToast).toHaveBeenCalled();
   });
 });
