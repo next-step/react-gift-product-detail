@@ -1,3 +1,9 @@
+const titleStyle = css({
+  ...typography.body1Bold,
+  color: colors.gray900,
+  margin: 0,
+  marginBottom: spacing.spacing4,
+});
 import { css } from '@emotion/react'
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
@@ -78,12 +84,7 @@ const RankingTabs = () => {
 
   return (
     <>
-      <h3 style={{
-        ...typography.body1Bold,
-        color: colors.gray900,
-        margin: 0,
-        marginBottom: spacing.spacing4,
-      }}>실시간 급상승 선물랭킹</h3>
+      <h3 css={titleStyle}>실시간 급상승 선물랭킹</h3>
       <div css={containerStyle}>
         {peopleTab.map(tab => (
           <button

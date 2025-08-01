@@ -17,13 +17,39 @@ import Loading from '@/components/Common/Loading'
 
 const tabList = ['상품설명', '선물후기', '상세정보'];
 
+// 리스트 스타일
+const listStyle = css({
+  padding: 0,
+  margin: 0,
+  listStyle: 'none',
+});
+const listItemStyle = css({
+  borderBottom: '1px solid #eee',
+  padding: '16px 0',
+});
+const listItemTitleStyle = css({
+  fontWeight: 'bold',
+  marginBottom: '8px',
+  color: '#222',
+});
+const listItemContentStyle = css({
+  color: '#444',
+});
+
 // 리스트 컴포넌트(후기/상세정보 공용)
 const List = ({ items, type }: { items: any[]; type: any }) => (
-  <ul style={{ padding: 0, margin: 0, listStyle: 'none' }}>
+  <ul css={listStyle}>
     {items.map((item) => (
-      <li key={type === 'review' ? item.id : item.name} style={{ borderBottom: '1px solid #eee', padding: '16px 0' }}>
-        <div style={{ fontWeight: 'bold', marginBottom: '8px', color: '#222' }}>{type === 'review' ? item.authorName : item.name}</div>
-        <div style={{ color: '#444', whiteSpace: type === 'review' ? 'pre-line' : undefined }}>{type === 'review' ? item.content : item.value}</div>
+      <li key={type === 'review' ? item.id : item.name} css={listItemStyle}>
+        <div css={listItemTitleStyle}>{type === 'review' ? item.authorName : item.name}</div>
+        <div
+          css={css([
+            listItemContentStyle,
+            type === 'review' && { whiteSpace: 'pre-line' },
+          ])}
+        >
+          {type === 'review' ? item.content : item.value}
+        </div>
       </li>
     ))}
   </ul>
@@ -109,7 +135,7 @@ function ProductPage() {
       <Header />
 
       {/* 상품 이미지 */}
-      <img src={product?.imageURL} alt={product?.name} style={{ width: '100%' }} />
+      <img src={product?.imageURL} alt={product?.name} css={css({ width: '100%' })} />
 
       {/* 상품명, 가격 */}
       <div>
@@ -118,8 +144,8 @@ function ProductPage() {
       </div>
 
       {/* 브랜드 */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <img src={product?.brandInfo?.imageURL} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <div css={css({ display: 'flex', alignItems: 'center', gap: '12px' })}>
+        <img src={product?.brandInfo?.imageURL} css={css({ width: '30px', height: '30px', borderRadius: '50%' })} />
         <p>{product?.brandInfo?.name}</p>
       </div>
 
@@ -147,7 +173,7 @@ function ProductPage() {
           css={likeButtonStyle}
           onClick={handleLikeClick}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" css={css({ display: 'block', margin: '0 auto' })}>
             <path d="M12.1 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54l-1.35 1.31z" fill={liked ? '#FF4F4F' : '#bbb'} />
           </svg>
           <span>{wishCount !== null ? wishCount : wish?.wishCount}</span>
