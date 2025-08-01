@@ -10,7 +10,7 @@ const FieldProps = {
   onChange: vi.fn(),
 };
 
-describe('공용 InputField 컴포넌트', () => {
+describe('공용 InputField 컴포넌트 - 단위 테스트', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

@@ -7,11 +7,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const queryClient = new QueryClient();
 const renderWithProviders = (ui: React.ReactElement, options = {}) =>
   render(
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
         <UserInfoProvider>{ui}</UserInfoProvider>
-      </ThemeProvider>
-    </QueryClientProvider>,
+      </QueryClientProvider>
+    </ThemeProvider>,
     options
   );
 

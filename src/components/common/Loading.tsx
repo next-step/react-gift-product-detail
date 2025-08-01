@@ -1,10 +1,14 @@
+// import theme from '@/styles/theme';
+// import { ThemeProvider } from '@emotion/react';
 import styled from '@emotion/styled';
 
 const Loading = () => (
+  // <ThemeProvider theme={theme}>
   <LoadingWrapper>
     <Spinner />
     <LoadingText>로딩 중...</LoadingText>
   </LoadingWrapper>
+  // </ThemeProvider>
 );
 
 export default Loading;
