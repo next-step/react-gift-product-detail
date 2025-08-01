@@ -5,11 +5,13 @@ import svgr from 'vite-plugin-svgr'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: 'src/__test__/setupTests.ts',
+  },
   resolve: {
-    alias: [
-      { find: '@components', replacement: '/src/components' },
-      { find: '@', replacement: '/src' },
-    ],
+    alias: [{ find: '@', replacement: '/src' }],
   },
   server: {
     proxy: {
