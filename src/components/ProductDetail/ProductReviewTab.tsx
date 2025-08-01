@@ -10,14 +10,7 @@ interface ProductReviewTabProps {
 }
 
 const ReviewContent = ({ productId }: { productId: string }) => {
-  const {
-    data: reviewData,
-    isLoading,
-    error,
-  } = useProductReviews(productId, true)
-
-  if (error) throw error
-  if (isLoading) return <Loading />
+  const { data: reviewData } = useProductReviews(productId)
 
   if (!reviewData?.reviews || reviewData.reviews.length === 0) {
     return (
