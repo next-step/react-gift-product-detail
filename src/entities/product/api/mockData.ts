@@ -1,4 +1,6 @@
-export const mockRankingProducts = [
+import type { MockRankingProduct } from '../model/types';
+
+export const mockRankingProducts: MockRankingProduct[] = [
   // 'FEMALE' 필터용 데이터
   {
     id: 9,
