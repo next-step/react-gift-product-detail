@@ -10,14 +10,7 @@ interface ProductDescriptionTabProps {
 }
 
 const DescriptionContent = ({ productId }: { productId: string }) => {
-  const {
-    data: detailData,
-    isLoading,
-    error,
-  } = useProductDetail(productId, true)
-
-  if (error) throw error
-  if (isLoading) return <Loading />
+  const { data: detailData } = useProductDetail(productId)
 
   return (
     <Layout height="auto" paddingDown="spacing16" paddingUp="spacing4">

@@ -10,14 +10,7 @@ interface ProductAnnouncementTabProps {
 }
 
 const AnnouncementContent = ({ productId }: { productId: string }) => {
-  const {
-    data: detailData,
-    isLoading,
-    error,
-  } = useProductDetail(productId, true)
-
-  if (error) throw error
-  if (isLoading) return <Loading />
+  const { data: detailData } = useProductDetail(productId)
 
   if (!detailData?.announcements || detailData.announcements.length === 0) {
     return (

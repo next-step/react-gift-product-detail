@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { AxiosError } from "axios"
 import fetchHandler from "@/functions/fetchHandler"
 import { ProductDetailResponse } from "@/interfaces/ProductDetailResponse"
 
-export default function useProductDetail(productId?: string, enabled = false) {
-  return useQuery<
+export default function useProductDetail(productId?: string) {
+  return useSuspenseQuery<
     ProductDetailResponse,
     AxiosError,
     ProductDetailResponse["data"]
@@ -13,6 +13,5 @@ export default function useProductDetail(productId?: string, enabled = false) {
     queryFn: () =>
       fetchHandler<ProductDetailResponse>(`/api/products/${productId}/detail`),
     select: (res) => res.data,
-    enabled,
   })
 }
