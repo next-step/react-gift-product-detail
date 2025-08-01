@@ -28,18 +28,6 @@ describe('Typography 컴포넌트', () => {
     expect(element.tagName).toBe('H1');
   });
 
-  it('variant에 맞는 스타일이 적용된다', () => {
-    render(
-      <ThemeProvider theme={theme}>
-        <Typography variant="title1Bold">굵은 제목</Typography>
-      </ThemeProvider>
-    );
-    const element = screen.getByText('굵은 제목');
-    const computedStyle = getComputedStyle(element);
-    expect(computedStyle.fontWeight).toBe('700'); // title1Bold는 fontWeight 700
-    expect(computedStyle.fontSize).toBe(theme.typography.title1Bold.fontSize);
-  });
-
   it('color prop으로 글자색을 덮어쓴다', () => {
     render(
       <ThemeProvider theme={theme}>
@@ -51,5 +39,23 @@ describe('Typography 컴포넌트', () => {
     const element = screen.getByText('컬러 테스트');
     const computedStyle = getComputedStyle(element);
     expect(computedStyle.color).toBe('rgb(255, 0, 0)');
+  });
+
+  // variant 스타일에 대한 테스트를 각 항목별로 반복 실행
+  Object.entries(theme.typography).forEach(([variant, style]) => {
+    it(`variant "${variant}"에 맞는 스타일이 적용된다`, () => {
+      render(
+        <ThemeProvider theme={theme}>
+          <Typography variant={variant as keyof typeof theme.typography}>
+            테스트 텍스트
+          </Typography>
+        </ThemeProvider>
+      );
+      const element = screen.getByText('테스트 텍스트');
+      const computedStyle = getComputedStyle(element);
+      expect(computedStyle.fontWeight).toBe(style.fontWeight.toString());
+      expect(computedStyle.fontSize).toBe(style.fontSize);
+      expect(computedStyle.lineHeight).toBe(style.lineHeight);
+    });
   });
 });

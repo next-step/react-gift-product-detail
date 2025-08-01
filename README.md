@@ -117,22 +117,23 @@
                 - 예상 결과: onRemove 함수가 호출된다.
 
         (+) Typography 컴포넌트 테스트 시나리오
-            - 시나리오 1: 기본 태그와 children 렌더링 확인
-                - 목적: Typography 컴포넌트가 기본적으로 p 태그로 렌더링 되는지, children이 화면에 표시되는지 확인
-                - 조건: variant="body1Regular" 속성으로 렌더링
-                - 예상 결과: p 태그로 렌더링되고, 텍스트가 화면에 보여진다.
 
-            - 시나리오 2: as prop에 따른 태그 변경
-                - 목적: as prop으로 지정한 태그(h1, span 등)로 렌더링 되는지 확인
-                - 조건: as="h1" 속성으로 렌더링
-                - 예상 결과: h1 태그로 렌더링된다.
+        - 시나리오 1: 기본 태그와 children 렌더링 확인
+            - 목적: Typography 컴포넌트가 기본적으로 p 태그로 렌더링 되는지, children이 화면에 표시되는지 확인
+            - 조건: variant="body1Regular" 속성으로 렌더링
+            - 예상 결과: p 태그로 렌더링되고, 텍스트가 화면에 보여진다.
 
-            - 시나리오 3: variant에 맞는 스타일 적용
-                - 목적: variant에 따라 폰트 크기, 굵기 등의 스타일이 올바르게 적용되는지 확인
-                - 조건: variant="title1Bold"로 렌더링
-                - 예상 결과: 폰트 굵기 700, 폰트 크기 theme에 지정된 크기 값이 적용된다.
+        - 시나리오 2: as prop에 따른 태그 변경
+            - 목적: as prop으로 지정한 태그(h1, span 등)로 렌더링 되는지 확인
+            - 조건: as="h1" 속성으로 렌더링
+            - 예상 결과: h1 태그로 렌더링된다.
 
-            - 시나리오 4: color prop을 통한 글자색 덮어쓰기
-                - 목적: color prop으로 전달된 색상이 스타일에 적용되는지 확인
-                - 조건: color="red"로 지정
-                - 예상 결과: 글자색이 'rgb(255, 0, 0)'로 적용된다.
+        - 시나리오 3: color prop을 통한 글자색 덮어쓰기
+            - 목적: color prop으로 전달된 색상이 스타일에 적용되는지 확인
+            - 조건: color="red"로 지정
+            - 예상 결과: 글자색이 'rgb(255, 0, 0)'로 적용된다.
+
+        - 시나리오 4: 모든 variant에 대한 폰트 스타일 적용 여부 검증
+            - 목적: theme.typography에 정의된 모든 variant에 대해 fontSize, fontWeight, lineHeight가 제대로 적용되는지 반복 검증
+            - 조건: variant에 theme.typography 객체의 모든 키를 순회하며 렌더링
+            - 예상 결과: 각 variant에 지정된 fontWeight, fontSize, lineHeight가 올바르게 적용된다.
