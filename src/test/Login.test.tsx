@@ -34,9 +34,11 @@ describe('Login Page (Vitest)', () => {
   });
 
   describe('렌더링 및 입력 필드 유효성 검사', () => {
-    it('이메일, 비밀번호 입력창과 로그인 버튼이 렌더링된다', () => {
+    beforeEach(() => {
       renderLogin();
+    });
 
+    it('이메일, 비밀번호 입력창과 로그인 버튼이 렌더링된다', () => {
       expect(
         screen.getByPlaceholderText('이메일')
       ).toBeInTheDocument();
@@ -49,7 +51,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('이메일 입력 필드에 타이핑할 수 있어야 함', () => {
-      renderLogin();
       const emailInput = screen.getByPlaceholderText('이메일');
       fireEvent.change(emailInput, {
         target: { value: 'test@example.com' },
@@ -58,7 +59,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('비밀번호 입력 필드에 타이핑할 수 있어야 함', () => {
-      renderLogin();
       const passwordInput = screen.getByPlaceholderText('비밀번호');
       fireEvent.change(passwordInput, {
         target: { value: 'password123' },
@@ -67,8 +67,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('유효하지 않은 이메일을 입력하면 에러가 나타난다', async () => {
-      renderLogin();
-
       fireEvent.change(screen.getByPlaceholderText('이메일'), {
         target: { value: 'invalid-email' },
       });
@@ -80,8 +78,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('짧은 비밀번호를 입력하면 에러가 나타난다', async () => {
-      renderLogin();
-
       fireEvent.change(screen.getByPlaceholderText('비밀번호'), {
         target: { value: '123' },
       });
@@ -93,8 +89,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('유효한 이메일과 비밀번호 입력 시 로그인 버튼이 활성화된다', async () => {
-      renderLogin();
-
       fireEvent.change(screen.getByPlaceholderText('이메일'), {
         target: { value: 'test@example.com' },
       });
@@ -111,9 +105,11 @@ describe('Login Page (Vitest)', () => {
   });
 
   describe('로그인 동작', () => {
-    it('로그인 성공 시 localStorage에 유저 정보가 저장된다', async () => {
+    beforeEach(() => {
       renderLogin();
+    });
 
+    it('로그인 성공 시 localStorage에 유저 정보가 저장된다', async () => {
       fireEvent.change(screen.getByPlaceholderText('이메일'), {
         target: { value: 'test@example.com' },
       });
@@ -135,8 +131,6 @@ describe('Login Page (Vitest)', () => {
     });
 
     it('로그인 실패 시 에러 메시지를 출력한다', async () => {
-      renderLogin();
-
       fireEvent.change(screen.getByPlaceholderText('이메일'), {
         target: { value: 'wrong@example.com' },
       });
