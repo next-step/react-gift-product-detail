@@ -3,7 +3,7 @@ import {
 } from '@/component/main/GiftRanking.styled';
 import ProductList from '@/component/theme/ProductList';
 
-import { baseUrl, getThemesInfoUrl } from '@/constant/api';
+import { getThemesInfoUrl } from '@/constant/api';
 
 import { DefaultDiv, Gap } from '@/styles/CommomStyle/Common.styled';
 import { ThemeDescription, ThemeName, ThemeTitle, ThemeTop } from '@/styles/CommomStyle/themes.styled';

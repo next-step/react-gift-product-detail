@@ -3,12 +3,11 @@ import type { ProductItemSummary } from "@/type/GiftAPI/product";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function useProductSummary() {
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { productId } = useParams<{ productId: string }>();
 

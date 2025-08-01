@@ -1,5 +1,4 @@
 import { getProductsWishUrl } from "@/constant/api";
-import theme from "@/styles/theme";
 import type { ProductWish } from "@/type/GiftAPI/product";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";

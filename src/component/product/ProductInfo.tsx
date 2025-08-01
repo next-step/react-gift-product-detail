@@ -20,7 +20,7 @@ const ProductInfo = () => {
 
     return (
         <section>
-            {data?.announcements.map(({ name, value, displayOrder }) => (
+            {data?.announcements.map(({ name, value }) => (
                 <div key={name}>
                     <Gap height={16} />
                     <NameText>{name}</NameText>

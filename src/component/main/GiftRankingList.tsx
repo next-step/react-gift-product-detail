@@ -9,7 +9,7 @@ import { CentorAlignDiv240, Gap } from '@/styles/CommomStyle/Common.styled';
 import {  ProductGrid,} from '@/styles/CommomStyle/ProductList';
 import { baseRankingUrl } from '@/constant/api';
 import { getFromUrl } from '@/utils/getFromUrl';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import ProductCard from '../ProductCard';
 
 

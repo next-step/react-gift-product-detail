@@ -11,9 +11,7 @@ const BottomBar = () => {
     const fill = isWished ?  theme.colors.red700 : "none"
     const { productId } = useParams<{ productId: string }>();
     const navigate = useNavigate();
-    const goOrder = () => {
-        navigate(`/order/11675363`);
-    }
+
               
 
     return (
@@ -36,7 +34,7 @@ const BottomBar = () => {
                 </svg>
                 <p style= {{fontSize : '0.625rem'}}>{wishCount}</p>
             </LikeButton>
-            <OrderButton onClick = {() => navigate(`/order/11675363`)}>
+            <OrderButton onClick = {() => navigate(`/order/${productId}`)}>
                 <OrderButtonText>주문하기</OrderButtonText>
             </OrderButton>
         </BottomBarDiv>
