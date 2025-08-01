@@ -4,12 +4,16 @@ import ErrorField from "@/components/order/ErrorField";
 
 describe("ErrorField", () => {
   it("error가 없을 때 null 반환", () => {
+    // Given
     const { container } = render(<ErrorField />);
+    // Then
     expect(container.firstChild).toBeNull();
   });
 
   it("error.message가 없을 때 null 반환", () => {
+    // Given
     const { container } = render(<ErrorField error={{}} />);
+    // Then
     expect(container.firstChild).toBeNull();
   });
 
@@ -21,7 +25,9 @@ describe("ErrorField", () => {
     ];
 
     testCases.forEach((message) => {
+      // Given
       const { unmount } = render(<ErrorField error={{ message }} />);
+      // Then
       expect(screen.getByText(message)).toBeInTheDocument();
       unmount();
     });

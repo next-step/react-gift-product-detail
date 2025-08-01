@@ -12,7 +12,9 @@ describe("ErrorMessage", () => {
     ];
 
     testCases.forEach((message) => {
+      // Given
       const { unmount } = render(<ErrorMessage>{message}</ErrorMessage>);
+      // Then
       expect(screen.getByText(message)).toBeInTheDocument();
       unmount();
     });
