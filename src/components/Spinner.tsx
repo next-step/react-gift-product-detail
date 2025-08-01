@@ -25,7 +25,7 @@ const SpinnerCircle = styled.div`
 
 export default function Spinner() {
   return (
-    <SpinnerWrapper>
+    <SpinnerWrapper data-testid="spinner">
       <SpinnerCircle />
     </SpinnerWrapper>
   );
