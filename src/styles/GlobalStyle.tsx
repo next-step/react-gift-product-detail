@@ -1,64 +1,75 @@
-import { Global, css } from "@emotion/react";
+import { Global, css } from '@emotion/react';
 
-const GlobalStyle = () => (
+export const GlobalStyle = () => (
   <Global
     styles={css`
-      @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
-
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
 
-      html,
+      html {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
       body {
-        font-family: "Pretendard", "Apple SD Gothic Neo", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
         background-color: #fff;
         color: #222;
-        line-height: 1.5;
         -webkit-font-smoothing: antialiased;
-        min-height: 100vh;
-        width: 100%;
-        overscroll-behavior-y: none;
+        -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
       }
 
-      #root {
-        min-height: 100vh;
-        width: 100vw;
-        background: #fff;
+      a {
+        color: inherit;
+        text-decoration: none;
       }
 
-      button,
-      input,
-      textarea {
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
         font-family: inherit;
       }
 
-      /* 스크롤바 스타일링 (개발 환경에서만 표시) */
+      input, textarea, select {
+        font-family: inherit;
+        border: none;
+        outline: none;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* 스크롤바 스타일링 */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
       }
-      
+
       ::-webkit-scrollbar-track {
         background: #f1f1f1;
         border-radius: 4px;
       }
-      
+
       ::-webkit-scrollbar-thumb {
         background: #c1c1c1;
         border-radius: 4px;
       }
-      
+
       ::-webkit-scrollbar-thumb:hover {
         background: #a8a8a8;
       }
-      
+
       /* Firefox 스크롤바 */
-      body {
+      * {
         scrollbar-width: thin;
         scrollbar-color: #c1c1c1 #f1f1f1;
       }
@@ -66,4 +77,3 @@ const GlobalStyle = () => (
   />
 );
 
-export default GlobalStyle;

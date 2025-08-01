@@ -4,6 +4,7 @@ import type { UserInfo } from "../types/auth";
 export interface LoginContextType {
   user: UserInfo | null;
   isLoggedIn: boolean;
+  isInitialized: boolean;
   login: (userInfo: UserInfo) => void;
   logout: () => void;
 }

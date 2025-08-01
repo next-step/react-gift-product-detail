@@ -103,7 +103,7 @@ const RankingSection = () => {
 
   // 상품 카드 클릭 핸들러
   const handleProductClick = (productId: number) => {
-    navigate(`/order/${productId}`);
+    navigate(`/product/${productId}`);
   };
 
   return (

@@ -4,7 +4,7 @@ import {
 } from "@mui/material/styles";
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
 import { theme as emotionTheme } from "@/styles/Theme";
-import GlobalStyle from "@/styles/GlobalStyle";
+import { GlobalStyle } from "@/styles/GlobalStyle";
 import Home from "@/pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -14,6 +14,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LoginProvider } from "./contexts/LoginProvider";
 import Order from "./pages/Order";
 import ThemeProducts from "./pages/ThemeProducts";
+import ProductDetail from "./pages/ProductDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,6 +48,14 @@ function App() {
               />
               <Route path="/order" element={<Navigate to="/" replace />} />
               <Route path="/themes/:themeId" element={<ThemeProducts />} />
+              <Route
+                path="/product/:productId"
+                element={
+                  <ProtectedRoute>
+                    <ProductDetail />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ToastContainer

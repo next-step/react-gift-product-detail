@@ -1,124 +1,5 @@
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
-  padding: ${({ theme }) => theme.spacing.card.padding};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  
-  @media (min-width: 480px) {
-    border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-    padding: ${({ theme }) => theme.spacing.card.paddingLarge};
-  }
-  
-  @media (min-width: 768px) {
-    padding: 18px 16px 16px 16px;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px 0 rgba(0,0,0,0.08);
-    }
-  }
-`;
-
-const ProductImage = styled.img`
-  width: 100%;
-  aspect-ratio: 1/1;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  object-fit: cover;
-  background: ${({ theme }) => theme.colors.gray.gray300};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-  
-  @media (min-width: 480px) {
-    border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
-    margin-bottom: 14px;
-  }
-`;
-
-const RankBadge = styled.span`
-  position: absolute;
-  top: ${({ theme }) => theme.spacing.md};
-  left: ${({ theme }) => theme.spacing.md};
-  background: ${({ theme }) => theme.colors.red.red700};
-  color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-  font-weight: 700;
-  font-size: 1.1rem;
-  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
-  padding: 2px 10px;
-  z-index: 2;
-`;
-
-const BrandName = styled.div`
-  font-size: 0.8rem;
-  color: ${({ theme }) => theme.colors.gray.gray700};
-  margin-bottom: 6px;
-  font-weight: 500;
-  
-  @media (min-width: 480px) {
-    font-size: 0.9rem;
-    margin-bottom: ${({ theme }) => theme.spacing.sm};
-  }
-`;
-
-const ProductName = styled.div`
-  font-size: 1rem;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  margin-bottom: 10px;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  
-  @media (min-width: 480px) {
-    font-size: 1.1rem;
-    margin-bottom: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
-const PriceSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  margin-top: auto;
-`;
-
-const SellingPrice = styled.div`
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.semantic.textDefault};
-  
-  @media (min-width: 480px) {
-    font-size: 1.2rem;
-  }
-`;
-
-const BasicPrice = styled.div`
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.gray.gray600};
-  text-decoration: line-through;
-  
-  @media (min-width: 480px) {
-    font-size: 1rem;
-  }
-`;
-
-const DiscountRate = styled.div`
-  font-size: 0.8rem;
-  color: ${({ theme }) => theme.colors.red.red700};
-  font-weight: 600;
-  
-  @media (min-width: 480px) {
-    font-size: 0.9rem;
-  }
-`;
 
 // 범용 상품 타입 정의
 export interface ProductData {
@@ -138,6 +19,116 @@ export interface ProductData {
   rankingType?: string;
 }
 
+const Card = styled.div`
+  background: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  padding: ${({ theme }) => theme.spacing.card.paddingLarge};
+  background: ${({ theme }) => theme.colors.gray.gray300};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const ProductImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadiusLarge};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+`;
+
+const Content = styled.div`
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.md};
+`;
+
+const RankBadge = styled.span`
+  position: absolute;
+  top: ${({ theme }) => theme.spacing.md};
+  left: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.red.red700};
+  color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: ${({ theme }) => theme.spacing.card.borderRadius};
+  padding: 2px 10px;
+  z-index: 2;
+`;
+
+const ProductName = styled.h3`
+  font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+  font-weight: ${({ theme }) => theme.typography.body1Regular.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  line-height: ${({ theme }) => theme.typography.body1Regular.lineHeight};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const PriceSection = styled.div`
+  margin-top: auto;
+`;
+
+const SellingPrice = styled.div`
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+`;
+
+const BasicPrice = styled.div`
+  font-size: ${({ theme }) => theme.typography.label1Regular.fontSize};
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  text-decoration: line-through;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  font-weight: ${({ theme }) => theme.typography.label1Regular.fontWeight};
+`;
+
+const DiscountRate = styled.span`
+  font-size: ${({ theme }) => theme.typography.label2Bold.fontSize};
+  color: ${({ theme }) => theme.colors.red.red700};
+  font-weight: ${({ theme }) => theme.typography.label2Bold.fontWeight};
+  margin-left: ${({ theme }) => theme.spacing.xs};
+`;
+
+const BrandInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const BrandLogo = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const BrandText = styled.span`
+  font-size: ${({ theme }) => theme.typography.label1Regular.fontSize};
+  color: ${({ theme }) => theme.colors.gray.gray600};
+  font-weight: ${({ theme }) => theme.typography.label1Regular.fontWeight};
+`;
+
 interface ProductCardProps {
   product: ProductData;
   onClick?: (productId: number) => void;
@@ -151,8 +142,14 @@ const ProductCard = ({
   showRankBadge = false, 
   rankNumber 
 }: ProductCardProps) => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    onClick?.(product.id);
+    if (onClick) {
+      onClick(product.id);
+    } else {
+      navigate(`/product/${product.id}`);
+    }
   };
 
   // 할인율이 0보다 큰 경우에만 할인 정보 표시
@@ -163,33 +160,44 @@ const ProductCard = ({
 
   return (
     <Card onClick={handleClick}>
-      {showRankBadge && rankNumber && (
-        <RankBadge>{rankNumber}</RankBadge>
-      )}
-      <ProductImage src={product.imageURL} alt={product.name} />
-      {product.brandInfo?.name && (
-        <BrandName>{product.brandInfo.name}</BrandName>
-      )}
-      <ProductName>{product.name}</ProductName>
-      <PriceSection>
-        <SellingPrice>
-          {product.price?.sellingPrice && product.price.sellingPrice > 0
-            ? `${product.price.sellingPrice.toLocaleString()}원`
-            : "가격 정보 없음"
-          }
-        </SellingPrice>
-        {shouldShowDiscount && (
-          <>
-            <BasicPrice>
-              {product.price?.basicPrice?.toLocaleString()}원
-            </BasicPrice>
-            <DiscountRate>
-              {discountRate}%
-            </DiscountRate>
-          </>
+      <ImageContainer>
+        {showRankBadge && rankNumber && (
+          <RankBadge>{rankNumber}</RankBadge>
         )}
-
-      </PriceSection>
+        <ProductImage src={product.imageURL} alt={product.name} />
+      </ImageContainer>
+      
+      <Content>
+        {product.brandInfo?.name && (
+          <BrandInfo>
+            {product.brandInfo.imageURL && (
+              <BrandLogo src={product.brandInfo.imageURL} alt={product.brandInfo.name} />
+            )}
+            <BrandText>{product.brandInfo.name}</BrandText>
+          </BrandInfo>
+        )}
+        
+        <ProductName>{product.name}</ProductName>
+        
+        <PriceSection>
+          <SellingPrice>
+            {product.price?.sellingPrice && product.price.sellingPrice > 0
+              ? `${product.price.sellingPrice.toLocaleString()}원`
+              : "가격 정보 없음"
+            }
+          </SellingPrice>
+          {shouldShowDiscount && (
+            <>
+              <BasicPrice>
+                {product.price?.basicPrice?.toLocaleString()}원
+              </BasicPrice>
+              <DiscountRate>
+                {discountRate}%
+              </DiscountRate>
+            </>
+          )}
+        </PriceSection>
+      </Content>
     </Card>
   );
 };
