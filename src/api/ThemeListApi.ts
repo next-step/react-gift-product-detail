@@ -1,4 +1,4 @@
-export const withError = <T extends (...args: any[]) => Promise<Response>>(
+export const withError = <T extends (...args: unknown[]) => Promise<Response>>(
   call: T,
   defaultError = '',
 ) => {
