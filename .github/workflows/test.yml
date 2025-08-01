@@ -5,10 +5,10 @@ name: CI Test
 on:
   pull_request:
     branches:
-      - main        # main 브랜치로 향하는 PR마다
+      - step3        # main 브랜치로 향하는 PR마다
   push:
     branches:
-      - main        # main 브랜치에 푸시될 때마다
+      - step3        # main 브랜치에 푸시될 때마다
 
 jobs:
   test:
