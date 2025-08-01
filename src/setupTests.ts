@@ -8,5 +8,8 @@ export const server = setupServer()
 expect.extend(matchers)
 
 beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
+afterEach(() => {
+  server.resetHandlers()
+  sessionStorage.clear()
+})
 afterAll(() => server.close())
