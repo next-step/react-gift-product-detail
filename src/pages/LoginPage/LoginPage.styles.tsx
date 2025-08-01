@@ -6,15 +6,8 @@ export const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: calc(100vh - ${({ theme }) => theme.components.navigationBar.height});
-  background-color: ${({ theme }) => theme.colors.background.default};
-`;
-
-export const KakaoLogo = styled.h1`
-  font-size: 2.5rem;
-  font-weight: ${({ theme }) =>
-    theme.typography.title.title1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-  margin-bottom: 3rem;
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const LoginForm = styled.form`
@@ -39,9 +32,10 @@ export const InputField = styled.input<{
   border: none;
   border-bottom: 1px solid
     ${({ isError, theme }) =>
-      isError ? theme.colors.red[700] : theme.colors.border.default};
+      isError ? theme.colors.red[700] : theme.colors.border["border-default"]};
   border-radius: 0;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 
   font-size: 1rem;
   font-family: "Pretendard", sans-serif;
@@ -65,7 +59,7 @@ export const LoginButton = styled.button<{
 
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius.xs};
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
 
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
@@ -75,10 +69,12 @@ export const LoginButton = styled.button<{
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.brand.kakaoYellowHover};
+    background-color: ${({ theme }) =>
+      theme.colors.brand["brand-kakaoYellowHover"]};
   }
 
   &:active {
-    background-color: ${({ theme }) => theme.colors.brand.kakaoYellowPressed};
+    background-color: ${({ theme }) =>
+      theme.colors.brand["brand-kakaoYellowPressed"]};
   }
 `;

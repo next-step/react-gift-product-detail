@@ -33,9 +33,10 @@ interface SubTabPropsType {
 
 function SubTab({ subTabIdx, onClick }: SubTabPropsType) {
   return (
-    <SubTabContainer>
+    <SubTabContainer data-testid="sub-tab">
       {TRENDING_GIFTS_SUB_TABS.map((el, idx) => (
         <SubTabButton
+          data-testid={`sub-tab-${idx}`}
           key={idx}
           isSelected={idx === subTabIdx}
           onClick={() => onClick(idx)}

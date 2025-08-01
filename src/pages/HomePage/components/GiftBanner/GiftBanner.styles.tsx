@@ -10,7 +10,8 @@ export const GiftBannerSection = styled.section`
   height: 7rem;
   margin-top: ${({ theme }) => theme.components.navigationBar.height};
 
-  background-color: ${({ theme }) => theme.colors.background.disabled};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-disabled"]};
 `;
 
 export const BannerCard = styled.button`
@@ -23,7 +24,8 @@ export const BannerCard = styled.button`
   border: 0;
 
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const AddIconWrapper = styled.div`
@@ -36,16 +38,11 @@ export const AddIconWrapper = styled.div`
   cursor: pointer;
   border: 0;
 
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
 `;
 
 export const AddIcon = styled.img`
   width: 20px;
   height: 20px;
-`;
-
-export const BannerMessage = styled.p`
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
 `;

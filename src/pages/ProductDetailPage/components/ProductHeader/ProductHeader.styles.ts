@@ -8,7 +8,8 @@ export const Divider = styled.div`
 export const ProductDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const ProductImage = styled.img`
@@ -23,23 +24,10 @@ export const ProductInfoContainer = styled.div`
   gap: ${({ theme }) => theme.spacing[3]};
 `;
 
-export const ProductName = styled.h1`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
 export const ProductPrice = styled.p`
   font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
-export const ProductPriceUnit = styled.span`
-  font-size: ${({ theme }) => theme.typography.title.title1Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.title.title1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
 
 export const BrandInfoContainer = styled.div`
@@ -55,10 +43,4 @@ export const BrandImage = styled.img`
   height: 30px;
   border-radius: 50%;
   object-fit: contain;
-`;
-
-export const BrandName = styled.p`
-  font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
 `;

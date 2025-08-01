@@ -73,36 +73,36 @@ export const colors = {
 export const semanticColors = {
   // 브랜드 컬러
   brand: {
-    kakaoYellow: "#fee500", // 카카오 메인 노란색
-    kakaoYellowHover: "#ffea2e", // 카카오 노란색 호버 상태
-    kakaoYellowActive: "#d5c000", // 카카오 노란색 활성 상태
-    kakaoYellowPressed: "#d5c000", // 카카오 노란색 눌림 상태
-    kakaoBrown: "#654321", // 카카오 갈색
-    kakaoBrownPressed: "#432a12", // 카카오 갈색 눌림 상태
+    "brand-kakaoYellow": "#fee500", // 카카오 메인 노란색
+    "brand-kakaoYellowHover": "#ffea2e", // 카카오 노란색 호버 상태
+    "brand-kakaoYellowActive": "#d5c000", // 카카오 노란색 활성 상태
+    "brand-kakaoYellowPressed": "#d5c000", // 카카오 노란색 눌림 상태
+    "brand-kakaoBrown": "#654321", // 카카오 갈색
+    "brand-kakaoBrownPressed": "#432a12", // 카카오 갈색 눌림 상태
   },
 
   background: {
-    default: "#ffffff", // 기본 배경색
-    disabled: "#f3f4f5", // 비활성 배경색
-    fill: "#f7f8f9", // 채움 배경색
+    "background-default": "#ffffff", // 기본 배경색
+    "background-disabled": "#f3f4f5", // 비활성 배경색
+    "background-fill": "#f7f8f9", // 채움 배경색
   },
 
   text: {
-    default: "#2a3038", // 기본 텍스트 색상
-    sub: "#b0b3ba", // 보조 텍스트 색상
-    disabled: "#dcdee3", // 비활성 텍스트 색상
-    placeholder: "#b0b3ba", // 플레이스홀더 텍스트 색상
+    "text-default": "#2a3038", // 기본 텍스트 색상
+    "text-sub": "#b0b3ba", // 보조 텍스트 색상
+    "text-disabled": "#dcdee3", // 비활성 텍스트 색상
+    "text-placeholder": "#b0b3ba", // 플레이스홀더 텍스트 색상
   },
 
   border: {
-    default: "#dcdee3", // 기본 테두리 색상
-    disabled: "#eeeff1", // 비활성 테두리 색상
+    "border-default": "#dcdee3", // 기본 테두리 색상
+    "border-disabled": "#eeeff1", // 비활성 테두리 색상
   },
 
   status: {
-    critical: "#fa342c", // 경고/에러 색상
-    criticalBackground: "#fdf0f0", // 경고/에러 배경 색상
-    info: "#217cf9", // 정보 색상
-    infoBackground: "#eff6ff", // 정보 배경 색상
+    "status-critical": "#fa342c", // 경고/에러 색상
+    "status-criticalBackground": "#fdf0f0", // 경고/에러 배경 색상
+    "status-info": "#217cf9", // 정보 색상
+    "status-infoBackground": "#eff6ff", // 정보 배경 색상
   },
 } as const;

@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 export const ReceiverSection = styled.section`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
   padding: ${({ theme }) => theme.spacing[4]};
   gap: 1rem;
 `;
@@ -11,7 +12,7 @@ export const ReceiverSection = styled.section`
 export const SectionTitle = styled.h2`
   font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   margin: 0;
 `;
 
@@ -26,7 +27,7 @@ export const FieldLabel = styled.label`
   font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   min-width: 4rem;
 `;
 
@@ -48,7 +49,7 @@ export const ShowModalButton = styled.button`
   background-color: transparent;
   background-color: ${({ theme }) => theme.colors.gray[300]};
   padding: ${({ theme }) => theme.spacing[2]} ${({ theme }) => theme.spacing[4]};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label1Regular.fontWeight};

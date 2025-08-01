@@ -15,7 +15,7 @@ import {
   getProductDetailInfo,
   getProductHighlightReview,
 } from "@/data/api";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQueries } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/constants/queryKey";
 import { Loading } from "@/components/Loading/Loading";
 import ErrorBoundary from "@/components/Error/ErrorBoundary/ErrorBoundary";
@@ -100,20 +100,23 @@ function TabContent({
   currentTab: Tab;
   productId: string;
 }) {
-  const { data: infoData } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL(productId),
-    queryFn: () => getProductDetail(productId),
-  });
-
-  const { data: reviewData } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_HIGHLIGHT_REVIEW(productId),
-    queryFn: () => getProductHighlightReview(productId),
-  });
-
-  const { data: detailData } = useSuspenseQuery({
-    queryKey: QUERY_KEY.PRODUCT_DETAIL_INFO(productId),
-    queryFn: () => getProductDetailInfo(productId),
-  });
+  const [{ data: infoData }, { data: reviewData }, { data: detailData }] =
+    useSuspenseQueries({
+      queries: [
+        {
+          queryKey: QUERY_KEY.PRODUCT_DETAIL(productId),
+          queryFn: () => getProductDetail(productId),
+        },
+        {
+          queryKey: QUERY_KEY.PRODUCT_HIGHLIGHT_REVIEW(productId),
+          queryFn: () => getProductHighlightReview(productId),
+        },
+        {
+          queryKey: QUERY_KEY.PRODUCT_DETAIL_INFO(productId),
+          queryFn: () => getProductDetailInfo(productId),
+        },
+      ],
+    });
 
   if (currentTab === TAB_CONTENT.TAB_INFO) {
     return <Info product={infoData} />;

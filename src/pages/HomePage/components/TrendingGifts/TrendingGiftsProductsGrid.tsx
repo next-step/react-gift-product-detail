@@ -5,9 +5,10 @@ import {
   TRENDING_GIFTS_LABELS,
 } from "./constants/labels";
 import ProductCard from "@/components/ProductCard/ProductCard";
-import { MoreInfo, MoreInfoWrapper } from "./TrendingGifts.styles";
+import { MoreInfoWrapper } from "./TrendingGifts.styles";
 import { PRODUCT_GRID_TYPES } from "@/components/ProductCard/types/productGridTypes";
 import EmptyProductContainer from "@/components/ProductCard/EmptyProductContainer";
+import { Typography } from "@/components/Typography/Typography";
 
 const ProductGridContainer = styled.div`
   width: 95%;
@@ -22,14 +23,15 @@ interface ProductsGridPropsType {
 }
 
 function TrendingGiftsProductsGrid({ products }: ProductsGridPropsType) {
-  if (products.length === 0)
+  if (products.length === 0) {
     return (
       <EmptyProductContainer label={TRENDING_GIFTS_EMPTY_MESSAGES.NO_PRODUCT} />
     );
+  }
 
   return (
     <>
-      <ProductGridContainer>
+      <ProductGridContainer data-testid="grid">
         {products.map((product, idx) => (
           <ProductCard
             key={product.id}
@@ -44,7 +46,9 @@ function TrendingGiftsProductsGrid({ products }: ProductsGridPropsType) {
         ))}
       </ProductGridContainer>
       <MoreInfoWrapper>
-        <MoreInfo>{TRENDING_GIFTS_LABELS.MORE_INFO}</MoreInfo>
+        <Typography variant="label1Regular" as="p">
+          {TRENDING_GIFTS_LABELS.MORE_INFO}
+        </Typography>
       </MoreInfoWrapper>
     </>
   );

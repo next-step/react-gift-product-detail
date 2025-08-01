@@ -15,7 +15,8 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   width: 90%;
   max-width: 550px;
@@ -34,12 +35,6 @@ export const ModalHeader = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing[4]};
 `;
 
-export const ModalTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
 export const ModalBody = styled.div`
   flex: 1;
 `;
@@ -48,13 +43,6 @@ export const InfoTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing[1]};
-`;
-
-export const InfoText = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.gray[800]};
 `;
 
 export const AddSection = styled.div`
@@ -66,7 +54,7 @@ export const AddSectionButton = styled.button<{ disabled: boolean }>`
   font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   background-color: ${({ theme }) => theme.colors.gray[300]};
   padding: ${({ theme }) => theme.spacing[2]} ${({ theme }) => theme.spacing[4]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
@@ -88,7 +76,7 @@ export const CancelButton = styled.button`
   border: 1px solid ${({ theme }) => theme.colors.gray[300]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   background-color: ${({ theme }) => theme.colors.gray[300]};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label1Regular.fontWeight};
@@ -100,8 +88,8 @@ export const CompleteButton = styled.button`
   padding: ${({ theme }) => theme.spacing[3]} ${({ theme }) => theme.spacing[4]};
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius.sm};
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
-  color: ${({ theme }) => theme.colors.text.default};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label1Regular.fontWeight};

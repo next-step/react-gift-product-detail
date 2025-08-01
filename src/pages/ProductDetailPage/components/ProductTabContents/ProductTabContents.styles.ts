@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 export const ProductInfoTabContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 `;
 
 export const TabSwitcherContainer = styled.div<{ isActive: boolean }>`
@@ -27,7 +28,7 @@ export const TabSwitcherRow = styled.div`
 export const TabSwitcherLabel = styled.p<{ isActive: boolean }>`
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   text-align: center;
   opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
 `;

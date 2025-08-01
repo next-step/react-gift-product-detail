@@ -1,6 +1,5 @@
 import {
   LoginContainer,
-  KakaoLogo,
   LoginForm,
   LoginButton,
   InputFieldGroup,
@@ -12,6 +11,7 @@ import PasswordField from "./components/PasswordField";
 import { useEmailValidation } from "./hooks/useEmailValidation";
 import usePasswordValidation from "./hooks/usePasswordValidation";
 import useLoginSubmit from "./hooks/useLoginSubmit";
+import { Typography } from "@/components/Typography/Typography";
 
 export interface LoginFormProps {
   value: string;
@@ -41,7 +41,17 @@ function LoginPage() {
   return (
     <Layout>
       <LoginContainer>
-        <KakaoLogo>kakao</KakaoLogo>
+        <Typography
+          variant="title1Regular"
+          as="h1"
+          color="text-default"
+          style={{
+            fontSize: "2.5rem",
+            marginBottom: "3rem",
+          }}
+        >
+          kakao
+        </Typography>
         <LoginForm onSubmit={(e) => handleSubmit(e)}>
           <InputFieldGroup>
             <IDField

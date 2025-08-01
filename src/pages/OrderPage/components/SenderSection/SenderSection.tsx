@@ -4,6 +4,7 @@ import SENDER_SECTION_CONSTANTS from "@/pages/OrderPage/constants/senderSection"
 import { Controller, type Control, type FieldErrors } from "react-hook-form";
 import { FORM_FIELD } from "../../constants/formField";
 import type { SenderFormData } from "../../schemas";
+import { Typography } from "@/components/Typography/Typography";
 
 interface SenderProps {
   control: Control<SenderFormData>;
@@ -18,12 +19,6 @@ const SendSection = styled.section`
   padding: ${({ theme }) => theme.spacing[4]};
 `;
 
-const SectionTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title.title2Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
-`;
-
 const SendForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -33,7 +28,9 @@ const SendForm = styled.form`
 function SenderSectionComponent({ control, errors }: SenderProps) {
   return (
     <SendSection>
-      <SectionTitle>{SENDER_SECTION_CONSTANTS.TITLE}</SectionTitle>
+      <Typography variant="title2Bold" as="h2" color="default">
+        {SENDER_SECTION_CONSTANTS.TITLE}
+      </Typography>
       <SendForm>
         <Controller
           control={control}

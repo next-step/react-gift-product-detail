@@ -1,6 +1,7 @@
 import { ROUTES } from "@/constants/routes";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@/components/Typography/Typography";
 
 const ThemeCardContainer = styled.div`
   display: flex;
@@ -24,12 +25,6 @@ const ThemeImage = styled.img`
   border-radius: 30%;
 `;
 
-const ThemeName = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label2Regular.fontWeight};
-`;
-
 function ThemeCard({
   themeId,
   name,
@@ -48,7 +43,9 @@ function ThemeCard({
   return (
     <ThemeCardContainer onClick={handleClick}>
       <ThemeImage src={image} alt={name} />
-      <ThemeName>{name}</ThemeName>
+      <Typography variant="label2Regular" as="p">
+        {name}
+      </Typography>
     </ThemeCardContainer>
   );
 }

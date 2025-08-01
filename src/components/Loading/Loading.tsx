@@ -35,7 +35,7 @@ const LoadingContainer = styled.div`
 export function Loading() {
   return (
     <LoadingContainer>
-      <LoadingSpinner />
+      <LoadingSpinner data-testid="loading" />
     </LoadingContainer>
   );
 }

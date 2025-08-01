@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Typography } from "@/components/Typography/Typography";
 
 const EmptyProductWrapper = styled.div`
   width: 100%;
@@ -10,12 +11,6 @@ const EmptyProductWrapper = styled.div`
   margin-bottom: 125px;
 `;
 
-const EmptyProductText = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label1Regular.fontWeight};
-`;
-
 interface EmptyProductContainerPropsType {
   label: string;
 }
@@ -23,7 +18,9 @@ interface EmptyProductContainerPropsType {
 function EmptyProductContainer({ label }: EmptyProductContainerPropsType) {
   return (
     <EmptyProductWrapper>
-      <EmptyProductText>{label}</EmptyProductText>
+      <Typography variant="label1Regular" as="p">
+        {label}
+      </Typography>
     </EmptyProductWrapper>
   );
 }

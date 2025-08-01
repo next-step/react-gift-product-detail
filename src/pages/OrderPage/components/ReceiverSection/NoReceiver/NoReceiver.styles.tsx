@@ -12,10 +12,3 @@ export const NoReceiversContent = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   padding: ${({ theme }) => theme.spacing[8]};
 `;
-
-export const NoReceiversLabel = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label1Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.gray[600]};
-`;

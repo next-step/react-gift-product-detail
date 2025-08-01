@@ -15,12 +15,12 @@ export const TabContentContainer = styled.div`
 export const TabContentTitle = styled.h1`
   font-size: ${({ theme }) => theme.typography.body.body2Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body2Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
 
 export const TabContentContent = styled.p`
   font-size: ${({ theme }) => theme.typography.body.body1Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body1Regular.fontWeight};
   line-height: ${({ theme }) => theme.typography.body.body1Regular.lineHeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;

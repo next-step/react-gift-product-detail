@@ -6,7 +6,8 @@ export const LikeIconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
   flex-direction: column;
   gap: 4px;
   cursor: pointer;
@@ -21,7 +22,7 @@ export const LikeCount = styled.span`
   font-size: ${({ theme }) => theme.typography.label.label2Regular.fontSize};
   font-weight: ${({ theme }) =>
     theme.typography.label.label2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
 
 export const OrderButtonContainer = styled.div`
@@ -42,13 +43,13 @@ export const OrderButtonContainer = styled.div`
 export const OrderButton = styled.button`
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.brand.kakaoYellow};
+  background-color: ${({ theme }) => theme.colors.brand["brand-kakaoYellow"]};
   border: none;
   border-radius: 0;
 
   font-size: ${({ theme }) => theme.typography.body.body1Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body1Bold.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
   cursor: pointer;
 `;
 
@@ -57,5 +58,6 @@ export const ContentLayout = styled.div`
   flex-direction: column;
   margin-bottom: 3.2rem;
   gap: ${({ theme }) => theme.spacing[2]};
-  background-color: ${({ theme }) => theme.colors.background.disabled};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-disabled"]};
 `;

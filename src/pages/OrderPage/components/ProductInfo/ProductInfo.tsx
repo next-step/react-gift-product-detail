@@ -2,18 +2,14 @@ import type { ProductInfoSummary } from "@/types/ProductInfoSummary";
 import { PRODUCT_INFO_CONSTANTS } from "../../constants/productInfo";
 import {
   ProductSection,
-  SectionTitle,
   ProductContainer,
   ProductImage,
   ProductDetails,
-  ProductName,
-  BrandName,
   PriceContainer,
-  PriceLabel,
-  Price,
   OrderButtonContainer,
   OrderButton,
 } from "./ProductInfo.styles";
+import { Typography } from "@/components/Typography/Typography";
 
 interface ProductInfoProps {
   product: ProductInfoSummary;
@@ -26,18 +22,26 @@ function ProductInfo({ product, quantity }: ProductInfoProps) {
   return (
     <>
       <ProductSection>
-        <SectionTitle>{PRODUCT_INFO_CONSTANTS.TITLE}</SectionTitle>
+        <Typography variant="title2Bold" as="h2" color="text-default">
+          {PRODUCT_INFO_CONSTANTS.TITLE}
+        </Typography>
         <ProductContainer>
           <ProductImage src={product.imageURL} alt={product.name} />
           <ProductDetails>
-            <ProductName>{product.name}</ProductName>
-            <BrandName>{product.brandName}</BrandName>
+            <Typography variant="body2Regular" as="h3" color="text-default">
+              {product.name}
+            </Typography>
+            <Typography variant="label2Regular" as="p" color="text-sub">
+              {product.brandName}
+            </Typography>
             <PriceContainer>
-              <PriceLabel>{PRODUCT_INFO_CONSTANTS.PRICE_LABEL}</PriceLabel>
-              <Price>
+              <Typography variant="body2Regular" as="span" color="text-sub">
+                {PRODUCT_INFO_CONSTANTS.PRICE_LABEL}
+              </Typography>
+              <Typography variant="title2Bold" as="span" color="text-default">
                 {product.price.toLocaleString()}
                 {PRODUCT_INFO_CONSTANTS.WON}
-              </Price>
+              </Typography>
             </PriceContainer>
           </ProductDetails>
         </ProductContainer>

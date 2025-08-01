@@ -15,11 +15,6 @@ export const TitleWarpper = styled.div`
   width: 95%;
 `;
 
-export const SectionTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.title.title1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.title.title1Bold.fontWeight};
-`;
-
 export const TabsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -39,12 +34,6 @@ export const MoreInfoWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing[4]};
   border: 1px solid ${({ theme }) => theme.colors.gray[400]};
   border-radius: ${({ theme }) => theme.borderRadius.xs};
-`;
-
-export const MoreInfo = styled.p`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-  font-weight: ${({ theme }) =>
-    theme.typography.label.label1Regular.fontWeight};
 `;
 
 export const MainTabButton = styled.button`
@@ -71,16 +60,6 @@ export const TabIconContainer = styled.div<{ isSelected: boolean }>`
   font-weight: ${({ theme }) => theme.typography.label.label1Bold.fontWeight};
   color: ${({ isSelected, theme }) =>
     isSelected ? theme.colors.gray[0] : theme.colors.blue[500]};
-`;
-
-export const TabLabel = styled.p<{ isSelected: boolean }>`
-  font-size: ${({ theme }) => theme.typography.label.label1Regular.fontSize};
-  font-weight: ${({ theme, isSelected }) =>
-    isSelected
-      ? theme.typography.label.label1Bold.fontWeight
-      : theme.typography.label.label1Regular.fontWeight};
-  color: ${({ isSelected, theme }) =>
-    isSelected ? theme.colors.blue[700] : theme.colors.gray[700]};
 `;
 
 export const LoadingContainer = styled.div`

@@ -20,7 +20,8 @@ export const TableRow = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: ${({ theme }) => theme.spacing[4]} ${({ theme }) => theme.spacing[3]};
-  background-color: ${({ theme }) => theme.colors.background.default};
+  background-color: ${({ theme }) =>
+    theme.colors.background["background-default"]};
 
   &:not(:last-child) {
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray[100]};
@@ -32,11 +33,11 @@ export const TableCell = styled.div`
   align-items: center;
   font-size: ${({ theme }) => theme.typography.body.body2Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.body.body2Regular.fontWeight};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
 
 export const TableHeaderCell = styled(TableCell)`
   font-weight: ${({ theme }) => theme.typography.body.body2Bold.fontWeight};
   font-size: ${({ theme }) => theme.typography.body.body2Bold.fontSize};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.colors.text["text-default"]};
 `;
