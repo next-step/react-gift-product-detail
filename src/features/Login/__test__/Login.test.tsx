@@ -4,6 +4,24 @@ import { renderWithProviders } from '@test/utils/renderWithProviders';
 import userEvent from '@testing-library/user-event';
 import { validateInputTest } from '@test/utils/validateInputTest';
 
+const invalidCases = [
+  {
+    name: '유효하지 않은 이메일과 유효하지 않은 비밀번호',
+    email: 'invalid-email',
+    password: '123',
+  },
+  {
+    name: '유효하지 않은 이메일과 유효한 비밀번호',
+    email: 'invalid',
+    password: 'password123',
+  },
+  {
+    name: '유효한 이메일과 유효하지 않은 비밀번호',
+    email: 'test@kakao.com',
+    password: 'pass',
+  },
+] as const;
+
 describe('LoginPage', () => {
   let emailInput: HTMLElement;
   let passwordInput: HTMLElement;
@@ -45,28 +63,18 @@ describe('LoginPage', () => {
     );
   });
 
-  it('유효하지 않은 이메일, 비밀번호 입력시 버튼 비활성화 테스트', async () => {
-    // 유효하지 않은 이메일 & 유효하지 않은 비밀번호
-    await userEvent.type(emailInput, 'invalid-email');
-    await userEvent.type(passwordInput, '123');
-    expect(loginButton).toBeDisabled();
+  it.each(invalidCases)(
+    '유효하지 않은 이메일, 비밀번호 입력시 버튼 비활성화 테스트',
+    async ({ email, password }) => {
+      await userEvent.clear(emailInput);
+      await userEvent.type(emailInput, email);
+      await userEvent.clear(passwordInput);
+      await userEvent.type(passwordInput, password);
+      expect(loginButton).toBeDisabled();
+    }
+  );
 
-    // 유효하지 않은 이메일 & 유효한 비밀번호
-    await userEvent.clear(emailInput);
-    await userEvent.type(emailInput, 'invalid');
-    await userEvent.clear(passwordInput);
-    await userEvent.type(passwordInput, 'password123');
-    expect(loginButton).toBeDisabled();
-
-    // 유효한 이메일 & 유효하지 않은 비밀번호
-    await userEvent.clear(emailInput);
-    await userEvent.type(emailInput, 'jin@kakao.com');
-    await userEvent.clear(passwordInput);
-    await userEvent.type(passwordInput, 'pass');
-    expect(loginButton).toBeDisabled();
-  });
-
-  it('유효한 이메일, 비밀번호 입력시 버튼 활성화', async () => {
+  it('유효한 이메일, 비밀번호 입력시 성공 toast 출력', async () => {
     // 핸들러가 정의한 성공 조건에 맞는 입력 값 사용
     await userEvent.type(emailInput, 'test@kakao.com');
     await userEvent.type(passwordInput, 'password123');
@@ -75,6 +83,14 @@ describe('LoginPage', () => {
     await waitFor(() => {
       expect(screen.getByText('로그인 성공')).toBeInTheDocument();
     });
+  });
+
+  it('유효한 이메일, 비밀번호 입력시 버튼 활성화', async () => {
+    // 핸들러가 정의한 성공 조건에 맞는 입력 값 사용
+    await userEvent.type(emailInput, 'test@kakao.com');
+    await userEvent.type(passwordInput, 'password123');
+    await userEvent.click(loginButton);
+    await waitFor(() => expect(loginButton).toBeEnabled());
   });
 
   it('로그인 실패 시 토스트 메시지 출력', async () => {
