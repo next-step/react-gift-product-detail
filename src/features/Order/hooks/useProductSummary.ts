@@ -1,7 +1,5 @@
-import { api } from '@/lib/axios';
-import { useQuery } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-import { queryKeys } from '@/lib/queryKeys';
+import { apiGet } from '@/lib/axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export interface ProductSummary {
   id: number;
@@ -11,37 +9,15 @@ export interface ProductSummary {
   imageURL: string;
 }
 
-const fetchProductSummary = async (productId: number | null) => {
-  if (!productId) return null;
-
-  try {
-    const res = await api.get(`/products/${productId}/summary`);
-    return res.data.data;
-  } catch (err) {
-    const error = err as AxiosError;
-
-    if (error.response?.status === 404) {
-      return null;
-    }
-
-    throw error;
-  }
+const fetchProductSummary = async (productId: number) => {
+  return await apiGet<ProductSummary>(`/products/${productId}/summary`);
 };
 
-export const useProductSummary = (productId: number | null) => {
-  const {
-    data: product,
-    isLoading: loading,
-    error,
-  } = useQuery({
-    queryKey: queryKeys.products.summary(productId),
+export const useProductSummary = (productId: number): ProductSummary => {
+  const { data: product } = useSuspenseQuery({
+    queryKey: ['product', productId],
     queryFn: () => fetchProductSummary(productId),
-    enabled: !!productId,
   });
 
-  return {
-    product,
-    loading,
-    error,
-  };
+  return product;
 };

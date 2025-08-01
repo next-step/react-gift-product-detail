@@ -19,7 +19,7 @@ const RankingSection = ({
   selectedType: Type;
   onProductSelect: (product: Product) => void;
 }) => {
-  const { products } = useProductsRanking(selectedGender, selectedType);
+  const products = useProductsRanking(selectedGender, selectedType);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const visibleCount = isExpanded ? products.length : INITIAL_VISIBLE_COUNT;
