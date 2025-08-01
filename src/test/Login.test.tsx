@@ -13,18 +13,21 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { MemoryRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient();
 
 const renderLogin = () => {
   render(
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <Login />
-        </AuthProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <MemoryRouter>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Login />
+          </AuthProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </MemoryRouter>
   );
 };
 
