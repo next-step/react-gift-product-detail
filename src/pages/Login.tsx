@@ -5,10 +5,10 @@ import { emailValidator, passwordValidator } from '@/utils/validators';
 import { useAuth } from '@/contexts/AuthContext';
 import { PaddingMd, PaddingSm } from '@/components/common/Padding';
 import { toast } from 'react-toastify';
-import { FetchLogin } from '@/services/authAPi';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import FormField from '@/components/formField/formField';
+import { FetchLogin } from '@/services/authApi';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -65,8 +65,7 @@ const ValidationMsg = styled.p`
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
-  // const email = useInput({ validator: emailValidator });
-  // const password = useInput({ validator: passwordValidator });
+
   const {
     register,
     handleSubmit,
@@ -91,7 +90,8 @@ const Login = () => {
       navigate('/');
     },
     onError: (e: any) => {
-      alert(e.message);
+      const msg = e.response?.data?.message || '알 수 없는 오류입니다';
+      toast.error(msg);
     },
   });
 
@@ -107,7 +107,6 @@ const Login = () => {
       <LoginWrapper>
         <Logo src="src/assets/images/카카오로고.svg" alt="" />
         <Loginform>
-          <InputWrapper>z</InputWrapper>
           <PaddingSm />
           <InputWrapper>
             <FormField

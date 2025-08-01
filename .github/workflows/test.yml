@@ -1,10 +1,10 @@
-name: Run Tests on PR and Main
+name: hyemomo 브랜치에 pr 보낼때마다 ,push  할 때마다
 
 on:
   pull_request:
-    branches: [main]
+    branches: [hyemomo]
   push:
-    branches: [main]
+    branches: [step3]
 
 jobs:
   test:
@@ -23,4 +23,4 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm run test -- --run
+        run: npm run test

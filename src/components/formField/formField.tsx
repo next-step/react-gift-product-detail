@@ -1,4 +1,3 @@
-// src/components/FormField/FormField.tsx
 import styled from '@emotion/styled';
 import type { FieldValues, UseFormRegister } from 'react-hook-form';
 

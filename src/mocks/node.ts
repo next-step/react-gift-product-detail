@@ -1,9 +1,8 @@
 import { fetchAuthhandlers } from '@/apis/AuthApu.mock';
 import { fetchRankingHandlers } from '@/apis/RankingApi.mock';
-import { Testhandler } from '@/apis/TestApi.mocks';
 import { setupServer } from 'msw/node';
 
-const handlers = [...fetchAuthhandlers, ...fetchRankingHandlers, ...Testhandler];
+const handlers = [...fetchAuthhandlers, ...fetchRankingHandlers];
 export const server = setupServer(...handlers);
 
 // 모든 테스트 전에 API 모킹 설정
