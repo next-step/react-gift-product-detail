@@ -1,18 +1,36 @@
 import { api } from './api';
-import type { GetRankingProductsResponse, Product } from '@/types/product';
+import type {
+  GetRankingProductsResponse,
+  Product,
+  ProductDetail,
+  ProductReview,
+  ProductSummary,
+  ProductWish,
+} from '@/types/product';
 
-export const getProductSummary = async (productId: number): Promise<Product> => {
+export const getProduct = async (productId: number): Promise<Product> => {
+  const response = await api.get(`/products/${productId}`);
+  return response.data.data;
+};
+
+export const getProductDetail = async (productId: number): Promise<ProductDetail> => {
+  const response = await api.get(`/products/${productId}/detail`);
+  return response.data.data;
+};
+
+export const getProductReview = async (productId: number): Promise<ProductReview> => {
+  const response = await api.get(`/products/${productId}/highlight-review`);
+  return response.data.data;
+};
+
+export const getProductWish = async (productId: number): Promise<ProductWish> => {
+  const response = await api.get(`/products/${productId}/wish`);
+  return response.data.data;
+};
+
+export const getProductSummary = async (productId: number): Promise<ProductSummary> => {
   const response = await api.get(`/products/${productId}/summary`);
-  const summaryData = response.data.data;
-
-  return {
-    ...summaryData,
-    price: {
-      sellingPrice: summaryData.price,
-      basicPrice: summaryData.price,
-      discountRate: 0,
-    },
-  };
+  return response.data.data;
 };
 
 export const getRankingProducts = async (targetType: string, rankType: string) => {

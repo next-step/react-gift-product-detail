@@ -9,7 +9,7 @@ interface Props {
 export function ThemeProductItem({ product }: Props) {
   return (
     <Card>
-      <Link to={`/order/${product.id}`}>
+      <Link to={`/product/${product.id}`}>
         <ThumbWrapper>
           <Thumb src={product.imageURL} alt={product.name} loading="lazy" />
         </ThumbWrapper>
