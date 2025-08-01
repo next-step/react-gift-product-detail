@@ -7,9 +7,14 @@ import { STORAGE_KEY } from "@/constants/storage";
 import * as toastModule from "@/styles/toast";
 import * as loginFormModule from "@/hooks/useLoginForm";
 
+let mutateOptions: any;
+
 const mockNavigate = vi.fn();
 const mockSetItem = vi.fn();
-const mockMutate = vi.fn();
+
+const mockMutate = vi.fn((_fn, options) => {
+  mutateOptions = options;
+});
 
 const defaultLoginForm = {
   email: "test@kakao.com",
@@ -163,10 +168,9 @@ describe("LoginPage", () => {
     const responseData = { authToken: "abc123", name: "test" };
 
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    const mockOptions = mockMutate.mock.calls[0]?.[1];
 
     // When
-    mockOptions?.onSuccess?.(responseData, {}, undefined);
+    mutateOptions?.onSuccess?.(responseData, {}, undefined);
 
     // Then
     expect(mockSetItem).toHaveBeenCalledWith(
@@ -183,10 +187,9 @@ describe("LoginPage", () => {
     const error = { isAxiosError: true };
 
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    const mockOptions = mockMutate.mock.calls[0]?.[1];
 
     // When
-    mockOptions?.onError?.(error, undefined, undefined);
+    mutateOptions?.onError?.(error, undefined, undefined);
     // Then
     expect(toastModule.showErrorToast).toHaveBeenCalled();
   });
