@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   fetchProductBasic,
   fetchProductDetail,
@@ -8,36 +8,32 @@ import {
 
 
 export function useProductBasicQuery(productId: any): any {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['productBasic', productId],
     queryFn: () => fetchProductBasic(productId),
-    enabled: !!productId,
   });
 }
 
 
 export function useProductDetailQuery(productId: any): any {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(productId),
-    enabled: !!productId,
   });
 }
 
 
 export function useProductWishQuery(productId: any): any {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['productWish', productId],
     queryFn: () => fetchProductWish(productId),
-    enabled: !!productId,
   });
 }
 
 
 export function useProductHighlightReviewQuery(productId: any): any {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['productHighlightReview', productId],
     queryFn: () => fetchProductHighlightReview(productId),
-    enabled: !!productId,
   });
 }
