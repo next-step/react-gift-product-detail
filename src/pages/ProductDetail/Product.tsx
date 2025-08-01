@@ -14,25 +14,33 @@ import {
   TabContainer,
   ProductDetailContainer,
 } from '@/styles/Product/Product.styles';
-import { useProductDetail } from '@/hooks/product';
+import { useProductData, useProductTab } from '@/hooks/product';
 
 function Product() {
-  const { activeTab, setActiveTab, productBasicInfo, productDetailInfo, productReviewInfo } =
-    useProductDetail();
+  const { productData, isLoading } = useProductData();
+  const { activeTab, setActiveTab } = useProductTab();
+
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
+
+  if (!productData) {
+    return <div>상품 정보를 불러올 수 없습니다.</div>;
+  }
 
   return (
     <ProductDetailContainerWrapper>
       <ProductoDetailInfoContainer>
-        <ProductoDetailImg src={productBasicInfo?.imageURL} alt="productDetailImg" />
-        <ProductoDetailName>{productBasicInfo?.name}</ProductoDetailName>
-        <ProductoDetailPrice>{productBasicInfo?.price.basicPrice}원</ProductoDetailPrice>
+        <ProductoDetailImg src={productData.basicInfo.imageURL} alt="productDetailImg" />
+        <ProductoDetailName>{productData.basicInfo.name}</ProductoDetailName>
+        <ProductoDetailPrice>{productData.basicInfo.price.basicPrice}원</ProductoDetailPrice>
       </ProductoDetailInfoContainer>
       <ProductoDetailBrandContainer>
         <ProductoDetailBrandImg
-          src={productBasicInfo?.brandInfo.imageURL}
+          src={productData.basicInfo.brandInfo.imageURL}
           alt="productDetailBrandImg"
         />
-        <ProductoDetailBrand>{productBasicInfo?.brandInfo.name}</ProductoDetailBrand>
+        <ProductoDetailBrand>{productData.basicInfo.brandInfo.name}</ProductoDetailBrand>
       </ProductoDetailBrandContainer>
       <TabContainer>
         <ProductDetailContainer
@@ -54,10 +62,11 @@ function Product() {
           상세정보
         </ProductDetailContainer>
       </TabContainer>
-      {activeTab === 'description' && <ProductDetail productDetailInfo={productDetailInfo} />}
-      {activeTab === 'review' && <ProductReview productReviewInfo={productReviewInfo} />}
-      {activeTab === 'detail' && productDetailInfo?.announcements && (
-        <Detail detailInfo={productDetailInfo.announcements} />
+      {activeTab === 'description' && <ProductDetail productDetailInfo={productData.detailInfo} />}
+      {activeTab === 'review' && <ProductReview productReviewInfo={productData.reviewInfo} />}
+      {activeTab === 'detail' && productData.detailInfo.announcements && (
+        <Detail detailInfo={productData.detailInfo.announcements} />
+
       )}
       <ProductDetailFooter />
     </ProductDetailContainerWrapper>

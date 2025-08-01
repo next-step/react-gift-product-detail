@@ -8,7 +8,9 @@ import {
   ItemName,
   ItemPrice,
 } from '@/styles/Item/Item.styles';
-import { useProductDetail } from '@/hooks/product';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 
 type ItemProps = {
   index: number;
@@ -16,17 +18,26 @@ type ItemProps = {
 };
 
 function Item({ index, itemData }: ItemProps) {
-  const { handleItemClick } = useProductDetail();
+  const navigate = useNavigate();
+  const { userInfo } = useContext(LoginInfoContext);
+
+  const handleItemClick = (itemId: number) => {
+    if (userInfo.email === '') {
+      navigate('/login');
+    } else {
+      navigate(`/product/${itemId}`);
+    }
+  };
 
   return (
     <ItemContainerStyle onClick={() => handleItemClick(itemData.id)}>
       <ItemImageWrapper>
-        <ItemIndex index={index}>{index + 1}</ItemIndex>
         <ItemImg src={itemData.imageURL} alt={itemData.name} />
+        <ItemIndex index={index}>{index + 1}</ItemIndex>
       </ItemImageWrapper>
-      <ItemName>{itemData.brandInfo.name}</ItemName>
-      <ItemBrand>브랜드: {itemData.brandInfo.name}</ItemBrand>
-      <ItemPrice>{itemData.price.sellingPrice}</ItemPrice>
+      <ItemBrand>{itemData.brandInfo.name}</ItemBrand>
+      <ItemName>{itemData.name}</ItemName>
+      <ItemPrice>{itemData.price.basicPrice}원</ItemPrice>
     </ItemContainerStyle>
   );
 }

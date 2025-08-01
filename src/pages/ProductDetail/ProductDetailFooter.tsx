@@ -3,12 +3,12 @@ import {
   FooterLikeButton,
   FooterOrderButton,
 } from '@/styles/Product/ProductFooter.styles';
-import { useProductDetail } from '@/hooks/product';
+import { useProductData } from '@/hooks/product';
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 
 function ProductDetailFooter() {
-  const { likeCount, isWished, handleLikeClick, handleOrderClick } = useProductDetail();
-  
+  const { likeCount, isWished, handleLikeClick, handleOrderClick } = useProductData();
+
   return (
     <FooterContainer>
       <FooterLikeButton onClick={handleLikeClick}>

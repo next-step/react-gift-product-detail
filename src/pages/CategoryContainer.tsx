@@ -13,6 +13,7 @@ function CategoryContainer({ selectedCategory, handleCategoryClick }: CategoryCo
     <CategoryContainerStyle>
       {CATEGORY_TYPE.map((category_type) => (
         <Category
+          key={category_type.value}
           onClick={() => handleCategoryClick(category_type.value)}
           category={category_type.value}
           categoryName={category_type.label}

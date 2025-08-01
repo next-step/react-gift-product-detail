@@ -9,12 +9,16 @@ type ItemContainerProps = {
 };
 function ItemContainer({ itemList }: ItemContainerProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const visibleItems = isExpanded ? itemList : itemList.slice(0, 6);
+  
+  const safeItemList = Array.isArray(itemList) ? itemList : [];
+  const visibleItems = isExpanded ? safeItemList : safeItemList.slice(0, 6);
+  
   function handleToggle() {
     setIsExpanded((prev) => !prev);
   }
+  
   function renderItem() {
-    return itemList.length === 0 ? (
+    return safeItemList.length === 0 ? (
       <>상품이 없습니다.</>
     ) : (
       <>
@@ -27,6 +31,7 @@ function ItemContainer({ itemList }: ItemContainerProps) {
       </>
     );
   }
+  
   return <ItemlistContainer>{renderItem()}</ItemlistContainer>;
 }
 
