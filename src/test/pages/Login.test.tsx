@@ -4,7 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import Login from '@/pages/Login';
 

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import Reciever from '@/pages/Order/Reciever';
 import type { ErrorType } from '@/hooks/useOrder';
 

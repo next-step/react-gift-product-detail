@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import { LoginTitle } from '@/styles/Login.styles';
 import { SenderTitle } from '@/styles/Order/Sender.styles';
 import { RecieverTitle } from '@/styles/Order/Reciever.styles';

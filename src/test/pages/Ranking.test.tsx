@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import { server } from '../mocks/server';
 import { http, HttpResponse } from 'msw';
 import Ranking from '@/Layout/Ranking';

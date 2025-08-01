@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import Sender from '@/pages/Order/Sender';
 import type { FieldErrors } from 'react-hook-form';
 import type { FormValues } from '@/pages/Order/Order';

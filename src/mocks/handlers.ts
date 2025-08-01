@@ -41,11 +41,7 @@ export const handlers = [
     });
   }),
 
-  http.get(`${testBaseURL}/products/ranking`, ({ request }) => {
-    const url = new URL(request.url);
-    const targetType = url.searchParams.get('targetType');
-    const rankType = url.searchParams.get('rankType');
-    
+  http.get(`${testBaseURL}/products/ranking`, () => {
     const mockRanking = Array.from({ length: 20 }, (_, i) => ({
       id: i + 1,
       name: `상품 ${i + 1}`,
@@ -86,8 +82,7 @@ export const handlers = [
     });
   }),
 
-  http.get(`${testBaseURL}/products/:id/detail`, ({ params }) => {
-    const { id } = params;
+  http.get(`${testBaseURL}/products/:id/detail`, () => {
     return HttpResponse.json({
       data: {
         description: '<p>상품에 대한 자세한 설명입니다.</p><p>이 상품은 정말 좋은 품질을 자랑합니다.</p>',
@@ -107,8 +102,7 @@ export const handlers = [
     });
   }),
 
-  http.get(`${testBaseURL}/products/:id/highlight-review`, ({ params }) => {
-    const { id } = params;
+  http.get(`${testBaseURL}/products/:id/highlight-review`, () => {
     return HttpResponse.json({
       data: {
         totalCount: 2,
@@ -128,8 +122,7 @@ export const handlers = [
     });
   }),
 
-  http.get(`${testBaseURL}/products/:id/wish`, ({ params }) => {
-    const { id } = params;
+  http.get(`${testBaseURL}/products/:id/wish`, () => {
     return HttpResponse.json({
       data: {
         wishCount: 42,

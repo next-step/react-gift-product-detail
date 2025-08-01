@@ -1,6 +1,6 @@
 import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/styles/ResetStyles';
+import { theme } from '@/styles/theme';
 import { useState, useEffect, type ReactNode } from 'react';
 import type { LoginResponseDto } from '@/types/DTO/loginDTO';
 
