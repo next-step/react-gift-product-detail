@@ -1,4 +1,4 @@
-import { useWish } from '../../hooks/useWish';
+import { useWish } from '@/features/Product/hooks/useWish';
 import * as S from './WishButton.styles';
 
 interface WishButtonProps {
@@ -11,6 +11,7 @@ const WishButton = ({ productId }: WishButtonProps) => {
   const { isWished, wishCount } = data;
 
   const handleToggleWish = () => {
+    if (mutation.isPending) return;
     mutation.mutate(!isWished);
   };
 
