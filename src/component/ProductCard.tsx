@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/AuthContext';
-import { BrandImage, Price, ProductCardSection, ProductGrid, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
+import { BrandImage, Price, ProductCardSection, ProductImage, ProductInfo } from '@/styles/CommomStyle/ProductList';
 import type { ProductItem } from "@/type/GiftAPI/product"
 import { useNavigate } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ const ProductCard = (product: ProductItem) => {
 
     return (
         <ProductCardSection
-            key={product.id}
             onClick={() => handleClickProduct(product)}
         >
             <ProductImage src={product.imageURL} alt={product.name} />

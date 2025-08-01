@@ -1,8 +1,7 @@
-import { baseUrl } from "@/constant/api";
-import { useAuth } from "@/context/AuthContext";
+import {getproductsbyCursorUrl } from "@/constant/api";
 import { type ProductItem, type ProductItemFromTheme } from "@/type/GiftAPI/product";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";
 
@@ -14,7 +13,7 @@ function useProductList() {
   const [loaderRef, setLoaderRef] = useState<HTMLDivElement | null>(null);
   const [extraLoading, setExtraLoading] = useState(false);
 
-  const productsUrl = `${baseUrl}/api/themes/${themeId}/products?cursor=${cursor}`
+  const productsUrl = getproductsbyCursorUrl(themeId, cursor);
 
   const { data, error, isLoading } = useQuery<ProductItemFromTheme>({
     queryKey: ['productListData', productsUrl],

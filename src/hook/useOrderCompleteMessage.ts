@@ -1,13 +1,7 @@
-import { baseUrl } from "@/constant/api";
 import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
-import { useLocation, useNavigate } from "react-router-dom";
-import {type ProductItemSummary } from "@/type/GiftAPI/product";
-import { getFromUrl } from "@/utils/getFromUrl";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { orderAPI } from "@/utils/orderApi";
-import { useQuery } from "@tanstack/react-query";
 import useProductSummary from "./useProductSummary";
 
 

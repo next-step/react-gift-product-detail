@@ -3,8 +3,6 @@ import {
     LoadMoreButton,
     LoadMoreButtonDiv,
 } from './GiftRanking.styled';
-import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import type { ProductItem } from '@/type/GiftAPI/product';
 import type { RankType, TargetType } from '@/type/giftRanking';
 import { CentorAlignDiv240, Gap } from '@/styles/CommomStyle/Common.styled';
@@ -52,7 +50,7 @@ const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
         <>
             <ProductGrid>
                 {shownProducts.map((product) => (
-                    <ProductCard {...product} />
+                    <ProductCard key={product.id} {...product} />
                 ))}
             </ProductGrid>
             <Gap height={16} />

@@ -2,7 +2,7 @@
 import {
 } from '@/component/main/GiftRanking.styled';
 import ProductList from '@/component/theme/ProductList';
-import { baseUrl } from '@/constant/api';
+import { baseUrl, getThemesInfoUrl } from '@/constant/api';
 import { DefaultDiv, Gap } from '@/styles/CommomStyle/Common.styled';
 import { ThemeDescription, ThemeName, ThemeTitle, ThemeTop } from '@/styles/CommomStyle/themes.styled';
 import type { ThemeInfo } from '@/type/GiftAPI/theme';
@@ -15,11 +15,11 @@ import { useParams } from 'react-router-dom';
 
 const Themes = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const themesUrl = `${baseUrl}/api/themes/${themeId}/info`
+  const themesInfoUrl = getThemesInfoUrl(themeId);
   //const themeInfo = useFetchFromUrlT<ThemeInfo>(themesUrl, getFromUrl, defaultThemeInfo);
   const { data } = useQuery<ThemeInfo>({
     queryKey : ['ThemeInfo'],
-    queryFn : () => getFromUrl(themesUrl)
+    queryFn : () => getFromUrl(themesInfoUrl)
   })
   const themeBackground = (data?.backgroundColor ?? 'white')
   const themeName = data?.name

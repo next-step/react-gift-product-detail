@@ -26,7 +26,7 @@ const ProductList = () => {
     <>
       <ProductGrid>
         {productList.map(product => (
-          <ProductCard {...product}/>
+          <ProductCard key={product.id} {...product}/>
         ))}
       </ProductGrid>
       <Loading loading={extraLoading}/>
