@@ -4,8 +4,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import LoginPage from "@/pages/LoginPage";
 import { MemoryRouter } from "react-router-dom";
 import { STORAGE_KEY } from "@/constants/storage";
+import * as toastModule from "@/styles/toast";
 
-const mockShowErrorToast = vi.fn();
 const mockNavigate = vi.fn();
 const mockSetItem = vi.fn();
 const mockMutate = vi.fn();
@@ -23,7 +23,7 @@ const defaultLoginForm = {
 };
 
 vi.mock("@/styles/toast", () => ({
-  showErrorToast: mockShowErrorToast,
+  showErrorToast: vi.fn(),
 }));
 
 vi.mock("react-router-dom", async () => {
@@ -89,7 +89,7 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
 
     // Then
-    expect(mockShowErrorToast).toHaveBeenCalledWith(
+    expect(toastModule.showErrorToast).toHaveBeenCalledWith(
       expect.stringMatching(/이메일/)
     );
   });
@@ -153,6 +153,6 @@ describe("LoginPage", () => {
     // When
     mutateFn.error?.({ isAxiosError: true });
     // Then
-    expect(mockShowErrorToast).toHaveBeenCalled();
+    expect(toastModule.showErrorToast).toHaveBeenCalled();
   });
 });
