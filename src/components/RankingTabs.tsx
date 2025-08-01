@@ -2,8 +2,9 @@ import { css } from '@emotion/react'
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
-import { useProductRankingQuery } from '../hooks/useProductQuery';
 import { usePersistentState } from '../hooks/usePersistentState';
+import { Suspense } from 'react'
+import Loading from '@/components/Common/Loading'
 
 const peopleTab = [
   { label: '전체', value: 'ALL' ,icon: 'ALL' },
@@ -66,7 +67,6 @@ import ProductGrid from './ProductGrid';
 const RankingTabs = () => {
   const [selected, setSelected] = usePersistentState('rankingTab', 'FEMALE');
   const [selectedWantedTab, setSelectedWantedTab] = usePersistentState('wantedTab', 'MANY_WISH');
-  const { data: products } = useProductRankingQuery(selected, selectedWantedTab);
 
   const handleTargetTabChange = (value: string) => {
     setSelected(value);
@@ -107,7 +107,9 @@ const RankingTabs = () => {
           </button>
         ))}
       </div>
-      <ProductGrid products={products ?? []}  />
+      <Suspense fallback={<Loading />}>
+        <ProductGrid  selected={selected} selectedWantedTab={selectedWantedTab} />
+      </Suspense>
     </>
   );
 }
