@@ -8,7 +8,7 @@ import {
   ItemName,
   ItemPrice,
 } from '@/styles/Item/Item.styles';
-import { useProductDetail } from '@/hooks/product';
+import { useProductData } from '@/hooks/product';
 
 type ItemProps = {
   index: number;
@@ -16,17 +16,17 @@ type ItemProps = {
 };
 
 function Item({ index, itemData }: ItemProps) {
-  const { handleItemClick } = useProductDetail();
+  const { handleItemClick } = useProductData();
 
   return (
     <ItemContainerStyle onClick={() => handleItemClick(itemData.id)}>
       <ItemImageWrapper>
-        <ItemIndex index={index}>{index + 1}</ItemIndex>
         <ItemImg src={itemData.imageURL} alt={itemData.name} />
+        <ItemIndex index={index}>{index + 1}</ItemIndex>
       </ItemImageWrapper>
-      <ItemName>{itemData.brandInfo.name}</ItemName>
-      <ItemBrand>브랜드: {itemData.brandInfo.name}</ItemBrand>
-      <ItemPrice>{itemData.price.sellingPrice}</ItemPrice>
+      <ItemBrand>{itemData.brandInfo.name}</ItemBrand>
+      <ItemName>{itemData.name}</ItemName>
+      <ItemPrice>{itemData.price.basicPrice}원</ItemPrice>
     </ItemContainerStyle>
   );
 }

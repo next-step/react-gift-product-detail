@@ -14,12 +14,12 @@ import {
   ProductPrice,
 } from '@/styles/Theme/ThemeDetail.styled';
 import { useQuery } from '@tanstack/react-query';
-import { useProductDetail } from '@/hooks/product';
+import { useProductData } from '@/hooks/product';
 
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
-  const { handleItemClick } = useProductDetail();
+  const { handleItemClick } = useProductData();
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
   const {
