@@ -1,44 +1,15 @@
-import styled from '@emotion/styled';
 import LogoImg from '@/Assets/icons/logo.png';
 import LoginButton from '@/components/login/LoginButton';
+import {
+  Container,
+  Logo,
+  EmailInput,
+  PwInput,
+  ErrorMessage,
+} from '@/components/login/LoginForm.style';
 
 import { useLoginForm } from '@/hooks/useLoginForm';
 import { useLoginHandler } from '@/hooks/useLoginHandler';
-
-const Container = styled.div`
-  width: 100%;
-  height: calc(-2.75rem + 100vh);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-const Logo = styled.img`
-  width: 5.5rem;
-  color: rgb(42, 48, 56);
-`;
-
-const EmailInput = styled.input`
-  width: 60%;
-  height: 2.5rem;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid ${({ theme }) => theme.color.semantic.border.default};
-  font-size: 1rem;
-`;
-
-const PwInput = styled.input`
-  width: 60%;
-  height: 2.5rem;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid ${({ theme }) => theme.color.semantic.border.default};
-  font-size: 1rem;
-`;
-const ErrorMessage = styled.div`
-  color: ${({ theme }) => theme.color.red.red700};
-  font-size: 0.875rem;
-`;
 
 const LoginForm = () => {
   const {
