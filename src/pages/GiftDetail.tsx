@@ -1,9 +1,11 @@
-import { Banner } from '@/components/gift_themed_list_page/Banner';
-import { GiftList } from '@/components/gift_themed_list_page/GiftList';
-import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
-import { TopNavBar } from '@/components/shared/TopNavBar';
-import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { TopNavBar } from '@/components/shared/TopNavBar';
+import { ProductOverview } from '@/components/gift_detail_page/ProductOverview';
+import { BrandInfo } from '@/components/gift_detail_page/BrandInfo';
+import { ProductDetailTabs } from '@/components/gift_detail_page/ProductDetailTabs';
+import { BottomButton } from '@/components/gift_detail_page/BottomButton';
+import { keyframes } from '@emotion/react';
+import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { Suspense } from 'react';
 
 const Container = styled.div`
@@ -43,7 +45,7 @@ const Spinner = styled.div`
   animation: ${spin} 0.7s linear infinite;
 `;
 
-const ThemedGiftList = () => {
+const GiftDetail = () => {
   return (
     <Container>
       <TopNavBar title="선물하기" mainPath="/" />
@@ -53,12 +55,14 @@ const ThemedGiftList = () => {
         }
       >
         <Suspense fallback={<Spinner />}>
-          <Banner />
-          <GiftList />
+          <ProductOverview />
+          <BrandInfo />
+          <ProductDetailTabs />
         </Suspense>
       </ErrorBoundary>
+      <BottomButton />
     </Container>
   );
 };
 
-export default ThemedGiftList;
+export default GiftDetail;

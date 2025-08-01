@@ -4,9 +4,8 @@ import type { QueryKey } from '@/api/types/giftItem.dto';
 import { GiftItemCard } from '@/components/shared/GiftItemCard';
 import { Header } from './Header';
 import { MoreButton } from './MoreButton';
-import { keyframes } from '@emotion/react';
 import { getGiftItems } from '@/api/services/giftItem.service';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 const Container = styled.div`
   width: 100%;
@@ -28,21 +27,6 @@ const List = styled.div`
   background-color: white;
 `;
 
-const spin = keyframes`
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const Spinner = styled.div`
-  width: 1.7rem;
-  height: 1.7rem;
-  border: 0.2rem solid #ccc;
-  border-top-color: ${({ theme }) => theme.colors.gray900};
-  border-radius: 50%;
-  animation: ${spin} 0.7s linear infinite;
-`;
-
 const ErrorText = styled.div`
   position: absolute;
   justify-self: center;
@@ -55,7 +39,7 @@ export const GiftList = () => {
   const [isViewMore, setIsViewMore] = useState(false);
   const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
   const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['giftItems', { targetType, rankType }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { targetType, rankType } = queryKey[1];
@@ -73,30 +57,24 @@ export const GiftList = () => {
         setRankType={setRankType}
       />
       <Container>
-        {isLoading && <Spinner />}
-        {!isLoading && (
-          <List>
-            {(data && isViewMore ? data : data!.slice(0, 6)).map((item, i) => {
-              return (
-                <GiftItemCard
-                  key={`GIFT_LIST_${item.id}`}
-                  rank={i + 1}
-                  id={item.id}
-                  name={item.name}
-                  image={item.imageURL}
-                  brandName={item.brandInfo.name}
-                  price={item.price.basicPrice}
-                />
-              );
-            })}
-          </List>
-        )}
-        {isError && (
-          <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
-        )}
-        {!isLoading && data?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
+        <List>
+          {(data && isViewMore ? data : data!.slice(0, 6)).map((item, i) => {
+            return (
+              <GiftItemCard
+                key={`GIFT_LIST_${item.id}`}
+                rank={i + 1}
+                id={item.id}
+                name={item.name}
+                image={item.imageURL}
+                brandName={item.brandInfo.name}
+                price={item.price.basicPrice}
+              />
+            );
+          })}
+        </List>
+        {data?.length === 0 && <ErrorText>상품이 없습니다.</ErrorText>}
       </Container>
-      {!isLoading && !isError && !(data?.length === 0) && (
+      {!(data?.length === 0) && (
         <MoreButton isViewMore={isViewMore} setIsViewMore={setIsViewMore} />
       )}
     </>

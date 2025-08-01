@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { CategoryCard } from '@/components/gift_list_page/Category/CategoryCard';
-import { keyframes } from '@emotion/react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getCategories } from '@/api/services/giftItem.service';
 
 const Container = styled.div`
@@ -38,12 +37,6 @@ const CategoryList = styled.div`
   height: fit-content;
 `;
 
-const spin = keyframes`
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
 const ErrorText = styled.div`
   position: absolute;
   justify-self: center;
@@ -52,17 +45,8 @@ const ErrorText = styled.div`
   font-weight: 500;
 `;
 
-const Spinner = styled.div`
-  width: 1.7rem;
-  height: 1.7rem;
-  border: 0.2rem solid #ccc;
-  border-top-color: ${({ theme }) => theme.colors.gray900};
-  border-radius: 50%;
-  animation: ${spin} 0.7s linear infinite;
-`;
-
 export const Category = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['categories'],
     queryFn: getCategories,
   });
@@ -71,28 +55,22 @@ export const Category = () => {
     <Container>
       <Title>선물 테마</Title>
       <Body>
-        {isLoading && <Spinner />}
-        {!isLoading && (
-          <CategoryList>
-            {data?.length === 0 ? (
-              <ErrorText>표시할 데이터가 없습니다.</ErrorText>
-            ) : (
-              data?.map((item) => {
-                return (
-                  <CategoryCard
-                    key={item.themeId}
-                    id={item.themeId}
-                    name={item.name}
-                    image={item.image}
-                  />
-                );
-              })
-            )}
-          </CategoryList>
-        )}
-        {isError && (
-          <ErrorText>⚠️ 요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</ErrorText>
-        )}
+        <CategoryList>
+          {data?.length === 0 ? (
+            <ErrorText>표시할 데이터가 없습니다.</ErrorText>
+          ) : (
+            data?.map((item) => {
+              return (
+                <CategoryCard
+                  key={item.themeId}
+                  id={item.themeId}
+                  name={item.name}
+                  image={item.image}
+                />
+              );
+            })
+          )}
+        </CategoryList>
       </Body>
     </Container>
   );

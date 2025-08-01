@@ -74,9 +74,9 @@ export const GiftItemCard = ({ rank, id, name, image, brandName, price }: GiftIt
     <Card
       onClick={() => {
         if (user.email) {
-          navigate(`/order/${id}`);
+          navigate(`/product/${id}`);
         } else {
-          navigate('/login', { state: { from: `/order/${id}` } });
+          navigate('/login', { state: { from: `/product/${id}` } });
         }
       }}
     >

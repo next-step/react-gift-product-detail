@@ -5,6 +5,7 @@ import NotFound from '@/pages/NotFound';
 import MyPage from '@/pages/MyPage';
 import GiftOrder from '@/pages/GiftOrder';
 import ThemedGiftList from '@/pages/ThemedGiftList';
+import GiftDetail from '@/pages/GiftDetail';
 
 const Router = () => {
   return (
@@ -13,6 +14,7 @@ const Router = () => {
         <Route path="/" element={<GiftShop />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my" element={<MyPage />} />
+        <Route path="/product/:id" element={<GiftDetail />} />
         <Route path="/order/:id" element={<GiftOrder />} />
         <Route path="/themes/:id" element={<ThemedGiftList />} />
         <Route path="*" element={<NotFound />} />

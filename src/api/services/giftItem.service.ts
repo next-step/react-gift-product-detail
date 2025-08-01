@@ -2,8 +2,11 @@ import publicClient from '../clients/publicClient';
 import type {
   CategoryCardData,
   GiftItemData,
+  GiftItemDetailData,
+  GiftItemHighlightReviewData,
   ThemedGiftItemsPage,
   ThemeInfo,
+  WishInfo,
 } from '../types/giftItem.dto';
 
 export const getCategories = async () => {
@@ -29,6 +32,11 @@ export const getThemedGiftItems = async (id: number, cursor: number) => {
   return data.data;
 };
 
+export const getGiftItem = async (id: number): Promise<GiftItemData> => {
+  const { data } = await publicClient.get<{ data: GiftItemData }>(`/api/products/${id}`);
+  return data.data;
+};
+
 export const getGiftItems = async (targetType: string, rankType: string) => {
   const { data } = await publicClient.get<{ data: GiftItemData[] }>(`/api/products/ranking`, {
     params: {
@@ -40,6 +48,20 @@ export const getGiftItems = async (targetType: string, rankType: string) => {
 };
 
 export const getGiftItemDetail = async (id: number) => {
-  const { data } = await publicClient.get<{ data: GiftItemData }>(`/api/products/${id}`);
+  const { data } = await publicClient.get<{ data: GiftItemDetailData }>(
+    `/api/products/${id}/detail`
+  );
+  return data.data;
+};
+
+export const getReviews = async (id: number) => {
+  const { data } = await publicClient.get<{ data: GiftItemHighlightReviewData }>(
+    `/api/products/${id}/highlight-review`
+  );
+  return data.data;
+};
+
+export const getWishInfo = async (id: number) => {
+  const { data } = await publicClient.get<{ data: WishInfo }>(`/api/products/${id}/wish`);
   return data.data;
 };

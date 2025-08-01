@@ -40,10 +40,7 @@ export const OrderButton = () => {
   } = useFormContext<FormValues>();
   const { messageCardId } = useProductInfo();
   const queryClient = useQueryClient();
-  const giftItemDetail = queryClient.getQueryData<GiftItemData>([
-    'giftItemDetail',
-    { id: parsedId },
-  ]);
+  const giftItemDetail = queryClient.getQueryData<GiftItemData>(['giftItem', { id: parsedId }]);
   const message = watch('message');
   const senderName = watch('senderName');
   const recipientInfo = useWatch({ control, name: 'recipientInfo' });
