@@ -1,7 +1,6 @@
-import type { Product } from '@/features/Gift/hooks/useProductsRanking';
+import type { Product } from '@/features/Theme/components/ThemeHero/ThemeTypes';
 import ProductCard from '@/components/ProductCard/ProductCard';
-import Loading from '@/components/Loading/Loading';
-import { useThemeProducts } from '../hooks/useThemeProducts';
+import { useThemeProducts } from '@/features/Theme/hooks/useThemeProducts';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import * as S from './ThemeProducts.styles';
 
@@ -11,23 +10,18 @@ interface ThemeProductsProps {
 }
 
 const ThemeProducts = ({ themeId, onProductSelect }: ThemeProductsProps) => {
-  const {
-    products,
-    loading: productsLoading,
-    error: productsError,
-    fetchNextPage,
-    hasMore,
-  } = useThemeProducts(themeId);
+  const { products, fetchNextPage, hasMore } = useThemeProducts(themeId);
 
   const observerRef = useInfiniteScroll({
     onIntersect: fetchNextPage,
     enabled: hasMore,
+    threshold: 0.5,
+    rootMargin: '100px',
   });
 
-  if (productsError) return <S.ErrorText>{productsError.message}</S.ErrorText>;
-  if (productsLoading && products.length === 0) return <Loading />;
-  if (!productsLoading && products.length === 0)
+  if (products.length === 0) {
     return <S.NoProduct>상품이 없습니다.</S.NoProduct>;
+  }
 
   return (
     <S.Container>

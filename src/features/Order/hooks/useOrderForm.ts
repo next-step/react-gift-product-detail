@@ -47,7 +47,6 @@ export const useOrderForm = ({
     setValue,
     getValues,
     formState: { errors },
-    trigger,
   } = methods;
 
   const { fields, append, remove } = useFieldArray({
