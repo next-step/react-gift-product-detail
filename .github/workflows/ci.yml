@@ -2,12 +2,12 @@
 # - 코드 품질 검사, 테스트, 빌드 검증을 수행
 name: CI
 
-# 트리거 조건: main 브랜치에 push 또는 PR 생성 시
+# 트리거 조건: main, sehigh 브랜치에 push 또는 PR 생성 시
 on:
   push:
-    branches: [main]
+    branches: [main, sehigh]
   pull_request:
-    branches: [main]
+    branches: [main, sehigh]
 
 jobs:
   # 코드 품질 검사 (ESLint + TypeScript 타입 체크)

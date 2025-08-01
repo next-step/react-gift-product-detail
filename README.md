@@ -63,7 +63,7 @@
 
 ### 실행 조건
 
-- `main`, `develop` 브랜치에 push 시
+- `main`, `sehigh` 브랜치에 push 시
 - Pull Request 생성/업데이트 시
 
 ### 워크플로우 순서
