@@ -36,13 +36,13 @@
         - 상품 주요 리뷰 API: /api/products/:productId/highlight-review
         - 상품 관심 등록 수 API: /api/products/:productId/wish
 
-    [ ] 3단계  테스트 코드 작성하기
+    [v] 3단계  테스트 코드 작성하기
         - 상황에 맞는 테스트 코드 방식을 통해 테스트 코드를 작성해봐요.
         - Github Action을 통해 매 PR에서 테스트 코드가 실행되도록 해요.
         [v] src/components에 있는 Form Field와 Typography에 대한 테스트 코드를 작성해주세요.
         [v] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성해주세요.
         [v] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성해주세요.
-        [ ] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 해주세요.
+        [v] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 해주세요.
 
         (+) 로그인 페이지 테스트 시나리오
             - 시나리오 1: 로그인 폼 초기 렌더링
@@ -114,7 +114,7 @@
                 - 조건: X 버튼 클릭
                 - 예상 결과: onRemove 함수가 호출된다.
 
-        (+ ) Typography 컴포넌트 테스트 시나리오
+        (+) Typography 컴포넌트 테스트 시나리오
             - 시나리오 1: 기본 태그와 children 렌더링 확인
                 - 목적: Typography 컴포넌트가 기본적으로 p 태그로 렌더링 되는지, children이 화면에 표시되는지 확인
                 - 조건: variant="body1Regular" 속성으로 렌더링

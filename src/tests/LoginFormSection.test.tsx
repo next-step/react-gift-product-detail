@@ -8,15 +8,25 @@ import { UserManagementProvider } from '../pages/Login/contexts/UserManagement';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as loginFormHook from '../pages/Login/hooks/useLoginForm';
 
-const queryClient = new QueryClient();
+// 앱의 main.tsx 설정을 반영하여 QueryClient 생성
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        throwOnError: true,
+      },
+      mutations: {
+        throwOnError: true,
+      },
+    },
+  });
 
-// renderComponent 함수를 describe 바깥에 선언해서 모든 테스트에서 사용 가능하도록 함
 const renderComponent = () =>
   render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <UserManagementProvider>
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <LoginFormSection />
           </QueryClientProvider>
         </UserManagementProvider>
