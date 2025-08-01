@@ -10,6 +10,7 @@ import {
   useSuspenseQueries,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { useRef } from 'react';
 import type { ProductId, ProductWishInfo } from 'src/types/product';
 
 export const useProduct = (id: ProductId) => {
@@ -24,7 +25,7 @@ export const useProduct = (id: ProductId) => {
   const highlightReview = res[1].data;
   const productDetailInfo = res[2].data;
 
-  const { productWishInfo, wishMutate } = useWish(id);
+  const { productWishInfo, wishMutate, isPending } = useWish(id);
 
   return {
     product,
@@ -32,7 +33,22 @@ export const useProduct = (id: ProductId) => {
     productDetailInfo,
     productWishInfo,
     wishMutate,
+    isPending,
   };
+};
+
+// 연속 요청시 오류 발생 테스트용 함수
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+const fetchAddWishSuccess = async () => {
+  await sleep(1000);
+};
+
+const fetchAddWishError = async () => {
+  await sleep(1000);
+
+  throw new Error('mock error response');
 };
 
 export const useWish = (id: ProductId) => {
@@ -40,10 +56,16 @@ export const useWish = (id: ProductId) => {
   const { queryKey, queryFn } = productWishOptions(id);
   const { data: productWishInfo } = useSuspenseQuery({ queryKey, queryFn });
 
-  const { mutate: wishMutate } = useMutation({
-    mutationFn: () => Promise.resolve(), // 해당 API가 없음, 실제
+  const isMutationRef = useRef(false);
+
+  const { mutate: wishMutate, isPending } = useMutation({
+    mutationFn: fetchAddWishSuccess,
 
     onMutate: async () => {
+      // 요청중이라면 무시
+      if (isMutationRef.current) return;
+      isMutationRef.current = true;
+
       // 현재 쿼리 중단 및 이전 값 백업
       await queryClient.cancelQueries({ queryKey });
       const prev = queryClient.getQueryData(queryKey);
@@ -74,7 +96,13 @@ export const useWish = (id: ProductId) => {
         queryClient.setQueryData(queryKey, context.prev);
       }
     },
+
+    // 성공/실패 시
+    onSettled: () => {
+      isMutationRef.current = false;
+      // queryClient.invalidateQueries({ queryKey });
+    },
   });
 
-  return { productWishInfo, wishMutate };
+  return { productWishInfo, wishMutate, isPending };
 };
