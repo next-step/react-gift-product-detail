@@ -19,12 +19,12 @@ export function ProductDetailPage() {
   )
 }
 
+type ProductTab = 'description' | 'review' | 'detail'
+
 function ProductDetailContent() {
   const { productId = '' } = useParams<{ productId: string }>()
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<
-    'description' | 'review' | 'detail'
-  >('description')
+  const [activeTab, setActiveTab] = useState<ProductTab>('description')
   const { product, detail, wishInfo, reviews } = useProductDetail(productId)
 
   return (
