@@ -1,7 +1,10 @@
 import "@testing-library/jest-dom";
 import { vi } from "vitest";
-import type { ComponentType } from "react";
 
-vi.mock("@emotion/styled", () => ({
-  default: (component: ComponentType) => component,
-}));
+vi.mock("@emotion/styled", () => {
+  return {
+    default: new Proxy({}, {
+      get: (_, tag) => () => tag,
+    }),
+  };
+});
