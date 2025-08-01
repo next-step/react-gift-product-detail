@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
+import { Suspense } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Loading from '@/component/Loading/Loading'
-import * as S from './TrendingGiftRanking.styles'
-import { FilterGender, FilterType } from './TrendingGiftRankingFilter'
 import { ROUTE_PATH } from '@/routes/Router'
-import type { Gender, Type, Product } from '@/features/Gift/types/GiftTypes'
+import type { Gender, Type } from '@/features/Gift/types/GiftTypes'
+import type { Product } from '@/types/CommonTypes'
 import { ErrorBoundary } from '@/component/Error/ErrorBoundary'
-import { Suspense } from 'react'
 import RankingSection from './RakingSection'
+import { FilterGender, FilterType } from './TrendingGiftRankingFilter'
+import * as S from './TrendingGiftRanking.styles'
 
 const genderList = [
   { label: 'All', icon: 'ALL' },

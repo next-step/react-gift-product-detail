@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { apiGet } from '@/lib/axios'
+import { API_PATH, apiGet } from '@/lib/axios'
 
 export interface Announcement {
   name: string
@@ -13,12 +13,12 @@ export interface ProductDetail {
 }
 
 const fetchProductDetail = (productId: number): Promise<ProductDetail> => {
-  const res = apiGet<ProductDetail>(`/products/${productId}/detail`)
+  const res = apiGet<ProductDetail>(API_PATH.PRODUCT_DETAIL(productId))
   return res
 }
 
 export const useProductDetail = (productId: number) => {
-  const { data: productDetail } = useSuspenseQuery<ProductDetail>({
+  const { data: productDetail } = useSuspenseQuery({
     queryKey: ['productDetail', productId],
     queryFn: () => fetchProductDetail(productId),
   })

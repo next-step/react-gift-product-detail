@@ -3,14 +3,15 @@ import { FormProvider } from 'react-hook-form'
 import { useProductSummary } from '@/features/Order/hooks/useProductSummary'
 import { cards } from '@/data/cards'
 import { useOrderForm } from '@/features/Order/hooks/useOrderForm'
+import CardSelect from '@/features/Order/components/CardSelect/CardSelect'
+import CardPreview from '@/features/Order/components/CardPreview/CardPreview'
+import MessageInput from '@/features/Order/components/MessageInput/MessageInput'
+import SenderInput from '@/features/Order/components/SenderInput/SenderInput'
+import ProductInfo from '@/features/Order/components/ProductInfo/ProductInfo'
+import BottomPurchaseBar from '@/features/Order/components/BottomPurchaseBar/BottomPurchaseBar'
+import ReceiverSection from '@/features/Order/components/ReceiverSection/ReceiverSection'
 
-import CardSelect from '../CardSelect/CardSelect'
-import CardPreview from '../CardPreview/CardPreview'
-import MessageInput from '../MessageInput/MessageInput'
-import SenderInput from '../SenderInput/SenderInput'
-import ProductInfo from '../ProductInfo/ProductInfo'
-import BottomPurchaseBar from '../BottomPurchaseBar/BottomPurchaseBar'
-import ReceiverSection from '../ReceiverSection/ReceiverSection'
+const INITIAL_CARD_ID = 904
 
 interface Props {
   idNum: number
@@ -23,7 +24,7 @@ const OrderPageContent = ({ idNum }: Props) => {
     return <div>상품 정보를 찾을 수 없습니다.</div>
   }
 
-  const [selectedCardId, setSelectedCardId] = useState<number>(904)
+  const [selectedCardId, setSelectedCardId] = useState<number>(INITIAL_CARD_ID)
   const selectedCard = cards.find((card) => card.id === selectedCardId)!
 
   const { methods, onSubmit, totalPrice, confirmReceivers } = useOrderForm({

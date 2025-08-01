@@ -1,6 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { apiGet } from '@/lib/axios'
-import type { Product } from '../types/ThemeTypes'
+import { apiGet, API_PATH } from '@/lib/axios'
+import type { Product } from '@/types/CommonTypes'
 
 interface ThemeProductResponse {
   list: Product[]
@@ -13,13 +13,13 @@ const fetchThemeProducts = async ({
   cursor = 0,
   limit = 10,
 }: {
-  themeId: number | null
+  themeId: number
   cursor?: number
   limit?: number
 }): Promise<ThemeProductResponse | null> => {
   if (!themeId) return null
   const res = await apiGet<ThemeProductResponse>(
-    `/themes/${themeId}/products`,
+    API_PATH.THEME_PRODUCTS(themeId),
     {
       params: { cursor, limit },
     }
@@ -27,7 +27,7 @@ const fetchThemeProducts = async ({
   return res
 }
 
-export const useThemeProducts = (themeId: number | null, limit = 10) => {
+export const useThemeProducts = (themeId: number, limit = 10) => {
   const { data, fetchNextPage, hasNextPage, refetch } =
     useSuspenseInfiniteQuery({
       queryKey: ['themeProducts', themeId],

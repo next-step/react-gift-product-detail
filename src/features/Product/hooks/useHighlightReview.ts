@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { apiGet } from '@/lib/axios'
+import { apiGet, API_PATH } from '@/lib/axios'
 
 export interface Review {
   id: string
@@ -16,13 +16,13 @@ const fetchHighlightReview = (
   productId: number
 ): Promise<HighlightReviewResponse> => {
   const res = apiGet<HighlightReviewResponse>(
-    `/products/${productId}/highlight-review`
+    API_PATH.PRODUCT_REVIEW(productId)
   )
   return res
 }
 
 export const useHighlightReview = (productId: number) => {
-  const { data: highlightReview } = useSuspenseQuery<HighlightReviewResponse>({
+  const { data: highlightReview } = useSuspenseQuery({
     queryKey: ['highlightReview', productId],
     queryFn: () => fetchHighlightReview(productId),
   })

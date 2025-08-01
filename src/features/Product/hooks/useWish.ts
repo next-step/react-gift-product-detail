@@ -3,7 +3,7 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query'
-import { apiGet } from '@/lib/axios'
+import { apiGet, API_PATH } from '@/lib/axios'
 
 export interface WishResponse {
   wishCount: number
@@ -11,7 +11,7 @@ export interface WishResponse {
 }
 
 const fetchWish = (productId: number): Promise<WishResponse> => {
-  const res = apiGet<WishResponse>(`/products/${productId}/wish`)
+  const res = apiGet<WishResponse>(API_PATH.PRODUCT_WISH(productId))
   return res
 }
 
@@ -34,7 +34,7 @@ const toggleWish = async ({
 export const useWish = (productId: number) => {
   const queryClient = useQueryClient()
 
-  const { data, ...queryInfo } = useSuspenseQuery<WishResponse>({
+  const { data, ...queryInfo } = useSuspenseQuery({
     queryKey: ['wish', productId],
     queryFn: () => fetchWish(productId),
   })
