@@ -3,11 +3,11 @@ name: Test
 on:
   # PR이 생성되거나 업데이트될 때
   pull_request:
-    branches: [main]
+    branches: [main, jjw5655]
 
   # main 브랜치에 직접 푸시될 때
   push:
-    branches: [main]
+    branches: [main, jjw5655]
 
 jobs:
   test:
