@@ -1,7 +1,7 @@
-import PresentCategory from "@/components//main/PresentCategory";
-import SelectFriendBox from "@/components/main/SelectFriendBox";
-import FightingBox from "@/components/main/FightingBox";
-import GiftsRanking from "@/components/main/GiftsRanking";
+import PresentCategory from "@/pages/main/components/PresentCategory";
+import SelectFriendBox from "@/pages/main/components/SelectFriendBox";
+import FightingBox from "@/pages/main/components/FightingBox";
+import GiftsRanking from "@/pages/main/components/GiftsRanking";
 
 const MainPage = () => {
   return (

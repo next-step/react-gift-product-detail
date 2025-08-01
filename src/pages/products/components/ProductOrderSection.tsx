@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Heart from "@/assets/heart.svg?react";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
-import useToggleWish from "@/hooks/api/useToggleWish";
+import useToggleWish from "@/api/hooks/useToggleWish";
 
 type ProductOrderSectionProps = {
   wishCount: number;

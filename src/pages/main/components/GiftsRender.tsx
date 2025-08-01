@@ -1,7 +1,7 @@
 import GiftsList from "./GiftsList";
 import BoxMessage from "@/components/common/BoxMessage";
 import type { TargetType, RankType } from "@/types/gift";
-import useProductsRanking from "@/hooks/api/useProductsRanking";
+import useProductsRanking from "@/api/hooks/useProductsRanking";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import { wrapper } from "@/utils/wrapper";
 

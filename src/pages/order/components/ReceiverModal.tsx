@@ -1,6 +1,6 @@
 import { useModal } from "@/contexts/ModalContext";
 import styled from "@emotion/styled";
-import DescriptionMessage from "../common/DescriptionMessage";
+import DescriptionMessage from "../../../components/common/DescriptionMessage";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import ReceiverForm from "./ReceiverForm";
 import { useEffect } from "react";

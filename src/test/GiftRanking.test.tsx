@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@emotion/react";
 import { test, expect } from "vitest";
 import { theme } from "@/styles/theme";
-import GiftsRanking from "@/components/main/GiftsRanking";
+import GiftsRanking from "@/pages/main/components/GiftsRanking";
 import { server } from "@/mocks/server";
 import { http, HttpResponse } from "msw";
 import { API_PATHS } from "@/api/apiPaths";

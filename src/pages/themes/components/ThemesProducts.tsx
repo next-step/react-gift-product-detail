@@ -3,10 +3,10 @@ import { fetchThemesProducts } from "@/api/themesProducts";
 import ThemesItem from "./ThemesItem";
 import { Link } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
-import BoxMessage from "../common/BoxMessage";
+import BoxMessage from "../../../components/common/BoxMessage";
 import type { ThemeProduct } from "@/types/theme";
-import LoadingSpinner from "../common/LoadingSpinner";
-import useInfiniteQuery from "@/hooks/api/useInfiniteQuery";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import useInfiniteQuery from "@/api/hooks/useInfiniteQuery";
 import type {
   fetchThemesProductsParams,
   FetchThemesProductsResult,

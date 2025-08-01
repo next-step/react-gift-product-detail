@@ -1,6 +1,6 @@
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessage from "../../../components/common/ErrorMessage";
 import styled from "@emotion/styled";
-import DescriptionMessage from "../common/DescriptionMessage";
+import DescriptionMessage from "../../../components/common/DescriptionMessage";
 import { useFormContext } from "react-hook-form";
 import { checkNameError } from "@/utils/validation";
 

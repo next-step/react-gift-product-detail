@@ -1,7 +1,7 @@
 import { ROUTE_PATH } from "@/routes/paths";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import usePreservedCallback from "../usePreservedCallback";
+import usePreservedCallback from "../../hooks/usePreservedCallback";
 
 type UseApiRequestProps<TData, TArgs extends unknown[] = []> = {
   requestFn: (...args: TArgs) => Promise<TData>;

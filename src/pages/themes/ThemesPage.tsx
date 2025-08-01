@@ -1,5 +1,5 @@
-import ThemesInfo from "@/components/themes/ThemesInfo";
-import ThemesProducts from "@/components/themes/ThemesProducts";
+import ThemesInfo from "@/pages/themes/components/ThemesInfo";
+import ThemesProducts from "@/pages/themes/components/ThemesProducts";
 import styled from "@emotion/styled";
 import { useParams } from "react-router";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useApiRequest from "./useApiRequest";
-import { useInView } from "../useInView";
-import usePreservedCallback from "../usePreservedCallback";
+import { useInView } from "../../hooks/useInView";
+import usePreservedCallback from "../../hooks/usePreservedCallback";
 
 type UseInfiniteQueryProps<TRes, TItem, TParams> = {
   fetcher: (params: TParams) => Promise<TRes>;

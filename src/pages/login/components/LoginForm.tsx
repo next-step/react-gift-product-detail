@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import { checkEmailError, checkPasswordError } from "@/utils/validation";
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessage from "../../../components/common/ErrorMessage";
 import useHandleLoginSuccess from "@/hooks/useHandleLoginSuccess";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { LoginFormValues } from "@/types/user";
-import useLogin from "@/hooks/api/useLogin";
+import useLogin from "@/api/hooks/useLogin";
 
 const LoginForm = () => {
   const method = useForm<LoginFormValues>({

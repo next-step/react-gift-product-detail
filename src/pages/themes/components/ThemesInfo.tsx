@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import useThemesInfo from "@/hooks/api/useThemesInfo";
+import useThemesInfo from "@/api/hooks/useThemesInfo";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import { wrapper } from "@/utils/wrapper";
 

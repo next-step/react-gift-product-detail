@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessage from "../../../components/common/ErrorMessage";
 
 type CardTextareaProps = {
   error?: string;

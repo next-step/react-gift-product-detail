@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import PresentTheme from "./PresentTheme";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "@/routes/paths";
-import useThemes from "@/hooks/api/useThemes";
+import useThemes from "@/api/hooks/useThemes";
 import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
 import { wrapper } from "@/utils/wrapper";
 

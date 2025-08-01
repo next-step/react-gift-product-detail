@@ -1,4 +1,4 @@
-import ErrorMessage from "../common/ErrorMessage";
+import ErrorMessage from "../../../components/common/ErrorMessage";
 import styled from "@emotion/styled";
 import {
   checkCountError,

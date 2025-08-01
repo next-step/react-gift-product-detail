@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import LoginForm from "@/components/login/LoginForm";
+import LoginForm from "@/pages/login/components/LoginForm";
 import KakaoLogo from "@/components/image/KakaoLogo";
 import withoutUser from "@/hoc/withoutUser";
 import { wrapper } from "@/utils/wrapper";

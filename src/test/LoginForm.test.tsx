@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@emotion/react";
 import { vi, test, expect } from "vitest";
 import { theme } from "@/styles/theme";
-import LoginForm from "@/components/login/LoginForm";
+import LoginForm from "@/pages/login/components/LoginForm";
 
 const mockLogin = vi.fn();
 

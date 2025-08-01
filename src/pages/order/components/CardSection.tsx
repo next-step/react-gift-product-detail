@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { cards } from "@/data/card";
-import CardThumbnail from "@/components/order/CardThumbnail";
-import CardImage from "@/components/order/CardImage";
+import CardThumbnail from "@/pages/order/components/CardThumbnail";
+import CardImage from "@/pages/order/components/CardImage";
 import type { Card } from "@/types/card";
 import CardTextarea from "./CardTextarea";
 import { useFormContext } from "react-hook-form";
