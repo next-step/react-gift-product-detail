@@ -65,7 +65,7 @@ type ColorKeys =
   | SemanticKeys;
 
 type VariantKeys = keyof typeof theme.typography;
-type HTMLTags =
+type HTMLTagList =
   | 'h1'
   | 'h2'
   | 'h3'
@@ -76,6 +76,7 @@ type HTMLTags =
   | 'span'
   | 'div'
   | 'label';
+type HTMLTags = Extract<ElementType, HTMLTagList>;
 
 const getColor = (colorKey: ColorKeys, theme: Theme): string => {
   // 색상 스케일 순회
