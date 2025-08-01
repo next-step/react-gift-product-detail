@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef } from 'react';
 import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../styles/colors';
@@ -7,6 +7,7 @@ import { typography } from '../styles/typography';
 import { useAuth } from '@/contexts/AuthContext';
 import { spinnerStyle } from '../styles/common';
 import { useThemeProductsInfiniteQuery } from '@/hooks/useThemeProductsInfiniteQuery';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` });
 const gridStyle = css({
@@ -60,41 +61,8 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     isFetchingNextPage,
   } = useThemeProductsInfiniteQuery(themeId);
 
-  // fetchNextPage를 useCallback으로 메모이제이션
-  const handleFetchNextPage = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  // Observer 설정을 useCallback으로 메모이제이션
-  const setupObserver = useCallback(() => {
-    if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          handleFetchNextPage();
-        }
-      },
-      { 
-        threshold: 0.1,
-        rootMargin: '50px' // 조금 더 일찍 트리거되도록 설정
-      }
-    );
-
-    observer.observe(observerRef.current);
-    return observer;
-  }, [hasNextPage, isFetchingNextPage, handleFetchNextPage]);
-
-  useEffect(() => {
-    const observer = setupObserver();
-    return () => {
-      if (observer) {
-        observer.disconnect();
-      }
-    };
-  }, [setupObserver]);
+  // 무한스크롤 커스텀 훅 사용
+  useInfiniteScroll(observerRef, { fetchNextPage, hasNextPage, isFetchingNextPage });
 
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
