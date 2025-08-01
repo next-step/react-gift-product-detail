@@ -8,7 +8,9 @@ interface ExpandButtonProps {
 const ExpandButton = ({ isExpanded, onToggle }: ExpandButtonProps) => {
   return (
     <Wrapper>
-      <Button onClick={onToggle}>{isExpanded ? '접기' : '더보기'}</Button>
+      <Button data-testid="expand-button" onClick={onToggle}>
+        {isExpanded ? '접기' : '더보기'}
+      </Button>
     </Wrapper>
   );
 };

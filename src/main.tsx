@@ -7,14 +7,23 @@ import App from '@/App';
 import { theme } from '@/styles/theme';
 import { AuthProvider } from '@/contexts/AuthContext/AuthProvider';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  </StrictMode>
-);
+async function enableMocking() {
+  if (import.meta.env.VITE_ENABLE_MSW === 'true') {
+    const { worker } = await import('@/mocks/browser');
+    return worker.start();
+  }
+}
+
+enableMocking().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </StrictMode>
+  );
+});

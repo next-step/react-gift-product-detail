@@ -93,3 +93,42 @@
   - [x] validation.ts에 사용하지 않는 변수 제거 및 조금 더 적절한 에러 메시지 문구 추가했습니다.
   - [x] ErrorBoundary + Suspense 구조를 WithSuspenseBoundary.tsx로 추출해 낸다음 기존에 ErrorBoundary + Suspense 구조를 활용하는 부분들을 WithSuspenseBoundary로 대체해주었습니다.
   - [x] html 구조로 제공되는 api 요청 결과를 화면에 성공적으로 띄우기 위해 기존의 dangerouslySetInnerHTML 대신 html-react-parser를 npm install로 설치하여 html 문자열을 element로 렌더링해 화면에 띄우도록 수정해주었습니다.
+
+## ✅4번째 미션 3단계
+
+### 요구사항
+
+- [x] 본인만의 기준으로 일관된 코드를 작성해주세요.
+  - [x] given-when-then 구조
+  - [x] 주석을 활용하여 테스트 구조를 알기 쉽게 하기
+  - [x] 하나의 테스트는 하나의 시나리오만 가능한 담기!
+- [x] 기능 단위로 나누어 커밋을 해주세요.
+- [x] 테스트 환경 설정하기
+  - [x] vitest, react-testing-library 명령어 활용하여 설치했습니다.(강의 내용 참고)
+  - [x] vite.config.ts에 test와 관련된 환경 설정을 강의 내용을 참고하여 추가했습니다.
+  - [x] package.json에는 test, test:dev와 관련하여 명령어를 등록해주엇습니다.
+  - [x] setupTests.ts를 src/tests 폴더 안에 만든다음 jest-dom을 전역 선언했습니다.
+- [x] **`src/components`**에 있는 Form Field와 Typography에 대한 테스트 코드를 작성해주세요.
+  - [x] InputField에 대해 테스트 진행
+  - [x] placeholder를 포함해서 InputField를 구성하는 기본적인 요소들이 제대로 렌더링이 되는지 확인
+  - [x] 유저가 값을 입력할 때 onChange 이벤트가 제대로 호출되는지 확인
+  - [x] 에러 메시지를 띄워야 할 때 제대로 띄우는지 확인
+  - [x] 화면의 요소에 style이 제대로 적용되는지 테스트
+  - [x] 주석을 통해 given->when->then을 잘 나타내고 있는지 점검했습니다.
+- [x] 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성해주세요.
+  - [x] 렌더링된 로그인 폼 UI에 필수 요소들이 존재하는지 확인
+  - [x] 입력값이 유효하지 않을 때 로그인 버튼이 비활성화되는지 테스트
+  - [x] 이메일/비밀번호를 올바르게 입력한 후 로그인 버튼 클릭 시 리디렉션이 정상적으로 되는지
+  - [x] 로그인 실패 시 에러 토스트 메시지가 잘 뜨는지
+  - [x] given->when->then 구조 점검, describe로 하나의 시나리오 잘 담당하는지 점검 과정을 거쳤습니다.
+- [x] MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성해주세요.
+  - [x] src/apis/mockData.ts에 랭킹 섹션에 필요한 data를 생성했습니다.
+  - [x] src/apis/rankingApi.mock.ts에 mockdata를 이용해서 상품 정보를 필터링하는 로직을 작성해주었습니다.
+  - [x] 테스트 진행 요소
+    - [x] 기본 필터일 때 상품이 정상적으로 렌더링되는지 테스트
+    - [x] 성별을 "여성"으로 설정했을 때 해당되는 상품만 뜨는지 테스트
+    - [x] 더보기 버튼을 클릭하면 정상적으로 확장되는지
+  - [x] 기존 테스트 코드를 제가 설정한 기준인 given-when-then 순서에 맞게 주석을 달고 하나의 테스트는 가능한 하나의 시나리오를 담도록 describe를 이용해 쪼개주는 과정을 거쳤습니다.
+- [x] github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 해주세요.
+- [x] npm run build 성공
+- [x] npm run lint 성공
