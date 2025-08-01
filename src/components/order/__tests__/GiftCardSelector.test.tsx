@@ -27,7 +27,7 @@ describe("GiftCardSelector", () => {
     fireEvent.click(cards[1]);
     // Then
     expect(mockOnChange).toHaveBeenCalled();
-    expect(mockOnChange.mock.calls[0][0].target.value).toBe(ordercard[1].defaultTextMessage);
+    expect(mockOnChange.mock.calls[0][0].target.value).toBe(ordercard[0].defaultTextMessage);
   });
 
   it("선택된 카드의 이미지로 표시", () => {
