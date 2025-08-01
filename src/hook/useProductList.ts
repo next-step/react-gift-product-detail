@@ -1,3 +1,4 @@
+
 import {getproductsbyCursorUrl } from "@/constant/api";
 import { type ProductItem, type ProductItemFromTheme } from "@/type/GiftAPI/product";
 import { useEffect, useState } from "react";
@@ -19,11 +20,13 @@ function useProductList() {
     queryKey: ['productListData', productsUrl],
     queryFn: () => getFromUrl(productsUrl),
     placeholderData: (previousData) => previousData,
+
   },)
 
 
   useEffect(() => {
     if (data?.list) {
+
       setProductList(prev => [...prev, ...data.list]);
       setExtraLoading(false);
     }
@@ -31,11 +34,13 @@ function useProductList() {
 
   useEffect(() => {
     if (!loaderRef) return;
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setCursor(prev => prev + 10);
         setExtraLoading(true);
       }
+
     },
       {
         root: null,
@@ -52,6 +57,7 @@ function useProductList() {
 
 
   return { data, isLoading, error, productList, extraLoading, setLoaderRef }
+
 }
 
 export default useProductList

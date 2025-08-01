@@ -47,11 +47,13 @@ export const Gap = styled.div<{ height?: number }>`
   background-color: transparent;
 `;
 
+
 export const GapGray = styled.div<{ height?: number }>`
   width: 100%;
   height: ${({ height }) => (height ? `${height}px` : '4px')};;
   background-color:  ${theme.colors.gray100};
   `
+
 
 export const EmptyDivGray8h = styled.div`
   width: 100%;

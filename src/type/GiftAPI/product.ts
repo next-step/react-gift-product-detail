@@ -45,6 +45,7 @@ export const defaultProductItemSummary = {
   price: 0,
   imageURL: ''
 }
+
 export interface ProductWish{
   wishCount: number,
   isWished: boolean
@@ -84,3 +85,4 @@ export const DetailTypeOption = [
   { type: ProductDetailType.review, text: '상품후기' },
   { type: ProductDetailType.info, text: '상품정보' },
 ]
+

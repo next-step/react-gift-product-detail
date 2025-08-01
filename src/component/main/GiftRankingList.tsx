@@ -15,6 +15,7 @@ import ProductCard from '../ProductCard';
 
 
 
+
 interface GiftRankingListProps {
     targetType: TargetType;
     rankType: RankType;
@@ -38,11 +39,13 @@ const GiftRankingList = ({ targetType, rankType }: GiftRankingListProps) => {
     if (data === null || isLoading) return (
         <Loading />
     )*/
+
     if (data?.length === 0) return (
         <CentorAlignDiv240>
             <p>상품이 없습니다</p>
         </CentorAlignDiv240>
     )
+
     return (
         <>
             <ProductGrid>

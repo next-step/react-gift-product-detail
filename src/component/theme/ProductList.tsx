@@ -17,6 +17,7 @@ const ProductList = () => {
   );
   
   if (!isLoading && productList.length === 0) return (
+
     <CentorAlignDiv240>
       <p>상품이 없습니다</p>
     </CentorAlignDiv240>

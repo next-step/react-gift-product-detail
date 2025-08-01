@@ -72,6 +72,7 @@ const GiftRanking = () => {
             <GiftRankingList targetType={targetType} rankType={rankType} />
           </Suspense>
         </ErrorBoundary>
+
       </ProductDiv>
     </GiftRanKingSection>
   );

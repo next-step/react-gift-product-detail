@@ -12,11 +12,13 @@ import Loading from '../Loading';
 
 
 
+
 const GiftThemeList = () => {
   const { data } = useSuspenseQuery<[]>({
     queryKey: ['themeLogoData'],
     queryFn: () => getFromUrl(themeUrl),
   });
+
 
   const navigate = useNavigate();
   /*
@@ -54,6 +56,7 @@ const GiftTheme = () => {
         </Suspense>
         </ErrorBoundary>
         <Gap height={24} />
+
     </GiftThemeSection>
   );
 };

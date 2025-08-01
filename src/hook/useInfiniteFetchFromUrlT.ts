@@ -22,6 +22,7 @@ function useInfiniteFetchFromUrlT<T>( url: string, fetchFn : (url : string) => P
             } finally {
                 setLoading(false);
             }
+
         };
 
         fetchData();
