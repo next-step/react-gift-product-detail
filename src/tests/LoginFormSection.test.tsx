@@ -62,7 +62,8 @@ describe('LoginFormSection', () => {
   });
 
   it('초기 렌더링 시 이메일, 비밀번호 입력과 로그인 버튼이 보여지고 버튼은 비활성화', () => {
-    (loginFormHook.useLoginForm as any).mockReturnValue({
+    const mockedUseLoginForm = vi.mocked(loginFormHook.useLoginForm);
+    mockedUseLoginForm.mockReturnValue({
       email: {
         value: '',
         error: '',
@@ -93,7 +94,8 @@ describe('LoginFormSection', () => {
   });
 
   it('유효한 이메일과 비밀번호가 입력되면 로그인 버튼이 활성화된다', () => {
-    (loginFormHook.useLoginForm as any).mockReturnValue({
+    const mockedUseLoginForm = vi.mocked(loginFormHook.useLoginForm);
+    mockedUseLoginForm.mockReturnValue({
       email: {
         value: 'test@example.com',
         error: '',
@@ -123,7 +125,8 @@ describe('LoginFormSection', () => {
     const emailError = '이메일 형식이 올바르지 않습니다';
     const passwordError = '비밀번호는 8자 이상이어야 합니다';
 
-    (loginFormHook.useLoginForm as any).mockReturnValue({
+    const mockedUseLoginForm = vi.mocked(loginFormHook.useLoginForm);
+    mockedUseLoginForm.mockReturnValue({
       email: {
         value: 'invalid',
         error: emailError,
@@ -153,7 +156,8 @@ describe('LoginFormSection', () => {
   });
 
   it('로그인 버튼 클릭 시 버튼이 활성화 상태인지 확인 (내부 goToLogin 호출 여부는 테스트하지 않음)', () => {
-    (loginFormHook.useLoginForm as any).mockReturnValue({
+    const mockedUseLoginForm = vi.mocked(loginFormHook.useLoginForm);
+    mockedUseLoginForm.mockReturnValue({
       email: {
         value: 'test@example.com',
         error: '',
