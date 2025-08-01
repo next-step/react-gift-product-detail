@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import GiftCardSelector from "@/components/order/GiftCardSelector";
+import { ordercard } from "@/data/ordercard";
 
 describe("GiftCardSelector", () => {
   const defaultProps = {
@@ -26,7 +27,7 @@ describe("GiftCardSelector", () => {
     fireEvent.click(cards[1]);
     // Then
     expect(mockOnChange).toHaveBeenCalled();
-    expect(mockOnChange.mock.calls[0][0].target.value).toBe("기본 메시지 2");
+    expect(mockOnChange.mock.calls[0][0].target.value).toBe(ordercard[1].defaultTextMessage);
   });
 
   it("선택된 카드의 이미지로 표시", () => {
@@ -36,7 +37,7 @@ describe("GiftCardSelector", () => {
     // Then
     expect(screen.getByAltText("message-card")).toHaveAttribute(
       "src",
-      "image1.png",
+      ordercard[0].imageUrl,
     );
   });
 
