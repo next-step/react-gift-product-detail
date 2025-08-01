@@ -7,13 +7,11 @@ import useRequiredParam from '@hooks/useRequiredParam';
 interface FixedBottonBarProps {
   productWishInfo: ProductWishInfo;
   wishMutate: () => void;
-  isPending?: boolean;
 }
 
 const FixedBottonBar = ({
   productWishInfo,
   wishMutate,
-  isPending,
 }: FixedBottonBarProps) => {
   const id = useRequiredParam('id');
   const navigate = useNavigate();
@@ -21,7 +19,7 @@ const FixedBottonBar = ({
 
   return (
     <FixedContainer>
-      <WishButton onClick={wishMutate} disabled={isPending}>
+      <WishButton onClick={wishMutate}>
         {productWishInfo.isWished ? (
           <AiFillHeart color="red" size={24} />
         ) : (
@@ -47,21 +45,19 @@ const FixedContainer = styled.div(({ theme }) => ({
   zIndex: '999',
 }));
 
-const WishButton = styled.button<{ disabled?: boolean }>(({ disabled }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
+const WishButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
 
-  border: 'none',
-  background: 'transparent',
-  width: '10%',
-  height: '56px',
+  border: none;
+  background: transparent;
+  width: 10%;
+  height: 56px;
 
-  cursor: 'pointer',
-  opacity: disabled ? 0.8 : 1,
-  transition: 'opacity 0.2s ease',
-}));
+  cursor: pointer;
+`;
 
 const OrderButton = styled.button(({ theme }) => ({
   flex: '1',

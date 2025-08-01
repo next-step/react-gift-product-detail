@@ -12,6 +12,7 @@ import {
 } from '@tanstack/react-query';
 import { useRef } from 'react';
 import type { ProductId, ProductWishInfo } from 'src/types/product';
+import { throttle } from 'lodash';
 
 export const useProduct = (id: ProductId) => {
   const res = useSuspenseQueries({
@@ -56,19 +57,20 @@ export const useWish = (id: ProductId) => {
   const { queryKey, queryFn } = productWishOptions(id);
   const { data: productWishInfo } = useSuspenseQuery({ queryKey, queryFn });
 
-  const isMutationRef = useRef(false);
+  const prevStackRef = useRef<ProductWishInfo[]>([]);
 
   const { mutate: wishMutate, isPending } = useMutation({
-    mutationFn: fetchAddWishSuccess,
+    mutationFn: fetchAddWishError,
 
     onMutate: async () => {
-      // 요청중이라면 무시
-      if (isMutationRef.current) return;
-      isMutationRef.current = true;
-
       // 현재 쿼리 중단 및 이전 값 백업
       await queryClient.cancelQueries({ queryKey });
       const prev = queryClient.getQueryData(queryKey);
+
+      //이전 상태를 스택에 저장
+      if (prev) {
+        prevStackRef.current.push(prev);
+      }
 
       //낙관적 업데이트
       queryClient.setQueryData(
@@ -92,14 +94,15 @@ export const useWish = (id: ProductId) => {
     },
     onError: (_err, _variables, context) => {
       console.log('err');
-      if (context?.prev) {
-        queryClient.setQueryData(queryKey, context.prev);
-      }
+      // if (context?.prev) {
+      //   queryClient.setQueryData(queryKey, context.prev);
+      // }
+      const prev = prevStackRef.current.pop();
+      if (prev) queryClient.setQueryData(queryKey, prev);
     },
 
     // 성공/실패 시
     onSettled: () => {
-      isMutationRef.current = false;
       // queryClient.invalidateQueries({ queryKey });
     },
   });

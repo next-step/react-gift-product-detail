@@ -21,7 +21,6 @@ const ProductDetail = () => {
     highlightReview,
     productWishInfo,
     wishMutate,
-    isPending,
   } = useProduct(id);
 
   return (
@@ -43,7 +42,6 @@ const ProductDetail = () => {
       <FixedBottonBar
         productWishInfo={productWishInfo}
         wishMutate={wishMutate}
-        isPending={isPending}
       />
     </>
   );
