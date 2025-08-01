@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import * as S from './ProductDescription.styles'
+import DOMPurify from 'dompurify'
+import parse from 'html-react-parser'
 
 interface ProductDescriptionProps {
   description: string
@@ -16,13 +18,12 @@ const ProductDescription = ({
   announcements,
 }: ProductDescriptionProps) => {
   const [activeTab, setActiveTab] = useState<TabType>('상세 설명')
+  const cleanHtml = DOMPurify.sanitize(description)
 
   const renderTabContent = () => {
     switch (activeTab) {
       case '상세 설명':
-        return (
-          <S.TabContent dangerouslySetInnerHTML={{ __html: description }} />
-        )
+        return <S.TabContent>{parse(cleanHtml)}</S.TabContent>
       case '선물 후기':
         return (
           <S.TabContent>
