@@ -8,8 +8,8 @@ import toLocaleString from '@/utils/toLocaleString';
 import ProductInfo from './components/ProductInfo';
 import useOrderForm from './hooks/useOrderForm';
 import { Suspense } from 'react';
-import Loading from '@/components/Loading';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 const OrderPage = () => {
   const { orderForm, onSubmit, price, productSummaryData } = useOrderForm();

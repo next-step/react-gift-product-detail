@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import useInput from './hooks/useInput';
-import InputField from './components/InputField';
+import InputField from '../../components/common/InputField';
 
 import useLogin from './hooks/useLogin';
 

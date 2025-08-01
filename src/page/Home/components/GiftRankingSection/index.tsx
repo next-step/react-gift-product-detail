@@ -3,8 +3,8 @@ import { filters, generations } from '@/data/categoryDatas';
 import useSearchParamState from '../../hooks/useSearchParamState';
 import RankList from './RankList';
 import { Suspense } from 'react';
-import Loading from '@/components/Loading';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 interface ButtonProps {
   isActive: boolean;

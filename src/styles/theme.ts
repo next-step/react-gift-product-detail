@@ -1,4 +1,4 @@
-export const colors = {
+const colors = {
   colorScale: {
     gray: {
       0: '#ffffff', // 흰색
@@ -103,7 +103,7 @@ export const colors = {
   },
 } as const;
 
-export const typography = {
+const typography = {
   title1Bold: {
     fontSize: '1.25rem', // 20px
     fontWeight: 700,
@@ -189,7 +189,7 @@ export const typography = {
   },
 } as const;
 
-export const spacing = {
+const spacing = {
   spacing0: '0px', // 간격 없음
   spacing1: '4px', // 최소 간격
   spacing2: '8px', // 작은 간격
@@ -209,10 +209,12 @@ export const spacing = {
   spacing16: '64px', // 최대 간격
 } as const;
 
-export const theme = {
+const theme = {
   colors,
   typography,
   spacing,
 } as const;
 
 export type AppTheme = typeof theme;
+
+export default theme;

@@ -7,8 +7,8 @@ import ProductSection from './components/ProductSection';
 import { useParamsIndex } from '@/hooks/useParamsIndex';
 import { Suspense, useState } from 'react';
 import OrderButton from './components/OrderButton';
-import Loading from '@/components/Loading';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 const ProductPage = () => {
   const index = useParamsIndex();

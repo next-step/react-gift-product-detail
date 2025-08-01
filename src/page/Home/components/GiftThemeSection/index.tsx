@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import ThemeList from './ThemeList';
 import { Suspense } from 'react';
-import Loading from '@/components/Loading';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 const GiftThemeSection = () => {
   return (
