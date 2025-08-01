@@ -36,29 +36,23 @@ export default function ReceiverForm({
         </EmptyWrapper>
       ) : (
         <TableWrapper>
-          <thead>
-            <tr>
-              <HeaderText>이름</HeaderText>
-              <HeaderText>전화번호</HeaderText>
-              <HeaderText>수량</HeaderText>
-            </tr>
-          </thead>
-          <tbody>
-            {receiverList.map((r) => (
-              <tr key={r.phone}>
-                <td>
-                  <BodyText>{r.name}</BodyText>
-                </td>
-                <td>
-                  <BodyText>{r.phone}</BodyText>
-                </td>
-                <td>
-                  <BodyText>{r.quantity}</BodyText>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </TableWrapper>
+  <thead>
+    <tr>
+      <HeaderText>이름</HeaderText>
+      <HeaderText>전화번호</HeaderText>
+      <HeaderText>수량</HeaderText>
+    </tr>
+  </thead>
+  <tbody>
+    {receiverList.map((r) => (
+      <tr key={r.phone}>
+        <BodyText>{r.name}</BodyText>
+        <BodyText>{r.phone}</BodyText>
+        <BodyText>{r.quantity}</BodyText>
+      </tr>
+    ))}
+  </tbody>
+</TableWrapper>
       )}
       {isModalOpen && (
         <ReceiverModal

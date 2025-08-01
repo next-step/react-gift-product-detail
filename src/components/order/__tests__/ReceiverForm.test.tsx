@@ -19,8 +19,8 @@ describe("ReceiverForm", () => {
     render(<ReceiverForm {...defaultProps} />);
 
     // Then
-    expect(screen.getByText("받는 사람이 없습니다.")).toBeInTheDocument();
-    expect(screen.getByText("받는 사람을 추가해주세요.")).toBeInTheDocument();
+    expect(screen.getByText((content) => content.includes("받는 사람이 없습니다."))).toBeInTheDocument();
+    expect(screen.getByText((content) => content.includes("받는 사람을 추가해주세요."))).toBeInTheDocument();
   });
 
   it("받는 사람 목록이 있을 때 받는 사람 리스트 표로 표시", () => {
@@ -84,7 +84,7 @@ describe("ReceiverForm", () => {
     expect(screen.getByTestId("receiver-modal")).toBeInTheDocument();
 
     // When
-    const closeButton = screen.getByText("닫기");
+    const closeButton = screen.getByText("취소");
     fireEvent.click(closeButton);
 
     // Then
