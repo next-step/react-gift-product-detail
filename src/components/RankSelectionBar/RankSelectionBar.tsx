@@ -1,4 +1,4 @@
-import type { RankTypeTemp, RankType } from "@/constants/tabs";
+import type { RankTypeTemp, RankType } from "@/constants/rank";
 import {
   Wrapper,
   BarButton,

@@ -16,10 +16,14 @@ export const useLogin = () => {
           if (message.includes("email") || message.includes("kakao")) {
             throw new Error("@kakao.com 이메일 주소만 가능합니다.");
           } else {
-            throw new Error(apiError.response.data?.message || "잘못된 요청입니다.");
+            throw new Error(
+              apiError.response.data?.message || "잘못된 요청입니다."
+            );
           }
         } else if (status && status >= 500) {
-          throw new Error("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+          throw new Error(
+            "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+          );
         } else {
           throw new Error("알 수 없는 오류가 발생했습니다.");
         }
@@ -28,4 +32,4 @@ export const useLogin = () => {
       }
     },
   });
-}; 
+};

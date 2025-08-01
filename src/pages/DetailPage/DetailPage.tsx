@@ -18,6 +18,7 @@ import {
   OrderButton,
   BottomBar,
 } from "@/pages/DetailPage/DetailPage.style";
+import { PRODUCT_TABS, type ProductTab } from "@/constants/tabs";
 
 const DetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,8 +26,8 @@ const DetailPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const [activeTab, setActiveTab] = useState<"description" | "review" | "info">(
-    "description"
+  const [activeTab, setActiveTab] = useState<ProductTab>(
+    PRODUCT_TABS.DESCRIPTION
   );
 
   const { data: item, isLoading, isError } = useGetProductInfo(productId);

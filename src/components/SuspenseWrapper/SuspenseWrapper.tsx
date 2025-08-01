@@ -10,7 +10,7 @@ interface Props {
 const SuspenseWrapper: React.FC<Props> = ({ children, fallback }) => {
   const defaultFallback = (
     <LoadingSpinner>
-      <div className="spinner"></div>
+      <div className="spinner" />
       <p>로딩 중</p>
     </LoadingSpinner>
   );

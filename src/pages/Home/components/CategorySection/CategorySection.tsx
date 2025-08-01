@@ -14,7 +14,7 @@ import {
 const CategorySection = () => {
   const { data: themes = [], isLoading, error } = useThemes();
   const navigate = useNavigate();
-  
+
   const handleThemeClick = (themeId: number) => {
     navigate(`/theme/${themeId}`);
   };

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { HttpStatusCode } from "axios";
 import type { CardItem, CardItemData } from "@/types/DTO/productDTO";
 import type { ApiError } from "@/types/error";
 import { RouterPath } from "@/routes/path";
@@ -35,7 +36,7 @@ export function useThemeProducts(themeId: number | undefined) {
   useEffect(() => {
     if (themeError) {
       const apiError = themeError as ApiError;
-      if (apiError?.response?.status === 404) {
+      if (apiError?.response?.status === HttpStatusCode.NotFound) {
         navigate(RouterPath.HOME, { replace: true });
       }
     }

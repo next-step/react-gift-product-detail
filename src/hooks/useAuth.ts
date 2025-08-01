@@ -16,7 +16,7 @@ export const useAuth = () => {
       setUser(response);
     } catch (error: unknown) {
       const apiError = error as ApiError;
-      toast.error(apiError.message || '로그인에 실패했습니다.');
+      toast.error(apiError.message || "로그인에 실패했습니다.");
       throw error;
     }
   };
@@ -26,10 +26,10 @@ export const useAuth = () => {
     setUser(null);
   };
 
-  return { 
-    user, 
-    login, 
-    logout, 
-    isLoggingIn: loginMutation.isPending 
+  return {
+    user,
+    login,
+    logout,
+    isLoggingIn: loginMutation.isPending,
   };
 };

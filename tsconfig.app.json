@@ -26,5 +26,5 @@
       "@/*": ["*"]
     }
   },
-  "include": ["src", "src/theme/emotion.d.ts"]
+  "include": ["src", "src/theme/emotion.d.ts", "**/*.test.ts", "**/*.test.tsx"]
 }

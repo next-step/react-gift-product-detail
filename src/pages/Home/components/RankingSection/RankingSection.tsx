@@ -14,9 +14,9 @@ import CardList from "@/components/CardList/CardList";
 import { useRanking } from "@/hooks/useRanking";
 import type { CardItemData } from "@/types/DTO/productDTO";
 import { AGE_SELECT } from "@/constants/age";
-import { RANK_SELECT } from "@/constants/tabs";
+import { RANK_SELECT } from "@/constants/rank";
 import type { TargetType } from "@/constants/age";
-import type { RankType } from "@/constants/tabs";
+import type { RankType } from "@/constants/rank";
 
 const MIN_VISIBLE_CARDS = 6;
 
