@@ -31,12 +31,12 @@ const OrderPage = () => {
   const navigate = useNavigate()
 
   const { product, loading, error } = useProductInfo(productId)
-  const storedName = localStorage.getItem("name") ?? ""
+  const { name } = useAuth()
 
   const methods = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
-      senderName: storedName,
+      senderName: name || "",
       receivers: [],
       message: "",
       messageCardId: "",
@@ -49,7 +49,7 @@ const OrderPage = () => {
     }
   }, [error, navigate])
 
-  const { mutate: createOrder, isPending: orderLoading, isSuccess } = useOrder()
+  const { mutate: createOrder } = useOrder()
   const { authToken } = useAuth()
 
   const { handleSubmit, reset, watch } = methods
@@ -137,6 +137,7 @@ const OrderPage = () => {
           type="submit"
           background="kakaoYellow"
           borderRadius="spacing0"
+          marginTop="spacing8"
         >
           {totalQuantity
             ? `${totalPrice.toLocaleString()}원 주문하기`

@@ -103,6 +103,7 @@ const Login = () => {
           message={errors.password ?? ""}
         ></InputBlank>
         <MoreButton
+          marginTop="spacing8"
           background="kakaoYellow"
           borderRadius="spacing0"
           disabled={!isEmailValid || !isPasswordValid || isLoggingIn}

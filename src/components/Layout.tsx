@@ -4,6 +4,7 @@ interface LayoutStyle {
   marginTop?: keyof typeof theme.space
   marginBottom?: keyof typeof theme.space
   paddingUp?: keyof typeof theme.space
+  paddingDown?: keyof typeof theme.space
   paddingLeft?: keyof typeof theme.space
   paddingRight?: keyof typeof theme.space
   height?: string
@@ -14,6 +15,7 @@ const Layout = styled.div<LayoutStyle>`
     marginTop,
     marginBottom,
     paddingUp,
+    paddingDown,
     paddingLeft,
     paddingRight,
     height,
@@ -28,6 +30,7 @@ const Layout = styled.div<LayoutStyle>`
   ${marginTop ? `margin-top:  ${theme.space[marginTop]};` : ""}
   ${marginBottom ? `margin-bottom:  ${theme.space[marginBottom]};` : ""}
   ${paddingUp ? `padding-top:  ${theme.space[paddingUp]};` : ""}
+  ${paddingDown ? `padding-bottom:  ${theme.space[paddingDown]};` : ""}
   ${paddingLeft ? `padding-left:  ${theme.space[paddingLeft]};` : ""}
   ${paddingRight ? `padding-right:  ${theme.space[paddingRight]};` : ""}
   ${color ? `background-color:  ${theme.colors[color]};` : ""}

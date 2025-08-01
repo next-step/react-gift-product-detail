@@ -6,7 +6,7 @@ import Blank from "@/components/Blank"
 import ButtonWithStyle from "@/components/ButtonWithStyle"
 
 const MyPage = () => {
-  const { logout } = useAuth()
+  const { logout, name, email } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -21,10 +21,10 @@ const MyPage = () => {
       </Text>
       <Blank height="8px" />
       <Text variant="body1Regular" margin="spacing0" padding="spacing0">
-        {localStorage.getItem("name")}님 안녕하세요!
+        {name}님 안녕하세요!
       </Text>
       <Text variant="body1Regular" margin="spacing0" padding="spacing0">
-        이메일 주소는 {localStorage.getItem("email")}입니다.
+        이메일 주소는 {email}입니다.
       </Text>
       <Blank height="24px" />
       <ButtonWithStyle

@@ -3,13 +3,14 @@ import styled from "@emotion/styled"
 interface MoreButtonStyle {
   background: keyof typeof theme.colors
   borderRadius: keyof typeof theme.space
+  marginTop: keyof typeof theme.space
 }
 
 const MoreButton = styled.button<MoreButtonStyle>`
-  ${({ theme, background, borderRadius }) => {
+  ${({ theme, marginTop, background, borderRadius }) => {
     return `
       width: 100%;
-      margin: 32px 0 0 0;
+      margin: ${theme.space[marginTop]} 0 0 0;
       padding: ${theme.space.spacing3} 0;
       border: 1px solid #eee;
       border-radius: ${theme.space[borderRadius]};

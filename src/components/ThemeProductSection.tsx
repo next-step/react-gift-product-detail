@@ -13,6 +13,8 @@ import getRoute from "@/functions/getRoute"
 import { useAuth } from "@/context/AuthContext"
 import useInView from "@/hooks/useInView"
 import { useEffect } from "react"
+import Layout from "./Layout"
+
 const ThemeProductSection = ({ themeId }: { themeId: string }) => {
   const { products, hasMore, loadingInitial, error, isFetching, fetchMore } =
     useThemeProduct(themeId)
@@ -28,7 +30,7 @@ const ThemeProductSection = ({ themeId }: { themeId: string }) => {
   const handleGoOrder = useCallback(
     (id: number) => {
       if (!isLoggedIn) navigate(ROUTES.LOGIN)
-      else navigate(getRoute(ROUTES.ORDER, { id }))
+      else navigate(getRoute(ROUTES.PRODUCT, { id }))
     },
     [isLoggedIn, navigate]
   )
@@ -39,43 +41,45 @@ const ThemeProductSection = ({ themeId }: { themeId: string }) => {
 
   return (
     <>
-      <Grid gap="spacing2">
-        {products.map((item) => (
-          <Card
-            key={item.id}
-            borderRadius="spacing2"
-            onClick={() => handleGoOrder(item.id)}
-          >
-            <ProductImage
-              src={item.imageURL}
-              alt={item.name}
-              borderTopLeftRadius="spacing0"
-              borderTopRightRadius="spacing0"
-            />
-            <div style={{ padding: theme.space.spacing3 }}>
-              <Text
-                variant="subtitle2Regular"
-                margin="spacing0"
-                padding="spacing0"
-              >
-                {item.brandInfo.name}
-              </Text>
-              <Text
-                variant="subtitle2Regular"
-                margin="spacing0"
-                padding="spacing0"
-              >
-                {item.name}
-              </Text>
-              <Text variant="title2Bold" margin="spacing0" padding="spacing0">
-                {item.price.sellingPrice.toLocaleString()} 원
-              </Text>
-            </div>
-          </Card>
-        ))}
-      </Grid>
-      {isFetching ? <Loading /> : <div style={{ height: 40 }} />}
-      <div style={{ height: 8 }} ref={sentinelRef} />
+      <Layout height="auto">
+        <Grid gap="spacing2">
+          {products.map((item) => (
+            <Card
+              key={item.id}
+              borderRadius="spacing2"
+              onClick={() => handleGoOrder(item.id)}
+            >
+              <ProductImage
+                src={item.imageURL}
+                alt={item.name}
+                borderTopLeftRadius="spacing0"
+                borderTopRightRadius="spacing0"
+              />
+              <div style={{ padding: theme.space.spacing3 }}>
+                <Text
+                  variant="subtitle2Regular"
+                  margin="spacing0"
+                  padding="spacing0"
+                >
+                  {item.brandInfo.name}
+                </Text>
+                <Text
+                  variant="subtitle2Regular"
+                  margin="spacing0"
+                  padding="spacing0"
+                >
+                  {item.name}
+                </Text>
+                <Text variant="title2Bold" margin="spacing0" padding="spacing0">
+                  {item.price.sellingPrice.toLocaleString()} 원
+                </Text>
+              </div>
+            </Card>
+          ))}
+        </Grid>
+        {isFetching ? <Loading /> : <div style={{ height: 40 }} />}
+        <div style={{ height: 8 }} ref={sentinelRef} />
+      </Layout>
     </>
   )
 }

@@ -1,22 +1,12 @@
-import React, { useCallback } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import React, { useCallback, useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { AuthContext, AuthContextType } from "./AuthContext"
+import { useLogin } from "@/hooks/useLogin"
 
-const STORAGE_KEYS = {
-  token: "authToken",
-  email: "email",
-  name: "name",
-} as const
-
-interface LoginResponse {
-  code: number
-  data: {
-    authToken: string
-    email: string
-    name: string
-  }
-  error?: string
+interface LoginData {
+  authToken: string | null
+  email: string
+  name: string
 }
 
 interface AuthContextProviderProps {
@@ -25,28 +15,10 @@ interface AuthContextProviderProps {
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const qc = useQueryClient()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const loginMutation = useMutation<
-    LoginResponse["data"],
-    Error,
-    { email: string; password: string }
-  >({
-    mutationFn: async ({ email, password }) => {
-      const baseUrl = import.meta.env.VITE_BASE_URL
-      const loginUrl = new URL("/api/login", baseUrl).toString()
-      const { data } = await axios.post<LoginResponse>(loginUrl, {
-        email,
-        password,
-      })
-      return data.data
-    },
-    onSuccess: (data) => {
-      qc.setQueryData(["auth"], data)
-
-      localStorage.setItem(STORAGE_KEYS.token, data.authToken)
-      localStorage.setItem(STORAGE_KEYS.email, data.email)
-      localStorage.setItem(STORAGE_KEYS.name, data.name)
-    },
+  const loginMutation = useLogin(() => {
+    setIsLoggingOut(false)
   })
 
   const login = useCallback(
@@ -65,27 +37,64 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   )
 
   const logout = useCallback(() => {
+    setIsLoggingOut(true)
+
+    // localStorage 제거
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("email")
+    localStorage.removeItem("name")
+
+    // 캐시에서 auth 쿼리 데이터를 완전히 제거
     qc.removeQueries({ queryKey: ["auth"] })
 
-    localStorage.removeItem(STORAGE_KEYS.token)
-    localStorage.removeItem(STORAGE_KEYS.email)
-    localStorage.removeItem(STORAGE_KEYS.name)
+    // 캐시를 명시적으로 null로 설정
+    qc.setQueryData(["auth"], null)
+
+    // 캐시 무효화
+    qc.invalidateQueries({ queryKey: ["auth"] })
 
     console.log("logout 완료")
   }, [qc])
 
-  const cached = (qc.getQueryData<LoginResponse["data"]>([
-    "auth",
-  ]) as LoginResponse["data"]) ?? {
-    authToken: localStorage.getItem(STORAGE_KEYS.token),
-    email: localStorage.getItem(STORAGE_KEYS.email) ?? "",
-    name: localStorage.getItem(STORAGE_KEYS.name) ?? "",
+  // 로그아웃 상태가 true면 빈 상태 반환
+  if (isLoggingOut) {
+    const logoutValue: AuthContextType = {
+      isLoggedIn: false,
+      authToken: null,
+      email: "",
+      name: "",
+      login,
+      logout,
+      isLoggingIn: loginMutation.isPending,
+    }
+    return (
+      <AuthContext.Provider value={logoutValue}>
+        {children}
+      </AuthContext.Provider>
+    )
   }
+
+  const cached = qc.getQueryData<LoginData>(["auth"])
+
+  // 캐시가 null이면 로그아웃 상태, 아니면 localStorage에서 가져옴
+  const authData: LoginData =
+    cached !== null
+      ? (cached ?? {
+          authToken: localStorage.getItem("authToken") || null,
+          email: localStorage.getItem("email") || "",
+          name: localStorage.getItem("name") || "",
+        })
+      : {
+          authToken: null,
+          email: "",
+          name: "",
+        }
+
   const value: AuthContextType = {
-    isLoggedIn: !!cached.authToken,
-    authToken: cached.authToken,
-    email: cached.email,
-    name: cached.name,
+    isLoggedIn: !!authData.authToken,
+    authToken: authData.authToken,
+    email: authData.email,
+    name: authData.name,
     login,
     logout,
     isLoggingIn: loginMutation.isPending,

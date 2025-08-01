@@ -1,63 +1,66 @@
-import Home from "@/Home"
-import Login from "@/pages/Login"
-import Categories from "@/pages/Categories"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import PresentProvider from "@/context/PresentProvider"
 import PresentThemeProvider from "@/context/PresentThemeProvider"
-import NotFound from "@/pages/NotFound"
-import { AuthContextProvider } from "@/context/AuthContextProvider"
-import MyPage from "@/pages/MyPage"
-import ProtectedRoute from "./ProtectedRoute"
-import OrderPage from "@/pages/OrderPage"
 import CardProvider from "@/context/CardProvider"
-import "react-toastify/dist/ReactToastify.css"
+import { AuthContextProvider } from "@/context/AuthContextProvider"
+import ProtectedRoute from "./ProtectedRoute"
+import NotFound from "@/pages/NotFound"
 import { ToastContainer } from "react-toastify"
-import ThemeInfo from "@/pages/ThemeInfoPage"
+import "react-toastify/dist/ReactToastify.css"
+import Home from "@/Home"
+import Login from "@/pages/Login"
+import Categories from "@/pages/Categories"
+import MyPage from "@/pages/MyPage"
+import OrderPage from "@/pages/OrderPage"
+import ThemeInfoPage from "@/pages/ThemeInfoPage"
+import ProductDetail from "@/pages/ProductDetail"
+import ErrorBoundary from "@/components/ErrorBoundary"
 
-const Router = () => {
+export default function Router() {
   return (
     <AuthContextProvider>
       <ToastContainer position="bottom-center" />
       <BrowserRouter>
-        <PresentThemeProvider>
-          <PresentProvider>
-            <CardProvider>
-              <Routes>
-                <Route path="/" element={<Home />}>
-                  <Route index element={<Categories />} />
-                  <Route path="/login" element={<Login />} />
+        <ErrorBoundary>
+          <PresentThemeProvider>
+            <PresentProvider>
+              <CardProvider>
+                <Routes>
+                  <Route path="/" element={<Home />}>
+                    <Route index element={<Categories />} />
+                    <Route path="login" element={<Login />} />
 
-                  <Route
-                    path="/my"
-                    element={
-                      <ProtectedRoute>
-                        <MyPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/order/:productId"
-                    element={
-                      <ProtectedRoute>
-                        <OrderPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                                    <Route
-                    path="/theme/:themeId"
-                    element={
-                        <ThemeInfo />
-                    }
-                  />
-                  <Route path={"*"} element={<NotFound />} />
-                </Route>
-              </Routes>
-            </CardProvider>
-          </PresentProvider>
-        </PresentThemeProvider>
+                    <Route
+                      path="my"
+                      element={
+                        <ProtectedRoute>
+                          <MyPage />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    <Route
+                      path="order/:productId"
+                      element={
+                        <ProtectedRoute>
+                          <OrderPage />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    <Route path="theme/:themeId" element={<ThemeInfoPage />} />
+                    <Route
+                      path="product/:productId"
+                      element={<ProductDetail />}
+                    />
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
+                </Routes>
+              </CardProvider>
+            </PresentProvider>
+          </PresentThemeProvider>
+        </ErrorBoundary>
       </BrowserRouter>
     </AuthContextProvider>
   )
 }
-
-export default Router
