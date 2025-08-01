@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react';
 import { theme } from '@styles/tokens';
 import userEvent from '@testing-library/user-event';
 
-describe('', () => {
+describe('UnderlineInputField', () => {
   it('렌더링 및 placeholder 테스트', () => {
     renderWithTheme(<UnderlineInputField placeholder="이름" />);
     expect(screen.getByPlaceholderText('이름')).toBeInTheDocument();
