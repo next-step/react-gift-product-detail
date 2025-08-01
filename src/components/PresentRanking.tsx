@@ -279,7 +279,7 @@ const PresentRanking: React.FC = () => {
   const [selectedPresentType, setSelectedPresentType] = useState<number>(0);
 
   const navigate = useNavigate();
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
