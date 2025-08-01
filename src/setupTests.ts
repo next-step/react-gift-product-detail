@@ -1,8 +1,10 @@
-﻿import '@testing-library/jest-dom'
-import { afterAll, afterEach, beforeAll } from 'vitest'
+﻿import { afterAll, afterEach, beforeAll, expect } from 'vitest'
+import * as matchers from '@testing-library/jest-dom/matchers'
 import { setupServer } from 'msw/node'
 
 export const server = setupServer()
+
+expect.extend(matchers)
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
