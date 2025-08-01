@@ -36,7 +36,7 @@
     - [x] 상품 주요 리뷰 API:    /api/products/:productId/highlight-review
     - [x] 상품 관심 등록 수 API: /api/products/:productId/wish
   - [x] API 통신의 최적화, 선언적 구조, react query 등을 활용하여 기능 구현
-  - [ ] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수 변경
+  - [x] 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수 변경
     - 실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상
 - [x] ErrorBoundary와 Suspense를 사용하여 코드 구조 리팩터링
   - [x] ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현
