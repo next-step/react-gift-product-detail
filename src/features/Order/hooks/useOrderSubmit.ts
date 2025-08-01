@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '@/contexts/UserContext';
-import { api } from '@/lib/axios';
+import { apiPost } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { ROUTE_PATH } from '@/routes/Router';
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 
 export interface Receiver {
   name: string;
@@ -25,11 +24,10 @@ export const useOrderSubmit = () => {
   const { user } = useUserContext();
   const authToken = user?.authToken;
 
-  const submitOrder = async (orderPayload: OrderPayload) => {
-    const res = await api.post('/order', orderPayload, {
+  const submitOrder = async (orderPayload: OrderPayload): Promise<void> => {
+    await apiPost<void, OrderPayload>('/order', orderPayload, {
       headers: { Authorization: authToken },
     });
-    return res.data;
   };
 
   const mutation = useMutation({
@@ -38,7 +36,10 @@ export const useOrderSubmit = () => {
       toast.success('주문이 완료되었습니다.');
     },
     onError: (err: unknown) => {
-      if (isAxiosError(err) && err.response?.status === 401) {
+      const status = (err as { response?: { status?: number } })?.response
+        ?.status;
+
+      if (status === 401) {
         toast.error('로그인이 필요합니다.');
         navigate(ROUTE_PATH.LOGIN);
       } else {

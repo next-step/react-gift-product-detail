@@ -3,7 +3,7 @@ import { useThemes } from '@/features/Gift/hooks/useThemes';
 import * as S from './GiftCategory.styles';
 
 const GiftCategoryGrid = () => {
-  const { themes } = useThemes();
+  const themes = useThemes();
   const navigate = useNavigate();
 
   const handleSelect = (themeId: number) => {
