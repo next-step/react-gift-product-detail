@@ -2,9 +2,14 @@ name: Run Tests
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - main
+      - eelkom
   push:
-    branches: [main]
+    branches:
+      - main
+      - eelkom
+      - step3
 
 jobs:
   test:
