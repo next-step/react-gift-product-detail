@@ -158,9 +158,7 @@ describe("LoginPage", () => {
     const mockOptions = mockMutate.mock.calls[0]?.[1];
 
     // When
-    if (mockOptions.onSuccess) {
-      mockOptions.onSuccess(responseData, {}, undefined);
-    }
+    mockOptions?.onSuccess?.(responseData, {}, undefined);
 
     // Then
     expect(mockSetItem).toHaveBeenCalledWith(
@@ -180,7 +178,7 @@ describe("LoginPage", () => {
     const mockOptions = mockMutate.mock.calls[0]?.[1];
 
     // When
-    mockOptions.onError?.(error, undefined, undefined);
+    mockOptions?.onError?.(error, undefined, undefined);
     // Then
     expect(toastModule.showErrorToast).toHaveBeenCalled();
   });
