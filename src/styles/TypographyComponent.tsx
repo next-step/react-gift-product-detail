@@ -4,12 +4,13 @@ import type { ThemeType } from './theme';
 import type { ReactNode, ElementType } from 'react';
 
 export type TypographyVariant = keyof ThemeType['typography'];
-type AllowedTags = Extract<keyof JSX.IntrinsicElements, string>;
+
+type AllowedTags = Extract<ElementType, 'p' | 'span' | 'h1'>;
 
 interface TypographyProps {
   children: ReactNode;
   variant: TypographyVariant;
-  as?: ElementType<unknown> | AllowedTags;
+  as?: AllowedTags;
   color?: string;
   className?: string;
 }
