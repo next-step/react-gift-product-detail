@@ -1,3 +1,4 @@
+import { Typography } from "@/components/common/Typography";
 import { useAuth } from "@/hooks/useAuth";
 import styled from "@emotion/styled";
 import { FiPlus } from "react-icons/fi";
@@ -11,10 +12,10 @@ export const FriendBanner = () => {
         <IconBox>
           <FiPlus size={20} />
         </IconBox>
-        <Text>
-          {isLoggedIn && user ? `${user.name}님,` : ""} 선물할 친구를 선택해
+        <Typography typo="body1Bold">
+          {isLoggedIn && user ? `${user.name}님, ` : ""}선물할 친구를 선택해
           주세요.
-        </Text>
+        </Typography>
       </InnerBox>
     </OuterWrapper>
   );
@@ -46,11 +47,4 @@ const IconBox = styled.div`
   svg {
     color: ${({ theme }) => theme.colors.colorScale.gray.gray1000};
   }
-`;
-
-const Text = styled.span`
-  color: ${({ theme }) => theme.colors.semantic.text.default};
-  font-size: ${({ theme }) => theme.typography.body1Bold.fontSize};
-  font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
-  line-height: ${({ theme }) => theme.typography.body1Bold.lineHeight};
 `;

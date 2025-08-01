@@ -30,7 +30,6 @@ export default function ReceiverFieldItem({
         </RemoveButton>
       </FieldHeader>
 
-      {/* 이름 */}
       <LabelInputWrapper>
         <InputLabel>이름</InputLabel>
         <div style={{ flex: 1 }}>
@@ -40,6 +39,7 @@ export default function ReceiverFieldItem({
               validate: validateReceiverName,
             })}
             placeholder="이름을 입력하세요."
+            data-testid={`receiver-name-${index}`}
           />
           {errors.receivers?.[index]?.name && (
             <ErrorMessage>{errors.receivers[index].name?.message}</ErrorMessage>
@@ -47,7 +47,6 @@ export default function ReceiverFieldItem({
         </div>
       </LabelInputWrapper>
 
-      {/* 전화번호 */}
       <LabelInputWrapper>
         <InputLabel>전화번호</InputLabel>
         <div style={{ flex: 1 }}>
