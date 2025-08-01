@@ -15,6 +15,7 @@ export const Spinner = ({ size = 45, withWrapper = false }: SpinnerProps) => {
       css={spinnerStyle(theme, size)}
       role="status"
       aria-label="로딩 중.."
+      data-testid="spinner"
     />
   );
 

@@ -31,7 +31,8 @@ export const RankingSection = () => {
   const group = (searchParams.get(GROUP_PARAM) || "ALL") as TargetType;
   const action = (searchParams.get(ACTION_PARAM) || "MANY_WISH") as RankType;
 
-  const { data: rankingList = [] } = useRanking({ targetType: group, rankType: action });
+const { data: rankingList = [] } = useRanking({ targetType: group, rankType: action });
+
   const isExpanded = rankingList.length > ITEM_COUNT;
 
   const updateParam = (key: string, value: string) => {

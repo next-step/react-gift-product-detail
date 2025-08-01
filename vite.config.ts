@@ -11,10 +11,13 @@ export default defineConfig({
       "@styles": path.resolve(__dirname, "./src/styles"),
     },
   },
+   optimizeDeps: {
+    include: ["msw"],
+  },
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/test/setup.ts",
+    setupFiles: ["./src/test/setup.ts"],
     coverage: {
       reporter: ["text", "json", "html"],
     },
