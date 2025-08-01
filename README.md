@@ -1,3 +1,32 @@
+## step3 피드백 반영 내용
+
+- MyPage.tsx에서의 handleNavigateToLogin -> NavigateToLogin으로 변경했습니다.
+- ReceiverModal.tsx에서 prop 매핑을
+  onClose={closeModal} -> onCancelClick={closeModal}로 변경,
+  onSubmit={handleSubmitReceivers} -> onConfirmClick={handleSubmitReceivers}로 변경,
+  onBackdropClick={closeModal}을 추가했습니다.
+- ReceiverModal.tsx에서 handleSubmitReceivers함수 이름을 handleConfirmReceivers로 변경했습니다. 이를 통해 ReceiverModal과 ReceiverInfoSection간의 책임 분리가 명확해지도록 했습니다.
+- ProductdetailPage.tsx에서 ProductDetailTabs로 넘기던 onTabClick={handleTabClick}부분을 onTabChange={setActiveTab}로 변경했습니다.
+
+## step3 과제 수행 내용
+
+- Form Field를 테스트하기 위해 ReceiverFormItem.test.tsx 파일을 만들어 테스트 코드를 만들었습니다.
+- Typography를 테스트하기 위해 Typography.tsx 파일을 만들어 기본적인 컴포넌트를 생성해, Typography.test.tsx파일을 만들어 테스트했습니다.
+- LoginPage에서 "유효하지 않은 이메일 형식을 입력하면 에러 메시지를 표시한다", "성공적으로 로그인하면 마이페이지로 이동한다", "잘못된 자격 증명으로 로그인하면 에러 토스트를 표시한다" 시나리오에 대해 테스트코드를 작성했습니다.
+- RisingSection에서 "초기 렌더링 시 제목, 필터 버튼, 로딩 스피너가 표시된다", "데이터 로딩 성공 시 상품 목록이 표시된다", "데이터 로딩 실패 시 에러 메시지가 표시된다", "필터 버튼 클릭 시 API가 다시 호출된다", "상품 클릭 시 상품 상세 페이지로 이동한다" 시나리오에 대해 테스트코드를 작성했습니다.
+- .github/workflows/ci.yml파일을 생성해 PR시에 테스트코드가 실행되도록 했습니다.
+
+## step2 피드백 반영 내용
+
+- suspense와 errorboundary로 반복되던 코드를 hoc를 정의하여 리팩터링했습니다.
+- MyPage.tsx에서 로그아웃버튼이 눌리면 useAuth내부에서 로그아웃을 한 뒤, onLogout을 통해 Mypage로 로그아웃됨을 알려 navigate 로직이 실행되도록 했습니다.
+- ReceiverModal.tsx에서 받는 사람의 목록을 편집하는 UI를 제공하고, 입력된 데이터를 검증하여 외부에 알리는 것에만 집중하도록 관심사를 분리했습니다. props를 통해 전달받은 콜백 함수를 통해 완료 버튼이 눌리면 onSubmit(data)를 호출하여 보고하고, 취소 버튼이 눌리면 onClose()를 호출하여 취소했다고 보고하는 형식으로 리팩터링했습니다.
+- ReceiverModal.tsx는 이제 스스로를 닫지 않습니다. onClose, onSubmit을 호출 하기만 합니다. onSubmit으로 넘겨지는 데이터에 대해서 관심을 가지지 않도록 유지했습니다.
+- ReceiverInfoSection.tsx는 모달을 여는 함수를 실행해 isModalOpen을 true로 변경하고, onSubmit, onClose 보고를 받으면 함수를 실행해 데이터를 업데이트하거나 모달을 닫습니다.
+- ProductDetailTabs에서는 onTabClick이라는 prop을 받고, 어떤 탭이 클릭되었는지에 대한 정보만 담아서 onTabClick을 호출합니다.
+- ProductDetailPage에서는 onTabClick 이벤트를 받아서, activeTab 상태를 변경하는 로직을 수행합니다.
+- useThemeinfiniteScroll.ts에서 useInitialThemeQuery, useThemeData, useNextThemeQuery, useInterSectionObserver 훅으로 추상화 시켜 각각 최초 데이터 펫칭, 데이터 기록, 새로운 데이터 펫칭, 페이지 감시의 역할을 수행할 수 있게 한 뒤 useThemeinfiniteScroll.ts에서 조합하여 사용할 수 있도록 리팩터링했습니다. 이제 더이상 useSuspenseApiQuery, useApiQuery처럼 1차 추상화된 훅을 직접적으로 사용하지 않습니다.
+
 ## step2 구현 내용
 
 - 상품 카드를 클릭하면 상품상세페이지로 이동하도록 로직을 변경했습니다.

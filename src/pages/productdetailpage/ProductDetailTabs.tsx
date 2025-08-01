@@ -2,32 +2,34 @@
 import styled from "@emotion/styled";
 import React from "react";
 
+type TabValue = "description" | "reviews" | "details";
+
 interface ProductDetailTabsProps {
-  activeTab: "description" | "reviews" | "details";
-  onTabChange: (tab: "description" | "reviews" | "details") => void;
+  activeTab: TabValue;
+  onTabClick: (tab: TabValue) => void;
 }
 
 const ProductDetailTabs = ({
   activeTab,
-  onTabChange,
+  onTabClick,
 }: ProductDetailTabsProps) => {
   return (
     <TabsContainer>
       <TabButton
         isActive={activeTab === "description"}
-        onClick={() => onTabChange("description")}
+        onClick={() => onTabClick("description")}
       >
         상품설명
       </TabButton>
       <TabButton
         isActive={activeTab === "reviews"}
-        onClick={() => onTabChange("reviews")}
+        onClick={() => onTabClick("reviews")}
       >
         선물후기
       </TabButton>
       <TabButton
         isActive={activeTab === "details"}
-        onClick={() => onTabChange("details")}
+        onClick={() => onTabClick("details")}
       >
         상세정보
       </TabButton>

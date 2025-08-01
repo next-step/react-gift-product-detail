@@ -8,15 +8,17 @@ import { useEffect } from "react";
 
 type Props = {
   isOpen: boolean;
-  handleClose: () => void;
-  onSubmit: (data: ReceiverArrayFormValues) => void;
+  onCancelClick: () => void;
+  onConfirmClick: (data: ReceiverArrayFormValues) => void;
+  onBackdropClick: () => void;
   initialReceivers: ReceiverArrayFormValues["receivers"];
 };
 
 const ReceiverModal = ({
   isOpen,
-  handleClose,
-  onSubmit,
+  onCancelClick,
+  onConfirmClick,
+  onBackdropClick,
   initialReceivers,
 }: Props) => {
   const methods = useForm<ReceiverArrayFormValues>({
@@ -33,7 +35,7 @@ const ReceiverModal = ({
           ? initialReceivers
           : [{ name: "", phoneNumber: "", quantity: 1 }],
     });
-  }, [initialReceivers]);
+  }, [initialReceivers, methods]);
 
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
@@ -42,9 +44,13 @@ const ReceiverModal = ({
 
   if (!isOpen) return null;
 
+  const handleFormError = (errors: any) => {
+    console.error("폼 유효성 검사 실패:", errors);
+  };
+
   return (
     <>
-      <Backdrop />
+      <Backdrop onClick={onBackdropClick} />
       <ModalContainer>
         <FormProvider {...methods}>
           <ModalHeader>
@@ -63,34 +69,24 @@ const ReceiverModal = ({
           </ModalHeader>
           <ModalBody>
             <ModalContentWrapper>
-              <FormWrapper>
-                {fields.map((field, index) => (
-                  <ReceiverFormItem
-                    key={field.id}
-                    field={field}
-                    index={index}
-                    onRemove={() => remove(index)}
-                  />
-                ))}
-              </FormWrapper>
+              {fields.map((field, index) => (
+                <ReceiverFormItem
+                  key={field.id}
+                  field={field}
+                  index={index}
+                  onRemove={() => remove(index)}
+                />
+              ))}
             </ModalContentWrapper>
           </ModalBody>
           <ModalFooter>
             <CompleteButton
               type="button"
-              onClick={methods.handleSubmit(
-                (data) => {
-                  onSubmit(data);
-                  handleClose();
-                },
-                (errors) => {
-                  console.log("유효성 검사 실패", errors);
-                }
-              )}
+              onClick={methods.handleSubmit(onConfirmClick, handleFormError)}
             >
               완료
             </CompleteButton>
-            <CancelButton type="button" onClick={handleClose}>
+            <CancelButton type="button" onClick={onCancelClick}>
               취소
             </CancelButton>
           </ModalFooter>
@@ -109,16 +105,21 @@ const ModalHeader = styled.div`
 const ModalBody = styled.div`
   flex: 1;
   overflow-y: auto;
+  padding-bottom: 4rem;
 `;
 
 const ModalFooter = styled.div`
-  flex-shrink: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: white;
   padding: 0.75rem 1rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
   border-top: 1px solid #ddd;
+  border-radius: 0 0 16px 16px;
 `;
 
 const ModalContainer = styled.div`
@@ -173,10 +174,6 @@ const Backdrop = styled.div`
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
-`;
-
-const FormWrapper = styled.div`
-  padding-bottom: 4rem;
 `;
 
 const CompleteButton = styled.button`

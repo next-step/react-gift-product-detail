@@ -9,11 +9,11 @@ import ProductDetailSection from "@/pages/productdetailpage/ProductDetailSection
 import ProductActionsBar from "@/pages/productdetailpage/ProductActionsBar";
 import ProductDetailTabs from "@/pages/productdetailpage/ProductDetailTabs";
 
+type TabValue = "description" | "reviews" | "details";
+
 const ProductDetailPage = () => {
   const { productId } = useParams<{ productId: string }>();
-  const [activeTab, setActiveTab] = useState<
-    "description" | "reviews" | "details"
-  >("description");
+  const [activeTab, setActiveTab] = useState<TabValue>("description");
 
   const { productInfo, productDetail, highlightReview, wishCount } =
     useProductData(productId || "");
@@ -24,8 +24,8 @@ const ProductDetailPage = () => {
 
   return (
     <Container>
-      <ProductInfoSection productInfo={productInfo} />
-      <ProductDetailTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <ProductInfoSection product={productInfo} />
+      <ProductDetailTabs activeTab={activeTab} onTabClick={setActiveTab} />
       {activeTab === "description" && (
         <ProductExplanationSection productDetail={productDetail} />
       )}

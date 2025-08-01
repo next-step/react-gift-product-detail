@@ -3,23 +3,23 @@ import styled from "@emotion/styled";
 import type { Product } from "@/types/api_types";
 
 interface ProductInfoSectionProps {
-  productInfo: Product;
+  product: Product;
 }
 
-const ProductInfoSection = ({ productInfo }: ProductInfoSectionProps) => {
+const ProductInfoSection = ({ product }: ProductInfoSectionProps) => {
   return (
     <Container>
-      <ProductImage src={productInfo.imageURL} alt={productInfo.name} />
-      <ProductName>{productInfo.name}</ProductName>
+      <ProductImage src={product.imageURL} alt={product.name} />
+      <ProductName>{product.name}</ProductName>
       <ProductPrice>
-        {productInfo.price.sellingPrice.toLocaleString()}원
+        {product.price.sellingPrice.toLocaleString()}원
       </ProductPrice>
       <BrandContainer>
         <BrandImage
-          src={productInfo.brandInfo.imageURL}
-          alt={productInfo.brandInfo.name}
+          src={product.brandInfo.imageURL}
+          alt={product.brandInfo.name}
         />
-        <BrandName>{productInfo.brandInfo.name}</BrandName>
+        <BrandName>{product.brandInfo.name}</BrandName>
       </BrandContainer>
     </Container>
   );

@@ -1,0 +1,33 @@
+name: Run Tests on PR and Push
+
+on:
+  pull_request:
+    branches:
+      - seongjin0320
+      - main
+  push:
+    branches:
+      - step3
+      - seongjin0320
+      - main
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: VITE_API_BASE_URL='' npm test

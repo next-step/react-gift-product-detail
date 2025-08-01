@@ -28,7 +28,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useAuth = () => {
+type UseAuthOptions = {
+  onLogout?: () => void;
+};
+
+export const useAuth = (options: UseAuthOptions = {}) => {
+  const { onLogout } = options;
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within an AuthProvider");
   const { userInfo, setUserInfo } = context;
@@ -37,7 +42,8 @@ export const useAuth = () => {
 
   const logout = useCallback(() => {
     setUserInfo(undefined);
-  }, [setUserInfo]);
+    onLogout?.();
+  }, [setUserInfo, onLogout]);
 
   return { userInfo, userName, loggedIn, setUserInfo, logout };
 };
