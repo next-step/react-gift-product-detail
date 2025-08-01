@@ -1,7 +1,8 @@
 import { useProductsRanking } from '@/features/Gift/hooks/useProductsRanking'
 import * as S from './TrendingGiftRanking.styles'
 import ProductCard from '@/component/ProductCard/ProductCard'
-import type { Gender, Type, Product } from '@/features/Gift/types/GiftTypes'
+import type { Gender, Type } from '@/features/Gift/types/GiftTypes'
+import type { Product } from '@/types/CommonTypes'
 import { useState } from 'react'
 
 const INITIAL_VISIBLE_COUNT = 6
@@ -18,11 +19,10 @@ const RankingSection = ({
   const products = useProductsRanking(selectedGender, selectedType)
 
   const [isExpanded, setIsExpanded] = useState(false)
-  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT)
+  const visibleCount = isExpanded ? products.length : INITIAL_VISIBLE_COUNT
 
   const handleToggleView = () => {
     setIsExpanded(!isExpanded)
-    setVisibleCount(isExpanded ? INITIAL_VISIBLE_COUNT : products.length)
   }
 
   if (products.length === 0) {
