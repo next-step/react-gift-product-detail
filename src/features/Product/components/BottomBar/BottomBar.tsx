@@ -1,6 +1,6 @@
 import MyButton from '@/component/Button/Button'
+import WishButton from '@/features/Product/components/WishButton/WishButton.tsx'
 import * as S from './BottomBar.styles.ts'
-import WishButton from '../WishButton/WishButton.tsx'
 
 interface BottomBarProps {
   productId: number

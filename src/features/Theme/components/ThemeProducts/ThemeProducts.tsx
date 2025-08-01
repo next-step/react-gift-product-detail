@@ -1,8 +1,8 @@
 import ProductCard from '@/component/ProductCard/ProductCard'
-import { useThemeProducts } from '../../hooks/useThemeProducts'
+import { useThemeProducts } from '@/features/Theme/hooks/useThemeProducts'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
+import type { Product } from '@/types/CommonTypes'
 import * as S from './ThemeProducts.styles'
-import type { Product } from '../../types/ThemeTypes'
 
 interface ThemeProductsProps {
   themeId: number

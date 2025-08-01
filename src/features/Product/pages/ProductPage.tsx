@@ -1,5 +1,5 @@
 import { ErrorBoundary } from '@/component/Error/ErrorBoundary'
-import ProductPageContent from '../components/ProductPageContent/ProductPageContent'
+import ProductPageContent from '@/features/Product/components/ProductPageContent/ProductPageContent'
 import Loading from '@/component/Loading/Loading'
 import { Suspense } from 'react'
 

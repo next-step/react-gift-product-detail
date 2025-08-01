@@ -1,4 +1,4 @@
-import ReceiverInput from '../ReceiverInput/ReceiverInput'
+import ReceiverInput from '@/features/Order/components/ReceiverInput/ReceiverInput'
 import type { Order } from '@/features/Order/schema/orderSchema'
 import {
   type UseFieldArrayRemove,

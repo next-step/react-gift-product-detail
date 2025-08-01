@@ -1,5 +1,5 @@
 import * as S from './ReceiverModal.styles'
-import ReceiverInputList from '../ReceiverInputList/ReceiverInputList'
+import ReceiverInputList from '@/features/Order/components/ReceiverInputList/ReceiverInputList'
 import MyButton from '@/component/Button/Button'
 import type { Order } from '@/features/Order/schema/orderSchema'
 import { useFormContext, useFieldArray } from 'react-hook-form'

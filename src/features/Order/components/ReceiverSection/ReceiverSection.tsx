@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import MyButton from '@/component/Button/Button'
-import ReceiverModal from '../ReceiverModal/ReceiverModal'
+import ReceiverModal from '@/features/Order/components/ReceiverModal/ReceiverModal'
 import type { Order, Receiver } from '@/features/Order/schema/orderSchema'
 import * as S from './ReceiverSection.styles'
 
