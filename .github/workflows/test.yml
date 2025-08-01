@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  # PR이 생성되거나 업데이트될 때
+  pull_request:
+    branches: [main]
+
+  # main 브랜치에 직접 푸시될 때
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    # Ubuntu 최신 버전에서 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Node.js 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. 의존성 설치
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 테스트 실행
+      - name: Run tests
+        run: npm run test:coverage
+
+      # 5. 테스트 결과 아티팩트 업로드 (선택사항)
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
