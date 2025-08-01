@@ -40,3 +40,13 @@
 2. Props에 따른 스타일 테스트
 3. 커스텀 HTML 속성 전달 테스트
 4. 잘못된 colorkey 사용시 fallback 색상 적용 테스트
+
+### UnderlineInputField
+
+1. input 요소 및 placeholder가 정상 렌더링된다.
+2. `message` prop이 있을 경우 에러 메시지가 렌더링된다.
+3. `error=true`일 경우 하단 border 색상이 변경된다.
+4. `type` prop에 따라 input type 속성이 반영된다.
+5. 사용자 입력이 정상적으로 반영된다.
+6. `name`, `id`, `aria-*` 등의 HTML 속성이 정상적으로 전달된다.
+7. `disabled` 상태일 경우 입력이 차단되고 disabled 속성이 적용된다.
