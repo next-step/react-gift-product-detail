@@ -134,7 +134,7 @@ export const loginHandler = http.post<
       message: 'Invalid email or password.',
     },
     {
-      status: 401,
+      status: 400,
     }
   );
 });

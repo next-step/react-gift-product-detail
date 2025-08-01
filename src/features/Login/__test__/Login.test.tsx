@@ -2,29 +2,51 @@ import { screen, waitFor } from '@testing-library/react';
 import Login from '../Login';
 import { renderWithProviders } from '@test/utils/renderWithProviders';
 import userEvent from '@testing-library/user-event';
-
-/* 시나리오
-1. 이메일, 비밀번호 입력 필드가 있다.
-2. 올바르지 않은 이메일 또는 비밀번호 입력시 비밀번호가 활성화 되지 않는다
-3. 올바른 정보 입력 후 로그인 버튼 클릭 시 로그인 API 호출
-4. 로그인 후 toast로 "로그인 성공" 택스트 출력
-*/
+import { validateInputTest } from '@test/utils/validateInputTest';
 
 describe('LoginPage', () => {
-  it('renders inputs and button', () => {
+  let emailInput: HTMLElement;
+  let passwordInput: HTMLElement;
+  let loginButton: HTMLElement;
+
+  beforeEach(() => {
     renderWithProviders(<Login />);
-    expect(screen.getByPlaceholderText('이메일')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('비밀번호')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /로그인/ })).toBeInTheDocument();
+    emailInput = screen.getByPlaceholderText('이메일');
+    passwordInput = screen.getByPlaceholderText('비밀번호');
+    loginButton = screen.getByRole('button', { name: /로그인/ });
   });
 
-  it('disables login button when inputs are invalid', async () => {
-    renderWithProviders(<Login />);
-    const emailInput = screen.getByPlaceholderText('이메일');
-    const passwordInput = screen.getByPlaceholderText('비밀번호');
-    const loginButton = screen.getByRole('button', { name: /로그인/ });
+  it('input 필드, 로그인 버튼 렌더링 테스트', () => {
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(loginButton).toBeInTheDocument();
+  });
 
-    // 유효하지 않은 이메일 & 유효하지  않은 비밀번호
+  it('초기 상태 로그인 버튼 비활성화 테스트', () => {
+    expect(loginButton).toBeDisabled();
+  });
+
+  //유효하지 않은 이메일, 비밀번호 입력시 오류 메시지 표시 테스트
+  it('이메일 패스워드 입력값이 없을 경우 에러 메시지 테스트', async () => {
+    await validateInputTest('ID를 입력해주세요', emailInput, '');
+    await validateInputTest('PW를 입력해주세요.', passwordInput, '');
+  });
+
+  it('이메일 패스워드 형식 테스트', async () => {
+    await validateInputTest(
+      'ID는 kakao.com 이메일 형식으로 입력해주세요',
+      emailInput,
+      'invalid-email'
+    );
+    await validateInputTest(
+      'PW는 최소 8글자 이상이어야 합니다.',
+      passwordInput,
+      '1234'
+    );
+  });
+
+  it('유효하지 않은 이메일, 비밀번호 입력시 버튼 비활성화 테스트', async () => {
+    // 유효하지 않은 이메일 & 유효하지 않은 비밀번호
     await userEvent.type(emailInput, 'invalid-email');
     await userEvent.type(passwordInput, '123');
     expect(loginButton).toBeDisabled();
@@ -44,12 +66,7 @@ describe('LoginPage', () => {
     expect(loginButton).toBeDisabled();
   });
 
-  it('calls login API with valid input and shows success toast', async () => {
-    renderWithProviders(<Login />);
-    const emailInput = screen.getByPlaceholderText('이메일');
-    const passwordInput = screen.getByPlaceholderText('비밀번호');
-    const loginButton = screen.getByRole('button', { name: /로그인/ });
-
+  it('유효한 이메일, 비밀번호 입력시 버튼 활성화', async () => {
     // 핸들러가 정의한 성공 조건에 맞는 입력 값 사용
     await userEvent.type(emailInput, 'test@kakao.com');
     await userEvent.type(passwordInput, 'password123');
@@ -61,13 +78,8 @@ describe('LoginPage', () => {
   });
 
   it('로그인 실패 시 토스트 메시지 출력', async () => {
-    renderWithProviders(<Login />);
-    const emailInput = screen.getByPlaceholderText('이메일');
-    const passwordInput = screen.getByPlaceholderText('비밀번호');
-    const loginButton = screen.getByRole('button', { name: /로그인/ });
-
     await userEvent.type(emailInput, 'invalid@kakao.com');
-    await userEvent.type(passwordInput, 'wrongpassword');
+    await userEvent.type(passwordInput, 'wrongPassword');
     await userEvent.click(loginButton);
 
     await waitFor(() => {
