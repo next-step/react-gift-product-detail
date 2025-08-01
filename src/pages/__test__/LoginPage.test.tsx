@@ -165,9 +165,10 @@ describe("LoginPage", () => {
     renderWithRouter(<LoginPage />);
     const responseData = { authToken: "abc123", name: "test" };
 
+    const mockOptions = mockMutate.mock.calls[0]?.[1];
+
     // When
-    const [, options] = mockMutate.mock.calls[0];
-    options.onSuccess?.(responseData, undefined, undefined);
+    mockOptions.onSuccess?.(responseData, undefined, undefined);
 
     // Then
     expect(sessionStorage.setItem).toHaveBeenCalledWith(
@@ -181,10 +182,11 @@ describe("LoginPage", () => {
   it("로그인 실패 시 에러 메세지 표시", () => {
     // Given
     renderWithRouter(<LoginPage />);
-    // When
     const error = { isAxiosError: true };
-    const [, options] = mockMutate.mock.calls[0];
-    options.onError?.(error, undefined, undefined);
+    const mockOptions = mockMutate.mock.calls[0]?.[1];
+
+    // When
+    mockOptions.onError?.(error, undefined, undefined);
     // Then
     expect(toastModule.showErrorToast).toHaveBeenCalled();
   });
