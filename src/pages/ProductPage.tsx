@@ -11,7 +11,8 @@ import {
   useProductWishQuery,
   useProductHighlightReviewQuery
 } from '@/hooks/useProductDetailQueries'
-
+import { Suspense } from 'react'
+import Loading from '@/components/Common/Loading'
 
 
 const tabList = ['상품설명', '선물후기', '상세정보'];
@@ -29,6 +30,49 @@ const List = ({ items, type }: { items: any[]; type: any }) => (
 );
 
 
+
+// 탭 콘텐츠 분리 컴포넌트
+interface ProductTabContentProps {
+  selectedTab: number;
+}
+
+const ProductTabContent = ({ selectedTab }: ProductTabContentProps) => {
+  const params = useParams();
+  const productId = params.productId;
+  const { data: detail } = useProductDetailQuery(productId);
+  const { data: highlightReview } = useProductHighlightReviewQuery(productId);
+
+  return (
+    <section>
+      {selectedTab === 0 && (
+        <div
+          css={descriptionStyle}
+          dangerouslySetInnerHTML={{ __html: detail?.description || '' }}
+        />
+      )}
+      {selectedTab === 1 && (
+        <div>
+          {highlightReview?.reviews?.length ? (
+            <List items={highlightReview.reviews} type="review" />
+          ) : (
+            <div>후기가 없습니다.</div>
+          )}
+        </div>
+      )}
+      {selectedTab === 2 && (
+        <div>
+          {detail?.announcements?.length ? (
+            <List items={detail.announcements} type="announcement" />
+          ) : (
+            <div>상세정보가 없습니다.</div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+};
+
+
 function ProductPage() {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState(0);
@@ -36,11 +80,8 @@ function ProductPage() {
   // 라우터 param에서 productId 받아오기
   const params = useParams();
   const productId = params.productId;
-  const { data: product} = useProductBasicQuery(productId);
+  const { data: product } = useProductBasicQuery(productId);
   const { data: wish } = useProductWishQuery(productId);
-  const { data: detail } = useProductDetailQuery(productId);
-  const { data: highlightReview } = useProductHighlightReviewQuery(productId);
-
   const [liked, setLiked] = useState(wish?.isWish);
   const [wishCount, setWishCount] = useState(wish?.wishCount);
 
@@ -95,33 +136,10 @@ function ProductPage() {
         ))}
       </nav>
 
-      {/* 탭 내용 */}
-      <section>
-        {selectedTab === 0 && (
-          <div
-            css={descriptionStyle}
-            dangerouslySetInnerHTML={{ __html: detail?.description || '' }}
-          />
-        )}
-        {selectedTab === 1 && (
-          <div>
-            {highlightReview?.reviews?.length ? (
-              <List items={highlightReview.reviews} type="review" />
-            ) : (
-              <div>후기가 없습니다.</div>
-            )}
-          </div>
-        )}
-        {selectedTab === 2 && (
-          <div>
-            {detail?.announcements?.length ? (
-              <List items={detail.announcements} type="announcement" />
-            ) : (
-              <div>상세정보가 없습니다.</div>
-            )}
-          </div>
-        )}
-      </section>
+
+      <Suspense fallback={<Loading />}>
+        <ProductTabContent selectedTab={selectedTab} />
+      </Suspense>
 
 
       <footer css={footerStyle}>
