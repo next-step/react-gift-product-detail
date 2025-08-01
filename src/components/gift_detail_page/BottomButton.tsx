@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { HeartIcon } from './HeartIcon';
 import { getWishInfo } from '@/api/services/giftItem.service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { QueryKey, WishInfo } from '@/api/types/giftItem.dto';
+import type { QueryKey } from '@/api/types/giftItem.dto';
+import { useWishMutation } from '@/hooks/useWishMutation';
 
 const Container = styled.div`
   display: flex;
@@ -56,29 +57,19 @@ export const BottomButton = () => {
   if (!id) throw new Error('id가 없습니다');
   const parsedId = parseInt(id!);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const mutation = useWishMutation(parsedId);
   const { data } = useQuery({
-    queryKey: [`wish-${parsedId}`, { id: parsedId }],
+    queryKey: ['wish', { id: parsedId }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
       const { id } = queryKey[1];
       if (!id) throw new Error('id is required');
       return getWishInfo(id);
     },
   });
-  const handleLike = () => {
-    queryClient.setQueryData<WishInfo>(['wish', { id: parsedId }], (old) => {
-      if (!old) return old;
-      return {
-        ...old,
-        isWished: !old.isWished,
-        wishCount: old.isWished ? old.wishCount - 1 : old.wishCount + 1,
-      };
-    });
-  };
 
   return (
     <Container>
-      <LikeButton onClick={handleLike}>
+      <LikeButton onClick={() => mutation.mutate()}>
         <HeartIcon
           size={SVG_SIZE}
           strokeColor={data?.isWished ? 'red' : 'black'}
