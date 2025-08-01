@@ -1,8 +1,8 @@
-import { PaddingMd } from '../../common/Padding';
-import RankingItem from '../RankingItem';
-import { PaddingLg } from '../../common/Padding';
-import PersonCategory from '../PersonCategory';
-import BehaviorCategory from '../BehaviorCategory';
+import { PaddingMd } from '../common/Padding';
+import RankingItem from './RankingItem';
+import { PaddingLg } from '../common/Padding';
+import PersonCategory from './PersonCategory';
+import BehaviorCategory from './BehaviorCategory';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -10,7 +10,7 @@ import {
   type BehaviorParam,
   type PersonFilterLabels,
   type PersonParam,
-} from '../types';
+} from './types';
 import { ROUTE_PATH } from '@/routes/Router';
 import { useAuth } from '@/contexts/AuthContext';
 import type { ProductType } from '@/types/product';
@@ -43,6 +43,14 @@ const Ranking = () => {
   const queryBehaviorParam = searchParams.get('rankType') as BehaviorParam | null;
   const [personParam, setPersonParam] = useState<PersonParam>('ALL');
   const [behaviorParam, setBehaviorParam] = useState<BehaviorParam>('MANY_RECEIVE');
+  useEffect(() => {
+    if (!queryPersonParams || !queryBehaviorParam) {
+      setSearchParams({
+        targetType: personParam,
+        rankType: behaviorParam,
+      });
+    }
+  }, []);
   useEffect(() => {
     if (queryPersonParams) {
       setPersonParam(queryPersonParams);
