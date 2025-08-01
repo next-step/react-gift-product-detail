@@ -1,4 +1,4 @@
-import type { RankItemType } from './productDTO';
+import type { ProductBasicInfo } from './productDTO';
 export type Themetype = {
   themeId: number;
   name: string;
@@ -14,7 +14,7 @@ export interface ThemeInfoResponseDTO {
 }
 
 export interface ThemeProductsResponseDTO {
-  list: RankItemType[];
+  list: ProductBasicInfo[];
   cursor: number;
   hasMoreList: boolean;
 }

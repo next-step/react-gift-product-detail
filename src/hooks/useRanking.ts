@@ -4,7 +4,7 @@ import type { SexType } from '@/types/sex';
 import type { CategoryType } from '@/types/category';
 import { CATEGORY_TYPE } from '@/types/category';
 import { getRanking } from '@/apis/product';
-import type { RankItemType } from '@/types/DTO/productDTO';
+import type { ProductBasicInfo } from '@/types/DTO/productDTO';
 import { useQuery } from '@tanstack/react-query';
 
 function useRanking() {
@@ -33,7 +33,7 @@ function useRanking() {
     setSelectCategory(category);
     localStorage.setItem('selectedCategory', category);
   }
-  const { data, isLoading, error } = useQuery<RankItemType[]>({
+  const { data, isLoading, error } = useQuery<ProductBasicInfo[]>({
     queryKey: ['ranking', selectedSex, selectCategory],
     queryFn: () =>
       getRanking({

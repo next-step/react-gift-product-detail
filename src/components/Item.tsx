@@ -8,7 +8,9 @@ import {
   ItemName,
   ItemPrice,
 } from '@/styles/Item/Item.styles';
-import { useProductData } from '@/hooks/product';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 
 type ItemProps = {
   index: number;
@@ -16,7 +18,16 @@ type ItemProps = {
 };
 
 function Item({ index, itemData }: ItemProps) {
-  const { handleItemClick } = useProductData();
+  const navigate = useNavigate();
+  const { userInfo } = useContext(LoginInfoContext);
+
+  const handleItemClick = (itemId: number) => {
+    if (userInfo.email === '') {
+      navigate('/login');
+    } else {
+      navigate(`/product/${itemId}`);
+    }
+  };
 
   return (
     <ItemContainerStyle onClick={() => handleItemClick(itemData.id)}>
