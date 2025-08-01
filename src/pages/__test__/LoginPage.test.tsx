@@ -7,6 +7,8 @@ import { STORAGE_KEY } from "@/constants/storage";
 
 const mockShowErrorToast = vi.fn();
 const mockNavigate = vi.fn();
+const mockSetItem = vi.fn();
+const mockMutate = vi.fn();
 
 const defaultLoginForm = {
   email: "test@kakao.com",
@@ -21,18 +23,32 @@ const defaultLoginForm = {
 };
 
 vi.mock("@/styles/toast", () => ({
-  showErrorToast: vi.fn(),
+  showErrorToast: mockShowErrorToast,
 }));
 
 vi.mock("react-router-dom", async () => {
   const actual =
     await vi.importActual<typeof import("react-router-dom")>(
-      "react-router-dom",
+      "react-router-dom"
     );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
   };
+});
+
+vi.mock("@/hooks/useLoginMutation", () => ({
+  useLoginMutation: () => ({
+    mutate: mockMutate,
+  }),
+}));
+
+vi.mock("@/hooks/useLoginForm", () => ({
+  useLoginForm: () => ({ ...defaultLoginForm }),
+}));
+
+vi.stubGlobal("sessionStorage", {
+  setItem: mockSetItem,
 });
 
 function renderWithRouter(ui: React.ReactNode) {
@@ -44,25 +60,6 @@ describe("LoginPage", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    mutateFn = vi.fn((_data, { onSuccess, onError }) => {
-      mutateFn.success = onSuccess;
-      mutateFn.error = onError;
-    });
-
-    vi.doMock("@/hooks/useLoginMutation", () => ({
-      useLoginMutation: () => ({
-        mutate: mutateFn,
-      }),
-    }));
-
-    vi.doMock("@/hooks/useLoginForm", () => ({
-      useLoginForm: () => ({ ...defaultLoginForm }),
-    }));
-
-    vi.stubGlobal("sessionStorage", {
-      setItem: vi.fn(),
-    });
   });
 
   // 1. 이메일, 비밀번호 input이 보여야 함.
@@ -93,7 +90,7 @@ describe("LoginPage", () => {
 
     // Then
     expect(mockShowErrorToast).toHaveBeenCalledWith(
-      expect.stringMatching(/이메일/),
+      expect.stringMatching(/이메일/)
     );
   });
 
@@ -128,7 +125,7 @@ describe("LoginPage", () => {
     // Then
     expect(mutateFn).toHaveBeenCalledWith(
       { email: "test@kakao.com", password: "test123" },
-      expect.any(Object),
+      expect.any(Object)
     );
   });
 
@@ -144,7 +141,7 @@ describe("LoginPage", () => {
     // Then
     expect(sessionStorage.setItem).toHaveBeenCalledWith(
       STORAGE_KEY.USER_INFO,
-      JSON.stringify(responseData),
+      JSON.stringify(responseData)
     );
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
