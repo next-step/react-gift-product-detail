@@ -8,7 +8,7 @@ type Props = {
   type?: string;
   error?: string;
   placeholder?: string;
-  validator?: (value: string) => true | string; 
+  validator?: (value: string) => true | string;
   register: UseFormRegister<FieldValues>;
 };
 
@@ -25,7 +25,7 @@ const Label = styled.label`
 const Input = styled.input<{ hasError: boolean }>`
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid ${({ hasError, theme }) => hasError ? theme.colors.red.red500 : '#ccc'};
+  border: 1px solid ${({ hasError, theme }) => (hasError ? theme.colors.red.red500 : '#ccc')};
   border-radius: 4px;
 `;
 
@@ -35,7 +35,15 @@ const ErrorText = styled.p`
   margin-top: 0.25rem;
 `;
 
-export default function FormField({ label, name, type = 'text', error, register, placeholder, validator }: Props) {
+export default function FormField({
+  label,
+  name,
+  type = 'text',
+  error,
+  register,
+  placeholder,
+  validator,
+}: Props) {
   return (
     <Wrapper>
       <Label htmlFor={name}>{label}</Label>

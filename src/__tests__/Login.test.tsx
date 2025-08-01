@@ -7,7 +7,6 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 
-
 export const renderWithRouter = (ui: React.ReactElement, route = '/login') => {
   const queryClient = new QueryClient();
 
@@ -60,18 +59,17 @@ describe('로그인 페이지 테스트 코드입니다.', () => {
     const loginBtn = screen.getByRole('button', { name: '로그인' });
     //then: 로그인 버튼의 스타일 투명도가 1로 바뀜
     expect(loginBtn).toHaveStyle('opacity:1');
-  }); 
-//   it('4. 유효성 통과, 로그인 버튼 클릭 시 선물하기 홈으로 가요.', async () => {
-//     //Given: 로그인 페이지 렌더링
-//     renderWithRouter(<Login />);
+  });
+  //   it('4. 유효성 통과, 로그인 버튼 클릭 시 선물하기 홈으로 가요.', async () => {
+  //     //Given: 로그인 페이지 렌더링
+  //     renderWithRouter(<Login />);
 
-//     //When: 이메일과 비밀번호를 제대로 입력했을 때
-//     await userEvent.type(screen.getByPlaceholderText('이메일을 입력하세요'), 'hyemo@kakao.com');
-//     await userEvent.type(screen.getByPlaceholderText('비밀번호를 입력하세요'), '123456789');
-//     const loginBtn = screen.getByRole('button', { name: '로그인' });
-//     await userEvent.click(loginBtn)
-//     //then: 홈으로 감
+  //     //When: 이메일과 비밀번호를 제대로 입력했을 때
+  //     await userEvent.type(screen.getByPlaceholderText('이메일을 입력하세요'), 'hyemo@kakao.com');
+  //     await userEvent.type(screen.getByPlaceholderText('비밀번호를 입력하세요'), '123456789');
+  //     const loginBtn = screen.getByRole('button', { name: '로그인' });
+  //     await userEvent.click(loginBtn)
+  //     //then: 홈으로 감
 
- 
-// });
+  // });
 });

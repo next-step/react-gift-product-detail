@@ -75,33 +75,33 @@ const Login = () => {
   } = useForm({
     mode: 'onChange',
   });
-  const isActivatedBtn =isValid;
-const loginMutation = useMutation({
-  mutationFn: FetchLogin,
-  onSuccess: (loginData) => {
-    const { authToken, email: useremail, name } = loginData.data;
-    const userInfo = {
-      token: authToken,
-      email: useremail,
-      name,
-      isLoggedIn: true,
-    };
-    setUser(userInfo);
-    localStorage.setItem('user', JSON.stringify(userInfo));
-    toast.success('로그인이 완료되었습니다.');
-    navigate('/');
-  },
-  onError: (e: any) => {
-    alert(e.message);
-  },
-});
-
-const handleLoginClick = handleSubmit((data) => {
-  loginMutation.mutate({
-    email: data.email,
-    password: data.password,
+  const isActivatedBtn = isValid;
+  const loginMutation = useMutation({
+    mutationFn: FetchLogin,
+    onSuccess: (loginData) => {
+      const { authToken, email: useremail, name } = loginData.data;
+      const userInfo = {
+        token: authToken,
+        email: useremail,
+        name,
+        isLoggedIn: true,
+      };
+      setUser(userInfo);
+      localStorage.setItem('user', JSON.stringify(userInfo));
+      toast.success('로그인이 완료되었습니다.');
+      navigate('/');
+    },
+    onError: (e: any) => {
+      alert(e.message);
+    },
   });
-});
+
+  const handleLoginClick = handleSubmit((data) => {
+    loginMutation.mutate({
+      email: data.email,
+      password: data.password,
+    });
+  });
   return (
     <div>
       <Navbar />

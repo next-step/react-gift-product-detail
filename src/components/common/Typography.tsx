@@ -1,1 +1,1 @@
-const Typography = styled.span
+const Typography = styled.span;

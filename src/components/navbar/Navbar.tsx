@@ -31,7 +31,8 @@ const Navbar = () => {
   return (
     <NavbarWrapper>
       <div>
-        <Button aria-label="뒤로 가기"
+        <Button
+          aria-label="뒤로 가기"
           onClick={() => {
             navigate(-1);
           }}

@@ -1,4 +1,3 @@
-
 import { fetchAuthhandlers } from '@/apis/AuthApu.mock';
 import { fetchRankingHandlers } from '@/apis/RankingApi.mock';
 import { Testhandler } from '@/apis/TestApi.mocks';

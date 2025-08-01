@@ -23,7 +23,6 @@ describe('랭킹 페이지 테스트 코드입니다. ', () => {
 
     //Given: Ranking 컴포넌트를 렌더링
     renderWithProviders(<Ranking />);
-    console.log('렌더링 완료12121212121');
     //expect
     const name = await screen.findByText('됐다!');
     expect(name).toBeInTheDocument();

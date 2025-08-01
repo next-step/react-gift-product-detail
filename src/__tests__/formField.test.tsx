@@ -1,7 +1,7 @@
 import { theme } from '@/styles/theme';
 import { ThemeProvider } from '@emotion/react';
 import { useForm } from 'react-hook-form';
-import  FormField  from '@/components/formField/formField';
+import FormField from '@/components/formField/formField';
 import { render, screen } from '@testing-library/react';
 import { test, expect } from 'vitest';
 
@@ -28,4 +28,3 @@ test('FormField는 label, placeholder, type을 렌더링 해요', () => {
   expect(screen.getByPlaceholderText('이메일 입력')).toBeInTheDocument();
   expect(screen.getByPlaceholderText('이메일 입력')).toHaveAttribute('type', 'email');
 });
-
