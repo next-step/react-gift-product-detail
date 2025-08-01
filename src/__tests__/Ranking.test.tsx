@@ -19,13 +19,12 @@ const renderWithProviders = (ui) => {
 };
 describe('랭킹 페이지 테스트 코드입니다. ', () => {
   test('1. 랭킹 API로 상품을 가져와요', async () => {
-    window.history.pushState({}, '', '/ranking?targetType=ALL&rankType=MANY_RECEIVE');
-
     //Given: Ranking 컴포넌트를 렌더링
     renderWithProviders(<Ranking />);
     //expect
-    const name = await screen.findByText('됐다!');
-    expect(name).toBeInTheDocument();
+    const item = await screen.findByText('스트로베리 초콜릿 생크림');
+
+    expect(item).toBeInTheDocument();
     screen.debug();
   });
 });
