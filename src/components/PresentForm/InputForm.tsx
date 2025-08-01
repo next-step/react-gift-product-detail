@@ -4,13 +4,11 @@ import Text from "@/components/Text"
 import theme from "@/styles/theme"
 
 const InputStyle = styled.input<ComponentStyle & { hasError?: boolean }>`
-  width: ${({ width }) => width};
+  width: ${({ width }) => width ?? "100%"};
   border: 1px solid;
   border-radius: ${theme.space.spacing2};
   ${({ hasError }) => (hasError ? theme.colors.red700 : theme.colors.gray700)};
   box-sizing: border-box;
-
-  width: 100%;
   height: ${({ height }) => height ?? "42px"};
 `
 
