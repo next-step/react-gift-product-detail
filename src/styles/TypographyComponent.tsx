@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from '@emotion/react';
 import type { ThemeType } from './theme';
-import type { ReactNode } from 'react';
+import type { ReactNode, ElementType } from 'react';
 
 export type TypographyVariant = keyof ThemeType['typography'];
+type AllowedTags = Extract<keyof JSX.IntrinsicElements, string>;
 
 interface TypographyProps {
   children: ReactNode;
   variant: TypographyVariant;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType<unknown> | AllowedTags;
   color?: string;
   className?: string;
 }
