@@ -90,7 +90,7 @@ describe("LoginPage", () => {
 
     // When
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    
+
     // Then
     expect(mockShowErrorToast).toHaveBeenCalledWith(
       expect.stringMatching(/이메일/),
@@ -109,10 +109,10 @@ describe("LoginPage", () => {
     }));
 
     renderWithRouter(<LoginPage />);
-    
+
     // When
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    
+
     // Then
     expect(mutateFn).not.toHaveBeenCalled();
   });
@@ -121,10 +121,10 @@ describe("LoginPage", () => {
   it("로그인 버튼 클릭 시 mutate 호출", async () => {
     // Given
     renderWithRouter(<LoginPage />);
-    
+
     // When
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    
+
     // Then
     expect(mutateFn).toHaveBeenCalledWith(
       { email: "test@kakao.com", password: "test123" },

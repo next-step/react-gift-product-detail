@@ -44,7 +44,7 @@ describe("ReceiverForm", () => {
   it("받는 사람 목록이 있을 때 버튼이 '수정'으로 변경", () => {
     // Given
     render(<ReceiverForm {...defaultProps} receiverList={ReceiverList} />);
-    
+
     // Then
     expect(screen.getByText("수정")).toBeInTheDocument();
     expect(screen.queryByText("추가")).not.toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("ReceiverForm", () => {
     fireEvent.click(addButton);
 
     expect(screen.getByTestId("receiver-modal")).toBeInTheDocument();
-    
+
     // When
     const closeButton = screen.getByText("닫기");
     fireEvent.click(closeButton);

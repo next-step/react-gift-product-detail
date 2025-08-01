@@ -12,7 +12,7 @@ describe("GiftCardSelector", () => {
   it("카드 이미지 렌더링", () => {
     // Given
     render(<GiftCardSelector {...defaultProps} />);
-    
+
     // Then
     expect(screen.getAllByRole("img").length).toBeGreaterThan(1);
   });
@@ -32,7 +32,7 @@ describe("GiftCardSelector", () => {
   it("선택된 카드의 이미지로 표시", () => {
     // Given
     render(<GiftCardSelector {...defaultProps} />);
-    
+
     // Then
     expect(screen.getByAltText("message-card")).toHaveAttribute(
       "src",
@@ -63,11 +63,11 @@ describe("GiftCardSelector", () => {
     // Given
     const mockOnChange = vi.fn();
     render(<GiftCardSelector {...defaultProps} onChange={mockOnChange} />);
-    
+
     // When
     const textarea = screen.getByPlaceholderText("메시지를 입력해주세요.");
     fireEvent.change(textarea, { target: { value: "새 메시지" } });
-    
+
     // Then
     expect(mockOnChange).toHaveBeenCalled();
   });
@@ -75,7 +75,7 @@ describe("GiftCardSelector", () => {
   it("error가 true일 때 에러 메시지 표시", () => {
     // Given
     render(<GiftCardSelector {...defaultProps} error={true} />);
-    
+
     // Then
     expect(screen.getByText("메시지를 입력해주세요.")).toBeInTheDocument();
   });
