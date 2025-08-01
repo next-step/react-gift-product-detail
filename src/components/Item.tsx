@@ -8,9 +8,7 @@ import {
   ItemName,
   ItemPrice,
 } from '@/styles/Item/Item.styles';
-import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { LoginInfoContext } from '@/contexts/LoginInfoContext';
+import { useProductDetail } from '@/hooks/product';
 
 type ItemProps = {
   index: number;

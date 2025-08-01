@@ -8,7 +8,7 @@ import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 
 function ProductDetailFooter() {
   const { likeCount, isWished, handleLikeClick, handleOrderClick } = useProductData();
-  
+
   return (
     <FooterContainer>
       <FooterLikeButton onClick={handleLikeClick}>

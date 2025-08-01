@@ -16,10 +16,12 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useProductData } from '@/hooks/product';
 
+
 function ThemeDetail() {
   const { themeId } = useParams();
   const navigate = useNavigate();
   const { handleItemClick } = useProductData();
+
   const { products, loading, lastProductRef } = useIntersectionObserver(Number(themeId));
 
   const {

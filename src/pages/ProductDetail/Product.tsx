@@ -66,6 +66,7 @@ function Product() {
       {activeTab === 'review' && <ProductReview productReviewInfo={productData.reviewInfo} />}
       {activeTab === 'detail' && productData.detailInfo.announcements && (
         <Detail detailInfo={productData.detailInfo.announcements} />
+
       )}
       <ProductDetailFooter />
     </ProductDetailContainerWrapper>
