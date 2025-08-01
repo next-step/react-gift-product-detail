@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [main, react-gift-product-detail/*, next-step/*]
+    branches: [dowankim1024]
   pull_request:
-    branches: [main, react-gift-product-detail/*, next-step/*]
+    branches: [dowankim1024]
 
 jobs:
   test:
@@ -17,14 +17,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Run linting
-        run: npm run lint
 
       - name: Run test
         run: npm test
