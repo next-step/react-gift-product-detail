@@ -6,9 +6,8 @@ import GiftFriendsSection from '@/Components/GiftFriendsSection';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
-const mockUseLoginContext = vi.fn();
 vi.mock('@/hooks/useLoginContext', () => ({
-  useLoginContext: mockUseLoginContext,
+  useLoginContext: vi.fn(),
 }));
 
 const renderWithTheme = (component: React.ReactElement) => {
@@ -22,123 +21,137 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('GiftFriendsSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it('renders with default message when user is not logged in', () => {
+    const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
     mockUseLoginContext.mockReturnValue({
       user: null,
     });
-
-    renderWithTheme(<GiftFriendsSection />);
-    
-    expect(screen.getByText('선물할 친구를 선택해 주세요.')).toBeInTheDocument();
   });
 
-  it('renders with personalized message when user is logged in', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: {
-        email: 'test@example.com',
-      },
+      it('renders with default message when user is not logged in', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
+
+      renderWithTheme(<GiftFriendsSection />);
+      
+      expect(screen.getByText('선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    expect(screen.getByText('test님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
-  });
+      it('renders with personalized message when user is logged in', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: {
+          email: 'test@example.com',
+        },
+      });
 
-  it('applies correct typography styles to guide text', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: null,
+      renderWithTheme(<GiftFriendsSection />);
+      
+      expect(screen.getByText('test님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    const guideText = screen.getByText('선물할 친구를 선택해 주세요.');
-    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
-    expect(guideText).toBeInTheDocument();
-  });
+      it('applies correct typography styles to guide text', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
 
-  it('has correct section styling', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: null,
+      renderWithTheme(<GiftFriendsSection />);
+      
+      const guideText = screen.getByText('선물할 친구를 선택해 주세요.');
+      // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+      expect(guideText).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    const section = screen.getByRole('region');
-    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
-    expect(section).toBeInTheDocument();
-  });
+      it('has correct section styling', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
 
-  it('has correct card styling', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: null,
+      renderWithTheme(<GiftFriendsSection />);
+      
+      const section = screen.getByRole('region');
+      // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+      expect(section).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    const card = screen.getByText('선물할 친구를 선택해 주세요.').closest('div');
-    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
-    expect(card).toBeInTheDocument();
-  });
+    it('has correct card styling', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
 
-  it('has correct add circle styling', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: null,
+      renderWithTheme(<GiftFriendsSection />);
+      
+      const card = screen.getByText('선물할 친구를 선택해 주세요.').closest('div');
+      // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+      expect(card).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    const addCircle = screen.getByText('선물할 친구를 선택해 주세요.').previousElementSibling;
-    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
-    expect(addCircle).toBeInTheDocument();
-  });
+    it('has correct add circle styling', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
 
-  it('displays plus icon', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: null,
+      renderWithTheme(<GiftFriendsSection />);
+      
+      const addCircle = screen.getByText('선물할 친구를 선택해 주세요.').previousElementSibling;
+      // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+      expect(addCircle).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    // Material-UI 아이콘은 aria-label이나 role로 접근 가능
-    const plusIcon = screen.getByTestId('AddIcon');
-    expect(plusIcon).toBeInTheDocument();
-  });
+    it('displays plus icon', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
 
-  it('handles user with different email format', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: {
-        email: 'user.name@example.com',
-      },
+      renderWithTheme(<GiftFriendsSection />);
+      
+      // Material-UI 아이콘은 aria-label이나 role로 접근 가능
+      const plusIcon = screen.getByTestId('AddIcon');
+      expect(plusIcon).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    expect(screen.getByText('user.name님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
-  });
+    it('handles user with different email format', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: {
+          email: 'user.name@example.com',
+        },
+      });
 
-  it('handles user with empty email', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: {
-        email: '',
-      },
+      renderWithTheme(<GiftFriendsSection />);
+      
+      expect(screen.getByText('user.name님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    expect(screen.getByText('님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
-  });
+    it('handles user with empty email', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: {
+          email: '',
+        },
+      });
 
-  it('handles user with email without @ symbol', () => {
-    mockUseLoginContext.mockReturnValue({
-      user: {
-        email: 'invalidemail',
-      },
+      renderWithTheme(<GiftFriendsSection />);
+      
+      expect(screen.getByText('님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    renderWithTheme(<GiftFriendsSection />);
-    
-    expect(screen.getByText('invalidemail님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
-  });
+    it('handles user with email without @ symbol', () => {
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: {
+          email: 'invalidemail',
+        },
+      });
+
+      renderWithTheme(<GiftFriendsSection />);
+      
+      expect(screen.getByText('invalidemail님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
+    });
 }); 

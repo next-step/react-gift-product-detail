@@ -8,9 +8,8 @@ import GiftFriendsSection from '@/Components/GiftFriendsSection';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
-const mockUseLoginContext = vi.fn();
 vi.mock('@/hooks/useLoginContext', () => ({
-  useLoginContext: mockUseLoginContext,
+  useLoginContext: vi.fn(),
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
@@ -186,6 +185,10 @@ describe('Typography Components', () => {
   describe('GiftFriendsSection', () => {
     beforeEach(() => {
       vi.clearAllMocks();
+      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
+      mockUseLoginContext.mockReturnValue({
+        user: null,
+      });
     });
 
     it('renders with default message when user is not logged in', () => {
