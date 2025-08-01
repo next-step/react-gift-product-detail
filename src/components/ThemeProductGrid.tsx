@@ -7,7 +7,7 @@ import { typography } from '../styles/typography';
 import { useAuth } from '@/contexts/AuthContext';
 import { spinnerStyle } from '../styles/common';
 import { fetchThemeProducts } from '../api/categoryApi';
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` });
 const gridStyle = css({
@@ -59,7 +59,7 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery({
+  } = useSuspenseInfiniteQuery({
     queryKey: ['themeProducts', themeId],
     queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeId, pageParam, 10),
     getNextPageParam: (lastPage) => {
