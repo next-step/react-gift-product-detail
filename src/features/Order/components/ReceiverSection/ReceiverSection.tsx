@@ -11,7 +11,7 @@ import type {
 
 import MyButton from '@/components/button/button';
 import ReceiverModal from '../ReceiverModal/ReceiverModal';
-import type { Receiver, Order } from '@/features/Order/hooks/useOrderForm';
+import type { Order, Receiver } from '@/features/Order/schema/OrderSchema';
 import * as S from './ReceiverSection.styles.ts';
 
 interface ReceiverSectionProps {
@@ -22,7 +22,7 @@ interface ReceiverSectionProps {
   remove: UseFieldArrayRemove;
   getValues: UseFormGetValues<Order>;
   trigger: UseFormTrigger<Order>;
-  onConfirm?: () => void; // ✅ 추가된 부분
+  onConfirm?: () => void;
 }
 
 const ReceiverSection = ({
@@ -33,7 +33,7 @@ const ReceiverSection = ({
   remove,
   getValues,
   trigger,
-  onConfirm, // ✅ 추가된 부분
+  onConfirm,
 }: ReceiverSectionProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [receivers, setReceivers] = useState<Receiver[]>([]);
@@ -91,7 +91,7 @@ const ReceiverSection = ({
           const updatedReceivers = getValues('receivers');
           setReceivers(updatedReceivers);
           setIsModalOpen(false);
-          onConfirm?.(); // ✅ 안전하게 호출
+          onConfirm?.();
         }}
       />
     </S.Container>
