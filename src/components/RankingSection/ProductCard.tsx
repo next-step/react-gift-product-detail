@@ -35,7 +35,7 @@ const ProductCard = ({ rank, ...product }: ProductCardProps) => {
       {!product.hideRank && rank && <RankBadge rank={rank}>{rank}</RankBadge>}
       <Image src={product.imageURL} alt={product.name} />
       <Brand>{product.brandInfo.name}</Brand>
-      <Name>{product.name}</Name>
+      <Name data-testid="product-name">{product.name}</Name>
       <Price>
         {product.price.sellingPrice.toLocaleString()} <span>원</span>
       </Price>
