@@ -21,7 +21,7 @@ const defaultLoginForm = {
 };
 
 vi.mock("@/styles/toast", () => ({
-  showErrorToast: mockShowErrorToast,
+  showErrorToast: vi.fn(),
 }));
 
 vi.mock("react-router-dom", async () => {
