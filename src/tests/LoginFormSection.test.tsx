@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
@@ -121,7 +122,7 @@ describe('LoginFormSection', () => {
     expect(loginButton).toBeEnabled();
   });
 
-  it('이메일과 비밀번호에 에러 메시지가 있을 때, 에러 메시지가 화면에 렌더링된다', () => {
+  it('이메일과 비밀번호에 에러 메시지가 있을 때, 에러 메시지가 화면에 렌더링된다', async () => {
     const emailError = '이메일 형식이 올바르지 않습니다';
     const passwordError = '비밀번호는 8자 이상이어야 합니다';
 
@@ -148,6 +149,17 @@ describe('LoginFormSection', () => {
 
     renderComponent();
 
+    const user = userEvent.setup();
+
+    const emailInput = screen.getByPlaceholderText('이메일');
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+
+    await user.click(emailInput);
+    await user.tab(); // blur 유도
+
+    await user.click(passwordInput);
+    await user.tab(); // blur 유도
+
     expect(screen.getByText(emailError)).toBeInTheDocument();
     expect(screen.getByText(passwordError)).toBeInTheDocument();
 
@@ -155,7 +167,7 @@ describe('LoginFormSection', () => {
     expect(loginButton).toBeDisabled();
   });
 
-  it('로그인 버튼 클릭 시 버튼이 활성화 상태인지 확인 (내부 goToLogin 호출 여부는 테스트하지 않음)', () => {
+  it('로그인 버튼 클릭 시 버튼이 활성화 상태인지 확인 (내부 goToLogin 호출 여부는 테스트하지 않음)', async () => {
     const mockedUseLoginForm = vi.mocked(loginFormHook.useLoginForm);
     mockedUseLoginForm.mockReturnValue({
       email: {
@@ -182,7 +194,8 @@ describe('LoginFormSection', () => {
     const loginButton = screen.getByRole('button', { name: /로그인/i });
     expect(loginButton).toBeEnabled();
 
-    fireEvent.click(loginButton);
+    const user = userEvent.setup();
+    await user.click(loginButton);
     // 내부 함수 호출 여부는 확인하지 않음
   });
 });
