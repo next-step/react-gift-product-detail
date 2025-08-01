@@ -1,0 +1,50 @@
+name: Run Test on PR or push dib3474
+
+on:
+  push:
+    branches:
+      - main
+      - dib3474
+  pull_request:
+    branches:
+      - main
+      - dib3474
+    # paths: // path는 특정 폴더에 변경사항이 생겼을 때 작동하도록 설정할 수 있음
+    #   - "services/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Test
+        run: npm run test

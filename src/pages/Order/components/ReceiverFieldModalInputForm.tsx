@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Divider from "@/components/common/Divider";
-import Input from "@/pages/Order/components/Input";
+import OutlineInputField from "@/components/form/OutlineInputField";
 import Close from "@/components/icons/Close";
 import type { OrderFormType } from "@/pages/Order/components/Order";
 import { useFormContext } from "react-hook-form";
@@ -32,7 +32,11 @@ const RECIPIENT_INPUT_CONFIG = [
 ] as const;
 
 const ReceiverFieldModalInputForm = ({ index, remove }: ReceiverFieldModalInputFormProps) => {
-  const { register, clearErrors, formState: { errors } } = useFormContext<OrderFormType>();
+  const {
+    register,
+    clearErrors,
+    formState: { errors },
+  } = useFormContext<OrderFormType>();
 
   const removeRecipient = (index: number) => {
     clearErrors(`receivers.${index}`);
@@ -52,7 +56,7 @@ const ReceiverFieldModalInputForm = ({ index, remove }: ReceiverFieldModalInputF
           <InputWrapper key={config.key}>
             <InputTitle>{config.title}</InputTitle>
             <InputWrapper>
-              <Input
+              <OutlineInputField
                 {...register(`receivers.${index}.${config.key}` as const, {
                   valueAsNumber: config.key === "quantity",
                 })}
