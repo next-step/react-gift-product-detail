@@ -42,12 +42,11 @@ export const handlers = [
    * - When: targetType과 rankType 파라미터가 전송되면
    * - Then: 해당 조건에 맞는 상품 목록을 반환한다
    */
-  http.get('https://localhost:3000/api/products/ranking', async ({ request }) => {
-    const url = new URL(request.url)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const targetType = url.searchParams.get('targetType') || 'ALL'
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const rankType = url.searchParams.get('rankType') || 'MANY_WISH'
+  http.get('https://localhost:3000/api/products/ranking', async ({ request: _request }) => {
+    // * URL 파라미터는 추후 실제 로직에서 사용할 수 있도록 주석으로 보존
+    // const url = new URL(request.url)
+    // const targetType = url.searchParams.get('targetType') || 'ALL'
+    // const rankType = url.searchParams.get('rankType') || 'MANY_WISH'
 
     // * 200ms 지연 시뮬레이션
     await new Promise((r) => setTimeout(r, 200))
