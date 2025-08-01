@@ -8,8 +8,11 @@ import { PaddingMd, PaddingSm } from '@/components/common/Padding';
 import { toast } from 'react-toastify';
 import { FetchLogin } from '@/services/authAPi';
 import { useMutation } from '@tanstack/react-query';
+<<<<<<< HEAD
 import { useForm } from 'react-hook-form';
 import FormField from '@/components/formField/formField';
+=======
+>>>>>>> hyemomo
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -101,7 +104,12 @@ const Login = () => {
       email: data.email,
       password: data.password,
     });
+<<<<<<< HEAD
   });
+=======
+  };
+
+>>>>>>> hyemomo
   return (
     <div>
       <Navbar />
