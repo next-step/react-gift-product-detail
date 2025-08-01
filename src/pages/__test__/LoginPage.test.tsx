@@ -101,7 +101,7 @@ describe("LoginPage", () => {
     expect(mutateFn).not.toHaveBeenCalled();
   });
 
-  // 4. 유효한 폼 입력 후 로그인 버튼 클릭 시 API 호출
+  // 4. 유효한 폼 입력 후 로그인 버튼 클릭 시 mutate 호출
   it("로그인 버튼 클릭 시 mutate 호출", async () => {
     renderWithRouter(<LoginPage />);
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
