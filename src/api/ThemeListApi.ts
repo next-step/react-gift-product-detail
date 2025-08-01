@@ -1,4 +1,5 @@
-export const withError = <T extends (...args: unknown[]) => Promise<Response>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const withError = <T extends (...args: any[]) => Promise<Response>>(
   call: T,
   defaultError = '',
 ) => {
