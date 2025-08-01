@@ -27,14 +27,6 @@ import {
 
 import type { Receiver } from '@/types/receiver';
 
-interface ApiProductData {
-  id: number;
-  name: string;
-  imageURL: string;
-  brandName: string;
-  price: number;
-}
-
 export interface ProductSummary {
   id: number;
   name: string;
@@ -91,26 +83,11 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     data: productInfo,
     isLoading,
     isError,
-  } = useQuery<ApiProductData, Error, ProductSummary>({
-    queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
-    queryFn: () => fetchProductSummary(giftId!),
-    enabled: !!giftId,
-    select: (apiData) => ({
-      id: apiData.id,
-      name: apiData.name,
-      imageURL: apiData.imageURL,
-      brandInfo: {
-        id: 0,
-        name: apiData.brandName,
-        imageURL: '',
-      },
-      price: {
-        basicPrice: apiData.price,
-        sellingPrice: apiData.price,
-        discountRate: 0,
-      },
-    }),
-  });
+} = useQuery<ProductSummary, Error>({ 
+  queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
+  queryFn: () => fetchProductSummary(giftId!), 
+  enabled: !!giftId,
+});
 
   useEffect(() => {
     if (!giftId) {
