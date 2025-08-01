@@ -1,95 +1,37 @@
-import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { getRankingProducts } from '@/entities/product/api/productApi';
-import type { RankingProduct, TargetType, RankType } from '@/entities/product/model/types';
-import { genderItems, actionItems } from '../../model/constants';
-import { RankingItemCard } from '@/entities/product/ui';
+import { useRankingSection } from '../../model/useRankingSection';
+import RankingFilter from '../RankingFilter';
+import RankingGrid from '../RankingGrid';
 import * as S from './styles';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { productQueryKeys } from '@/entities/product/api/queryKeys';
-import { ROUTES } from '@/shared/config';
 
 const RankingSection = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate();
-
-  const selectedGender = searchParams.get('gender') || 'ALL';
-  const selectedAction = searchParams.get('action') || 'MANY_WISH';
-
-  const { data } = useSuspenseQuery<RankingProduct[]>({
-    queryKey: productQueryKeys.ranking(selectedGender, selectedAction),
-    queryFn: () => getRankingProducts(selectedGender as TargetType, selectedAction as RankType),
-  });
-
-  const handleGenderChange = (gender: string) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      newParams.set('gender', gender);
-      return newParams;
-    });
-  };
-
-  const handleActionChange = (action: string) => {
-    setSearchParams(prev => {
-      const newParams = new URLSearchParams(prev);
-      newParams.set('action', action);
-      return newParams;
-    });
-  };
-
-  const handleItemCardClick = (productId: number) => {
-    navigate(`${ROUTES.PRODUCT}/${productId}`);
-  };
+  const {
+    data,
+    isExpanded,
+    selectedGender,
+    selectedAction,
+    handleGenderChange,
+    handleActionChange,
+    handleItemCardClick,
+    handleToggleExpand,
+  } = useRankingSection();
 
   return (
     <S.Section>
       <S.Title>실시간 급상승 선물랭킹</S.Title>
 
-      <S.FilterContainer>
-        <S.GenderFilterContainer>
-          {genderItems.map(option => (
-            <S.GenderButton key={option.key} onClick={() => handleGenderChange(option.key)}>
-              <S.GenderIconContainer isSelected={selectedGender === option.key}>
-                {option.icon}
-              </S.GenderIconContainer>
-              <S.GenderText isSelected={selectedGender === option.key}>{option.label}</S.GenderText>
-            </S.GenderButton>
-          ))}
-        </S.GenderFilterContainer>
+      <RankingFilter
+        selectedGender={selectedGender}
+        selectedAction={selectedAction}
+        onGenderChange={handleGenderChange}
+        onActionChange={handleActionChange}
+      />
 
-        <S.ActionFilterContainer>
-          {actionItems.map(action => (
-            <S.ActionButton
-              key={action.key}
-              isSelected={selectedAction === action.key}
-              onClick={() => handleActionChange(action.key)}
-            >
-              {action.label}
-            </S.ActionButton>
-          ))}
-        </S.ActionFilterContainer>
-      </S.FilterContainer>
-
-      <>
-        <S.Grid>
-          {(isExpanded ? data : data.slice(0, 6)).map((item, index) => (
-            <RankingItemCard
-              key={item.id}
-              imageUrl={item.imageURL}
-              title={item.name}
-              subtitle={item.brandInfo.name}
-              price={item.price.sellingPrice}
-              rank={index + 1}
-              onClick={() => handleItemCardClick(item.id)}
-            />
-          ))}
-        </S.Grid>
-
-        <S.MoreButton onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? '접기' : '더보기'}
-        </S.MoreButton>
-      </>
+      <RankingGrid
+        data={data}
+        isExpanded={isExpanded}
+        onToggleExpand={handleToggleExpand}
+        onItemClick={handleItemCardClick}
+      />
     </S.Section>
   );
 };

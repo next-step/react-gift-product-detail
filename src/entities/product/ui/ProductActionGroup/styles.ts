@@ -5,9 +5,12 @@ export const Container = styled.div`
   position: fixed;
   bottom: 0;
   display: flex;
-  width: 720px;
+  width: 100%;
+  max-width: 720px;
   height: 48px;
   z-index: ${Z_INDEX.FIXED_BOTTOM};
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 export const WishButton = styled.button<{ isWished: boolean }>`

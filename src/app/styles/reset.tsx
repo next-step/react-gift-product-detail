@@ -2,7 +2,9 @@ import { Global, css } from '@emotion/react';
 import emotionReset from 'emotion-reset';
 
 const customGlobalStyles = css`
-  *, *::after, *::before {
+  *,
+  *::after,
+  *::before {
     box-sizing: border-box;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -12,11 +14,13 @@ const customGlobalStyles = css`
     font-family: 'Pretendard', Arial, sans-serif;
     background-color: rgb(247, 248, 249);
   }
-  
-  /* Mobile First Design 720px최대로 고정 */
+
+  /* Mobile First Design - 반응형 컨테이너 */
   #root {
+    width: 100%;
     max-width: 720px;
     margin: 0 auto;
+    position: relative;
   }
 `;
 
