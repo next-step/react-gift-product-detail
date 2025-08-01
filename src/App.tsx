@@ -10,6 +10,7 @@ import RootLayout from '@/layout/RootLayout';
 import MyPage from '@/pages/MyPage';
 import PrivateRoute from '@/components/PrivateRoute';
 import OrderPage from '@/pages/OrderPage';
+import ProductDetailPage from '@/pages/ProductDetailPage';
 import { ModalProvider } from '@/contexts/ModalContext';
 import ThemePage from '@/pages/ThemePage';
 
@@ -34,6 +35,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/my" element={<MyPage />} />
           <Route path="/order/:productId" element={<OrderPage />} />
+          <Route path="/product/:productId" element={<ProductDetailPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

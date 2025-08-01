@@ -10,7 +10,7 @@ interface Props {
 export function ProductItem({ product, rank }: Props) {
   return (
     <Card>
-      <Link to={`/order/${product.id}`}>
+      <Link to={`/product/${product.id}`}>
         <ThumbWrapper>
           <RankBadge rank={rank}>{rank}</RankBadge>
           <Thumb src={product.imageURL} alt={product.name} loading="lazy" />

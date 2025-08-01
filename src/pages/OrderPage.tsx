@@ -126,7 +126,7 @@ export default function OrderPage() {
           imgSrc={product.imageURL}
           productName={product.name}
           brandName={product.brandName}
-          price={product.price.sellingPrice}
+          price={product.price}
         />
       </FieldSet>
 
