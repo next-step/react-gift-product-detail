@@ -6,8 +6,7 @@ import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
 import { useAuth } from '@/contexts/AuthContext';
 import { spinnerStyle } from '../styles/common';
-import { fetchThemeProducts } from '../api/categoryApi';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useThemeProductsInfiniteQuery } from '@/hooks/useThemeProductsInfiniteQuery';
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` });
 const gridStyle = css({
@@ -59,14 +58,7 @@ const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useSuspenseInfiniteQuery({
-    queryKey: ['themeProducts', themeId],
-    queryFn: ({ pageParam = 0 }) => fetchThemeProducts(themeId, pageParam, 10),
-    getNextPageParam: (lastPage) => {
-      return lastPage.hasMoreList ? lastPage.cursor : undefined
-    },
-    initialPageParam: 0,
-  });
+  } = useThemeProductsInfiniteQuery(themeId);
 
   // fetchNextPage를 useCallback으로 메모이제이션
   const handleFetchNextPage = useCallback(() => {
