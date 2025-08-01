@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { AuthContext, AuthContextType } from "./AuthContext"
 import { useLogin } from "@/hooks/useLogin"
-
+import { useEffect } from "react"
 interface LoginData {
   authToken: string | null
   email: string
@@ -11,12 +11,30 @@ interface LoginData {
 
 interface AuthContextProviderProps {
   children: React.ReactNode
+  initialValue?: LoginData
 }
 
-export function AuthContextProvider({ children }: AuthContextProviderProps) {
+export function AuthContextProvider({
+  children,
+  initialValue,
+}: AuthContextProviderProps) {
   const qc = useQueryClient()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  useEffect(() => {
+    if (!initialValue) return
 
+    const seed: LoginData = {
+      authToken: initialValue.authToken ?? null,
+      email: initialValue.email ?? "",
+      name: initialValue.name ?? "",
+    }
+
+    if (seed.authToken) localStorage.setItem("authToken", seed.authToken)
+    if (seed.email) localStorage.setItem("email", seed.email)
+    if (seed.name) localStorage.setItem("name", seed.name)
+
+    qc.setQueryData(["auth"], seed)
+  }, [])
   const loginMutation = useLogin(() => {
     setIsLoggingOut(false)
   })

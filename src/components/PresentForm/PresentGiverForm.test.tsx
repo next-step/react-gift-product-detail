@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import PresentGiverForm from "./PresentGiverForm"
 import { describe, it, expect } from "vitest"
 import { FormData } from "@/pages/OrderPage"
-import { renderWithTheme } from "./InputForm.test"
+import { renderWithProviders } from "@/test-utils/renderWithProviders"
 
 function FormWrapper({ children }: { children: React.ReactNode }) {
   const methods = useForm<FormData>({
@@ -18,13 +18,13 @@ function FormWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-function renderWithProviders(ui: React.ReactElement) {
-  return renderWithTheme(<FormWrapper>{ui}</FormWrapper>)
+function renderWithForm(ui: React.ReactElement) {
+  return renderWithProviders(<FormWrapper>{ui}</FormWrapper>)
 }
 
 describe("PresentGiverForm", () => {
   it("placeholder와 설명이 정상적으로 렌더링된다", () => {
-    renderWithProviders(<PresentGiverForm />)
+    renderWithForm(<PresentGiverForm />)
 
     expect(
       screen.getByPlaceholderText("이름을 입력하세요.")
@@ -37,7 +37,7 @@ describe("PresentGiverForm", () => {
   })
 
   it("값이 비어 있으면 제출 시 에러 메시지가 나온다", async () => {
-    renderWithProviders(<PresentGiverForm />)
+    renderWithForm(<PresentGiverForm />)
 
     const form = document.querySelector("form")
     if (form) {
@@ -50,7 +50,7 @@ describe("PresentGiverForm", () => {
   })
 
   it("입력 후 blur 하면 value 가 정상적으로 반영된다", async () => {
-    renderWithProviders(<PresentGiverForm />)
+    renderWithForm(<PresentGiverForm />)
 
     const input = screen.getByPlaceholderText(
       "이름을 입력하세요."

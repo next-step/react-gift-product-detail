@@ -10,7 +10,7 @@ export default defineConfig({
       { find: "@", replacement: path.resolve(__dirname, "src") },
       {
         find: "lottie-web",
-        replacement: "lottie-web/build/player/lottie_light.min.js",
+        replacement: "lottie-web",
       },
     ],
   },
@@ -18,6 +18,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["./src/setupTests.ts"],
+    setupFiles: ["./src/setupTests.ts", "./src/vitest.setup.ts"],
   },
 })

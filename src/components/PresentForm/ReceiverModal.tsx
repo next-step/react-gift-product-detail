@@ -87,8 +87,18 @@ const ReceiverModal = ({ close, isOpen }: Props) => {
 
   return (
     <Overlay>
-      <ReciverContainer onClick={(e) => e.stopPropagation()}>
-        <Text variant="title1Bold" margin="spacing0" padding="spacing0">
+      <ReciverContainer
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="receiver-modal-title"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Text
+          id="receiver-modal-title"
+          variant="title1Bold"
+          margin="spacing0"
+          padding="spacing0"
+        >
           받는 사람
         </Text>
         <Text variant="label2Regular" margin="spacing0" padding="spacing0">

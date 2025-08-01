@@ -1,17 +1,12 @@
 import { describe, it, expect, vi } from "vitest"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { screen, fireEvent } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import InputForm from "./InputForm"
-import { ThemeProvider } from "@emotion/react"
-import theme from "@/styles/theme"
-
-export function renderWithTheme(ui: React.ReactElement) {
-  return render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>)
-}
+import { renderWithProviders } from "@/test-utils/renderWithProviders"
 
 describe("InputForm 컴포넌트 기본 렌더링", () => {
   it("placeholder, name, width, height가 올바르게 적용된다", () => {
-    renderWithTheme(
+    renderWithProviders(
       <InputForm
         width="120px"
         height="30px"
@@ -29,7 +24,7 @@ describe("InputForm 컴포넌트 기본 렌더링", () => {
   })
 
   it("message prop이 있으면 에러 메시지만 보여주고 description은 숨긴다", () => {
-    renderWithTheme(
+    renderWithProviders(
       <InputForm
         width="120px"
         height="30px"
@@ -45,7 +40,7 @@ describe("InputForm 컴포넌트 기본 렌더링", () => {
 
   it("onBlur 콜백을 호출한다", () => {
     const handleBlur = vi.fn()
-    renderWithTheme(
+    renderWithProviders(
       <InputForm
         width="100px"
         height="20px"

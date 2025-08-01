@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import ReceiverList from "./ReceiverList"
-import { renderWithTheme } from "./InputForm.test"
+import { renderWithProviders } from "@/test-utils/renderWithProviders"
 
 describe("ReceiverList", () => {
   it("빈 배열이면 안내 문구를 출력한다", () => {
-    renderWithTheme(<ReceiverList receivers={[]} />)
+    renderWithProviders(<ReceiverList receivers={[]} />)
 
     expect(screen.getByText("받는 사람이 없습니다.")).toBeInTheDocument()
     expect(screen.getByText("받는 사람을 추가해 주세요.")).toBeInTheDocument()

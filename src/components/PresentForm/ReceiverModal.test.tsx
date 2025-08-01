@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import ReceiverModal from "./ReceiverModal"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { FormData } from "@/pages/OrderPage"
-import { renderWithTheme } from "./InputForm.test"
+import { renderWithProviders } from "@/test-utils/renderWithProviders"
 
 global.alert = vi.fn()
 
@@ -22,11 +22,11 @@ function FormWrapper({
   return <FormProvider {...methods}>{children}</FormProvider>
 }
 
-function renderWithProviders(
+function renderWithFormDefaultProviders(
   ui: React.ReactElement,
   defaultValues?: Partial<FormData>
 ) {
-  return renderWithTheme(
+  return renderWithProviders(
     <FormWrapper defaultValues={defaultValues}>{ui}</FormWrapper>
   )
 }
@@ -41,7 +41,9 @@ describe("받는 사람 모달창", () => {
 
   describe("기본적인 모달 화면이 잘 렌더링된다.", () => {
     it("isOpen이 true일 때 모달이 렌더링된다", () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       expect(screen.getByText("받는 사람")).toBeInTheDocument()
       expect(
@@ -53,15 +55,17 @@ describe("받는 사람 모달창", () => {
     })
 
     it("isOpen이 false일 때 아무것도 렌더링되지 않는다", () => {
-      const { container } = renderWithProviders(
+      renderWithFormDefaultProviders(
         <ReceiverModal isOpen={false} close={mockClose} />
       )
 
-      expect(container.firstChild).toBeNull()
+      expect(screen.queryByRole("dialog")).toBeNull()
     })
 
     it("isOpen이 true일 때 body overflow가 hidden으로 설정되어 보이지 않게 된다.", () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       expect(document.body.style.overflow).toBe("hidden")
     })
@@ -69,7 +73,9 @@ describe("받는 사람 모달창", () => {
 
   describe("받는 사람 추가", () => {
     it("추가하기 버튼을 클릭하면 새로운 입력 폼이 추가된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       const addButton = screen.getByText("추가하기")
       fireEvent.click(addButton)
@@ -87,7 +93,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("최대 10명까지만 추가할 수 있다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       const addButton = screen.getByText("추가하기")
 
@@ -109,7 +117,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("X 버튼을 클릭하면 해당 받는 사람이 삭제된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       const addButton = screen.getByText("추가하기")
       fireEvent.click(addButton)
@@ -129,7 +139,9 @@ describe("받는 사람 모달창", () => {
 
   describe("입력값에 대해 검증하는 과정이 있다.", () => {
     it("이름이 비어있으면 에러 메시지가 표시된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
 
@@ -142,7 +154,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("전화번호가 비어있으면 에러 메시지가 표시된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
 
@@ -160,7 +174,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("올바르지 않은 전화번호 형식이면 에러 메시지가 표시된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
 
@@ -178,7 +194,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("중복된 전화번호가 있으면 에러 메시지가 표시된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
       const nameInput1 = screen.getAllByPlaceholderText("이름을 입력하세요.")[0]
@@ -206,7 +224,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("수량이 1 미만이면 에러 메시지가 표시된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
 
@@ -226,7 +246,9 @@ describe("받는 사람 모달창", () => {
 
   describe("모달 액션", () => {
     it("취소 버튼을 클릭하면 모달이 닫힌다", () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       const cancelButton = screen.getByText("취소")
       fireEvent.click(cancelButton)
@@ -235,7 +257,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("모든 검증을 통과하면 완료 버튼 클릭 시 모달이 닫힌다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       fireEvent.click(screen.getByText("추가하기"))
 
@@ -256,7 +280,9 @@ describe("받는 사람 모달창", () => {
     })
 
     it("완료 버튼의 텍스트가 받는 사람 수에 따라 변경된다", async () => {
-      renderWithProviders(<ReceiverModal isOpen={true} close={mockClose} />)
+      renderWithFormDefaultProviders(
+        <ReceiverModal isOpen={true} close={mockClose} />
+      )
 
       expect(screen.getByText("0명 완료")).toBeInTheDocument()
 
