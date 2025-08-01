@@ -1,16 +1,8 @@
-<<<<<<< HEAD:src/components/ranking/Ranking.tsx
 import { PaddingMd } from '../common/Padding';
 import RankingItem from './RankingItem';
 import { PaddingLg } from '../common/Padding';
 import PersonCategory from './PersonCategory';
 import BehaviorCategory from './BehaviorCategory';
-=======
-import { PaddingMd } from '../../common/Padding';
-import RankingItem from '../RankingItem';
-import { PaddingLg } from '../../common/Padding';
-import PersonCategory from '../PersonCategory';
-import BehaviorCategory from '../BehaviorCategory';
->>>>>>> hyemomo:src/components/ranking/ranking/Ranking.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {

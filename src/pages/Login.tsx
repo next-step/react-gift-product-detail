@@ -1,18 +1,14 @@
 import Navbar from './../components/navbar/Navbar';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import useInput from '@/hooks/useInput';
 import { emailValidator, passwordValidator } from '@/utils/validators';
 import { useAuth } from '@/contexts/AuthContext';
 import { PaddingMd, PaddingSm } from '@/components/common/Padding';
 import { toast } from 'react-toastify';
 import { FetchLogin } from '@/services/authAPi';
 import { useMutation } from '@tanstack/react-query';
-<<<<<<< HEAD
 import { useForm } from 'react-hook-form';
 import FormField from '@/components/formField/formField';
-=======
->>>>>>> hyemomo
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -104,12 +100,7 @@ const Login = () => {
       email: data.email,
       password: data.password,
     });
-<<<<<<< HEAD
   });
-=======
-  };
-
->>>>>>> hyemomo
   return (
     <div>
       <Navbar />
