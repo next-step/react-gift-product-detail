@@ -55,6 +55,7 @@ const LoginPage = () => {
             type="email"
             name="email"
             id="email"
+            data-testid="email"
             autoComplete="email"
             placeholder="이메일"
             value={email}
@@ -68,6 +69,7 @@ const LoginPage = () => {
             type="password"
             name="password"
             id="password"
+            data-testid="password"
             autoComplete="current-password"
             placeholder="비밀번호"
             value={pw}
