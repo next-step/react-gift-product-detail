@@ -5,10 +5,10 @@ name: CI Test
 on:
   pull_request:
     branches:
-      - step3        # main 브랜치로 향하는 PR마다
+      - whyyhyh        # main 브랜치로 향하는 PR마다
   push:
     branches:
-      - step3        # main 브랜치에 푸시될 때마다
+      - whyyhyh        # main 브랜치에 푸시될 때마다
 
 jobs:
   test:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'     # 프로젝트에 맞춰 변경 가능
+          node-version: '20'     # 프로젝트에 맞춰 변경 가능
           cache: 'npm'           # npm 캐싱 활성화
 
       # 3. 의존성 설치
