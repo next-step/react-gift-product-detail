@@ -8,15 +8,17 @@ import { useEffect } from "react";
 
 type Props = {
   isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: ReceiverArrayFormValues) => void;
+  onCancelClick: () => void;
+  onConfirmClick: (data: ReceiverArrayFormValues) => void;
+  onBackdropClick: () => void;
   initialReceivers: ReceiverArrayFormValues["receivers"];
 };
 
 const ReceiverModal = ({
   isOpen,
-  onClose,
-  onSubmit,
+  onCancelClick,
+  onConfirmClick,
+  onBackdropClick,
   initialReceivers,
 }: Props) => {
   const methods = useForm<ReceiverArrayFormValues>({
@@ -46,13 +48,9 @@ const ReceiverModal = ({
     console.error("폼 유효성 검사 실패:", errors);
   };
 
-  const handleCancelClick = () => {
-    onClose();
-  };
-
   return (
     <>
-      <Backdrop onClick={onClose} />
+      <Backdrop onClick={onBackdropClick} />
       <ModalContainer>
         <FormProvider {...methods}>
           <ModalHeader>
@@ -84,11 +82,11 @@ const ReceiverModal = ({
           <ModalFooter>
             <CompleteButton
               type="button"
-              onClick={methods.handleSubmit(onSubmit, handleFormError)}
+              onClick={methods.handleSubmit(onConfirmClick, handleFormError)}
             >
               완료
             </CompleteButton>
-            <CancelButton type="button" onClick={handleCancelClick}>
+            <CancelButton type="button" onClick={onCancelClick}>
               취소
             </CancelButton>
           </ModalFooter>

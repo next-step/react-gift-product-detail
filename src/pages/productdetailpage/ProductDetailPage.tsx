@@ -22,14 +22,10 @@ const ProductDetailPage = () => {
     return <Container>상품 정보를 불러오는 중...</Container>;
   }
 
-  const handleTabClick = (tab: TabValue) => {
-    setActiveTab(tab);
-  };
-
   return (
     <Container>
       <ProductInfoSection product={productInfo} />
-      <ProductDetailTabs activeTab={activeTab} onTabClick={handleTabClick} />
+      <ProductDetailTabs activeTab={activeTab} onTabClick={setActiveTab} />
       {activeTab === "description" && (
         <ProductExplanationSection productDetail={productDetail} />
       )}

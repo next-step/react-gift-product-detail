@@ -7,11 +7,11 @@ import LogoutButton from "@/components/common/BaseButton";
 const MyPage = () => {
   const navigate = useNavigate();
 
-  const handleNavigateToLogin = () => {
+  const NavigateToLogin = () => {
     navigate("/login");
   };
 
-  const { userInfo, logout } = useAuth({ onLogout: handleNavigateToLogin });
+  const { userInfo, logout } = useAuth({ onLogout: NavigateToLogin });
   const userEmail = userInfo?.email || "";
   const userName = userInfo?.name || "";
 

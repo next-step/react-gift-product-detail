@@ -16,7 +16,7 @@ const ReceiverInfoSection = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleSubmitReceivers = (data: ReceiverArrayFormValues) => {
+  const handleConfirmReceivers = (data: ReceiverArrayFormValues) => {
     setValue("receivers", data.receivers, { shouldValidate: true });
     closeModal();
   };
@@ -60,8 +60,9 @@ const ReceiverInfoSection = () => {
       {isModalOpen && (
         <ReceiverModal
           isOpen={isModalOpen}
-          onClose={closeModal}
-          onSubmit={handleSubmitReceivers}
+          onCancelClick={closeModal}
+          onConfirmClick={handleConfirmReceivers}
+          onBackdropClick={closeModal}
           initialReceivers={receivers}
         />
       )}

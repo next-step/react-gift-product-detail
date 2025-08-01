@@ -1,3 +1,13 @@
+## step3 피드백 반영 내용
+
+- MyPage.tsx에서의 handleNavigateToLogin -> NavigateToLogin으로 변경했습니다.
+- ReceiverModal.tsx에서 prop 매핑을
+  onClose={closeModal} -> onCancelClick={closeModal}로 변경,
+  onSubmit={handleSubmitReceivers} -> onConfirmClick={handleSubmitReceivers}로 변경,
+  onBackdropClick={closeModal}을 추가했습니다.
+- ReceiverModal.tsx에서 handleSubmitReceivers함수 이름을 handleConfirmReceivers로 변경했습니다. 이를 통해 ReceiverModal과 ReceiverInfoSection간의 책임 분리가 명확해지도록 했습니다.
+- ProductdetailPage.tsx에서 ProductDetailTabs로 넘기던 onTabClick={handleTabClick}부분을 onTabChange={setActiveTab}로 변경했습니다.
+
 ## step3 과제 수행 내용
 
 - Form Field를 테스트하기 위해 ReceiverFormItem.test.tsx 파일을 만들어 테스트 코드를 만들었습니다.
