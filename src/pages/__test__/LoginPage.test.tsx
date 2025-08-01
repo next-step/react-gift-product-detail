@@ -132,8 +132,8 @@ describe("LoginPage", () => {
     );
   });
 
-  // 5. 로그인 성공 시, 토큰 저장 및 페이지 이동
-  it("로그인 성공 시 저장, navigate 호출", () => {
+  // 5. 로그인 성공 시, 토큰 저장 후 홈으로 이동
+  it("로그인 성공 시 저장 후 홈으로 이동", () => {
     // Given
     renderWithRouter(<LoginPage />);
     const responseData = { authToken: "abc123", name: "test" };
@@ -146,7 +146,7 @@ describe("LoginPage", () => {
       STORAGE_KEY.USER_INFO,
       JSON.stringify(responseData),
     );
-    expect(mockNavigate).toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
   // 6. 로그인 실패 시, 에러 메세지 표시
