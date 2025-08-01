@@ -25,9 +25,10 @@ vi.mock("@/styles/toast", () => ({
 }));
 
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<typeof import("react-router-dom")>(
-    "react-router-dom"
-  );
+  const actual =
+    await vi.importActual<typeof import("react-router-dom")>(
+      "react-router-dom",
+    );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -83,7 +84,9 @@ describe("LoginPage", () => {
 
     renderWithRouter(<LoginPage />);
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
-    expect(mockShowErrorToast).toHaveBeenCalledWith(expect.stringMatching(/이메일/));
+    expect(mockShowErrorToast).toHaveBeenCalledWith(
+      expect.stringMatching(/이메일/),
+    );
   });
 
   // 3. 비밀번호가 비어 있을 경우 에러 메세지 표시
@@ -107,7 +110,7 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
     expect(mutateFn).toHaveBeenCalledWith(
       { email: "test@kakao.com", password: "test123" },
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
@@ -120,7 +123,7 @@ describe("LoginPage", () => {
 
     expect(sessionStorage.setItem).toHaveBeenCalledWith(
       STORAGE_KEY.USER_INFO,
-      JSON.stringify(responseData)
+      JSON.stringify(responseData),
     );
     expect(mockNavigate).toHaveBeenCalled();
   });

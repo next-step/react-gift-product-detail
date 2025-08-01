@@ -12,7 +12,7 @@ export const handlers = [
           price: { sellingPrice: 5000 },
         },
       ]),
-      { status: 200 }
+      { status: 200 },
     );
   }),
 ];

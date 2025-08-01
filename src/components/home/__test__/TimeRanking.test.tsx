@@ -16,25 +16,27 @@ describe("실시간 급상승 선물랭킹", () => {
     render(
       <MemoryRouter>
         <TimeRanking />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(await screen.findByText("노트북")).toBeInTheDocument();
     expect(await screen.findByText("카카오프렌즈")).toBeInTheDocument();
-    expect(await screen.findByText(/5,000/)).toBeInTheDocument(); 
+    expect(await screen.findByText(/5,000/)).toBeInTheDocument();
   });
 
   it("API 에러 시 에러 메세지 표시", async () => {
     server.use(
       http.get("/api/products/ranking", () => {
         return new Response(null, { status: 500 });
-      })
+      }),
     );
     render(
       <MemoryRouter>
         <TimeRanking />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
-    expect(await screen.findByText(/에러|문제|불러올 수 없습니다/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/에러|문제|불러올 수 없습니다/),
+    ).toBeInTheDocument();
   });
 });
