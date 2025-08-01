@@ -1,8 +1,9 @@
 import * as S from './LoginForm.styles'
 import KaKaoTitleIcon from '@/assets/icons/kakao-title.svg?react'
 import MyButton from '@/component/Button/Button'
-import { useLoginForm } from '../hooks/useLoginForm'
-import { useLoginSubmit } from '../hooks/useLoginSubmit'
+import UnderlineInputField from '@/component/InputField/UnderlineInputField/UnderlineInputField'
+import { useLoginForm } from '@/features/Login/hooks/useLoginForm'
+import { useLoginSubmit } from '@/features/Login/hooks/useLoginSubmit'
 
 interface LoginFormProps {
   redirectPath: string
@@ -28,25 +29,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectPath }) => {
             <KaKaoTitleIcon />
           </S.KakaoTitle>
 
-          <S.InputForm
+          <UnderlineInputField
             placeholder="이메일"
             type="email"
             {...register('email')}
             isError={!!errors.email}
+            errorMessage={errors.email?.message}
           />
-          {errors.email && (
-            <S.ErrorMessage isActive>{errors.email.message}</S.ErrorMessage>
-          )}
-
-          <S.InputForm
+          <UnderlineInputField
             placeholder="비밀번호"
             type="password"
             {...register('password')}
             isError={!!errors.password}
+            errorMessage={errors.password?.message}
           />
-          {errors.password && (
-            <S.ErrorMessage isActive>{errors.password.message}</S.ErrorMessage>
-          )}
 
           <MyButton
             type="submit"

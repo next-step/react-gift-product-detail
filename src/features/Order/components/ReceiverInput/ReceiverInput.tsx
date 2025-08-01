@@ -2,6 +2,7 @@ import * as S from './ReceiverInput.styles'
 import { type FieldError, useFormContext } from 'react-hook-form'
 import type { Order } from '@/features/Order/schema/orderSchema'
 import MyButton from '@/component/Button/Button'
+import OutlineInputField from '@/component/InputField/OutlineInputField/OutlineInputField'
 
 interface ReceiverInputProps {
   index: number
@@ -29,41 +30,31 @@ const ReceiverInput = ({ index, onRemove }: ReceiverInputProps) => {
         </MyButton>
       </S.TitleContainer>
 
-      <S.InputContainer>
-        <S.InputLabel>이름</S.InputLabel>
-        <S.InputText
-          placeholder="이름"
-          {...register(`receivers.${index}.receiver`)}
-          isError={!!fieldErrors.receiver}
-        />
-        {fieldErrors.receiver && (
-          <S.ErrorText>{fieldErrors.receiver.message}</S.ErrorText>
-        )}
-      </S.InputContainer>
-      <S.InputContainer>
-        <S.InputLabel>전화번호</S.InputLabel>
-        <S.InputText
-          placeholder="전화번호"
-          {...register(`receivers.${index}.phone`)}
-          isError={!!fieldErrors.phone}
-        />
-        {fieldErrors.phone && (
-          <S.ErrorText>{fieldErrors.phone.message}</S.ErrorText>
-        )}
-      </S.InputContainer>
+      <OutlineInputField
+        label="이름"
+        placeholder="이름"
+        {...register(`receivers.${index}.receiver`)}
+        isError={!!fieldErrors.receiver}
+        errorMessage={fieldErrors.receiver?.message}
+      />
 
-      <S.InputContainer>
-        <S.InputLabel>수량</S.InputLabel>
-        <S.InputText
-          type="number"
-          placeholder="수량"
-          {...register(`receivers.${index}.quantity`, { valueAsNumber: true })}
-          isError={!!fieldErrors.quantity}
-        />
-        {fieldErrors.quantity && (
-          <S.ErrorText>{fieldErrors.quantity.message}</S.ErrorText>
-        )}
-      </S.InputContainer>
+      <OutlineInputField
+        label="전화번호"
+        placeholder="전화번호"
+        {...register(`receivers.${index}.phone`)}
+        isError={!!fieldErrors.phone}
+        errorMessage={fieldErrors.phone?.message}
+      />
+
+      <OutlineInputField
+        label="수량"
+        type="number"
+        placeholder="수량"
+        {...register(`receivers.${index}.quantity`, { valueAsNumber: true })}
+        isError={!!fieldErrors.quantity}
+        errorMessage={fieldErrors.quantity?.message}
+      />
+
       <S.Divider />
     </S.Container>
   )
