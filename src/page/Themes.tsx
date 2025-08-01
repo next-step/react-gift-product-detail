@@ -2,24 +2,25 @@
 import {
 } from '@/component/main/GiftRanking.styled';
 import ProductList from '@/component/theme/ProductList';
-import { baseUrl } from '@/constant/api';
+
+import { getThemesInfoUrl } from '@/constant/api';
+
 import { DefaultDiv, Gap } from '@/styles/CommomStyle/Common.styled';
 import { ThemeDescription, ThemeName, ThemeTitle, ThemeTop } from '@/styles/CommomStyle/themes.styled';
 import type { ThemeInfo } from '@/type/GiftAPI/theme';
 import { getFromUrl } from '@/utils/getFromUrl';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-//import useFetchFromUrlT from '@/hook/useFetchFromUrlT';
-
 
 
 const Themes = () => {
   const { themeId } = useParams<{ themeId: string }>();
-  const themesUrl = `${baseUrl}/api/themes/${themeId}/info`
-  //const themeInfo = useFetchFromUrlT<ThemeInfo>(themesUrl, getFromUrl, defaultThemeInfo);
+
+  const themesInfoUrl = getThemesInfoUrl(themeId);
   const { data } = useQuery<ThemeInfo>({
     queryKey : ['ThemeInfo'],
-    queryFn : () => getFromUrl(themesUrl)
+    queryFn : () => getFromUrl(themesInfoUrl)
+
   })
   const themeBackground = (data?.backgroundColor ?? 'white')
   const themeName = data?.name

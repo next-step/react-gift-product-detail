@@ -1,66 +1,63 @@
-import { baseUrl } from "@/constant/api";
-import { useAuth } from "@/context/AuthContext";
+
+import {getproductsbyCursorUrl } from "@/constant/api";
 import { type ProductItem, type ProductItemFromTheme } from "@/type/GiftAPI/product";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";
 
-function useProductList(){
+function useProductList() {
   const { themeId } = useParams<{ themeId: string }>();
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
   const [cursor, setCursor] = useState(0);
-  const [productList,serProductList] = useState<ProductItem[]>([]);
+  const [productList, setProductList] = useState<ProductItem[]>([]);
   const [loaderRef, setLoaderRef] = useState<HTMLDivElement | null>(null);
   const [extraLoading, setExtraLoading] = useState(false);
 
-  const productsUrl = `${baseUrl}/api/themes/${themeId}/products?cursor=${cursor}`
+  const productsUrl = getproductsbyCursorUrl(themeId, cursor);
 
-  const { data, error, isLoading} = useQuery<ProductItemFromTheme>({
-    queryKey : ['productListData',productsUrl],
-    queryFn : () => getFromUrl(productsUrl),
-    placeholderData : (previousData) => previousData,
+  const { data, error, isLoading } = useQuery<ProductItemFromTheme>({
+    queryKey: ['productListData', productsUrl],
+    queryFn: () => getFromUrl(productsUrl),
+    placeholderData: (previousData) => previousData,
+
   },)
 
 
   useEffect(() => {
     if (data?.list) {
-      serProductList(prev => [...prev, ...data.list]);
+
+      setProductList(prev => [...prev, ...data.list]);
       setExtraLoading(false);
     }
-  },[data]);
+  }, [data]);
 
-  useEffect(() =>{
-    if(!loaderRef) return;
+  useEffect(() => {
+    if (!loaderRef) return;
+
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setCursor(prev => prev + 10);
         setExtraLoading(true);
       }
-  }, 
-  {
-    root: null,
-    rootMargin: '100px',
-    threshold: 0.1,
-  });
 
-  observer.observe(loaderRef);
+    },
+      {
+        root: null,
+        rootMargin: '100px',
+        threshold: 0.1,
+      });
 
-  return () => observer.disconnect();
-}, [loaderRef]);
+    observer.observe(loaderRef);
+
+    return () => observer.disconnect();
+  }, [loaderRef]);
 
 
-  const handleClickProduct = (product: ProductItem) => {
-    if (!user) {
-      navigate(`/login?redirect=/order?id=${product.id}`);
-    } else {
-      navigate(`/order?id=${product.id}`);
-    }
-  };
 
-  return { data, isLoading, error, productList,extraLoading,handleClickProduct,setLoaderRef}
+
+  return { data, isLoading, error, productList, extraLoading, setLoaderRef }
+
 }
 
 export default useProductList

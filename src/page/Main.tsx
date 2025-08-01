@@ -7,12 +7,11 @@ import GiftTheme from '@/component/main/GiftTheme'
 
 import { DefaultDiv } from '../styles/CommomStyle/Common.styled'
 
-
 const Main = () => {
   return (
     <DefaultDiv>
       <FriendChoise/>
-      <GiftTheme/>
+          <GiftTheme/>
       <Banner/>
       <GiftRanking/>
     </DefaultDiv>

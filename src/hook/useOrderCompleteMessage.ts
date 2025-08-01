@@ -1,13 +1,10 @@
-import { baseUrl } from "@/constant/api";
+
 import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
-import { useLocation, useNavigate } from "react-router-dom";
-import {type ProductItemSummary } from "@/type/GiftAPI/product";
-import { getFromUrl } from "@/utils/getFromUrl";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 import { orderAPI } from "@/utils/orderApi";
-import { useQuery } from "@tanstack/react-query";
+import useProductSummary from "./useProductSummary";
+
 
 
 function useOrderCompleteMessage() {
@@ -15,31 +12,10 @@ function useOrderCompleteMessage() {
   const { receivers } = useReceiver();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const query = new URLSearchParams(location.search);
-  const idParam = query.get('id');
-  const id = idParam !== null ? Number(idParam) : null;
-
-  const productUrl = `${baseUrl}/api/products/${id}/summary`;
-  const { data, error } = useQuery<ProductItemSummary>({
-    queryKey : ['productData'],
-    queryFn : () => getFromUrl(productUrl)
-  })
-  //const { item, error } = useFetchFromUrlT<ProductItemSummary>(productUrl, getFromUrl, defaultProductItemSummary);
-
-
-  useEffect(() => {
-    if (error) {
-      toast.error((error as Error).message);
-      navigate('/');
-    }
-  }, [error, navigate]);
-
-  const price = data?.price;
-  const imageUrl = data?.imageURL;
-  const name = data?.name;
-  const brandName = data?.brandName;
+  const total = receivers.reduce((acc, receiver) => acc + receiver.quantity, 0);
+  const { productId } = useParams<{ productId: string }>();
+  const { name } = useProductSummary();
 
 
   const handleOrder = async () => {
@@ -48,7 +24,8 @@ function useOrderCompleteMessage() {
     if (!ordererName.error) {
       try {
         await orderAPI(
-          (id ?? 0),
+          Number(productId),
+
           message,
           messageCardId,
           ordererName.value,
@@ -68,9 +45,10 @@ function useOrderCompleteMessage() {
     }
   };
 
-  const total = receivers.reduce((acc, receiver) => acc + receiver.quantity, 0);
+  
     return {
-        price, imageUrl, name, brandName, total, handleOrder
+      total, handleOrder
+
     }
 };
 

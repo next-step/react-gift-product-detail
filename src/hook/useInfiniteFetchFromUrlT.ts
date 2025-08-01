@@ -6,7 +6,6 @@ function useInfiniteFetchFromUrlT<T>( url: string, fetchFn : (url : string) => P
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
-
     useEffect(() => {
         let isMounted = true;
         const fetchData = async () => {
@@ -23,7 +22,6 @@ function useInfiniteFetchFromUrlT<T>( url: string, fetchFn : (url : string) => P
             } finally {
                 setLoading(false);
             }
-            
 
         };
 

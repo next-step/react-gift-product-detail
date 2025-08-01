@@ -45,3 +45,44 @@ export const defaultProductItemSummary = {
   price: 0,
   imageURL: ''
 }
+
+export interface ProductWish{
+  wishCount: number,
+  isWished: boolean
+}
+
+export interface ProductDetailInfo {
+  description : string,
+    announcements: [
+      {
+        name: string,
+        value: string,
+        displayOrder: number
+      }
+    ]
+}
+
+export interface productHighlightReviewUrl{
+  totalCount: number,
+    reviews: [
+      {
+        id: string,
+        authorName: string,
+        content: string,
+      },
+
+    ]
+  }
+export enum  ProductDetailType {
+  description,
+  review,
+  info,
+}
+
+export const DetailTypeOption = [
+
+  { type: ProductDetailType.description, text: '상품설명' },
+  { type: ProductDetailType.review, text: '상품후기' },
+  { type: ProductDetailType.info, text: '상품정보' },
+]
+
