@@ -9,7 +9,12 @@ import { LoginInfoContext } from '@/contexts/LoginInfoContext';
 import Login from '@/pages/Login';
 
 vi.mock('@/apis/login', () => ({
-  postLogin: vi.fn(),
+  postLogin: vi.fn().mockResolvedValue({
+    authToken: 'mock-auth-token',
+    id: 1,
+    name: '테스트 사용자',
+    email: 'test@kakao.com',
+  }),
 }));
 
 const mockSetLoginInfo = vi.fn();
