@@ -1,4 +1,4 @@
-import { apiGet } from '@/lib/axios'
+import { apiGet, API_PATH } from '@/lib/axios'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 export interface ProductSummary {
@@ -12,14 +12,12 @@ export interface ProductSummary {
 const fetchProductSummary = async (
   productId: number
 ): Promise<ProductSummary | null> => {
-  const res = await apiGet<ProductSummary>(`/products/${productId}/summary`)
+  const res = await apiGet<ProductSummary>(API_PATH.PRODUCTS_SUMMARY(productId))
   return res
 }
 
-export const useProductSummary = (productId: number | null) => {
-  if (!productId) return null
-
-  const { data: product } = useSuspenseQuery<ProductSummary | null>({
+export const useProductSummary = (productId: number) => {
+  const { data: product } = useSuspenseQuery({
     queryKey: ['product', productId],
     queryFn: () => fetchProductSummary(productId),
   })

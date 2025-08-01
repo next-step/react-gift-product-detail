@@ -1,4 +1,4 @@
-import { apiGet } from '@/lib/axios'
+import { apiGet, API_PATH } from '@/lib/axios'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 interface ThemeInfo {
@@ -9,17 +9,13 @@ interface ThemeInfo {
   backgroundColor: string
 }
 
-const fetchThemeInfo = async (
-  themeId: number | null
-): Promise<ThemeInfo | null> => {
-  const res = await apiGet<ThemeInfo>(`/themes/${themeId}/info`)
+const fetchThemeInfo = async (themeId: number): Promise<ThemeInfo | null> => {
+  const res = await apiGet<ThemeInfo>(API_PATH.THEME_INFO(themeId))
   return res
 }
 
-export const useThemeInfo = (themeId: number | null) => {
-  if (!themeId) return null
-
-  const { data: themeInfo } = useSuspenseQuery<ThemeInfo | null>({
+export const useThemeInfo = (themeId: number) => {
+  const { data: themeInfo } = useSuspenseQuery({
     queryKey: ['themeInfo', themeId],
     queryFn: () => fetchThemeInfo(themeId),
   })
