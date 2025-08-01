@@ -2,11 +2,10 @@ import ErrorBoundary from "@/components/common/ErrorBoundary";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { Suspense, type ComponentType } from "react";
 
-const withSuspenseBoundary = <P extends object>(
-  Component: ComponentType<P>,
-  option: boolean = false,
-) => {
-  return (props: P) => {
+const withSuspenseBoundary =
+  (option: boolean = false) =>
+  <P extends object>(Component: ComponentType<P>) =>
+  (props: P) => {
     return (
       <ErrorBoundary redirect={option}>
         <Suspense fallback={<LoadingSpinner height="266px" />}>
@@ -15,6 +14,5 @@ const withSuspenseBoundary = <P extends object>(
       </ErrorBoundary>
     );
   };
-};
 
 export default withSuspenseBoundary;

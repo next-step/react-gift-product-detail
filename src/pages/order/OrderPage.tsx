@@ -1,0 +1,142 @@
+import { useParams, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { ROUTE_PATH } from "@/routes/paths";
+import { cards } from "@/data/card";
+import type { Card } from "@/types/card";
+import styled from "@emotion/styled";
+import CardSection from "@/pages/order/components/CardSection";
+import SenderSection from "@/pages/order/components/SenderSection";
+import ReceiverSection from "@/pages/order/components/ReceiverSection";
+import GiftInformationSection from "@/pages/order/components/GiftInformationSection";
+import { useUserInfo } from "@/contexts/UserInfoContext";
+import { FormProvider, useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import type { OrderFormValue } from "@/types/order";
+import type { OrderRequest } from "@/types/order";
+import { postOrder } from "@/api/order";
+import withUser from "@/hoc/withUser";
+import useProductsSummary from "@/api/hooks/useProductsSummary";
+import withSuspenseBoundary from "@/hoc/withSuspenseBoundary";
+import { wrapper } from "@/utils/wrapper";
+
+const OrderPage = () => {
+  const navigate = useNavigate();
+  const [selectedCard, setSelectedCard] = useState<Card>(cards[0]);
+  const userInfo = useUserInfo();
+  const methods = useForm<OrderFormValue>({
+    mode: "onChange",
+    defaultValues: {
+      message: selectedCard.defaultTextMessage,
+      sender: userInfo?.name || "",
+      receiver: [],
+    },
+  });
+
+  const watchedReceiver = methods.watch("receiver");
+
+  useEffect(() => {
+    methods.setValue("message", selectedCard.defaultTextMessage);
+  }, [selectedCard, methods]);
+
+  const { id } = useParams<{ id: string }>();
+  const { gift, isError } = useProductsSummary({ id });
+
+  useEffect(() => {
+    if (!gift && isError) {
+      navigate(ROUTE_PATH.HOME, { replace: true });
+    }
+  }, [gift, isError, navigate]);
+
+  if (!gift) return null;
+
+  const onValid: SubmitHandler<OrderFormValue> = data => {
+    const totalCount = data.receiver.reduce(
+      (sum, receiver) => sum + Number(receiver.quantity),
+      0,
+    );
+
+    const orderRequestData: OrderRequest = {
+      productId: Number(id),
+      message: data.message,
+      messageCardId: String(selectedCard.id),
+      ordererName: data.sender,
+      receivers: data.receiver.map(receiver => ({
+        name: receiver.name,
+        phoneNumber: receiver.phoneNumber,
+        quantity: Number(receiver.quantity),
+      })),
+    };
+
+    postOrder({ orderData: orderRequestData })
+      .then(() => {
+        alert(
+          [
+            "주문이 완료되었습니다.",
+            `상품명: ${gift.name}`,
+            `구매 수량: ${totalCount}개`,
+            `보낸 사람: ${data.sender}`,
+            `메시지: ${data.message}`,
+          ].join("\n"),
+        );
+        navigate(ROUTE_PATH.HOME, { replace: true });
+      })
+      .catch(error => {
+        if (error.response?.status === 401) {
+          navigate(ROUTE_PATH.LOGIN, { replace: true });
+        }
+      });
+  };
+
+  return (
+    <Main>
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit(onValid)}>
+          <CardSection {...selectedCard} setSelectedCard={setSelectedCard} />
+          <SenderSection />
+          <ReceiverSection />
+          <GiftInformationSection {...gift} />
+          <Button type="submit">
+            {gift.price *
+              watchedReceiver.reduce(
+                (total, receiver) => total + Number(receiver.quantity || 0),
+                0,
+              )}
+            원 주문하기
+          </Button>
+        </Form>
+      </FormProvider>
+    </Main>
+  );
+};
+export default wrapper([withUser, withSuspenseBoundary(true)], OrderPage);
+
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.gray.gray200};
+  padding-bottom: 3.125rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.spacing2};
+`;
+
+const Button = styled.button`
+  z-index: 100;
+  width: 100%;
+  max-width: 720px;
+  height: 3.125rem;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: ${({ theme }) => theme.spacing.spacing0} auto;
+  background-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
+  color: ${({ theme }) => theme.colors.semantic.text.default};
+  font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
+  line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
+`;
