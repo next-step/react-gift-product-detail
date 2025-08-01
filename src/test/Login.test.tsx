@@ -6,7 +6,7 @@ import {
 } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { AuthProvider } from '../contexts/AuthContext';
-import Login from './Login';
+import Login from '../pages/Login';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '../styles/theme';
 import {
