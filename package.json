@@ -1,12 +1,31 @@
 {
   "name": "react-gift-monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "react-gift-mock-server"
+  ],
   "scripts": {
-    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run start\""
+    "dev": "concurrently \"npm --workspace frontend run dev\" \"npm --workspace backend run dev\" \"npm --workspace react-gift-mock-server run start:dev\"",
+    "lint": "npm run lint:frontend && npm run lint:backend && npm run lint:mock",
+    "lint:frontend": "npm --workspace frontend run lint",
+    "lint:backend": "npm --workspace backend run lint",
+    "lint:mock": "npm --workspace react-gift-mock-server run lint",
+    "type-check": "npm run type-check:frontend && npm run type-check:backend && npm run type-check:mock",
+    "type-check:frontend": "npm --workspace frontend run type-check",
+    "type-check:backend": "npm --workspace backend run type-check",
+    "type-check:mock": "npm --workspace react-gift-mock-server run type-check",
+    "build": "npm run build:frontend && npm run build:backend && npm run build:mock",
+    "build:frontend": "npm --workspace frontend run build",
+    "build:backend": "npm --workspace backend run build",
+    "build:mock": "npm --workspace react-gift-mock-server run build",
+    "test": "npm run test:frontend && npm run test:backend && npm run test:mock",
+    "test:frontend": "npm --workspace frontend run test",
+    "test:backend": "npm --workspace backend run test",
+    "test:mock": "npm --workspace react-gift-mock-server run test"
   },
   "devDependencies": {
     "concurrently": "^8.2.0"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.83.0"
   }
 }

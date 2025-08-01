@@ -1,0 +1,32 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - juhyeong424   # PR이 이 브랜치로 오면 실행
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # PR 소스 브랜치가 step03 인 경우만 실행 예시
+    if: github.event_name == 'pull_request' && github.head_ref == 'step03'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.13.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
