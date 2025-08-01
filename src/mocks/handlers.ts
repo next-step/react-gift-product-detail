@@ -23,4 +23,32 @@ export const handlers = [
       ],
     });
   }),
+
+  // 로그인 API 핸들러
+  http.post('http://localhost:3000/api/login', async ({ request }) => {
+    const body = (await request.json()) as Record<string, any>;
+
+    // 성공 케이스: 이메일이 있고 비밀번호가 8자 이상
+    if (body.email && body.password && body.password.length >= 8) {
+      return Response.json({
+        data: {
+          email: body.email,
+          name: 'user',
+          authToken: 'dummy-token',
+        },
+      });
+    }
+
+    // 실패 케이스
+    return Response.json(
+      {
+        data: {
+          status: 'BAD_REQUEST',
+          statusCode: 400,
+          message: '잘못된 이메일 또는 비밀번호입니다.',
+        },
+      },
+      { status: 400 }
+    );
+  }),
 ];

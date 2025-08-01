@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@emotion/react';
 import { theme } from '@/styles';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 // 테스트용 QueryClient 생성
 const createTestQueryClient = () =>
@@ -36,7 +37,9 @@ function customRender(
     return (
       <QueryClientProvider client={testQueryClient}>
         <ThemeProvider theme={theme}>
-          <BrowserRouter>{children}</BrowserRouter>
+          <AuthProvider>
+            <BrowserRouter>{children}</BrowserRouter>
+          </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     );
