@@ -3,6 +3,7 @@ import Login from '@/pages/Login';
 import MyPage from '@/pages/MyPage';
 import NotFound from '@/pages/NotFound';
 import Order from '@/pages/Order';
+import ProductDetail from '@/pages/ProductDetail/Page';
 import ThemeProductList from '@/pages/ThemeProductList';
 import { Route, Routes as RouterRoutes } from 'react-router';
 
@@ -15,6 +16,7 @@ export const Routes = () => {
       <Route path={ROUTE_PATH.MY_PAGE} element={<MyPage />} />
       <Route path={ROUTE_PATH.ORDER} element={<Order />} />
       <Route path={ROUTE_PATH.THEME_PRODUCT_LIST} element={<ThemeProductList />} />
+      <Route path={ROUTE_PATH.PRODUCT_DETAIL} element={<ProductDetail />} />
     </RouterRoutes>
   );
 };
@@ -26,4 +28,7 @@ export const ROUTE_PATH = {
   MY_PAGE: '/Mypage',
   ORDER: '/Order',
   THEME_PRODUCT_LIST: '/themes/:themeId/products',
+  PRODUCT_DETAIL: '/products/:productId',
 };
+
+export const getProductDetailPath = (id: number | string) => `/products/${id}`;

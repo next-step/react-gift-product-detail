@@ -99,7 +99,6 @@ export const getThemeProducts = async (themeId: number, cursor = 0, limit = 10) 
   return data.data;
 };
 
-/* ---------- 상품 랭킹 ---------- */
 interface ProductRankingResponse {
   data: ProductItem[];
 }
@@ -113,7 +112,67 @@ export const getProductRanking = async (targetType = 'ALL', rankType = 'MANY_WIS
   const { data } = await api.get<ProductRankingResponse>('/api/products/ranking', {
     params: { targetType, rankType },
   });
-  return data.data; // 배열
+  return data.data;
+};
+
+interface ProductInfoResponse {
+  data: ProductItem;
+}
+
+export const getProductInfo = async (productId: number): Promise<ProductItem> => {
+  const { data } = await api.get<ProductInfoResponse>(`/api/products/${productId}`);
+  return data.data;
 };
 
 export type ProductRankingItem = ProductItem;
+
+export interface ProductAnnouncement {
+  name: string;
+  value: string;
+  displayOrder: number;
+}
+export interface ProductDetailInfo {
+  description: string;
+  announcements: ProductAnnouncement[];
+}
+
+interface ProductDetailResponse {
+  data: ProductDetailInfo;
+}
+
+export const getProductDetailInfo = async (productId: number): Promise<ProductDetailInfo> => {
+  const { data } = await api.get<ProductDetailResponse>(`/api/products/${productId}/detail`);
+  return data.data;
+};
+
+export interface HighlightReviewItem {
+  id: string;
+  authorName: string;
+  content: string;
+}
+export interface HighlightReviewData {
+  totalCount: number;
+  reviews: HighlightReviewItem[];
+}
+interface HighlightReviewResponse {
+  data: HighlightReviewData;
+}
+
+export const getHighlightReview = async (productId: number): Promise<HighlightReviewData> => {
+  const { data } = await api.get<HighlightReviewResponse>(
+    `/api/products/${productId}/highlight-review`
+  );
+  return data.data;
+};
+export interface WishInfo {
+  wishCount: number;
+  isWished: boolean;
+}
+interface WishInfoResponse {
+  data: WishInfo;
+}
+
+export const getWishInfo = async (productId: number): Promise<WishInfo> => {
+  const { data } = await api.get<WishInfoResponse>(`/api/products/${productId}/wish`);
+  return data.data;
+};

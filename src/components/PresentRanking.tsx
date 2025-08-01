@@ -125,6 +125,7 @@ const PresentDisplay = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
   gap: 24px 8px;
 `;
 
@@ -152,24 +153,37 @@ const ProductBox = styled.div`
   width: 100%;
   position: relative;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ProductInfo = styled.div`
   width: 100%;
+  flex: 1 0 auto;
+`;
+
+const ProductThumb = styled.div`
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 4px;
+  overflow: hidden;
 `;
 
 const ProductImage = styled.img`
+  position: absolute;
+  inset: 0;
   width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center center;
-  border-radius: 4px;
-  overflow: hidden;
 `;
 
 const SubProductName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.1875rem;
@@ -181,7 +195,9 @@ const SubProductName = styled.p`
 const ProdudctName = styled.h6`
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.1875rem;
@@ -265,7 +281,6 @@ const PresentRanking: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  /* ───── 파라미터 매핑 ───── */
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
     female: 'FEMALE',
@@ -274,7 +289,6 @@ const PresentRanking: React.FC = () => {
   };
   const apiRankTypeMap = ['MANY_WISH', 'MANY_RECEIVE', 'MANY_WISH_RECEIVE'] as const;
 
-  /* ───── Preferences 복원 ───── */
   useEffect(() => {
     const savedType = localStorage.getItem('selectedType') as
       | 'all'
@@ -287,7 +301,6 @@ const PresentRanking: React.FC = () => {
     if (savedPresentType !== null) setSelectedPresentType(Number(savedPresentType));
   }, []);
 
-  /* ───── React Query: 랭킹 데이터 ───── */
   const {
     data: products = [],
     isLoading,
@@ -299,7 +312,6 @@ const PresentRanking: React.FC = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  /* ───── 핸들러 ───── */
   const handleTypeSelect = (type: typeof selectedType) => {
     setShowAll(false);
     setSelectedType(type);
@@ -323,10 +335,14 @@ const PresentRanking: React.FC = () => {
 
   const presentTypes = ['받고 싶어한', '많이 선물한', '위시로 받은'];
 
-  const goOrder = (productId: number) => {
-    const to = `/Order?productId=${productId}`;
-    if (user) navigate(to);
-    else navigate('/login', { state: { from: to } });
+  // const goOrder = (productId: number) => {
+  //   const to = `/Order?productId=${productId}`;
+  //   if (user) navigate(to);
+  //   else navigate('/login', { state: { from: to } });
+  // };
+
+  const goDetail = (productId: number) => {
+    navigate(`/products/${productId}`);
   };
   return (
     <ThemeProvider theme={theme}>
@@ -334,7 +350,6 @@ const PresentRanking: React.FC = () => {
         <Title>실시간 급상승 선물랭킹</Title>
         <MarginBox1 />
 
-        {/* 수신자 유형 선택 */}
         <SelectionBanner>
           <ReceiverType>
             {typeOptions.map((type) => (
@@ -348,7 +363,6 @@ const PresentRanking: React.FC = () => {
 
         <MarginBox2 />
 
-        {/* 랭킹 기준 선택 */}
         <PresentType>
           {presentTypes.map((text, index) => (
             <PresentTypeButton
@@ -363,7 +377,6 @@ const PresentRanking: React.FC = () => {
 
         <MarginBox2 />
 
-        {/* 랭킹 리스트 */}
         <PresentDisplayContainer>
           {isLoading ? (
             <LoadingContainer>
@@ -376,7 +389,7 @@ const PresentRanking: React.FC = () => {
           ) : (
             <PresentDisplay>
               {products.slice(0, productsToShow).map((p, index) => (
-                <ProductBox key={p.id} onClick={() => goOrder(p.id)}>
+                <ProductBox key={p.id} onClick={() => goDetail(p.id)}>
                   <NumberLogo
                     css={css`
                       background-color: ${index <= 2 ? 'rgb(252, 106, 102)' : 'rgb(176, 179, 186)'};
@@ -385,7 +398,9 @@ const PresentRanking: React.FC = () => {
                     {index + 1}
                   </NumberLogo>
                   <ProductInfo>
-                    <ProductImage src={p.imageURL} alt={p.name} />
+                    <ProductThumb>
+                      <ProductImage src={p.imageURL} alt={p.name} />
+                    </ProductThumb>
                     <div
                       css={css`
                         width: 100%;
@@ -408,7 +423,6 @@ const PresentRanking: React.FC = () => {
           )}
         </PresentDisplayContainer>
 
-        {/* 더보기 / 접기 */}
         {products.length > 6 && (
           <>
             <div

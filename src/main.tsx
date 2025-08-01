@@ -4,7 +4,17 @@ import App from './App.tsx';
 import GlobalStyle from './styles/global.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      throwOnError: true,
+      retry: 1,
+    },
+    mutations: {
+      throwOnError: true,
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
