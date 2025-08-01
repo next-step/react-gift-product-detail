@@ -81,6 +81,14 @@ function renderWithRouter(ui: React.ReactNode) {
 describe("LoginPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    Object.defineProperty(window, "sessionStorage", {
+      value: {
+        setItem: mockSetItem,
+      },
+      writable: true,
+    });
+    vi.spyOn(toastModule, "showErrorToast").mockImplementation(vi.fn());
   });
 
   // 1. 이메일, 비밀번호 input이 보여야 함.
