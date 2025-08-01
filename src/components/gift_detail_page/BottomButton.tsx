@@ -66,7 +66,7 @@ export const BottomButton = () => {
     },
   });
   const handleLike = () => {
-    queryClient.setQueryData<WishInfo>([`wish-${parsedId}`, { id: parsedId }], (old) => {
+    queryClient.setQueryData<WishInfo>(['wish', { id: parsedId }], (old) => {
       if (!old) return old;
       return {
         ...old,
