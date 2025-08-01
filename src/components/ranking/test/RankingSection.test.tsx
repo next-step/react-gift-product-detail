@@ -10,6 +10,18 @@ import {
 import  ErrorBoundary  from "@/components/common/ErrorBoundary";
 
 describe("RankingSection", () => {
+//   it("정상 응답 시 상품 정보가 렌더링된다", async () => {
+//   renderWithTheme(<RankingSection />);
+
+//   await waitFor(() =>
+//     expect(screen.getByTestId("product-name")).toHaveTextContent(
+//       "스트로베리 초콜릿 생크림"
+//     )
+//   );
+
+//   expect(screen.getByText("투썸플레이스")).toBeInTheDocument();
+//   expect(screen.getByText("39,000")).toBeInTheDocument();
+// });
 
   it("로딩 중에는 Spinner가 표시된다", async () => {
   renderWithTheme(<RankingSection />);
