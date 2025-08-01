@@ -7,7 +7,7 @@ import LoginForm from "@/pages/login/components/LoginForm";
 
 const mockLogin = vi.fn();
 
-vi.mock("@/hooks/api/useLogin", () => ({
+vi.mock("@/api/hooks/useLogin", () => ({
   default: () => ({
     data: undefined,
     isPending: false,
