@@ -82,7 +82,9 @@ const setButtonStyle = ({
 const StyledButton = styled('button', {
   shouldForwardProp: (prop) => !['variant', 'size', 'fullWidth'].includes(prop),
 })<ButtonProps>`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
   border-radius: ${theme.spacing[1]};
 
