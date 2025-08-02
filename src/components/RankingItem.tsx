@@ -63,7 +63,7 @@ export default function RankingItem({ item, rank }: Props) {
   const goToDetail = useGoToDetail(item.id);
 
   return (
-    <Card onClick={goToDetail}>
+    <Card onClick={goToDetail} data-testid="ranking-item">
       <ItemImage>
         <img src={item.imageURL} alt={item.name} />
         <RankBadge top3={isTop3}>{rank}</RankBadge>

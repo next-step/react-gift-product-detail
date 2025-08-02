@@ -79,8 +79,9 @@ export default function LoginPage() {
     try {
       await login(values.email, values.password);
       navigate(from, { replace: true });
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : '로그인에 실패했습니다.';
+      toast.error(errorMessage);
     }
   };
 

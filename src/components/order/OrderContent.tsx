@@ -97,12 +97,13 @@ export default function OrderContent() {
         </div>,
       );
       goToHome();
-    } catch (err: any) {
-      if (err.message === '401') {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+      if (errorMessage === '401') {
         toast.error('로그인이 필요합니다.');
         goToLogin();
       } else {
-        toast.error(err.message);
+        toast.error(errorMessage);
       }
     }
   };
