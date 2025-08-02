@@ -1,19 +1,26 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import LoginPage from "@/pages/LoginPage";
 import { MemoryRouter } from "react-router-dom";
 import { STORAGE_KEY } from "@/constants/storage";
-import { showErrorToast } from "@/styles/toast";
 import * as loginFormModule from "@/hooks/useLoginForm";
 
-let mutateOptions: any;
+let LoginPage: React.ComponentType;
 
 const mockNavigate = vi.fn();
 const mockSetItem = vi.fn();
+const mockShowErrorToast = vi.fn();
 
-const mockMutate = vi.fn((_fn, options) => {
-  mutateOptions = options;
+const mockMutate = vi.fn((variables, options) => {
+  if (variables.email === "test@kakao.com") {
+    options?.onSuccess?.(
+      { authToken: "abc123", name: "test" },
+      variables,
+      undefined
+    );
+  } else {
+    options?.onError?.({ isAxiosError: true }, variables, undefined);
+  }
 });
 
 const defaultLoginForm = {
@@ -29,7 +36,7 @@ const defaultLoginForm = {
 };
 
 vi.mock("@/styles/toast", () => ({
-  showErrorToast: vi.fn(),
+  showErrorToast: (...args: unknown[]) => mockShowErrorToast(...args),
 }));
 
 vi.mock("react-router-dom", async () => {
@@ -46,23 +53,6 @@ vi.mock("react-router-dom", async () => {
 vi.mock("@/hooks/useLoginMutation", () => ({
   useLoginMutation: () => ({
     mutate: mockMutate,
-    mutateAsync: vi.fn(),
-    reset: vi.fn(),
-    data: undefined,
-    error: null,
-    isError: false,
-    isIdle: false,
-    isLoading: false,
-    isSuccess: false,
-    status: "idle",
-    variables: undefined,
-    context: undefined,
-    failureCount: 0,
-    failureReason: null,
-    isPaused: false,
-    onSettled: undefined,
-    onSuccess: undefined,
-    onError: undefined,
   }),
 }));
 
@@ -71,21 +61,24 @@ vi.mock("@/hooks/useLoginForm", () => ({
 }));
 
 vi.mock("axios", () => ({
-  default: {},
   isAxiosError: () => true,
 }));
 
-beforeAll(() => {
-  const sessionStorageMock = {
-    setItem: mockSetItem,
-    getItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  };
+beforeEach(async () => {
+  vi.clearAllMocks();
+
   Object.defineProperty(window, "sessionStorage", {
-    value: sessionStorageMock,
+    value: {
+      setItem: mockSetItem,
+      getItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+    },
     writable: true,
+    configurable: true,
   });
+
+  LoginPage = (await import("@/pages/LoginPage")).default;
 });
 
 function renderWithRouter(ui: React.ReactNode) {
@@ -93,10 +86,6 @@ function renderWithRouter(ui: React.ReactNode) {
 }
 
 describe("LoginPage", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   // 1. 이메일, 비밀번호 input이 보여야 함.
   it("이메일, 비밀번호, 로그인 버튼 렌더링", () => {
     // Given
@@ -122,7 +111,7 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
 
     // Then
-    expect(showErrorToast).toHaveBeenCalledWith(
+    expect(mockShowErrorToast).toHaveBeenCalledWith(
       expect.stringMatching(/이메일/)
     );
   });
@@ -135,7 +124,6 @@ describe("LoginPage", () => {
       password: "",
       isFormValid: false,
     });
-
     renderWithRouter(<LoginPage />);
 
     // When
@@ -148,6 +136,9 @@ describe("LoginPage", () => {
   // 4. 유효한 폼 입력 후 로그인 버튼 클릭 시 mutate 호출
   it("로그인 버튼 클릭 시 mutate 호출", async () => {
     // Given
+    vi.spyOn(loginFormModule, "useLoginForm").mockReturnValue({
+      ...defaultLoginForm,
+    });
     renderWithRouter(<LoginPage />);
 
     // When
@@ -164,34 +155,31 @@ describe("LoginPage", () => {
 
   // 5. 로그인 성공 시, 토큰 저장 후 홈으로 이동
   it("로그인 성공 시 저장 후 홈으로 이동", async () => {
-    // Given
     renderWithRouter(<LoginPage />);
-    const responseData = { authToken: "abc123", name: "test" };
-
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
 
-    // When
-    mutateOptions?.onSuccess?.(responseData, {}, undefined);
-
-    // Then
     expect(mockSetItem).toHaveBeenCalledWith(
       STORAGE_KEY.USER_INFO,
-      JSON.stringify(responseData)
+      JSON.stringify({ authToken: "abc123", name: "test" })
     );
-    expect(mockNavigate).toHaveBeenCalledWith("/");
+    expect(mockNavigate).toHaveBeenCalledWith("/", { replace: true });
   });
 
   // 6. 로그인 실패 시, 에러 메세지 표시
   it("로그인 실패 시 에러 메세지 표시", async () => {
-    // Given
-    renderWithRouter(<LoginPage />);
-    const error = { isAxiosError: true };
+    vi.spyOn(
+      await import("@/hooks/useLoginForm"),
+      "useLoginForm"
+    ).mockReturnValue({
+      ...defaultLoginForm,
+      email: "invalid-email",
+    });
 
+    renderWithRouter(<LoginPage />);
     await userEvent.click(screen.getByRole("button", { name: /로그인/i }));
 
-    // When
-    mutateOptions?.onError?.(error, undefined, undefined);
-    // Then
-    expect(showErrorToast).toHaveBeenCalled();
+    expect(mockShowErrorToast).toHaveBeenCalledWith(
+      "올바른 이메일 형식이 아닙니다."
+    );
   });
 });
