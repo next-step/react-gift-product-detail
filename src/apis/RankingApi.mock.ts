@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const fetchRankingHandlers = [
-  http.get('/api/products/ranking', ({ request }) => {
+  http.get('http://localhost/api/products/ranking', ({ request }) => {
     const url = new URL(request.url);
     const targetType = url.searchParams.get('targetType') ?? 'ALL';
     const rankType = url.searchParams.get('rankType') ?? 'MANY_WISH';

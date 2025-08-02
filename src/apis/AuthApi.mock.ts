@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
 export const fetchAuthhandlers = [
-  http.post('/api/login', async ({ request }) => {
+  http.post('http://localhost/api/login', async ({ request }) => {
     const body = await request.json();
 
     const { email, password } = body;
