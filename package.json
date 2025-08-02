@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:ci": "vitest run --project=unit",
+    "dev:mock":"VITE_ENABLE_MSW=true vite"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -36,6 +38,9 @@
     "@storybook/addon-vitest": "^9.0.14",
     "@storybook/react-vite": "^9.0.14",
     "@tanstack/eslint-plugin-query": "^5.81.2",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
@@ -49,6 +54,8 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-storybook": "^9.0.14",
     "globals": "^16.0.0",
+    "jsdom": "^26.1.0",
+    "msw": "^2.10.4",
     "playwright": "^1.53.1",
     "prettier": "^3.6.0",
     "typescript": "~5.8.3",
@@ -56,5 +63,10 @@
     "vite": "^6.3.5",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

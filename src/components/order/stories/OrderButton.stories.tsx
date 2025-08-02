@@ -1,10 +1,10 @@
 import { OrderButton } from "@/components/order/OrderButton";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { withOrderProvider } from "./decorators";
+import { OrderDecorator } from "./OrderDecorators";
 
 const meta: Meta<typeof OrderButton> = {
   component: OrderButton,
-  decorators: [withOrderProvider],
+  decorators: [OrderDecorator],
 };
 
 export default meta;

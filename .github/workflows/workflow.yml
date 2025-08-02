@@ -1,0 +1,27 @@
+name: KTC_CI
+
+on:
+  push:
+    branches:
+      - kimgho
+  pull_request:
+    branches:
+      - kimgho
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+      - name: install dependencies
+        run: npm ci
+
+      - name: run tests
+        run: npm run test:ci

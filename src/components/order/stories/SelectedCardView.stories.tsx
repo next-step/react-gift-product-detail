@@ -1,10 +1,10 @@
 import { SelectedCardView } from "@/components/order/SelectedCardView";
-import { withOrderProvider } from "@/components/order/stories/decorators";
+import { OrderDecorator } from "@/components/order/stories/OrderDecorators";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta: Meta<typeof SelectedCardView> = {
   component: SelectedCardView,
-  decorators: [withOrderProvider],
+  decorators: [OrderDecorator],
 };
 
 export default meta;

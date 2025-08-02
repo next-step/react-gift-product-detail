@@ -1,11 +1,11 @@
 import { product } from "@/__mock__";
 import { OrderProductInfoSection } from "@/components/order/OrderProductInfoSection";
-import { withOrderProvider } from "@/components/order/stories/decorators";
+import { OrderDecorator } from "@/components/order/stories/OrderDecorators";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta: Meta<typeof OrderProductInfoSection> = {
   component: OrderProductInfoSection,
-  decorators: [withOrderProvider],
+  decorators: [OrderDecorator],
 };
 
 export default meta;
