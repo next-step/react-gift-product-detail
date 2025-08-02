@@ -31,15 +31,15 @@ describe('로그인 페이지 - 통합 테스트', () => {
   });
 
   it('GIVEN: 올바른 정보를, WHEN: 입력하고 제출하면, THEN: 홈페이지로 이동해야 한다.', async () => {
-    vi.mocked(userRequests.fetchUserInfos).mockResolvedValue({
+    vi.mocked(userRequests).fetchUserInfos.mockResolvedValue({
       authToken: 'fake-token',
       name: '테스트 유저',
       email: 'test@example.com',
     });
 
     renderWithRouter();
-    const emailInput = screen.getByPlaceholderText('이메일');
-    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const emailInput = screen.getByPlaceholderText('email');
+    const passwordInput = screen.getByPlaceholderText('password');
     const loginButton = screen.getByRole('button', { name: '로그인' });
 
     await user.type(emailInput, 'test@example.com');
@@ -56,13 +56,13 @@ describe('로그인 페이지 - 통합 테스트', () => {
 
   it('GIVEN: 유효하지 않은 이메일을, WHEN: 입력하고 제출하면, THEN: 에러 메시지를 보여줘야 한다.', async () => {
     renderWithRouter();
-    const emailInput = screen.getByPlaceholderText('이메일');
-    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const emailInput = screen.getByPlaceholderText('email');
+    const passwordInput = screen.getByPlaceholderText('password');
     const loginButton = screen.getByRole('button', { name: '로그인' });
 
     await user.type(emailInput, 'invalid-email');
     await user.type(passwordInput, 'password123');
-    await user.tab(); // blur
+    await user.tab();
     await user.click(loginButton);
 
     const errorMessage = await screen.findByText('ID는 이메일 형식으로 입력해주세요.');
