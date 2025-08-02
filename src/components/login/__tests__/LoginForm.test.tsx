@@ -60,7 +60,7 @@ describe('LoginForm 통합 테스트', () => {
     expect(screen.getByText('비밀번호는 8자 이상이어야 합니다.')).toBeInTheDocument();
   });
 
-  it('정상 입력 시 버튼이 활성화되고 handleLogin이 호출된다', async () => {
+  it('정상 입력 시 버튼이 활성화된다', () => {
     renderWithTheme();
 
     const emailInput = screen.getByPlaceholderText('이메일');
@@ -73,6 +73,19 @@ describe('LoginForm 통합 테스트', () => {
     fireEvent.blur(passwordInput);
 
     expect(button).not.toBeDisabled();
+  });
+
+  it('로그인 버튼 클릭 시 handleLogin이 호출된다', async () => {
+    renderWithTheme();
+
+    const emailInput = screen.getByPlaceholderText('이메일');
+    const passwordInput = screen.getByPlaceholderText('비밀번호');
+    const button = screen.getByRole('button', { name: '로그인' });
+
+    fireEvent.change(emailInput, { target: { value: 'user@kakao.com' } });
+    fireEvent.blur(emailInput);
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.blur(passwordInput);
 
     fireEvent.click(button);
 
