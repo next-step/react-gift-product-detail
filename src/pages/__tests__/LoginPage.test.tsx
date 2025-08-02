@@ -4,10 +4,12 @@ import { ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LoginPage from '../LoginPage';
 import { theme } from '../../styles/theme';
+import { AuthProvider } from '../../hooks/useAuth';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('@/hooks/useAuth', () => ({
   useAuth: vi.fn(),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 vi.mock('@/hooks/useLoginForm', () => ({
@@ -20,13 +22,17 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const mockUseAuth = vi.mocked(await import('@/hooks/useAuth')).useAuth;
-const mockUseLoginForm = vi.mocked(await import('@/hooks/useLoginForm')).default;
+const { useAuth: mockUseAuth } = (await import('@/hooks/useAuth')) as any;
+const { default: mockUseLoginForm } = (await import('@/hooks/useLoginForm')) as any;
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { retry: false },
+      queries: {
+        retry: false,
+        gcTime: 0,
+        staleTime: 0,
+      },
       mutations: { retry: false },
     },
   });
@@ -34,7 +40,9 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>{children}</BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>{children}</BrowserRouter>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
