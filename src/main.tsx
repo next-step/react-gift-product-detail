@@ -8,7 +8,7 @@ import { GlobalStyles } from "@/app/styles";
 import App from "@/App";
 
 async function enableMocking() {
-    if (import.meta.env.PROD) return;
+    if (import.meta.env.PROD) return Promise.resolve();
 
     const { worker } = await import("@/__mocks__/browser");
 
