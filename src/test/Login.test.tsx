@@ -69,7 +69,7 @@ describe('Login Page (Vitest)', () => {
       expect(passwordInput).toHaveValue('password123');
     });
 
-    it('유효하지 않은 이메일을 입력하면 에러가 나타난다', async () => {
+    it('이메일에 "@"가 없으면 에러가 나타난다', async () => {
       fireEvent.change(screen.getByPlaceholderText('이메일'), {
         target: { value: 'invalid-email' },
       });
@@ -80,7 +80,7 @@ describe('Login Page (Vitest)', () => {
       ).toBeInTheDocument();
     });
 
-    it('짧은 비밀번호를 입력하면 에러가 나타난다', async () => {
+    it('비밀번호가 8자 미만이면 에러가 나타난다', async () => {
       fireEvent.change(screen.getByPlaceholderText('비밀번호'), {
         target: { value: '123' },
       });
