@@ -124,7 +124,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('전체 필터 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -156,7 +156,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('남자 필터 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -188,7 +188,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('여자 필터 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -220,7 +220,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('청소년 필터 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -254,7 +254,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('받고 싶어요 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -286,7 +286,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('선물 많이 받아요 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
@@ -318,7 +318,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
     it('받고 싶어요 + 선물 많이 받아요 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
-        http.get('/api/products/ranking', ({ request }) => {
+        http.get('/api/products/ranking', () => {
           mockHandler();
           return HttpResponse.json([
             {
