@@ -16,24 +16,24 @@ describe('공용 InputField 컴포넌트 - 단위 테스트', () => {
   });
 
   it('GIVEN: type prop이 "email"로 주어지면, THEN: input 요소의 타입이 "email"여야 한다.', () => {
-    render(<InputField field={FieldProps} placeholder="이메일" type="email" />);
+    render(<InputField {...FieldProps} placeholder="email" type="email" />);
 
-    const inputElement = screen.getByPlaceholderText('이메일');
+    const inputElement = screen.getByPlaceholderText('email');
     expect(inputElement).toHaveAttribute('type', 'email');
   });
 
   it('GIVEN: type prop이 "password"로 주어지면, THEN: input 요소의 타입이 "password"여야 한다.', () => {
-    render(<InputField field={FieldProps} placeholder="비밀번호" type="password" />);
+    render(<InputField {...FieldProps} placeholder="password" type="password" />);
 
-    const inputElement = screen.getByPlaceholderText('비밀번호');
+    const inputElement = screen.getByPlaceholderText('password');
     expect(inputElement).toHaveAttribute('type', 'password');
   });
 
   it('GIVEN: 사용자가 입력을 할 때, WHEN: onChange 핸들러가 주어지면, THEN: 핸들러가 호출되어야 한다.', async () => {
     const user = userEvent.setup();
-    render(<InputField field={FieldProps} placeholder="입력 테스트" />);
-    const inputElement = screen.getByPlaceholderText('입력 테스트');
-    const testText = 'hello';
+    render(<InputField {...FieldProps} placeholder="email" type="email" />);
+    const inputElement = screen.getByPlaceholderText('email');
+    const testText = 'hello@email.com';
     await user.type(inputElement, testText);
 
     expect(FieldProps.onChange).toHaveBeenCalledTimes(testText.length);
@@ -45,14 +45,14 @@ describe('공용 InputField 컴포넌트 - 단위 테스트', () => {
         ...FieldProps,
         error: 'ID를 입력해주세요.',
       };
-      render(<InputField field={errorFieldProps} placeholder="이메일" />);
+      render(<InputField {...errorFieldProps} placeholder="email" type="email" />);
 
       const errorMessage = screen.getByText('ID를 입력해주세요.');
       expect(errorMessage).toBeInTheDocument();
     });
 
     it('WHEN: 에러 메시지가 주어지지 않으면, THEN: 화면에 표시되지 않아야 한다.', () => {
-      render(<InputField field={FieldProps} placeholder="이메일" />);
+      render(<InputField {...FieldProps} placeholder="email" type="email" />);
 
       const errorMessage = screen.queryByText('ID를 입력해주세요');
       expect(errorMessage).not.toBeInTheDocument();
