@@ -12,14 +12,10 @@ const ProductWishButton = ({ index }: ProductWishButtonProps) => {
     queryFn: () => requests.fetchProductWish(index),
   });
 
-  const { mutate: toggleWish } = useWishToggleMutation(index);
-
-  const handleWishClick = () => {
-    toggleWish();
-  };
+  const toggleWish = useWishToggleMutation(index);
 
   return (
-    <button onClick={handleWishClick}>
+    <button onClick={() => toggleWish()}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

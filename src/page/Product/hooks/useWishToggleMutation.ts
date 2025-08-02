@@ -10,7 +10,7 @@ export const useWishToggleMutation = (index: number) => {
   const queryClient = useQueryClient();
   const queryKey = ['productWishData', index];
 
-  return useMutation({
+  const { mutate } = useMutation({
     mutationFn: simulateToggleRequest,
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
@@ -33,8 +33,7 @@ export const useWishToggleMutation = (index: number) => {
         queryClient.setQueryData(queryKey, context.previousWishData);
       }
     },
-    // onSettled: () => {
-    //   queryClient.invalidateQueries({ queryKey });
-    // },
   });
+
+  return mutate;
 };
