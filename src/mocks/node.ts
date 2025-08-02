@@ -1,4 +1,4 @@
-import { fetchAuthhandlers } from '@/apis/AuthApu.mock';
+import { fetchAuthhandlers } from '@/apis/AuthApi.mock';
 import { fetchRankingHandlers } from '@/apis/RankingApi.mock';
 import { setupServer } from 'msw/node';
 

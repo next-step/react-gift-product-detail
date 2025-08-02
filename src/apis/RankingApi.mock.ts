@@ -18,63 +18,7 @@ export const fetchRankingHandlers = [
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    if (targetType === 'MALE' && rankType === 'MANY_WISH_RECEIVE') {
-      return HttpResponse.json({
-        data: [
-          {
-            id: 10654912,
-            name: '파인트 아이스크림',
-            price: {
-              basicPrice: 9800,
-              sellingPrice: 9800,
-              discountRate: 0,
-            },
-            imageURL:
-              'https://st.kakaocdn.net/product/gift/product/20240614175745_88409b7f8d0f400ebbf760948160af02.png',
-            brandInfo: {
-              id: 8,
-              name: '배스킨라빈스',
-              imageURL:
-                'https://st.kakaocdn.net/product/gift/gift_brand/20241127182011_da1537baef944ea183edc76482066103.jpg',
-            },
-          },
-          {
-            id: 10344218,
-            name: '모바일 금액권 3만원권',
-            price: {
-              basicPrice: 30000,
-              sellingPrice: 30000,
-              discountRate: 0,
-            },
-            imageURL:
-              'https://st.kakaocdn.net/product/gift/product/20240926161704_d676084e26c54caaba249cb9eb6a5d8c.png',
-            brandInfo: {
-              id: 8,
-              name: '배스킨라빈스',
-              imageURL:
-                'https://st.kakaocdn.net/product/gift/gift_brand/20241127182011_da1537baef944ea183edc76482066103.jpg',
-            },
-          },
-          {
-            id: 11700952,
-            name: '더 듬뿍 복숭아 케이크(배달가능)',
-            price: {
-              basicPrice: 32000,
-              sellingPrice: 32000,
-              discountRate: 0,
-            },
-            imageURL:
-              'https://st.kakaocdn.net/product/gift/product/20250605150315_3fa12b07cdc3402c92072e4776d1b256.png',
-            brandInfo: {
-              id: 8,
-              name: '배스킨라빈스',
-              imageURL:
-                'https://st.kakaocdn.net/product/gift/gift_brand/20241127182011_da1537baef944ea183edc76482066103.jpg',
-            },
-          },
-        ],
-      });
-    }
+    
     return HttpResponse.json({
       data: [
         {
