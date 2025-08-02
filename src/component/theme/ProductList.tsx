@@ -3,7 +3,7 @@ import {
 import { CentorAlignDiv240,} from '@/styles/CommomStyle/Common.styled';
 import {  ProductGrid } from '@/styles/CommomStyle/ProductList';
 import Loading from '../Loading';
-import useProductList from '@/hook/useProductList';
+import useProductList from '@/hook/theme/useProductList';
 import ProductCard from '../ProductCard';
 
 

@@ -1,4 +1,4 @@
-import useFormInput from '@/hook/useFormInput';
+import useFormInput from '@/hook/common/useFormInput';
 import { validateName } from '@/utils/validateInput';
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useAuth } from './AuthContext';

@@ -1,11 +1,11 @@
 import { SideBlankDiv, Title } from "@/styles/Common.styled"
 import { BrandDiv, BrandLogo, BrandLogoP, ProductImage } from "./ProductThumbNail.styled"
-import { getProductsUrl } from "@/constant/api"
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getFromUrl } from "@/utils/getFromUrl";
 import type { ProductItem } from "@/type/GiftAPI/product";
 import { Gap, GapGray } from "@/styles/CommomStyle/Common.styled";
+import { getProductsUrl } from "@/utils/getApiUrl";
 const ProductThumbNail = () => {
     const { productId } = useParams<{ productId: string }>();
     const productUrl = getProductsUrl(productId);

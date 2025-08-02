@@ -1,12 +1,10 @@
 import { GiftThemeSection, ThemeGrid, ThemeImage, ThemeItem, ThemeLabel } from './GiftTheme.styled';
 import { Gap, Title, TitleDiv } from '@/styles/CommomStyle/Common.styled';
 import { useNavigate } from 'react-router-dom';
-import { themeUrl } from '@/constant/api';
-import { getFromUrl } from '@/utils/getFromUrl';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Suspense } from 'react';
 import Loading from '../Loading';
+import useGiftThemeListData from '@/hook/main/useGiftThemeListData';
 
 
 
@@ -14,21 +12,9 @@ import Loading from '../Loading';
 
 
 const GiftThemeList = () => {
-  const { data } = useSuspenseQuery<[]>({
-    queryKey: ['themeLogoData'],
-    queryFn: () => getFromUrl(themeUrl),
-  });
-
-
+  const { data } = useGiftThemeListData();
+  
   const navigate = useNavigate();
-  /*
-  if (error) return null
-
-  if (isLoading) return (
-    <SpinnerWrapper>
-      <Spinner />
-    </SpinnerWrapper>
-  )*/
   return (
     <ThemeGrid>
       {data?.map(({ themeId, name, image }) => (

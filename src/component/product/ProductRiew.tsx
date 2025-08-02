@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { getproductsHighlightReviewUrl } from "@/constant/api"
 import { useQuery } from "@tanstack/react-query";
 import { getFromUrl } from "@/utils/getFromUrl";
 import type { productHighlightReviewUrl } from "@/type/GiftAPI/product";
 import { NameText, DescriptionText } from './ProductDetail.styled';
 import { Gap } from '@/styles/CommomStyle/Common.styled';
+import { getproductsHighlightReviewUrl } from '@/utils/getApiUrl';
 
 
 

@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'), // ⬅️ 여기!
+      '@': path.resolve(__dirname, 'src'), 
     },
   },
   test: {
@@ -17,3 +17,4 @@ export default defineConfig({
     setupFiles: './src/setupTests.ts',
   },
 });
+
