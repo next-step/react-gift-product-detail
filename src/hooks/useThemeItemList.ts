@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { fetchThemeItemList } from '@/apis/themeItemList';
 import type { themeItemInfo } from '@/types/themeItemInfo';
 import { STALE_TIME } from '@/constants/apiReactQueryStaleTime';
+import { QUERY_KEYS } from '@/constants/queryKey';
 
 const API_ERROR_MESSAGE = '알 수 없는 오류가 발생했습니다.';
 
@@ -24,11 +25,11 @@ export const useThemeItemList = (
 ): UseThemeItemListResult => {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  if (!themeId) throw new Error('themeId가 필요합니다.');
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<FetchThemeItemListResponse>({
-      queryKey: ['themeItemList', themeId],
+      queryKey: QUERY_KEYS.themeItemList(themeId),
       queryFn: async ({ pageParam = 0 }) => {
-        if (!themeId) throw new Error('themeId가 필요합니다.');
         return await fetchThemeItemList(themeId, pageParam as number);
       },
       initialPageParam: 0,

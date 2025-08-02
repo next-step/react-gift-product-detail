@@ -5,6 +5,7 @@ import theme from '@src/styles/tokens/index';
 import useRankingProducts from '@src/hooks/useRankingProducts';
 import ProductRankingList from '@src/components/ProductRankingList';
 import Loading from '@src/components/common/Loading';
+import type { RankingSectionType } from '@/types/rankingSectionType';
 
 const targets = [
   { key: 'ALL', label: '전체', icon: 'ALL' },
@@ -191,12 +192,7 @@ const RankingSection = ({
   rankType,
   expanded,
   onToggleExpand,
-}: {
-  targetType: string;
-  rankType: string;
-  expanded: boolean;
-  onToggleExpand: () => void;
-}) => {
+}: RankingSectionType) => {
   const { products } = useRankingProducts({ targetType, rankType });
 
   return (

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleWish } from '@/apis/wish';
+import { QUERY_KEYS } from '@/constants/queryKey';
 
 export const useWishUpdateMutation = (productId: number) => {
   const queryClient = useQueryClient();
@@ -13,33 +14,45 @@ export const useWishUpdateMutation = (productId: number) => {
     retry: 1,
     retryDelay: 1000,
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['productWish', productId] });
-
-      const previous = queryClient.getQueryData(['productWish', productId]);
-
-      queryClient.setQueryData(['productWish', productId], (old: any) => {
-        if (!old) return old;
-
-        return {
-          ...old,
-          isWished: !old.isWished,
-          wishCount: old.isWished
-            ? Math.max(old.wishCount - 1, 0)
-            : old.wishCount + 1,
-        };
+      await queryClient.cancelQueries({
+        queryKey: QUERY_KEYS.productWish(productId),
       });
+
+      const previous = queryClient.getQueryData(
+        QUERY_KEYS.productWish(productId)
+      );
+
+      queryClient.setQueryData(
+        QUERY_KEYS.productWish(productId),
+        (old: any) => {
+          if (!old) return old;
+
+          return {
+            ...old,
+            isWished: !old.isWished,
+            wishCount: old.isWished
+              ? Math.max(old.wishCount - 1, 0)
+              : old.wishCount + 1,
+          };
+        }
+      );
 
       return { previous };
     },
 
     onError: (_error, _variables, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(['productWish', productId], context.previous);
+        queryClient.setQueryData(
+          QUERY_KEYS.productWish(productId),
+          context.previous
+        );
       }
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['productWish', productId] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.productWish(productId),
+      });
     },
   });
 };

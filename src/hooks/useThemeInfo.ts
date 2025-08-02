@@ -6,15 +6,15 @@ import ROUTES from '@/constants/routes';
 import type { themeInfo } from '@/types/themeInfo';
 import { STALE_TIME } from '@/constants/apiReactQueryStaleTime';
 import { useState } from 'react';
+import { QUERY_KEYS } from '@/constants/queryKey';
 
 const RESPONSE_404_ERROR_MSG = '해당 ID에 일치하는 데이터가 없습니다.';
 
 export const useThemeInfo = (themeId: string | undefined) => {
   const navigate = useNavigate();
   const [localError, setLocalError] = useState<unknown>(null);
-
+  if (!themeId) throw new Error('themeId가 없습니다.');
   const queryFn = async () => {
-    if (!themeId) throw new Error('themeId가 없습니다.');
     try {
       return await fetchThemeInfo(themeId);
     } catch (error: any) {
@@ -29,7 +29,7 @@ export const useThemeInfo = (themeId: string | undefined) => {
   };
 
   const { data } = useSuspenseQuery<themeInfo | null, unknown>({
-    queryKey: ['themeInfo', themeId],
+    queryKey: QUERY_KEYS.themeInfo(themeId),
     queryFn,
     staleTime: STALE_TIME,
     retry: false,

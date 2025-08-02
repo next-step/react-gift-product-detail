@@ -2,6 +2,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import apiClient from '@src/lib/apiClient';
 import { PRESENT_THEMES_URL } from '@src/apis/constants';
 import { STALE_TIME } from '@/constants/apiReactQueryStaleTime';
+import { QUERY_KEYS } from '@/constants/queryKey';
 
 type Theme = {
   themeId: number;
@@ -21,7 +22,7 @@ const fetchThemes = async (): Promise<Theme[]> => {
 
 const useThemeCategories = (): ThemeState => {
   const { data, isError } = useSuspenseQuery<Theme[], Error>({
-    queryKey: ['themeCategories'],
+    queryKey: QUERY_KEYS.themeCategories,
     queryFn: fetchThemes,
     staleTime: STALE_TIME,
     retry: false,

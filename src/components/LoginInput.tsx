@@ -50,7 +50,11 @@ const LoginInput = ({ error, ...props }: LoginInputProps) => {
   return (
     <div css={inputDiv}>
       <input css={inputStyle(!!error)} {...props} />
-      {error && <p css={errorMessageStyle}>{error}</p>}
+      {error && (
+        <p css={errorMessageStyle} className="error-message">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
