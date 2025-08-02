@@ -1,17 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { requests } from '@/api/requests';
 import { useWishToggleMutation } from '../hooks/useWishToggleMutation';
+import useProductWish from '../hooks/useProductWish';
 
 interface ProductWishButtonProps {
   index: number;
 }
 
 const ProductWishButton = ({ index }: ProductWishButtonProps) => {
-  const { data } = useSuspenseQuery({
-    queryKey: ['productWishData', index],
-    queryFn: () => requests.fetchProductWish(index),
-  });
-
+  const data = useProductWish(index);
   const toggleWish = useWishToggleMutation(index);
 
   return (
