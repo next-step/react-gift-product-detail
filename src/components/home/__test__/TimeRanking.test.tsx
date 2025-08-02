@@ -15,7 +15,7 @@ const renderWithClient = (ui: React.ReactNode) => {
   const queryClient = new QueryClient();
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={["/?gender=ALL&rankType=받고 싶어한"]}>
+      <MemoryRouter initialEntries={["/?gender=ALL&rankType=MANY_WISH"]}>
         {ui}
       </MemoryRouter>
     </QueryClientProvider>
@@ -25,9 +25,11 @@ const renderWithClient = (ui: React.ReactNode) => {
 describe("실시간 급상승 선물랭킹", () => {
   it("API에서 받아온 랭킹 데이터 렌더링", async () => {
     renderWithClient(<TimeRanking />);
+    screen.debug();
 
-    expect(await screen.findByText("노트북")).toBeInTheDocument();
-    expect(await screen.findByText("카카오프렌즈")).toBeInTheDocument();
-    expect(await screen.findByText(/5,000/)).toBeInTheDocument();
+    expect(await screen.findByText(/고구마 라떼/)).toBeInTheDocument();
+    expect(await screen.findByText(/뚜레쥬르/)).toBeInTheDocument();
+    const matches = await screen.findAllByText(/26,350/);
+    expect(matches).toHaveLength(1);
   });
 });
