@@ -2,7 +2,6 @@ import { useSearchParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import ProductCard from '@/components/giftHome/GiftThemes/ProductCard';
 import Text from '@/common/Text';
-import LoadingSpinner from '@/common/LoadingSpinner';
 import useGiftRanking from '@/hooks/useGiftRanking';
 
 const targetTypes = ['ALL', 'FEMALE', 'MALE', 'TEEN'];
@@ -27,7 +26,7 @@ const GiftRanking = () => {
   const selectedTarget = searchParams.get('target') || 'ALL';
   const selectedRank = searchParams.get('rank') || 'MANY_WISH';
 
-  const { products, isLoading, isError, error } = useGiftRanking({
+  const { products } = useGiftRanking({
     target: selectedTarget,
     rank: selectedRank,
   });
@@ -72,15 +71,7 @@ const GiftRanking = () => {
         ))}
       </RankContainer>
 
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : isError ? (
-        <CenteredBox>
-          <Text size="label1" weight="regular">
-            {error?.message || '에러가 발생했습니다.'}
-          </Text>
-        </CenteredBox>
-      ) : products.length === 0 ? (
+      {products && products.length === 0 ? (
         <CenteredBox>
           <Text size="label1" weight="regular">
             상품이 없습니다.
@@ -88,7 +79,7 @@ const GiftRanking = () => {
         </CenteredBox>
       ) : (
         <ProductItem>
-          {products.map((product) => (
+          {products && products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </ProductItem>

@@ -6,6 +6,8 @@ import reset from '@/styles/reset';
 import { theme } from '@/styles/theme';
 import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from 'react-hot-toast';
+import { Suspense } from 'react';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 function App() {
   return (
@@ -13,7 +15,11 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Global styles={reset} />
-          <Router />
+          <ErrorBoundary>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Router />
+            </Suspense>
+          </ErrorBoundary>
           <Toaster
             position="top-center"
             reverseOrder={false}

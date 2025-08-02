@@ -34,7 +34,13 @@ const LoginForm = () => {
       <FormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <Input
-            {...register('id')}
+            {...register('id', {
+              required: '이메일을 입력해주세요.',
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@kakao\.com$/,
+                message: '@kakao.com 이메일 주소만 가능합니다.',
+              },
+            })}
             type="email"
             placeholder="이메일"
             hasError={!!errors.id}
@@ -45,7 +51,13 @@ const LoginForm = () => {
 
         <InputWrapper>
           <Input
-            {...register('password')}
+            {...register('password', {
+              required: '비밀번호를 입력해주세요.',
+              minLength: {
+                value: 8,
+                message: '비밀번호는 8자 이상이어야 합니다.',
+              },
+            })}
             type="password"
             placeholder="비밀번호"
             hasError={!!errors.password}

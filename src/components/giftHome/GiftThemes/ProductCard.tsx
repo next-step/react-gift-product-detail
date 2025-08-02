@@ -14,7 +14,7 @@ const ProductCardContainer = ({ product }: ProductCardContainerProps) => {
 
   const goToCard = () => {
     if (isLoggedIn) {
-      navigate(`/order/${id}`);
+      navigate(`/products/${id}`);
     } else {
       navigate('/login');
     }

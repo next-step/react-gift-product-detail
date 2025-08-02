@@ -2,23 +2,18 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import CategoryBtn from '@/components/giftHome/GiftThemes/CategoryBtn';
 import Text from '@/common/Text';
-import LoadingSpinner from '@/common/LoadingSpinner';
 import useGiftThemes from '@/hooks/useGiftThemes';
 
 const GiftCategoryList = () => {
-  const { categories, isLoading, isError, error } = useGiftThemes();
+  const { categories } = useGiftThemes();
   const navigate = useNavigate();
-
-  if (isLoading) return <LoadingSpinner />;
-  if (isError) return <Text>{error?.message}</Text>;
-
   return (
     <Layout>
       <Text size="title1" weight="bold">
         선물 테마
       </Text>
       <CategoryItem>
-        {categories.map((category) => (
+        {categories && categories.map((category) => (
           <CategoryBtn
             key={category.themeId}
             name={category.name}

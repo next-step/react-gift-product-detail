@@ -15,35 +15,37 @@ const GiftCardSelector = ({
   messageCardId,
   onChangeMessageCardId,
 }: GiftCardSelectorProps) => {
-  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
-  const selectedCard = orderData[selectedCardIndex];
+  const [selectedCardId, setSelectedCardId] = useState(messageCardId || orderData[0]?.id);
+  const selectedCard = orderData.find((card) => card.id === selectedCardId);
 
   useEffect(() => {
-    onChangeMessage(selectedCard.defaultTextMessage);
-    onChangeMessageCardId(selectedCard.id);
+    if (selectedCard) {
+      onChangeMessage(selectedCard.defaultTextMessage);
+      onChangeMessageCardId(selectedCard.id);
+    }
   }, [selectedCard, onChangeMessage, onChangeMessageCardId]);
 
-  const handleCardSelect = (index: number) => {
-    setSelectedCardIndex(index);
+  const handleCardSelect = (id: string) => {
+    setSelectedCardId(id);
   };
 
   return (
     <>
       <CardSlider>
-        {orderData.map((card, index) => (
+        {orderData.map((card) => (
           <CardItem
             key={card.id}
-            isSelected={index === selectedCardIndex}
-            onClick={() => handleCardSelect(index)}
+            isSelected={card.id === selectedCardId}
+            onClick={() => handleCardSelect(card.id)}
           >
-            <CardImage src={card.thumbUrl} alt={`card-${index}`} />
+            <CardImage src={card.thumbUrl} alt={`card-${card.id}`} />
           </CardItem>
         ))}
       </CardSlider>
 
       <SelectedCardPreview>
         <CardFrame>
-          <PreviewImage src={selectedCard.imageUrl} />
+          <PreviewImage src={selectedCard?.imageUrl} />
         </CardFrame>
         <CardMessage
           value={message}

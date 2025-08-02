@@ -13,16 +13,12 @@ const Theme = () => {
   const { themeId } = useParams<{ themeId: string }>();
   const {
     themeInfo,
-    isLoading: infoLoading,
-    isError: infoError,
   } = useThemeInfo(themeId ?? '');
   const {
     products,
     loadMore,
     hasMore,
     isLoading: productsLoading,
-    isError: productsError,
-    error,
   } = useThemeProducts(Number(themeId));
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -33,28 +29,23 @@ const Theme = () => {
     rootMargin: '100px',
   });
 
-  if (infoLoading) return <div>로딩 중...</div>;
-  if (infoError || !themeInfo)
-    return <div>테마 정보를 불러올 수 없습니다.</div>;
-  if (productsError) return <div>{error?.message}</div>;
-
   return (
     <Layout>
       <NavigationBar />
       <Content>
-        <ThemeHeroContent backgroundColor={themeInfo.backgroundColor}>
+        <ThemeHeroContent backgroundColor={themeInfo?.backgroundColor}>
           <TextLine>
             <Text size="label1" weight="bold" color="#ffffff">
-              {themeInfo.name}
+              {themeInfo?.name}
             </Text>
           </TextLine>
           <TextLine>
             <Text size="title1" weight="bold" color="#ffffff">
-              {themeInfo.title}
+              {themeInfo?.title}
             </Text>
           </TextLine>
           <Text size="title2" weight="regular" color="#ffffff">
-            {themeInfo.description}
+            {themeInfo?.description}
           </Text>
         </ThemeHeroContent>
 
@@ -65,7 +56,7 @@ const Theme = () => {
             {products.map((product, index) => {
               const goToCard = () => {
                 if (isLoggedIn) {
-                  navigate(`/order/${product.id}`);
+                  navigate(`/products/${product.id}`);
                 } else {
                   navigate('/login');
                 }

@@ -13,7 +13,7 @@ import { useProductSummary } from '@/hooks/useProductSummary';
 
 const ProductOrder = () => {
   const { productId } = useParams();
-  const { product, isLoading: isProductLoading } = useProductSummary(
+  const { product } = useProductSummary(
     Number(productId)
   );
 
@@ -24,9 +24,6 @@ const ProductOrder = () => {
   const [message, setMessage] = useState('생일 축하해!');
   const [messageCardId, setMessageCardId] = useState('default-card');
 
-  if (isProductLoading) return <div>상품 정보를 불러오는 중입니다...</div>;
-  if (!product) return <div>상품 정보를 찾을 수 없습니다.</div>;
-
   return (
     <>
       <NavigationBar />
@@ -35,10 +32,10 @@ const ProductOrder = () => {
           <Layout>
             <Content>
               <ProductInfo
-                imageURL={product.imageURL}
-                name={product.name}
-                price={{ basicPrice: product.price }}
-                brandInfo={{ name: product.brandName }}
+                imageURL={product?.imageURL}
+                name={product?.name}
+                price={{ basicPrice: product?.price }}
+                brandInfo={{ name: product?.brandName }}
               />
               <GiftCardSelector
                 message={message}
@@ -52,7 +49,7 @@ const ProductOrder = () => {
 
             <StickyWrapper>
               <OrderBtn
-                price={product.price}
+                price={product?.price}
                 onClick={handleSubmit(() => order({ message, messageCardId }))}
                 disabled={isOrderLoading}
               />
