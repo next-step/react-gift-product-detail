@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import { RankingMockData } from '@/mocks/data/mockRankingData';
 
 export const handlers = [
   http.get('/api/products/ranking', ({ request }) => {
@@ -7,16 +8,7 @@ export const handlers = [
     const targetType = url.searchParams.get('targetType');
 
     if (rankType === 'BIRTHDAY' && targetType === 'FEMALE') {
-
-      const mockData = Array.from({ length: 10 }, (_, i) => ({
-        id: i + 1,
-        name: `상품 ${i + 1}`,
-        imageURL: `https://example.com/item${i + 1}.jpg`,
-        brandInfo: { name: `브랜드 ${i + 1}` },
-        price: { sellingPrice: 10000 + i * 1000, discountRate: 0 },
-      }));
-
-      return HttpResponse.json({ data: mockData });
+      return HttpResponse.json({ data: RankingMockData });
     }
 
     return new HttpResponse(null, { status: 404 });
