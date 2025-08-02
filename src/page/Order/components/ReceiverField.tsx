@@ -13,7 +13,7 @@ const ReceiverField = () => {
   const receiverInfos = watch('receiverInfos');
   const isEmpty = receiverInfos.length === 0;
 
-  const handleChange = (value: OrderInfoValues['receiverInfos']) => {
+  const handleSetValue = (value: OrderInfoValues['receiverInfos']) => {
     setValue('receiverInfos', value);
   };
 
@@ -41,7 +41,7 @@ const ReceiverField = () => {
       <ReceiverModal
         isModalOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        handleChange={handleChange}
+        onSubmit={handleSetValue}
         receiverInfos={receiverInfos}
       />
     </>

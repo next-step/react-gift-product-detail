@@ -7,20 +7,15 @@ import type { OrderInfoValues } from '@/types';
 interface ReceiverInfoProps {
   isModalOpen: boolean;
   onClose: () => void;
-  handleChange: (value: OrderInfoValues['receiverInfos']) => void;
+  onSubmit: (value: OrderInfoValues['receiverInfos']) => void;
   receiverInfos: OrderInfoValues['receiverInfos'];
 }
 const MAX_LENGTH = 10;
 
-const ReceiverModal = ({
-  isModalOpen,
-  onClose,
-  handleChange,
-  receiverInfos,
-}: ReceiverInfoProps) => {
-  const { receiverInfosForm, receiverInfoArray, onSubmit } = useModal({
+const ReceiverModal = ({ isModalOpen, onClose, onSubmit, receiverInfos }: ReceiverInfoProps) => {
+  const { receiverInfosForm, receiverInfoArray, submit } = useModal({
     receiverInfos,
-    handleChange,
+    onSubmit,
     onClose,
   });
   const { fields, append, remove } = receiverInfoArray;
@@ -67,7 +62,7 @@ const ReceiverModal = ({
               <ButtonCancel type="button" onClick={onClose}>
                 취소
               </ButtonCancel>
-              <ButtonAddDone type="button" onClick={onSubmit}>
+              <ButtonAddDone type="button" onClick={submit}>
                 {fields.length}명 완료
               </ButtonAddDone>
             </ButtonArea>
