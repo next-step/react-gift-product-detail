@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const useSubmitOrder = () => {
   const navigate = useNavigate();
-
-  return useMutation({
+  const { mutate } = useMutation({
     mutationFn: requests.fetchOrder,
     onSuccess: () => {
       navigate(ROUTE_PATH.HOME);
@@ -18,6 +17,8 @@ const useSubmitOrder = () => {
       }
     },
   });
+
+  return mutate;
 };
 
 export default useSubmitOrder;
