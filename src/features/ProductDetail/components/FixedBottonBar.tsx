@@ -48,7 +48,7 @@ const FixedContainer = styled.div(({ theme }) => ({
 const WishButton = styled.button`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-items: center;
   align-items: center;
 
   border: none;

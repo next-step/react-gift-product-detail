@@ -4,25 +4,59 @@
 
 ## 구현할 기능 목록
 
-- 상품 상세 페이지
-- API 통신 구현 조건
-  - 최적화
-  - 선언적 구조
-  - react query
-- 상품 관심 등록 버튼 클릭 시 낙관적 업데이트를 통해 상품 관심 등록 수를 변경 (실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상)
-- ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링 (단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현)
+- src/components에 있는 Form Field와 Typography에 대한 테스트 코드를 작성
+- 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성
+- MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성
+- github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 작성
 
 ## 구현한 내용
 
-- 초기 프로젝트 세팅
-- ProductInfo UI 구현
-- TabMenu 구현
-- 각 Tab 세부 UI 구현
-- 하단 고정 버튼 바 구현
-- API 연동
-- Wish의 useQuery를 mutate로 변경, useProduct 훅 제작
-- suspense, ErrorBoundary 적용
-- 훅을 통해 id가 있는 경우에만 API 호출하도록 변경
-- useSuspenseQuery -> useSuspenseQueries로 병렬 쿼리 통합
+- Typography 컴포넌트 구현
+- Form Field 컴포넌트 구현
+- UnderlineInputField를 통해 Login 페이지 리팩토링
+- Typography 테스트 코드 작성
+- renderWithTheme 함수 제작후 리팩토링
+- UnderlineInputField 테스트 코드 작성
+- 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성 (MSW X)
+- 로그인 페이지에 대한 테스트에 MSW 적용
+- RankingSection MSW 사용한 테스트 코드 작성
+- github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 작성
+- env.test 추가
 
-## 리뷰 반영
+## 2단계 리뷰 반영
+
+- axios에 제네릭으로 전달
+- 낙관적 업데이트 오류 수정
+  - 진정할 해결을 위해선 invalidateQueries 써야할 것 같지만 일단 이 환경에서 사용하긴 어려울 것 같아 useRef를 사용하는 방식으로 구현해보았습니다
+  - UX를 위해 버튼에 disabled 기능을 넣었는데 이러다 보니 낙관적 업데이트의 장점이 사라진것 같아 올바른 해결책은 아니라는 생각이듭니다.
+
+---
+
+## 테스트 시나리오
+
+### Typograpsy
+
+1. 렌더링 테스트
+2. Props에 따른 스타일 테스트
+3. 커스텀 HTML 속성 전달 테스트
+4. 잘못된 colorkey 사용시 fallback 색상 적용 테스트
+
+### UnderlineInputField
+
+1. input 요소 및 placeholder가 정상 렌더링된다.
+2. `message` prop이 있을 경우 에러 메시지가 렌더링된다.
+3. `error=true`일 경우 하단 border 색상이 변경된다.
+4. `type` prop에 따라 input type 속성이 반영된다.
+5. 사용자 입력이 정상적으로 반영된다.
+6. `name`, `id`, `aria-*` 등의 HTML 속성이 정상적으로 전달된다.
+7. `disabled` 상태일 경우 입력이 차단되고 disabled 속성이 적용된다.
+
+### Login Page
+
+1. 이메일, 비밀번호 필드와 로그인 버튼이 렌더링 된다.
+2. 초기 상태에는 로그인 버튼이 비활성화 되어 있다
+3. 유효하지 않은 이메일/비밀번호 입력시 오류 메시지가 표시된다
+4. 유효하지 않은 이메일/비밀번호 입력시 버튼이 비활성화 된다
+5. 유효한 이메일/비밀번호 입력시 로그인 버튼이 활성화 된다
+6. 로그인 성공 시 성공 메시지가 출력된다
+7. 로그인 실패 시 에러 메시지가 표시된다

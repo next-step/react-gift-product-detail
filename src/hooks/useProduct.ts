@@ -10,7 +10,9 @@ import {
   useSuspenseQueries,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { useRef } from 'react';
 import type { ProductId, ProductWishInfo } from 'src/types/product';
+import { throttle } from 'lodash';
 
 export const useProduct = (id: ProductId) => {
   const res = useSuspenseQueries({
@@ -24,7 +26,7 @@ export const useProduct = (id: ProductId) => {
   const highlightReview = res[1].data;
   const productDetailInfo = res[2].data;
 
-  const { productWishInfo, wishMutate } = useWish(id);
+  const { productWishInfo, wishMutate, isPending } = useWish(id);
 
   return {
     product,
@@ -32,7 +34,22 @@ export const useProduct = (id: ProductId) => {
     productDetailInfo,
     productWishInfo,
     wishMutate,
+    isPending,
   };
+};
+
+// 연속 요청시 오류 발생 테스트용 함수
+const sleep = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+const fetchAddWishSuccess = async () => {
+  await sleep(1000);
+};
+
+const fetchAddWishError = async () => {
+  await sleep(1000);
+
+  throw new Error('mock error response');
 };
 
 export const useWish = (id: ProductId) => {
@@ -40,13 +57,20 @@ export const useWish = (id: ProductId) => {
   const { queryKey, queryFn } = productWishOptions(id);
   const { data: productWishInfo } = useSuspenseQuery({ queryKey, queryFn });
 
-  const { mutate: wishMutate } = useMutation({
-    mutationFn: () => Promise.resolve(), // 해당 API가 없음, 실제
+  const prevStackRef = useRef<ProductWishInfo[]>([]);
+
+  const { mutate: wishMutate, isPending } = useMutation({
+    mutationFn: fetchAddWishError,
 
     onMutate: async () => {
       // 현재 쿼리 중단 및 이전 값 백업
       await queryClient.cancelQueries({ queryKey });
       const prev = queryClient.getQueryData(queryKey);
+
+      //이전 상태를 스택에 저장
+      if (prev) {
+        prevStackRef.current.push(prev);
+      }
 
       //낙관적 업데이트
       queryClient.setQueryData(
@@ -70,11 +94,18 @@ export const useWish = (id: ProductId) => {
     },
     onError: (_err, _variables, context) => {
       console.log('err');
-      if (context?.prev) {
-        queryClient.setQueryData(queryKey, context.prev);
-      }
+      // if (context?.prev) {
+      //   queryClient.setQueryData(queryKey, context.prev);
+      // }
+      const prev = prevStackRef.current.pop();
+      if (prev) queryClient.setQueryData(queryKey, prev);
+    },
+
+    // 성공/실패 시
+    onSettled: () => {
+      // queryClient.invalidateQueries({ queryKey });
     },
   });
 
-  return { productWishInfo, wishMutate };
+  return { productWishInfo, wishMutate, isPending };
 };

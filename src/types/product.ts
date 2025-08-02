@@ -5,6 +5,11 @@
 export type ProductId = string;
 
 // 상품 기본정보
+
+export type ProductBasicInfoRes = {
+  data: ProductBasicInfo;
+};
+
 export interface ProductBasicInfo {
   id: number;
   name: string;
@@ -22,6 +27,9 @@ export interface ProductBasicInfo {
 }
 
 //상품 상세정보
+export interface ProductDetailInfoRes {
+  data: ProductDetailInfo;
+}
 export interface ProductAnnouncement {
   name: string;
   value: string;
@@ -34,6 +42,10 @@ export interface ProductDetailInfo {
 }
 
 // 상품 찜 정보
+export interface ProductWishInfoRes {
+  data: ProductWishInfo;
+}
+
 export interface ProductWishInfo {
   wishCount: number;
   isWished: boolean;
@@ -49,4 +61,8 @@ export interface Review {
 export interface ProductHighlightReview {
   totalCount: number;
   reviews: Review[];
+}
+
+export interface ProductHighlightReviewRes {
+  data: ProductHighlightReview;
 }
