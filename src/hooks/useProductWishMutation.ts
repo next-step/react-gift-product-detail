@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiRequest } from '@/api/apiClient';
 
-// 상품 찜(좋아요) 토글 API
+// 개발용 목업 API
 async function toggleProductWish(productId: any) {
-  return apiRequest(`/products/${productId}/wish`, { method: 'POST' });
+  return new Promise(resolve => 
+    setTimeout(() => resolve({ success: true }), 100)
+  );
 }
 
 export function useProductWishMutation(productId: any) {
