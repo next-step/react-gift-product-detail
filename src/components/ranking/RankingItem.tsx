@@ -46,6 +46,7 @@ const RankingItem = ({ id, name, imageURL, price, brandInfo, onClick }: RankingI
       <Brand>{brandInfo.name}</Brand>
       <Name>{name}</Name>
       <PaddingSm />
+      <div>됐다!</div>
       <Price>{price.sellingPrice}원</Price>
     </RankingItemWrap>
   );

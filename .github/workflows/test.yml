@@ -1,0 +1,29 @@
+name: Test on PR and Push
+
+on:
+  pull_request:
+    branches: [hyemomo]
+  push:
+    branches: [step3]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set VITE_API_BASE_URL for tests
+        run: echo "VITE_API_BASE_URL=http://localhost" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test -- --reporter verbose

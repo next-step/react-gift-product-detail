@@ -32,17 +32,18 @@ const Navbar = () => {
     <NavbarWrapper>
       <div>
         <Button
+          aria-label="뒤로 가기"
           onClick={() => {
             navigate(-1);
           }}
         >
-          <img src={arrowLeftIcon} alt="" />
+          <img src={arrowLeftIcon} alt="뒤로 가기 버튼" />
         </Button>
       </div>
       <div>선물하기</div>
       <div>
-        <Button onClick={handleMyBtn}>
-          <img src={myIcon} alt="" />
+        <Button aria-label="마이페이지" onClick={handleMyBtn}>
+          <img src={myIcon} alt="마이페이지 버튼" />
         </Button>
       </div>
     </NavbarWrapper>

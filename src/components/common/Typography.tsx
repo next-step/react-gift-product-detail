@@ -1,0 +1,1 @@
+const Typography = styled.span;

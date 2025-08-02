@@ -1,13 +1,14 @@
 import Navbar from './../components/navbar/Navbar';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import useInput from '@/hooks/useInput';
 import { emailValidator, passwordValidator } from '@/utils/validators';
 import { useAuth } from '@/contexts/AuthContext';
 import { PaddingMd, PaddingSm } from '@/components/common/Padding';
 import { toast } from 'react-toastify';
-import { FetchLogin } from '@/services/authAPi';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import FormField from '@/components/formField/formField';
+import { FetchLogin } from '@/services/authApi';
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -64,10 +65,15 @@ const ValidationMsg = styled.p`
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useAuth();
-  const email = useInput({ validator: emailValidator });
-  const password = useInput({ validator: passwordValidator });
-  const isActivatedBtn = email.isValid && password.isValid;
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+  });
+  const isActivatedBtn = isValid;
   const loginMutation = useMutation({
     mutationFn: FetchLogin,
     onSuccess: (loginData) => {
@@ -78,48 +84,48 @@ const Login = () => {
         name,
         isLoggedIn: true,
       };
-      password.reset();
       setUser(userInfo);
       localStorage.setItem('user', JSON.stringify(userInfo));
       toast.success('로그인이 완료되었습니다.');
       navigate('/');
     },
-    onError: () => {
-      alert(e.message);
+    onError: (e: any) => {
+      const msg = e.response?.data?.message || '알 수 없는 오류입니다';
+      toast.error(msg);
     },
   });
 
-  const handleLoginClick = async () => {
+  const handleLoginClick = handleSubmit((data) => {
     loginMutation.mutate({
-      email: email.value,
-      password: password.value,
+      email: data.email,
+      password: data.password,
     });
-  };
-
+  });
   return (
     <div>
       <Navbar />
       <LoginWrapper>
         <Logo src="src/assets/images/카카오로고.svg" alt="" />
         <Loginform>
-          <InputWrapper>
-            <Input
-              {...email}
-              onChange={(e) => email.onChange(e.target.value)}
-              hasError={!!email.error}
-              placeholder="이메일"
-            />
-            {<ValidationMsg>{email.error}</ValidationMsg>}
-          </InputWrapper>
           <PaddingSm />
           <InputWrapper>
-            <Input
-              {...password}
-              onChange={(e) => password.onChange(e.target.value)}
-              hasError={!!password.error}
-              placeholder="비밀번호"
+            <FormField
+              name="email"
+              label="이메일"
+              placeholder="이메일을 입력하세요"
+              register={register}
+              error={errors.email?.message}
+              validator={emailValidator}
             />
-            <ValidationMsg>{password.error}</ValidationMsg>
+            <FormField
+              name="password"
+              label="비밀번호"
+              type="password"
+              placeholder="비밀번호를 입력하세요"
+              register={register}
+              error={errors.password?.message}
+              validator={passwordValidator}
+            />
           </InputWrapper>
           <PaddingMd />
           <LoginBtn
