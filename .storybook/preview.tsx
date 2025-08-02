@@ -1,6 +1,6 @@
 import { GlobalStyles } from "../src/app/styles";
 import { theme } from "../src/app/theme";
-import { Global, ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "@emotion/react";
 import { withThemeFromJSXProvider } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/react-vite";
 

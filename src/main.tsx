@@ -7,9 +7,21 @@ import { GlobalStyles } from "@/app/styles";
 
 import App from "@/App";
 
-createRoot(document.getElementById("root")!).render(
-    <Fragment>
-        <GlobalStyles />
-        <App />
-    </Fragment>,
-);
+async function enableMocking() {
+    if (import.meta.env.PROD) return Promise.resolve();
+
+    const { worker } = await import("@/__mocks__/browser");
+
+    return worker.start({
+        onUnhandledRequest: "bypass",
+    });
+}
+
+enableMocking().then(() => {
+    createRoot(document.getElementById("root")!).render(
+        <Fragment>
+            <GlobalStyles />
+            <App />
+        </Fragment>,
+    );
+});

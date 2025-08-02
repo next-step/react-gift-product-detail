@@ -5,8 +5,6 @@ import * as Styles from "./ReceiverList.styled";
 export const ReceiverList = () => {
     const { receivers } = useReceiverContext();
 
-    console.log("ReceiverList state:", receivers.receivers);
-
     if (receivers.receivers.length === 0) {
         return <Styles.EmptyState>받는 사람을 추가해주세요.</Styles.EmptyState>;
     }
