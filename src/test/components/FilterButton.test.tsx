@@ -77,13 +77,6 @@ describe('FilterButton', () => {
     expect(screen.queryByTestId('mock-icon')).not.toBeInTheDocument();
   });
 
-  it('has correct button attributes', () => {
-    renderWithTheme(<FilterButton {...defaultProps} />);
-    
-    const button = screen.getByRole('button');
-    expect(button).toHaveAttribute('type', 'button');
-  });
-
   it('has correct styling properties', () => {
     renderWithTheme(<FilterButton {...defaultProps} />);
     

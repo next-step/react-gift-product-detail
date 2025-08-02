@@ -8,7 +8,7 @@ import GiftFriendsSection from '@/Components/GiftFriendsSection';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
-const mockUseLoginContext = vi.fn();
+const mockUseLoginContext = vi.hoisted(() => vi.fn());
 vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
 }));
@@ -32,6 +32,13 @@ const renderWithTheme = (component: React.ReactElement) => {
 };
 
 describe('Typography Components', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseLoginContext.mockReturnValue({
+      user: null,
+    });
+  });
+
   describe('ProductCard', () => {
     const mockProduct = {
       id: 1,

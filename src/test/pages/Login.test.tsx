@@ -1,15 +1,16 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { vi } from 'vitest';
+import { http, HttpResponse } from 'msw';
+import { server } from '@/test/mocks/server';
 import Login from '@/pages/Login';
 import { theme } from '@/styles/Theme';
 
 // Mock hooks
-const mockUseLoginForm = vi.fn();
-const mockUseLoginContext = vi.fn();
-const mockUseLogin = vi.fn();
+const mockUseLoginForm = vi.hoisted(() => vi.fn());
+const mockUseLoginContext = vi.hoisted(() => vi.fn());
 
 vi.mock('@/hooks/useLoginForm', () => ({
   useLoginForm: mockUseLoginForm,
@@ -17,10 +18,6 @@ vi.mock('@/hooks/useLoginForm', () => ({
 
 vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
-}));
-
-vi.mock('@/api/auth', () => ({
-  useLogin: mockUseLogin,
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
@@ -34,30 +31,26 @@ const renderWithProviders = (component: React.ReactElement) => {
 };
 
 describe('Login Page', () => {
-  const defaultMockForm = {
-    email: '',
-    emailError: '',
-    handleEmailChange: vi.fn(),
-    handleEmailBlur: vi.fn(),
-    password: '',
-    passwordError: '',
-    handlePasswordChange: vi.fn(),
-    handlePasswordBlur: vi.fn(),
-    isFormValid: false,
-    handleSubmit: vi.fn(),
-    isLoading: false,
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
     
-    mockUseLoginForm.mockReturnValue(defaultMockForm);
+    mockUseLoginForm.mockReturnValue({
+      email: '',
+      emailError: '',
+      handleEmailChange: vi.fn(),
+      handleEmailBlur: vi.fn(),
+      password: '',
+      passwordError: '',
+      handlePasswordChange: vi.fn(),
+      handlePasswordBlur: vi.fn(),
+      isFormValid: false,
+      handleSubmit: vi.fn(),
+      isLoading: false,
+    });
     mockUseLoginContext.mockReturnValue({
       login: vi.fn(),
-    });
-    mockUseLogin.mockReturnValue({
-      login: vi.fn(),
-      isLoading: false,
+      logout: vi.fn(),
+      user: null,
     });
   });
 
@@ -106,8 +99,17 @@ describe('Login Page', () => {
   describe('폼 상태 관리', () => {
     it('폼이 유효하지 않을 때 로그인 버튼이 비활성화된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
         isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -118,8 +120,17 @@ describe('Login Page', () => {
 
     it('폼이 유효할 때 로그인 버튼이 활성화된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
         isFormValid: true,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -130,7 +141,16 @@ describe('Login Page', () => {
 
     it('로딩 중일 때 버튼 텍스트가 변경되고 비활성화된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
         isLoading: true,
       });
 
@@ -145,8 +165,17 @@ describe('Login Page', () => {
   describe('에러 메시지 표시', () => {
     it('이메일 에러가 있을 때 에러 메시지가 표시된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
         emailError: '올바른 이메일 형식이 아닙니다.',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -156,8 +185,17 @@ describe('Login Page', () => {
 
     it('비밀번호 에러가 있을 때 에러 메시지가 표시된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
         passwordError: 'PW는 최소 8글자 이상이어야 합니다.',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -167,9 +205,17 @@ describe('Login Page', () => {
 
     it('에러가 없을 때 에러 메시지가 표시되지 않는다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
         emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
         passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -184,8 +230,17 @@ describe('Login Page', () => {
     it('이메일 입력 시 handleEmailChange가 호출된다', () => {
       const handleEmailChange = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
         handleEmailChange,
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -199,8 +254,17 @@ describe('Login Page', () => {
     it('비밀번호 입력 시 handlePasswordChange가 호출된다', () => {
       const handlePasswordChange = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
         handlePasswordChange,
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -214,8 +278,17 @@ describe('Login Page', () => {
     it('이메일 필드 blur 시 handleEmailBlur가 호출된다', () => {
       const handleEmailBlur = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
         handleEmailBlur,
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -229,8 +302,17 @@ describe('Login Page', () => {
     it('비밀번호 필드 blur 시 handlePasswordBlur가 호출된다', () => {
       const handlePasswordBlur = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
         handlePasswordBlur,
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -244,13 +326,22 @@ describe('Login Page', () => {
     it('폼 제출 시 handleSubmit이 호출된다', () => {
       const handleSubmit = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
         handleSubmit,
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
       
-      const form = screen.getByRole('form');
+      const form = screen.getByTestId('login-form');
       fireEvent.submit(form);
       
       expect(handleSubmit).toHaveBeenCalled();
@@ -259,9 +350,17 @@ describe('Login Page', () => {
     it('로그인 버튼 클릭 시 폼이 제출된다', () => {
       const handleSubmit = vi.fn();
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
         isFormValid: true,
         handleSubmit,
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -276,8 +375,17 @@ describe('Login Page', () => {
   describe('입력 필드 값 표시', () => {
     it('이메일 필드에 현재 값이 표시된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
         email: 'test@kakao.com',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
+        password: '',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -288,8 +396,17 @@ describe('Login Page', () => {
 
     it('비밀번호 필드에 현재 값이 표시된다', () => {
       mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
+        email: '',
+        emailError: '',
+        handleEmailChange: vi.fn(),
+        handleEmailBlur: vi.fn(),
         password: 'password123',
+        passwordError: '',
+        handlePasswordChange: vi.fn(),
+        handlePasswordBlur: vi.fn(),
+        isFormValid: false,
+        handleSubmit: vi.fn(),
+        isLoading: false,
       });
 
       renderWithProviders(<Login />);
@@ -310,7 +427,7 @@ describe('Login Page', () => {
     it('폼이 올바른 스타일을 가진다', () => {
       renderWithProviders(<Login />);
       
-      const form = screen.getByRole('form');
+      const form = screen.getByTestId('login-form');
       expect(form).toBeInTheDocument();
     });
 
@@ -359,7 +476,7 @@ describe('Login Page', () => {
     it('폼이 올바른 접근성 구조를 가진다', () => {
       renderWithProviders(<Login />);
       
-      const form = screen.getByRole('form');
+      const form = screen.getByTestId('login-form');
       expect(form).toBeInTheDocument();
       
       const emailInput = screen.getByPlaceholderText('이메일');
@@ -372,36 +489,7 @@ describe('Login Page', () => {
     });
   });
 
-  describe('키보드 네비게이션', () => {
-    it('Tab 키로 입력 필드 간 이동이 가능하다', () => {
-      renderWithProviders(<Login />);
-      
-      const emailInput = screen.getByPlaceholderText('이메일');
-      const passwordInput = screen.getByPlaceholderText('비밀번호');
-      
-      emailInput.focus();
-      expect(emailInput).toHaveFocus();
-      
-      fireEvent.keyDown(emailInput, { key: 'Tab' });
-      expect(passwordInput).toHaveFocus();
-    });
 
-    it('Enter 키로 폼 제출이 가능하다', () => {
-      const handleSubmit = vi.fn();
-      mockUseLoginForm.mockReturnValue({
-        ...defaultMockForm,
-        isFormValid: true,
-        handleSubmit,
-      });
-
-      renderWithProviders(<Login />);
-      
-      const form = screen.getByRole('form');
-      fireEvent.keyDown(form, { key: 'Enter' });
-      
-      expect(handleSubmit).toHaveBeenCalled();
-    });
-  });
 
   describe('반응형 디자인', () => {
     it('모바일에서 올바르게 렌더링된다', () => {

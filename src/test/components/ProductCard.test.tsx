@@ -55,11 +55,11 @@ describe('ProductCard', () => {
   it('calls onClick when card is clicked', () => {
     const onClick = vi.fn();
     renderWithProviders(<ProductCard {...defaultProps} onClick={onClick} />);
-    
-    const card = screen.getByRole('button');
-    fireEvent.click(card);
-    
-    expect(onClick).toHaveBeenCalledWith(mockProduct.id);
+
+    const card = screen.getByText('테스트 상품').closest('div');
+    fireEvent.click(card!);
+
+    expect(onClick).toHaveBeenCalledWith(defaultProps.product.id);
   });
 
   it('displays rank badge when showRankBadge is true', () => {
@@ -128,8 +128,8 @@ describe('ProductCard', () => {
 
   it('has correct card styling', () => {
     renderWithProviders(<ProductCard {...defaultProps} />);
-    
-    const card = screen.getByRole('button');
+
+    const card = screen.getByText('테스트 상품').closest('div');
     // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
     expect(card).toBeInTheDocument();
   });
@@ -147,8 +147,8 @@ describe('ProductCard', () => {
     const { onClick: _, ...propsWithoutOnClick } = defaultProps;
     renderWithProviders(<ProductCard {...propsWithoutOnClick} />);
     
-    const card = screen.getByRole('button');
-    expect(() => fireEvent.click(card)).not.toThrow();
+    const card = screen.getByText('테스트 상품').closest('div');
+    expect(() => fireEvent.click(card!)).not.toThrow();
   });
 
   it('formats price correctly with commas', () => {

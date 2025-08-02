@@ -9,7 +9,7 @@ import Home from '@/pages/Home';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
-const mockUseLoginContext = vi.fn();
+const mockUseLoginContext = vi.hoisted(() => vi.fn());
 vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
 }));
@@ -339,7 +339,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
         expect(screen.getByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
       });
 
-      const wishedButton = screen.getByText('받고 싶어요 + 선물 많이 받아요');
+      const wishedButton = screen.getByText('받고 싶어한');
       fireEvent.click(wishedButton);
       
       await waitFor(() => {
