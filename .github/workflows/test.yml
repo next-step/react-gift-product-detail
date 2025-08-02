@@ -2,9 +2,7 @@ name: Run Vitest on PR and Main Push
 
 on:
   pull_request:
-    branches: [main]
   push:
-    branches: [main]
 
 jobs:
   test:
