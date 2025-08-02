@@ -2,10 +2,10 @@ name: CI - Vitest
 
 on:
   push:
-    branches: [main]
+    branches: [jskim3936]
 
   pull_request:
-    branches: [main]
+    branches: [jskim3936]
 
 jobs:
   test:
