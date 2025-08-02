@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
+import type { Result } from '@/types/CommonTypes';
+import { queryKeys } from '@/lib/queryKeys';
 
 export interface Price {
   basicPrice: number;
@@ -37,25 +39,17 @@ const typeMap: Record<Type, string> = {
   '위시로 받은': 'MANY_WISH_RECEIVE',
 };
 
-// 쿼리 키 생성 함수 (관리 일원화)
-const getProductsRankingQueryKey = (gender: Gender, type: Type) => [
-  'productsRanking',
-  gender,
-  type,
-];
-
-// 쿼리 함수 분리
 export const fetchProductsRanking = async (
   gender: Gender,
   type: Type
 ): Promise<Product[]> => {
-  const res = await api.get('/products/ranking', {
+  const res = await api.get<Result<Product[]>>('/products/ranking', {
     params: {
       targetType: genderMap[gender],
       rankType: typeMap[type],
     },
   });
-  return res.data;
+  return res.data.data;
 };
 
 export const useProductsRanking = (gender: Gender, type: Type) => {
@@ -64,7 +58,7 @@ export const useProductsRanking = (gender: Gender, type: Type) => {
     isLoading: loading,
     error,
   } = useQuery<Product[]>({
-    queryKey: getProductsRankingQueryKey(gender, type),
+    queryKey: queryKeys.products.ranking(gender, type),
     queryFn: () => fetchProductsRanking(gender, type),
     staleTime: 1000 * 60 * 5,
   });

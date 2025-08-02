@@ -1,6 +1,7 @@
 import { api } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+import { queryKeys } from '@/lib/queryKeys';
 
 export interface ProductSummary {
   id: number;
@@ -33,7 +34,7 @@ export const useProductSummary = (productId: number | null) => {
     isLoading: loading,
     error,
   } = useQuery({
-    queryKey: ['product', productId],
+    queryKey: queryKeys.products.summary(productId),
     queryFn: () => fetchProductSummary(productId),
     enabled: !!productId,
   });

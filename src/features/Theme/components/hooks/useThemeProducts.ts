@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 import type { Product } from '../ThemeHero/ThemeTypes';
 import type { Result } from '@/types/CommonTypes';
+import { queryKeys } from '@/lib/queryKeys';
 
 interface ThemeProductResponse {
   list: Product[];
@@ -39,7 +40,7 @@ export const useThemeProducts = (themeId: number | null, limit = 10) => {
     error,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ['themeProducts', themeId],
+    queryKey: queryKeys.themes.products(themeId),
     queryFn: ({ pageParam = 0 }) =>
       fetchThemeProducts({ themeId, cursor: pageParam, limit }),
     getNextPageParam: (lastPage) => {
