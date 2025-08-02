@@ -92,14 +92,14 @@ const OrderPage = () => {
           `발신자 이름: ${data.senderName}\n` +
           `메시지: ${data.message}`
       )
-    } catch (e: any) {
-      if (e?.name === 401) {
+    } catch (e: unknown) {
+      if (e && typeof e === 'object' && 'name' in e && e.name === 401) {
         toast.error("인증이 만료되었습니다. 다시 로그인해주세요.")
         localStorage.removeItem("authToken")
         navigate("/login")
         return
       }
-      alert("주문 실패: " + error)
+      alert("주문 실패: " + (e instanceof Error ? e.message : '알 수 없는 오류'))
     }
   }
 

@@ -21,8 +21,7 @@ import ProductDescriptionTab from "@/components/ProductDetail/ProductDescription
 import ProductAnnouncementTab from "@/components/ProductDetail/ProductAnnouncementTab"
 import ProductReviewTab from "@/components/ProductDetail/ProductReviewTab"
 
-const TAB_LIST = ["description", "review", "announcement"] as const
-type Tab = (typeof TAB_LIST)[number]
+type Tab = "description" | "review" | "announcement"
 
 const ProductDetail = () => {
   const { isLoggedIn } = useAuth()
@@ -30,9 +29,7 @@ const ProductDetail = () => {
   const navigate = useNavigate()
   const [tab, setTab] = useState<Tab>("description")
 
-  if (!productId) return <ThemeNotFound />
-
-  const { product, loading, error } = useProduct(productId)
+  const { product, loading, error } = useProduct(productId || "")
 
   useEffect(() => {
     if (error) {
@@ -53,6 +50,7 @@ const ProductDetail = () => {
     [isLoggedIn, navigate]
   )
 
+  if (!productId) return <ThemeNotFound />
   if (loading) return <Loading />
   if (error) return <ThemeNotFound />
   if (!product) return null

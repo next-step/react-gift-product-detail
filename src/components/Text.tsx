@@ -2,7 +2,7 @@ import styled from "@emotion/styled"
 import type theme from "@/styles/theme"
 interface TextProps {
   variant: keyof typeof theme.Typography
-  margin: keyof typeof theme.space
+  margin?: keyof typeof theme.space
   padding: keyof typeof theme.space
   marginTop?: keyof typeof theme.space
   marginBottom?: keyof typeof theme.space
@@ -15,7 +15,6 @@ const Text = styled.p<TextProps>`
   ${({
     theme,
     variant,
-    margin,
     padding,
     marginTop,
     marginRight,
@@ -30,7 +29,6 @@ const Text = styled.p<TextProps>`
       font-size: ${fontSize};
       font-weight: ${fontWeight};
       line-height: ${lineHeight};
-      margin: ${theme.space[margin]};
       padding: ${theme.space[padding]};
       ${marginTop ? `margin-top:  ${theme.space[marginTop]};` : ""}
       ${marginRight ? `margin-right:  ${theme.space[marginRight]};` : ""}

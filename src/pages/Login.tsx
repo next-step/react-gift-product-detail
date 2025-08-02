@@ -67,7 +67,7 @@ const Login = () => {
       } else {
         toast.error("@kakao.com 이메일 주소만 가능합니다.")
       }
-    } catch (error) {
+    } catch {
       console.log("로그인 중 오류가 발생했습니다. 다시 시도해주세요.")
     }
   }

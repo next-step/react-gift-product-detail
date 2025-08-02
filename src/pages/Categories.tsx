@@ -82,7 +82,12 @@ const Categories = () => {
 
       <Layout>
         <Blank height="24px" />
-        <Text variant="title1Bold" margin="spacing2" padding="spacing2">
+        <Text
+          variant="title1Bold"
+          margin="spacing2"
+          padding="spacing2"
+          marginLeft="spacing4"
+        >
           선물 테마
         </Text>
 
@@ -101,6 +106,7 @@ const Categories = () => {
                 marginLeft="spacing0"
                 padding="spacing0"
                 marginBottom="spacing0"
+                marginTop="spacing4"
               >
                 카카오테크 캠퍼스 3기여러분
               </Text>
@@ -109,6 +115,8 @@ const Categories = () => {
                 margin="spacing4"
                 padding="spacing0"
                 marginTop="spacing0"
+                marginBottom="spacing4"
+                marginLeft="spacing4"
               >
                 프론트엔드 2단계 과제 화이팅! 🎉
               </Text>
