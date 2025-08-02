@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 import { server } from './mocks/server';
 
 // MSW 서버 시작

@@ -22,7 +22,9 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { useAuth: mockUseAuth } = (await import('@/hooks/useAuth')) as any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const { default: mockUseLoginForm } = (await import('@/hooks/useLoginForm')) as any;
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => {
