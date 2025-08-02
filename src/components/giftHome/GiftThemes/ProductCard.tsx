@@ -25,6 +25,7 @@ const ProductCardContainer = ({ product }: ProductCardContainerProps) => {
       onClick={goToCard}
       src={imageURL}
       brandName={brandInfo.name}
+      productName={product.name}
       price={price.basicPrice.toLocaleString()}
     />
   );

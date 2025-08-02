@@ -15,6 +15,7 @@ const GiftCardSelector = ({
   messageCardId,
   onChangeMessageCardId,
 }: GiftCardSelectorProps) => {
+
   const [selectedCardId, setSelectedCardId] = useState(messageCardId || orderData[0]?.id);
   const selectedCard = orderData.find((card) => card.id === selectedCardId);
 
