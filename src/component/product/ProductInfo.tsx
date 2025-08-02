@@ -1,22 +1,12 @@
-import { useParams } from 'react-router-dom';
-import { useQuery } from "@tanstack/react-query";
-import { getFromUrl } from "@/utils/getFromUrl";
-import type { ProductDetailInfo } from "@/type/GiftAPI/product";
 import { NameText, DescriptionText } from './ProductDetail.styled';
 import { Gap } from '@/styles/CommomStyle/Common.styled';
-import { getProductsDetailUrl } from '@/utils/getApiUrl';
+import useProductInfo from '@/hook/product/useProductInfo';
 
 
 
 const ProductInfo = () => {
-    const { productId } = useParams<{ productId: string }>();
-    const productDetailUrl = getProductsDetailUrl(productId);
-    const { data } = useQuery<ProductDetailInfo>({
-        queryKey: ['ProductDetailData'],
-        queryFn: () => getFromUrl(productDetailUrl)
 
-    })
-    console.log(data)
+    const { data } = useProductInfo();
 
     return (
         <section>

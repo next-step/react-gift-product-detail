@@ -1,9 +1,9 @@
 import { DetailTypeOption, ProductDetailType } from '@/type/GiftAPI/product';
 import { DetailOption, DetailOptionButton, DetailOptionText, HighLightLine, PrdocutDescriptionDiv } from './ProductDetail.styled';
-import ProductRiew from './ProductRiew';
 import ProductInfo from './ProductInfo';
 import { Gap } from '@/styles/CommomStyle/Common.styled';
 import useProductDetailData from '@/hook/product/useProductDetailData';
+import ProductReview from './ProductReview';
 const ProductDetail = () => {
     const {data, DetailType, setDetailType,} = useProductDetailData();
 
@@ -27,7 +27,7 @@ const ProductDetail = () => {
                 }
 
                 {(DetailType === ProductDetailType.review) && data?.description &&
-                    <ProductRiew />
+                    <ProductReview />
                 }
 
                 {(DetailType === ProductDetailType.info) && data?.description &&

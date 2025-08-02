@@ -1,19 +1,10 @@
 import { SideBlankDiv, Title } from "@/styles/Common.styled"
-import { BrandDiv, BrandLogo, BrandLogoP, ProductImage } from "./ProductThumbNail.styled"
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getFromUrl } from "@/utils/getFromUrl";
-import type { ProductItem } from "@/type/GiftAPI/product";
+import { BrandDiv, BrandLogo, BrandLogoP, ProductImage } from "./ProductThumbnail.styled";
+import useProductThumbnail from "@/hook/product/useProductThumbnail";
 import { Gap, GapGray } from "@/styles/CommomStyle/Common.styled";
-import { getProductsUrl } from "@/utils/getApiUrl";
 const ProductThumbNail = () => {
-    const { productId } = useParams<{ productId: string }>();
-    const productUrl = getProductsUrl(productId);
-    const { data } = useQuery<ProductItem>({
-        queryKey: ['productData'],
-        queryFn: () => getFromUrl(productUrl)
-
-    })
+    
+    const { data } = useProductThumbnail();
 
     return (
         <section>
