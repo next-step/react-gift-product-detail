@@ -3,7 +3,7 @@ import { useOrder } from "@/context/OrderContext";
 import { useReceiver } from "@/context/ReceiverContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { orderAPI } from "@/utils/orderApi";
-import useProductSummary from "./useProductSummary";
+import useProductSummary from "../common/useProductSummary";
 
 
 
@@ -18,7 +18,7 @@ function useOrderCompleteMessage() {
   const { name } = useProductSummary();
 
 
-  const handleOrder = async () => {
+  const submitOrder = async () => {
     ordererName.validate();
 
     if (!ordererName.error) {
@@ -47,7 +47,7 @@ function useOrderCompleteMessage() {
 
   
     return {
-      total, handleOrder
+      total, submitOrder
 
     }
 };

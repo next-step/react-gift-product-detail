@@ -1,5 +1,5 @@
 import kakaoLogoImg from '@/assets/KaKao로고.svg';
-import useInput from '@/hook/useInput';
+import useInput from '@/hook/common/useInput';
 import { validateEmail, validatePassword } from '@/utils/validateInput';
 import { useNavigate } from 'react-router-dom';
 import {

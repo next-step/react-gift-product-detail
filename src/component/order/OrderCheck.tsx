@@ -1,5 +1,5 @@
-import useOrderCompleteMessage from '@/hook/useOrderCompleteMessage';
-import useProductSummary from '@/hook/useProductSummary';
+import useOrderCompleteMessage from '@/hook/order/useOrderCompleteMessage';
+import useProductSummary from '@/hook/common/useProductSummary';
 
 import {
   DefaultComponentDiv,
@@ -19,7 +19,10 @@ import { ToastContainer } from 'react-toastify';
 
 const OrderCheck = () => {
   const {price, imageUrl, name, brandName} = useProductSummary();
-  const {total, handleOrder} = useOrderCompleteMessage();
+  const {total, submitOrder} = useOrderCompleteMessage();
+  const handleClick = () => {
+    submitOrder();
+  }
 
 
   return (
@@ -41,7 +44,7 @@ const OrderCheck = () => {
         </ProductBox>
       </SideBlankDiv>
 
-      <OrderButton onClick={handleOrder}>
+      <OrderButton onClick={handleClick}>
         {' '}
         {Number(total) * (price ?? 0)} 원 주문하기
       </OrderButton>
