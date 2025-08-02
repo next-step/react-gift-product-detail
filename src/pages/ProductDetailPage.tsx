@@ -9,7 +9,6 @@ import ProductDetailSummary from '@/components/productdetail/ProductDetailSummar
 
 import FixedOrderBar from '@/components/productdetail/FixedOrderBar';
 import theme from '@/data/theme';
-const Loading = () => <div>로딩 중...</div>;
 
 const TAB_LIST = [
   { key: 'detail', label: '상품 설명' },
@@ -29,11 +28,23 @@ const ProductDetailPage = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'detail':
-        return <ProductDetailInfo productId={productId} />;
+        return (
+          <Suspense fallback={<div>상품 정보를 불러오고 있습니다</div>}>
+            <ProductDetailInfo productId={productId} />
+          </Suspense>
+        );
       case 'announcement':
-        return <ProductAnnouncements productId={productId} />;
+        return (
+          <Suspense fallback={<div>상세 정보를 불러오고 있습니다</div>}>
+            <ProductAnnouncements productId={productId} />
+          </Suspense>
+        );
       case 'review':
-        return <HighlightReview productId={productId} />;
+        return (
+          <Suspense fallback={<div>선물 후기를 불러오고 있습니다</div>}>
+            <HighlightReview productId={productId} />
+          </Suspense>
+        );
       default:
         return null;
     }
@@ -43,18 +54,30 @@ const ProductDetailPage = () => {
     <ErrorBoundary
       fallback={<div>상품 정보를 불러오는 중 오류가 발생했습니다.</div>}
     >
-      <Suspense fallback={<Loading />}>
+
         <ProductDetailSummary productId={productId} />
 
-        <div style={{ display: 'flex', gap: theme.spacing.spacing1, margin: theme.spacing.spacing4 }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: theme.spacing.spacing1,
+            margin: theme.spacing.spacing4,
+          }}
+        >
           {TAB_LIST.map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               style={{
                 padding: `${theme.spacing.spacing2} ${theme.spacing.spacing4}`,
-                backgroundColor: activeTab === tab.key ?theme.colors.semantic.textDefault : theme.colors.semantic.backgroundDefault,
-                color: activeTab === tab.key ? theme.colors.semantic.backgroundDefault :theme.colors.semantic.textDefault,
+                backgroundColor:
+                  activeTab === tab.key
+                    ? theme.colors.semantic.textDefault
+                    : theme.colors.semantic.backgroundDefault,
+                color:
+                  activeTab === tab.key
+                    ? theme.colors.semantic.backgroundDefault
+                    : theme.colors.semantic.textDefault,
                 border: 'none',
                 borderRadius: theme.spacing.spacing2,
                 cursor: 'pointer',
@@ -64,9 +87,10 @@ const ProductDetailPage = () => {
             </button>
           ))}
         </div>
-        <div style={{ marginTop: theme.spacing.spacing4 }}>{renderTabContent()}</div>
+        <div style={{ marginTop: theme.spacing.spacing4 }}>
+          {renderTabContent()}
+        </div>
         <FixedOrderBar productId={productId} />
-      </Suspense>
     </ErrorBoundary>
   );
 };
