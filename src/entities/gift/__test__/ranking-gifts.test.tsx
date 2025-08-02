@@ -24,7 +24,11 @@ describe("RankingGifts 컴포넌트", () => {
 
         await waitFor(
             () => {
-                expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+                expect(
+                    screen.getByText((_, element) => {
+                        return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                    }),
+                ).toBeInTheDocument();
             },
             { timeout: 3000 },
         );
@@ -45,7 +49,11 @@ describe("RankingGifts 컴포넌트", () => {
         render(<RankingGifts />);
 
         await waitFor(() => {
-            expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+            expect(
+                screen.getByText((_, element) => {
+                    return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                }),
+            ).toBeInTheDocument();
         });
 
         const giftCards = screen.getAllByText(
@@ -63,7 +71,11 @@ describe("RankingGifts 컴포넌트", () => {
         render(<RankingGifts />);
 
         await waitFor(() => {
-            expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+            expect(
+                screen.getByText((_, element) => {
+                    return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                }),
+            ).toBeInTheDocument();
         });
 
         const moreButton = screen.getByText("더보기");
@@ -81,10 +93,19 @@ describe("RankingGifts 컴포넌트", () => {
         render(<RankingGifts />);
 
         await waitFor(() => {
-            expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+            expect(
+                screen.getByText((_, element) => {
+                    return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                }),
+            ).toBeInTheDocument();
         });
 
-        const firstGiftCard = screen.getByText("스트로베리 초콜릿 생크림 케이크").closest("div");
+        const firstGiftCard = screen
+            .getByText((_, element) => {
+                return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+            })
+            .closest("div");
+
         if (firstGiftCard) {
             fireEvent.click(firstGiftCard);
         }
@@ -98,7 +119,11 @@ describe("RankingGifts 컴포넌트", () => {
         render(<RankingGifts />);
 
         await waitFor(() => {
-            expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+            expect(
+                screen.getByText((_, element) => {
+                    return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                }),
+            ).toBeInTheDocument();
         });
 
         expect(screen.getByText("35000 원")).toBeInTheDocument();
@@ -108,7 +133,11 @@ describe("RankingGifts 컴포넌트", () => {
         render(<RankingGifts />);
 
         await waitFor(() => {
-            expect(screen.getByText("스트로베리 초콜릿 생크림 케이크")).toBeInTheDocument();
+            expect(
+                screen.getByText((_, element) => {
+                    return element?.textContent === "스트로베리 초콜릿 생크림 케이크";
+                }),
+            ).toBeInTheDocument();
         });
 
         expect(screen.getByText("1")).toBeInTheDocument();
