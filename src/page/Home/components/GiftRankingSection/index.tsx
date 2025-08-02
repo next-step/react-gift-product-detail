@@ -11,7 +11,7 @@ interface ButtonProps {
 }
 
 const GiftRankingSection = () => {
-  const { selectGeneration, selectFilter, activeGeneration, activeFilter } = useSearchParamState();
+  const { generation, filter } = useSearchParamState();
 
   return (
     <Section>
@@ -22,8 +22,8 @@ const GiftRankingSection = () => {
           {generations.map(({ id, emoji, label }) => (
             <Button
               key={id}
-              isActive={activeGeneration === id}
-              onClick={() => selectGeneration(id)}
+              isActive={generation.active === id}
+              onClick={() => generation.select(id)}
             >
               <div>{emoji}</div>
               <p>{label}</p>
@@ -33,7 +33,7 @@ const GiftRankingSection = () => {
 
         <FilterGroup>
           {filters.map(({ id, label }) => (
-            <Button key={id} isActive={activeFilter === id} onClick={() => selectFilter(id)}>
+            <Button key={id} isActive={filter.active === id} onClick={() => filter.select(id)}>
               <p>{label}</p>
             </Button>
           ))}
@@ -41,7 +41,7 @@ const GiftRankingSection = () => {
       </CatContainer>
       <ErrorBoundary fallback={<div>랭킹을 불러올 수 없습니다.</div>}>
         <Suspense fallback={<Loading />}>
-          <RankList activeGeneration={activeGeneration} activeFilter={activeFilter} />
+          <RankList activeGeneration={generation.active} activeFilter={filter.active} />
         </Suspense>
       </ErrorBoundary>
     </Section>
