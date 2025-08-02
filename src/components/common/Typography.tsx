@@ -2,7 +2,7 @@
 import { css, useTheme } from '@emotion/react';
 import type { ReactNode, ElementType } from 'react';
 import type { JSX } from '@emotion/react/jsx-runtime';
-import type { ThemeType } from '../../styles/ThemeType';
+import type { ThemeType } from '../../styles/themeType';
 
 type TextType = keyof ThemeType['typography'];
 type NativeTags = Extract<keyof JSX.IntrinsicElements, string>;
