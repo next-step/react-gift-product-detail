@@ -4,7 +4,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["node"]
+    "types": ["vitest", "node"]
   },
   "include": ["src", "vitest.config.ts"],
   "files": [],
