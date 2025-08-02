@@ -1,16 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 import type { Product } from '../ThemeHero/ThemeTypes';
+import type { Result } from '@/types/CommonTypes';
 
 interface ThemeProductResponse {
   list: Product[];
   cursor: number;
   hasMoreList: boolean;
 }
-
-// 공통 API 응답 타입 제네릭
-// res.data.data 사용 없이 타입 단언 제거 가능
-type Result<T> = { data: T };
 
 const fetchThemeProducts = async ({
   themeId,
