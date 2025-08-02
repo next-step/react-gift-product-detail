@@ -30,9 +30,9 @@ export class HTTPExceptionBoundary extends React.Component<
 
     public componentDidCatch(error: Error) {
         if (error instanceof HTTPException) {
-            console.error("HTTPException caught:", error.code, error.message);
+            // console.error("HTTPException caught:", error.code, error.message);
         } else {
-            console.error("Unknown error caught:", error);
+            // console.error("Unknown error caught:", error);
         }
     }
 
