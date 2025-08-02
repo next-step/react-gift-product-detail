@@ -7,16 +7,20 @@ import Login from '@/pages/Login';
 import { theme } from '@/styles/Theme';
 
 // Mock hooks
+const mockUseLoginForm = vi.fn();
+const mockUseLoginContext = vi.fn();
+const mockUseLogin = vi.fn();
+
 vi.mock('@/hooks/useLoginForm', () => ({
-  useLoginForm: vi.fn(),
+  useLoginForm: mockUseLoginForm,
 }));
 
 vi.mock('@/hooks/useLoginContext', () => ({
-  useLoginContext: vi.fn(),
+  useLoginContext: mockUseLoginContext,
 }));
 
 vi.mock('@/api/auth', () => ({
-  useLogin: vi.fn(),
+  useLogin: mockUseLogin,
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
@@ -46,9 +50,6 @@ describe('Login Page', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
-    const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
-    const mockUseLogin = vi.mocked(require('@/api/auth').useLogin);
     
     mockUseLoginForm.mockReturnValue(defaultMockForm);
     mockUseLoginContext.mockReturnValue({
@@ -104,7 +105,6 @@ describe('Login Page', () => {
 
   describe('폼 상태 관리', () => {
     it('폼이 유효하지 않을 때 로그인 버튼이 비활성화된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         isFormValid: false,
@@ -117,7 +117,6 @@ describe('Login Page', () => {
     });
 
     it('폼이 유효할 때 로그인 버튼이 활성화된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         isFormValid: true,
@@ -130,7 +129,6 @@ describe('Login Page', () => {
     });
 
     it('로딩 중일 때 버튼 텍스트가 변경되고 비활성화된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         isLoading: true,
@@ -146,7 +144,6 @@ describe('Login Page', () => {
 
   describe('에러 메시지 표시', () => {
     it('이메일 에러가 있을 때 에러 메시지가 표시된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         emailError: '올바른 이메일 형식이 아닙니다.',
@@ -158,7 +155,6 @@ describe('Login Page', () => {
     });
 
     it('비밀번호 에러가 있을 때 에러 메시지가 표시된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         passwordError: 'PW는 최소 8글자 이상이어야 합니다.',
@@ -170,7 +166,6 @@ describe('Login Page', () => {
     });
 
     it('에러가 없을 때 에러 메시지가 표시되지 않는다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         emailError: '',
@@ -188,7 +183,6 @@ describe('Login Page', () => {
   describe('사용자 상호작용', () => {
     it('이메일 입력 시 handleEmailChange가 호출된다', () => {
       const handleEmailChange = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         handleEmailChange,
@@ -204,7 +198,6 @@ describe('Login Page', () => {
 
     it('비밀번호 입력 시 handlePasswordChange가 호출된다', () => {
       const handlePasswordChange = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         handlePasswordChange,
@@ -220,7 +213,6 @@ describe('Login Page', () => {
 
     it('이메일 필드 blur 시 handleEmailBlur가 호출된다', () => {
       const handleEmailBlur = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         handleEmailBlur,
@@ -236,7 +228,6 @@ describe('Login Page', () => {
 
     it('비밀번호 필드 blur 시 handlePasswordBlur가 호출된다', () => {
       const handlePasswordBlur = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         handlePasswordBlur,
@@ -252,7 +243,6 @@ describe('Login Page', () => {
 
     it('폼 제출 시 handleSubmit이 호출된다', () => {
       const handleSubmit = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         handleSubmit,
@@ -268,7 +258,6 @@ describe('Login Page', () => {
 
     it('로그인 버튼 클릭 시 폼이 제출된다', () => {
       const handleSubmit = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         isFormValid: true,
@@ -286,7 +275,6 @@ describe('Login Page', () => {
 
   describe('입력 필드 값 표시', () => {
     it('이메일 필드에 현재 값이 표시된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         email: 'test@kakao.com',
@@ -299,7 +287,6 @@ describe('Login Page', () => {
     });
 
     it('비밀번호 필드에 현재 값이 표시된다', () => {
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         password: 'password123',
@@ -401,7 +388,6 @@ describe('Login Page', () => {
 
     it('Enter 키로 폼 제출이 가능하다', () => {
       const handleSubmit = vi.fn();
-      const mockUseLoginForm = vi.mocked(require('@/hooks/useLoginForm').useLoginForm);
       mockUseLoginForm.mockReturnValue({
         ...defaultMockForm,
         isFormValid: true,

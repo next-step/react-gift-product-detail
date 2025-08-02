@@ -143,7 +143,8 @@ describe('ProductCard', () => {
   });
 
   it('handles click without onClick prop', () => {
-    const { onClick, ...propsWithoutOnClick } = defaultProps;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { onClick: _, ...propsWithoutOnClick } = defaultProps;
     renderWithProviders(<ProductCard {...propsWithoutOnClick} />);
     
     const card = screen.getByRole('button');

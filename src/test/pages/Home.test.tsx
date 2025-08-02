@@ -9,8 +9,9 @@ import Home from '@/pages/Home';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
+const mockUseLoginContext = vi.fn();
 vi.mock('@/hooks/useLoginContext', () => ({
-  useLoginContext: vi.fn(),
+  useLoginContext: mockUseLoginContext,
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
@@ -26,7 +27,6 @@ const renderWithProviders = (component: React.ReactElement) => {
 describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
     mockUseLoginContext.mockReturnValue({
       user: null,
     });

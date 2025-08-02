@@ -8,8 +8,9 @@ import GiftFriendsSection from '@/Components/GiftFriendsSection';
 import { theme } from '@/styles/Theme';
 
 // Mock useLoginContext hook
+const mockUseLoginContext = vi.fn();
 vi.mock('@/hooks/useLoginContext', () => ({
-  useLoginContext: vi.fn(),
+  useLoginContext: mockUseLoginContext,
 }));
 
 const renderWithProviders = (component: React.ReactElement) => {
@@ -158,7 +159,8 @@ describe('Typography Components', () => {
     });
 
     it('handles click without onClick prop', () => {
-      const { onClick, ...propsWithoutOnClick } = defaultProps;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onClick: _, ...propsWithoutOnClick } = defaultProps;
       renderWithProviders(<ProductCard {...propsWithoutOnClick} />);
       
       const card = screen.getByText('테스트 상품').closest('div');
@@ -185,14 +187,12 @@ describe('Typography Components', () => {
   describe('GiftFriendsSection', () => {
     beforeEach(() => {
       vi.clearAllMocks();
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
     });
 
     it('renders with default message when user is not logged in', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -203,7 +203,6 @@ describe('Typography Components', () => {
     });
 
     it('renders with personalized message when user is logged in', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: {
           email: 'test@example.com',
@@ -216,7 +215,6 @@ describe('Typography Components', () => {
     });
 
     it('applies correct typography styles to guide text', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -229,7 +227,6 @@ describe('Typography Components', () => {
     });
 
     it('has correct section styling', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -242,7 +239,6 @@ describe('Typography Components', () => {
     });
 
     it('has correct card styling', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -255,7 +251,6 @@ describe('Typography Components', () => {
     });
 
     it('has correct add circle styling', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -268,7 +263,6 @@ describe('Typography Components', () => {
     });
 
     it('displays plus icon', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: null,
       });
@@ -281,7 +275,6 @@ describe('Typography Components', () => {
     });
 
     it('handles user with different email format', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: {
           email: 'user.name@example.com',
@@ -294,7 +287,6 @@ describe('Typography Components', () => {
     });
 
     it('handles user with empty email', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: {
           email: '',
@@ -307,7 +299,6 @@ describe('Typography Components', () => {
     });
 
     it('handles user with email without @ symbol', () => {
-      const mockUseLoginContext = vi.mocked(require('@/hooks/useLoginContext').useLoginContext);
       mockUseLoginContext.mockReturnValue({
         user: {
           email: 'invalidemail',

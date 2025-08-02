@@ -69,7 +69,8 @@ describe('FilterButton', () => {
   });
 
   it('renders without icon when icon prop is not provided', () => {
-    const { icon, ...propsWithoutIcon } = defaultProps;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { icon: _, ...propsWithoutIcon } = defaultProps;
     renderWithTheme(<FilterButton {...propsWithoutIcon} />);
     
     expect(screen.getByText('Test Filter')).toBeInTheDocument();

@@ -71,7 +71,8 @@ describe('Form Field Components', () => {
     });
 
     it('renders without icon when icon prop is not provided', () => {
-      const { icon, ...propsWithoutIcon } = defaultProps;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { icon: _, ...propsWithoutIcon } = defaultProps;
       renderWithTheme(<FilterButton {...propsWithoutIcon} />);
       
       expect(screen.getByText('Test Filter')).toBeInTheDocument();
@@ -174,7 +175,8 @@ describe('Form Field Components', () => {
     });
 
     it('handles click without onClick prop', () => {
-      const { onClick, ...propsWithoutOnClick } = defaultProps;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { onClick: _, ...propsWithoutOnClick } = defaultProps;
       renderWithTheme(<TabButton {...propsWithoutOnClick} />);
       
       const button = screen.getByRole('button');

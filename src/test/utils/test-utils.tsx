@@ -28,7 +28,8 @@ const customRender = (
   ui: ReactElement,
   options: CustomRenderOptions = {}
 ) => {
-  const { route = '/', ...renderOptions } = options;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { route: _ = '/', ...renderOptions } = options;
   
   const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
     const queryClient = createTestQueryClient();
@@ -50,5 +51,26 @@ const customRender = (
 };
 
 // 재내보내기
-export * from '@testing-library/react';
+export {
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+  waitForElementToBeRemoved,
+  findByText,
+  findByRole,
+  findByTestId,
+  queryByText,
+  queryByRole,
+  queryByTestId,
+  getByText,
+  getByRole,
+  getByTestId,
+  getAllByText,
+  getAllByRole,
+  getAllByTestId,
+  act,
+  cleanup,
+  renderHook,
+} from '@testing-library/react';
 export { customRender as render }; 
