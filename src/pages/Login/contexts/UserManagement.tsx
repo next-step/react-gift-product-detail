@@ -68,7 +68,7 @@ export const UserManagementProvider = ({
     </UserManagementContext.Provider>
   );
 };
-export const UserManagement = () => {
+export const userManagement = () => {
   const context = useContext(UserManagementContext);
   if (!context)
     throw new Error(

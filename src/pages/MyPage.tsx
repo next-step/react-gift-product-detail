@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { useTheme } from '@emotion/react';
-import { UserManagement } from './Login/contexts/UserManagement';
+import { userManagement } from './Login/contexts/UserManagement';
 import { css } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
   const theme = useTheme();
-  const { user, logout } = UserManagement();
+  const { user, logout } = userManagement();
   const navigate = useNavigate();
 
   const email = typeof user?.email === 'string' ? user.email : '';

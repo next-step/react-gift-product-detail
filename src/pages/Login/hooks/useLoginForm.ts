@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { UserManagement } from '../contexts/UserManagement';
+import { userManagement } from '../contexts/UserManagement';
 import { useEmailInput } from './useEmailInput';
 import { usePasswordInput } from './usePasswordInput';
 import { useLoginMutation } from '../../../apis/auth';
@@ -9,7 +9,7 @@ export const useLoginForm = () => {
   const password = usePasswordInput();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login } = UserManagement();
+  const { login } = userManagement();
 
   const isValid = email.isValid && password.isValid;
   const redirectPath = searchParams.get('redirect') || '/my';

@@ -27,7 +27,7 @@ import {
 } from './styles';
 
 import { ErrorBoundary } from '../../ErrorBoundary';
-import { UserManagement } from '../Login/contexts/UserManagement'; // 추가
+import { userManagement } from '../Login/contexts/UserManagement';
 
 const TAB = {
   DESCRIPTION: '상품설명',
@@ -41,7 +41,7 @@ const ProductDetailContent = () => {
   const { productId } = useParams<{ productId: string }>();
   const [activeTab, setActiveTab] = useState<TabKey>('DESCRIPTION');
 
-  const { user } = UserManagement();
+  const { user } = userManagement();
   const location = useLocation();
 
   if (!user) {

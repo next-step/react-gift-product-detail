@@ -1,0 +1,31 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - eunchae-04
+  push:
+    branches:
+      - main
+      - eunchae-04
+      - step3
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
