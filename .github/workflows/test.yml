@@ -1,4 +1,4 @@
-name: hyemomo 브랜치에 pr 보낼때마다 ,push  할 때마다
+name: Test on PR and Push
 
 on:
   pull_request:
@@ -19,8 +19,11 @@ jobs:
         with:
           node-version: 18
 
+      - name: Set VITE_API_BASE_URL for tests
+        run: echo "VITE_API_BASE_URL=http://localhost" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm ci
 
       - name: Run tests
-        run: npm run test
+        run: npm run test -- --reporter verbose
