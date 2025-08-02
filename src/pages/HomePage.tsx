@@ -16,9 +16,7 @@ function Home() {
         <FriendSelector />
         <CategoryList />
         <NoticeBanner />
-        <Suspense fallback={<Loading />}>
-          <RankingTabs />
-        </Suspense>
+        <RankingTabs />
       </Suspense>
     </div>
   )
