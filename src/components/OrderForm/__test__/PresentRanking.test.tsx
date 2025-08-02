@@ -1,5 +1,5 @@
-import { vi, describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from '@emotion/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -9,7 +9,12 @@ import { theme } from '@/theme/theme';
 import { server } from '@/setupTests';
 import { http, HttpResponse } from 'msw';
 
-export const navigateSpy = vi.fn();
+beforeEach(() => {
+  localStorage.clear();
+  vi.clearAllMocks();
+});
+
+const navigateSpy = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<any>('react-router-dom');
   return { ...actual, useNavigate: () => navigateSpy };
@@ -28,6 +33,25 @@ const renderComponent = () => {
     </QueryClientProvider>
   );
 };
+
+const maleProducts = [
+  {
+    id: 301,
+    name: '남성용 상품 1',
+    price: { basicPrice: 0, sellingPrice: 0, discountRate: 0 },
+    imageURL: '',
+    brandInfo: { id: 1, name: '브랜드M', imageURL: '' },
+  },
+];
+const femaleProducts = [
+  {
+    id: 401,
+    name: '여성용 상품 1',
+    price: { basicPrice: 0, sellingPrice: 0, discountRate: 0 },
+    imageURL: '',
+    brandInfo: { id: 2, name: '브랜드F', imageURL: '' },
+  },
+];
 
 describe('PresentRanking – 실시간 급상승 선물랭킹', () => {
   it('API 성공 시 카드 6개를 보여주고 클릭하면 상세 페이지로 이동한다', async () => {
@@ -58,4 +82,39 @@ describe('PresentRanking – 실시간 급상승 선물랭킹', () => {
     expect(await screen.findByText('상품이 없습니다.')).toBeInTheDocument();
     expect(screen.queryByText('상품 1')).not.toBeInTheDocument();
   });
+
+  beforeEach(() => {
+    server.use(
+      http.get('/api/products/ranking', ({ request }) => {
+        const target = new URL(request.url).searchParams.get('targetType');
+        if (target === 'MALE') return HttpResponse.json({ data: maleProducts });
+        if (target === 'FEMALE') return HttpResponse.json({ data: femaleProducts });
+        return HttpResponse.json({ data: [] });
+      })
+    );
+  });
+
+  it('남성 필터에서 여성 필터로 전환 시 목록이 변경된다', async () => {
+    renderComponent();
+
+    await userEvent.click(screen.getByText('남성이'));
+    expect(await screen.findByText('남성용 상품 1')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByText('여성이'));
+    expect(await screen.findByText('여성용 상품 1')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText('남성용 상품 1')).not.toBeInTheDocument());
+  });
+
+  it('여성 필터에서 남성 필터로 전환 시 목록이 변경된다', async () => {
+    renderComponent();
+
+    await userEvent.click(screen.getByText('여성이'));
+    expect(await screen.findByText('여성용 상품 1')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByText('남성이'));
+    expect(await screen.findByText('남성용 상품 1')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByText('여성용 상품 1')).not.toBeInTheDocument());
+  });
 });
+
+server.use(http.get(/\.(png|jpe?g|webp|svg)$/, () => new HttpResponse(null, { status: 200 })));
