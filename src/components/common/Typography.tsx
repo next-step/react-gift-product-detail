@@ -1,13 +1,13 @@
 import React from 'react';
 
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
-  variant?: 'h1' | 'h2' | 'p' | 'span';
+  as?: 'h1' | 'h2' | 'p' | 'span';
   children: React.ReactNode;
 }
 
-const Typography = ({ variant = 'p', children, ...rest }: TypographyProps) => {
-  const Tag = variant;
-  return <Tag {...rest}>{children}</Tag>;
+const Typography = ({ as = 'p', children, ...rest }: TypographyProps) => {
+  const Component = as;
+  return <Component {...rest}>{children}</Component>;
 };
 
 export default Typography;
