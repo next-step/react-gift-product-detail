@@ -26,10 +26,10 @@ export default function TimeRanking() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedGender, setSelectedGender] = useState(
-    () => searchParams.get("gender") || "ALL",
+    () => searchParams.get("gender") || "ALL"
   );
   const [selectedRankType, setSelectedRankType] = useState(
-    () => searchParams.get("rankType") || "받고 싶어한",
+    () => searchParams.get("rankType") || "받고 싶어한"
   );
   const [showAll, setShowAll] = useState(false);
 
@@ -56,13 +56,15 @@ export default function TimeRanking() {
         return "MANY_WISH";
     }
   };
+  const targetType = searchTargetType(selectedGender);
+  const rankType = searchRankType(selectedRankType);
 
   const { data, isLoading } = useFetch<ProductInfo[]>({
-    queryKey: ["Ranking", selectedGender, selectedRankType],
+    queryKey: ["Ranking", targetType, rankType],
     url: API.PRODUCT_RANKING,
     queryParams: {
-      targetType: searchTargetType(selectedGender),
-      rankType: searchRankType(selectedRankType),
+      targetType,
+      rankType,
     },
   });
 

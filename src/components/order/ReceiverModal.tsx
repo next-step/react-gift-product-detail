@@ -26,7 +26,7 @@ export default function ReceiverModal({
   useLockBodyScroll();
 
   return (
-    <Modal isOpen={true}>
+    <Modal isOpen={true} data-testid="receiver-modal">
       <ModalBox>
         <ModalInner>
           <ReceiverTitleBox>
