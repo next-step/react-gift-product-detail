@@ -10,7 +10,10 @@ import { UserInfoProvider } from '@/providers/UserInfoProvider';
 const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
-      queries: { retry: false },
+      queries: {
+        retry: 0,
+        throwOnError: true,
+      },
     },
   });
 
