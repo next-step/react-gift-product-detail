@@ -34,7 +34,7 @@ export function AuthContextProvider({
     if (seed.name) localStorage.setItem("name", seed.name)
 
     qc.setQueryData(["auth"], seed)
-  }, [])
+  }, [initialValue, qc])
   const loginMutation = useLogin(() => {
     setIsLoggingOut(false)
   })

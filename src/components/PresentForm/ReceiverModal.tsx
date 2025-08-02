@@ -29,8 +29,6 @@ const ReceiverModal = ({ close, isOpen }: Props) => {
     }
   }, [isOpen])
 
-  if (!isOpen) return null
-
   const {
     control,
     register,
@@ -84,6 +82,8 @@ const ReceiverModal = ({ close, isOpen }: Props) => {
 
     return true
   }
+
+  if (!isOpen) return null
 
   return (
     <Overlay>

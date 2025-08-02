@@ -57,7 +57,7 @@ const ProductGrid = () => {
     }
   )
 
-  const products = productsData?.data || []
+  const products = useMemo(() => productsData?.data || [], [productsData?.data])
   const visibleProducts = useMemo(() => {
     const count = showAll ? products.length : VISIBLE_COUNT
     return products.slice(0, count)

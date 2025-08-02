@@ -40,7 +40,8 @@ afterAll(() => server.close())
 
 const navigateMock = vi.fn()
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<any>("react-router-dom")
+  // 실제 모듈 모두 유지
+  const actual = await vi.importActual<typeof import("react-router-dom")>("react-router-dom")
   return {
     ...actual,
     useNavigate: () => navigateMock,

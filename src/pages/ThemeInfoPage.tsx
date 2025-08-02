@@ -10,10 +10,9 @@ import { ROUTES } from "@/constants/routes"
 
 const ThemeInfoPage = () => {
   const { themeId } = useParams<{ themeId: string }>()
-  if (!themeId) return <ThemeNotFound />
-  const { theme, loading, error } = useThemeInfo(themeId)
-  console.log(theme)
   const navigate = useNavigate()
+  const { theme, loading, error } = useThemeInfo(themeId || "")
+  
   useEffect(() => {
     if (error) {
       if (error.response?.status === 404) {
@@ -22,6 +21,7 @@ const ThemeInfoPage = () => {
     }
   }, [error, navigate])
 
+  if (!themeId) return <ThemeNotFound />
   if (loading) return <Loading />
   if (error) return <ThemeNotFound />
   return (
