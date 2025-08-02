@@ -19,3 +19,41 @@ export const fetchProductSummary = async (productId: number): Promise<ProductSum
   );
   return result.data;
 };
+
+
+export const fetchProductBasic = async (productId: any): Promise<any> => {
+  const result: any = await apiRequest(
+    `/products/${productId}`,
+    { method: 'GET' }
+  );
+  return result.data;
+};
+
+
+export const fetchProductDetail = async (productId: any): Promise<any> => {
+  const result: any = await apiRequest(
+    `/products/${productId}/detail`,
+    { method: 'GET' }
+  );
+  return result.data;
+};
+
+
+// 상품 찜 정보 조회
+export const fetchProductWish = async (productId: any): Promise<any> => {
+  const result: any = await apiRequest(
+    `/products/${productId}/wish`,
+    { method: 'GET' }
+  );
+  return result.data;
+};
+
+
+// 상품 하이라이트 리뷰 조회
+export const fetchProductHighlightReview = async (productId: any): Promise<any> => {
+  const result: any = await apiRequest(
+    `/products/${productId}/highlight-review`,
+    { method: 'GET' }
+  );
+  return result.data;
+};

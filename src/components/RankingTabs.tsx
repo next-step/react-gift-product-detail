@@ -1,9 +1,16 @@
+const titleStyle = css({
+  ...typography.body1Bold,
+  color: colors.gray900,
+  margin: 0,
+  marginBottom: spacing.spacing4,
+});
 import { css } from '@emotion/react'
 import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
-import { useProductRankingQuery } from '../hooks/useProductQuery';
 import { usePersistentState } from '../hooks/usePersistentState';
+import { Suspense } from 'react'
+import Loading from '@/components/Common/Loading'
 
 const peopleTab = [
   { label: '전체', value: 'ALL' ,icon: 'ALL' },
@@ -66,7 +73,6 @@ import ProductGrid from './ProductGrid';
 const RankingTabs = () => {
   const [selected, setSelected] = usePersistentState('rankingTab', 'FEMALE');
   const [selectedWantedTab, setSelectedWantedTab] = usePersistentState('wantedTab', 'MANY_WISH');
-  const { data: products, isLoading } = useProductRankingQuery(selected, selectedWantedTab);
 
   const handleTargetTabChange = (value: string) => {
     setSelected(value);
@@ -78,12 +84,7 @@ const RankingTabs = () => {
 
   return (
     <>
-      <h3 style={{
-        ...typography.body1Bold,
-        color: colors.gray900,
-        margin: 0,
-        marginBottom: spacing.spacing4,
-      }}>실시간 급상승 선물랭킹</h3>
+      <h3 css={titleStyle}>실시간 급상승 선물랭킹</h3>
       <div css={containerStyle}>
         {peopleTab.map(tab => (
           <button
@@ -107,7 +108,9 @@ const RankingTabs = () => {
           </button>
         ))}
       </div>
-      <ProductGrid products={products ?? []} loading={isLoading} />
+      <Suspense fallback={<Loading />}>
+        <ProductGrid  selected={selected} selectedWantedTab={selectedWantedTab} />
+      </Suspense>
     </>
   );
 }

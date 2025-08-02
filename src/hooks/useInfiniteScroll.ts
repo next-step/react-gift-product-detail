@@ -1,27 +1,47 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
+import type { RefObject } from 'react';
 
 interface UseInfiniteScrollOptions {
-  loading: boolean;
-  hasMore: boolean;
-  onLoadMore: () => void;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
-function useInfiniteScroll<T extends HTMLElement = HTMLDivElement>(options: UseInfiniteScrollOptions) {
-  const { loading, hasMore, onLoadMore } = options;
-  const observer = useRef<IntersectionObserver | null>(null);
+export function useInfiniteScroll(
+  observerRef: RefObject<HTMLElement | null>,
+  { fetchNextPage, hasNextPage, isFetchingNextPage }: UseInfiniteScrollOptions
+) {
+  const handleFetchNextPage = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const setRef = (node: T | null) => {
-    if (observer.current) observer.current.disconnect();
-    if (loading || !hasMore || !node) return;
-    observer.current = new window.IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) onLoadMore();
-    }, { threshold: 0.1 });
-    observer.current.observe(node);
-  };
+  const setupObserver = useCallback(() => {
+    if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
 
-  useEffect(() => () => { observer.current?.disconnect(); }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          handleFetchNextPage();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px',
+      }
+    );
 
-  return setRef;
+    observer.observe(observerRef.current);
+    return observer;
+  }, [observerRef, hasNextPage, isFetchingNextPage, handleFetchNextPage]);
+
+  useEffect(() => {
+    const observer = setupObserver();
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [setupObserver]);
 }
-
-export { useInfiniteScroll };

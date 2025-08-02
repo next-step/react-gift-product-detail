@@ -3,7 +3,6 @@ import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
 import { useCategoriesQuery } from '../hooks/useCategoryQuery';
-import { spinnerStyle } from '@/styles/common';
 import { useNavigate } from 'react-router-dom';
 
 const sectionStyle = css({
@@ -35,21 +34,10 @@ const nameStyle = css({
   color: colors.textDefault,
 });
 
-const CategoryList = () => {
-  const { data: categoryData, isLoading: loading, error } = useCategoriesQuery();
-  const navigate = useNavigate();
-  if (loading) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <div css={spinnerStyle}></div>
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
 
-  if (error || (categoryData ?? []).length === 0) {
-    return null; // 에러가 발생하거나 데이터가 없으면 아무것도 렌더링하지 않음
-  }
+const CategoryList = () => {
+  const { data: categoryData } = useCategoriesQuery();
+  const navigate = useNavigate();
 
   return (
     <section css={sectionStyle}>

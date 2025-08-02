@@ -1,13 +1,13 @@
-import React from 'react';
+import { useRef } from 'react';
 import { css } from '@emotion/react';
-import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { typography } from '../styles/typography';
 import { useAuth } from '@/contexts/AuthContext';
-import { type Product } from '../types/product';
 import { spinnerStyle } from '../styles/common';
+import { useThemeProductsInfiniteQuery } from '@/hooks/useThemeProductsInfiniteQuery';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` });
 const gridStyle = css({
@@ -35,18 +35,15 @@ const nameStyle = css({ marginTop: parseInt(spacing.spacing3), ...typography.bod
 const priceStyle = css({ marginTop: parseInt(spacing.spacing2), ...typography.body2Regular, color: colors.textDefault });
 const brandStyle = css({ marginTop: parseInt(spacing.spacing1), ...typography.label2Regular, color: colors.textSub });
 
-const emptyStyle = css({
+// 로딩 스피너 스타일 (인라인으로 표시)
+const loadingSpinnerStyle = css({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  height: '200px',
+  padding: spacing.spacing4,
   color: colors.textSub,
-  flexDirection: 'column',
   gap: spacing.spacing2,
 });
-
-import { useThemeProductsQuery } from '@/hooks/useCategoryQuery';
-import type { ThemeProductList } from '@/types/category';
 
 interface ThemeProductGridProps {
   themeId: number;
@@ -55,96 +52,64 @@ interface ThemeProductGridProps {
 const ThemeProductGrid = ({ themeId }: ThemeProductGridProps) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  // 페이지네이션 및 상품 누적 관리
-  const [page, setPage] = React.useState(0);
-  const [products, setProducts] = React.useState<Product[]>([]);
-  const [hasMore, setHasMore] = React.useState(true);
-  const [productLoading, setProductLoading] = React.useState(false);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useThemeProductsInfiniteQuery(themeId);
 
-  // 상품 불러오기 쿼리
-  const { data: productData } = useThemeProductsQuery(themeId, page, 10) as { data?: ThemeProductList };
-
-  React.useEffect(() => {
-    if (productData) {
-      setProducts(prev => {
-        const newList = productData.list.filter(
-          item => !prev.some(p => p.id === item.id)
-        );
-        return page === 0 ? productData.list : [...prev, ...newList];
-      });
-      setHasMore(productData.hasMoreList);
-      setProductLoading(false);
-    }
-  }, [productData, page]);
-
-  // useInfiniteScroll 훅 사용
-  const setObserverRef = useInfiniteScroll<HTMLDivElement>({
-    loading: productLoading,
-    hasMore,
-    onLoadMore: () => {
-      if (!productLoading && hasMore) {
-        setProductLoading(true);
-        setPage(prev => prev + 1);
-      }
-    },
-  });
+  // 무한스크롤 커스텀 훅 사용
+  useInfiniteScroll(observerRef, { fetchNextPage, hasNextPage, isFetchingNextPage });
 
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
     if (isAuthenticated) {
-      navigate(`/order/${productId}`);
+      navigate(`/product/${productId}`);
     } else {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }
   };
 
-  if (productLoading && products.length === 0) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <div css={spinnerStyle}></div>
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
 
-  if (!products || products.length === 0) {
-    return (
-      <section css={sectionStyle}>
-        <div css={emptyStyle}>
-          <div>등록된 상품이 없습니다.</div>
-        </div>
-      </section>
-    );
-  }
+  // 모든 상품을 flat하게 배열로 만들기
+  const products = data?.pages.flatMap((page: any) => page?.list ?? []);
 
   return (
     <section css={sectionStyle}>
       <div css={gridStyle}>
-        {products.map((product, index) => {
-          const isLast = index === products.length - 1;
-          return (
-            <div
-              key={product.id}
-              css={cardStyle}
-              onClick={() => handleProductClick(product.id)}
-              ref={isLast && hasMore ? setObserverRef : undefined}
-            >
-              <img
-                src={product.imageURL}
-                alt={product.name}
-                width={160}
-                height={120}
-                css={imgStyle}
-              />
-              <div css={nameStyle}>{product.name}</div>
-              <div css={priceStyle}>{product.price.sellingPrice.toLocaleString()}원</div>
-              <div css={brandStyle}>{product.brandInfo.name}</div>
-            </div>
-          );
-        })}
+        {products?.map((product: any) => (
+          <div
+            key={product.id}
+            css={cardStyle}
+            onClick={() => handleProductClick(product.id)}
+          >
+            <img
+              src={product.imageURL}
+              alt={product.name}
+              width={160}
+              height={120}
+              css={imgStyle}
+            />
+            <div css={nameStyle}>{product.name}</div>
+            <div css={priceStyle}>{product.price.sellingPrice.toLocaleString()}원</div>
+            <div css={brandStyle}>{product.brandInfo.name}</div>
+          </div>
+        ))}
       </div>
-      {/* 더보기 버튼은 무한스크롤로 대체, 필요시 유지 가능 */}
+      
+      {/* 추가 로딩 인디케이터 - 기존 콘텐츠 아래에 표시 */}
+      {isFetchingNextPage && (
+        <div css={loadingSpinnerStyle}>
+          <div css={spinnerStyle}></div>
+          <span>더 많은 상품을 불러오는 중...</span>
+        </div>
+      )}
+      
+      {/* 무한스크롤 트리거 요소 */}
+      <div ref={observerRef} style={{ height: '1px' }} />
     </section>
   );
 };

@@ -4,16 +4,22 @@ import FriendSelector from '@/components/FriendSelector'
 import CategoryList from '@/components/CategoryList'
 import NoticeBanner from '@/components/NoticeBanner'
 import RankingTabs from '@/components/RankingTabs'
+import { Suspense } from 'react'
+import Loading from '@/components/Common/Loading'
 
 function Home() {
   return (
     <div>
-      <GlobalStyle />
-      <Header />
-      <FriendSelector />
-      <CategoryList />
-      <NoticeBanner />
-      <RankingTabs />
+      <Suspense fallback={<Loading />}>
+        <GlobalStyle />
+        <Header />
+        <FriendSelector />
+        <CategoryList />
+        <NoticeBanner />
+        <Suspense fallback={<Loading />}>
+          <RankingTabs />
+        </Suspense>
+      </Suspense>
     </div>
   )
 }

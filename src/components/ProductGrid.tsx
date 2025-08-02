@@ -5,8 +5,7 @@ import { colors } from '../styles/colors'
 import { spacing } from '../styles/spacing'
 import { typography } from '../styles/typography'
 import { useAuth } from '@/contexts/AuthContext'
-import { type Product } from '../types/product'
-import { spinnerStyle } from '@/styles/common'
+import { useProductRankingQuery } from '../hooks/useProductQuery'
 
 const sectionStyle = css({ margin: `${spacing.spacing8} 0` })
 const gridStyle = css({
@@ -68,36 +67,28 @@ const emptyStyle = css({
   gap: spacing.spacing2,
 })
 
-interface ProductGridProps {
-  products: Product[];
-  loading?: boolean;
-}
-
 const INITIAL_DISPLAY_COUNT = 6;
 
-const ProductGrid = ({ products, loading = false }: ProductGridProps) => {
+interface ProductGridProps {
+  selected: string;
+  selectedWantedTab: string;
+}
+
+const ProductGrid = ({ selected, selectedWantedTab }: ProductGridProps) => {
   const [showAll, setShowAll] = useState(false)
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
+  const { data: products } = useProductRankingQuery(selected, selectedWantedTab);
 
   // 상품 클릭 핸들러
   const handleProductClick = (productId: number) => {
     if (isAuthenticated) {
-      navigate(`/order/${productId}`);
+      navigate(`/product/${productId}`);
     } else {
       navigate('/login', { state: { from: `/order/${productId}` } });
     }
   };
 
-  // 로딩 중일 때
-  if (loading) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <div css={spinnerStyle}></div>
-        <p>로딩 중...</p>
-      </div>
-    );
-  }
 
   // 데이터가 없을 때
   if (!products || products.length === 0) {
