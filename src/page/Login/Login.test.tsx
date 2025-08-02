@@ -7,7 +7,7 @@ import { ROUTE_PATH } from '@/routes/routePath';
 import MyPage from '../My';
 import { userRequests } from '@/api/userRequests';
 
-vi.mock('@/api/requests');
+vi.mock('@/api/userRequests');
 
 // 테스트 환경에서 사용할 라우터 설정
 const renderWithRouter = () => {
