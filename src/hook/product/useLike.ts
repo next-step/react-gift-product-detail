@@ -1,5 +1,5 @@
-import { getProductsWishUrl } from "@/constant/api";
 import type { ProductWish } from "@/type/GiftAPI/product";
+import { getProductsWishUrl } from "@/utils/getApiUrl";
 import { getFromUrl } from "@/utils/getFromUrl";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -23,8 +23,6 @@ function useLike(){
     }
     }, [data]);
     
-    //const isWished = data?.isWished
-    //const wishCount = isWished? data?.wishCount + 1 : data?.wishCount;
 
     const handleClick = () =>{
         if(isWished){
