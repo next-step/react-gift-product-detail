@@ -1,4 +1,3 @@
-// src/test-utils/renderWithProviders.tsx
 import { render } from "@testing-library/react"
 import { MemoryRouter, Routes, Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -22,7 +21,7 @@ interface RenderOpts {
 
 export function renderWithProviders(
   ui: React.ReactElement,
-  { route = "/", path = route, authValue }: RenderOpts = {}
+  { route = "/", path = route }: RenderOpts = {}
 ) {
   return render(
     <MemoryRouter initialEntries={[route]}>

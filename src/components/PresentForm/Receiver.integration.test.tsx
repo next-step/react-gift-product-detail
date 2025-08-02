@@ -8,7 +8,6 @@ describe("OrderPage에서 모달창 플로우가 정상적으로 작동한다.",
     renderWithProviders(<OrderPage />, {
       route: "/order/11526198",
       path: "/order/:productId",
-      authValue: { name: "테스트유저", authToken: "MOCK_TOKEN" },
     })
 
     const addBtn = await screen.findByRole("button", { name: /추가|수정/ })
