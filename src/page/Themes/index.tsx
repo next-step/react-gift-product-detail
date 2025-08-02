@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import CardSection from './components/CardSection';
 import GridSection from './components/GridSection';
 import { Suspense } from 'react';
-import Loading from '@/components/Loading';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import Loading from '@/components/common/Loading';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 const ThemesPage = () => {
   return (

@@ -12,7 +12,7 @@ const useOrderForm = () => {
   const orderForm = useInitOrderForm();
   const orderData = orderForm.getValues();
   const price = orderData.receiverInfos.length * (productSummaryData?.price || 0);
-  const { mutate: order } = useSubmitOrder();
+  const order = useSubmitOrder();
 
   const onSubmit = async (formData: OrderInfoValues) => {
     if (!index) return;

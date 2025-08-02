@@ -1,14 +1,14 @@
-import { requests } from '@/api/requests';
+import { themeRequests } from '@/api/themeRequests';
 import type { ThemeInfo } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 const useThemes = () => {
   const { data } = useSuspenseQuery<ThemeInfo[]>({
     queryKey: ['themeDatas'],
-    queryFn: requests.fetchTheme,
+    queryFn: themeRequests.fetchTheme,
   });
 
-  return { themes: data };
+  return data;
 };
 
 export default useThemes;

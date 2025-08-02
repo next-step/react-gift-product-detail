@@ -3,11 +3,11 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 interface UseModalProps {
   receiverInfos: OrderInfoValues['receiverInfos'];
-  handleChange: (value: OrderInfoValues['receiverInfos']) => void;
+  onSubmit: (value: OrderInfoValues['receiverInfos']) => void;
   onClose: () => void;
 }
 
-const useModal = ({ receiverInfos, handleChange, onClose }: UseModalProps) => {
+const useModal = ({ receiverInfos, onSubmit, onClose }: UseModalProps) => {
   const receiverInfosForm = useForm<OrderInfoValues>({
     defaultValues: {
       receiverInfos: receiverInfos,
@@ -19,15 +19,15 @@ const useModal = ({ receiverInfos, handleChange, onClose }: UseModalProps) => {
     name: 'receiverInfos',
   });
 
-  const onSubmit = async () => {
+  const submit = async () => {
     const isValid = await receiverInfosForm.trigger();
     if (isValid) {
       const receiverInfos = receiverInfosForm.getValues('receiverInfos');
-      handleChange(receiverInfos);
+      onSubmit(receiverInfos);
       onClose();
     }
   };
 
-  return { receiverInfosForm, receiverInfoArray, onSubmit };
+  return { receiverInfosForm, receiverInfoArray, submit };
 };
 export default useModal;

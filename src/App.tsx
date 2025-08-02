@@ -1,7 +1,7 @@
 import Navigation from '@/layouts/Navigation';
 import GlobalStyle from '@/styles/global';
 import { ThemeProvider } from '@emotion/react';
-import { theme } from '@/styles/theme';
+import theme from '@/styles/theme';
 import styled from '@emotion/styled';
 import AppRouter from './routes/Routers';
 import { UserInfoProvider } from './contexts/UserInfoContext';

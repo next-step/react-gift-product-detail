@@ -2,20 +2,14 @@ import styled from '@emotion/styled';
 import type { ComponentPropsWithoutRef } from 'react';
 
 interface fieldProps extends ComponentPropsWithoutRef<'input'> {
-  error?: string;
+  error: string;
 }
 
-interface InputFieldProps {
-  field: fieldProps;
-  placeholder: string;
-  type?: React.HTMLInputTypeAttribute;
-}
-
-const InputField = ({ field, placeholder, type = 'text' }: InputFieldProps) => {
-  const { error, ...rest } = field;
+const InputField = ({ ...field }: fieldProps) => {
+  const { error, type, ...rest } = field;
   return (
     <InputContainer>
-      <Input placeholder={placeholder} type={type} {...rest} />
+      <Input placeholder={type} type={type} {...rest} />
       {error && <P>{error}</P>}
     </InputContainer>
   );

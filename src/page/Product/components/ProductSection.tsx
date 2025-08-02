@@ -1,24 +1,20 @@
-import { requests } from '@/api/requests';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import useProductQuery from '../hooks/useProductQuery';
 
 interface ProductSectionProps {
   index: number;
 }
 
 const ProductSection = ({ index }: ProductSectionProps) => {
-  const productQuery = useSuspenseQuery({
-    queryKey: ['productData', index],
-    queryFn: () => requests.fetchProduct(index),
-  });
+  const data = useProductQuery(index);
 
   return (
     <section>
-      <img src={productQuery.data?.imageURL} alt={productQuery.data?.name} />
-      <h3>{productQuery.data?.name}</h3>
-      <p>{productQuery.data?.price.basicPrice} 원</p>
+      <img src={data.imageURL} alt={data.name} />
+      <h3>{data.name}</h3>
+      <p>{data.price.basicPrice} 원</p>
       <div>
-        <img src={productQuery.data?.brandInfo.imageURL} alt={productQuery.data?.brandInfo.name} />
-        <p>{productQuery.data?.brandInfo.name}</p>
+        <img src={data.brandInfo.imageURL} alt={data.brandInfo.name} />
+        <p>{data.brandInfo.name}</p>
       </div>
     </section>
   );

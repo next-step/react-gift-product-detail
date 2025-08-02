@@ -1,20 +1,14 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import type { ThemeIdInfoData } from '@/types';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { requests } from '@/api/requests';
 import { ROUTE_PATH } from '@/routes/routePath';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import useThemeInfoQuery from './useThemeInfoQuery';
+import { useParamsIndex } from '@/hooks/useParamsIndex';
 
 const useThemeInfo = () => {
-  const { id } = useParams<{ id: string }>();
-  const index = Number(id);
+  const index = useParamsIndex();
   const navigate = useNavigate();
-
-  const { data, error } = useSuspenseQuery<ThemeIdInfoData>({
-    queryKey: ['themeIdInfoData', index],
-    queryFn: () => requests.fetchThemeIdInfo(index),
-  });
+  const { data, error } = useThemeInfoQuery(index);
 
   useEffect(() => {
     if (axios.isAxiosError(error) && error.response?.status === 404) {

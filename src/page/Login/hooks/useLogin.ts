@@ -1,4 +1,4 @@
-import { requests } from '@/api/requests';
+import { userRequests } from '@/api/userRequests';
 import { useUserInfo } from '@/contexts/UserInfoContext';
 import { ROUTE_PATH } from '@/routes/routePath';
 import type { UserInfoData } from '@/types';
@@ -13,7 +13,7 @@ const useLogin = () => {
   const from = location.state?.from?.pathname || ROUTE_PATH.MY;
 
   const { mutate } = useMutation({
-    mutationFn: requests.fetchUserInfos,
+    mutationFn: userRequests.fetchUserInfos,
     onSuccess: (data: UserInfoData) => {
       setLoginSession(data);
       toast(`${data.name}님, 환영합니다!`);

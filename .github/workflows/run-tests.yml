@@ -1,0 +1,31 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - eelkom
+  push:
+    branches:
+      - main
+      - eelkom
+      - step3
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js # 또는 Python 등 환경에 맞게 설정
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test

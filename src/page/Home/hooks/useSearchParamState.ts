@@ -29,10 +29,8 @@ const useSearchParamState = () => {
   };
 
   return {
-    selectGeneration,
-    selectFilter,
-    activeGeneration,
-    activeFilter,
+    generation: { active: activeGeneration, select: selectGeneration },
+    filter: { active: activeFilter, select: selectFilter },
   };
 };
 

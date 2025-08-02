@@ -24,6 +24,6 @@ const useInput = (type: FieldType) => {
 
   const isValid = touched && error === '';
 
-  return { value, onChange, onBlur, error, isValid };
+  return { value, onChange, onBlur, error, isValid, type };
 };
 export default useInput;

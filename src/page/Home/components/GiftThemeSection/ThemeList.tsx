@@ -4,13 +4,13 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import useThemes from '../../hooks/useThemes';
 
 const ThemeList = () => {
-  const { themes } = useThemes();
+  const themes = useThemes();
   const navigate = useNavigate();
 
   const handleClick = (id: number) => {
     navigate(generatePath(ROUTE_PATH.THEMES, { id: String(id) }));
   };
-
+  
   return (
     <Container>
       {themes.map(theme => (

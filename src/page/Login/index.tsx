@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import useInput from './hooks/useInput';
-import InputField from './components/InputField';
+import InputField from '../../components/common/InputField';
 
 import useLogin from './hooks/useLogin';
 
@@ -28,8 +28,8 @@ const LoginPage = () => {
       />
       <Section>
         <form onSubmit={handleSubmit}>
-          <InputField field={username} placeholder="이메일" type="email" />
-          <InputField field={password} placeholder="비밀번호" type="password" />
+          <InputField {...username} />
+          <InputField {...password} />
           <Button type="submit" disabled={!isButtonActive}>
             로그인
           </Button>
