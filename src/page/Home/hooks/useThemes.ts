@@ -8,7 +8,7 @@ const useThemes = () => {
     queryFn: requests.fetchTheme,
   });
 
-  return { themes: data };
+  return data;
 };
 
 export default useThemes;
