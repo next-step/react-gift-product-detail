@@ -124,7 +124,7 @@ const mockRankingGifts = [
 ];
 
 export const giftHandlers = [
-    http.get(`/api/products/ranking`, ({ request }) => {
+    http.get(`/products/ranking`, ({ request }) => {
         const url = new URL(request.url);
         const targetType = url.searchParams.get("targetType") || "ALL";
         const rankType = url.searchParams.get("rankType") || "MANY_WISH";
