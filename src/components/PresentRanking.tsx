@@ -3,7 +3,7 @@ import { css, ThemeProvider } from '@emotion/react';
 import { theme } from '@/theme/theme';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+// import { useAuth } from '@/hooks/useAuth';
 import { getProductRanking } from '@/Api/api';
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '@/queries/queryKeys';
@@ -279,7 +279,7 @@ const PresentRanking: React.FC = () => {
   const [selectedPresentType, setSelectedPresentType] = useState<number>(0);
 
   const navigate = useNavigate();
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const apiTargetTypeMap: Record<typeof selectedType, string> = {
     all: 'ALL',
