@@ -7,7 +7,7 @@ import useRanking from '../../hooks/useRanking';
 import type { RankingApiProps } from '@/types';
 
 const RankList = ({ activeGeneration, activeFilter }: RankingApiProps) => {
-  const { data } = useRanking({ activeGeneration, activeFilter });
+  const data = useRanking({ activeGeneration, activeFilter });
   const { isCollapsed, visibleItemsCount, toggleCollapse } = useToggleCollapse(data?.length || 0);
 
   const navigate = useNavigate();
