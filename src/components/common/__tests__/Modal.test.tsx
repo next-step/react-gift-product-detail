@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from '@emotion/react';
 import Modal from '../Modal';
 import { theme } from '../../../styles/theme';
@@ -27,7 +28,9 @@ describe('Modal Component', () => {
     expect(screen.getByText('모달 내용')).toBeInTheDocument();
   });
 
-  it('Overlay 클릭 시 onClose가 호출되는지 확인', () => {
+  it('Overlay 클릭 시 onClose가 호출되는지 확인', async () => {
+    const user = userEvent.setup();
+
     render(
       <TestWrapper>
         <Modal onClose={mockOnClose}>
@@ -36,16 +39,18 @@ describe('Modal Component', () => {
       </TestWrapper>,
     );
 
-    const modalContent = screen.getByText('모달 내용');
-    const overlay = modalContent.parentElement?.parentElement;
+    // data-testid를 사용하여 overlay를 직접 찾기
+    const overlay = screen.getByTestId('modal-overlay');
     expect(overlay).toBeInTheDocument();
 
-    fireEvent.click(overlay!);
+    await user.click(overlay);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it('Modal 내부 클릭 시 onClose가 호출되지 않는지 확인', () => {
+  it('Modal 내부 클릭 시 onClose가 호출되지 않는지 확인', async () => {
+    const user = userEvent.setup();
+
     render(
       <TestWrapper>
         <Modal onClose={mockOnClose}>
@@ -55,7 +60,7 @@ describe('Modal Component', () => {
     );
 
     const button = screen.getByText('버튼');
-    fireEvent.click(button);
+    await user.click(button);
 
     expect(mockOnClose).not.toHaveBeenCalled();
   });
@@ -69,7 +74,8 @@ describe('Modal Component', () => {
       </TestWrapper>,
     );
 
-    const modalWrapper = screen.getByText('모달 내용').parentElement;
+    // data-testid를 사용하여 modal wrapper를 직접 찾기
+    const modalWrapper = screen.getByTestId('modal-wrapper');
     expect(modalWrapper).toHaveStyle({
       background: '#fff',
       width: '100%',

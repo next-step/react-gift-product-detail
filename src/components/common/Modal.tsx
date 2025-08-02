@@ -31,8 +31,10 @@ interface ModalProps {
 
 export default function Modal({ children, onClose }: ModalProps) {
   return (
-    <Overlay onClick={onClose}>
-      <ModalWrapper onClick={(e) => e.stopPropagation()}>{children}</ModalWrapper>
+    <Overlay onClick={onClose} data-testid="modal-overlay">
+      <ModalWrapper onClick={(e) => e.stopPropagation()} data-testid="modal-wrapper">
+        {children}
+      </ModalWrapper>
     </Overlay>
   );
 }
