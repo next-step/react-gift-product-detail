@@ -96,10 +96,13 @@ function ProductList({
   // 더보기/접기 state
   const [visibleCount, setVisibleCount] = useState(DEFAULT_VISIBLE);
 
-  const { data } = useSuspenseQuery<Product[], Error>({
-    queryKey: ['products', 'ranking'],
-    queryFn: fetchProductRanking,
-  });
+  // products prop이 전달되면 API 호출하지 않음
+  const { data } = propProducts
+    ? { data: undefined }
+    : useSuspenseQuery<Product[], Error>({
+        queryKey: ['products', 'ranking'],
+        queryFn: fetchProductRanking,
+      });
 
   const products: Product[] = propProducts || (Array.isArray(data) ? data : []);
   const visibleProducts: Product[] = products.slice(0, visibleCount);
