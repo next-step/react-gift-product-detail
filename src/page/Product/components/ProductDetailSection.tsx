@@ -1,24 +1,20 @@
 import styled from '@emotion/styled';
-import { requests } from '@/api/requests';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import useProductDetailQuery from '../hooks/useProductDetailQuery';
 
 interface ProductDetailSectionProps {
   index: number;
 }
 
 const ProductDetailSection = ({ index }: ProductDetailSectionProps) => {
-  const productDetailQuery = useSuspenseQuery({
-    queryKey: ['productDetailData', index],
-    queryFn: () => requests.fetchProductDetail(index),
-  });
+  const detailDatas = useProductDetailQuery(index);
   return (
     <div>
       <div>
         <div>
-          {productDetailQuery.data?.announcements?.map(data => (
+          {detailDatas.announcements?.map(data => (
             <div key={data.displayOrder}>
-              <Title>{data?.name}</Title>
-              <Text>{data?.value}</Text>
+              <Title>{data.name}</Title>
+              <Text>{data.value}</Text>
             </div>
           ))}
         </div>

@@ -1,12 +1,12 @@
 import { productRequests } from '@/api/productRequests';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-const useProductWish = (index: number) => {
+const useProductQuery = (index: number) => {
   const { data } = useSuspenseQuery({
-    queryKey: ['productWishData', index],
-    queryFn: () => productRequests.fetchProductWish(index),
+    queryKey: ['productData', index],
+    queryFn: () => productRequests.fetchProduct(index),
   });
   return data;
 };
 
-export default useProductWish;
+export default useProductQuery;

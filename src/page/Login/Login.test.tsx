@@ -2,10 +2,10 @@ import { render, screen, waitFor } from '@/tests/test-utils';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './index';
-import { requests } from '@/api/requests';
 import HOME from '../Home';
 import { ROUTE_PATH } from '@/routes/routePath';
 import MyPage from '../My';
+import { userRequests } from '@/api/userRequests';
 
 vi.mock('@/api/requests');
 
@@ -30,9 +30,8 @@ describe('로그인 페이지 - 통합 테스트', () => {
     user = userEvent.setup();
   });
 
-
   it('GIVEN: 올바른 정보를, WHEN: 입력하고 제출하면, THEN: 홈페이지로 이동해야 한다.', async () => {
-    vi.mocked(requests.fetchUserInfos).mockResolvedValue({
+    vi.mocked(userRequests.fetchUserInfos).mockResolvedValue({
       authToken: 'fake-token',
       name: '테스트 유저',
       email: 'test@example.com',
@@ -45,15 +44,14 @@ describe('로그인 페이지 - 통합 테스트', () => {
 
     await user.type(emailInput, 'test@example.com');
     await user.type(passwordInput, 'password123');
-    await user.tab(); 
+    await user.tab();
     await user.click(loginButton);
-
 
     await waitFor(() => {
       expect(window.location.pathname).toBe(ROUTE_PATH.HOME);
     });
- 
-    expect(requests.fetchUserInfos).toHaveBeenCalledTimes(1);
+
+    expect(userRequests.fetchUserInfos).toHaveBeenCalledTimes(1);
   });
 
   it('GIVEN: 유효하지 않은 이메일을, WHEN: 입력하고 제출하면, THEN: 에러 메시지를 보여줘야 한다.', async () => {
@@ -67,10 +65,9 @@ describe('로그인 페이지 - 통합 테스트', () => {
     await user.tab(); // blur
     await user.click(loginButton);
 
-
     const errorMessage = await screen.findByText('ID는 이메일 형식으로 입력해주세요.');
     expect(errorMessage).toBeInTheDocument();
 
-    expect(requests.fetchUserInfos).not.toHaveBeenCalled();
+    expect(userRequests.fetchUserInfos).not.toHaveBeenCalled();
   });
 });

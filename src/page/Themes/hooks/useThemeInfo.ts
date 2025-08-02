@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { useEffect } from 'react';

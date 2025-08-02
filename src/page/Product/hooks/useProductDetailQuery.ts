@@ -1,12 +1,12 @@
-import { requests } from './../../../api/requests';
-
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { productRequests } from '@/api/productRequests';
 
 const useProductDetailQuery = (index: number) => {
   const { data } = useSuspenseQuery({
-    queryKey: ['productDetailData', index],
-    queryFn: () => requests.fetchProductDetail(index),
+    queryKey: ['productDetail', index],
+    queryFn: () => productRequests.fetchProductDetail(index),
   });
+
   return data;
 };
 

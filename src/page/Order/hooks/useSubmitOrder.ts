@@ -1,4 +1,4 @@
-import { requests } from '@/api/requests';
+import { orderRequests } from '@/api/orderRequests';
 import { ROUTE_PATH } from '@/routes/routePath';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const useSubmitOrder = () => {
   const navigate = useNavigate();
   const { mutate } = useMutation({
-    mutationFn: requests.fetchOrder,
+    mutationFn: orderRequests.fetchOrder,
     onSuccess: () => {
       navigate(ROUTE_PATH.HOME);
     },
