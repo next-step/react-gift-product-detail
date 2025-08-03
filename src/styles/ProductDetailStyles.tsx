@@ -62,6 +62,7 @@ export const StickyFooter = styled.div`
 
 export const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
+  role="img"
     width="24"
     height="24"
     viewBox="0 0 24 24"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLoginHandler } from "@/hooks/useLoginHandler";
 import {
   FormSection,
   InputWrapper,
@@ -6,91 +7,70 @@ import {
   ErrorMessage,
   LoginButton,
 } from "./LoginFormStyles";
-import { userStorage } from "@/utils/userStorage";
-import { toast } from "react-toastify";
-import { useLogin } from "@/hooks/mutations/useLogin";
 
-type Props = {
+interface LoginFormProps {
   onLoginSuccess: (email: string, token: string) => void;
-};
+}
 
-export const LoginForm = ({ onLoginSuccess }: Props) => {
+export const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const getValidateEmail = (email: string) => {
-    if (!email) return "ID를 입력해주세요.";
+  const { handleLogin } = useLoginHandler();
+
+  const validateEmail = (email: string) => {
+    if (!email) return "이메일을 입력해주세요.";
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regex.test(email)) return "ID는 이메일 형식으로 입력해주세요.";
+    if (!regex.test(email)) return "올바른 이메일 형식이 아닙니다.";
     return "";
   };
 
   const validatePassword = (password: string) => {
-    if (!password) return "PW를 입력해주세요.";
-    if (password.length < 8) return "PW는 최소 8글자 이상이어야 합니다.";
+    if (!password) return "비밀번호를 입력해주세요.";
+    if (password.length < 8) return "비밀번호는 8자 이상이어야 합니다.";
     return "";
-  };
-
-  const isKakaoEmail = (email: string) => {
-    return email.endsWith("@kakao.com");
-  };
-
-  const { mutate: loginMutate, isPending } = useLogin({
-    onSuccess: (data) => {
-      userStorage.set(data);
-      toast.success("로그인 성공!");
-      onLoginSuccess(data.email, data.authToken);
-    },
-    onError: (msg) => {
-      toast.error(msg);
-    },
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === "email") {
-      setEmail(value);
-      if (emailError) setEmailError("");
-    } else if (name === "password") {
-      setPassword(value);
-      if (passwordError) setPasswordError("");
-    }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "email") setEmailError(getValidateEmail(value));
+    if (name === "email") setEmailError(validateEmail(value));
     if (name === "password") setPasswordError(validatePassword(value));
   };
 
-  const handleSubmit = () => {
-    const emailErr = getValidateEmail(email);
+  const handleSubmit = async () => {
+    const emailErr = validateEmail(email);
     const pwErr = validatePassword(password);
     setEmailError(emailErr);
     setPasswordError(pwErr);
     if (emailErr || pwErr) return;
 
-    if (!isKakaoEmail(email)) {
-      toast.error("@kakao.com 이메일 주소만 가능합니다.");
-      return;
+    setIsSubmitting(true);
+    try {
+      const res = await handleLogin(email, password);
+      onLoginSuccess(res.email, res.authToken);
+      setEmail("");
+      setPassword("");
+    } catch (_) {
+    } finally {
+      setIsSubmitting(false);
     }
-
-    loginMutate({ email, password });
   };
 
-  const disabled = !email || !password || !!emailError || !!passwordError || isPending;
+  const isDisabled =
+    isSubmitting || !email || !password || !!emailError || !!passwordError;
 
   return (
     <FormSection>
       <InputWrapper>
         <Input
-          type="text"
           name="email"
+          type="text"
           placeholder="이메일"
           value={email}
-          onChange={handleChange}
+          onChange={(e) => setEmail(e.target.value)}
           onBlur={handleBlur}
           isError={!!emailError}
         />
@@ -99,20 +79,22 @@ export const LoginForm = ({ onLoginSuccess }: Props) => {
 
       <InputWrapper>
         <Input
-          type="password"
           name="password"
+          type="password"
           placeholder="비밀번호"
           value={password}
-          onChange={handleChange}
+          onChange={(e) => setPassword(e.target.value)}
           onBlur={handleBlur}
           isError={!!passwordError}
         />
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
       </InputWrapper>
 
-      <LoginButton onClick={handleSubmit} disabled={disabled}>
+      <LoginButton onClick={handleSubmit} disabled={isDisabled}>
         로그인
       </LoginButton>
     </FormSection>
   );
 };
+
+export default LoginForm;

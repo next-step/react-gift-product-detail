@@ -13,3 +13,4 @@ export const useRanking = ({ targetType, rankType }: UseRankingParams) => {
     queryFn: () => fetchRanking({ targetType, rankType }),
   });
 };
+

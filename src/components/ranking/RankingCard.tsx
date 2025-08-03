@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import type { ThemeType } from "@/styles/theme/theme";
 import { PATH } from "@/constants/path";
@@ -41,7 +41,10 @@ export const RankingCard = ({
       <span css={rankBadge(theme, rank)}>{rank}</span>
       <img css={itemImg(theme)} src={imageURL} alt={productName} />
       <p css={brandNameStyle(theme)}>{brandName}</p>
-      <h6 css={productNameStyle(theme)}>{productName}</h6>
+      <h6 css={productNameStyle(theme)} data-testid="product-name">
+        {productName}
+      </h6>
+
       <p css={priceStyle(theme)}>
         {price.toLocaleString()} <span>원</span>
       </p>
