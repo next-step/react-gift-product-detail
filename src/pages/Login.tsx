@@ -111,7 +111,7 @@ const Login = () => {
     <Layout>
       <LoginWrapper>
         <Logo>kakao</Logo>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} data-testid="login-form">
           {/* 이메일 입력 필드 */}
           <Input
             type="email"

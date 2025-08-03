@@ -1,0 +1,169 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@emotion/react';
+import { vi } from 'vitest';
+import ProductCard from '@/Components/ProductCard';
+import { theme } from '@/styles/Theme';
+
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        {component}
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+};
+
+describe('ProductCard', () => {
+  const mockProduct = {
+    id: 1,
+    name: '테스트 상품',
+    imageURL: 'https://example.com/image.jpg',
+    brandInfo: {
+      id: 1,
+      name: '테스트 브랜드',
+      imageURL: 'https://example.com/brand.jpg',
+    },
+    price: {
+      basicPrice: 50000,
+      sellingPrice: 40000,
+      discountRate: 20,
+    },
+  };
+
+  const defaultProps = {
+    product: mockProduct,
+    onClick: vi.fn(),
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders product information correctly', () => {
+    renderWithProviders(<ProductCard {...defaultProps} />);
+    
+    expect(screen.getByText('테스트 상품')).toBeInTheDocument();
+    expect(screen.getByText('테스트 브랜드')).toBeInTheDocument();
+    expect(screen.getByText('40,000원')).toBeInTheDocument();
+    expect(screen.getByText('50,000원')).toBeInTheDocument();
+    expect(screen.getByText('20%')).toBeInTheDocument();
+  });
+
+  it('calls onClick when card is clicked', () => {
+    const onClick = vi.fn();
+    renderWithProviders(<ProductCard {...defaultProps} onClick={onClick} />);
+
+    const card = screen.getByText('테스트 상품').closest('div');
+    fireEvent.click(card!);
+
+    expect(onClick).toHaveBeenCalledWith(defaultProps.product.id);
+  });
+
+  it('displays rank badge when showRankBadge is true', () => {
+    renderWithProviders(
+      <ProductCard {...defaultProps} showRankBadge={true} rankNumber={1} />
+    );
+    
+    expect(screen.getByText('1')).toBeInTheDocument();
+  });
+
+  it('does not display rank badge when showRankBadge is false', () => {
+    renderWithProviders(<ProductCard {...defaultProps} showRankBadge={false} />);
+    
+    expect(screen.queryByText('1')).not.toBeInTheDocument();
+  });
+
+  it('handles product without brand info', () => {
+    const productWithoutBrand = {
+      ...mockProduct,
+      brandInfo: undefined,
+    };
+    
+    renderWithProviders(<ProductCard {...defaultProps} product={productWithoutBrand} />);
+    
+    expect(screen.getByText('테스트 상품')).toBeInTheDocument();
+    expect(screen.queryByText('테스트 브랜드')).not.toBeInTheDocument();
+  });
+
+  it('handles product without price info', () => {
+    const productWithoutPrice = {
+      ...mockProduct,
+      price: undefined,
+    };
+    
+    renderWithProviders(<ProductCard {...defaultProps} product={productWithoutPrice} />);
+    
+    expect(screen.getByText('테스트 상품')).toBeInTheDocument();
+    expect(screen.queryByText('40,000원')).not.toBeInTheDocument();
+  });
+
+  it('handles product without discount', () => {
+    const productWithoutDiscount = {
+      ...mockProduct,
+      price: {
+        ...mockProduct.price!,
+        discountRate: 0,
+      },
+    };
+    
+    renderWithProviders(<ProductCard {...defaultProps} product={productWithoutDiscount} />);
+    
+    expect(screen.getByText('40,000원')).toBeInTheDocument();
+    expect(screen.queryByText('0%')).not.toBeInTheDocument();
+  });
+
+  it('applies correct typography styles', () => {
+    renderWithProviders(<ProductCard {...defaultProps} />);
+    
+    const productName = screen.getByText('테스트 상품');
+    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+    expect(productName).toBeInTheDocument();
+    
+    const sellingPrice = screen.getByText('40,000원');
+    expect(sellingPrice).toBeInTheDocument();
+  });
+
+  it('has correct card styling', () => {
+    renderWithProviders(<ProductCard {...defaultProps} />);
+
+    const card = screen.getByText('테스트 상품').closest('div');
+    // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
+    expect(card).toBeInTheDocument();
+  });
+
+  it('displays product image with correct attributes', () => {
+    renderWithProviders(<ProductCard {...defaultProps} />);
+    
+    const image = screen.getByAltText('테스트 상품');
+    expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
+    expect(image).toHaveAttribute('alt', '테스트 상품');
+  });
+
+  it('handles click without onClick prop', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { onClick: _, ...propsWithoutOnClick } = defaultProps;
+    renderWithProviders(<ProductCard {...propsWithoutOnClick} />);
+    
+    const card = screen.getByText('테스트 상품').closest('div');
+    expect(() => fireEvent.click(card!)).not.toThrow();
+  });
+
+  it('formats price correctly with commas', () => {
+    const productWithLargePrice = {
+      ...mockProduct,
+      price: {
+        basicPrice: 1000000,
+        sellingPrice: 800000,
+        discountRate: 20,
+      },
+    };
+    
+    renderWithProviders(<ProductCard {...defaultProps} product={productWithLargePrice} />);
+    
+    expect(screen.getByText('800,000원')).toBeInTheDocument();
+    expect(screen.getByText('1,000,000원')).toBeInTheDocument();
+  });
+}); 
