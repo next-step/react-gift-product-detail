@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectPath }) => {
     formState: { errors, isValid },
   } = methods;
 
-  const onSubmit = handleSubmit(submitLogin);
+  const onSubmit = handleSubmit((data) => submitLogin(data));
 
   return (
     <S.Container>

@@ -1,4 +1,4 @@
-import { useApi } from '@/hooks/useApi';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 
 interface Theme {
@@ -7,10 +7,21 @@ interface Theme {
   image: string;
 }
 
+const fetchThemes = async (): Promise<Theme[]> => {
+  const response = await api.get('/themes');
+  return response.data.data;
+};
+
 export const useThemes = () => {
-  const { data, loading, error } = useApi<Theme[]>(async () => {
-    const response = await api.get('/themes');
-    return response.data.data;
+  const { data, isLoading, error } = useQuery<Theme[]>({
+    queryKey: ['themes'],
+    queryFn: fetchThemes,
+    staleTime: 1000 * 60 * 5,
   });
-  return { themes: data ?? [], loading, error };
+
+  return {
+    themes: data ?? [],
+    loading: isLoading,
+    error,
+  };
 };

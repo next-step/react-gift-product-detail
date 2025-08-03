@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useApi } from '@/hooks/useApi';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
 import type { Product } from '../ThemeHero/ThemeTypes';
+import type { Result } from '@/types/CommonTypes';
+import { queryKeys } from '@/lib/queryKeys';
 
 interface ThemeProductResponse {
   list: Product[];
@@ -9,44 +10,55 @@ interface ThemeProductResponse {
   hasMoreList: boolean;
 }
 
-export const useThemeProducts = (themeId: number | null, limit = 10) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [cursor, setCursor] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+const fetchThemeProducts = async ({
+  themeId,
+  cursor = 0,
+  limit = 10,
+}: {
+  themeId: number | null;
+  cursor?: number;
+  limit?: number;
+}): Promise<ThemeProductResponse | null> => {
+  if (!themeId) return null;
 
-  const fetcher = useCallback(async () => {
-    if (!themeId) return null;
-
-    const res = await api.get(`/themes/${themeId}/products`, {
+  const res = await api.get<Result<ThemeProductResponse>>(
+    `/themes/${themeId}/products`,
+    {
       params: { cursor, limit },
-    });
-    return res.data.data as ThemeProductResponse;
-  }, [themeId, cursor, limit]);
-
-  const { data, loading, error } = useApi<ThemeProductResponse | null>(fetcher);
-
-  useEffect(() => {
-    if (data) {
-      setProducts((prev) => {
-        const alreadyExist = new Set(prev.map((p) => p.id));
-        const newItems = data.list.filter((item) => !alreadyExist.has(item.id));
-        return [...prev, ...newItems];
-      });
-      setCursor(data.cursor);
-      setHasMore(data.hasMoreList);
     }
-  }, [data]);
+  );
 
-  const fetchNextPage = useCallback(() => {
-    if (loading || !hasMore) return;
-    setCursor((prev) => prev + limit);
-  }, [loading, hasMore]);
+  return res.data.data;
+};
 
-  useEffect(() => {
-    setProducts([]);
-    setCursor(0);
-    setHasMore(true);
-  }, [themeId]);
+export const useThemeProducts = (themeId: number | null, limit = 10) => {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: queryKeys.themes.products(themeId),
+    queryFn: ({ pageParam = 0 }) =>
+      fetchThemeProducts({ themeId, cursor: pageParam, limit }),
+    getNextPageParam: (lastPage) => {
+      if (!lastPage) return undefined;
+      return lastPage.hasMoreList ? lastPage.cursor : undefined;
+    },
+    initialPageParam: 0,
+    enabled: !!themeId,
+  });
 
-  return { products, loading, error, fetchNextPage, hasMore };
+  const products = data?.pages.flatMap((page) => page?.list ?? []) ?? [];
+
+  return {
+    products,
+    loading,
+    error,
+    fetchNextPage,
+    hasMore: !!hasNextPage,
+    refetch,
+  };
 };

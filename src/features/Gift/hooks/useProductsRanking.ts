@@ -1,5 +1,7 @@
-import { useApi } from '@/hooks/useApi';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
+import type { Result } from '@/types/CommonTypes';
+import { queryKeys } from '@/lib/queryKeys';
 
 export interface Price {
   basicPrice: number;
@@ -37,19 +39,32 @@ const typeMap: Record<Type, string> = {
   '위시로 받은': 'MANY_WISH_RECEIVE',
 };
 
+export const fetchProductsRanking = async (
+  gender: Gender,
+  type: Type
+): Promise<Product[]> => {
+  const res = await api.get<Result<Product[]>>('/products/ranking', {
+    params: {
+      targetType: genderMap[gender],
+      rankType: typeMap[type],
+    },
+  });
+  return res.data.data;
+};
+
 export const useProductsRanking = (gender: Gender, type: Type) => {
-  const { data, loading, error } = useApi<Product[]>(async () => {
-    const res = await api.get('/products/ranking', {
-      params: {
-        targetType: genderMap[gender],
-        rankType: typeMap[type],
-      },
-    });
-    return res.data.data;
+  const {
+    data: products = [],
+    isLoading: loading,
+    error,
+  } = useQuery<Product[]>({
+    queryKey: queryKeys.products.ranking(gender, type),
+    queryFn: () => fetchProductsRanking(gender, type),
+    staleTime: 1000 * 60 * 5,
   });
 
   return {
-    products: data ?? [],
+    products,
     loading,
     error,
   };
