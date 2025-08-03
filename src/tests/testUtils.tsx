@@ -1,12 +1,13 @@
 import { render } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@emotion/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, BrowserRouter } from 'react-router-dom';
 import theme from '@/styles/theme';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import type { ReactNode } from 'react';
 import { UserProvider } from '@/contexts/UserContext';
+import RankingSection from '@/components/main/RankingSection';
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -30,6 +31,22 @@ export const renderCustom = (ui: ReactNode) => {
           </UserProvider>
         </MemoryRouter>
       </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
+
+export const renderCustom2 = () => {
+  const queryClient = new QueryClient();
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <RankingSection />
+          </ThemeProvider>
+        </BrowserRouter>
+      </UserProvider>
     </QueryClientProvider>
   );
 };

@@ -1,33 +1,12 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
-import RankingSection from '@/components/main/RankingSection';
-import { UserProvider } from '@/contexts/UserContext';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { PRODUCTS_PUB_DATA } from '@/mocks/tests';
 import { server } from '@/mocks/server';
 import { http, HttpResponse } from 'msw';
-import { ThemeProvider } from '@emotion/react';
-import theme from '@/styles/theme';
-
-const renderWithProviders = () => {
-  const queryClient = new QueryClient();
-
-  render(
-    <QueryClientProvider client={queryClient}>
-      <UserProvider>
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <RankingSection />
-          </ThemeProvider>
-        </BrowserRouter>
-      </UserProvider>
-    </QueryClientProvider>
-  );
-};
+import { renderCustom2 } from '@/tests/testUtils';
 
 describe('RankingSection (MSW)', () => {
   it('초기 상품 목록이 표시된다', async () => {
-    renderWithProviders();
+    renderCustom2();
     expect(await screen.findByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
 
     await waitFor(() => {
@@ -36,29 +15,29 @@ describe('RankingSection (MSW)', () => {
   });
 
   it('랭크 탭을 누르면 상품이 변경된다', async () => {
-    renderWithProviders();
+    renderCustom2();
 
     const tab = await screen.findByText('받고 싶어한');
     fireEvent.click(tab);
 
     await waitFor(() => {
-      expect(screen.getByText(PRODUCTS_PUB_DATA[6].name)).toBeInTheDocument();
+      expect(screen.getByText(PRODUCTS_PUB_DATA[0].name)).toBeInTheDocument();
     });
   });
 
   it('성별 탭을 누르면 해당 성별 상품이 표시된다', async () => {
-    renderWithProviders();
+    renderCustom2();
 
     const teenTab = await screen.findByText('청소년이');
     fireEvent.click(teenTab);
 
     await waitFor(() => {
-      expect(screen.getByText(PRODUCTS_PUB_DATA[9].name)).toBeInTheDocument();
+      expect(screen.getByText(PRODUCTS_PUB_DATA[2].name)).toBeInTheDocument();
     });
   });
 
   it('더보기 버튼을 누르면 전체 상품이 표시된다', async () => {
-    renderWithProviders();
+    renderCustom2();
 
     const toggle = await screen.findByText('더보기');
     fireEvent.click(toggle);
@@ -75,7 +54,7 @@ describe('RankingSection (MSW)', () => {
       })
     );
 
-    renderWithProviders();
+    renderCustom2();
 
     expect(await screen.findByText('상품이 없습니다.')).toBeInTheDocument();
   });
