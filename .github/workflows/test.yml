@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ jinvibe ]
   pull_request:
-    branches: [ main ]
+    branches: [ jinvibe ]
 
 jobs:
   test:
