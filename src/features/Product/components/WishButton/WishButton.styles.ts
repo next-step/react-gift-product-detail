@@ -28,4 +28,11 @@ export const CountText = styled.div`
   color: ${theme.colors.colorScale.gray[900]};
 `;
 
+export const IconButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+`;
+
 export const heartButtonSrc = HeartButtonImg;

@@ -16,19 +16,10 @@ const WishButton = ({ productId }: WishButtonProps) => {
 
   return (
     <S.Container>
-      <button
-        onClick={handleToggleWish}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          padding: 0,
-        }}
-        aria-label="찜하기 버튼"
-      >
-        <S.WishIcon isWished={isWished} />
+      <S.IconButton onClick={handleToggleWish} aria-label="찜하기 버튼">
+        <S.WishIcon src={S.heartButtonSrc} isWished={isWished} />
         <S.CountText>{wishCount}</S.CountText>
-      </button>
+      </S.IconButton>
     </S.Container>
   );
 };
