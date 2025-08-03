@@ -40,9 +40,7 @@ function AnnouncementList({ items = [] }: AnnouncementListProps) {
     return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
   }
 
-  const sorted = [...items].sort(
-    (a, b) => a.displayOrder - b.displayOrder,
-  )
+  const sorted = [...items].sort((a, b) => a.displayOrder - b.displayOrder)
 
   return (
     <InfoList>

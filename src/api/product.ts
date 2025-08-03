@@ -78,7 +78,8 @@ export function useProductSummaryQuery(
 ): UseQueryResult<ProductSummary, Error> {
   return useQuery<ProductSummary, Error>({
     queryKey: productKeys.summary(productId ?? 0),
-    queryFn: () => fetchProductSummary(productId ?? 0),    enabled: productId !== undefined,
+    queryFn: () => fetchProductSummary(productId ?? 0),
+    enabled: productId !== undefined,
     ...options,
   })
 }

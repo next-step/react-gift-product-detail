@@ -58,9 +58,7 @@ export async function fetchApi<T>(
 
     const parsed = json as ErrorResponse | undefined
     const message =
-      parsed?.data?.message ||
-      parsed?.message ||
-      `Invalid response from ${url}`
+      parsed?.data?.message || parsed?.message || `Invalid response from ${url}`
     const error = new Error(message) as Error & { statusCode?: number }
     error.statusCode =
       parsed?.data?.statusCode || parsed?.statusCode || res.status
