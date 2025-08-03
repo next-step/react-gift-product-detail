@@ -1,34 +1,17 @@
-﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+﻿import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { vi, describe, test, expect } from 'vitest'
 import LoginFormSection from '../LoginFormSection'
-import { AuthProvider } from '@/contexts/AuthContext'
 import type { UserInfo } from '@/utils/storage'
 import { server } from '../../setupTests'
 
-function renderComponent(onSuccess?: (info: UserInfo) => void) {
-  const queryClient = new QueryClient()
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <LoginFormSection onSuccess={onSuccess} />
-      </AuthProvider>
-    </QueryClientProvider>,
-  )
-}
+import { renderWithProviders } from '@/test-utils'
 
 describe('LoginFormSection', () => {
-  test('입력 검증', async () => {
-    renderComponent()
+  test('이메일 입력 검증', async () => {
+    renderWithProviders(<LoginFormSection />)
 
     const emailInput = screen.getByPlaceholderText('이메일') as HTMLInputElement
-    const passwordInput = screen.getByPlaceholderText(
-      '비밀번호',
-    ) as HTMLInputElement
-    const submitButton = screen.getByRole('button', { name: '로그인' })
-
-    expect(submitButton).toBeDisabled()
 
     fireEvent.blur(emailInput)
     expect(await screen.findByText('ID를 입력해주세요.')).toBeInTheDocument()
@@ -38,15 +21,39 @@ describe('LoginFormSection', () => {
     expect(
       await screen.findByText('ID는 이메일 형식으로 입력해주세요.'),
     ).toBeInTheDocument()
+  })
+
+  test('유효한 이메일을 입력하면 이메일 관련 에러 메시지가 사라진다', async () => {
+    renderWithProviders(<LoginFormSection />)
+
+    const emailInput = screen.getByPlaceholderText('이메일') as HTMLInputElement
+
+    fireEvent.blur(emailInput)
+    fireEvent.change(emailInput, { target: { value: 'invalid' } })
+    fireEvent.blur(emailInput)
 
     fireEvent.change(emailInput, { target: { value: 'tester@example.com' } })
     fireEvent.blur(emailInput)
+
     await waitFor(() => {
       expect(screen.queryByText('ID를 입력해주세요.')).toBeNull()
       expect(
         screen.queryByText('ID는 이메일 형식으로 입력해주세요.'),
       ).toBeNull()
     })
+      })
+
+  test('비밀번호 입력 검증', async () => {
+    renderWithProviders(<LoginFormSection />)
+
+    const emailInput = screen.getByPlaceholderText('이메일') as HTMLInputElement
+    fireEvent.change(emailInput, { target: { value: 'tester@example.com' } })
+    fireEvent.blur(emailInput)
+
+    const passwordInput = screen.getByPlaceholderText('비밀번호') as HTMLInputElement
+    const submitButton = screen.getByRole('button', { name: '로그인' })
+
+    expect(submitButton).toBeDisabled()
 
     fireEvent.blur(passwordInput)
     expect(
@@ -81,7 +88,7 @@ describe('LoginFormSection', () => {
     )
 
     const handleSuccess = vi.fn()
-    renderComponent(handleSuccess)
+    renderWithProviders(<LoginFormSection onSuccess={handleSuccess} />)
 
     const emailInput = screen.getByPlaceholderText('이메일')
     const passwordInput = screen.getByPlaceholderText('비밀번호')

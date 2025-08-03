@@ -1,11 +1,10 @@
-﻿import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+﻿import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
 import { MemoryRouter } from 'react-router-dom'
 import LoginPage from './LoginPage'
-import { AuthProvider } from '@/contexts/AuthContext'
 import { server } from '@/setupTests'
 import { vi } from 'vitest'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { renderWithProviders } from '@/test-utils'
 
 const mockNavigate = vi.fn()
 
@@ -19,15 +18,10 @@ vi.mock('react-router-dom', async () => {
 })
 
 const renderPage = () => {
-  const queryClient = new QueryClient()
-  render(
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <MemoryRouter initialEntries={['/login']}>
-          <LoginPage />
-        </MemoryRouter>
-      </AuthProvider>
-    </QueryClientProvider>,
+  renderWithProviders(
+    <MemoryRouter initialEntries={['/login']}>
+      <LoginPage />
+    </MemoryRouter>,
   )
 }
 
