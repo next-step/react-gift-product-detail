@@ -40,9 +40,10 @@ describe('RankingList', () => {
         return HttpResponse.json(mockProducts)
       }),
     )
-    const { container } = renderWithClient(<RankingList />)
+    renderWithClient(<RankingList />)
     expect(screen.queryByText('Product 1')).not.toBeInTheDocument()
-    expect(container.querySelectorAll('div').length).toBeGreaterThan(0)
+    expect(screen.getByTestId('ranking-skeleton')).toBeInTheDocument()
+    expect(screen.getAllByTestId('ranking-skeleton-item')).toHaveLength(6)
     await screen.findByText('Product 1')
   })
 

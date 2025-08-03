@@ -34,9 +34,9 @@ const Text = styled.div`
 
 export default function RankingSkeleton() {
   return (
-    <Grid>
+    <Grid data-testid="ranking-skeleton">
       {Array.from({ length: 6 }).map((_, idx) => (
-        <Card key={idx}>
+        <Card key={idx} data-testid="ranking-skeleton-item">
           <Image />
           <Text />
         </Card>
