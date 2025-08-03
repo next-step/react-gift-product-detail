@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/axios';
+import type { Result } from '@/types/CommonTypes';
 
 export interface Price {
   basicPrice: number;
@@ -41,12 +42,19 @@ const fetchProductsRanking = async (
   gender: Gender,
   type: Type
 ): Promise<Product[]> => {
-  return await apiGet<Product[]>('/products/ranking', {
-    params: {
-      targetType: genderMap[gender],
-      rankType: typeMap[type],
-    },
-  });
+  const genderParam = genderMap[gender];
+  const typeParam = typeMap[type];
+
+  const res = await apiGet<Result<Product[]>>(
+    `/products/rankings?gender=${genderParam}&type=${typeParam}`
+  );
+
+  if (!res?.data || !Array.isArray(res.data)) {
+    console.warn('Invalid productsRanking response:', res);
+    return [];
+  }
+
+  return res.data;
 };
 
 export const useProductsRanking = (gender: Gender, type: Type): Product[] => {
@@ -56,5 +64,5 @@ export const useProductsRanking = (gender: Gender, type: Type): Product[] => {
     staleTime: 1000 * 60 * 5,
   });
 
-  return data;
+  return data ?? [];
 };

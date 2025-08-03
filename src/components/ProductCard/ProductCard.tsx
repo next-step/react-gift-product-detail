@@ -28,15 +28,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <>
       <S.ProductTab>
-        {list.map((item, index) => (
-          <S.ProductItem key={item.id} onClick={() => onProductSelect(item)}>
-            {showRank && <S.Rank rank={index + 1}>{index + 1}</S.Rank>}
-            <S.ProductImage src={item.imageURL} alt={item.name} />
-            <S.BrandName>{item.brandInfo.name}</S.BrandName>
-            <S.ProductName>{item.name}</S.ProductName>
-            <strong>{item.price.sellingPrice.toLocaleString()} 원</strong>
-          </S.ProductItem>
-        ))}
+        {Array.isArray(list) &&
+          list.map((item, index) => (
+            <S.ProductItem key={item.id} onClick={() => onProductSelect(item)}>
+              {showRank && <S.Rank rank={index + 1}>{index + 1}</S.Rank>}
+              <S.ProductImage src={item.imageURL} alt={item.name} />
+              <S.BrandName>{item.brandInfo.name}</S.BrandName>
+              <S.ProductName>{item.name}</S.ProductName>
+              <strong>{item.price.sellingPrice.toLocaleString()} 원</strong>
+            </S.ProductItem>
+          ))}
       </S.ProductTab>
 
       {showToggleButton && onToggleView && (

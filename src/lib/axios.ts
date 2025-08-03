@@ -14,11 +14,12 @@ api.interceptors.response.use(
   (err) => Promise.reject(err)
 );
 
-export const apiGet = <T>(
+export const apiGet = async <T>(
   url: string,
   config?: AxiosRequestConfig
 ): Promise<T> => {
-  return api.get(url, config).then((res) => res as T);
+  const response = await api.get<T>(url, config);
+  return response.data;
 };
 
 export const apiPost = <TResponse, TRequest = unknown>(

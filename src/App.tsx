@@ -4,7 +4,6 @@ import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from '@/contexts/UserContext';
 import Router from '@/routes/Router';
 import { ToastContainer } from 'react-toastify';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -17,7 +16,6 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={Router} />
         </QueryClientProvider>
-        <RouterProvider router={Router} />
       </UserProvider>
       <ToastContainer
         position="bottom-center"
