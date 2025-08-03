@@ -37,11 +37,15 @@ export async function fetchApi<T>(
     body: body ? JSON.stringify(body) : undefined,
     cache: 'no-store',
   })
-  const text = await res.text()
+  const contentType = res.headers.get('Content-Type')
   let json: unknown
-  try {
-    json = text ? JSON.parse(text) : undefined
-  } catch {
+  if (contentType?.includes('application/json')) {
+    try {
+      json = await res.json()
+    } catch {
+      json = undefined
+    }
+  } else {
     json = undefined
   }
 
