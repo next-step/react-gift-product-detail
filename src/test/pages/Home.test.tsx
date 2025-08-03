@@ -14,6 +14,15 @@ vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
 }));
 
+// Default mock context
+const defaultMockContext = {
+  user: null,
+  isLoggedIn: false,
+  isInitialized: true,
+  login: vi.fn(),
+  logout: vi.fn(),
+};
+
 const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <BrowserRouter>
@@ -27,9 +36,7 @@ const renderWithProviders = (component: React.ReactElement) => {
 describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseLoginContext.mockReturnValue({
-      user: null,
-    });
+    mockUseLoginContext.mockReturnValue(defaultMockContext);
   });
 
   describe('기본 렌더링', () => {

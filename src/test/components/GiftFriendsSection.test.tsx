@@ -11,6 +11,15 @@ vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
 }));
 
+// Default mock context
+const defaultMockContext = {
+  user: null,
+  isLoggedIn: false,
+  isInitialized: true,
+  login: vi.fn(),
+  logout: vi.fn(),
+};
+
 const renderWithTheme = (component: React.ReactElement) => {
   return render(
     <ThemeProvider theme={theme}>
@@ -22,9 +31,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('GiftFriendsSection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseLoginContext.mockReturnValue({
-      user: null,
-    });
+    mockUseLoginContext.mockReturnValue(defaultMockContext);
   });
 
         it('renders with default message when user is not logged in', () => {

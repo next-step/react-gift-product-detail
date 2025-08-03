@@ -13,6 +13,15 @@ vi.mock('@/hooks/useLoginContext', () => ({
   useLoginContext: mockUseLoginContext,
 }));
 
+// Default mock context
+const defaultMockContext = {
+  user: null,
+  isLoggedIn: false,
+  isInitialized: true,
+  login: vi.fn(),
+  logout: vi.fn(),
+};
+
 const renderWithProviders = (component: React.ReactElement) => {
   return render(
     <BrowserRouter>
@@ -34,9 +43,7 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('Typography Components', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseLoginContext.mockReturnValue({
-      user: null,
-    });
+    mockUseLoginContext.mockReturnValue(defaultMockContext);
   });
 
   describe('ProductCard', () => {
@@ -199,32 +206,37 @@ describe('Typography Components', () => {
       });
     });
 
-    it('renders with default message when user is not logged in', () => {
-      mockUseLoginContext.mockReturnValue({
-        user: null,
-      });
+            it('renders with default message when user is not logged in', () => {
+    mockUseLoginContext.mockReturnValue({
+      ...defaultMockContext,
+      user: null,
+    });
 
       renderWithTheme(<GiftFriendsSection />);
       
       expect(screen.getByText('선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    it('renders with personalized message when user is logged in', () => {
-      mockUseLoginContext.mockReturnValue({
-        user: {
-          email: 'test@example.com',
-        },
-      });
+            it('renders with personalized message when user is logged in', () => {
+    mockUseLoginContext.mockReturnValue({
+      ...defaultMockContext,
+      user: {
+        authToken: 'test-token',
+        email: 'test@example.com',
+        name: '테스트 사용자',
+      },
+    });
 
       renderWithTheme(<GiftFriendsSection />);
       
       expect(screen.getByText('test님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
-    it('applies correct typography styles to guide text', () => {
-      mockUseLoginContext.mockReturnValue({
-        user: null,
-      });
+            it('applies correct typography styles to guide text', () => {
+    mockUseLoginContext.mockReturnValue({
+      ...defaultMockContext,
+      user: null,
+    });
 
       renderWithTheme(<GiftFriendsSection />);
       
@@ -235,6 +247,7 @@ describe('Typography Components', () => {
 
     it('has correct section styling', () => {
       mockUseLoginContext.mockReturnValue({
+        ...defaultMockContext,
         user: null,
       });
 
@@ -247,6 +260,7 @@ describe('Typography Components', () => {
 
     it('has correct card styling', () => {
       mockUseLoginContext.mockReturnValue({
+        ...defaultMockContext,
         user: null,
       });
 
@@ -259,6 +273,7 @@ describe('Typography Components', () => {
 
     it('has correct add circle styling', () => {
       mockUseLoginContext.mockReturnValue({
+        ...defaultMockContext,
         user: null,
       });
 
@@ -271,6 +286,7 @@ describe('Typography Components', () => {
 
     it('displays plus icon', () => {
       mockUseLoginContext.mockReturnValue({
+        ...defaultMockContext,
         user: null,
       });
 
