@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from '@emotion/styled';
-
 import { useRanking } from '@/hooks/useRanking';
 import Spinner from '@/components/common/Spinner';
 import GiftItemCard from '@/components/GiftRanking/GiftItemCard';
