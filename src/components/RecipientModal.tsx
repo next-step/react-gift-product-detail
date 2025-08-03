@@ -208,7 +208,9 @@ export default function RecipientModal({
             </div>
           </Row>
         ))}
-        {hasDuplicate && <ErrorMessage>전화번호가 중복되었습니다.</ErrorMessage>}
+        {hasDuplicate && (
+          <ErrorMessage>전화번호가 중복되었습니다.</ErrorMessage>
+        )}
         <Footer>
           <button type="button" onClick={onClose}>
             취소

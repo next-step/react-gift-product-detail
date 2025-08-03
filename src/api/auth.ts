@@ -1,4 +1,8 @@
-import { useMutation, type UseMutationOptions, type UseMutationResult } from '@tanstack/react-query'
+import {
+  useMutation,
+  type UseMutationOptions,
+  type UseMutationResult,
+} from '@tanstack/react-query'
 import { fetchApi } from './client'
 import type { UserInfo } from '../utils/storage'
 
@@ -23,11 +27,11 @@ export async function postLogin(
     typeof name !== 'string' ||
     typeof authToken !== 'string'
   ) {
-       throw new Error('Invalid response from /api/login')
+    throw new Error('Invalid response from /api/login')
   }
 
   return { email: userEmail, name, authToken }
-  }
+}
 
 export function useLoginMutation(
   options?: UseMutationOptions<UserInfo, Error, LoginParams>,

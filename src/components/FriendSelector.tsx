@@ -88,12 +88,13 @@ const FriendSelector = ({ friends, onSelect }: FriendSelectorProps) => {
     <Wrapper>
       <Button onClick={() => setOpen((p) => !p)}>
         <IconCircle>
-          <img src={plusIcon} alt="plus" width="16" height="16" />        
+          <img src={plusIcon} alt="plus" width="16" height="16" />
         </IconCircle>
         {selected ??
           (userInfo
             ? `${nickname}님! 선물할 친구를 선택해 주세요.`
-            : '선물할 친구를 선택해 주세요.')}      </Button>
+            : '선물할 친구를 선택해 주세요.')}{' '}
+      </Button>
       {open && (
         <Dropdown>
           {friends.map((friend) => (

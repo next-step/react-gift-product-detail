@@ -15,7 +15,7 @@ import {
   type UseQueryOptions,
   type UseQueryResult,
 } from '@tanstack/react-query'
-
+import { themeKeys } from '@/constants/queryKeys'
 export interface FetchThemeProductsParams {
   cursor?: number
   limit?: number
@@ -43,13 +43,13 @@ export async function fetchThemeProducts(
   }
 
   return data
-   }
+}
 
 export function useThemesQuery(
   options?: UseQueryOptions<Theme[], Error>,
 ): UseQueryResult<Theme[], Error> {
   return useQuery<Theme[], Error>({
-    queryKey: ['themes'],
+    queryKey: themeKeys.all(),
     queryFn: fetchThemes,
     ...options,
   })
@@ -61,7 +61,7 @@ export function useThemeProductsQuery(
   options?: UseQueryOptions<ThemeProductsResponse, Error>,
 ): UseQueryResult<ThemeProductsResponse, Error> {
   return useQuery<ThemeProductsResponse, Error>({
-    queryKey: ['themes', themeId, 'products', params],
+    queryKey: themeKeys.products(themeId!, params),
     queryFn: () => fetchThemeProducts(themeId!, params),
     enabled: themeId !== undefined,
     ...options,

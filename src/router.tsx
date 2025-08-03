@@ -2,11 +2,11 @@
 import App from '@/App'
 import LoginPage from '@/pages/LoginPage'
 import OrderPage from '@/pages/OrderPage'
+import ProductDetailPage from '@/pages/ProductDetailPage'
 import MyPage from '@/pages/MyPage'
 import NotFound from '@/pages/NotFound'
 import RequireAuth from '@/components/RequireAuth'
 import ThemeProductsPage from '@/pages/ThemeProductsPage'
-
 
 const router = createBrowserRouter([
   {
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/product/:id',
+    element: <ProductDetailPage />,
   },
   {
     element: <RequireAuth />,
@@ -32,10 +36,9 @@ const router = createBrowserRouter([
         path: '/theme/:id',
         element: <ThemeProductsPage />,
       },
-
     ],
   },
-    {
+  {
     path: '*',
     element: <NotFound />,
   },

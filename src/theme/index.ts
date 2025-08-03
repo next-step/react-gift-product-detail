@@ -8,7 +8,6 @@ import type { Colors } from './color'
 import type { Typography } from './typography'
 import type { Spacing } from './spacing'
 
-
 export interface Theme extends Colors, Typography, Spacing {}
 
 export const theme: Theme = {

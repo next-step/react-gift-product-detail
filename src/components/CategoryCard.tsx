@@ -38,7 +38,6 @@ const CategoryCard = ({ themeId, name, image }: CategoryCardProps) => {
   }
   return (
     <Card onClick={handleClick}>
-
       <Image src={image} alt={name} />
       <Name>{name}</Name>
     </Card>

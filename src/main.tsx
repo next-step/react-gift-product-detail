@@ -22,6 +22,6 @@ createRoot(document.getElementById('root')!).render(
           <ToastContainer position="top-center" hideProgressBar />
         </AuthProvider>
       </ThemeProvider>
-    </QueryClientProvider>  
+    </QueryClientProvider>
   </StrictMode>,
 )

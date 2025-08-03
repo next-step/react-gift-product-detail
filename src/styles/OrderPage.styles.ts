@@ -34,8 +34,7 @@ export const CardItem = styled.div<{ selected: boolean }>`
   width: 80px;
   cursor: pointer;
   border: 2px solid
-    ${({ selected }) =>
-    selected ? colors.brand.kakaoYellow : 'transparent'};
+    ${({ selected }) => (selected ? colors.brand.kakaoYellow : 'transparent')};
   border-radius: 4px;
   overflow: hidden;
 `
