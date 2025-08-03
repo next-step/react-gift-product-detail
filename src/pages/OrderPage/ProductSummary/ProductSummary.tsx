@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useReactQueryFetch } from '@/hooks/useReactQueryFetch';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchProductSummary } from '@/api/products';
 import * as S from './ProductSummary.styles';
 
@@ -8,41 +8,18 @@ const ProductSummary = () => {
   const productId = parseInt(id ?? '', 10);
 
   if (isNaN(productId)) {
-    return (
-      <S.Wrapper style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
-        <p>유효하지 않은 상품 ID입니다.</p>
-      </S.Wrapper>
-    );
+    throw new Error('유효하지 않은 상품 ID입니다.');
   }
 
-  const { data, isLoading, error } = useReactQueryFetch(['productSummary', productId], () =>
-    fetchProductSummary(productId)
-  );
+  const { data } = useSuspenseQuery({
+    queryKey: ['productSummary', productId],
+    queryFn: () => fetchProductSummary(productId),
+  });
 
   const product = data?.data;
 
-  if (isLoading) {
-    return (
-      <S.Wrapper style={{ textAlign: 'center', padding: '20px' }}>
-        <p>상품 정보를 불러오는 중...</p>
-      </S.Wrapper>
-    );
-  }
-
-  if (error) {
-    return (
-      <S.Wrapper style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
-        <p>{error.message}</p>
-      </S.Wrapper>
-    );
-  }
-
   if (!product) {
-    return (
-      <S.Wrapper style={{ textAlign: 'center', padding: '20px' }}>
-        <p>상품 정보를 찾을 수 없습니다.</p>
-      </S.Wrapper>
-    );
+    throw new Error('상품 정보를 찾을 수 없습니다.');
   }
 
   return (

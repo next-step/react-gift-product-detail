@@ -21,12 +21,12 @@ const ProductItem = ({
 }: ProductItemProps) => {
   const navigate = useNavigate();
 
-  const goToOrderPage = () => {
-    navigate(PATH.ORDER_DETAIL(id));
+  const goToDetailPage = () => {
+    navigate(PATH.PRODUCT_DETAIL(id));
   };
 
   return (
-    <S.Card onClick={goToOrderPage}>
+    <S.Card onClick={goToDetailPage}>
       <S.Thumbnail src={imageURL} alt={name} />
       <S.Brand>
         <S.BrandLogo src={brandImageURL} alt={brandName} />

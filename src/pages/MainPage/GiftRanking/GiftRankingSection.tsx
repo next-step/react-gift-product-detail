@@ -36,8 +36,9 @@ const GiftRankingSection = () => {
     data: response,
     isLoading,
     error,
-  } = useReactQueryFetch<Product[]>(['productRanking', selectedTargetType, selectedRankType], () =>
-    fetchProductRanking(selectedTargetType, selectedRankType)
+  } = useReactQueryFetch<{ data: Product[] }>(
+    ['productRanking', selectedTargetType, selectedRankType],
+    () => fetchProductRanking(selectedTargetType, selectedRankType)
   );
 
   useEffect(() => {

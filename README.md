@@ -362,7 +362,9 @@ hint : 받는 사람 기능 구현할 때 useFieldArray 사용?
 </div>
 </details>
 
----
+<details>
+<summary>2단계 구현기능 목록 보기</summary>
+<div markdown="1">
 
 ## 📌 2단계 - 구현 기능 목록
 
@@ -382,3 +384,18 @@ hint : 받는 사람 기능 구현할 때 useFieldArray 사용?
 
 - ErrorBoundary와 Suspense를 사용하여 코드 구조를 리팩터링
   - 단, ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현
+
+</div>
+</details>
+
+## 📌 3단계 - 구현 기능 목록
+
+### 테스트코드 작성
+
+- src/components에 있는 TextInputBox에 대한 테스트 코드를 작성
+
+- 로그인 페이지에 대한 테스트 시나리오를 작성하고 테스트 코드를 작성
+
+- MSW를 사용하여 선물하기 홈 페이지의 실시간 급상승 선물랭킹 섹션의 테스트 코드를 작성
+
+- github action을 사용하여 PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되게 하기

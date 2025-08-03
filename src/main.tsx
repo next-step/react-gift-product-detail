@@ -18,7 +18,17 @@ import ThemeProductPage from '@/pages/ThemeProductPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // @ts-ignore
+      suspense: true,
+      // @ts-ignore
+      useErrorBoundary: true,
+      retry: false,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {

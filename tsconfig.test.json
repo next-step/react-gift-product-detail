@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "types": ["vitest", "@testing-library/jest-dom", "node"]
+  },
+  "include": ["src", "tests/vitest.setup.ts", "**/*.test.ts", "**/*.test.tsx"]
+}

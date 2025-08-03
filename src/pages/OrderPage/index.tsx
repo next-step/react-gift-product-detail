@@ -98,32 +98,32 @@ const OrderPage = () => {
   return (
     <Layout>
       <NavigationBar />
-      <ErrorBoundary fallback={<div>주문 페이지를 불러오는 중 오류가 발생했어요.</div>}>
-        <Suspense fallback={<div>주문 페이지 로딩 중...</div>}>
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <MessageCardSelector
-                cards={messageCards}
-                selectedId={selectedCard?.id ?? null}
-                onSelect={handleSelectCard}
-              />
-              <SelectedCardPreview
-                card={selectedCard ?? messageCards[0]}
-                message={watch('message') ?? ''}
-                onChange={(val) => setValue('message', val, { shouldValidate: true })}
-              />
-              <SectionDivider />
-              <SenderInfo />
-              <SectionDivider />
-              <ReceiverSection />
-              <SectionDivider />
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <MessageCardSelector
+            cards={messageCards}
+            selectedId={selectedCard?.id ?? null}
+            onSelect={handleSelectCard}
+          />
+          <SelectedCardPreview
+            card={selectedCard ?? messageCards[0]}
+            message={watch('message') ?? ''}
+            onChange={(val) => setValue('message', val, { shouldValidate: true })}
+          />
+          <SectionDivider />
+          <SenderInfo />
+          <SectionDivider />
+          <ReceiverSection />
+          <SectionDivider />
+          <ErrorBoundary fallback={<div>상품 정보를 불러오는 중 오류가 발생했어요.</div>}>
+            <Suspense fallback={<div>상품 정보를 불러오는 중이에요...</div>}>
               <SectionTitle title="상품 정보" />
               <ProductSummary />
-              <BottomButton type="submit">주문하기</BottomButton>
-            </form>
-          </FormProvider>
-        </Suspense>
-      </ErrorBoundary>
+            </Suspense>
+          </ErrorBoundary>
+          <BottomButton type="submit">주문하기</BottomButton>
+        </form>
+      </FormProvider>
     </Layout>
   );
 };
