@@ -3,14 +3,12 @@
   ProductDetail,
   HighlightReviewResponse,
   WishInfo,
-
 } from '../type'
 import { fetchApi } from './client'
 import {
   useQuery,
   useMutation,
   useQueryClient,
-
   useSuspenseQuery,
   type UseQueryOptions,
   type UseQueryResult,

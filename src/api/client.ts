@@ -1,6 +1,5 @@
 import type { QueryFunctionContext } from '@tanstack/react-query'
 
-
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 export interface FetchApiOptions {
   method?: HttpMethod
@@ -52,7 +51,6 @@ export async function fetchApi<T>(
   }
 
   if (!res.ok) {
-
     interface ErrorResponse {
       data?: { message?: string; statusCode?: number }
       message?: string

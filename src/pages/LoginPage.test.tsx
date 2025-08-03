@@ -27,7 +27,7 @@ const renderPage = () => {
           <LoginPage />
         </MemoryRouter>
       </AuthProvider>
-    </QueryClientProvider>
+    </QueryClientProvider>,
   )
 }
 
@@ -40,7 +40,7 @@ describe('LoginPage', () => {
           name: 'User',
           authToken: 'token',
         })
-      })
+      }),
     )
 
     renderPage()
@@ -72,12 +72,16 @@ describe('LoginPage', () => {
     fireEvent.change(emailInput, { target: { value: 'wrong' } })
     fireEvent.blur(emailInput)
 
-    expect(await screen.findByText('ID는 이메일 형식으로 입력해주세요.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('ID는 이메일 형식으로 입력해주세요.'),
+    ).toBeInTheDocument()
 
     const passwordInput = screen.getByPlaceholderText('비밀번호')
     fireEvent.change(passwordInput, { target: { value: '123' } })
     fireEvent.blur(passwordInput)
 
-    expect(await screen.findByText('비밀번호는 8자 이상이어야 합니다.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('비밀번호는 8자 이상이어야 합니다.'),
+    ).toBeInTheDocument()
   })
 })

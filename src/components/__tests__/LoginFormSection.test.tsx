@@ -23,7 +23,9 @@ describe('LoginFormSection', () => {
     renderComponent()
 
     const emailInput = screen.getByPlaceholderText('이메일') as HTMLInputElement
-    const passwordInput = screen.getByPlaceholderText('비밀번호') as HTMLInputElement
+    const passwordInput = screen.getByPlaceholderText(
+      '비밀번호',
+    ) as HTMLInputElement
     const submitButton = screen.getByRole('button', { name: '로그인' })
 
     expect(submitButton).toBeDisabled()
@@ -33,21 +35,29 @@ describe('LoginFormSection', () => {
 
     fireEvent.change(emailInput, { target: { value: 'invalid' } })
     fireEvent.blur(emailInput)
-    expect(await screen.findByText('ID는 이메일 형식으로 입력해주세요.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('ID는 이메일 형식으로 입력해주세요.'),
+    ).toBeInTheDocument()
 
     fireEvent.change(emailInput, { target: { value: 'tester@example.com' } })
     fireEvent.blur(emailInput)
     await waitFor(() => {
       expect(screen.queryByText('ID를 입력해주세요.')).toBeNull()
-      expect(screen.queryByText('ID는 이메일 형식으로 입력해주세요.')).toBeNull()
+      expect(
+        screen.queryByText('ID는 이메일 형식으로 입력해주세요.'),
+      ).toBeNull()
     })
 
     fireEvent.blur(passwordInput)
-    expect(await screen.findByText('비밀번호를 입력해주세요.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('비밀번호를 입력해주세요.'),
+    ).toBeInTheDocument()
 
     fireEvent.change(passwordInput, { target: { value: '1234' } })
     fireEvent.blur(passwordInput)
-    expect(await screen.findByText('비밀번호는 8자 이상이어야 합니다.')).toBeInTheDocument()
+    expect(
+      await screen.findByText('비밀번호는 8자 이상이어야 합니다.'),
+    ).toBeInTheDocument()
 
     fireEvent.change(passwordInput, { target: { value: '12345678' } })
     fireEvent.blur(passwordInput)

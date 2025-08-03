@@ -1,7 +1,6 @@
 ﻿export const QUERY_KEYS = {
   PRODUCTS: 'products',
   THEMES: 'themes',
-
 } as const
 
 export const productKeys = {
