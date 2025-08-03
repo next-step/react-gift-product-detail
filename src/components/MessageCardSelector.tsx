@@ -1,10 +1,5 @@
 import { cardTemplates, type CardTemplate } from '@/data/cardTemplates'
-import {
-  CardGrid,
-  CardItem,
-  Thumb,
-  Preview,
-} from '@/styles/OrderPage.styles'
+import { CardGrid, CardItem, Thumb, Preview } from '@/styles/OrderPage.styles'
 
 interface MessageCardSelectorProps {
   selected: CardTemplate

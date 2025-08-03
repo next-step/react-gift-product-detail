@@ -39,7 +39,7 @@ export async function postOrder(
   }
 
   return data
-    }
+}
 
 export interface OrderMutationVariables {
   order: OrderRequest

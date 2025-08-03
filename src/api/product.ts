@@ -3,14 +3,19 @@
   ProductDetail,
   HighlightReviewResponse,
   WishInfo,
-} from "../type"
+
+} from '../type'
 import { fetchApi } from './client'
 import {
   useQuery,
   useMutation,
   useQueryClient,
+
+  useSuspenseQuery,
   type UseQueryOptions,
   type UseQueryResult,
+  type UseSuspenseQueryOptions,
+  type UseSuspenseQueryResult,
   type UseMutationOptions,
   type UseMutationResult,
 } from '@tanstack/react-query'
@@ -55,7 +60,7 @@ export async function fetchProductSummary(
   }
 
   return data
-    }
+}
 
 export function useProductRankingQuery(
   targetType = 'ALL',
@@ -63,7 +68,8 @@ export function useProductRankingQuery(
   options?: UseQueryOptions<Product[], Error>,
 ): UseQueryResult<Product[], Error> {
   return useQuery<Product[], Error>({
-    queryKey: productKeys.ranking(targetType, rankType),    queryFn: () => fetchProductRanking(targetType, rankType),
+    queryKey: productKeys.ranking(targetType, rankType),
+    queryFn: () => fetchProductRanking(targetType, rankType),
     ...options,
   })
 }
@@ -73,12 +79,12 @@ export function useProductSummaryQuery(
   options?: UseQueryOptions<ProductSummary, Error>,
 ): UseQueryResult<ProductSummary, Error> {
   return useQuery<ProductSummary, Error>({
-    queryKey: productKeys.summary(productId!),
-    queryFn: () => fetchProductSummary(productId!),    enabled: productId !== undefined,
+    queryKey: productKeys.summary(productId ?? 0),
+    queryFn: () => fetchProductSummary(productId ?? 0),
+    enabled: productId !== undefined,
     ...options,
   })
 }
-
 
 export async function fetchProduct(productId: number): Promise<Product> {
   return fetchApi<Product>(`/api/products/${productId}`)
@@ -106,64 +112,67 @@ export async function postWish(productId: number): Promise<void> {
 }
 
 export function useProductQuery(
-  productId: number | undefined,
-  options?: UseQueryOptions<Product, Error>,
-): UseQueryResult<Product, Error> {
-  return useQuery<Product, Error>({
-    queryKey: productKeys.detail(productId!),
-    queryFn: () => fetchProduct(productId!),
-    enabled: productId !== undefined,
+  productId: number,
+  options?: UseSuspenseQueryOptions<Product, Error>,
+): UseSuspenseQueryResult<Product, Error> {
+  return useSuspenseQuery<Product, Error>({
+    queryKey: productKeys.detail(productId),
+    queryFn: () => fetchProduct(productId),
     ...options,
   })
 }
 
 export function useProductDetailQuery(
-  productId: number | undefined,
-  options?: UseQueryOptions<ProductDetail, Error>,
-): UseQueryResult<ProductDetail, Error> {
-  return useQuery<ProductDetail, Error>({
-    queryKey: productKeys.productDetail(productId!),
-    queryFn: () => fetchProductDetail(productId!),
-    enabled: productId !== undefined,
+  productId: number,
+  options?: UseSuspenseQueryOptions<ProductDetail, Error>,
+): UseSuspenseQueryResult<ProductDetail, Error> {
+  return useSuspenseQuery<ProductDetail, Error>({
+    queryKey: productKeys.productDetail(productId),
+    queryFn: () => fetchProductDetail(productId),
     ...options,
   })
 }
 
 export function useHighlightReviewQuery(
-  productId: number | undefined,
-  options?: UseQueryOptions<HighlightReviewResponse, Error>,
-): UseQueryResult<HighlightReviewResponse, Error> {
-  return useQuery<HighlightReviewResponse, Error>({
-    queryKey: productKeys.review(productId!),
-    queryFn: () => fetchHighlightReview(productId!),
-    enabled: productId !== undefined,
+  productId: number,
+  options?: UseSuspenseQueryOptions<HighlightReviewResponse, Error>,
+): UseSuspenseQueryResult<HighlightReviewResponse, Error> {
+  return useSuspenseQuery<HighlightReviewResponse, Error>({
+    queryKey: productKeys.review(productId),
+    queryFn: () => fetchHighlightReview(productId),
     ...options,
   })
 }
 
 export function useWishCountQuery(
-  productId: number | undefined,
-  options?: UseQueryOptions<WishInfo, Error>,
-): UseQueryResult<WishInfo, Error> {
-  return useQuery<WishInfo, Error>({
-    queryKey: productKeys.wish(productId!),
-    queryFn: () => fetchWishCount(productId!),
-    enabled: productId !== undefined,
+  productId: number,
+  options?: UseSuspenseQueryOptions<WishInfo, Error>,
+): UseSuspenseQueryResult<WishInfo, Error> {
+  return useSuspenseQuery<WishInfo, Error>({
+    queryKey: productKeys.wish(productId),
+    queryFn: () => fetchWishCount(productId),
     ...options,
   })
 }
 
 export function useWishMutation(
   productId: number,
-  options?: UseMutationOptions<void, Error, void>,
-): UseMutationResult<void, Error, void> {
+  options?: UseMutationOptions<void, Error, void, { prev?: WishInfo }>,
+): UseMutationResult<void, Error, void, { prev?: WishInfo }> {
   const queryClient = useQueryClient()
-  return useMutation<void, Error, void>({
+  return useMutation<void, Error, void, { prev?: WishInfo }>({
     mutationFn: () => postWish(productId),
     onMutate: async () => {
-    const prev = queryClient.getQueryData<WishInfo>(productKeys.wish(productId))
-    queryClient.setQueryData<WishInfo>(productKeys.wish(productId), (prev ? { ...prev, wishCount: prev.wishCount + 1 } : { wishCount: 1, isWished: true }))
-          return { prev }
+      const prev = queryClient.getQueryData<WishInfo>(
+        productKeys.wish(productId),
+      )
+      queryClient.setQueryData<WishInfo>(
+        productKeys.wish(productId),
+        prev
+          ? { ...prev, wishCount: prev.wishCount + 1 }
+          : { wishCount: 1, isWished: true },
+      )
+      return { prev }
     },
     onError: (_err, _vars, context) => {
       if (context?.prev !== undefined) {

@@ -35,7 +35,6 @@ export default function LoginPage() {
   const location = useLocation()
   const from = (location.state as { from?: string })?.from ?? '/'
 
-
   const handleSuccess = () => {
     navigate(from, { replace: true })
   }

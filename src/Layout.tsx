@@ -5,14 +5,12 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { spacing } from '@/theme/spacing'
 import { useAuth } from '@/contexts/AuthContext'
 
-
 const Container = styled.div`
   max-width: 720px;
   margin: 0 auto;
   padding: 0 ${spacing.spacing4};
 `
 interface LayoutProps extends PropsWithChildren {}
-
 
 const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate()

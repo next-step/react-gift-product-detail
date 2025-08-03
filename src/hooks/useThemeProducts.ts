@@ -1,9 +1,6 @@
 ﻿import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  useThemeProductsQuery,
-  useThemesQuery,
-} from '@/api/themes'
+import { useThemeProductsQuery, useThemesQuery } from '@/api/themes'
 import type { Product } from '@/type'
 
 export default function useThemeProducts(id: string | undefined) {
@@ -21,4 +18,5 @@ export default function useThemeProducts(id: string | undefined) {
     }
   }, [isError, themes, navigate])
 
-  return { products, loading: isLoading, error: isError }}
+  return { products, loading: isLoading, error: isError }
+}

@@ -58,8 +58,8 @@ export default function LoginFormSection({ onSuccess }: LoginFormSectionProps) {
     e.preventDefault()
     if (!isValid) return
 
-    try{
-      const info = await mutateAsync({ email, password })      
+    try {
+      const info = await mutateAsync({ email, password })
       await login(info)
       onSuccess?.(info)
     } catch (err: any) {
@@ -72,28 +72,30 @@ export default function LoginFormSection({ onSuccess }: LoginFormSectionProps) {
     }
   }
 
-    return (
-        <Form onSubmit={handleSubmit}>
-            <Input
-                type="email"
-                placeholder="이메일"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={handleEmailBlur}
-                required
-            />
-            {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-            <Input
-                type="password"
-                placeholder="비밀번호"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={handlePasswordBlur}
-                required
-            />
-            {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
-            <Button type="submit" disabled={!isValid || isPending}>                로그인
-            </Button>
-        </Form>
-    )
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Input
+        type="email"
+        placeholder="이메일"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        onBlur={handleEmailBlur}
+        required
+      />
+      {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+      <Input
+        type="password"
+        placeholder="비밀번호"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        onBlur={handlePasswordBlur}
+        required
+      />
+      {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+      <Button type="submit" disabled={!isValid || isPending}>
+        {' '}
+        로그인
+      </Button>
+    </Form>
+  )
 }

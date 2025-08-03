@@ -10,14 +10,15 @@ interface AuthContextValue {
   userInfo: UserInfo | null
   login: (info: UserInfo) => void
   logout: () => void
-
 }
 const STORAGE_KEY = 'isLoggedIn'
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(() => loadUserInfo())
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(() =>
+    loadUserInfo(),
+  )
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!loadUserInfo())
 
   const login = (info: UserInfo) => {

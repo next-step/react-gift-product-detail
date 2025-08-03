@@ -1,4 +1,4 @@
-﻿﻿import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { colors } from '@/theme/color'
@@ -45,16 +45,14 @@ const GenderButton = styled.button<{ selected: boolean }>`
 
 const GenderIcon = styled.span<{ selected: boolean }>`
   font-size: 1.5rem;
-  color: ${({ selected }) =>
-    selected ? colors.gray[0] : colors.gray[900]};
+  color: ${({ selected }) => (selected ? colors.gray[0] : colors.gray[900])};
 `
 
 const GenderLabel = styled.span<{ selected: boolean }>`
   ${typography.label1Regular};
   text-align: center;
   flex: 1;
-  color: ${({ selected }) =>
-    selected ? colors.blue[700] : colors.gray[900]};
+  color: ${({ selected }) => (selected ? colors.blue[700] : colors.gray[900])};
 
   &:not(:last-of-type) {
     margin-right: 12px;
@@ -71,7 +69,8 @@ const SortTabsWrapper = styled.div`
 const SortTab = styled.button<{ active: boolean }>`
   flex: 1;
   padding: 10px 0;
-  background-color: ${({ active }) => (active ? colors.gray[0] : 'transparent')};
+  background-color: ${({ active }) =>
+    active ? colors.gray[0] : 'transparent'};
   border: none;
   cursor: pointer;
   ${typography.body1Regular};
@@ -104,7 +103,7 @@ export function RankingFilterBar({
   onGenderChange,
   onSortChange,
 }: RankingFilterBarProps) {
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams()
   const selectedGender = searchParams.get('gender') ?? genders[0].key
   const selectedSort = searchParams.get('sort') ?? sorts[0].key
 

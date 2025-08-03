@@ -5,7 +5,6 @@ import { spacing } from '@/theme/spacing'
 import { useNavigate } from 'react-router-dom'
 import { YellowButton } from '@/components/common'
 
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
