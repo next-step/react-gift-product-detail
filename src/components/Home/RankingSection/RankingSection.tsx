@@ -1,6 +1,6 @@
 import TargetCategory from "./TargetCategory";
 import RankingCategory from "./RankingCategory";
-import ProductItem from "@/components/Common/ProductItem";
+import ProductItem from "@/components/Common/ProductItem/ProductItem";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import {
@@ -17,7 +17,7 @@ import { queryKeys } from "@/utils/queryKeys";
 const RankingSection = () => {
   const [showAll, setShowAll] = useState(false);
 
-  const RANK_COUNT = showAll ? 21 : 6;
+  const RANK_COUNT = showAll ? 20 : 6;
   const toggleShowAll = () => setShowAll((prev) => !prev);
 
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ const RankingSection = () => {
           />
         ))}
       </RankingGrid>
-      <MoreButton onClick={toggleShowAll}>
+      <MoreButton data-testid="more-toggle-button" onClick={toggleShowAll}>
         {showAll ? "접기" : "더보기"}
       </MoreButton>
     </SectionContainer>
