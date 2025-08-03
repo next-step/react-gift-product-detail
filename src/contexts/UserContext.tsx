@@ -9,6 +9,7 @@ interface User {
 
 interface UserContextType {
   user: User | null;
+  isLoggedIn: boolean;
   login: (userInfo: User) => void;
   logout: () => void;
 }
@@ -36,8 +37,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  const isLoggedIn = !!user;
+
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, isLoggedIn, login, logout }}>
       {children}
     </UserContext.Provider>
   );

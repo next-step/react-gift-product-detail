@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { apiGet } from '@/lib/axios';
 import type { Result } from '@/types/CommonTypes';
-import { queryKeys } from '@/lib/queryKeys';
 
 export interface Price {
   basicPrice: number;
@@ -39,33 +38,31 @@ const typeMap: Record<Type, string> = {
   '위시로 받은': 'MANY_WISH_RECEIVE',
 };
 
-export const fetchProductsRanking = async (
+const fetchProductsRanking = async (
   gender: Gender,
   type: Type
 ): Promise<Product[]> => {
-  const res = await api.get<Result<Product[]>>('/products/ranking', {
-    params: {
-      targetType: genderMap[gender],
-      rankType: typeMap[type],
-    },
-  });
-  return res.data.data;
+  const genderParam = genderMap[gender];
+  const typeParam = typeMap[type];
+
+  const res = await apiGet<Result<Product[]>>(
+    `/products/rankings?gender=${genderParam}&type=${typeParam}`
+  );
+
+  if (!res?.data || !Array.isArray(res.data)) {
+    console.warn('Invalid productsRanking response:', res);
+    return [];
+  }
+
+  return res.data;
 };
 
-export const useProductsRanking = (gender: Gender, type: Type) => {
-  const {
-    data: products = [],
-    isLoading: loading,
-    error,
-  } = useQuery<Product[]>({
-    queryKey: queryKeys.products.ranking(gender, type),
+export const useProductsRanking = (gender: Gender, type: Type): Product[] => {
+  const { data } = useSuspenseQuery<Product[]>({
+    queryKey: ['productsRanking', gender, type],
     queryFn: () => fetchProductsRanking(gender, type),
     staleTime: 1000 * 60 * 5,
   });
 
-  return {
-    products,
-    loading,
-    error,
-  };
+  return data ?? [];
 };

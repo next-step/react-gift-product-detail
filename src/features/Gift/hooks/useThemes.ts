@@ -1,27 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/axios';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { apiGet } from '@/lib/axios';
+import type { Result } from '@/types/CommonTypes';
 
-interface Theme {
+export interface Theme {
   themeId: number;
   name: string;
   image: string;
 }
 
 const fetchThemes = async (): Promise<Theme[]> => {
-  const response = await api.get('/themes');
-  return response.data.data;
+  const res = await apiGet<Result<Theme[]>>('/themes');
+
+  if (!res || !res.data || !Array.isArray(res.data)) {
+    console.error('Invalid theme response:', res);
+    return [];
+  }
+
+  return res.data;
 };
 
-export const useThemes = () => {
-  const { data, isLoading, error } = useQuery<Theme[]>({
+export const useThemes = (): Theme[] => {
+  const { data } = useSuspenseQuery<Theme[]>({
     queryKey: ['themes'],
     queryFn: fetchThemes,
     staleTime: 1000 * 60 * 5,
   });
 
-  return {
-    themes: data ?? [],
-    loading: isLoading,
-    error,
-  };
+  return data ?? [];
 };
