@@ -1,20 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { apiClient } from '@/api/apiClient';
+import { useLoginMutation } from '@/hooks/useLoginMutation';
 import { AxiosError } from 'axios';
+import { LoginResponse } from '@/hooks/useLoginMutation';
 
 type Props = {
   onLoginSuccess: () => void;
-};
-
-type LoginResponse = {
-  message?: string;
-  data?: {
-    message?: string;
-    email: string;
-    name: string;
-    authToken: string;
-  };
 };
 
 export const useLoginForm = ({ onLoginSuccess }: Props) => {
@@ -23,6 +14,8 @@ export const useLoginForm = ({ onLoginSuccess }: Props) => {
   const [pw, setPw] = useState('');
   const [idError, setIdError] = useState('');
   const [pwError, setPwError] = useState('');
+
+  const { mutate: loginMutate } = useLoginMutation();
 
   const validateId = (): boolean => {
     if (!id.trim()) {
@@ -58,25 +51,24 @@ export const useLoginForm = ({ onLoginSuccess }: Props) => {
   const handleLogin = async () => {
     if (!validateId() || !validatePw()) return;
 
-    try {
-      const response = await apiClient.post<LoginResponse>('/api/login', {
-        email: id,
-        password: pw,
-      });
-
-      const { email, name, authToken } = response.data.data!;
-      login({ email, name, authToken });
-      onLoginSuccess();
-    } catch (e: unknown) {
-      let msg = '로그인 중 오류가 발생했습니다.';
-
-      if (e instanceof AxiosError) {
-        const resData = e.response?.data;
-        msg = resData?.data?.message ?? resData?.message ?? e.message;
+    loginMutate(
+      { email: id, password: pw },
+      {
+        onSuccess: (response: LoginResponse) => {
+          if (response.data) {
+            const { email, name, authToken } = response.data;
+            login({ email, name, authToken });
+          }
+          onLoginSuccess();
+        },
+        onError: (e: AxiosError<LoginResponse>) => {
+          let msg = '로그인 중 오류가 발생했습니다.';
+          const resData = e.response?.data;
+          msg = resData?.data?.message ?? resData?.message ?? e.message;
+          setPwError(msg);
+        },
       }
-
-      setPwError(msg);
-    }
+    );
   };
 
   return {

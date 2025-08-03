@@ -53,8 +53,9 @@ const RankingSection: React.FC = () => {
       </Section>
     );
 
-  const visibleItems = products.slice(0, visibleCount);
-  const hasMore = visibleCount < products.length;
+  const currentProducts = products || [];
+  const visibleItems = currentProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < currentProducts.length;
 
   return (
     <Section>
@@ -63,7 +64,7 @@ const RankingSection: React.FC = () => {
       <GiftRankingTab selected={tab} onChange={setTab} />
 
       <ContentArea>
-        {products.length === 0 ? (
+        {currentProducts.length === 0 ? (
           <ErrorMsg>상품이 없습니다.</ErrorMsg>
         ) : (
           <>

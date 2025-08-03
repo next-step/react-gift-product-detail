@@ -1,17 +1,7 @@
-import { useEffect, useState } from 'react';
-import { fetchThemes, Theme } from '@/api/themes';
+import { useThemesQuery } from '@/hooks/useThemesQuery';
 
 export const useThemes = () => {
-  const [themes, setThemes] = useState<Theme[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useEffect(() => {
-    fetchThemes()
-      .then(setThemes)
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }, []);
+  const { data: themes, isLoading: loading, error } = useThemesQuery();
 
   return { themes, loading, error };
 };

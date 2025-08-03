@@ -8,7 +8,7 @@ import Spinner from '@/components/common/Spinner';
 import { useCards } from '@/hooks/useCards';
 import { useProductSummary } from '@/hooks/useProductSummary';
 import { useAuth } from '@/contexts/AuthContext';
-import { fetchOrderSubmit } from '@/api/order';
+import { useOrderMutation } from '@/hooks/useOrderMutation';
 import type { Recipient } from '@/types/order';
 
 const OrderPage = () => {
@@ -24,6 +24,7 @@ const OrderPage = () => {
 
   const { cards, loading: cardsLoading, error: cardsError } = useCards();
   const { user } = useAuth();
+  const { mutate: submitOrder } = useOrderMutation();
 
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
@@ -64,20 +65,7 @@ const OrderPage = () => {
       receivers: mappedRecipients,
     };
 
-    
-
-    const result = await fetchOrderSubmit(
-      orderPayload,
-      user.authToken,
-      navigate
-    );
-
-    if (result.success) {
-      toast.success('주문이 완료되었습니다!');
-      navigate('/');
-    } else {
-      toast.error(result.message);
-    }
+    submitOrder({ order: orderPayload, token: user.authToken });
   };
 
   return (
@@ -103,14 +91,16 @@ const OrderPage = () => {
         </SelectedCardBox>
       </Section>
 
-      <OrderForm
-        product={product}
-        defaultMessage={cards[selectedCardIndex].defaultTextMessage}
-        recipients={recipients}
-        onEditRecipients={() => setShowModal(true)}
-        onSubmit={handleOrderSubmit}
-        defaultSender={user?.name ?? ''}
-      />
+      {product && (
+        <OrderForm
+          product={product}
+          defaultMessage={cards[selectedCardIndex].defaultTextMessage}
+          recipients={recipients}
+          onEditRecipients={() => setShowModal(true)}
+          onSubmit={handleOrderSubmit}
+          defaultSender={user?.name ?? ''}
+        />
+      )}
 
       <RecipientsModal
         isOpen={showModal}

@@ -5,6 +5,7 @@ import Spinner from '@/components/common/Spinner';
 import { useThemeDetail } from '@/hooks/useThemeDetail';
 import { useThemeProducts } from '@/hooks/useThemeProducts';
 import GiftItemCard from '@/components/GiftRanking/GiftItemCard';
+import { GiftItem } from '@/constants/GiftItem';
 
 const ThemeProductListPage: React.FC = () => {
   const { themeId: themeIdParam } = useParams<{ themeId: string }>();
@@ -97,7 +98,7 @@ const ThemeProductListPage: React.FC = () => {
           <EmptyState>상품이 없습니다.</EmptyState>
         ) : (
           <ProductGrid>
-            {products.map((product) => (
+            {products.map((product: GiftItem) => (
               <GiftItemCard key={product.id} item={product} />
             ))}
           </ProductGrid>

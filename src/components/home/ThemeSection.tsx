@@ -11,11 +11,13 @@ const ThemeSection: React.FC = () => {
   if (loading) return <Spinner />;
   if (error) return null;
 
+  const currentThemes = themes || [];
+
   return (
     <Section>
       <Title>선물 테마</Title>
       <Grid>
-        {themes.map((t) => (
+        {currentThemes.map((t) => (
           <Card key={t.themeId} onClick={() => navigate(`/themes/${t.themeId}`)}>
             <Thumb src={t.image} alt={t.name} />
             <Label>{t.name}</Label>
