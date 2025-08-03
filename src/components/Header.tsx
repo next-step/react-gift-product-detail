@@ -49,11 +49,12 @@ const Header = ({ onBack, onLoginClick, title = '선물하기' }: HeaderProps) =
     navigate(-1)
   }
 
-  const handleLoginClick = onLoginClick ?? (() => {
-    navigate(isLoggedIn ? '/profile' : '/login')
-  })
+  const handleLoginClick =
+    onLoginClick ??
+    (() => {
+      navigate(isLoggedIn ? '/profile' : '/login')
+    })
 
-  
   return (
     <Nav>
       <IconButton onClick={handleBack} aria-label="back">
@@ -69,7 +70,7 @@ const Header = ({ onBack, onLoginClick, title = '선물하기' }: HeaderProps) =
           alt={isLoggedIn ? 'profile' : 'login'}
           height="24"
         />
-        </IconButton>
+      </IconButton>
     </Nav>
   )
 }

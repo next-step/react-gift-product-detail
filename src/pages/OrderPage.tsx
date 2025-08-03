@@ -30,7 +30,7 @@ import {
 export default function OrderPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { data: product } = useProductSummaryQuery(id ? Number(id) : undefined)  
+  const { data: product } = useProductSummaryQuery(id ? Number(id) : undefined)
   const { userInfo } = useAuth()
   const { mutateAsync: orderMutate } = useOrderMutation()
   const [selected, setSelected] = useState<CardTemplate>(cardTemplates[0])
@@ -52,7 +52,6 @@ export default function OrderPage() {
       setValue('sender', userInfo.name)
     }
   }, [userInfo, setValue])
-
 
   const recipients = watch('recipients')
   const totalQty = recipients.reduce(
@@ -100,10 +99,7 @@ export default function OrderPage() {
   return (
     <Layout>
       <Container as="form" onSubmit={handleSubmit(onSubmit)}>
-        <MessageCardSelector
-          selected={selected}
-          onSelect={handleCardSelect}
-        />
+        <MessageCardSelector selected={selected} onSelect={handleCardSelect} />
         <MessageInput
           {...register('message')}
           placeholder="메시지를 입력해주세요."
@@ -120,7 +116,8 @@ export default function OrderPage() {
             placeholder="이름을 입력하세요."
           />
           {errors.sender && (
-            <ErrorMessage>{String(errors.sender.message)}</ErrorMessage>)}
+            <ErrorMessage>{String(errors.sender.message)}</ErrorMessage>
+          )}
           *실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.
         </InfoSection>
 
@@ -131,10 +128,7 @@ export default function OrderPage() {
               {fields.length === 0 ? '추가' : '수정'}
             </button>
           </RecipientHeader>
-          <RecipientList
-            recipients={watch('recipients')}
-            fields={fields}
-          />
+          <RecipientList recipients={watch('recipients')} fields={fields} />
         </InfoSection>
         {product && (
           <ProductInfo>

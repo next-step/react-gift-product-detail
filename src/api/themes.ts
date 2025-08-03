@@ -43,7 +43,7 @@ export async function fetchThemeProducts(
   }
 
   return data
-   }
+}
 
 export function useThemesQuery(
   options?: UseQueryOptions<Theme[], Error>,
@@ -61,7 +61,8 @@ export function useThemeProductsQuery(
   options?: UseQueryOptions<ThemeProductsResponse, Error>,
 ): UseQueryResult<ThemeProductsResponse, Error> {
   return useQuery<ThemeProductsResponse, Error>({
-    queryKey: themeKeys.products(themeId!, params),    queryFn: () => fetchThemeProducts(themeId!, params),
+    queryKey: themeKeys.products(themeId!, params),
+    queryFn: () => fetchThemeProducts(themeId!, params),
     enabled: themeId !== undefined,
     ...options,
   })

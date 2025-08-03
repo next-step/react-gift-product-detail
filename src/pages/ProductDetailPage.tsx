@@ -63,9 +63,7 @@ function AnnouncementList({
       return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
     }
 
-    const sorted = items
-      .slice()
-      .sort((a, b) => a.displayOrder - b.displayOrder)
+    const sorted = items.slice().sort((a, b) => a.displayOrder - b.displayOrder)
 
     return (
       <InfoList>
@@ -96,16 +94,19 @@ function AnnouncementList({
   )
 }
 
-
 function DetailContent({ productId }: { productId: number }) {
   const navigate = useNavigate()
   const { data: product } = useProductQuery(productId, { suspense: true })
   const { data: detail } = useProductDetailQuery(productId, { suspense: true })
-  const { data: reviews } = useHighlightReviewQuery(productId, { suspense: true })
+  const { data: reviews } = useHighlightReviewQuery(productId, {
+    suspense: true,
+  })
   const { data: wishInfo } = useWishCountQuery(productId, { suspense: true })
   const { mutate } = useWishMutation(productId)
 
-    const [tab, setTab] = useState<'description' | 'reviews' | 'details'>('description')
+  const [tab, setTab] = useState<'description' | 'reviews' | 'details'>(
+    'description',
+  )
   const [liked, setLiked] = useState<boolean>(wishInfo?.isWished ?? false)
   const [likeCount, setLikeCount] = useState<number>(wishInfo?.wishCount ?? 0)
 
@@ -128,9 +129,12 @@ function DetailContent({ productId }: { productId: number }) {
         <Brand>{product.brandInfo.name}</Brand>
         <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
       </div>
-      
+
       <TabBar>
-        <TabButton active={tab === 'description'} onClick={() => setTab('description')}>
+        <TabButton
+          active={tab === 'description'}
+          onClick={() => setTab('description')}
+        >
           상품설명
         </TabButton>
         <TabButton active={tab === 'reviews'} onClick={() => setTab('reviews')}>
@@ -170,7 +174,9 @@ function DetailContent({ productId }: { productId: number }) {
             <LikeCount>{likeCount}</LikeCount>
           </LikeButton>
         </LikeSection>
-        <OrderButton onClick={() => navigate(`/order/${productId}`)}>주문하기</OrderButton>
+        <OrderButton onClick={() => navigate(`/order/${productId}`)}>
+          주문하기
+        </OrderButton>
       </StickyBar>
     </Container>
   )

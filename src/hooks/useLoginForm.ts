@@ -38,11 +38,9 @@ export default function useLoginForm() {
   const handlePasswordBlur = () => {
     if (!password) {
       setPasswordError('비밀번호를 입력해주세요.')
-    } 
-    else if (!validatePassword(password)) {
+    } else if (!validatePassword(password)) {
       setPasswordError('비밀번호는 8자 이상이어야 합니다.')
-    }    
-    else {
+    } else {
       setPasswordError('')
     }
 

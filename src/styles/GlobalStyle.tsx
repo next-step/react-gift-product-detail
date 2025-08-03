@@ -1,4 +1,4 @@
-﻿import { Global, css } from "@emotion/react";
+﻿import { Global, css } from '@emotion/react'
 import { spacing } from '@/theme/spacing'
 
 const GlobalStyle = () => (
@@ -25,7 +25,6 @@ const GlobalStyle = () => (
         line-height: 1;
         -webkit-font-smoothing: antialiased;
         font-family: 'Pretendard', sans-serif;
-
       }
       ol,
       ul,
@@ -40,7 +39,7 @@ const GlobalStyle = () => (
       blockquote::after,
       q::before,
       q::after {
-        content: "";
+        content: '';
         content: none;
       }
       table {
@@ -49,6 +48,6 @@ const GlobalStyle = () => (
       }
     `}
   />
-);
+)
 
-export default GlobalStyle;
+export default GlobalStyle

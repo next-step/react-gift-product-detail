@@ -12,7 +12,7 @@ export async function fetchApi<T>(
   url: string,
   optionsOrParams?: FetchApiOptions | Record<string, string>,
 ): Promise<T> {
-   let options: FetchApiOptions
+  let options: FetchApiOptions
 
   if (
     optionsOrParams &&
@@ -29,7 +29,7 @@ export async function fetchApi<T>(
   const { method = 'GET', params, body, headers } = options
 
   const query = params ? `?${new URLSearchParams(params).toString()}` : ''
- const res = await fetch(`${url}${query}`, {
+  const res = await fetch(`${url}${query}`, {
     method,
     headers: body
       ? { 'Content-Type': 'application/json', ...headers }
@@ -46,17 +46,17 @@ export async function fetchApi<T>(
   }
 
   if (!res.ok) {
-  const message =
+    const message =
       json?.data?.message || json?.message || `Invalid response from ${url}`
-  const error = new Error(message)
+    const error = new Error(message)
     ;(error as any).statusCode =
       json?.data?.statusCode || json?.statusCode || res.status
     throw error
   }
-    if (res.status === 304) {
+  if (res.status === 304) {
     return undefined as T
   }
-    if (json === undefined) {
+  if (json === undefined) {
     return undefined as T
   }
 
@@ -67,5 +67,5 @@ export async function fetcher<T>(
   context: QueryFunctionContext<[string, FetchApiOptions?]>,
 ): Promise<T> {
   const [url, options] = context.queryKey
-  return fetchApi<T>(url, options)  
+  return fetchApi<T>(url, options)
 }

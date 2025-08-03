@@ -11,7 +11,6 @@ import RankingSkeleton from './RankingSkeleton'
 import { useProductRankingQuery } from '@/api/product'
 import { targetMap, rankMap } from '@/constants/ranking'
 
-
 //— RankingList 컴포넌트
 const RankingList: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -27,7 +26,7 @@ const RankingList: React.FC = () => {
     isError,
   } = useProductRankingQuery(targetType, rankType)
   const visibleItems = expanded ? products : products.slice(0, 6)
-  
+
   if (isLoading) {
     return (
       <Wrapper>
@@ -38,7 +37,6 @@ const RankingList: React.FC = () => {
 
   if (isError || products.length === 0) {
     return <Wrapper>상품 목록이 없습니다.</Wrapper>
-
   }
 
   return (

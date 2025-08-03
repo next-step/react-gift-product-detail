@@ -44,9 +44,7 @@ export default function MyPage() {
     <Layout>
       <Container>
         <Title>{nickname}님 안녕하세요!</Title>
-        {userInfo && (
-          <Text>이메일 주소는 {userInfo.email} 입니다.</Text>
-        )}
+        {userInfo && <Text>이메일 주소는 {userInfo.email} 입니다.</Text>}
         <Button onClick={handleLogout}>로그아웃</Button>
       </Container>
     </Layout>

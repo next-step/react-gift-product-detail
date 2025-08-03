@@ -3,7 +3,7 @@
   ProductDetail,
   HighlightReviewResponse,
   WishInfo,
-} from "../type"
+} from '../type'
 import { fetchApi } from './client'
 import {
   useQuery,
@@ -55,7 +55,7 @@ export async function fetchProductSummary(
   }
 
   return data
-    }
+}
 
 export function useProductRankingQuery(
   targetType = 'ALL',
@@ -63,7 +63,8 @@ export function useProductRankingQuery(
   options?: UseQueryOptions<Product[], Error>,
 ): UseQueryResult<Product[], Error> {
   return useQuery<Product[], Error>({
-    queryKey: productKeys.ranking(targetType, rankType),    queryFn: () => fetchProductRanking(targetType, rankType),
+    queryKey: productKeys.ranking(targetType, rankType),
+    queryFn: () => fetchProductRanking(targetType, rankType),
     ...options,
   })
 }
@@ -74,11 +75,11 @@ export function useProductSummaryQuery(
 ): UseQueryResult<ProductSummary, Error> {
   return useQuery<ProductSummary, Error>({
     queryKey: productKeys.summary(productId!),
-    queryFn: () => fetchProductSummary(productId!),    enabled: productId !== undefined,
+    queryFn: () => fetchProductSummary(productId!),
+    enabled: productId !== undefined,
     ...options,
   })
 }
-
 
 export async function fetchProduct(productId: number): Promise<Product> {
   return fetchApi<Product>(`/api/products/${productId}`)
@@ -161,9 +162,16 @@ export function useWishMutation(
   return useMutation<void, Error, void>({
     mutationFn: () => postWish(productId),
     onMutate: async () => {
-    const prev = queryClient.getQueryData<WishInfo>(productKeys.wish(productId))
-    queryClient.setQueryData<WishInfo>(productKeys.wish(productId), (prev ? { ...prev, wishCount: prev.wishCount + 1 } : { wishCount: 1, isWished: true }))
-          return { prev }
+      const prev = queryClient.getQueryData<WishInfo>(
+        productKeys.wish(productId),
+      )
+      queryClient.setQueryData<WishInfo>(
+        productKeys.wish(productId),
+        prev
+          ? { ...prev, wishCount: prev.wishCount + 1 }
+          : { wishCount: 1, isWished: true },
+      )
+      return { prev }
     },
     onError: (_err, _vars, context) => {
       if (context?.prev !== undefined) {

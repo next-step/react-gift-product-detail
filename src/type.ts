@@ -21,7 +21,8 @@ export interface ProductAnnouncementItem {
 
 export interface ProductDetail {
   description: string
-  announcement: ProductAnnouncementItem[] | Record<string, string>}
+  announcement: ProductAnnouncementItem[] | Record<string, string>
+}
 
 export interface HighlightReview {
   id: string

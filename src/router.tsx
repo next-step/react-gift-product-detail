@@ -8,7 +8,6 @@ import NotFound from '@/pages/NotFound'
 import RequireAuth from '@/components/RequireAuth'
 import ThemeProductsPage from '@/pages/ThemeProductsPage'
 
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -18,7 +17,7 @@ const router = createBrowserRouter([
     path: '/login',
     element: <LoginPage />,
   },
-    {
+  {
     path: '/product/:id',
     element: <ProductDetailPage />,
   },
@@ -37,10 +36,9 @@ const router = createBrowserRouter([
         path: '/theme/:id',
         element: <ThemeProductsPage />,
       },
-
     ],
   },
-    {
+  {
     path: '*',
     element: <NotFound />,
   },
