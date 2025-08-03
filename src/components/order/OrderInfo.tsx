@@ -10,14 +10,14 @@ import { useState, useEffect } from 'react';
 import { isAxiosError } from 'axios';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 
+import FormField from '@/components/common/FormField';
+import Typography from '@/components/common/Typography';
+
 import {
   Wrapper,
   Section,
-  Label,
-  InputBox,
   StyledInput,
   StyledTextarea,
-  ErrorMsg,
   HelperText,
   ProductInfo,
   ProductImage,
@@ -26,14 +26,6 @@ import {
 } from '@/components/order/Order.style';
 
 import type { Receiver } from '@/types/receiver';
-
-interface ApiProductData {
-  id: number;
-  name: string;
-  imageURL: string;
-  brandName: string;
-  price: number;
-}
 
 export interface ProductSummary {
   id: number;
@@ -91,29 +83,11 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     data: productInfo,
     isLoading,
     isError,
-  } = useQuery<ApiProductData, Error, ProductSummary>({
-    queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
-    queryFn: () => fetchProductSummary(giftId!),
-    enabled: !!giftId,
-
-    select: (apiData) => {
-      return {
-        id: apiData.id,
-        name: apiData.name,
-        imageURL: apiData.imageURL,
-        brandInfo: {
-          id: 0,
-          name: apiData.brandName,
-          imageURL: '',
-        },
-        price: {
-          basicPrice: apiData.price,
-          sellingPrice: apiData.price,
-          discountRate: 0,
-        },
-      };
-    },
-  });
+} = useQuery<ProductSummary, Error>({ 
+  queryKey: giftId ? QUERY_KEYS.product(giftId) : [],
+  queryFn: () => fetchProductSummary(giftId!), 
+  enabled: !!giftId,
+});
 
   useEffect(() => {
     if (!giftId) {
@@ -182,7 +156,7 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     return (
       <Wrapper>
         <div style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ fontSize: '16px' }}>상품 정보를 불러오는 중입니다...</p>
+          <Typography variant="p">상품 정보를 불러오는 중입니다...</Typography>
         </div>
       </Wrapper>
     );
@@ -192,9 +166,9 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     return (
       <Wrapper>
         <div style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ fontSize: '16px', marginBottom: '16px' }}>
+          <Typography variant="p" style={{ marginBottom: '16px' }}>
             상품 정보를 불러오는 데 실패했습니다.
-          </p>
+          </Typography>
           <OrderButton type="button" onClick={() => navigate('/')}>
             홈으로 돌아가기
           </OrderButton>
@@ -207,47 +181,50 @@ const GiftForm = ({ templateMessage }: GiftSenderProps) => {
     <Wrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Section>
-          <Label>메시지</Label>
-          <InputBox>
+          <FormField label="메시지" error={errors.message?.message}>
             <StyledTextarea
               placeholder="메시지를 입력하세요"
-              {...register('message', { required: '메시지는 반드시 입력되어야 해요.' })}
+              {...register('message', {
+                required: '메시지는 반드시 입력되어야 해요.',
+              })}
               error={!!errors.message}
             />
-            {errors.message && <ErrorMsg>{errors.message.message}</ErrorMsg>}
-          </InputBox>
+          </FormField>
         </Section>
 
         <Section>
-          <Label>보내는 사람</Label>
-          <InputBox>
+          <FormField label="보내는 사람" error={errors.sender?.message}>
             <StyledInput
               type="text"
               placeholder="이름을 입력하세요."
-              {...register('sender', { required: '보내는 사람 이름이 반드시 입력되어야 해요.' })}
+              {...register('sender', {
+                required: '보내는 사람 이름이 반드시 입력되어야 해요.',
+              })}
               error={!!errors.sender}
             />
-            {errors.sender && <ErrorMsg>{errors.sender.message}</ErrorMsg>}
             <HelperText>* 실제 선물 발송 시 발신자 이름으로 반영됩니다.</HelperText>
-          </InputBox>
+          </FormField>
         </Section>
 
         <Section>
-          <Label>받는 사람</Label>
-          <ReceiverInfo receivers={receiverList} onUpdate={setReceiverList} />
+          <FormField label="받는 사람">
+            <ReceiverInfo receivers={receiverList} onUpdate={setReceiverList} />
+          </FormField>
         </Section>
 
         <Section>
-          <Label>상품 정보</Label>
-          <ProductInfo>
-            <ProductImage src={productInfo.imageURL} alt={productInfo.name ?? '상품 이미지'} />
-            <ProductDetails>
-              <strong>{productInfo.name}</strong>
-              <span>{productInfo.brandInfo.name}</span>
-              <b>상품가 {productInfo.price.sellingPrice.toLocaleString()}원</b>
-            </ProductDetails>
-          </ProductInfo>
+          <FormField label="상품 정보">
+            <ProductInfo>
+              <ProductImage src={productInfo.imageURL} alt={productInfo.name ?? '상품 이미지'} />
+              <ProductDetails>
+                <strong>{productInfo.name}</strong>
+                <span>{productInfo.brandInfo.name}</span>
+                <b>상품가 {productInfo.price.sellingPrice.toLocaleString()}원</b>
+              </ProductDetails>
+            </ProductInfo>
+          </FormField>
         </Section>
+
         <OrderButton type="submit">
           {productInfo.price.sellingPrice.toLocaleString()}원 주문하기
         </OrderButton>
