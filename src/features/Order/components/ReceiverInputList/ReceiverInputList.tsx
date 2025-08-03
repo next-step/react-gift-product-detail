@@ -1,5 +1,5 @@
 import ReceiverInput from '../ReceiverInput/ReceiverInput';
-import type { Order } from '@/features/Order/hooks/useOrderForm';
+import type { Order } from '../../schema/OrderSchema';
 import type {
   UseFormRegister,
   FieldErrors,

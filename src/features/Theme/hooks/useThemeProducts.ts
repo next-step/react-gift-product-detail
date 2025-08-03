@@ -1,7 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { apiGet } from '@/lib/axios';
-import type { Product } from '../ThemeHero/ThemeTypes';
-import type { Result } from '@/types/CommonTypes';
+import type { Product } from '../components/ThemeHero/ThemeTypes';
 import { queryKeys } from '@/lib/queryKeys';
 
 interface ThemeProductResponse {
@@ -34,7 +33,7 @@ const fetchThemeProducts = async ({
 export const useThemeProducts = (themeId: number | null, limit = 10) => {
   const { data, fetchNextPage, hasNextPage, refetch } =
     useSuspenseInfiniteQuery({
-      queryKey: ['themeProducts', themeId],
+      queryKey: queryKeys.themes.products(themeId),
       queryFn: ({ pageParam = 0 }) =>
         fetchThemeProducts({ themeId, cursor: pageParam, limit }),
       getNextPageParam: (lastPage) => {

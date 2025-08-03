@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import HeartButtonImg from '@/assets/icons/heart.png';
+import HeartButtonImg from '@/assets/heart.png';
 
 export const Container = styled.div`
   display: flex;

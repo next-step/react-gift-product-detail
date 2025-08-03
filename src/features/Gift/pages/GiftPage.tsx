@@ -1,5 +1,5 @@
 import GiftRecipient from '@/features/Gift/components/Recipient/GiftRecipient';
-import GiftCategory from '@/features/Gift/components/Category/CategorySection';
+import GiftCategory from '@/features/Gift/components/Category/GiftCategory';
 import MessageSection from '@/components/MessageSection';
 import TrendingGiftRanking from '@/features/Gift/components/TrendRanking/TrendRanking';
 

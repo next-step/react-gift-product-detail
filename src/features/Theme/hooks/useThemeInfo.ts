@@ -1,6 +1,6 @@
 import { apiGet } from '@/lib/axios';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import type { ThemeInfo } from '../ThemeHero/ThemeTypes';
+import type { ThemeInfo } from '../components/ThemeHero/ThemeTypes';
 
 const fetchThemeInfo = async (themeId: number): Promise<ThemeInfo> => {
   return await apiGet<ThemeInfo>(`/themes/${themeId}/info`);

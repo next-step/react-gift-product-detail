@@ -4,7 +4,7 @@ import type {
   UseFormRegister,
   UseFormGetValues,
 } from 'react-hook-form';
-import type { Order } from '../../hooks/useOrderForm';
+import type { Order } from '../../schema/OrderSchema';
 import MyButton from '@/components/button/button';
 
 interface ReceiverInputProps {
