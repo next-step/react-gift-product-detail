@@ -1,63 +1,91 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { Navbar } from '@/components/Navbar';
 import { ThemeInfoBanner } from '@/components/ThemeInfoBanner';
-import { useThemeProducts } from '@/hooks/useThemeProducts';
 import { ThemeProductItem } from '@/components/ThemeProductItem';
 import { Spinner } from '@/components/common/Spinner';
-import styled from '@emotion/styled';
 import RootLayout from '@/layout/RootLayout';
-import { Navbar } from '@/components/Navbar';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { useThemeProductsQuery } from '@/hooks/queries/useThemeProductsQuery';
+import { useInView } from '@/hooks/useInView';
 
 export default function ThemePage() {
   const { themeId } = useParams<{ themeId: string }>();
-  const { products, isPending, isError, loadMoreRef } = useThemeProducts(
-    Number(themeId),
-  );
 
-  if (isError) {
-    return <div>Error: 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  if (!themeId) {
+    return <RootLayout><div>잘못된 테마 ID입니다.</div></RootLayout>;
   }
 
   return (
     <RootLayout>
       <Navbar />
+      <ErrorBoundary fallback={<div>테마 정보를 불러오는 데 실패했습니다.</div>}>
+        <Suspense fallback={<Spinner />}>
+          <ThemePageContent themeId={Number(themeId)} />
+        </Suspense>
+      </ErrorBoundary>
+    </RootLayout>
+  );
+}
+
+function ThemePageContent({ themeId }: { themeId: number }) {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useThemeProductsQuery(themeId);
+
+  const { ref } = useInView({
+    threshold: 0.5,
+    onInView: () => {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+  });
+
+  const allProducts = data?.pages.flatMap((page) => page.list) ?? [];
+
+  return (
+    <>
       <ThemeInfoBanner />
       <Container>
         <ProductGrid>
-          {products.map((product) => (
-            <ThemeProductItem // 변경된 부분
+          {allProducts.map((product) => (
+            <ThemeProductItem
               key={product.id}
               product={{
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                imageURL: product.imageURL,
-                brandName: product.brandInfo.name, // 타입 변환
+                ...product,
+                brandName: product.brandInfo.name,
               }}
             />
           ))}
         </ProductGrid>
       </Container>
 
-      <div ref={loadMoreRef} style={{ height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {isPending && <Spinner />}
+      <div ref={ref} style={{ height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {isFetchingNextPage && <Spinner />}
       </div>
 
-      {!isPending && products.length === 0 && (
+      {!hasNextPage && allProducts.length > 0 && (
+        <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+          더 이상 상품이 없습니다.
+        </div>
+      )}
+
+      {allProducts.length === 0 && !isFetchingNextPage && (
         <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
           상품이 없습니다.
         </div>
       )}
-    </RootLayout>
+    </>
   );
 }
 
 const Container = styled.div`
-    margin: 0 auto;
-    padding: 16px;
+  margin: 0 auto;
+  padding: 16px;
 `;
 
 const ProductGrid = styled.ul`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 8px;
 `;

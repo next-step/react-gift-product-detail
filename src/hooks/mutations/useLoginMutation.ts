@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { logIn } from '@/services/login';
 import useAuthStore from '@/stores/authStore';
 import { toast } from 'react-toastify';
-import { isAxiosError } from 'axios';
+import { ApiError } from '@/errors/ApiError';
 
 export const useLoginMutation = () => {
   return useMutation({
@@ -11,13 +11,13 @@ export const useLoginMutation = () => {
       useAuthStore.getState().login(data.authToken, { email: data.email, name: data.name });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        switch (error.response?.status) {
+      if (error instanceof ApiError) {
+        switch (error.status) {
           case 400:
             toast.error('잘못된 요청입니다. 입력한 정보를 확인해주세요.');
             break;
           default:
-            toast.error('로그인에 실패했습니다. 다시 시도해주세요.');
+            toast.error(error.message || '로그인에 실패했습니다. 다시 시도해주세요.');
             break;
         }
       } else {

@@ -6,7 +6,6 @@ import { LetterCardSelector } from '@/components/LetterCardSelector';
 import { OrderForm, type OrderFormRef } from '@/components/OrderForm';
 import { ProductInfo } from '@/components/ProductInfo';
 import { cardTemplates } from '@/data/cardTemplateMock';
-import { NotFoundPage } from '@/pages/NotFoundPage';
 import { Button } from '@/components/common/Button';
 import { useOrderStore } from '@/stores/orderStore';
 import useAuthStore from '@/stores/authStore';
@@ -15,13 +14,42 @@ import { VerticalSpacing } from '@/components/common/VerticalSpacing';
 import { Spinner } from '@/components/common/Spinner';
 import { useProductSummaryQuery } from '@/hooks/queries/useProductSummaryQuery';
 import { useCreateOrderMutation } from '@/hooks/mutations/useCreateOrderMutation';
+import RootLayout from '@/layout/RootLayout';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+import type { ProductSummary } from '@/types/product';
+import { ApiError } from '@/errors/ApiError';
 
 export default function OrderPage() {
   const { productId } = useParams();
+  const { data: product, isPending, isError } = useProductSummaryQuery(Number(productId));
+
+  if (isPending) {
+    return (
+      <RootLayout>
+        <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Spinner />
+        </Container>
+      </RootLayout>
+    );
+  }
+
+  if (isError || !product) {
+    return <RootLayout><div>상품 정보를 불러오는 데 실패했습니다.</div></RootLayout>;
+  }
+
+  return (
+    <RootLayout>
+      <ErrorBoundary fallback={<div>오류가 발생했습니다.</div>}>
+        <OrderPageContent product={product} />
+      </ErrorBoundary>
+    </RootLayout>
+  );
+}
+
+function OrderPageContent({ product }: { product: ProductSummary }) {
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  const { data: product, isPending, isError } = useProductSummaryQuery(Number(productId));
   const { mutate: createOrder, isPending: isCreatingOrder } = useCreateOrderMutation();
 
   const [selectedCardId, setSelectedCardId] = useState(cardTemplates[0].id);
@@ -38,18 +66,6 @@ export default function OrderPage() {
       setReceivers([]);
     };
   }, [setReceivers]);
-
-  if (isPending) {
-    return (
-      <Container>
-        <Spinner size="40px" borderWidth="4px" color="#000" />
-      </Container>
-    );
-  }
-
-  if (isError || !product) {
-    return <NotFoundPage />;
-  }
 
   const handleSelectCard = (id: number) => {
     setSelectedCardId(id);
@@ -86,11 +102,15 @@ export default function OrderPage() {
         navigate('/'); // 성공 시 홈으로 이동
       },
       onError: (error) => {
-        if (error instanceof Error && error.message === 'Unauthorized') {
-          toast.error('로그인이 필요합니다.');
-          navigate('/login');
+        if (error instanceof ApiError) {
+          if (error.status === 401) { // Assuming 401 for Unauthorized
+            toast.error('로그인이 필요합니다.');
+            navigate('/login');
+          } else {
+            toast.error(error.message || '주문에 실패했습니다. 잠시 후 다시 시도해주세요.');
+          }
         } else {
-          toast.error('주문에 실패했습니다.');
+          toast.error('주문에 실패했습니다. 잠시 후 다시 시도해주세요.');
         }
       },
     });
