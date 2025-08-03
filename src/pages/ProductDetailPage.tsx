@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import Layout from '@/Layout'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import HeartIcon from '@/components/HeartIcon'
 import type { ProductAnnouncementItem } from '@/type'
 import {
   useProductQuery,
@@ -10,64 +11,45 @@ import {
   useWishCountQuery,
   useWishMutation,
 } from '@/api/product'
-import * as Styles from '@/styles/ProductDetailPage.styles'
-
-function HeartIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill={filled ? '#2a3038' : 'none'}
-      stroke="#2a3038"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{ display: 'block' }}
-    >
-      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-    </svg>
-  )
+import {
+  Container,
+  ProductImage,
+  Name,
+  Brand,
+  Price,
+  TabBar,
+  TabButton,
+  ContentArea,
+  ReviewCard,
+  ReviewAuthor,
+  ReviewContent,
+  EmptyText,
+  InfoList,
+  InfoItem,
+  StickyBar,
+  LikeSection,
+  LikeButton,
+  LikeCount,
+  OrderButton,
+} from '@/styles/ProductDetailPage.styles'
+interface AnnouncementListProps {
+  items?: ProductAnnouncementItem[]
 }
-function AnnouncementList({
-  items,
-}: {
-  items: ProductAnnouncementItem[] | Record<string, string> | undefined
-}) {
-  if (!items) {
+function AnnouncementList({ items = [] }: AnnouncementListProps) {
+  if (items.length === 0) {
     return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
   }
 
-  if (Array.isArray(items)) {
-    if (items.length === 0) {
-      return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
-    }
-
-    const sorted = items.slice().sort((a, b) => a.displayOrder - b.displayOrder)
-
-    return (
-      <InfoList>
-        {sorted.map((item, idx) => (
-          <InfoItem key={idx}>
-            <strong>{item.name}</strong>
-            <div>{item.value}</div>
-          </InfoItem>
-        ))}
-      </InfoList>
-    )
-  }
-
-  const entries = Object.entries(items)
-  if (entries.length === 0) {
-    return <EmptyText>등록된 상세 정보가 없습니다.</EmptyText>
-  }
+  const sorted = [...items].sort(
+    (a, b) => a.displayOrder - b.displayOrder,
+  )
 
   return (
     <InfoList>
-      {entries.map(([name, value], idx) => (
+      {sorted.map((item, idx) => (
         <InfoItem key={idx}>
-          <strong>{name}</strong>
-          <div>{value}</div>
+          <strong>{item.name}</strong>
+          <div>{item.value}</div>
         </InfoItem>
       ))}
     </InfoList>
@@ -76,19 +58,17 @@ function AnnouncementList({
 
 function DetailContent({ productId }: { productId: number }) {
   const navigate = useNavigate()
-  const { data: product } = useProductQuery(productId, { suspense: true })
-  const { data: detail } = useProductDetailQuery(productId, { suspense: true })
-  const { data: reviews } = useHighlightReviewQuery(productId, {
-    suspense: true,
-  })
-  const { data: wishInfo } = useWishCountQuery(productId, { suspense: true })
+  const { data: product } = useProductQuery(productId)
+  const { data: detail } = useProductDetailQuery(productId)
+  const { data: reviews } = useHighlightReviewQuery(productId)
+  const { data: wishInfo } = useWishCountQuery(productId)
   const { mutate } = useWishMutation(productId)
 
   const [tab, setTab] = useState<'description' | 'reviews' | 'details'>(
     'description',
   )
-  const [liked, setLiked] = useState<boolean>(wishInfo?.isWished ?? false)
-  const [likeCount, setLikeCount] = useState<number>(wishInfo?.wishCount ?? 0)
+  const [liked, setLiked] = useState<boolean>(wishInfo.isWished)
+  const [likeCount, setLikeCount] = useState<number>(wishInfo.wishCount)
 
   const toggleLike = () => {
     if (liked) {
