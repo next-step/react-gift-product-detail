@@ -48,5 +48,5 @@
 - [x] `src/components`에 있는 Form Field와 Typography에 대한 테스트 코드 작성
 - [x] 로그인 페이지에 대한 테스트 시나리오 작성 → 테스트 코드 작성
 - [x] MSW 사용 → `선물하기 홈 페이지`의 `실시간 급상승 선물랭킹 섹션`(`src/components/ProductListSection.tsx`)의 테스트 코드 작성
-- [ ] github action을 사용 → PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되도록 설정
-  - [ ] 매 PR에서 테스트 코드가 실행되도록 설정
+- [x] github action을 사용 → PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되도록 설정
+  - [x] 매 PR에서 테스트 코드가 실행되도록 설정
