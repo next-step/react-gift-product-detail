@@ -10,27 +10,7 @@ import {
   useWishCountQuery,
   useWishMutation,
 } from '@/api/product'
-import {
-  Container,
-  ProductImage,
-  Name,
-  Brand,
-  Price,
-  TabBar,
-  TabButton,
-  ContentArea,
-  ReviewCard,
-  ReviewAuthor,
-  ReviewContent,
-  EmptyText,
-  InfoList,
-  InfoItem,
-  StickyBar,
-  LikeSection,
-  LikeButton,
-  LikeCount,
-  OrderButton,
-} from '@/styles/ProductDetailPage.styles'
+import * as Styles from '@/styles/ProductDetailPage.styles'
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (

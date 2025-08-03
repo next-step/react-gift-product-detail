@@ -74,9 +74,8 @@ export function useProductSummaryQuery(
   options?: UseQueryOptions<ProductSummary, Error>,
 ): UseQueryResult<ProductSummary, Error> {
   return useQuery<ProductSummary, Error>({
-    queryKey: productKeys.summary(productId!),
-    queryFn: () => fetchProductSummary(productId!),
-    enabled: productId !== undefined,
+    queryKey: productKeys.summary(productId ?? 0),
+    queryFn: () => fetchProductSummary(productId ?? 0),    enabled: productId !== undefined,
     ...options,
   })
 }
@@ -111,8 +110,8 @@ export function useProductQuery(
   options?: UseQueryOptions<Product, Error>,
 ): UseQueryResult<Product, Error> {
   return useQuery<Product, Error>({
-    queryKey: productKeys.detail(productId!),
-    queryFn: () => fetchProduct(productId!),
+    queryKey: productKeys.detail(productId ?? 0),
+    queryFn: () => fetchProduct(productId ?? 0),
     enabled: productId !== undefined,
     ...options,
   })
@@ -123,8 +122,8 @@ export function useProductDetailQuery(
   options?: UseQueryOptions<HighlightReviewResponse, Error>,
 ): UseQueryResult<HighlightReviewResponse, Error> {
   return useQuery<HighlightReviewResponse, Error>({
-    queryKey: productKeys.productDetail(productId!),
-    queryFn: () => fetchProductDetail(productId!),
+    queryKey: productKeys.productDetail(productId ?? 0),
+    queryFn: () => fetchProductDetail(productId ?? 0),
     enabled: productId !== undefined,
     ...options,
   })
@@ -135,8 +134,8 @@ export function useHighlightReviewQuery(
   options?: UseQueryOptions<HighlightReviewResponse, Error>,
 ): UseQueryResult<HighlightReviewResponse, Error> {
   return useQuery<HighlightReviewResponse, Error>({
-    queryKey: productKeys.review(productId!),
-    queryFn: () => fetchHighlightReview(productId!),
+    queryKey: productKeys.review(productId ?? 0),
+    queryFn: () => fetchHighlightReview(productId ?? 0),
     enabled: productId !== undefined,
     ...options,
   })
@@ -147,8 +146,8 @@ export function useWishCountQuery(
   options?: UseQueryOptions<WishInfo, Error>,
 ): UseQueryResult<WishInfo, Error> {
   return useQuery<WishInfo, Error>({
-    queryKey: productKeys.wish(productId!),
-    queryFn: () => fetchWishCount(productId!),
+    queryKey: productKeys.wish(productId ?? 0),
+    queryFn: () => fetchWishCount(productId ?? 0),
     enabled: productId !== undefined,
     ...options,
   })
