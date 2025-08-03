@@ -2,6 +2,8 @@ import { useUserContext } from '@/contexts/UserContext';
 import { apiPost } from '@/lib/axios';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { ROUTE_PATH } from '@/routes/Router';
 
 export interface Receiver {
   name: string;
@@ -20,6 +22,8 @@ export interface OrderPayload {
 export const useOrderSubmit = () => {
   const { user } = useUserContext();
   const authToken = user?.authToken;
+
+  const navigate = useNavigate();
 
   const submitOrder = async (orderPayload: OrderPayload): Promise<void> => {
     await apiPost<void, OrderPayload>('/order', orderPayload, {

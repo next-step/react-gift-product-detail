@@ -1,7 +1,7 @@
 import * as S from './ReceiverModal.styles';
 import ReceiverInputList from '../ReceiverInputList/ReceiverInputList';
 import MyButton from '@/components/button/button';
-import type { Order } from '@/features/Order/hooks/useOrderForm';
+import type { Order } from '../../schema/OrderSchema';
 import type {
   FieldArrayWithId,
   FieldErrors,
