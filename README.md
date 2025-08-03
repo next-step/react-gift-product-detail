@@ -40,3 +40,13 @@
     - 실제 API 반영은 없기 때문에, 새로고침 하면 사라지는 것이 정상
 - [x] ErrorBoundary와 Suspense를 사용하여 코드 구조 리팩터링
   - [x] ErrorBoundary는 관련 라이브러리를 사용하지 않고 구현
+
+### 3단계 :
+- [x] 이전 단계 피드백 반영 : 전역 에러 핸들링, API 에러 처리
+  - [x] ErrorBoundary를 사용하여 전역 에러 핸들링 구현
+  - [x] API 에러 발생 시 ErrorBoundary에서 감지하고, 페이지 단위로 에러 처리 로직 구현
+- [ ] `src/components`에 있는 Form Field와 Typography에 대한 테스트 코드 작성
+- [ ] 로그인 페이지에 대한 테스트 시나리오 작성 → 테스트 코드 작성
+- [ ] MSW 사용 → `선물하기 홈 페이지`의 `실시간 급상승 선물랭킹 섹션`(`src/components/ProductListSection.tsx`)의 테스트 코드 작성
+- [ ] github action을 사용 → PR 요청 및 Main 브렌치 머지 시 테스트 코드가 실행되도록 설정
+  - [ ] 매 PR에서 테스트 코드가 실행되도록 설정
