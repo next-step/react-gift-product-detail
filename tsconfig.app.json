@@ -30,5 +30,8 @@
       "@/*": ["src/*"] // 절대 경로 매핑
     }
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "node_modules/vitest/globals.d.ts"
+  ]
 }

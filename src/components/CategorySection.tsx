@@ -14,7 +14,11 @@ export function CategorySection() {
     );
   }
 
-  if (isError || !themes || themes.length === 0) {
+  if (isError) {
+    return <Section>테마 목록을 불러오는 데 실패했습니다.</Section>;
+  }
+
+  if (!themes || themes.length === 0) {
     return null;
   }
 
@@ -33,7 +37,7 @@ export function CategorySection() {
 
       {/* 테마 목록 그리드 */}
       <Grid>
-        {themes.map(({ themeId, name, image }) => (
+        {themes?.map(({ themeId, name, image }) => (
           <CategoryItem key={themeId} themeId={themeId} name={name} image={image} />
         ))}
       </Grid>

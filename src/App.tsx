@@ -13,33 +13,36 @@ import OrderPage from '@/pages/OrderPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import { ModalProvider } from '@/contexts/ModalContext';
 import ThemePage from '@/pages/ThemePage';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 function App() {
   return (
     <ModalProvider>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RootLayout>
-              <Navbar />
-              <main>
-                <CategorySection />
-                <ProductListSection />
-              </main>
-            </RootLayout>
-          }
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/theme/:themeId" element={<ThemePage />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/my" element={<MyPage />} />
-          <Route path="/order/:productId" element={<OrderPage />} />
-          <Route path="/product/:productId" element={<ProductDetailPage />} />
-        </Route>
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-      <ToastContainer />
+      <ErrorBoundary>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RootLayout>
+                <Navbar />
+                <main>
+                  <CategorySection />
+                  <ProductListSection />
+                </main>
+              </RootLayout>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/theme/:themeId" element={<ThemePage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/my" element={<MyPage />} />
+            <Route path="/order/:productId" element={<OrderPage />} />
+            <Route path="/product/:productId" element={<ProductDetailPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+        <ToastContainer />
+      </ErrorBoundary>
     </ModalProvider>
   );
 }
