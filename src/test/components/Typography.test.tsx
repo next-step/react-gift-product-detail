@@ -253,7 +253,7 @@ describe('Typography Components', () => {
 
       renderWithTheme(<GiftFriendsSection />);
       
-      const section = screen.getByRole('region');
+      const section = screen.getByText('선물할 친구를 선택해 주세요.').closest('section');
       // emotion styled-components는 CSS 클래스로 스타일을 적용하므로 존재 여부만 확인
       expect(section).toBeInTheDocument();
     });
@@ -311,14 +311,17 @@ describe('Typography Components', () => {
 
     it('handles user with empty email', () => {
       mockUseLoginContext.mockReturnValue({
+        ...defaultMockContext,
         user: {
+          authToken: 'test-token',
           email: '',
+          name: '테스트 사용자',
         },
       });
 
       renderWithTheme(<GiftFriendsSection />);
       
-      expect(screen.getByText('님! 선물할 친구를 선택해 주세요.')).toBeInTheDocument();
+      expect(screen.getByText('선물할 친구를 선택해 주세요.')).toBeInTheDocument();
     });
 
     it('handles user with email without @ symbol', () => {

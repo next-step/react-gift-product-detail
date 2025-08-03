@@ -63,9 +63,9 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
       renderWithProviders(<Home />);
       
       await waitFor(() => {
-        expect(screen.getByText('받고 싶어요')).toBeInTheDocument();
-        expect(screen.getByText('선물 많이 받아요')).toBeInTheDocument();
-        expect(screen.getByText('받고 싶어요 + 선물 많이 받아요')).toBeInTheDocument();
+        expect(screen.getByText('받고 싶어한')).toBeInTheDocument();
+        expect(screen.getByText('많이 선물한')).toBeInTheDocument();
+        expect(screen.getByText('위시로 받은')).toBeInTheDocument();
       });
     });
   });
@@ -258,7 +258,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
   });
 
   describe('랭킹 타입 필터', () => {
-    it('받고 싶어요 버튼 클릭 시 API가 호출된다', async () => {
+    it('받고 싶어한 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
         http.get('/api/products/ranking', () => {
@@ -282,7 +282,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
         expect(screen.getByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
       });
 
-      const wantedButton = screen.getByText('받고 싶어요');
+      const wantedButton = screen.getByText('받고 싶어한');
       fireEvent.click(wantedButton);
       
       await waitFor(() => {
@@ -290,7 +290,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
       });
     });
 
-    it('선물 많이 받아요 버튼 클릭 시 API가 호출된다', async () => {
+    it('많이 선물한 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
         http.get('/api/products/ranking', () => {
@@ -314,7 +314,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
         expect(screen.getByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
       });
 
-      const givenButton = screen.getByText('선물 많이 받아요');
+      const givenButton = screen.getByText('많이 선물한');
       fireEvent.click(givenButton);
       
       await waitFor(() => {
@@ -322,7 +322,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
       });
     });
 
-    it('받고 싶어요 + 선물 많이 받아요 버튼 클릭 시 API가 호출된다', async () => {
+    it('위시로 받은 버튼 클릭 시 API가 호출된다', async () => {
       const mockHandler = vi.fn();
       server.use(
         http.get('/api/products/ranking', () => {
@@ -346,7 +346,7 @@ describe('Home Page - 실시간 급상승 선물랭킹 섹션', () => {
         expect(screen.getByText('실시간 급상승 선물랭킹')).toBeInTheDocument();
       });
 
-      const wishedButton = screen.getByText('받고 싶어한');
+      const wishedButton = screen.getByText('위시로 받은');
       fireEvent.click(wishedButton);
       
       await waitFor(() => {
