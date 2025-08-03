@@ -3,8 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@emotion/react';
 import { vi } from 'vitest';
-import { http, HttpResponse } from 'msw';
-import { server } from '@/test/mocks/server';
 import Login from '@/pages/Login';
 import { theme } from '@/styles/Theme';
 
