@@ -1,22 +1,8 @@
-export interface Product {
-  id: number;
-  name: string;
-  imageURL: string;
-  price: {
-    basicPrice: number;
-    discountRate: number;
-    sellingPrice: number;
-  };
-  brandInfo: {
-    id: number;
-    name: string;
-    imageURL: string;
-  };
-}
+import type { Product } from '@/types/product';
 
-export const productListMock: Product[] = Array.from({ length: 20 }, (_, idx) => ({
-  id: idx,
-  name: 'BBQ 양념치킨+크림치즈볼+콜라1.25L',
+export const productListMock: Product[] = Array.from({ length: 10 }, (_, idx) => ({
+  id: idx + 1,
+  name: `BBQ 양념치킨+크림치즈볼+콜라1.25L ${idx + 1}`,
   imageURL:
     'https://st.kakaocdn.net/product/gift/product/20231030175450_53e90ee9708f45ffa45b3f7b4bc01c7c.jpg',
   price: {
@@ -24,10 +10,5 @@ export const productListMock: Product[] = Array.from({ length: 20 }, (_, idx) =>
     discountRate: 0,
     sellingPrice: 29_000,
   },
-  brandInfo: {
-    id: 2088,
-    name: 'BBQ',
-    imageURL:
-      'https://st.kakaocdn.net/product/gift/gift_brand/20220216170226_38ba26d8eedf450683200d6730757204.png',
-  },
+  brandName: 'BBQ',
 }));

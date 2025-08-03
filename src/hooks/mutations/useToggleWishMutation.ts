@@ -43,7 +43,9 @@ export const useToggleWishMutation = () => {
       }
     },
     onSettled: (_data, _error, productId) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.products.wish(productId) });
-    },
+      if (_error) {
+        queryClient.invalidateQueries({ queryKey: queryKeys.products.wish(productId) });
+      }
+    }
   });
 };

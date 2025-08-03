@@ -98,7 +98,7 @@ export function ProductListSection() {
       ) : products.length === 0 ? (
         <Message>상품 목록이 없습니다.</Message>
       ) : (
-        <ProductGrid>
+        <ProductGrid role="grid">
           {displayedProducts.map((p, idx) => (
             <ProductItem key={p.id} product={p} rank={idx + 1} />
           ))}

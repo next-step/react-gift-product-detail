@@ -9,7 +9,7 @@ interface TabProps extends LiHTMLAttributes<HTMLLIElement> {
 
 export function Tab({ children, active, variant = 'main', ...props }: TabProps) {
   return (
-    <StyledTab active={active} variant={variant} {...props}>
+    <StyledTab active={active} variant={variant} role="tab" {...props}>
       {children}
     </StyledTab>
   );
