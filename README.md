@@ -1,5 +1,7 @@
 # 1단계 완료
 
+- React Query 적용
+
 ## 목표
 
 - React Query를 사용하여 API 사용 방식과 사용자 경험을 고도화 해요.
