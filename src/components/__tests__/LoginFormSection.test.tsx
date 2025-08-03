@@ -1,6 +1,7 @@
 ﻿import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { http, HttpResponse } from 'msw'
 import { vi, describe, test, expect } from 'vitest'
+import { toast } from 'react-toastify'
 import LoginFormSection from '../LoginFormSection'
 import type { UserInfo } from '@/utils/storage'
 import { server } from '../../setupTests'
@@ -104,5 +105,39 @@ describe('LoginFormSection', () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => expect(handleSuccess).toHaveBeenCalledWith(mockInfo))
+  })
+   test('로그인 실패 시 에러 토스트를 표시한다', async () => {
+    server.use(
+      http.post('/api/login', () => {
+        return HttpResponse.json(
+          { message: '이메일 또는 비밀번호가 올바르지 않습니다.' },
+          { status: 401 },
+        )
+      }),
+    )
+
+    const handleSuccess = vi.fn()
+    const toastSpy = vi.spyOn(toast, 'error').mockImplementation(() => {})
+    renderWithProviders(<LoginFormSection onSuccess={handleSuccess} />)
+
+    const emailInput = screen.getByPlaceholderText('이메일')
+    const passwordInput = screen.getByPlaceholderText('비밀번호')
+    const submitButton = screen.getByRole('button', { name: '로그인' })
+
+    fireEvent.change(emailInput, { target: { value: 'tester@example.com' } })
+    fireEvent.change(passwordInput, { target: { value: '12345678' } })
+    fireEvent.blur(emailInput)
+    fireEvent.blur(passwordInput)
+
+    await waitFor(() => expect(submitButton).toBeEnabled())
+
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(handleSuccess).not.toHaveBeenCalled()
+      expect(toastSpy).toHaveBeenCalledWith(
+        '이메일 또는 비밀번호가 올바르지 않습니다.',
+      )
+    })
   })
 })
