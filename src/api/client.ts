@@ -1,8 +1,8 @@
 import type { QueryFunctionContext } from '@tanstack/react-query'
 
-const responseCache = new Map<string, unknown>()
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 export interface FetchApiOptions {
-  method?: string
+  method?: HttpMethod
   params?: Record<string, string>
   body?: unknown
   headers?: Record<string, string>
@@ -38,7 +38,7 @@ export async function fetchApi<T>(
     cache: 'no-store',
   })
   const text = await res.text()
-  let json: any
+  let json: unknown
   try {
     json = text ? JSON.parse(text) : undefined
   } catch {
@@ -46,11 +46,20 @@ export async function fetchApi<T>(
   }
 
   if (!res.ok) {
+    interface ErrorResponse {
+      data?: { message?: string; statusCode?: number }
+      message?: string
+      statusCode?: number
+    }
+
+    const parsed = json as ErrorResponse | undefined
     const message =
-      json?.data?.message || json?.message || `Invalid response from ${url}`
-    const error = new Error(message)
-    ;(error as any).statusCode =
-      json?.data?.statusCode || json?.statusCode || res.status
+      parsed?.data?.message ||
+      parsed?.message ||
+      `Invalid response from ${url}`
+    const error = new Error(message) as Error & { statusCode?: number }
+    error.statusCode =
+      parsed?.data?.statusCode || parsed?.statusCode || res.status
     throw error
   }
   if (res.status === 304) {
