@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { MoreButton } from './MoreButton';
 import { getGiftItems } from '@/api/services/giftItem.service';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSelectedFilter } from '@/hooks/useSelectedFilter';
 
 const Container = styled.div`
   width: 100%;
@@ -37,8 +38,7 @@ const ErrorText = styled.div`
 
 export const GiftList = () => {
   const [isViewMore, setIsViewMore] = useState(false);
-  const [targetType, setTargetType] = useState(localStorage.getItem('currentTarget') || 'ALL');
-  const [rankType, setRankType] = useState(localStorage.getItem('currentTopic') || 'MANY_WISH');
+  const { targetType, setTargetType, rankType, setRankType } = useSelectedFilter();
   const { data } = useSuspenseQuery({
     queryKey: ['giftItems', { targetType, rankType }],
     queryFn: ({ queryKey }: { queryKey: QueryKey }) => {
