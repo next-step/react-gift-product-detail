@@ -1,0 +1,14 @@
+{
+  "testEnvironment": "jsdom",
+  "verbose": true,
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/src/$1"
+  },
+  "testMatch": [
+    "<rootDir>/__test__/**/*.js",
+    "<rootDir>/**/*.test.js"
+  ],
+  "transform": {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+  }
+}
