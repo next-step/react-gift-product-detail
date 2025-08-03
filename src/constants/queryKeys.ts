@@ -9,6 +9,7 @@ export const productKeys = {
     [QUERY_KEYS.PRODUCTS, 'ranking', targetType, rankType] as const,
   summary: (productId: number) =>
     [QUERY_KEYS.PRODUCTS, productId, 'summary'] as const,
+
   detail: (productId: number) => [QUERY_KEYS.PRODUCTS, productId] as const,
   productDetail: (productId: number) =>
     [QUERY_KEYS.PRODUCTS, productId, 'detail'] as const,

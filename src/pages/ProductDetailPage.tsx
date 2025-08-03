@@ -2,6 +2,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import Layout from '@/Layout'
 import ErrorBoundary from '@/components/ErrorBoundary'
+
 import HeartIcon from '@/components/HeartIcon'
 import type { ProductAnnouncementItem } from '@/type'
 import {
@@ -32,6 +33,7 @@ import {
   LikeCount,
   OrderButton,
 } from '@/styles/ProductDetailPage.styles'
+
 interface AnnouncementListProps {
   items?: ProductAnnouncementItem[]
 }
@@ -67,7 +69,6 @@ function DetailContent({ productId }: { productId: number }) {
   )
   const [liked, setLiked] = useState<boolean>(wishInfo.isWished)
   const [likeCount, setLikeCount] = useState<number>(wishInfo.wishCount)
-
   const toggleLike = () => {
     if (liked) {
       setLikeCount((c) => Math.max(0, c - 1))
@@ -87,7 +88,6 @@ function DetailContent({ productId }: { productId: number }) {
         <Brand>{product.brandInfo.name}</Brand>
         <Price>{product.price.sellingPrice.toLocaleString()}원</Price>
       </div>
-
       <TabBar>
         <TabButton
           active={tab === 'description'}
