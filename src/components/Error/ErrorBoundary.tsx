@@ -3,6 +3,7 @@ import * as S from './ErrorBoundary.styles';
 
 type ErrorBoundaryProps = {
   children: React.ReactNode;
+  fallback?: React.ReactNode;
 };
 
 type ErrorBoundaryState = {
@@ -29,7 +30,13 @@ export class ErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      return <S.ErrorText>{this.state.error?.message}</S.ErrorText>;
+      return (
+        this.props.fallback ?? (
+          <S.ErrorText>
+            문제가 발생했습니다. 잠시 후 다시 시도해주세요.
+          </S.ErrorText>
+        )
+      );
     }
     return this.props.children;
   }
